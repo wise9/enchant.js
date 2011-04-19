@@ -38,7 +38,7 @@ enchant.Pad = enchant.Class.create(enchant.Sprite, {
         });
         this.addEventListener('touchend', function(e) {
             this.frame = 0;
-            if (this.state) this.scene.dispatchEvent(new Event(this.state + 'buttonup'));
+            if (this.state) this.game.dispatchEvent(new Event(this.state + 'buttonup'));
             this.state = null;
         });
     },
