@@ -77,6 +77,10 @@ if (typeof Object.create != 'function') {
     };
 }
 
+if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=640px');
+}
+
 var VENDER_PREFIX = (function() {
     var ua = navigator.userAgent;
     if (ua.indexOf('Opera') != -1) {
@@ -934,6 +938,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             that.dispatchEvent(new enchant.Event('render'));
         };
         this.addEventListener('addedtoscene', function() {
+            render();
             game.addEventListener('enterframe', render);
         });
         this.addEventListener('removedfromscene', function() {
@@ -1388,8 +1393,15 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         enchant.Entity.call(this);
 
         var canvas = document.createElement('canvas');
-        canvas.width = game.width;
-        canvas.height = game.height;
+        if (window.devicePixelRatio == 2 && game.scale == 2) {
+            canvas.width = game.width * 2;
+            canvas.height = game.height * 2;
+            this._style.webkitTransformOrigin = '0 0';
+            this._style.webkitTransform = 'scale(0.5)';
+        } else {
+            canvas.width = game.width;
+            canvas.height = game.height;
+        }
         this._element.appendChild(canvas);
         this._context = canvas.getContext('2d');
 
@@ -1409,9 +1421,69 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
         this._listeners['render'] = null;
         this.addEventListener('render', function() {
-            if (this._offsetX != this._previousOffsetX ||
-                this._offsetY != this._previousOffsetY || this._dirty) {
-                this.redraw();
+            if (this._dirty || this._previousOffsetX == null || this._previousOffsetY == null) {
+                this._dirty = false;
+                this.redraw(0, 0, game.width, game.height);
+            } else {
+                var ox = -this._offsetX;
+                var oy = -this._offsetY;
+                var px = -this._previousOffsetX;
+                var py = -this._previousOffsetY;
+                if (ox != px || oy != py) {
+                    var w1 = ox - px + game.width;
+                    var w2 = px - ox + game.width;
+                    var h1 = oy - py + game.height;
+                    var h2 = py - oy + game.height;
+                    if (w1 > this._tileWidth && w2 > this._tileWidth &&
+                        h1 > this._tileHeight && h2 > this._tileHeight && this._tight) {
+                        var sx, sy, dx, dy, sw, sh;
+                        if (w1 < w2) {
+                            sx = 0;
+                            dx = px - ox;
+                            sw = w1;
+                        } else {
+                            sx = ox - px;
+                            dx = 0;
+                            sw = w2;
+                        }
+                        if (h1 < h2) {
+                            sy = 0;
+                            dy = py - oy;
+                            sh = h1;
+                        } else {
+                            sy = oy - py;
+                            dy = 0;
+                            sh = h2;
+                        }
+
+                        if (game._buffer == null) {
+                            game._buffer = new Surface(this._context.canvas.width, this._context.canvas.height);
+                        }
+                        var buffer = game._buffer;
+                        buffer.clear();
+                        buffer.context.drawImage(this._context.canvas, 0, 0);
+                        if (this._doubledImage) {
+                            this._context.clearRect(dx*2, dy*2, sw*2, sh*2);
+                            this._context.drawImage(buffer._element, sx*2, sy*2, sw*2, sh*2, dx*2, dy*2, sw*2, sh*2);
+                        } else {
+                            this._context.clearRect(dx*2, dy*2, sw*2, sh*2);
+                            this._context.drawImage(buffer._element, sx, sy, sw, sh, dx, dy, sw, sh);
+                        }
+
+                        if (dx == 0) {
+                            this.redraw(sw, 0, game.width - sw, game.height);
+                        } else {
+                            this.redraw(0, 0, game.width - sw, game.height);
+                        }
+                        if (dy == 0) {
+                            this.redraw(0, sh, game.width, game.height - sh);
+                        } else {
+                            this.redraw(0, 0, game.width, game.height - sh);
+                        }
+                    } else {
+                        this.redraw(0, 0, game.width, game.height);
+                    }
+                }
             }
             this._previousOffsetX = this._offsetX;
             this._previousOffsetY = this._offsetY;
@@ -1424,6 +1496,17 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     loadData: function(data) {
         this._data = Array.prototype.slice.apply(arguments);
         this._dirty = true;
+        var c = 0;
+        for (var y = 0, l = data.length; y < l; y++) {
+            for (var x = 0, ll = data[y].length; x < ll; x++) {
+                if (data[y][x] >= 0) c++;
+            }
+        }
+        if (c / (data.length * data[0].length) > 0.2) {
+            this._tight = true;
+        } else {
+            this._tight = false;
+        }
     },
     /**
      * Map上に障害物があるかどうかを判定する.
@@ -1466,6 +1549,20 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         },
         set: function(image) {
             this._image = image;
+            if (window.devicePixelRatio == 2 && game.scale == 2) {
+                var img = new Surface(image.width * 2, image.height * 2);
+                var tileWidth = this._tileWidth || image.width;
+                var tileHeight = this._tileHeight || image.height;
+                var row = image.width / tileWidth | 0;
+                var col = image.height / tileHeight | 0;
+                for (var y = 0; y < col; y++) {
+                    for (var x = 0; x < row; x++) {
+                        img.draw(image, x * tileWidth, y * tileHeight, tileWidth, tileHeight,
+                            x * tileWidth * 2, y * tileHeight * 2, tileWidth * 2, tileHeight * 2);
+                    }
+                }
+                this._doubledImage = img;
+            }
             this._dirty = true;
         }
     },
@@ -1511,41 +1608,56 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._tileHeight * this._data[0].length
         }
     },
-    redraw: function() {
+    redraw: function(x, y, width, height) {
         if (this._image == null) {
             return;
         }
 
-        var image = this._image._element;
+        var image, tileWidth, tileHeight, dx, dy;
+        if (this._doubledImage) {
+            image = this._doubledImage;
+            tileWidth = this._tileWidth * 2;
+            tileHeight = this._tileHeight * 2;
+            dx = -this._offsetX * 2;
+            dy = -this._offsetY * 2;
+            x *= 2;
+            y *= 2;
+            width *= 2;
+            height *= 2;
+        } else {
+            image = this._image;
+            tileWidth = this._tileWidth;
+            tileHeight = this._tileHeight;
+            dx = -this._offsetX;
+            dy = -this._offsetY;
+        }
+        var row = image.width / tileWidth | 0;
+        var col = image.height / tileHeight | 0;
+        var left = Math.max((x + dx) / tileWidth | 0, 0);
+        var top = Math.max((y + dy) / tileHeight | 0, 0);
+        var right = Math.ceil((x + dx + width) / tileWidth); 
+        var bottom = Math.ceil((y + dy + height) / tileHeight);
+
+        var source = image._element;
         var context = this._context;
-        var width = game.width;
-        var height = game.height;
-        var dx = -this._offsetX;
-        var dy = -this._offsetY;
-        var tileWidth = this._tileWidth || this._image.width;
-        var tileHeight = this._tileHeight || this._image.height;
-        var row = this._image.width / tileWidth | 0;
-        var col = this._image.height / tileHeight | 0;
-        var left = Math.max(dx / tileWidth | 0, 0);
-        var top = Math.max(dy / tileHeight | 0, 0);
-        context.clearRect(0, 0, width, height);
+        var canvas = context.canvas;
+        context.clearRect(x, y, width, height);
         for (var i = 0, len = this._data.length; i < len; i++) {
             var data = this._data[i];
-            var right = Math.min(Math.ceil((dx + width) / tileWidth), data[0].length);
-            var bottom = Math.min(Math.ceil((dy + height) / tileHeight), data.length);
-            for (var y = top; y < bottom; y++) {
-                for (var x = left; x < right; x++) {
+            var r = Math.min(right, data[0].length);
+            var b = Math.min(bottom, data.length);
+            for (y = top; y < b; y++) {
+                for (x = left; x < r; x++) {
                     var n = data[y][x];
                     if (0 <= n && n < row * col) {
                         var sx = (n % row) * tileWidth;
                         var sy = (n / row | 0) * tileHeight;
-                        context.drawImage(image, sx, sy, tileWidth, tileHeight,
+                        context.drawImage(source, sx, sy, tileWidth, tileHeight,
                             x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                     }
                 }
             }
         }
-        this._dirty = false;
     }
 });
 
