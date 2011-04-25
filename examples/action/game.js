@@ -20,7 +20,7 @@ window.onload = function() {
         }
     });
 
-    var game = new Game(320, 320);
+    var game = new Game(320, 240);
     game.fps = 24;
     game.preload('bear.gif', 'map.gif');
     game.onload = function() {
@@ -52,7 +52,8 @@ window.onload = function() {
         map.loadData(blocks);
 
         var bear = new Sprite(20, 30);
-        bear.y = 32;
+        bear.x = 16;
+        bear.y = -30;
         bear.vx = 0;
         bear.vy = 0;
         bear.ax = 0;

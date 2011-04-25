@@ -78,7 +78,12 @@ if (typeof Object.create != 'function') {
 }
 
 if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
-    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=640px');
+    var viewport = document.querySelector('meta[name="viewport"]');
+    if (viewport == null) {
+        viewport = document.createElement('meta');
+        document.head.appendChild(viewport);
+    }
+    viewport.setAttribute('content', 'width=640px');
 }
 
 var VENDER_PREFIX = (function() {
@@ -207,10 +212,16 @@ enchant.Event.LOAD = 'load';
 enchant.Event.PROGRESS = 'progress';
 
 /**
- * 毎フレームごとに発生するイベント.
+ * フレーム開始時に発生するイベント.
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
+
+/**
+ * フレーム終了時に発生するイベント.
+ * @type {String}
+ */
+enchant.Event.EXIT_FRAME = 'exitframe';
 
 /**
  * Sceneが開始したとき発生するイベント.
@@ -365,7 +376,7 @@ enchant.EventTarget = enchant.Class.create({
         if (listeners == null) {
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
-            listeners.unshift(listener);
+            listeners.push(listener);
         }
     },
     /**
@@ -394,6 +405,7 @@ enchant.EventTarget = enchant.Class.create({
         var listeners = this._listeners[e.type];
         if (listeners != null) {
             for (var i = 0, len = listeners.length; i < len; i++) {
+                if (listeners[i] == null) console.log(i, len, listeners);
                 listeners[i].call(this, e);
             }
         }
@@ -457,10 +469,12 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             this._pageY = 0;
         } else {
             var style = window.getComputedStyle(stage);
-            if (style.width && style.height) {
+            width = parseInt(style.width);
+            height = parseInt(style.height);
+            if (width && height) {
                 this.scale = Math.min(
-                   parseInt(style.width) / this.width,
-                   parseInt(style.height) / this.height
+                   width / this.width,
+                   height / this.height
                 );
             } else {
                 stage.style.width = this.width + 'px';
@@ -736,7 +750,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     _tick: function() {
         var now = Date.now();
         var e = new enchant.Event('enterframe');
-        e.frame = this.frame;
         e.elapsed = now - this.currentTime;
         this.currentTime = now;
 
@@ -753,6 +766,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         this.currentScene.dispatchEvent(e);
         this.dispatchEvent(e);
 
+        this.dispatchEvent(new enchant.Event('exitframe'));
         this.frame++;
     },
     /**
@@ -832,17 +846,17 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this.game = game;
 
         this.addEventListener('touchstart', function(e) {
-            if (this.parentNode && this.parentNode == this.scene) {
+            if (this.parentNode && this.parentNode != this.scene) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchmove', function(e) {
-            if (this.parentNode && this.parentNode == this.scene) {
+            if (this.parentNode && this.parentNode != this.scene) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchend', function(e) {
-            if (this.parentNode && this.parentNode == this.scene) {
+            if (this.parentNode && this.parentNode != this.scene) {
                 this.parentNode.dispatchEvent(e);
             }
         });
@@ -940,10 +954,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         };
         this.addEventListener('addedtoscene', function() {
             render();
-            game.addEventListener('enterframe', render);
+            game.addEventListener('exitframe', render);
         });
         this.addEventListener('removedfromscene', function() {
-            game.removeEventListener('enterframe', render);
+            game.removeEventListener('exitframe', render);
         });
         this.addEventListener('render', function() {
             if (this._offsetX != this._previousOffsetX) {
