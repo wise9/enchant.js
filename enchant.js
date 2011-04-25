@@ -373,7 +373,7 @@ enchant.EventTarget = enchant.Class.create({
      * @param {String} type イベントのタイプ.
      * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
      */
-    removeEventListner: function(type, listener) {
+    removeEventListener: function(type, listener) {
         var listeners = this._listeners[type];
         if (listeners != null) {
             var i = listeners.indexOf(listener);
@@ -453,6 +453,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                window.innerWidth / this.width,
                window.innerHeight / this.height
             );
+            this._pageX = 0;
+            this._pageY = 0;
         } else {
             var style = window.getComputedStyle(stage);
             if (style.width && style.height) {
@@ -468,11 +470,10 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 stage.removeChild(stage.firstChild);
             }
             stage.style.position = 'relative';
+            var bounding = stage.getBoundingClientRect();
+            this._pageX = Math.round(window.scrollX + bounding.left);
+            this._pageY = Math.round(window.scrollY + bounding.top);
         }
-        stage.style.overflow = 'hidden';
-        var bounding = stage.getBoundingClientRect();
-        this._pageX = Math.round(window.scrollX + bounding.left);
-        this._pageY = Math.round(window.scrollY + bounding.top);
         this._element = stage;
 
         /**
@@ -942,7 +943,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             game.addEventListener('enterframe', render);
         });
         this.addEventListener('removedfromscene', function() {
-            game.removeEventListner('enterframe', render);
+            game.removeEventListener('enterframe', render);
         });
         this.addEventListener('render', function() {
             if (this._offsetX != this._previousOffsetX) {
@@ -1111,8 +1112,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             }
 
             if (this._buttonMode != null) {
-                this.removeEventListner('touchstart', this._buttondown);
-                this.removeEventListner('touchend', this._buttonup);
+                this.removeEventListener('touchstart', this._buttondown);
+                this.removeEventListener('touchend', this._buttonup);
             }
             if (button != null) {
                 this._buttondown = function() {
@@ -1227,7 +1228,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 if (this._element.firstChild) {
                     this._element.removeChild(this._element.firstChild);
                     if (this._dirtyListener) {
-                        this.removeEventListner('render', this._dirtyListener);
+                        this.removeEventListener('render', this._dirtyListener);
                         this._dirtyListener = null;
                     } else {
                         this._image._parent = null;
@@ -1410,6 +1411,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         this._image = null;
         this._data = [[[]]];
         this._dirty = false;
+        this._tight = false;
 
         this.touchEnabled = false;
 
@@ -1421,53 +1423,64 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
         this._listeners['render'] = null;
         this.addEventListener('render', function() {
-            if (this._dirty || this._previousOffsetX == null || this._previousOffsetY == null) {
+            if (this._dirty || this._previousOffsetX == null) {
                 this._dirty = false;
                 this.redraw(0, 0, game.width, game.height);
-            } else {
-                var ox = -this._offsetX;
-                var oy = -this._offsetY;
-                var px = -this._previousOffsetX;
-                var py = -this._previousOffsetY;
-                if (ox != px || oy != py) {
-                    var w1 = ox - px + game.width;
-                    var w2 = px - ox + game.width;
-                    var h1 = oy - py + game.height;
-                    var h2 = py - oy + game.height;
+            } else if (this._offsetX != this._previousOffsetX ||
+                       this._offsetY != this._previousOffsetY) {
+                if (this._tight) {
+                    var x = -this._offsetX;
+                    var y = -this._offsetY;
+                    var px = -this._previousOffsetX;
+                    var py = -this._previousOffsetY;
+                    var w1 = x - px + game.width;
+                    var w2 = px - x + game.width;
+                    var h1 = y - py + game.height;
+                    var h2 = py - y + game.height;
                     if (w1 > this._tileWidth && w2 > this._tileWidth &&
-                        h1 > this._tileHeight && h2 > this._tileHeight && this._tight) {
+                        h1 > this._tileHeight && h2 > this._tileHeight) {
                         var sx, sy, dx, dy, sw, sh;
                         if (w1 < w2) {
                             sx = 0;
-                            dx = px - ox;
+                            dx = px - x;
                             sw = w1;
                         } else {
-                            sx = ox - px;
+                            sx = x - px;
                             dx = 0;
                             sw = w2;
                         }
                         if (h1 < h2) {
                             sy = 0;
-                            dy = py - oy;
+                            dy = py - y;
                             sh = h1;
                         } else {
-                            sy = oy - py;
+                            sy = y - py;
                             dy = 0;
                             sh = h2;
                         }
 
                         if (game._buffer == null) {
-                            game._buffer = new Surface(this._context.canvas.width, this._context.canvas.height);
+                            game._buffer = document.createElement('canvas');
+                            game._buffer.width = this._context.canvas.width;
+                            game._buffer.height = this._context.canvas.height;
                         }
-                        var buffer = game._buffer;
-                        buffer.clear();
-                        buffer.context.drawImage(this._context.canvas, 0, 0);
+                        var context = game._buffer.getContext('2d');
                         if (this._doubledImage) {
-                            this._context.clearRect(dx*2, dy*2, sw*2, sh*2);
-                            this._context.drawImage(buffer._element, sx*2, sy*2, sw*2, sh*2, dx*2, dy*2, sw*2, sh*2);
+                            context.clearRect(0, 0, sw*2, sh*2);
+                            context.drawImage(this._context.canvas,
+                                sx*2, sy*2, sw*2, sh*2, 0, 0, sw*2, sh*2);
+                            context = this._context;
+                            context.clearRect(dx*2, dy*2, sw*2, sh*2);
+                            context.drawImage(game._buffer,
+                                0, 0, sw*2, sh*2, dx*2, dy*2, sw*2, sh*2);
                         } else {
-                            this._context.clearRect(dx*2, dy*2, sw*2, sh*2);
-                            this._context.drawImage(buffer._element, sx, sy, sw, sh, dx, dy, sw, sh);
+                            context.clearRect(0, 0, sw, sh);
+                            context.drawImage(this._context.canvas,
+                                sx, sy, sw, sh, 0, 0, sw, sh);
+                            context = this._context;
+                            context.clearRect(dx, dy, sw, sh);
+                            context.drawImage(game._buffer,
+                                0, 0, sw, sh, dx, dy, sw, sh);
                         }
 
                         if (dx == 0) {
@@ -1483,6 +1496,8 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
                     } else {
                         this.redraw(0, 0, game.width, game.height);
                     }
+                } else {
+                    this.redraw(0, 0, game.width, game.height);
                 }
             }
             this._previousOffsetX = this._offsetX;
@@ -1818,6 +1833,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 
         this._element = document.createElement('div');
         this._element.style.position = 'absolute';
+        this._element.style.overflow = 'hidden';
         this._element.style.width = game.width + 'px';
         this._element.style.height = game.height + 'px';
         this._element.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
