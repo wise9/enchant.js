@@ -3,7 +3,7 @@ enchant();
 window.onload = function() {
     var game = new Game(320, 320);
     game.fps = 15;
-    game.preload('map.gif', 'player.gif', 'pad.png');
+    game.preload('map.gif', 'player.gif');
     game.onload = function() {
         var map = new Map(16, 16);
         map.image = game.assets['map.gif'];

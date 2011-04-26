@@ -21,35 +21,20 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
-
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
-
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
-
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-/**
- * グローバルにライブラリのクラスをエクスポートする.
- * @namespace
- * @function
- */
-var enchant = function() {
-    for (var prop in enchant) if (enchant.hasOwnProperty(prop)) {
-        window[prop] = enchant[prop];
-    }
-};
-
-(function() {
-
-"use strict";
 
 if (typeof Object.defineProperty != 'function') {
     Object.defineProperty = function(obj, prop, desc) {
@@ -76,15 +61,57 @@ if (typeof Object.create != 'function') {
         return obj;
     };
 }
-
-if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
-    var viewport = document.querySelector('meta[name="viewport"]');
-    if (viewport == null) {
-        viewport = document.createElement('meta');
-        document.head.appendChild(viewport);
-    }
-    viewport.setAttribute('content', 'width=640px');
+if (typeof Object.getPrototypeOf != 'function') {
+    Object.getPrototypeOf = function(obj) {
+        return obj.__proto__;
+    };
 }
+
+/**
+ * グローバルにライブラリのクラスをエクスポートする.
+ * @namespace
+ * @function
+ */
+var enchant = function(modules) {
+    if (modules != null) {
+        if (!(modules instanceof Array)) {
+            modules = Array.prototype.slice.call(arguments);
+        }
+        modules = modules.filter(function(module) {
+            return [module].join();
+        });
+    }
+
+    (function include(module, prefix) {
+        var submodules = [];
+        for (var prop in module) if (module.hasOwnProperty(prop)) {
+            if (typeof module[prop] == 'function') {
+                window[prop] = module[prop];
+            } else if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+                if (modules == null) {
+                    submodules.push(prop);
+                } else {
+                    i = modules.indexOf(prefix + prop);
+                    if (i != -1) {
+                        submodules.push(prop);
+                        modules.splice(i, 1);
+                    }
+                }
+            }
+        }
+        for (var i = 0, len = submodules.length; i < len; i++) {
+            include(module[submodules[i]], prefix + submodules[i] + '.');
+        }
+    })(enchant, '');
+
+    if (modules != null && modules.length) {
+        throw new Error('Cannot load module: ' + modules.join(', '));
+    }
+};
+
+(function() {
+
+"use strict";
 
 var VENDER_PREFIX = (function() {
     var ua = navigator.userAgent;
@@ -104,6 +131,19 @@ var TOUCH_ENABLED = (function() {
     var div = document.createElement('div');
     div.setAttribute('ontouchstart', 'return');
     return typeof div.ontouchstart == 'function';
+})();
+var RETINA_DISPLAY = (function() {
+    if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
+        var viewport = document.querySelector('meta[name="viewport"]');
+        if (viewport == null) {
+            viewport = document.createElement('meta');
+            document.head.appendChild(viewport);
+        }
+        viewport.setAttribute('content', 'width=640px');
+        return true;
+    } else {
+        return false;
+    }
 })();
 
 // the running instance
@@ -405,7 +445,6 @@ enchant.EventTarget = enchant.Class.create({
         var listeners = this._listeners[e.type];
         if (listeners != null) {
             for (var i = 0, len = listeners.length; i < len; i++) {
-                if (listeners[i] == null) console.log(i, len, listeners);
                 listeners[i].call(this, e);
             }
         }
@@ -431,7 +470,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             initial = false;
             game.stop();
         }
-        game = this;
+        game = enchant.Game.instance = this;
 
         /**
          * ゲーム画面の横幅.
@@ -515,14 +554,19 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
          * @type {Object.<String, Surface>}
          */
         this.assets = {};
-        this.debug = false;
+        var assets = this._assets = [];
+        (function detectAssets(module) {
+            if (module.assets instanceof Array) {
+                [].push.apply(assets, module.assets);
+            }
+            for (var prop in module) if (module.hasOwnProperty(prop)) {
+                if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+                    detectAssets(module[prop]);
+                }
+            }
+        })(enchant);
 
         this._scenes = [];
-        /**
-         * ローディング時に表示されるScene.
-         * @type {enchant.Scene}
-         */
-        this.loadingScene = null;
         /**
          * 現在のScene.
          * @type {enchant.Scene}
@@ -534,9 +578,39 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
          */
         this.rootScene = new enchant.Scene();
         this.pushScene(this.rootScene);
+        /**
+         * ローディング時に表示されるScene.
+         * @type {enchant.Scene}
+         */
+        this.loadingScene = new enchant.Scene();
+        this.loadingScene.backgroundColor = '#000';
+        var barWidth = this.width * 0.9 | 0;
+        var barHeight = this.width * 0.3 | 0;
+        var border = barWidth * 0.05 | 0;
+        var bar = new enchant.Sprite(barWidth, barHeight);
+        bar.x = (this.width - barWidth) / 2;
+        bar.y = (this.height - barHeight) / 2;
+        var image = new enchant.Surface(barWidth, barHeight);
+        image.context.fillStyle = '#fff';
+        image.context.fillRect(0, 0, barWidth, barHeight);
+        image.context.fillStyle = '#000';
+        image.context.fillRect(border, border, barWidth - border*2, barHeight - border*2);
+        bar.image = image;
+        var progress = 0, _progress = 0;
+        this.addEventListener('progress', function(e) {
+            progress = e.loaded / e.total;
+        });
+        bar.addEventListener('enterframe', function() {
+            _progress *= 0.9;
+            _progress += progress * 0.1;
+            image.context.fillStyle = '#fff';
+            image.context.fillRect(border, 0, (barWidth - border*2) * _progress, barHeight);
+        });
+        this.loadingScene.addChild(bar);
 
-        this._mousedown_id = 0;
-        this._surface_id = 0;
+        this._mousedownID = 0;
+        this._surfaceID = 0;
+        this._intervalID = null;
 
         /**
          * ゲームに対する入力状態を保存するオブジェクト.
@@ -600,6 +674,11 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         if (initial) {
             document.addEventListener('keydown', function(e) {
+                if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode == 32) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+
                 if (!game.running) return;
                 var button = game._keybind[e.keyCode];
                 if (button) {
@@ -633,7 +712,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             } else {
                 document.addEventListener('mousedown', function(e) {
                     e.preventDefault();
-                    game._mousedown_id++;
+                    game._mousedownID++;
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mousemove', function(e) {
@@ -652,68 +731,10 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      * @param {Array.<String>} assets プリロードする画像のパスの配列.
      */
     preload: function(assets) {
-        if (this.ready != null || assets == null) {
-            return;
-        }
         if (!(assets instanceof Array)) {
             assets = Array.prototype.slice.call(arguments);
         }
-
-        if (this.loadingScene == null) {
-            var loading = this.loadingScene = new enchant.Scene();
-            loading.backgroundColor = '#000';
-            var width = game.width * 0.9 | 0;
-            var height = game.width * 0.3 | 0;
-            var border = width * 0.05 | 0;
-            var bar = new enchant.Sprite(width, height);
-            bar.x = (game.width - width) / 2;
-            bar.y = (game.height - height) / 2;
-            var image = new enchant.Surface(width, height);
-            image.context.fillStyle = '#fff';
-            image.context.fillRect(0, 0, width, height);
-            image.context.fillStyle = '#000';
-            image.context.fillRect(border, border, width - border*2, height - border*2);
-            bar.image = image;
-            var progress = 0, _progress = 0;
-            this.addEventListener('progress', function(e) {
-                progress = e.loaded / e.total;
-            });
-            bar.addEventListener('enterframe', function() {
-                _progress *= 0.9;
-                _progress += progress * 0.1;
-                image.context.fillStyle = '#fff';
-                image.context.fillRect(border, 0, (width - border*2) * _progress, height);
-            });
-            loading.addChild(bar);
-        }
-        this.pushScene(this.loadingScene);
-
-        var count = 0;
-        assets.forEach(function(path) {
-            var image = new Image();
-            image.src = path;
-            image.onerror = function() {
-                throw new Error('cannot load an asset: ' + image.src);
-            };
-            image.onload = function() {
-                game.assets[path] = Object.create(Surface.prototype, {
-                    width: { value: image.width },
-                    height: { value: image.height },
-                    _css: { value: 'url(' + image.src + ')' },
-                    _element: { value: image }
-                });
-                var e = new enchant.Event('progress');
-                e.loaded = ++count;
-                e.total = assets.length;
-                game.dispatchEvent(e);
-                if (count == assets.length) {
-                    game.popScene();
-                    game.ready = true;
-                    game.dispatchEvent(new enchant.Event('load'));
-                }
-            };
-        });
-        this.ready = false;
+        [].push.apply(this._assets, assets);
     },
     /**
      * ゲームを開始する.
@@ -721,6 +742,31 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     start: function() {
         if (this._intervalID) {
             window.clearInterval(this._intervalID);
+        } else if (this._assets.length) {
+            var o = {};
+            var assets = this._assets.filter(function(i) {
+                return i in o ? false : o[i] = true;
+            });
+            var loaded = 0;
+            var total = assets.length;
+            while (assets.length) {
+                var src = assets.shift();
+                var asset = Surface.load(src);
+                asset.onload = function() {
+                    var e = new enchant.Event('progress');
+                    e.loaded = ++loaded;
+                    e.total = total;
+                    game.dispatchEvent(e);
+                    if (loaded == total) {
+                        game.popScene();
+                        game.dispatchEvent(new enchant.Event('load'));
+                    }
+                };
+                this.assets[src] = asset;
+            }
+            this.pushScene(this.loadingScene);
+        } else {
+            this.dispatchEvent(new enchant.Event('load'));
         }
         this.currentTime = Date.now();
         this._intervalID = window.setInterval(function() {
@@ -817,6 +863,13 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
+ * 現在のGameインスタンス.
+ * @type {enchant.Game}
+ * @static
+ */
+enchant.Game.instance = null;
+
+/**
  * @scope enchant.Node.prototype
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
@@ -843,7 +896,6 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          * @type {enchant.Scene}
          */
         this.scene = null;
-        this.game = game;
 
         this.addEventListener('touchstart', function(e) {
             if (this.parentNode && this.parentNode != this.scene) {
@@ -942,11 +994,30 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._buttonMode = null;
 
         /**
+         * Entityにボタンの機能を設定する.
+         * @type {String}
+         */
+        this.buttonMode = null;
+        /**
          * Entityが押されているかどうか.
-         * buttonModeがtrueのときだけ機能する.
+         * buttonModeが設定されているときだけ機能する.
          * @type {Boolean}
          */
         this.buttonPressed = false;
+        this.addEventListener('touchstart', function() {
+            if (!this.buttonMode) return;
+            this.buttonPressed = true;
+            var e = new Event(button + 'buttondown');
+            this.dispatchEvent(e);
+            game.dispatchEvent(e);
+        });
+        this.addEventListener('touchend', function() {
+            if (!this.buttonMode) return;
+            this.buttonPressed = false;
+            var e = new Event(button + 'buttonup');
+            this.dispatchEvent(e);
+            game.dispatchEvent(e);
+        });
 
         var that = this;
         var render = function() {
@@ -1004,7 +1075,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchstart');
-                e.identifier = game._mousedown_id;
+                e.identifier = game._mousedownID;
                 e._initPosition(x, y);
                 that.dispatchEvent(e);
                 that._mousedown = true;
@@ -1014,7 +1085,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchmove');
-                e.identifier = game._mousedown_id;
+                e.identifier = game._mousedownID;
                 e._initPosition(x, y);
                 that.dispatchEvent(e);
             }, false);
@@ -1023,7 +1094,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchend');
-                e.identifier = game._mousedown_id;
+                e.identifier = game._mousedownID;
                 e._initPosition(x, y);
                 that.dispatchEvent(e);
                 that._mousedown = false;
@@ -1113,42 +1184,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Entityにボタンの機能を設定する.
-     * @type {String}
-     */
-    buttonMode: {
-        get: function() {
-            return this._buttonMode;
-        },
-        set: function(button) {
-            if (this._buttonMode == button) {
-                return;
-            }
-
-            if (this._buttonMode != null) {
-                this.removeEventListener('touchstart', this._buttondown);
-                this.removeEventListener('touchend', this._buttonup);
-            }
-            if (button != null) {
-                this._buttondown = function() {
-                    this.buttonPressed = true;
-                    var e = new Event(button + 'buttondown');
-                    this.dispatchEvent(e);
-                    game.dispatchEvent(e);
-                };
-                this._buttonup = function() {
-                    this.buttonPressed = false;
-                    var e = new Event(button + 'buttonup');
-                    this.dispatchEvent(e);
-                    game.dispatchEvent(e);
-                };
-                this.addEventListener('touchstart', this._buttondown);
-                this.addEventListener('touchend', this._buttonup);
-            }
-            this._buttonMode = button;
-        }
-    },
-    /**
      * Entityの矩形が交差しているかどうかにより衝突判定を行う.
      * @param {*} other 衝突判定を行うEntityなどx, y, width, heightプロパティを持ったObject.
      * @return {Boolean} 衝突判定の結果.
@@ -1168,8 +1203,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             distance = (this.width + this.height + other.width + other.height) / 4;
         }
         var _;
-        return (_ = this.x + this.width * 0.5 - other.x - other.width * 0.5) * _ +
-            (_ = this.y + this.height * 0.5 - other.y - other.height * 0.5) * _ < distance * distance;
+        return (_ = this.x - other.x + (this.width - other.width) / 2) * _ +
+            (_ = this.y - other.y + (this.height - other.height) / 2) * _ < distance * distance;
     }
 });
 
@@ -1408,7 +1443,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         enchant.Entity.call(this);
 
         var canvas = document.createElement('canvas');
-        if (window.devicePixelRatio == 2 && game.scale == 2) {
+        if (RETINA_DISPLAY && game.scale == 2) {
             canvas.width = game.width * 2;
             canvas.height = game.height * 2;
             this._style.webkitTransformOrigin = '0 0';
@@ -1578,7 +1613,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         },
         set: function(image) {
             this._image = image;
-            if (window.devicePixelRatio == 2 && game.scale == 2) {
+            if (RETINA_DISPLAY && game.scale == 2) {
                 var img = new Surface(image.width * 2, image.height * 2);
                 var tileWidth = this._tileWidth || image.width;
                 var tileHeight = this._tileHeight || image.height;
@@ -1889,7 +1924,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchstart');
-                e.identifier = game._mousedown_id;
+                e.identifier = game._mousedownID;
                 e._initPosition(x, y);
                 that.dispatchEvent(e);
                 that._mousedown = true;
@@ -1899,7 +1934,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchmove');
-                e.identifier = game._mousedown_id;
+                e.identifier = game._mousedownID;
                 e._initPosition(x, y);
                 that.dispatchEvent(e);
             }, false);
@@ -1908,7 +1943,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchend');
-                e.identifier = game._mousedown_id;
+                e.identifier = game._mousedownID;
                 e._initPosition(x, y);
                 that.dispatchEvent(e);
                 that._mousedown = false;
@@ -1940,7 +1975,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 /**
  * @scope enchant.Surface.prototype
  */
-enchant.Surface = enchant.Class.create({
+enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
      * Surfaceオブジェクトを作成する.
      * @param {Number} width Surfaceの横幅.
@@ -1948,6 +1983,8 @@ enchant.Surface = enchant.Class.create({
      * @constructs
      */
     initialize: function(width, height) {
+        enchant.EventTarget.call(this);
+
         /**
          * Surfaceの横幅.
          * @type {Number}
@@ -1964,7 +2001,7 @@ enchant.Surface = enchant.Class.create({
          */
         this.context = null;
 
-        var id = 'enchant-surface' + game._surface_id++;
+        var id = 'enchant-surface' + game._surfaceID++;
         if (document.getCSSCanvasContext) {
             this.context = document.getCSSCanvasContext('2d', id, width, height);
             this._element = this.context.canvas;
@@ -2052,5 +2089,29 @@ enchant.Surface = enchant.Class.create({
         return clone;
     }
 });
+
+/**
+ * 画像を読み込んでSurfaceオブジェクトを作成する.
+ * @param {String} src ロードする画像のパス.
+ * @static
+ */
+enchant.Surface.load = function(src) {
+    var image = new Image();
+    var surface = Object.create(Surface.prototype, {
+        _css: { value: 'url(' + src + ')' },
+        _element: { value: image }
+    });
+    enchant.EventTarget.call(surface);
+    image.src = src;
+    image.onerror = function() {
+        throw new Error('Cannot load an asset: ' + image.src);
+    };
+    image.onload = function() {
+        surface.width = image.width;
+        surface.height = image.height;
+        surface.dispatchEvent(new enchant.Event('load'));
+    };
+    return surface;
+};
 
 })();
