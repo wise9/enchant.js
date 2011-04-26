@@ -19,6 +19,16 @@ Design
 - Graphics Object Tree
 - Event Driven
 
+Platform
+--------
+
+- Chrome
+- Safari
+- Firefox
+- IE9 
+- iOS
+- Android 2.1+
+
 License
 -------
 
