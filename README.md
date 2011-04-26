@@ -1,7 +1,7 @@
 enchant.js
 ==========
 
-![enchant.js logo](http://www.4gamer.net/games/032/G003263/20110418052/TN/001.jpg)
+<img src="http://github.com/wise9/enchant.js/raw/master/enchant.png" width="320" height="320">
 
 JavaScript Game Engine
 
