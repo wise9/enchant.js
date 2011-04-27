@@ -71,7 +71,7 @@ window.onload = function() {
             [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,421,420, -1, -1, -1, -1, -1, -1, -1, -1]
         ]);
         map.collisionData = [
-            [  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1],
+            [  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1],
             [  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1],
             [  0,  1,  1,  0,  1,  1,  0,  1,  1,  0,  1,  1,  0,  0,  0,  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1],
             [  0,  0,  0,  1,  1,  1,  1,  1,  1,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
@@ -200,8 +200,8 @@ window.onload = function() {
         game.rootScene.addChild(pad);
 
         game.rootScene.addEventListener('enterframe', function(e) {
-            var x = Math.min((game.width  - 32) / 2 - player.x, 0);
-            var y = Math.min((game.height - 32) / 2 - player.y, 0);
+            var x = Math.min((game.width  - 16) / 2 - player.x, 0);
+            var y = Math.min((game.height - 16) / 2 - player.y, 0);
 			x = Math.max(game.width,  x + map.width)  - map.width;
 			y = Math.max(game.height, y + map.height) - map.height;
             stage.x = x;

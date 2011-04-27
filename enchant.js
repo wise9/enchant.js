@@ -1883,8 +1883,8 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element = document.createElement('div');
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
-        this._element.style.width = game.width + 'px';
-        this._element.style.height = game.height + 'px';
+        this._element.style.width = (this.width = game.width) + 'px';
+        this._element.style.height = (this.height = game.height) + 'px';
         this._element.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
         this._element.style[VENDER_PREFIX + 'Transform'] = 'scale(' +  game.scale + ')';
 

@@ -161,6 +161,9 @@ window.onload = function() {
             if (this.x > 64 - bear.x) { 
                 this.x = 64 - bear.x;
             }
+            if (bear.y > 240) {
+                game.end(bear.x, bear.x + 'mで死にました');
+            }
         });
         game.rootScene.addChild(map);
         game.rootScene.addChild(bear);
