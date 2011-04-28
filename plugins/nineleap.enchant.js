@@ -22,8 +22,8 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
                 var id = location.pathname.match(/^\/game\/(\d+)/)[1]; 
                 location.replace([
                     'http://9leap.net/games/', id, '/result',
-                    '?score=', escape(score),
-                    '&result=', escape(result)
+                    '?score=', encodeURIComponent(score),
+                    '&result=', encodeURIComponent(result)
                 ].join(''));
             }
             this.endScene.addEventListener('touchend', submit);
