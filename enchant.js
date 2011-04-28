@@ -662,6 +662,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         if (initial) {
             document.addEventListener('keydown', function(e) {
+                game.dispatchEvent(new enchant.Event('keydown'));
                 if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode == 32) {
                     e.preventDefault();
                     e.stopPropagation();
