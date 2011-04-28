@@ -4,7 +4,7 @@ require 'rake/clean'
 require 'net/http'
 
 RELEASES = ['enchant.js', 'enchant.min.js', 'doc/index.html']
-CLEAN << 'enchant.min.js'
+CLEAN << 'enchant.min.js' << 'doc/index.html'
 
 Copyright = <<EOS
 /*

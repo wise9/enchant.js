@@ -70,7 +70,7 @@ if (typeof Object.getPrototypeOf != 'function') {
 /**
  * グローバルにライブラリのクラスをエクスポートする.
  * @namespace
- * @function
+ * @param {Array.<String>} [modules] エクスポートするモジュール
  */
 var enchant = function(modules) {
     if (modules != null) {
@@ -1415,7 +1415,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 文字色の指定.
-     * CSSの'font'プロパティと同様の形式で指定できる.
+     * CSSの'color'プロパティと同様の形式で指定できる.
      * @type {String}
      */
     color: {
