@@ -20,7 +20,7 @@ window.onload = function() {
         }
     });
 
-    var game = new Game(320, 240);
+    var game = new Game(320, 320);
     game.fps = 24;
     game.preload('bear.gif', 'map.gif');
     game.onload = function() {
@@ -157,16 +157,23 @@ window.onload = function() {
             this.x = dest.x;
             this.y = dest.y;
         });
-        game.rootScene.addEventListener('enterframe', function(e) {
+        var stage = new Group();
+        stage.addChild(map);
+        stage.addChild(bear);
+        stage.addEventListener('enterframe', function(e) {
             if (this.x > 64 - bear.x) { 
                 this.x = 64 - bear.x;
             }
-            if (bear.y > 240) {
+            if (bear.y > 320) {
                 game.end(bear.x, bear.x + 'mで死にました');
             }
         });
-        game.rootScene.addChild(map);
-        game.rootScene.addChild(bear);
+        var pad = new Pad();
+        pad.x = 0;
+        pad.y = 224;
+        game.rootScene.addChild(stage);
+        game.rootScene.addChild(pad);
+        game.rootScene.backgroundColor = 'rgb(182, 255, 255)';
     };
     game.start();
 };

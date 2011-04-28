@@ -316,11 +316,30 @@ enchant.Event.TOUCH_MOVE = 'touchmove';
  * @type {String}
  */
 enchant.Event.TOUCH_END = 'touchend';
+
 /**
  * Entityがレンダリングされるときに発生するイベント.
  * @type {String}
  */
 enchant.Event.RENDER = 'render';
+
+/**
+ * ボタン入力が始まったとき発生するイベント.
+ * @type {String}
+ */
+enchant.Event.INPUT_START = 'inputstart';
+
+/**
+ * ボタン入力が変化したとき発生するイベント.
+ * @type {String}
+ */
+enchant.Event.INPUT_CHANGE = 'inputchange';
+
+/**
+ * ボタン入力が終了したとき発生するイベント.
+ * @type {String}
+ */
+enchant.Event.INPUT_END = 'inputend';
 
 /**
  * leftボタンが押された発生するイベント.
@@ -623,54 +642,23 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         this.keybind(39, 'right'); // Right Arrow
         this.keybind(40, 'down');  // Down Arrow
 
-        this.addEventListener('leftbuttondown', function(e) {
-            this.input.left = true;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('leftbuttonup', function(e) {
-            this.input.left = false;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('rightbuttondown', function(e) {
-            this.input.right = true;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('rightbuttonup', function(e) {
-            this.input.right = false;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('upbuttondown', function(e) {
-            this.input.up = true;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('upbuttonup', function(e) {
-            this.input.up = false;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('downbuttondown', function(e) {
-            this.input.down = true;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('downbuttonup', function(e) {
-            this.input.down = false;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('abuttondown', function(e) {
-            this.input.a = true;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('abuttonup', function(e) {
-            this.input.a = false;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('bbuttondown', function(e) {
-            this.input.b = true;
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener('bbuttonup', function(e) {
-            this.input.b = false;
-            this.currentScene.dispatchEvent(e);
-        });
+        var c = 0;
+        ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
+            this.addEventListener(type + 'buttondown', function(e) {
+                if (!this.input[type]) {
+                    this.input[type] = true;
+                    this.dispatchEvent(new enchant.Event((c++) ? 'inputchange' : 'inputstart'));
+                }
+                this.currentScene.dispatchEvent(e);
+            });
+            this.addEventListener(type + 'buttonup', function(e) {
+                if (this.input[type]) {
+                    this.input[type] = false;
+                    this.dispatchEvent(new enchant.Event((--c) ? 'inputchange' : 'inputend'));
+                }
+                this.currentScene.dispatchEvent(e);
+            });
+        }, this);
 
         if (initial) {
             document.addEventListener('keydown', function(e) {
@@ -683,7 +671,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 var button = game._keybind[e.keyCode];
                 if (button) {
                     var e = new enchant.Event(button + 'buttondown');
-                    game.currentScene.dispatchEvent(e);
                     game.dispatchEvent(e);
                 }
             }, true);
@@ -692,7 +679,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 var button = game._keybind[e.keyCode];
                 if (button) {
                     var e = new enchant.Event(button + 'buttonup');
-                    game.currentScene.dispatchEvent(e);
                     game.dispatchEvent(e);
                 }
             }, true);
