@@ -69,8 +69,18 @@ if (typeof Object.getPrototypeOf != 'function') {
 
 /**
  * グローバルにライブラリのクラスをエクスポートする.
- * @namespace
- * @param {Array.<String>} [modules] エクスポートするモジュール
+ *
+ * 引数に何も渡さない場合enchant.jsで定義されたクラス及びプラグインで定義されたクラス
+ * 全てがエクスポートされる. 引数が一つ以上の場合はenchant.jsで定義されたクラスのみ
+ * がデフォルトでエクスポートされ、プラグインのクラスをエクスポートしたい場合は明示的に
+ * プラグインの識別子を引数として渡す必要がある.
+ *
+ * @example
+ *   enchant();     // 全てのクラスがエクスポートされる
+ *   enchant('');   // enchant.js本体のクラスのみがエクスポートされる
+ *   enchant('ui'); // enchant.js本体のクラスとui.enchant.jsのクラスがエクスポートされる
+ *
+ * @param {...String} [modules] エクスポートするモジュール. 複数指定できる.
  */
 var enchant = function(modules) {
     if (modules != null) {
@@ -151,6 +161,9 @@ var game;
 
 /**
  * Classオブジェクトを作成する.
+ *
+ * Class.createと同様. Class.createの項を参照.
+ *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} definition クラス定義.
  * @constructor
@@ -161,6 +174,25 @@ enchant.Class = function(superclass, definition) {
 
 /**
  * Classオブジェクトを作成する.
+ *
+ * ほかのクラスを継承したクラスを作成する場合、コンストラクタはデフォルトで
+ * 継承元のクラスのものが使われる. コンストラクタをオーバーライドする場合継承元の
+ * コンストラクタを適用するには明示的に呼び出す必要がある.
+ *
+ * @example
+ *   var Ball = Class.create({ // 何も継承しないクラスを作成する
+ *       initialize: function(radius) { ... }, // メソッド定義
+ *       fall: function() { ... }
+ *   });
+ *
+ *   var Ball = Class.create(Sprite);  // Spriteを継承したクラスを作成する
+ *   var Ball = Class.create(Sprite, { // Spriteを継承したクラスを作成する
+ *       initialize: function(radius) { // コンストラクタを上書きする
+ *          Sprite.call(this, radius*2, radius*2); // 継承元のコンストラクタを適用する
+ *          this.image = game.assets['ball.gif'];
+ *       }
+ *   });
+ *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} [definition] クラス定義.
  * @static
@@ -172,8 +204,10 @@ enchant.Class.create = function(superclass, definition) {
         return enchant.Class.create(Object, arguments[0]);
     }
 
-    for (var prop in definition) if (typeof definition[prop] != 'object') {
-        definition[prop] = { value: definition[prop] };
+    for (var prop in definition) if (definition.hasOwnProperty(prop)) {
+        if (Object.getPrototypeOf(definition[prop]) != Object.prototype) {
+            definition[prop] = { value: definition[prop] };
+        }
     }
     var constructor = function() {
         if (this instanceof constructor) {
@@ -198,6 +232,9 @@ enchant.Class.create = function(superclass, definition) {
 enchant.Event = enchant.Class.create({
     /**
      * Eventオブジェクトを作成する.
+     *
+     * DOM Event風味の独自イベント実装. ただしフェーズの概念はなし.
+     *
      * @param {String} type Eventのタイプ
      * @constructs
      */
@@ -241,174 +278,270 @@ enchant.Event = enchant.Class.create({
 
 /**
  * Gameのロード完了時に発生するイベント.
+ *
+ * 画像のプリロードを行う場合ロードが完了するのを待ってゲーム開始時の処理を行う必要がある.
+ * 発行するオブジェクト: enchant.Game
+ *
+ * @example
+ *   var game = new Game(320, 320);
+ *   game.preload('actor.gif');
+ *   game.onload = function() {
+ *      ... // ゲーム開始時の処理を記述
+ *   };
+ *   game.start();
+ *
  * @type {String}
  */
 enchant.Event.LOAD = 'load';
 
 /**
  * Gameのロード進行中に発生するイベント.
+ * 
+ * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: enchant.Game
+ * 
  * @type {String}
  */
 enchant.Event.PROGRESS = 'progress';
 
 /**
  * フレーム開始時に発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
 
 /**
  * フレーム終了時に発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game
+ *
  * @type {String}
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
 
 /**
  * Sceneが開始したとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.ENTER = 'enter';
 
 /**
  * Sceneが終了したとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.EXIT = 'exit';
 
 /**
  * NodeがGroupに追加されたとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.ADDED = 'added';
 
 /**
  * NodeがSceneに追加されたとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
 
 /**
  * NodeがGroupから削除されたとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.REMOVED = 'removed';
 
 /**
  * NodeがSceneから削除されたとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
 
 /**
  * Nodeに対するタッチが始まったとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.TOUCH_START = 'touchstart';
 
 /**
  * Nodeに対するタッチが移動したとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.TOUCH_MOVE = 'touchmove';
 
 /**
  * Nodeに対するタッチが終了したとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Node
+ *
  * @type {String}
  */
 enchant.Event.TOUCH_END = 'touchend';
 
 /**
  * Entityがレンダリングされるときに発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Entity
+ *
  * @type {String}
  */
 enchant.Event.RENDER = 'render';
 
 /**
  * ボタン入力が始まったとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.INPUT_START = 'inputstart';
 
 /**
  * ボタン入力が変化したとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
  * ボタン入力が終了したとき発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.INPUT_END = 'inputend';
 
 /**
  * leftボタンが押された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
 
 /**
  * leftボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
 
 /**
  * rightボタンが押された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
 
 /**
  * rightボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
 
 /**
  * upボタンが押された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
 
 /**
  * upボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.UP_BUTTON_UP = 'upbuttonup';
 
 /**
  * downボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
-enchant.Event.DOwN_BUTTON_DOWN = 'downbuttondown';
+enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 
 /**
  * downボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
-enchant.Event.DOwN_BUTTON_UP = 'downbuttonup';
+enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 /**
  * aボタンが押された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
  * aボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
 /**
  * bボタンが押された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
 /**
  * bボタンが離された発生するイベント.
+ * 
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
+ *
  * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
@@ -420,6 +553,9 @@ enchant.Event.B_BUTTON_UP = 'bbuttonup';
 enchant.EventTarget = enchant.Class.create({
     /**
      * EventTargetオブジェクトを作成する.
+     *
+     * DOM Event風味の独自イベント実装. ただしフェーズの概念はなし.
+     *
      * @constructs
      */
     initialize: function() {
@@ -476,6 +612,11 @@ enchant.EventTarget = enchant.Class.create({
 enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
      * Gameオブジェクトを作成する.
+     *
+     * インスタンスは一つしか存在することができず、すでにインスタンスが存在する状態で
+     * コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
+     * enchant.Game.instanceからアクセスできる.
+     *
      * @param {Number} width ゲーム画面の横幅.
      * @param {Number} height ゲーム画面の高さ.
      * @constructs
@@ -546,6 +687,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             this._pageX = Math.round(window.scrollX + bounding.left);
             this._pageY = Math.round(window.scrollY + bounding.top);
         }
+        if (!this.scale) this.scale = 1;
         stage.style.fontSize = '12px';
         stage.style.webkitTextSizeAdjust = 'none';
         this._element = stage;
@@ -589,12 +731,12 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         this._scenes = [];
         /**
-         * 現在のScene.
+         * 現在のScene. Sceneスタック中の一番上のScene.
          * @type {enchant.Scene}
          */
         this.currentScene = null;
         /**
-         * ルートScene.
+         * ルートScene. Sceneスタック中の一番下のScene.
          * @type {enchant.Scene}
          */
         this.rootScene = new enchant.Scene();
@@ -716,8 +858,24 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * ゲームに必要なリソースのプリロードを行う.
-     * @param {Array.<String>} assets プリロードする画像のパスの配列.
+     * 画像ファイルのプリロードを行う.
+     *
+     * プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
+     * ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
+     * イベントが発行され、GameオブジェクトのassetsプロパティからSurfaceオブジェクト
+     * として参照できるようになる. なおこのSurfaceオブジェクトはcontextプロパティを
+     * 持たないためピクセル操作を行うことはできない.
+     *
+     * @example
+     *   game.preload('actor.gif');
+     *   game.onload = function() {
+     *      var sprite = new Sprite(32, 32);
+     *      sprite.image = game.assets['actor.gif']; // パス名でアクセス 
+     *      ...
+     *   };
+     *   game.start();
+     *
+     * @param {...String} assets プリロードする画像のパス. 複数指定できる.
      */
     preload: function(assets) {
         if (!(assets instanceof Array)) {
@@ -727,6 +885,10 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * ゲームを開始する.
+     *
+     * enchant.Game#fpsで設定されたフレームレートに従ってenchant.Game#currentSceneの
+     * フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
+     * 始まりローディング画面が表示される. 
      */
     start: function() {
         if (this._intervalID) {
@@ -747,7 +909,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     e.total = total;
                     game.dispatchEvent(e);
                     if (loaded == total) {
-                        game.popScene();
+                        game.removeScene(game.loadingScene);
                         game.dispatchEvent(new enchant.Event('load'));
                     }
                 };
@@ -762,25 +924,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             game._tick()
         }, 1000 / this.fps);
         this.running = true;
-    },
-    /**
-     * ゲームを停止する.
-     */
-    stop: function() {
-        if (this._intervalID) {
-            window.clearInterval(this._intervalID);
-            this._intervalID = null;
-        }
-        this.running = false;
-    },
-    /**
-     * ゲームを一時停止する.
-     */
-    pause: function() {
-        if (this._intervalID) {
-            window.clearInterval(this._intervalID);
-            this._intervalID = null;
-        }
     },
     _tick: function() {
         var now = Date.now();
@@ -805,7 +948,37 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         this.frame++;
     },
     /**
+     * ゲームを停止する.
+     *
+     * フレームは更新されず、プレイヤーの入力も受け付けなくなる. 
+     * enchant.Game#startで再開できる.
+     */
+    stop: function() {
+        if (this._intervalID) {
+            window.clearInterval(this._intervalID);
+            this._intervalID = null;
+        }
+        this.running = false;
+    },
+    /**
+     * ゲームを一時停止する.
+     *
+     * フレームは更新されず、プレイヤーの入力は受け付ける. 
+     * enchant.Game#startで再開できる.
+     */
+    pause: function() {
+        if (this._intervalID) {
+            window.clearInterval(this._intervalID);
+            this._intervalID = null;
+        }
+    },
+    /**
      * 新しいSceneに移行する.
+     *
+     * Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+     * enchant.Game#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
+     * 一番上のSceneに対してはフレームの更新が行われる.
+     *
      * @param {enchant.Scene} scene 移行する新しいScene.
      * @return {enchant.Scene} 新しいScene.
      */
@@ -820,10 +993,14 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * 現在のSceneを終了させ前のSceneに戻る.
+     *
+     * Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+     * enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出すことができる.
+     *
      * @return {enchant.Scene} 終了させたScene.
      */
     popScene: function() {
-        if (this.currentScene === this.rootScene) {
+        if (this.currentScene == this.rootScene) {
             return;
         }
         this._element.removeChild(this.currentScene._element);
@@ -834,6 +1011,9 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * 現在のSceneを別のSceneにおきかえる.
+     *
+     * enchant.Game#popScene, enchant.Game#pushSceneを同時に行う.
+     *
      * @param {enchant.Scene} scene おきかえるScene.
      * @return {enchant.Scene} 新しいScene.
      */
@@ -842,7 +1022,30 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         return this.pushScene(scene);
     },
     /**
+     * Scene削除する.
+     *
+     * Sceneスタック中からSceneを削除する.
+     *
+     * @param {enchant.Scene} scene 削除するScene.
+     * @return {enchant.Scene} 削除したScene.
+     */
+    removeScene: function(scene) {
+        if (this.currentScene == scene) {
+            return this.popScene();
+        } else {
+            var i = this._scenes.indexOf(scene);
+            if (i != -1) {
+                this._scenes.splice(i, 1);
+                this._element.removeChild(scene._element);
+                return scene;
+            }
+        }
+    },
+    /**
      * キーバインドを設定する.
+     *
+     * キー入力をleft, right, up, down, a, bのボタン入力として割り当てることができる.
+     *
      * @param {Number} key キーバインドを設定するキーコード.
      * @param {String} button 割り当てるボタン.
      */

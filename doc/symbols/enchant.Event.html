@@ -38,8 +38,6 @@
 				
 					<li><a href="../symbols/_global_.html">_global_</a></li>
 				
-					<li><a href="../symbols/enchant.html">enchant</a></li>
-				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
@@ -71,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-28 22:53
+		Generated on: 2011-3-30 20:23
 	</div>
 </div>
 
@@ -206,7 +204,7 @@
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										enchant.Event.<b><a href="../symbols/enchant.Event.html#.DOwN_BUTTON_DOWN">DOwN_BUTTON_DOWN</a></b>
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.DOWN_BUTTON_DOWN">DOWN_BUTTON_DOWN</a></b>
 										</div>
 										<div class="description">downボタンが離された発生するイベント.</div>
 									</td>
@@ -216,7 +214,7 @@
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										enchant.Event.<b><a href="../symbols/enchant.Event.html#.DOwN_BUTTON_UP">DOwN_BUTTON_UP</a></b>
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.DOWN_BUTTON_UP">DOWN_BUTTON_UP</a></b>
 										</div>
 										<div class="description">downボタンが離された発生するイベント.</div>
 									</td>
@@ -524,6 +522,8 @@
 					
 					<div class="description">
 						Eventオブジェクトを作成する.
+
+DOM Event風味の独自イベント実装. ただしフェーズの概念はなし.
 						
 					</div>
 					
@@ -569,6 +569,8 @@
 						
 						<div class="description">
 							aボタンが押された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -591,6 +593,8 @@
 						
 						<div class="description">
 							aボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -613,6 +617,8 @@
 						
 						<div class="description">
 							NodeがGroupに追加されたとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -635,6 +641,8 @@
 						
 						<div class="description">
 							NodeがSceneに追加されたとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -657,6 +665,8 @@
 						
 						<div class="description">
 							bボタンが押された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -679,6 +689,8 @@
 						
 						<div class="description">
 							bボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -689,18 +701,20 @@
 						
 						<div class="hr"></div>
 					
-						<div class="fixedFont heading" id=".DOwN_BUTTON_DOWN">
+						<div class="fixedFont heading" id=".DOWN_BUTTON_DOWN">
 							<span class='lighter'>
 							&lt;static&gt; 
 							</span>
 							
 							
 							
-							<span class="light">enchant.Event.</span><b>DOwN_BUTTON_DOWN</b>							
+							<span class="light">enchant.Event.</span><b>DOWN_BUTTON_DOWN</b>							
 						</div>
 						
 						<div class="description">
 							downボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -711,18 +725,20 @@
 						
 						<div class="hr"></div>
 					
-						<div class="fixedFont heading" id=".DOwN_BUTTON_UP">
+						<div class="fixedFont heading" id=".DOWN_BUTTON_UP">
 							<span class='lighter'>
 							&lt;static&gt; 
 							</span>
 							
 							
 							
-							<span class="light">enchant.Event.</span><b>DOwN_BUTTON_UP</b>							
+							<span class="light">enchant.Event.</span><b>DOWN_BUTTON_UP</b>							
 						</div>
 						
 						<div class="description">
 							downボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -745,6 +761,8 @@
 						
 						<div class="description">
 							Sceneが開始したとき発生するイベント.
+
+発行するオブジェクト: enchant.Scene
 							
 							
 							
@@ -767,6 +785,8 @@
 						
 						<div class="description">
 							フレーム開始時に発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Node
 							
 							
 							
@@ -789,6 +809,8 @@
 						
 						<div class="description">
 							Sceneが終了したとき発生するイベント.
+
+発行するオブジェクト: enchant.Scene
 							
 							
 							
@@ -811,6 +833,8 @@
 						
 						<div class="description">
 							フレーム終了時に発生するイベント.
+
+発行するオブジェクト: enchant.Game
 							
 							
 							
@@ -833,6 +857,8 @@
 						
 						<div class="description">
 							ボタン入力が変化したとき発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -855,6 +881,8 @@
 						
 						<div class="description">
 							ボタン入力が終了したとき発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -877,6 +905,8 @@
 						
 						<div class="description">
 							ボタン入力が始まったとき発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -899,6 +929,8 @@
 						
 						<div class="description">
 							leftボタンが押された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -921,6 +953,8 @@
 						
 						<div class="description">
 							leftボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -943,11 +977,23 @@
 						
 						<div class="description">
 							Gameのロード完了時に発生するイベント.
+
+画像のプリロードを行う場合ロードが完了するのを待ってゲーム開始時の処理を行う必要がある.
+発行するオブジェクト: enchant.Game
 							
 							
 							
 						</div>
 						
+						
+							
+								<pre class="code">  var game = new Game(320, 320);
+  game.preload('actor.gif');
+  game.onload = function() {
+     ... // ゲーム開始時の処理を記述
+  };
+  game.start();</pre>
+							
 						
 							
 						
@@ -1009,6 +1055,8 @@
 						
 						<div class="description">
 							Gameのロード進行中に発生するイベント.
+
+プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: enchant.Game
 							
 							
 							
@@ -1031,6 +1079,8 @@
 						
 						<div class="description">
 							NodeがGroupから削除されたとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -1053,6 +1103,8 @@
 						
 						<div class="description">
 							NodeがSceneから削除されたとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -1075,6 +1127,8 @@
 						
 						<div class="description">
 							Entityがレンダリングされるときに発生するイベント.
+
+発行するオブジェクト: enchant.Entity
 							
 							
 							
@@ -1097,6 +1151,8 @@
 						
 						<div class="description">
 							rightボタンが押された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -1119,6 +1175,8 @@
 						
 						<div class="description">
 							rightボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -1163,6 +1221,8 @@
 						
 						<div class="description">
 							Nodeに対するタッチが終了したとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -1185,6 +1245,8 @@
 						
 						<div class="description">
 							Nodeに対するタッチが移動したとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -1207,6 +1269,8 @@
 						
 						<div class="description">
 							Nodeに対するタッチが始まったとき発生するイベント.
+
+発行するオブジェクト: enchant.Node
 							
 							
 							
@@ -1251,6 +1315,8 @@
 						
 						<div class="description">
 							upボタンが押された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							
@@ -1273,6 +1339,8 @@
 						
 						<div class="description">
 							upボタンが離された発生するイベント.
+
+発行するオブジェクト: enchant.Game, enchant.Scene
 							
 							
 							

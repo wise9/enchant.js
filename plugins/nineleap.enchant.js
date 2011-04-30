@@ -23,7 +23,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         this.pushScene(this.endScene);
         if (location.hostname == 'r.jsgames.jp') {
             var submit = function() {
-                var id = location.pathname.match(/^\/game\/(\d+)/)[1]; 
+                var id = location.pathname.match(/^\/games\/(\d+)/)[1]; 
                 location.replace([
                     'http://9leap.net/games/', id, '/result',
                     '?score=', encodeURIComponent(score),

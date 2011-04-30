@@ -38,8 +38,6 @@
 				
 					<li><a href="../symbols/_global_.html">_global_</a></li>
 				
-					<li><a href="../symbols/enchant.html">enchant</a></li>
-				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
@@ -71,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-28 22:53
+		Generated on: 2011-3-30 20:23
 	</div>
 </div>
 
@@ -187,6 +185,8 @@
 					
 					<div class="description">
 						Classオブジェクトを作成する.
+
+Class.createと同様. Class.createの項を参照.
 						
 					</div>
 					
@@ -247,12 +247,31 @@
 								
 								<div class="description">
 									Classオブジェクトを作成する.
+
+ほかのクラスを継承したクラスを作成する場合、コンストラクタはデフォルトで
+継承元のクラスのものが使われる. コンストラクタをオーバーライドする場合継承元の
+コンストラクタを適用するには明示的に呼び出す必要がある.
 									
 									
 									
 									
 								</div>
 								
+								
+									
+										<pre class="code">  var Ball = Class.create({ // 何も継承しないクラスを作成する
+      initialize: function(radius) { ... }, // メソッド定義
+      fall: function() { ... }
+  });
+
+  var Ball = Class.create(Sprite);  // Spriteを継承したクラスを作成する
+  var Ball = Class.create(Sprite, { // Spriteを継承したクラスを作成する
+      initialize: function(radius) { // コンストラクタを上書きする
+         Sprite.call(this, radius*2, radius*2); // 継承元のコンストラクタを適用する
+         this.image = game.assets['ball.gif'];
+      }
+  });</pre>
+									
 								
 								
 								

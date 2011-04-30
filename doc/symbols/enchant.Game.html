@@ -38,8 +38,6 @@
 				
 					<li><a href="../symbols/_global_.html">_global_</a></li>
 				
-					<li><a href="../symbols/enchant.html">enchant</a></li>
-				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
@@ -71,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-28 22:53
+		Generated on: 2011-3-30 20:23
 	</div>
 </div>
 
@@ -346,7 +344,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#preload">preload</a></b>(assets)
 										</div>
-										<div class="description">ゲームに必要なリソースのプリロードを行う.</div>
+										<div class="description">画像ファイルのプリロードを行う.</div>
 									</td>
 								</tr>
 							
@@ -366,6 +364,17 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#removeScene">removeScene</a></b>(scene)
+										</div>
+										<div class="description">Scene削除する.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#replaceScene">replaceScene</a></b>(scene)
 										</div>
 										<div class="description">現在のSceneを別のSceneにおきかえる.</div>
@@ -373,7 +382,7 @@
 								</tr>
 							
 								<tr
-									 class='item6'
+									 class='item7'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -384,7 +393,7 @@
 								</tr>
 							
 								<tr
-									 class='item7'
+									 class='item8'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -426,6 +435,10 @@
 					
 					<div class="description">
 						Gameオブジェクトを作成する.
+
+インスタンスは一つしか存在することができず、すでにインスタンスが存在する状態で
+コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
+enchant.Game.instanceからアクセスできる.
 						
 					</div>
 					
@@ -498,7 +511,7 @@
 						</div>
 						
 						<div class="description">
-							現在のScene.
+							現在のScene. Sceneスタック中の一番上のScene.
 							
 							
 							
@@ -674,7 +687,7 @@
 						</div>
 						
 						<div class="description">
-							ルートScene.
+							ルートScene. Sceneスタック中の一番下のScene.
 							
 							
 							
@@ -782,6 +795,8 @@
 								
 								<div class="description">
 									キーバインドを設定する.
+
+キー入力をleft, right, up, down, a, bのボタン入力として割り当てることができる.
 									
 									
 									
@@ -828,6 +843,9 @@
 								
 								<div class="description">
 									ゲームを一時停止する.
+
+フレームは更新されず、プレイヤーの入力は受け付ける. 
+enchant.Game#startで再開できる.
 									
 									
 									
@@ -857,6 +875,9 @@
 								
 								<div class="description">
 									現在のSceneを終了させ前のSceneに戻る.
+
+Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出すことができる.
 									
 									
 									
@@ -906,7 +927,13 @@
 								</div>
 								
 								<div class="description">
-									ゲームに必要なリソースのプリロードを行う.
+									画像ファイルのプリロードを行う.
+
+プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
+ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
+イベントが発行され、GameオブジェクトのassetsプロパティからSurfaceオブジェクト
+として参照できるようになる. なおこのSurfaceオブジェクトはcontextプロパティを
+持たないためピクセル操作を行うことはできない.
 									
 									
 									
@@ -914,16 +941,26 @@
 								</div>
 								
 								
+									
+										<pre class="code">  game.preload('actor.gif');
+  game.onload = function() {
+     var sprite = new Sprite(32, 32);
+     sprite.image = game.assets['actor.gif']; // パス名でアクセス 
+     ...
+  };
+  game.start();</pre>
+									
+								
 								
 								
 									<dl class="detailList params">
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{Array.&lt;String&gt;}</span> <b>assets</b>
+												<span class="light fixedFont">{...String}</span> <b>assets</b>
 												
 											</dt>
-											<dd>プリロードする画像のパスの配列.</dd>
+											<dd>プリロードする画像のパス. 複数指定できる.</dd>
 										
 									</dl>
 								
@@ -947,6 +984,10 @@
 								
 								<div class="description">
 									新しいSceneに移行する.
+
+Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+enchant.Game#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
+一番上のSceneに対してはフレームの更新が行われる.
 									
 									
 									
@@ -996,6 +1037,69 @@
 							<li 
 								 class='item5'
 							>
+								<div class="fixedFont heading" id="removeScene">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
+									
+									<b>removeScene</b>(scene)
+								</div>
+								
+								<div class="description">
+									Scene削除する.
+
+Sceneスタック中からSceneを削除する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> <b>scene</b>
+												
+											</dt>
+											<dd>削除するScene.</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> 削除したScene.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
 								<div class="fixedFont heading" id="replaceScene">
 									<span class='lighter'>
 									
@@ -1008,6 +1112,8 @@
 								
 								<div class="description">
 									現在のSceneを別のSceneにおきかえる.
+
+enchant.Game#popScene, enchant.Game#pushSceneを同時に行う.
 									
 									
 									
@@ -1055,7 +1161,7 @@
 							</li>
 						
 							<li 
-								 class='item6'
+								 class='item7'
 							>
 								<div class="fixedFont heading" id="start">
 									<span class='lighter'>
@@ -1069,6 +1175,10 @@
 								
 								<div class="description">
 									ゲームを開始する.
+
+enchant.Game#fpsで設定されたフレームレートに従ってenchant.Game#currentSceneの
+フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
+始まりローディング画面が表示される.
 									
 									
 									
@@ -1084,7 +1194,7 @@
 							</li>
 						
 							<li 
-								 class='item7'
+								 class='item8'
 							>
 								<div class="fixedFont heading" id="stop">
 									<span class='lighter'>
@@ -1098,6 +1208,9 @@
 								
 								<div class="description">
 									ゲームを停止する.
+
+フレームは更新されず、プレイヤーの入力も受け付けなくなる. 
+enchant.Game#startで再開できる.
 									
 									
 									

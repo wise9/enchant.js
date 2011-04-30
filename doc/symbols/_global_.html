@@ -38,8 +38,6 @@
 				
 					<li><a href="../symbols/_global_.html">_global_</a></li>
 				
-					<li><a href="../symbols/enchant.html">enchant</a></li>
-				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
@@ -71,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-28 22:53
+		Generated on: 2011-3-30 20:23
 	</div>
 </div>
 
@@ -99,6 +97,41 @@
 #### METHODS SUMMARY
 -->
 		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class _global_.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/_global_.html#enchant">enchant</a></b>(modules)
+										</div>
+										<div class="description">グローバルにライブラリのクラスをエクスポートする.</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
 		
 <!--
 #### EVENTS SUMMARY
@@ -115,6 +148,73 @@
 <!--
 #### METHOD DETAILS
 -->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="enchant">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>enchant</b>(modules)
+								</div>
+								
+								<div class="description">
+									グローバルにライブラリのクラスをエクスポートする.
+
+引数に何も渡さない場合enchant.jsで定義されたクラス及びプラグインで定義されたクラス
+全てがエクスポートされる. 引数が一つ以上の場合はenchant.jsで定義されたクラスのみ
+がデフォルトでエクスポートされ、プラグインのクラスをエクスポートしたい場合は明示的に
+プラグインの識別子を引数として渡す必要がある.
+									
+									
+										<br />
+										<i>Defined in: </i> <a href="../symbols/src/enchant.js.html">enchant.js</a>.
+									
+									
+									
+								</div>
+								
+								
+									
+										<pre class="code">  enchant();     // 全てのクラスがエクスポートされる
+  enchant('');   // enchant.js本体のクラスのみがエクスポートされる
+  enchant('ui'); // enchant.js本体のクラスとui.enchant.jsのクラスがエクスポートされる</pre>
+									
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{...String}</span> <b>modules</b>
+												<i>Optional</i>
+											</dt>
+											<dd>エクスポートするモジュール. 複数指定できる.</dd>
+										
+									</dl>
+								
+								
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
 		
 		
 <!--
