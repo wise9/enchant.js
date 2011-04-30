@@ -3,10 +3,10 @@ enchant();
 window.onload = function() {
     var game = new Game(320, 320);
     game.fps = 15;
-    game.preload('map.gif', 'player.gif');
+    game.preload('map1.gif', 'chara0.gif');
     game.onload = function() {
         var map = new Map(16, 16);
-        map.image = game.assets['map.gif'];
+        map.image = game.assets['map1.gif'];
         map.loadData([
             [322,322,322,322,322,322,224,225,225,225,225,225,167,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205,205],
             [322,322,322,322,322,322,322,322,322,322,322,322,224,225,225,225,225,225,167,205,205,205,205,205,205,205,205,205,205,205],
@@ -104,7 +104,7 @@ window.onload = function() {
         ];
 
         var foregroundMap = new Map(16, 16);
-        foregroundMap.image = game.assets['map.gif'];
+        foregroundMap.image = game.assets['map1.gif'];
         foregroundMap.loadData([
             [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
             [ -1,461,462, -1,461,462, -1,461,462, -1,461,462, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -138,11 +138,11 @@ window.onload = function() {
             [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
         ]);
 
-        var player = new Sprite(16, 24);
-        player.x = 6 * 16;
-        player.y = 10 * 16 + 8;
-        var image = new Surface(48, 96);
-        image.draw(game.assets['player.gif'], 0, 0, 48, 96, 0, 0, 48, 96);
+        var player = new Sprite(32, 32);
+        player.x = 6 * 16 - 8;
+        player.y = 10 * 16;
+        var image = new Surface(96, 128);
+        image.draw(game.assets['chara0.gif'], 0, 0, 96, 128, 0, 0, 96, 128);
         player.image = image;
 
         player.isMoving = false;
@@ -157,12 +157,12 @@ window.onload = function() {
                     this.walk++;
                     this.walk %= 3;
                 }
-				if ((this.vx && this.x % 16 == 0) || (this.vy && (this.y-8) % 16 == 0)) {
-					this.isMoving = false;
+                if ((this.vx && (this.x-8) % 16 == 0) || (this.vy && this.y % 16 == 0)) {
+                    this.isMoving = false;
                     this.walk = 1;
-				}
+                }
             } else {
-				this.vx = this.vy = 0;
+                this.vx = this.vy = 0;
                 var n = Math.random();
                 if (game.input.left) {
                     this.direction = 1;
@@ -178,8 +178,8 @@ window.onload = function() {
                     this.vy = 4;
                 }
                 if (this.vx || this.vy) {
-                    var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 8;
-                    var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 8;
+                    var x = this.x + (this.vx ? this.vx / Math.abs(this.vx) * 16 : 0) + 16;
+                    var y = this.y + (this.vy ? this.vy / Math.abs(this.vy) * 16 : 0) + 16;
                     if (0 <= x && x < map.width && 0 <= y && y < map.height && !map.hitTest(x, y)) {
                         this.isMoving = true;
                         arguments.callee.call(this);
@@ -202,8 +202,8 @@ window.onload = function() {
         game.rootScene.addEventListener('enterframe', function(e) {
             var x = Math.min((game.width  - 16) / 2 - player.x, 0);
             var y = Math.min((game.height - 16) / 2 - player.y, 0);
-			x = Math.max(game.width,  x + map.width)  - map.width;
-			y = Math.max(game.height, y + map.height) - map.height;
+            x = Math.max(game.width,  x + map.width)  - map.width;
+            y = Math.max(game.height, y + map.height) - map.height;
             stage.x = x;
             stage.y = y;
         });

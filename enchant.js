@@ -186,7 +186,7 @@ enchant.Class.create = function(superclass, definition) {
     constructor.prototype.constructor = constructor;
     if (constructor.prototype.initialize == null) {
         constructor.prototype.initialize = function() {
-            superclass.call(this, arguments);
+            superclass.apply(this, arguments);
         };
     }
     return constructor;
@@ -546,6 +546,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             this._pageX = Math.round(window.scrollX + bounding.left);
             this._pageY = Math.round(window.scrollY + bounding.top);
         }
+        stage.style.fontSize = '12px';
+        stage.style.webkitTextSizeAdjust = 'none';
         this._element = stage;
 
         /**
@@ -1239,6 +1241,22 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._image;
         },
         set: function(image) {
+            if (image == this._image) return;
+
+            if (this._image != null) {
+                if (this._image.css) {
+                    this._style.backgroundImage = '';
+                } else if (this._element.firstChild) {
+                    this._element.removeChild(this._element.firstChild);
+                    if (this._dirtyListener) {
+                        this.removeEventListener('render', this._dirtyListener);
+                        this._dirtyListener = null;
+                    } else {
+                        this._image._parent = null;
+                    }
+                }
+            }
+
             if (image != null) {
                 if (image._css) {
                     this._style.backgroundImage = image._css;
@@ -1260,19 +1278,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                     image._parent = this;
                     this._element.appendChild(image._element);
                 }
-            } else {
-                if (this._element.firstChild) {
-                    this._element.removeChild(this._element.firstChild);
-                    if (this._dirtyListener) {
-                        this.removeEventListener('render', this._dirtyListener);
-                        this._dirtyListener = null;
-                    } else {
-                        this._image._parent = null;
-                    }
-                } else {
-                    this._style.backgroundImage = '';
-                }
             }
+
             this._image = image;
        }
     },
@@ -1287,22 +1294,22 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         set: function(frame) {
             this._frame = frame;
             var row = this._image.width / this._width | 0;
-            if (this._element.firstChild) {
-                var style = this._element.firstChild.style;
-                style.left = -(frame % row) * this._width + 'px';
-                style.top = -(frame / row | 0) * this._height + 'px';
-            } else {
+            if (this._image._css) {
                 this._style.backgroundPosition = [
                     -(frame % row) * this._width, 'px ',
                     -(frame / row | 0) * this._height, 'px'
                 ].join('');
+            } else if (this._element.firstChild) {
+                var style = this._element.firstChild.style;
+                style.left = -(frame % row) * this._width + 'px';
+                style.top = -(frame / row | 0) * this._height + 'px';
             }
         }
     },
     /**
      * Spriteを拡大縮小する.
      * @param {Number} x 拡大するx軸方向の倍率.
-     * @param {Number} y 拡大するy軸方向の倍率.
+     * @param {Number} [y] 拡大するy軸方向の倍率.
      */
     scale: function(x, y) {
         if (y == null) y = x;
@@ -1738,8 +1745,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * @param {enchant.Node} node 追加するNode.
      */
     addChild: function(node) {
-        node.parentNode = this;
         this.childNodes.push(node);
+        node.parentNode = this;
         node.dispatchEvent(new enchant.Event('added'));
         if (this.scene) {
             var e = new enchant.Event('addedtoscene');
@@ -1750,7 +1757,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             var fragment = document.createDocumentFragment();
             var nodes;
             var push = Array.prototype.push;
-            if (node.childNodes) {
+            if (node._element) {
+                fragment.appendChild(node._element);
+            } else if (node.childNodes) {
                 nodes = node.childNodes.slice().reverse();
                 while (nodes.length) {
                     node = nodes.pop();
@@ -1758,13 +1767,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     node.dispatchEvent(e);
                     if (node._element) {
                         fragment.appendChild(node._element);
-                    }
-                    if (node.childNodes) {
+                    } else if (node.childNodes) {
                         push.apply(nodes, node.childNodes.reverse());
                     }
                 }
-            } else {
-                fragment.appendChild(node._element);
             }
             if (!fragment.childNodes.length) return;
 
@@ -1774,11 +1780,11 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 nodes = nodes.slice(nodes.indexOf(this) + 1).reverse();
                 while (nodes.length) {
                     node = nodes.pop();
-                    if (node.childNodes) {
-                        push.apply(nodes, node.childNodes.slice().reverse());
-                    } else {
-                        nextSibling = node;
+                    if (node._element) {
+                        nextSibling = node._element;
                         break;
+                    } else if (node.childNodes) {
+                        push.apply(nodes, node.childNodes.slice().reverse());
                     }
                 }
             }
@@ -1806,20 +1812,21 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             var e = new enchant.Event('removedfromscene');
             node.scene = null;
             node.dispatchEvent(e);
-            if (node.childNodes) {
+            if (node._element) {
+                this.scene._element.removeChild(node._element);
+            } else if (node.childNodes) {
                 var nodes = node.childNodes.slice();
                 var push = Array.prototype.push;
                 while (nodes.length) {
                     node = nodes.pop();
                     node.scene = null;
                     node.dispatchEvent(e);
-                    this.scene._element.removeChild(node._element);
-                    if (node.childNodes) {
+                    if (node._element) {
+                        this.scene._element.removeChild(node._element);
+                    } else if (node.childNodes) {
                         push.apply(nodes, node.childNodes);
                     }
                 }
-            } else {
-                this.scene._element.removeChild(node._element);
             }
         }
     },
@@ -1959,6 +1966,11 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
     }
 });
 
+var CANVAS_DRAWING_METHODS = [
+    'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
+    'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
+];
+
 /**
  * @scope enchant.Surface.prototype
  */
@@ -2008,18 +2020,13 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
             this._element.style.position = 'absolute';
             this.context = this._element.getContext('2d');
 
-            var that = this;
-            var methods = [
-                'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
-                'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
-            ];
-            for (var i = 0, len = methods.length; i < len; i++) (function(name) {
-                var method = that.context[name];
-                that.context[name] = function() {
+            CANVAS_DRAWING_METHODS.forEach(function(name) {
+                var method = this.context[name];
+                this.context[name] = function() {
                     method.apply(this, arguments);
-                    that._dirty = true;
+                    this._dirty = true;
                 }
-            })(methods[i]);
+            }, this);
         }
     },
     /**
