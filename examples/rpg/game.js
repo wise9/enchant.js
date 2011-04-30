@@ -163,7 +163,6 @@ window.onload = function() {
                 }
             } else {
                 this.vx = this.vy = 0;
-                var n = Math.random();
                 if (game.input.left) {
                     this.direction = 1;
                     this.vx = -4;

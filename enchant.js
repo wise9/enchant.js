@@ -50,7 +50,7 @@ if (typeof Object.defineProperties != 'function') {
             Object.defineProperty(obj, prop, descs[prop]);
         }
         return obj;
-    }; 
+    };
 }
 if (typeof Object.create != 'function') {
     Object.create = function(prototype, descs) {
@@ -72,7 +72,7 @@ if (typeof Object.getPrototypeOf != 'function') {
  *
  * 引数に何も渡さない場合enchant.jsで定義されたクラス及びプラグインで定義されたクラス
  * 全てがエクスポートされる. 引数が一つ以上の場合はenchant.jsで定義されたクラスのみ
- * がデフォルトでエクスポートされ、プラグインのクラスをエクスポートしたい場合は明示的に
+ * がデフォルトでエクスポートされ, プラグインのクラスをエクスポートしたい場合は明示的に
  * プラグインの識別子を引数として渡す必要がある.
  *
  * @example
@@ -160,9 +160,7 @@ var RETINA_DISPLAY = (function() {
 var game;
 
 /**
- * Classオブジェクトを作成する.
- *
- * Class.createと同様. Class.createの項を参照.
+ * クラスのクラス.
  *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} definition クラス定義.
@@ -173,9 +171,9 @@ enchant.Class = function(superclass, definition) {
 };
 
 /**
- * Classオブジェクトを作成する.
+ * クラスを作成する.
  *
- * ほかのクラスを継承したクラスを作成する場合、コンストラクタはデフォルトで
+ * ほかのクラスを継承したクラスを作成する場合, コンストラクタはデフォルトで
  * 継承元のクラスのものが使われる. コンストラクタをオーバーライドする場合継承元の
  * コンストラクタを適用するには明示的に呼び出す必要がある.
  *
@@ -231,10 +229,8 @@ enchant.Class.create = function(superclass, definition) {
  */
 enchant.Event = enchant.Class.create({
     /**
-     * Eventオブジェクトを作成する.
-     *
-     * DOM Event風味の独自イベント実装. ただしフェーズの概念はなし.
-     *
+     * DOM Event風味の独自イベント実装を行ったクラス.
+     * ただしフェーズの概念はなし.
      * @param {String} type Eventのタイプ
      * @constructs
      */
@@ -284,7 +280,7 @@ enchant.Event = enchant.Class.create({
  *
  * @example
  *   var game = new Game(320, 320);
- *   game.preload('actor.gif');
+ *   game.preload('player.gif');
  *   game.onload = function() {
  *      ... // ゲーム開始時の処理を記述
  *   };
@@ -296,252 +292,196 @@ enchant.Event.LOAD = 'load';
 
 /**
  * Gameのロード進行中に発生するイベント.
- * 
  * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: enchant.Game
- * 
  * @type {String}
  */
 enchant.Event.PROGRESS = 'progress';
 
 /**
  * フレーム開始時に発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Node
- *
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
 
 /**
  * フレーム終了時に発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game
- *
  * @type {String}
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
 
 /**
  * Sceneが開始したとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.ENTER = 'enter';
 
 /**
  * Sceneが終了したとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.EXIT = 'exit';
 
 /**
  * NodeがGroupに追加されたとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Node
- *
  * @type {String}
  */
 enchant.Event.ADDED = 'added';
 
 /**
  * NodeがSceneに追加されたとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Node
- *
  * @type {String}
  */
 enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
 
 /**
  * NodeがGroupから削除されたとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Node
- *
  * @type {String}
  */
 enchant.Event.REMOVED = 'removed';
 
 /**
  * NodeがSceneから削除されたとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Node
- *
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
 
 /**
  * Nodeに対するタッチが始まったとき発生するイベント.
- * 
- * 発行するオブジェクト: enchant.Node
- *
+ * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
  * @type {String}
  */
 enchant.Event.TOUCH_START = 'touchstart';
 
 /**
  * Nodeに対するタッチが移動したとき発生するイベント.
- * 
- * 発行するオブジェクト: enchant.Node
- *
+ * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
  * @type {String}
  */
 enchant.Event.TOUCH_MOVE = 'touchmove';
 
 /**
  * Nodeに対するタッチが終了したとき発生するイベント.
- * 
- * 発行するオブジェクト: enchant.Node
- *
+ * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
  * @type {String}
  */
 enchant.Event.TOUCH_END = 'touchend';
 
 /**
  * Entityがレンダリングされるときに発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Entity
- *
  * @type {String}
  */
 enchant.Event.RENDER = 'render';
 
 /**
  * ボタン入力が始まったとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.INPUT_START = 'inputstart';
 
 /**
  * ボタン入力が変化したとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
  * ボタン入力が終了したとき発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.INPUT_END = 'inputend';
 
 /**
  * leftボタンが押された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
 
 /**
  * leftボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
 
 /**
  * rightボタンが押された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
 
 /**
  * rightボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
 
 /**
  * upボタンが押された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
 
 /**
  * upボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.UP_BUTTON_UP = 'upbuttonup';
 
 /**
  * downボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 
 /**
  * downボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 /**
  * aボタンが押された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
  * aボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
 /**
  * bボタンが押された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
 /**
  * bボタンが離された発生するイベント.
- * 
  * 発行するオブジェクト: enchant.Game, enchant.Scene
- *
  * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
@@ -552,10 +492,8 @@ enchant.Event.B_BUTTON_UP = 'bbuttonup';
  */
 enchant.EventTarget = enchant.Class.create({
     /**
-     * EventTargetオブジェクトを作成する.
-     *
-     * DOM Event風味の独自イベント実装. ただしフェーズの概念はなし.
-     *
+     * DOM Event風味の独自イベント実装を行ったクラス.
+     * ただしフェーズの概念はなし.
      * @constructs
      */
     initialize: function() {
@@ -611,9 +549,9 @@ enchant.EventTarget = enchant.Class.create({
  */
 enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
-     * Gameオブジェクトを作成する.
+     * ゲームのメインループ, シーンを管理するクラス.
      *
-     * インスタンスは一つしか存在することができず、すでにインスタンスが存在する状態で
+     * インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
      * コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
      * enchant.Game.instanceからアクセスできる.
      *
@@ -862,15 +800,16 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      *
      * プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
      * ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
-     * イベントが発行され、GameオブジェクトのassetsプロパティからSurfaceオブジェクト
-     * として参照できるようになる. なおこのSurfaceオブジェクトはcontextプロパティを
-     * 持たないためピクセル操作を行うことはできない.
+     * イベントが発行され, GameオブジェクトのassetsプロパティからSurfaceオブジェクト
+     * として参照できるようになる. なおこのSurfaceオブジェクトはenchant.Surface.loadを
+     * 使って作成されたものであるため直接画像操作を行うことはできない. enchant.Surface.load
+     * の項を参照.
      *
      * @example
-     *   game.preload('actor.gif');
+     *   game.preload('player.gif');
      *   game.onload = function() {
      *      var sprite = new Sprite(32, 32);
-     *      sprite.image = game.assets['actor.gif']; // パス名でアクセス 
+     *      sprite.image = game.assets['player.gif']; // パス名でアクセス
      *      ...
      *   };
      *   game.start();
@@ -888,7 +827,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      *
      * enchant.Game#fpsで設定されたフレームレートに従ってenchant.Game#currentSceneの
      * フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
-     * 始まりローディング画面が表示される. 
+     * 始まりローディング画面が表示される.
      */
     start: function() {
         if (this._intervalID) {
@@ -950,7 +889,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
      * ゲームを停止する.
      *
-     * フレームは更新されず、プレイヤーの入力も受け付けなくなる. 
+     * フレームは更新されず, プレイヤーの入力も受け付けなくなる.
      * enchant.Game#startで再開できる.
      */
     stop: function() {
@@ -963,7 +902,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
      * ゲームを一時停止する.
      *
-     * フレームは更新されず、プレイヤーの入力は受け付ける. 
+     * フレームは更新されず, プレイヤーの入力は受け付ける.
      * enchant.Game#startで再開できる.
      */
     pause: function() {
@@ -975,7 +914,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
      * 新しいSceneに移行する.
      *
-     * Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+     * Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
      * enchant.Game#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
      * 一番上のSceneに対してはフレームの更新が行われる.
      *
@@ -994,7 +933,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
      * 現在のSceneを終了させ前のSceneに戻る.
      *
-     * Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+     * Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
      * enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出すことができる.
      *
      * @return {enchant.Scene} 終了させたScene.
@@ -1044,7 +983,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     /**
      * キーバインドを設定する.
      *
-     * キー入力をleft, right, up, down, a, bのボタン入力として割り当てることができる.
+     * キー入力をleft, right, up, down, a, bいずれかのボタン入力として割り当てる.
      *
      * @param {Number} key キーバインドを設定するキーコード.
      * @param {String} button 割り当てるボタン.
@@ -1066,7 +1005,8 @@ enchant.Game.instance = null;
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
-     * Nodeオブジェクトを作成する.
+     * Sceneをルートとした表示オブジェクトツリーに属するオブジェクトの基底クラス.
+     * 直接使用することはない.
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -1167,7 +1107,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
-     * Entityオブジェクトを作成する.
+     * DOM上で表示する実体を持ったクラス.直接使用することはない.
      * @constructs
      * @extends enchant.Node
      */
@@ -1187,6 +1127,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
 
         /**
          * Entityにボタンの機能を設定する.
+         * Entityに対するタッチ, クリックをleft, right, up, down, a, bいずれかの
+         * ボタン入力として割り当てる.
          * @type {String}
          */
         this.buttonMode = null;
@@ -1332,7 +1274,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      * Entityの透明度.
-     * 0から1までの値を設定する(0が完全な透明、1が完全な不透明).
+     * 0から1までの値を設定する(0が完全な透明, 1が完全な不透明).
      * @type {Number}
      */
     opacity: {
@@ -1405,7 +1347,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
-     * Spriteオブジェクトを作成する.
+     * 画像表示機能を持ったクラス.
+     *
+     * @example
+     *   var bear = new Sprite(32, 32);
+     *   bear.image = game.assets['chara1.gif'];
+     *
      * @param {Number} [width] Spriteの横幅.
      * @param {Number} [height] Spriteの高さ.
      * @constructs
@@ -1488,6 +1435,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 表示するフレームのインデックス.
+     * Spriteと同じ横幅と高さを持ったフレームがimageプロパティの画像に左上から順に
+     * 配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
      * @type {Number}
      */
     frame: {
@@ -1586,7 +1535,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 表示するテキスト.
-     * HTMLタグが使える.
      * @type {String}
      */
     text: {
@@ -1630,7 +1578,8 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
-     * Mapオブジェクトを作成する.
+     * タイルセットからマップを生成して表示するクラス.
+     *
      * @param {Number} tileWidth タイルの横幅.
      * @param {Number} tileHeight タイルの高さ.
      * @constructs
@@ -1752,7 +1701,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     /**
      * データを設定する.
-     * @param {Array<Array.<Number>>...} data タイルのインデックスの二元配列.
+     * タイルががimageプロパティの画像に左上から順に配列されていると見て, 0から始まる
+     * インデックスの二元配列を設定する.複数指定された場合は後のものから順に表示される.
+     * @param {...Array<Array.<Number>>} data タイルのインデックスの二元配列. 複数指定できる.
      */
     loadData: function(data) {
         this._data = Array.prototype.slice.apply(arguments);
@@ -1771,7 +1722,6 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Map上に障害物があるかどうかを判定する.
-     * 境界は当たり判定に含まれない.
      * @param {Number} x 判定を行うマップ上の点のx座標.
      * @param {Number} y 判定を行うマップ上の点のy座標.
      * @return {Boolean} 障害物があるかどうか.
@@ -1801,7 +1751,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     * Mapで表示するタイル画像.
+     * Mapで表示するタイルセット画像.
      * @type {enchant.Surface}
      */
     image: {
@@ -1869,6 +1819,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._tileHeight * this._data[0].length
         }
     },
+    /**
+     * @private
+     */
     redraw: function(x, y, width, height) {
         if (this._image == null) {
             return;
@@ -1896,7 +1849,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         var col = image.height / tileHeight | 0;
         var left = Math.max((x + dx) / tileWidth | 0, 0);
         var top = Math.max((y + dy) / tileHeight | 0, 0);
-        var right = Math.ceil((x + dx + width) / tileWidth); 
+        var right = Math.ceil((x + dx + width) / tileWidth);
         var bottom = Math.ceil((y + dy + height) / tileHeight);
 
         var source = image._element;
@@ -1927,7 +1880,20 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
-     * Groupオブジェクトを作成する.
+     * 複数のNodeを子に持つことができるクラス.
+     *
+     * @example
+     *   var stage = new Group();
+     *   stage.addChild(player);
+     *   stage.addChild(enemy);
+     *   stage.addChild(map);
+     *   stage.addEventListener('enterframe', function() {
+     *      // playerの座標に従って全体をスクロールする
+     *      if (this.x > 64 - player.x) {
+     *          this.x = 64 - player.x;
+     *      }
+     *   });
+     *
      * @constructs
      * @extends enchant.Node
      */
@@ -2070,7 +2036,14 @@ enchant.Group = enchant.Class.create(enchant.Node, {
  */
 enchant.Scene = enchant.Class.create(enchant.Group, {
     /**
-     * Sceneオブジェクトを作成する.
+     * 表示オブジェクトツリーのルートになるクラス.
+     *
+     * @example
+     *   var scene = new Scene();
+     *   scene.addChild(player);
+     *   scene.addChild(enemy);
+     *   game.pushScene(scene);
+     *
      * @constructs
      * @extends enchant.Group
      */
@@ -2179,7 +2152,20 @@ var CANVAS_DRAWING_METHODS = [
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
-     * Surfaceオブジェクトを作成する.
+     * canvas要素をラップしたクラス.
+     *
+     * SpriteやMapのimageプロパティに設定して表示させることができる.
+     * Canvas APIにアクセスしたいときはcontextプロパティを用いる.
+     *
+     * @example
+     *   // 円を表示するSpriteを作成する
+     *   var ball = new Sprite(50, 50);
+     *   var surface = new Surface(50, 50);
+     *   surface.context.beginPath();
+     *   surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+     *   surface.context.fill();
+     *   ball.image = surface;
+     *
      * @param {Number} width Surfaceの横幅.
      * @param {Number} height Surfaceの高さ.
      * @constructs
@@ -2266,6 +2252,19 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * Surfaceに対して引数で指定されたSurfaceを描画する.
+     *
+     * Canvas APIのdrawImageをラップしており, 描画する矩形を同様の形式で指定できる.
+     *
+     * @example
+     *   var src = game.assets['src.gif'];
+     *   var dst = new Surface(100, 100);
+     *   dst.draw(src);         // ソースを(0, 0)に描画
+     *   dst.draw(src, 50, 50); // ソースを(50, 50)に描画
+     *   // ソースを(50, 50)に縦横30ピクセル分だけ描画
+     *   dst.draw(src, 50, 50, 30, 30);
+     *   // ソースの(10, 10)から縦横40ピクセルの領域を(50, 50)に縦横30ピクセルに縮小して描画
+     *   dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
+     *
      * @param {enchant.Surface} image 描画に用いるSurface.
      */
     draw: function(image) {
@@ -2289,6 +2288,13 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
 
 /**
  * 画像を読み込んでSurfaceオブジェクトを作成する.
+ *
+ * このメソッドによって作成されたSurfaceはimg要素のラップしておりcontextプロパティに
+ * アクセスしたりdraw, clear, getPixel, setPixelメソッドなどの呼び出しでCanvas API
+ * を使った画像操作を行うことはできない. ただしdrawメソッドの引数とすることはでき,
+ * ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
+ * 場合はピクセルを取得するなど画像操作の一部が制限される).
+ *
  * @param {String} src ロードする画像のパス.
  * @static
  */

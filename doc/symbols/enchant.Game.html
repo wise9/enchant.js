@@ -69,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-30 20:23
+		Generated on: 2011-3-30 22:50
 	</div>
 </div>
 
@@ -118,7 +118,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Game.html#constructor">enchant.Game</a></b>(width, height)
 								</div>
-								<div class="description">Gameオブジェクトを作成する.</div>
+								<div class="description">ゲームのメインループ, シーンを管理するクラス.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -434,9 +434,9 @@
 					</div>
 					
 					<div class="description">
-						Gameオブジェクトを作成する.
+						ゲームのメインループ, シーンを管理するクラス.
 
-インスタンスは一つしか存在することができず、すでにインスタンスが存在する状態で
+インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
 コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
 enchant.Game.instanceからアクセスできる.
 						
@@ -796,7 +796,7 @@ enchant.Game.instanceからアクセスできる.
 								<div class="description">
 									キーバインドを設定する.
 
-キー入力をleft, right, up, down, a, bのボタン入力として割り当てることができる.
+キー入力をleft, right, up, down, a, bいずれかのボタン入力として割り当てる.
 									
 									
 									
@@ -844,7 +844,7 @@ enchant.Game.instanceからアクセスできる.
 								<div class="description">
 									ゲームを一時停止する.
 
-フレームは更新されず、プレイヤーの入力は受け付ける. 
+フレームは更新されず, プレイヤーの入力は受け付ける.
 enchant.Game#startで再開できる.
 									
 									
@@ -876,7 +876,7 @@ enchant.Game#startで再開できる.
 								<div class="description">
 									現在のSceneを終了させ前のSceneに戻る.
 
-Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
 enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出すことができる.
 									
 									
@@ -931,9 +931,10 @@ enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出す
 
 プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
 ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
-イベントが発行され、GameオブジェクトのassetsプロパティからSurfaceオブジェクト
-として参照できるようになる. なおこのSurfaceオブジェクトはcontextプロパティを
-持たないためピクセル操作を行うことはできない.
+イベントが発行され, GameオブジェクトのassetsプロパティからSurfaceオブジェクト
+として参照できるようになる. なおこのSurfaceオブジェクトはenchant.Surface.loadを
+使って作成されたものであるため直接画像操作を行うことはできない. enchant.Surface.load
+の項を参照.
 									
 									
 									
@@ -942,10 +943,10 @@ enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出す
 								
 								
 									
-										<pre class="code">  game.preload('actor.gif');
+										<pre class="code">  game.preload('player.gif');
   game.onload = function() {
      var sprite = new Sprite(32, 32);
-     sprite.image = game.assets['actor.gif']; // パス名でアクセス 
+     sprite.image = game.assets['player.gif']; // パス名でアクセス
      ...
   };
   game.start();</pre>
@@ -985,7 +986,7 @@ enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出す
 								<div class="description">
 									新しいSceneに移行する.
 
-Sceneはスタック状に管理されており、表示順序もスタックに積み上げられた順に従う. 
+Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
 enchant.Game#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
 一番上のSceneに対してはフレームの更新が行われる.
 									
@@ -1209,7 +1210,7 @@ enchant.Game#fpsで設定されたフレームレートに従ってenchant.Game#
 								<div class="description">
 									ゲームを停止する.
 
-フレームは更新されず、プレイヤーの入力も受け付けなくなる. 
+フレームは更新されず, プレイヤーの入力も受け付けなくなる.
 enchant.Game#startで再開できる.
 									
 									

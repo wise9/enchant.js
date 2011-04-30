@@ -69,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-30 20:23
+		Generated on: 2011-3-30 22:50
 	</div>
 </div>
 
@@ -116,7 +116,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Surface.html#constructor">enchant.Surface</a></b>(width, height)
 								</div>
-								<div class="description">Surfaceオブジェクトを作成する.</div>
+								<div class="description">canvas要素をラップしたクラス.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -291,10 +291,23 @@
 					</div>
 					
 					<div class="description">
-						Surfaceオブジェクトを作成する.
+						canvas要素をラップしたクラス.
+
+SpriteやMapのimageプロパティに設定して表示させることができる.
+Canvas APIにアクセスしたいときはcontextプロパティを用いる.
 						
 					</div>
 					
+					
+						
+							<pre class="code">  // 円を表示するSpriteを作成する
+  var ball = new Sprite(50, 50);
+  var surface = new Surface(50, 50);
+  surface.context.beginPath();
+  surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+  surface.context.fill();
+  ball.image = surface;</pre>
+						
 					
 				
 					
@@ -507,12 +520,25 @@
 								
 								<div class="description">
 									Surfaceに対して引数で指定されたSurfaceを描画する.
+
+Canvas APIのdrawImageをラップしており, 描画する矩形を同様の形式で指定できる.
 									
 									
 									
 									
 								</div>
 								
+								
+									
+										<pre class="code">  var src = game.assets['src.gif'];
+  var dst = new Surface(100, 100);
+  dst.draw(src);         // ソースを(0, 0)に描画
+  dst.draw(src, 50, 50); // ソースを(50, 50)に描画
+  // ソースを(50, 50)に縦横30ピクセル分だけ描画
+  dst.draw(src, 50, 50, 30, 30);
+  // ソースの(10, 10)から縦横40ピクセルの領域を(50, 50)に縦横30ピクセルに縮小して描画
+  dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);</pre>
+									
 								
 								
 								
@@ -614,6 +640,12 @@
 								
 								<div class="description">
 									画像を読み込んでSurfaceオブジェクトを作成する.
+
+このメソッドによって作成されたSurfaceはimg要素のラップしておりcontextプロパティに
+アクセスしたりdraw, clear, getPixel, setPixelメソッドなどの呼び出しでCanvas API
+を使った画像操作を行うことはできない. ただしdrawメソッドの引数とすることはでき,
+ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
+場合はピクセルを取得するなど画像操作の一部が制限される).
 									
 									
 									

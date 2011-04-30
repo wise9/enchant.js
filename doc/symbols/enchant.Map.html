@@ -69,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-30 20:23
+		Generated on: 2011-3-30 22:50
 	</div>
 </div>
 
@@ -118,7 +118,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Map.html#constructor">enchant.Map</a></b>(tileWidth, tileHeight)
 								</div>
-								<div class="description">Mapオブジェクトを作成する.</div>
+								<div class="description">タイルセットからマップを生成して表示するクラス.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -158,7 +158,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Map.html#image">image</a></b>
 										</div>
-										<div class="description">Mapで表示するタイル画像.</div>
+										<div class="description">Mapで表示するタイルセット画像.</div>
 									</td>
 								</tr>
 							
@@ -267,7 +267,7 @@
 					</div>
 					
 					<div class="description">
-						Mapオブジェクトを作成する.
+						タイルセットからマップを生成して表示するクラス.
 						
 					</div>
 					
@@ -340,7 +340,7 @@
 						</div>
 						
 						<div class="description">
-							Mapで表示するタイル画像.
+							Mapで表示するタイルセット画像.
 							
 							
 							
@@ -426,7 +426,6 @@
 								
 								<div class="description">
 									Map上に障害物があるかどうかを判定する.
-境界は当たり判定に含まれない.
 									
 									
 									
@@ -494,6 +493,8 @@
 								
 								<div class="description">
 									データを設定する.
+タイルががimageプロパティの画像に左上から順に配列されていると見て, 0から始まる
+インデックスの二元配列を設定する.複数指定された場合は後のものから順に表示される.
 									
 									
 									
@@ -507,10 +508,10 @@
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{Array&lt;Array.&lt;Number&gt;&gt;...}</span> <b>data</b>
+												<span class="light fixedFont">{...Array&lt;Array.&lt;Number&gt;&gt;}</span> <b>data</b>
 												
 											</dt>
-											<dd>タイルのインデックスの二元配列.</dd>
+											<dd>タイルのインデックスの二元配列. 複数指定できる.</dd>
 										
 									</dl>
 								

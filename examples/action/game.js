@@ -161,13 +161,14 @@ window.onload = function() {
             this.y = dest.y-2;
 
             if (this.y > 320) {
+                var score = Math.round(bear.x);
                 this.frame = 3;
                 this.vy = -20;
                 this.addEventListener('enterframe', function() {
                     this.vy += 2;
                     this.y += Math.min(Math.max(this.vy, -10), 10);
                     if (this.y > 320) {
-                        game.end(bear.x, bear.x + 'mで死にました');
+                        game.end(score, score + 'mで死にました');
                     }
                 });
                 this.removeEventListener('enterframe', arguments.callee);

@@ -69,7 +69,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.3.2<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2011-3-30 20:23
+		Generated on: 2011-3-30 22:50
 	</div>
 </div>
 
@@ -118,7 +118,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Scene.html#constructor">enchant.Scene</a></b>()
 								</div>
-								<div class="description">Sceneオブジェクトを作成する.</div>
+								<div class="description">表示オブジェクトツリーのルートになるクラス.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -201,10 +201,17 @@
 					</div>
 					
 					<div class="description">
-						Sceneオブジェクトを作成する.
+						表示オブジェクトツリーのルートになるクラス.
 						
 					</div>
 					
+					
+						
+							<pre class="code">  var scene = new Scene();
+  scene.addChild(player);
+  scene.addChild(enemy);
+  game.pushScene(scene);</pre>
+						
 					
 				
 					
