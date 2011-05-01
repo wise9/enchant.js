@@ -841,7 +841,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             var total = assets.length;
             while (assets.length) {
                 var src = assets.shift();
-                var asset = Surface.load(src);
+                var asset = enchant.Surface.load(src);
                 asset.onload = function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
