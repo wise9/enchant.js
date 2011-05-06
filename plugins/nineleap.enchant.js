@@ -33,6 +33,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             this.endScene.addEventListener('touchend', submit);
             window.setTimeout(submit, 3000);
         }
+        this.end = function() {};
     }
 });
 
