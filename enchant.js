@@ -796,14 +796,16 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * 画像ファイルのプリロードを行う.
+     * ファイルのプリロードを行う.
      *
      * プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
      * ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
-     * イベントが発行され, GameオブジェクトのassetsプロパティからSurfaceオブジェクト
-     * として参照できるようになる. なおこのSurfaceオブジェクトはenchant.Surface.loadを
-     * 使って作成されたものであるため直接画像操作を行うことはできない. enchant.Surface.load
-     * の項を参照.
+     * イベントが発行され, Gameオブジェクトのassetsプロパティから画像ファイルの場合は
+     * Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジェクトとして,
+     * その他の場合は文字列としてアクセスできるようになる.
+     *
+     * なおこのSurfaceオブジェクトはenchant.Surface.loadを使って作成されたものである
+     * ため直接画像操作を行うことはできない. enchant.Surface.loadの項を参照.
      *
      * @example
      *   game.preload('player.gif');
@@ -823,6 +825,55 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         [].push.apply(this._assets, assets);
     },
     /**
+     * ファイルのロードを行う.
+     *
+     * @param {String} asset ロードするファイルのパス.
+     * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
+     */
+    load: function(src, callback) {
+        if (callback == null) callback = function() {};
+
+        var ext = (src.match(/\.(\w+)$/) || [])[1];
+        switch (ext) {
+            case 'jpg':
+            case 'gif':
+            case 'png':
+                game.assets[src] = enchant.Surface.load(src);
+                game.assets[src].addEventListener('load', callback);
+                break;
+            case 'mp3':
+            case 'aac':
+            case 'wav':
+            case 'ogg':
+                game.assets[src] = enchant.Sound.load(src);
+                game.assets[src].addEventListener('load', callback);
+                break;
+            default:
+                var req = new XMLHttpRequest();
+                req.open('GET', asset, true);
+                req.onreadystatechange = function(e) {
+                    if (req.readyState == 4) {
+                        if (req.status != 200) {
+                            throw new Error('Cannot load an asset: ' + src);
+                        }
+
+                        var type = req.getResponseHeaders('Content-Type') || '';
+                        if (type.match(/^image/)) {
+                            game.assets[src] = enchant.Surface.load(src);
+                            game.assets[src].addEventListener('load', callback);
+                        } else if (type.match(/^audio/)) {
+                            game.assets[src] = enchant.Sound.load(src);
+                            game.assets[src].addEventListener('load', callback);
+                        } else {
+                            game.assets[asset] = req.responseText;
+                            callback();
+                        }
+                    }
+                };
+                req.send(null);
+        }
+    },
+    /**
      * ゲームを開始する.
      *
      * enchant.Game#fpsで設定されたフレームレートに従ってenchant.Game#currentSceneの
@@ -834,25 +885,21 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             window.clearInterval(this._intervalID);
         } else if (this._assets.length) {
             var o = {};
-            var assets = this._assets.filter(function(i) {
-                return i in o ? false : o[i] = true;
+            var assets = this._assets.filter(function(asset) {
+                return asset in o ? false : o[asset] = true;
             });
             var loaded = 0;
-            var total = assets.length;
-            while (assets.length) {
-                var src = assets.shift();
-                var asset = enchant.Surface.load(src);
-                asset.onload = function() {
+            for (var i = 0, len = assets.length; i < len; i++) {
+                this.load(assets[i], function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
-                    e.total = total;
+                    e.total = len;
                     game.dispatchEvent(e);
-                    if (loaded == total) {
+                    if (loaded == len) {
                         game.removeScene(game.loadingScene);
                         game.dispatchEvent(new enchant.Event('load'));
                     }
-                };
-                this.assets[src] = asset;
+                });
             }
             this.pushScene(this.loadingScene);
         } else {
@@ -1708,16 +1755,20 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     loadData: function(data) {
         this._data = Array.prototype.slice.apply(arguments);
         this._dirty = true;
-        var c = 0;
-        for (var y = 0, l = data.length; y < l; y++) {
-            for (var x = 0, ll = data[y].length; x < ll; x++) {
-                if (data[y][x] >= 0) c++;
+
+        this._tight = false;
+        for (var i = 0, len = this._data.length; i < len; i++) {
+            var c = 0;
+            var data = this._data[i];
+            for (var y = 0, l = data.length; y < l; y++) {
+                for (var x = 0, ll = data[y].length; x < ll; x++) {
+                    if (data[y][x] >= 0) c++;
+                }
             }
-        }
-        if (c / (data.length * data[0].length) > 0.2) {
-            this._tight = true;
-        } else {
-            this._tight = false;
+            if (c / (data.length * data[0].length) > 0.2) {
+                this._tight = true;
+                break;
+            }
         }
     },
     /**
@@ -2280,14 +2331,14 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * @return {enchant.Surface} 複製されたSurface.
      */
     clone: function() {
-        var clone = new enchant.Surface(this.width, this,height);
+        var clone = new enchant.Surface(this.width, this.height);
         clone.draw(this);
         return clone;
     }
 });
 
 /**
- * 画像を読み込んでSurfaceオブジェクトを作成する.
+ * 画像ファイルを読み込んでSurfaceオブジェクトを作成する.
  *
  * このメソッドによって作成されたSurfaceはimg要素のラップしておりcontextプロパティに
  * アクセスしたりdraw, clear, getPixel, setPixelメソッドなどの呼び出しでCanvas API
@@ -2295,12 +2346,13 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  * ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
  * 場合はピクセルを取得するなど画像操作の一部が制限される).
  *
- * @param {String} src ロードする画像のパス.
+ * @param {String} src ロードする画像ファイルのパス.
  * @static
  */
 enchant.Surface.load = function(src) {
     var image = new Image();
     var surface = Object.create(Surface.prototype, {
+        context: { value: null },
         _css: { value: 'url(' + src + ')' },
         _element: { value: image }
     });
@@ -2315,6 +2367,55 @@ enchant.Surface.load = function(src) {
         surface.dispatchEvent(new enchant.Event('load'));
     };
     return surface;
+};
+
+/**
+ * @scope enchant.Sound.prototype
+ */
+enchant.Sound = enchant.Class.create(enchant.EventTarget, {
+    /**
+     * audio要素をラップしたクラス.
+     *
+     * @constructs
+     */
+    initialize: function() {
+        // enchant.EventTarget.call(this);
+        throw new Error("Illegal Constructor");
+    },
+    play: function() {
+        this._element.play();
+    },
+    pause: function() {
+        this._element.pause();
+    },
+    stop: function() {
+        this._element.pause();
+        this._element.currentTime = this._element.startTime;
+    }
+});
+
+/**
+ * 音声ファイルを読み込んでSurfaceオブジェクトを作成する.
+ *
+ * @param {String} src ロードする音声ファイルのパス.
+ * @static
+ */
+enchant.Sound.load = function(src) {
+    var audio = new Audio();
+    var sound = Object.create(enchant.Sound.prototype, {
+        _element: { value: audio }
+    });
+    enchant.EventTarget.call(sound);
+    audio.src = src;
+    audio.load();
+    audio.autoplay = false;
+    audio.onerror = function() {
+        throw new Error('Cannot load an asset: ' + audio.src);
+    };
+    audio.onload = function() {
+        sound.duration = audio.duration;
+        sound.dispatchEvent(new enchant.Event('load'));
+    };
 };
 
 })();
