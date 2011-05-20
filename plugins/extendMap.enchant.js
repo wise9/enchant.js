@@ -2,7 +2,7 @@
  *	extendMap.enchant.js
  *
  *	enchantMapEditor:
- *	http://github.com/wise9/enchant.js
+ *	http://github.com/wise9/enchantMapEditor
  */
 
 enchant.extendMap = {};
