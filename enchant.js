@@ -833,7 +833,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     load: function(src, callback) {
         if (callback == null) callback = function() {};
 
-        var ext = (src.match(/\.(\w+)$/) || [])[1];
+        var ext = (src.match(/\.(\w+)$/) || [])[1].toLowerCase();
         switch (ext) {
             case 'jpg':
             case 'gif':
