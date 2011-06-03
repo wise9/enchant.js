@@ -3,7 +3,6 @@
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.3.1 or later
  * 
-
 EXAMPLE: use switter icon as a sprite
 
 enchant();
