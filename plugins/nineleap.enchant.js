@@ -1,4 +1,4 @@
-/** nineleap.enchant.js v0.2 (2011/05/31)
+/** nineleap.enchant.js v0.2.1 (2011/05/31)
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.3.1 or later
@@ -28,6 +28,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         this._twitterRequests = [];
         this.requireAuth = true;
         this.authorized = true;
+        this.twitterQueue = 0;
         this.addEventListener('load', function() {
             var game = this;
             this.startScene = new SplashScene();
