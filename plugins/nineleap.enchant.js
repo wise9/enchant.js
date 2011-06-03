@@ -1,9 +1,8 @@
-/** nineleap.enchant.js v0.2 (2011/05/31)
+/** nineleap.enchant.js v0.2.2 (2011/06/03)                                                                                                                     
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.3.1 or later
  * 
-
 EXAMPLE: use switter icon as a sprite
 
 enchant();
@@ -26,8 +25,10 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
     initialize: function(width, height) {
         enchant.Game.call(this, width, height);
         this._twitterRequests = [];
+        this._twitterAssets = [];
         this.requireAuth = true;
         this.authorized = true;
+        this.twitterQueue = 0;
         this.addEventListener('load', function() {
             var game = this;
             this.startScene = new SplashScene();
@@ -48,6 +49,11 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
 
         });
     },
+    loadImage: function(src, callback) {
+        if (callback == null) callback = function() {};
+        this.assets[src] = enchant.Surface.load(src);
+        this.assets[src].addEventListener('load', callback);
+    },
     start: function() {
         var game = this;
         if (this.twitterQueue != 0) {
@@ -56,7 +62,6 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
                 for (var i in this._twitterRequests) {
                     this.twitterAssets[this._twitterRequests[i].requestType] = new Array();
                 }
-                this.twitterQueue = this._twitterRequests.length;
                 for (var i = 0, l = this._twitterRequests.length; i < l; i++) {
                     this._twitterRequests[i]._sendRequest();
                 }
@@ -71,14 +76,28 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             var assets = this._assets.filter(function(asset) {
                 return asset in o ? false : o[asset] = true;
             });
+            var tAssets = this._twitterAssets;
             var loaded = 0;
+            var total = assets.length + tAssets.length;
             for (var i = 0, len = assets.length; i < len; i++) {
                 this.load(assets[i], function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
-                    e.total = len;
+                    e.total = total;
                     game.dispatchEvent(e);
-                    if (loaded == len) {
+                    if (loaded == total) {
+                        game.removeScene(game.loadingScene);
+                        game.dispatchEvent(new enchant.Event('load'));
+                    }
+                });
+            }
+            for (var i = 0, len = tAssets.length; i < len; i++) {
+                this.loadImage(tAssets[i], function() {
+                    var e = new enchant.Event('progress');
+                    e.loaded = ++loaded;
+                    e.total = total;
+                    game.dispatchEvent(e);
+                    if (loaded == total) {
                         game.removeScene(game.loadingScene);
                         game.dispatchEvent(new enchant.Event('load'));
                     }
@@ -121,6 +140,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
                 checkError = true;
             }
         }
+        this.twitterQueue++;
         var id = this._twitterRequests.length;
         var request = new TwitterRequest(id, requestType, option, checkError);
         this._twitterRequests.push(request);
@@ -134,37 +154,38 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             });
         }
         this.twitterQueue--;
-        if ('code' in resBody[0]) {
-            if (resBody[0].code == 401 &&this.requireAuth) {
+        if (resBody[0] == undefined) {
+            this.twitterAssets[requestType] = [];
+        } else if ('code' in resBody[0]) {
+            if (resBody[0].code == 401 && this.requireAuth) {
                 window.location.replace('http://9leap.net/api/login?after_login=' + window.location.href);
+                return;
             } else if (resBody[0].code == 401 && !this.requireAuth) {
-                if (this.twitterQueue == 0) {
-                    this.authorized = false;
-                    this.start();
-                }
+                this.authorized = false;
             } else if (checkError) {
-                window.location.replace('http://9leap.net/api/login?after_login=' + window.location.href);
+                alert (resBody[0].code + ' error' + '\nリロードしてみてください');
                 throw new Error(resBody[0].code + ': ' +resBody[0].error);
+                return;
             } else {
-                if (this.twitterQueue == 0) {
-                    this.start();
-                }
+                this.twitterAssets[requestType] = [];
             }
         } else {
             for (var i = 0, l = resBody.length; i < l; i++) {
-                if ('status' in resBody[i]) {
+                if ('name' in resBody[i]) {
                     this.twitterAssets[requestType][i] = new TwitterUserData(resBody[i]);
-                    this.twitterAssets[requestType][i].status = new TwitterStatusData(resBody[i].status);
-                    this._assets.push(resBody[i]['profile_image_url']);
+                    this._twitterAssets.push(resBody[i]['profile_image_url']);
+                    if ('status' in resBody[i]) {
+                        this.twitterAssets[requestType][i].status = new TwitterStatusData(resBody[i].status);
+                    }
                 } else {
                     this.twitterAssets[requestType][i] = new TwitterStatusData(resBody[i]);
                     this.twitterAssets[requestType][i].user = new TwitterUserData(resBody[i].user);
-                    this._assets.push(resBody[i].user['profile_image_url']);
+                    this._twitterAssets.push(resBody[i].user['profile_image_url']);
                 }
             }
-            if (this.twitterQueue == 0) {
-                this.start();
-            }
+        }
+        if (this.twitterQueue == 0) {
+            this.start();
         }
     },
 });
@@ -184,7 +205,6 @@ enchant.twitter.TwitterRequest = enchant.Class.create({
         this.script = document.createElement('script');
         this.script.type = 'text/javascript';
         this.script.src = src;
-        console.log(src);
         this.requestType = requestType;
     },
     _callback: function(resBody) {
