@@ -203,8 +203,10 @@ enchant.Class.create = function(superclass, definition) {
     }
 
     for (var prop in definition) if (definition.hasOwnProperty(prop)) {
-        if (Object.getPrototypeOf(definition[prop]) != Object.prototype) {
-            definition[prop] = { value: definition[prop] };
+        if (Object.getPrototypeOf(definition[prop]) == Object.prototype) {
+            if (!('enumerable' in definition[prop])) definition[prop].enumerable = true;
+        } else {
+            definition[prop] = { value: definition[prop], enumerable: true, writable: true };
         }
     }
     var constructor = function() {
@@ -711,6 +713,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         this._mousedownID = 0;
         this._surfaceID = 0;
+        this._soundID = 0;
         this._intervalID = null;
 
         /**
@@ -833,7 +836,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     load: function(src, callback) {
         if (callback == null) callback = function() {};
 
-        var ext = (src.match(/\.(\w+)$/) || [])[1];
+        var ext = src.match(/\.\w+$/)[0];
+        if (ext) ext = ext.slice(1).toLowerCase();
         switch (ext) {
             case 'jpg':
             case 'gif':
@@ -843,26 +847,27 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 break;
             case 'mp3':
             case 'aac':
+            case 'm4a':
             case 'wav':
             case 'ogg':
-                game.assets[src] = enchant.Sound.load(src);
+                game.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
                 game.assets[src].addEventListener('load', callback);
                 break;
             default:
                 var req = new XMLHttpRequest();
-                req.open('GET', asset, true);
+                req.open('GET', src, true);
                 req.onreadystatechange = function(e) {
                     if (req.readyState == 4) {
                         if (req.status != 200) {
                             throw new Error('Cannot load an asset: ' + src);
                         }
 
-                        var type = req.getResponseHeaders('Content-Type') || '';
+                        var type = req.getResponseHeader('Content-Type') || '';
                         if (type.match(/^image/)) {
                             game.assets[src] = enchant.Surface.load(src);
                             game.assets[src].addEventListener('load', callback);
                         } else if (type.match(/^audio/)) {
-                            game.assets[src] = enchant.Sound.load(src);
+                            game.assets[src] = enchant.Sound.load(src, type);
                             game.assets[src].addEventListener('load', callback);
                         } else {
                             game.assets[asset] = req.responseText;
@@ -2383,14 +2388,30 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         throw new Error("Illegal Constructor");
     },
     play: function() {
-        this._element.play();
+        if (this._element) this._element.play();
     },
     pause: function() {
-        this._element.pause();
+        if (this._element) this._element.pause();
     },
     stop: function() {
-        this._element.pause();
-        this._element.currentTime = this._element.startTime;
+        if (this._element) this._element.pause();
+        this.currentTime = 0;
+    },
+    currentTime: {
+        get: function() {
+            return this._element ? this._element.currentTime : 0;
+        },
+        set: function(time) {
+            if (this._element) this._element.currentTime = time;
+        }
+    },
+    volume: {
+        get: function() {
+            return this._element ? this._element.volume : 1;
+        },
+        set: function(volume) {
+            if (this._element) this._element.volume = volume;
+        }
     }
 });
 
@@ -2400,22 +2421,60 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
  * @param {String} src ロードする音声ファイルのパス.
  * @static
  */
-enchant.Sound.load = function(src) {
-    var audio = new Audio();
-    var sound = Object.create(enchant.Sound.prototype, {
-        _element: { value: audio }
-    });
+enchant.Sound.load = function(src, type) {
+    if (type == null) {
+        var ext = src.match(/\.\w+$/)[0];
+        if (ext) {
+            type = 'audio/' + ext.slice(1).toLowerCase();
+        } else {
+            type = '';
+        }
+    }
+
+    var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);
-    audio.src = src;
-    audio.load();
-    audio.autoplay = false;
-    audio.onerror = function() {
-        throw new Error('Cannot load an asset: ' + audio.src);
-    };
-    audio.onload = function() {
-        sound.duration = audio.duration;
-        sound.dispatchEvent(new enchant.Event('load'));
-    };
+    var audio = new Audio();
+    if (audio.canPlayType(type)) {
+        audio.src = src;
+        audio.load();
+        audio.autoplay = false;
+        audio.onerror = function() {
+            throw new Error('Cannot load an asset: ' + audio.src);
+        };
+        audio.onload = function() {
+            sound.duration = audio.duration;
+            sound.dispatchEvent(new enchant.Event('load'));
+        };
+        sound._element = audio;
+    } else if (type.match(/^audio\/(mpeg|mp3)/)) {
+        var embed = document.createElement('embed');
+        var id = 'enchant-audio' + game._soundID++;
+        embed.width = embed.height = 1;
+        embed.name = id;
+        embed.src = ['sound.swf?id=', id, '&src=', src].join('');
+        embed.allowscriptaccess = 'always';
+        embed.style.position = 'absolute';
+        embed.style.left = '-1px';
+        sound.onload = function() {
+            Object.defineProperties(embed, {
+                currentTime: {
+                    get: function() { return embed.getCurrentTime() },
+                    set: function(time) { embed.setCurrentTime(time) }
+                },
+                volume: {
+                    get: function() { return embed.getVolume() },
+                    set: function(volume) { embed.setVolume(volume) }
+                }
+            });
+            sound._element = embed;
+        };
+        sound.onerror = function() {
+            throw new Error('Cannot load an asset: ' + src);
+        };
+        game._element.appendChild(embed);
+        enchant.Sound[id] = sound;
+    }
+    return sound;
 };
 
 })();
