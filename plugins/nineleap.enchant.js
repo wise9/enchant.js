@@ -1,4 +1,4 @@
-/** nineleap.enchant.js v0.2.1 (2011/05/31)
+/** nineleap.enchant.js v0.2.1 (2011/06/02)
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.3.1 or later
