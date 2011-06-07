@@ -2535,6 +2535,7 @@ enchant.Sound.load = function(src, type) {
                 }
             });
             sound._element = embed;
+            sound.duration = embed.getDuration();
         };
         sound.onerror = function() {
             throw new Error('Cannot load an asset: ' + src);
