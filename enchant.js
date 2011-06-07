@@ -1999,10 +1999,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             }
             if (!fragment.childNodes.length) return;
 
-            var nextSibling;
-            if (this.parentNode) {
-                nodes = this.parentNode.childNodes;
-                nodes = nodes.slice(nodes.indexOf(this) + 1).reverse();
+            var nextSibling, thisNode = this;
+            while (thisNode.parentNode) {
+                nodes = thisNode.parentNode.childNodes;
+                nodes = nodes.slice(nodes.indexOf(thisNode) + 1).reverse();
                 while (nodes.length) {
                     node = nodes.pop();
                     if (node._element) {
@@ -2012,12 +2012,80 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                         push.apply(nodes, node.childNodes.slice().reverse());
                     }
                 }
+                thisNode = thisNode.parentNode;
             }
             if (nextSibling) {
                 this.scene._element.insertBefore(fragment, nextSibling);
             } else {
                 this.scene._element.appendChild(fragment);
             }
+        }
+    },
+    /**
+     * GroupにNodeを挿入する.
+     * @param {enchant.Node} node 挿入するNode.
+     * @param {enchant.Node} reference 挿入位置の前にあるNode.
+     */
+    insertBefore: function(node, reference) {
+        var i = this.childNodes.indexOf(reference);
+        if (i != -1) {
+            this.childNodes.splice(i, 0, node);
+            node.parentNode = this;
+            node.dispatchEvent(new enchant.Event('added'));
+            if (this.scene) {
+                var e = new enchant.Event('addedtoscene');
+                node.scene = this.scene;
+                node.dispatchEvent(e);
+                node._updateCoordinate();
+
+                var fragment = document.createDocumentFragment();
+                var nodes;
+                var push = Array.prototype.push;
+                if (node._element) {
+                    fragment.appendChild(node._element);
+                } else if (node.childNodes) {
+                    nodes = node.childNodes.slice().reverse();
+                    while (nodes.length) {
+                        node = nodes.pop();
+                        node.scene = this.scene;
+                        node.dispatchEvent(e);
+                        if (node._element) {
+                            fragment.appendChild(node._element);
+                        } else if (node.childNodes) {
+                            push.apply(nodes, node.childNodes.reverse());
+                        }
+                    }
+                }
+                if (!fragment.childNodes.length) return;
+
+                var nextSibling, thisNode = reference;
+                while (thisNode.parentNode) {
+                    if (i != null) {
+                        nodes = this.childNodes.slice(i+1).reverse();
+                        i = null;
+                    } else {
+                        nodes = thisNode.parentNode.childNodes;
+                        nodes = nodes.slice(nodes.indexOf(thisNode) + 1).reverse();
+                    }
+                    while (nodes.length) {
+                        node = nodes.pop();
+                        if (node._element) {
+                            nextSibling = node._element;
+                            break;
+                        } else if (node.childNodes) {
+                            push.apply(nodes, node.childNodes.slice().reverse());
+                        }
+                    }
+                    thisNode = thisNode.parentNode;
+                }
+                if (nextSibling) {
+                    this.scene._element.insertBefore(fragment, nextSibling);
+                } else {
+                    this.scene._element.appendChild(fragment);
+                }
+            }
+        } else {
+            this.addChild(node);
         }
     },
     /**
