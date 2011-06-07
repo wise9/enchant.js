@@ -511,7 +511,7 @@ enchant.EventTarget = enchant.Class.create({
         if (listeners == null) {
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
-            listeners.push(listener);
+            listeners.unshift(listener);
         }
     },
     /**
@@ -539,7 +539,7 @@ enchant.EventTarget = enchant.Class.create({
         if (this['on' + e.type] != null) this['on' + e.type]();
         var listeners = this._listeners[e.type];
         if (listeners != null) {
-            for (var i = 0, len = listeners.length; i < len; i++) {
+            while (i--) {
                 listeners[i].call(this, e);
             }
         }
