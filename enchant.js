@@ -539,7 +539,8 @@ enchant.EventTarget = enchant.Class.create({
         if (this['on' + e.type] != null) this['on' + e.type]();
         var listeners = this._listeners[e.type];
         if (listeners != null) {
-            while (i--) {
+            listeners = listeners.slice();
+            for (var i = 0, len = listeners.length; i < len; i++) {
                 listeners[i].call(this, e);
             }
         }
