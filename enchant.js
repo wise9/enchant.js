@@ -1524,7 +1524,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Spriteを回転する.
-     * @param {Number} deg 回転する角度(度数法).
+     * @param {Number} deg 回転する角度 (度数法).
      */
     rotate: function(deg) {
         this._rotation += deg;
@@ -1557,7 +1557,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     * Spriteの回転角(度数法).
+     * Spriteの回転角 (度数法).
      * @type {Number}
      */
     rotation: {
@@ -2450,22 +2450,48 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
     /**
      * audio要素をラップしたクラス.
      *
+     * MP3ファイルの再生はSafari, Chrome, Firefox, Opera, IEが対応
+     * (Firefox, OperaではFlashを経由して再生). WAVEファイルの再生は
+     * Safari, Chrome, Firefox, Operaが対応している. ブラウザが音声ファイル
+     * のコーデックに対応していない場合は再生されない.
+     *
+     * コンストラクタではなくenchant.Sound.loadを通じてインスタンスを作成する.
+     *
      * @constructs
      */
     initialize: function() {
-        // enchant.EventTarget.call(this);
+        enchant.EventTarget.call(this);
         throw new Error("Illegal Constructor");
+
+        /**
+         * Soundの再生時間.
+         * @type {Number}
+         */
+        this.duration = 0;
     },
+    /**
+     * 再生を開始する.
+     */
     play: function() {
         if (this._element) this._element.play();
     },
+    /**
+     * 再生を中断する.
+     */
     pause: function() {
         if (this._element) this._element.pause();
     },
+    /**
+     * 再生を停止する.
+     */
     stop: function() {
-        if (this._element) this._element.pause();
+        this.pause();
         this.currentTime = 0;
     },
+    /**
+     * 現在の再生位置 (秒).
+     * @type {Number}
+     */
     currentTime: {
         get: function() {
             return this._element ? this._element.currentTime : 0;
@@ -2474,6 +2500,10 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
             if (this._element) this._element.currentTime = time;
         }
     },
+    /**
+     * ボリューム. 0 (無音) ～ 1 (フルボリューム).
+     * @type {Number}
+     */
     volume: {
         get: function() {
             return this._element ? this._element.volume : 1;
@@ -2488,6 +2518,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
  * 音声ファイルを読み込んでSurfaceオブジェクトを作成する.
  *
  * @param {String} src ロードする音声ファイルのパス.
+ * @param {String} [type] 音声ファイルのMIME Type.
  * @static
  */
 enchant.Sound.load = function(src, type) {

@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta name="generator" content="JsDoc Toolkit"></meta>
-		<title>enchant.Sprite | JsDoc Reference</title>
+		<title>enchant.Sound | JsDoc Reference</title>
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
 		<meta name="mobileoptimized" content="0"></meta>
@@ -81,7 +81,7 @@
 	<div class="innerContent">
 		<h1 class="classTitle">
 			
-			Class <span>enchant.Sprite</span>
+			Class <span>enchant.Sound</span>
 		</h1>
 		
 		<div class="intro">
@@ -96,16 +96,14 @@
 					
 						<li>Defined in: <a href="../symbols/src/enchant.js.html">enchant.js</a></li>
 					
-						<li>Extends <span class="fixedFont">
-						<a href="../symbols/enchant.Entity.html">enchant.Entity</a></span></li>
-					
+						
 				</ul>
 			
 		</div>
 		
 		
 			<div class="props">
-				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.Sprite.">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.Sound.">
 					<caption class="sectionTitle">Class Summary</caption>
 					<thead>
 						<tr>
@@ -118,9 +116,9 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/enchant.Sprite.html#constructor">enchant.Sprite</a></b>(width, height)
+									<b><a href="../symbols/enchant.Sound.html#constructor">enchant.Sound</a></b>()
 								</div>
-								<div class="description">画像表示機能を持ったクラス.</div>
+								<div class="description">audio要素をラップしたクラス.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -132,7 +130,7 @@
 			
 			
 				<div class="props">
-					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.Sprite.">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.Sound.">
 						<caption class="sectionTitle">Field Summary</caption>
 						
 						<thead>
@@ -148,9 +146,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/enchant.Sprite.html#frame">frame</a></b>
+										<b><a href="../symbols/enchant.Sound.html#currentTime">currentTime</a></b>
 										</div>
-										<div class="description">表示するフレームのインデックス.</div>
+										<div class="description">現在の再生位置 (秒).</div>
 									</td>
 								</tr>
 							
@@ -158,9 +156,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/enchant.Sprite.html#image">image</a></b>
+										<b><a href="../symbols/enchant.Sound.html#duration">duration</a></b>
 										</div>
-										<div class="description">Spriteで表示する画像.</div>
+										<div class="description">Soundの再生時間.</div>
 									</td>
 								</tr>
 							
@@ -168,29 +166,9 @@
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">
-										<b><a href="../symbols/enchant.Sprite.html#rotation">rotation</a></b>
+										<b><a href="../symbols/enchant.Sound.html#volume">volume</a></b>
 										</div>
-										<div class="description">Spriteの回転角 (度数法).</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont">
-										<b><a href="../symbols/enchant.Sprite.html#scaleX">scaleX</a></b>
-										</div>
-										<div class="description">Spriteのx軸方向の倍率.</div>
-									</td>
-								</tr>
-							
-								<tr>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont">
-										<b><a href="../symbols/enchant.Sprite.html#scaleY">scaleY</a></b>
-										</div>
-										<div class="description">Spriteのy軸方向の倍率.</div>
+										<div class="description">ボリューム.</div>
 									</td>
 								</tr>
 							
@@ -199,10 +177,6 @@
 				</div>
 			
 			
-			
-				<dl class="inheritsList">
-				<dt>Fields borrowed from class <a href="../symbols/enchant.Entity.html">enchant.Entity</a>: </dt><dd><a href="../symbols/enchant.Entity.html#backgroundColor">backgroundColor</a>, <a href="../symbols/enchant.Entity.html#buttonMode">buttonMode</a>, <a href="../symbols/enchant.Entity.html#buttonPressed">buttonPressed</a>, <a href="../symbols/enchant.Entity.html#height">height</a>, <a href="../symbols/enchant.Entity.html#opacity">opacity</a>, <a href="../symbols/enchant.Entity.html#touchEnabled">touchEnabled</a>, <a href="../symbols/enchant.Entity.html#visible">visible</a>, <a href="../symbols/enchant.Entity.html#width">width</a></dd><dt>Fields borrowed from class <a href="../symbols/enchant.Node.html">enchant.Node</a>: </dt><dd><a href="../symbols/enchant.Node.html#parentNode">parentNode</a>, <a href="../symbols/enchant.Node.html#scene">scene</a>, <a href="../symbols/enchant.Node.html#x">x</a>, <a href="../symbols/enchant.Node.html#y">y</a></dd>
-				</dl>
 			
 		
 <!--
@@ -215,7 +189,7 @@
 				<h2 class="sectionTitle">Method Summary</h2>
 				
 				
-					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class enchant.Sprite.">
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class enchant.Sound.">
 						<thead>
 							<tr>
 								<th scope="col">Method Attributes</th>
@@ -229,11 +203,11 @@
 								<tr
 									 class='item0'
 								>
-									<td class="attributes">&nbsp;</td>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Sprite.html#rotate">rotate</a></b>(deg)
+										<div class="fixedFont">enchant.Sound.<b><a href="../symbols/enchant.Sound.html#.load">load</a></b>(src, type)
 										</div>
-										<div class="description">Spriteを回転する.</div>
+										<div class="description">音声ファイルを読み込んでSurfaceオブジェクトを作成する.</div>
 									</td>
 								</tr>
 							
@@ -242,9 +216,31 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Sprite.html#scale">scale</a></b>(x, y)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Sound.html#pause">pause</a></b>()
 										</div>
-										<div class="description">Spriteを拡大縮小する.</div>
+										<div class="description">再生を中断する.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Sound.html#play">play</a></b>()
+										</div>
+										<div class="description">再生を開始する.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Sound.html#stop">stop</a></b>()
+										</div>
+										<div class="description">再生を停止する.</div>
 									</td>
 								</tr>
 							
@@ -252,10 +248,6 @@
 					</table>
 				
 			
-				
-					<dl class="inheritsList" id="MethodsListInherited">
-					<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.Entity.html">enchant.Entity</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.Entity.html#intersect">intersect</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.Entity.html#within">within</a></span></dd><dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.Node.html">enchant.Node</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.Node.html#moveBy">moveBy</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.Node.html#moveTo">moveTo</a></span></dd><dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
-					</dl>
 				
 			</div>
 		
@@ -275,38 +267,23 @@
 					</h2>
 					
 					<div class="fixedFont">
-						<b>enchant.Sprite</b>(width, height)
+						<b>enchant.Sound</b>()
 					</div>
 					
 					<div class="description">
-						画像表示機能を持ったクラス.
+						audio要素をラップしたクラス.
+
+MP3ファイルの再生はSafari, Chrome, Firefox, Opera, IEが対応
+(Firefox, OperaではFlashを経由して再生). WAVEファイルの再生は
+Safari, Chrome, Firefox, Operaが対応している. ブラウザが音声ファイル
+のコーデックに対応していない場合は再生されない.
+
+コンストラクタではなくenchant.Sound.loadを通じてインスタンスを作成する.
 						
 					</div>
 					
 					
-						
-							<pre class="code">  var bear = new Sprite(32, 32);
-  bear.image = game.assets['chara1.gif'];</pre>
-						
-					
 				
-					
-						<dl class="detailList params">
-							<dt class="heading">Parameters:</dt>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span>  <b>width</b>
-									<i>Optional</i>
-								</dt>
-								<dd>Spriteの横幅.</dd>
-							
-								<dt>
-									<span class="light fixedFont">{Number}</span>  <b>height</b>
-									<i>Optional</i>
-								</dt>
-								<dd>Spriteの高さ.</dd>
-							
-						</dl>
 					
 					
 					
@@ -324,20 +301,18 @@
 					</h2>
 					
 					
-						<div class="fixedFont heading" id="frame">
+						<div class="fixedFont heading" id="currentTime">
 							<span class='lighter'>
 							
 							</span>
 							
 							
 							
-							<b>frame</b>							
+							<b>currentTime</b>							
 						</div>
 						
 						<div class="description">
-							表示するフレームのインデックス.
-Spriteと同じ横幅と高さを持ったフレームがimageプロパティの画像に左上から順に
-配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
+							現在の再生位置 (秒).
 							
 							
 							
@@ -348,18 +323,18 @@ Spriteと同じ横幅と高さを持ったフレームがimageプロパティの
 						
 						<div class="hr"></div>
 					
-						<div class="fixedFont heading" id="image">
+						<div class="fixedFont heading" id="duration">
 							<span class='lighter'>
 							
 							</span>
 							
 							
 							
-							<b>image</b>							
+							<b>duration</b>							
 						</div>
 						
 						<div class="description">
-							Spriteで表示する画像.
+							Soundの再生時間.
 							
 							
 							
@@ -370,62 +345,18 @@ Spriteと同じ横幅と高さを持ったフレームがimageプロパティの
 						
 						<div class="hr"></div>
 					
-						<div class="fixedFont heading" id="rotation">
+						<div class="fixedFont heading" id="volume">
 							<span class='lighter'>
 							
 							</span>
 							
 							
 							
-							<b>rotation</b>							
+							<b>volume</b>							
 						</div>
 						
 						<div class="description">
-							Spriteの回転角 (度数法).
-							
-							
-							
-						</div>
-						
-						
-							
-						
-						<div class="hr"></div>
-					
-						<div class="fixedFont heading" id="scaleX">
-							<span class='lighter'>
-							
-							</span>
-							
-							
-							
-							<b>scaleX</b>							
-						</div>
-						
-						<div class="description">
-							Spriteのx軸方向の倍率.
-							
-							
-							
-						</div>
-						
-						
-							
-						
-						<div class="hr"></div>
-					
-						<div class="fixedFont heading" id="scaleY">
-							<span class='lighter'>
-							
-							</span>
-							
-							
-							
-							<b>scaleY</b>							
-						</div>
-						
-						<div class="description">
-							Spriteのy軸方向の倍率.
+							ボリューム. 0 (無音) ～ 1 (フルボリューム).
 							
 							
 							
@@ -455,18 +386,18 @@ Spriteと同じ横幅と高さを持ったフレームがimageプロパティの
 							<li 
 								 class='item0'
 							>
-								<div class="fixedFont heading" id="rotate">
+								<div class="fixedFont heading" id=".load">
 									<span class='lighter'>
-									
+									&lt;static&gt; 
 									</span>
 									
 									
 									
-									<b>rotate</b>(deg)
+									<span class="light">enchant.Sound.</span><b>load</b>(src, type)
 								</div>
 								
 								<div class="description">
-									Spriteを回転する.
+									音声ファイルを読み込んでSurfaceオブジェクトを作成する.
 									
 									
 									
@@ -480,10 +411,16 @@ Spriteと同じ横幅と高さを持ったフレームがimageプロパティの
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{Number}</span> <b>deg</b>
+												<span class="light fixedFont">{String}</span> <b>src</b>
 												
 											</dt>
-											<dd>回転する角度 (度数法).</dd>
+											<dd>ロードする音声ファイルのパス.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>type</b>
+												<i>Optional</i>
+											</dt>
+											<dd>音声ファイルのMIME Type.</dd>
 										
 									</dl>
 								
@@ -495,18 +432,18 @@ Spriteと同じ横幅と高さを持ったフレームがimageプロパティの
 							<li 
 								 class='item1'
 							>
-								<div class="fixedFont heading" id="scale">
+								<div class="fixedFont heading" id="pause">
 									<span class='lighter'>
 									
 									</span>
 									
 									
 									
-									<b>scale</b>(x, y)
+									<b>pause</b>()
 								</div>
 								
 								<div class="description">
-									Spriteを拡大縮小する.
+									再生を中断する.
 									
 									
 									
@@ -516,22 +453,63 @@ Spriteと同じ横幅と高さを持ったフレームがimageプロパティの
 								
 								
 								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<span class="light fixedFont">{Number}</span> <b>x</b>
-												
-											</dt>
-											<dd>拡大するx軸方向の倍率.</dd>
-										
-											<dt>
-												<span class="light fixedFont">{Number}</span> <b>y</b>
-												<i>Optional</i>
-											</dt>
-											<dd>拡大するy軸方向の倍率.</dd>
-										
-									</dl>
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="play">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>play</b>()
+								</div>
+								
+								<div class="description">
+									再生を開始する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="stop">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>stop</b>()
+								</div>
+								
+								<div class="description">
+									再生を停止する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
 								
 								
 								
