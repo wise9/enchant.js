@@ -2536,15 +2536,14 @@ enchant.Sound.load = function(src, type) {
     var audio = new Audio();
     if (audio.canPlayType(type)) {
         audio.src = src;
-        audio.load();
         audio.autoplay = false;
         audio.onerror = function() {
             throw new Error('Cannot load an asset: ' + audio.src);
         };
-        audio.onload = function() {
+        audio.addEventListener('canplaythrough', function() {
             sound.duration = audio.duration;
             sound.dispatchEvent(new enchant.Event('load'));
-        };
+        });
         sound._element = audio;
     } else if (type.match(/^audio\/(mpeg|mp3)/)) {
         var embed = document.createElement('embed');
