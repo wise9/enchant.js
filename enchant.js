@@ -2464,7 +2464,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         throw new Error("Illegal Constructor");
 
         /**
-         * Soundの再生時間.
+         * Soundの再生時間 (秒).
          * @type {Number}
          */
         this.duration = 0;
@@ -2543,7 +2543,7 @@ enchant.Sound.load = function(src, type) {
         audio.addEventListener('canplaythrough', function() {
             sound.duration = audio.duration;
             sound.dispatchEvent(new enchant.Event('load'));
-        });
+        }, false);
         sound._element = audio;
     } else if (type.match(/^audio\/(mpeg|mp3)/)) {
         var embed = document.createElement('embed');

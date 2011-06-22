@@ -3,8 +3,8 @@ require 'rake'
 require 'rake/clean'
 require 'net/http'
 
-RELEASES = ['enchant.js', 'enchant.min.js', 'doc/index.html']
-CLEAN << 'enchant.min.js' << 'doc/index.html'
+RELEASES = ['enchant.js', 'enchant.min.js', 'doc/index.html', 'sound.swf']
+CLEAN << 'enchant.min.js' << 'doc/index.html' << 'sound.swf'
 
 SOURCE = File.read('enchant.js')
 VERSION = SOURCE[/enchant\.js\s+(v\d+\.\d+\.\d+)/, 1]
@@ -48,4 +48,8 @@ end
 
 file 'doc/index.html' do |t|
   sh 'jsdoc -d=doc -t=doc/template enchant.js'
+end
+
+file 'sound.swf' do |t|
+  sh 'mxmlc sound.as'
 end

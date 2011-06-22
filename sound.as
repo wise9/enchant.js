@@ -23,7 +23,6 @@ package {
                 ExternalInterface.call([
                     'function() {',
                         'var sound = enchant.Sound["', id, '"];',
-                        'sound.duration = ', _sound.length / 1000, ';',
                         'sound.dispatchEvent(new Event("load"));',
                     '}'
                 ].join(''));
