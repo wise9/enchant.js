@@ -2554,7 +2554,7 @@ enchant.Sound.load = function(src, type) {
         embed.allowscriptaccess = 'always';
         embed.style.position = 'absolute';
         embed.style.left = '-1px';
-        sound.onload = function() {
+        sound.addEventListener('load', function() {
             Object.defineProperties(embed, {
                 currentTime: {
                     get: function() { return embed.getCurrentTime() },
@@ -2567,10 +2567,7 @@ enchant.Sound.load = function(src, type) {
             });
             sound._element = embed;
             sound.duration = embed.getDuration();
-        };
-        sound.onerror = function() {
-            throw new Error('Cannot load an asset: ' + src);
-        };
+        });
         game._element.appendChild(embed);
         enchant.Sound[id] = sound;
     }

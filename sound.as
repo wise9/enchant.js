@@ -18,12 +18,12 @@ package {
             Security.allowDomain('*');
 
             var id:String = root.loaderInfo.parameters.id;
-            _sound = new Sound(new URLRequest(root.loaderInfo.parameters.src));
+            var src:String = root.loaderInfo.parameters.src;
+            _sound = new Sound(new URLRequest(src));
             _sound.addEventListener(Event.COMPLETE, function(e:Event):void {
                 ExternalInterface.call([
                     'function() {',
-                        'var sound = enchant.Sound["', id, '"];',
-                        'sound.dispatchEvent(new Event("load"));',
+                        'enchant._sound["', id, '"].dispatchEvent(new Event("load"));',
                     '}'
                 ].join(''));
 
@@ -39,7 +39,7 @@ package {
             _sound.addEventListener(IOErrorEvent.IO_ERROR, function(e:Event):void {
                 ExternalInterface.call([
                     'function() {',
-                        'enchant._sound["', id, '"].dispatchEvent(new Event("error"));',
+                        'throw new Error("Cannot load an asset: ', src, '");',
                     '}'
                 ].join(''));
             });
@@ -68,15 +68,10 @@ package {
         }
 
         public function setCurrentTime(time:Number):void {
-            time *= 1000;
-            if (time > _sound.length) time = _sound.length;
-            if (time < 0) time = time = 0;
-            if (playing) {
-                channel.stop();
-                channel = _sound.play(time);
-            } else {
-                position = time;
-            }
+            position = time * 1000;
+            if (position > _sound.length) position = _sound.length;
+            if (position < 0) position = 0;
+            if (playing) play();
         }
 
         public function getDuration():Number {
