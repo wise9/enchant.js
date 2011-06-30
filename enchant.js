@@ -2531,10 +2531,11 @@ enchant.Sound.load = function(src, type) {
         }
     }
 
+    var iOS = VENDER_PREFIX == 'webkit' && TOUCH_ENABLED;
     var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);
     var audio = new Audio();
-    if (audio.canPlayType(type)) {
+    if (audio.canPlayType(type) && !iOS) {
         audio.src = src;
         audio.autoplay = false;
         audio.onerror = function() {
@@ -2545,12 +2546,12 @@ enchant.Sound.load = function(src, type) {
             sound.dispatchEvent(new enchant.Event('load'));
         }, false);
         sound._element = audio;
-    } else if (type.match(/^audio\/(mpeg|mp3)/)) {
+    } else if (type.match(/^audio\/(mpeg|mp3)/) && !iOS) {
         var embed = document.createElement('embed');
         var id = 'enchant-audio' + game._soundID++;
         embed.width = embed.height = 1;
         embed.name = id;
-        embed.src = ['sound.swf?id=', id, '&src=', src].join('');
+        embed.src = 'sound.swf?id=' + '&src=' + src;
         embed.allowscriptaccess = 'always';
         embed.style.position = 'absolute';
         embed.style.left = '-1px';
@@ -2570,6 +2571,10 @@ enchant.Sound.load = function(src, type) {
         });
         game._element.appendChild(embed);
         enchant.Sound[id] = sound;
+    } else {
+        window.setTimeout(function() {
+            sound.dispatchEvent(new enchant.Event('load'));
+        }, 0);
     }
     return sound;
 };
