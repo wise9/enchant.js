@@ -772,7 +772,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             if (TOUCH_ENABLED) {
                 document.addEventListener('touchstart', function(e) {
                     e.preventDefault();
-                    if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('touchmove', function(e) {
                     e.preventDefault();
@@ -890,6 +889,27 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         if (this._intervalID) {
             window.clearInterval(this._intervalID);
         } else if (this._assets.length) {
+            if (!game._touched) {
+                var scene = new Scene();
+                scene.backgroundColor = '#000';
+                var size = Math.round(game.width / 10);
+                var sprite = new Sprite(game.width, size);
+                sprite.y = (game.height - size) / 2;
+                sprite.image = new Surface(game.width, size);
+                sprite.image.context.fillStyle = '#fff';
+                sprite.image.context.font = (size-1) + 'px bold Helvetica,Arial,sans-serif';
+                var width = sprite.image.context.measureText('Touch to Start').width;
+                sprite.image.context.fillText('Touch to Start', (game.width - width) / 2, size-1);
+                scene.addChild(sprite);
+                document.addEventListener('touchstart', function() {
+                    game._touched = true;
+                    game.removeScene(scene);
+                    game.start();
+                }, true);
+                game.pushScene(scene);
+                return;
+            }
+
             var o = {};
             var assets = this._assets.filter(function(asset) {
                 return asset in o ? false : o[asset] = true;
@@ -2531,52 +2551,61 @@ enchant.Sound.load = function(src, type) {
         }
     }
 
-    var iOS = VENDER_PREFIX == 'webkit' && TOUCH_ENABLED;
     var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);
     var audio = new Audio();
-    if (audio.canPlayType(type) && !iOS) {
-        audio.src = src;
-        audio.autoplay = false;
-        audio.onerror = function() {
-            throw new Error('Cannot load an asset: ' + audio.src);
-        };
-        audio.addEventListener('canplaythrough', function() {
-            sound.duration = audio.duration;
-            sound.dispatchEvent(new enchant.Event('load'));
-        }, false);
-        sound._element = audio;
-    } else if (type.match(/^audio\/(mpeg|mp3)/) && !iOS) {
-        var embed = document.createElement('embed');
-        var id = 'enchant-audio' + game._soundID++;
-        embed.width = embed.height = 1;
-        embed.name = id;
-        embed.src = 'sound.swf?id=' + '&src=' + src;
-        embed.allowscriptaccess = 'always';
-        embed.style.position = 'absolute';
-        embed.style.left = '-1px';
-        sound.addEventListener('load', function() {
-            Object.defineProperties(embed, {
-                currentTime: {
-                    get: function() { return embed.getCurrentTime() },
-                    set: function(time) { embed.setCurrentTime(time) }
-                },
-                volume: {
-                    get: function() { return embed.getVolume() },
-                    set: function(volume) { embed.setVolume(volume) }
-                }
-            });
-            sound._element = embed;
-            sound.duration = embed.getDuration();
-        });
-        game._element.appendChild(embed);
-        enchant.Sound[id] = sound;
-    } else {
+    if (!enchant.Sound.enabledInMobileSafari &&
+        VENDER_PREFIX == 'webkit' && TOUCH_ENABLED) {
         window.setTimeout(function() {
             sound.dispatchEvent(new enchant.Event('load'));
         }, 0);
+    } else {
+        if (audio.canPlayType(type)) {
+            audio.src = src;
+            audio.load();
+            audio.autoplay = false;
+            audio.onerror = function() {
+                throw new Error('Cannot load an asset: ' + audio.src);
+            };
+            audio.addEventListener('canplaythrough', function() {
+                sound.duration = audio.duration;
+                sound.dispatchEvent(new enchant.Event('load'));
+            }, false);
+            sound._element = audio;
+        } else if (type.match(/^audio\/(mpeg|mp3)/)) {
+            var embed = document.createElement('embed');
+            var id = 'enchant-audio' + game._soundID++;
+            embed.width = embed.height = 1;
+            embed.name = id;
+            embed.src = 'sound.swf?id=' + '&src=' + src;
+            embed.allowscriptaccess = 'always';
+            embed.style.position = 'absolute';
+            embed.style.left = '-1px';
+            sound.addEventListener('load', function() {
+                Object.defineProperties(embed, {
+                    currentTime: {
+                        get: function() { return embed.getCurrentTime() },
+                        set: function(time) { embed.setCurrentTime(time) }
+                    },
+                    volume: {
+                        get: function() { return embed.getVolume() },
+                        set: function(volume) { embed.setVolume(volume) }
+                    }
+                });
+                sound._element = embed;
+                sound.duration = embed.getDuration();
+            });
+            game._element.appendChild(embed);
+            enchant.Sound[id] = sound;
+        } else {
+            window.setTimeout(function() {
+                sound.dispatchEvent(new enchant.Event('load'));
+            }, 0);
+        }
     }
     return sound;
 };
+
+enchant.Sound.enabledInMobileSafari = false;
 
 })();
