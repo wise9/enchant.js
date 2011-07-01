@@ -82,7 +82,7 @@ window.onload = function() {
                 if (game.input.up) {
                     this.jumpBoost = 5;
                     this.ay = -5;
-                    game.assets['jump.wav'].play();
+                    game.assets['jump.wav'].clone().play();
                 }
             }
             this.ax = 0;

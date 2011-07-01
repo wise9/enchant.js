@@ -889,7 +889,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         if (this._intervalID) {
             window.clearInterval(this._intervalID);
         } else if (this._assets.length) {
-            if (!enchant.Sound.enabledInMobileSafari && !game._touched &&
+            if (enchant.Sound.enabledInMobileSafari && !game._touched &&
                 VENDER_PREFIX == 'webkit' && TOUCH_ENABLED) {
                 var scene = new Scene();
                 scene.backgroundColor = '#000';
