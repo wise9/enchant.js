@@ -2509,6 +2509,20 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         this.currentTime = 0;
     },
     /**
+     * Soundを複製する.
+     * @return {enchant.Sound} 複製されたSound.
+     */
+    clone: function() {
+        if (this._element instanceof Audio) {
+            return Object.create(enchant.Sound.prototype, {
+                _element: { value: this._element.cloneNode() },
+                duration: { value: this.duration }
+            });
+        } else {
+            return Object.create(enchant.Sound.prototype);
+        }
+    },
+    /**
      * 現在の再生位置 (秒).
      * @type {Number}
      */
