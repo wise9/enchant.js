@@ -2568,6 +2568,7 @@ enchant.Sound.load = function(src, type) {
             type = '';
         }
     }
+    type = type.replace('mp3', 'mpeg');
 
     var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);
@@ -2590,12 +2591,12 @@ enchant.Sound.load = function(src, type) {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, false);
             sound._element = audio;
-        } else if (type.match(/^audio\/(mpeg|mp3)/)) {
+        } else if (type == 'audio/mpeg') {
             var embed = document.createElement('embed');
             var id = 'enchant-audio' + game._soundID++;
             embed.width = embed.height = 1;
             embed.name = id;
-            embed.src = 'sound.swf?id=' + '&src=' + src;
+            embed.src = 'sound.swf?id=' + id + '&src=' + src;
             embed.allowscriptaccess = 'always';
             embed.style.position = 'absolute';
             embed.style.left = '-1px';

@@ -23,7 +23,7 @@ package {
             _sound.addEventListener(Event.COMPLETE, function(e:Event):void {
                 ExternalInterface.call([
                     'function() {',
-                        'enchant._sound["', id, '"].dispatchEvent(new Event("load"));',
+                        'enchant.Sound["', id, '"].dispatchEvent(new Event("load"));',
                     '}'
                 ].join(''));
 
