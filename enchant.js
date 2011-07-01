@@ -2514,14 +2514,17 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * @return {enchant.Sound} 複製されたSound.
      */
     clone: function() {
+        var clone;
         if (this._element instanceof Audio) {
-            return Object.create(enchant.Sound.prototype, {
-                _element: { value: this._element.cloneNode() },
+            clone = Object.create(enchant.Sound.prototype, {
+                _element: { value: this._element.cloneNode(false) },
                 duration: { value: this.duration }
             });
         } else {
-            return Object.create(enchant.Sound.prototype);
+            clone = Object.create(enchant.Sound.prototype);
         }
+        enchant.EventTarget.call(clone);
+        return clone;
     },
     /**
      * 現在の再生位置 (秒).
