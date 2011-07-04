@@ -11,18 +11,10 @@ Download
 - [enchant.js](http://github.com/wise9/enchant.js/raw/master/enchant.js)
 - [enchant.min.js](http://github.com/wise9/enchant.js/raw/master/enchant.min.js) (compressed)
 
-Examples
---------
-
-- [2D Action](http://wise9.github.com/enchant.js/examples/action/)
-- [RPG](http://wise9.github.com/enchant.js/examples/rpg/)
-
-and see [9leap](http://9leap.net/)
-
 Documentation
 -------------
 
-- [API Reference](http://wise9.github.com/enchant.js/doc/)
+- See [enchantjs.com](http://enchantjs.com)
 
 Design
 ------
