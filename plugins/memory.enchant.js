@@ -1,10 +1,19 @@
-/** memory.enchant.js v0.2.1 (2011/07/30)
+/** memory.enchant.js v0.2.2 (2011/07/31)
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.3.1 or later
  * @requires nineleap.enchant.js v0.2.2 or later
  * 
-EXAMPLE: use user memory
+ * EXAMPLE: use user memory
+ * var game = new Game();
+ * game.memory.player.preload();
+ * game.onload = function () {
+ *    var playerSp = this.memory.player.toSprite();
+ *    playerSp.x = this.width / 2 - playerSp.width / 2;
+ *    playerSp.y = this.height / 2 - playerSp.height / 2;
+ *    this.rootScene.addChild(playerSp);
+ * };
+ * game.start();
  */
 
 (function() {
@@ -92,7 +101,6 @@ enchant.nineleap.memory.Game = enchant.Class.create(parentModule.Game, {
         this._memoryRequests = [];
         this.requireAuth = true;
         this.authorized = true;
-        this.online = false;
         this.memoryQueue = 0;
         this.ajaxQueue = 0;
         this._ajaxRequests = [];
@@ -233,11 +241,15 @@ enchant.nineleap.memory.Game = enchant.Class.create(parentModule.Game, {
     _setMemoryAssets: function(resBody, requestType, checkError){
         var game = enchant.Game.instance;
         this.memoryQueue--;
-        var setmemory = (requestType.match(/user_memory/)) ? this.memory.player :
-                        (requestType.match(/u\/[0-9a-zA-Z_+]/)) ? this.memory.user[requestType.replace(/u\//, '')] :
-                        (requestType.match(/friends_memories/)) ? this.memories.friends :
-                        (requestType.match(/recent_memories/)) ? this.memories.recent :
-                        (requestType.match(/ranking_memories/)) ? this.memories.ranking : null;
+        if (requestType.match(/u\/[0-9a-zA-Z_+]/)) {
+            this.memory.user[requestType.replace(/u\//, '')] = {};
+            var setmemory = this.memory.user[requestType.replace(/u\//, '')];
+        } else {
+          var setmemory = (requestType.match(/user_memory/)) ? this.memory.player :
+                          (requestType.match(/friends_memories/)) ? this.memories.friends :
+                          (requestType.match(/recent_memories/)) ? this.memories.recent :
+                          (requestType.match(/ranking_memories/)) ? this.memories.ranking : null;
+        }
         if(setmemory == null) return;
         if (resBody == undefined) {
         } else if ('code' in resBody) {
@@ -592,6 +604,7 @@ enchant.nineleap.memory.LocalStorage = enchant.Class.create({
     },
     get_user_memory: function (key) {
         var ret = JSON.parse(localStorage.getItem(this._user_memory_key + key));
+        if (ret == null) return {'data':{}};
         ret.toSprite = function (width, height) {
             if (arguments.length < 2) {
                 var width = 48;
@@ -605,7 +618,9 @@ enchant.nineleap.memory.LocalStorage = enchant.Class.create({
         return ret;
     },
     set_user_memory: function (key, obj) {
-        var color = localStorage.getItem(this._user_memory_key + key).profile_image_url;
+        if(localStorage.getItem(this._user_memory_key + key) != null)
+            var color = localStorage.getItem(this._user_memory_key + key).profile_image_url;
+        else var color = null;
         if (color == null) {
             var color_list = ['blue', 'red', 'yellow', 'green', 'orange'];
             color = color_list[Math.floor( Math.random() * 5 )];
