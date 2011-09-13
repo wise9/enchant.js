@@ -1,7 +1,7 @@
-/** nineleap.enchant.js v0.2.5 (2011/07/25)
+/** nineleap.enchant.js v0.2.6 (2011/09/13)
  * 
  * enchant.js extention for 9leap.net
- * @requires enchant.js v0.3.1 or later
+ * @requires enchant.js v0.4.0 or later
  */
 
 (function () {
@@ -17,22 +17,29 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         enchant.Game.call(this, width, height);
         this.addEventListener('load', function() {
             var game = this;
+            this.onstart = function(){};
             this.startScene = new SplashScene();
             this.startScene.image = this.assets['start.png'];
             this.startScene.addEventListener('touchend', function() {
                 if (game.currentScene == this) game.popScene();
-                gameStart=true;
+                if (this.onstart != null) this.onstart();
+                this.started = true;
+                gameStart = true;   // deprecated
             });
             this.addEventListener('keydown', function() {
                 if (this.currentScene == this.startScene) this.popScene();
                 this.removeEventListener('keydown', arguments.callee);
-                gameStart=true;
+                if (this.onstart != null) this.onstart();
+                this.started = true;
+                gameStart = true;   // deprecated
             });
             this.pushScene(this.startScene);
 
             this.endScene = new SplashScene();
             this.endScene.image = this.assets['end.png'];
             this.scoreQueue = false;
+            gameStart = false; // deprecated
+            this.started = false;
         });
     },
 
