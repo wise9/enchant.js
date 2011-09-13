@@ -35,19 +35,28 @@ test('Entity.class', function() {
 	label.class = 'myClassName';
 	equal(label.class, 'myClassName');
 
+	ok(findElementsWithClass('myClassName').length === 0);
 	enchant.Game.instance.rootScene.addChild(label);
-	var elementsWhichHasRequiredClassName = document.getElementsByClassName('myClassName');
-	ok(elementsWhichHasRequiredClassName && elementsWhichHasRequiredClassName.length === 1);
+	ok(findElementsWithClass('myClassName').length === 1);
 });
+
 test('Entity.id', function() {
 	var label = new Label();
 	label.id = 'myId';
 	equal(label.id, 'myId');
 
+	ok(findElementWithId('myId') === null);
 	enchant.Game.instance.rootScene.addChild(label);
-	var elementWhichHasRequiredId = document.getElementById('myId');
-	ok(elementWhichHasRequiredId !== null);
+	ok(findElementWithId('myId') !== null);
 });
+
+function findElementsWithClass(className) {
+	return document.getElementsByClassName(className);
+}
+
+function findElementWithId(id) {
+	return document.getElementById(id);
+}
 	</script>
 </body>
 </html>
