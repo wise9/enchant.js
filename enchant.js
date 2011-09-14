@@ -1325,7 +1325,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * DOMのclass.
      * @type {String}
      */
-    'class': {
+    className: {
         get: function() {
             return this._element.className;
         },
