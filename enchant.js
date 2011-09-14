@@ -1310,6 +1310,30 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
+     * DOMのID.
+     * @type {String}
+     */
+    id: {
+        get: function() {
+            return this._element.id;
+        },
+        set: function(id) {
+            this._element.id = id;
+        }
+    },
+    /**
+     * DOMのclass.
+     * @type {String}
+     */
+    'class': {
+        get: function() {
+            return this._element.className;
+        },
+        set: function(className) {
+            this._element.className = className;
+        }
+    },
+    /**
      * Entityの横幅.
      * @type {Number}
      */
