@@ -18,10 +18,10 @@ module('Entity', {
 });
 
 
-test('Entity.class', function () {
+test('Entity.className', function () {
 	var label = new Label();
-	label['class'] = 'myClassName';
-	equal(label['class'], 'myClassName');
+	label.className = 'myClassName';
+	equal(label.className, 'myClassName');
 
 	ok(findElementsWithClass('myClassName').length === 0);
 	enchant.Game.instance.rootScene.addChild(label);
