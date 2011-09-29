@@ -2453,6 +2453,22 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         var clone = new enchant.Surface(this.width, this.height);
         clone.draw(this);
         return clone;
+    },
+    /**
+     * SurfaceからdataスキームのURLを生成する.
+     * @return {String} Surfaceを表すdataスキームのURL.
+     */
+    toDataURL: function() {
+        var src = this._element.src;
+        if (src) {
+            if (src.slice(0, 5) == 'data:') {
+                return src;
+            } else {
+                return this.clone().toDataURL();
+            }
+        } else {
+            return this._element.toDataURL();
+        }
     }
 });
 
