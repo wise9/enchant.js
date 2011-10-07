@@ -1,11 +1,15 @@
 /**
- *util.enchant.js v0.0.2
- *lastupdate: Sep/30/2011
+ * util.enchant.js v0.1.0 (2011/10/06)
+ * 
+ * enchant.js extention plugin
+ * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
+ * 
+ * @requires enchant.js v0.4.0 or later
  */
 
 enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
 
-//背景専用スプライト
+// 背景専用スプライト
 enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継承したクラスを作成する
 	initialize: function(backgroundimaget) { // コンストラクタを上書きする
 		Sprite.call(this, game.width, game.height); // 継承元のコンストラクタを適用する
@@ -17,16 +21,18 @@ enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継�
 	}
 });
 
-//画像でフォントを再現したラベル（参考：draw.text.js）
+// 画像でフォントを再現したラベル (参考: draw.text.js)
 enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 	initialize: function(posX, posY, width, height) {
 		enchant.Sprite.call(this, 0, 0);
 		var game = enchant.Game.instance;
 		var width = (arguments[2] || game.width);
 		var height = (arguments[3] || game.height);
-		this.fontSize = 16;//このラベルのフォントサイズ
-		this.widthItemNum = 16;//font.pngの横の文字数
-		this.returnLength = width/this.fontSize;//改行を入れる文字数
+		this.fontSize = 16;
+		this.widthItemNum = 16;
+		// font.png の横の文字数
+		this.returnLength = width/this.fontSize;
+		// 改行を入れる文字数
 		this.image = new Surface(width, height);
 		this.x = posX;
 		this.y = posY;
@@ -49,7 +55,7 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 			x = charPos % this.widthItemNum;
 			y = (charPos / this.widthItemNum)|0;
 			this.image.draw(game.assets['font.png'], 
-				x*this.fontSize, y*this.fontSize, this.fontSize, this.fontSize,
+				x * this.fontSize, y * this.fontSize, this.fontSize, this.fontSize,
 				(i%this.returnLength)*this.fontSize, ((i/this.returnLength)|0)*this.fontSize, this.fontSize, this.fontSize);
 		}
 	},
@@ -72,8 +78,8 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 	}
 });
 
-//スコアラベル
-enchant.util.scoreLabel = enchant.Class.create(enchant.util.MutableText, {
+// スコアラベル
+enchant.util.ScoreLabel = enchant.Class.create(enchant.util.MutableText, {
 	initialize: function(x, y) {
 		MutableText.call(this, 0, 0);
 		switch(arguments.length){
@@ -108,8 +114,8 @@ enchant.util.scoreLabel = enchant.Class.create(enchant.util.MutableText, {
 	}
 });
 
-//タイムラベル
-enchant.util.timeLabel = enchant.Class.create(enchant.util.MutableText, {
+// タイムラベル
+enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
 	initialize: function(x, y, counttype) {
 		MutableText.call(this, 0, 0);
 		switch(arguments.length){
@@ -123,7 +129,7 @@ enchant.util.timeLabel = enchant.Class.create(enchant.util.MutableText, {
 				break;
 		}
 		this._time = 0;
-		this._count = 1;//この数を毎フレーム每に足して上げ下げを制御する
+		this._count = 1;// この数を毎フレーム每に足して上げ下げを制御する
 		if(counttype == 'countdown')this._count = -1;
 		this.text = this.label = 'TIME:';
 		this.addEventListener('enterframe', function(){
@@ -141,8 +147,8 @@ enchant.util.timeLabel = enchant.Class.create(enchant.util.MutableText, {
 	}
 });
 
-//ライフラベル
-enchant.util.lifeLabel = enchant.Class.create(enchant.Group, {
+// ライフラベル
+enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
 	initialize: function(x, y, maxlife) {
 		Group.call(this);
 		this.x = x || 0;
@@ -181,13 +187,12 @@ enchant.util.lifeLabel = enchant.Class.create(enchant.Group, {
 	}
 });
 
-//イージング付きのバー（左右方向のみ）
-/*枠を入れたほうが分かりやすいかも…*/
+// イージング付きのバー (左右方向のみ) 
 enchant.Bar = enchant.Class.create(enchant.Sprite, {
 	initialize: function(x, y) {
 		Sprite.call(this, 1, 16);
 		var game = enchant.Game.instance;
-		this.image = new Surface(1, 16);//Null用
+		this.image = new Surface(1, 16);// Null用
 		this.image.context.fillColor = 'RGB(0, 0, 256)';
 		this.image.context.fillRect(0, 0, 1, 16);
 		this._direction = 'right';
@@ -251,14 +256,13 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
 	}
 });
 
-//拡張Sprite
 enchant.util.ExSprite = enchant.Class.create(enchant.Sprite, {
 	initialize: function(width, height) {
 		Sprite.call(this, arguments[0], arguments[1]);
-		this._mode = 'normal';	//状態
-		this._fade = 0;			//opacityに足してフェードイン・フェードアウトを制御する
-		this._blastf = 0;		//爆発中の状態を保持する変数（０〜１００％）
-		this._blast = 0;		//爆発の速度（％）
+		this._mode = 'normal';	// 状態
+		this._fade = 0;			// フェードイン・フェードアウトを制御
+		this._blastf = 0;		// 爆発中の状態を保持する変数 (%) 
+		this._blast = 0;		// 爆発の速度 (%) 
 		this.addEventListener('enterframe', function(){
 			switch(this._mode){
 			case 'normal':
@@ -338,7 +342,7 @@ enchant.util.ExSprite = enchant.Class.create(enchant.Sprite, {
 	}
 });
 
-//引数豊富なスプライト（自動移動付き）
+// 引数豊富なスプライト (自動移動付き) 
 enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 	initialize: function(width, height, x, y, toSpriteImage) {
 		ExSprite.call(this, arguments[0], arguments[1]);
@@ -355,34 +359,34 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 				this.width = arguments[0];
 				break;
 		}
-		this.name = '';				/*名前（IDとして使用）*/
-		this.physical = true;		/*物理演算っぽいことを行うか*/
-		this.kinematic = false;		/*超	 能力的に物理演算に対して不動か*/
-		this.weight = 10;			/*重さ*/
-		this.maxspeed = 10;			/*最大加速度*/
-		this._colled = false;		/*前フレーム時に衝突しているか*/
-		this.partner = {};			/*衝突相手*/
-		this._preventx = 0;			/*前フレーム時のx座標*/
+		this.name = '';				/* 名前 (IDとして使用) */
+		this.physical = true;		/* 物理演算っぽいことを行うか */
+		this.static = false;		/* 不動か */
+		this.weight = 10;			/* 重さ */
+		this.maxspeed = 10;			/* 最大加速度 */
+		this._colled = false;		/* 前フレーム時に衝突しているか */
+		this.partner = {};			/* 衝突相手 */
+		this._preventx = 0;			/* 前フレーム時のx座標 */
 		this._preventy = 0;
 		this.vx = 0;
 		this.vy = 0;
 		this.addEventListener('enterframe', function(){
 			if(this._mode != 'blast')this.move();
 		});
-		this.addEventListener('colled', function(){//衝突時のイベントリスナ
+		this.addEventListener('colled', function(){// 衝突時のイベントリスナ
 			
 		});
 	},
 	move: function() {
 		this._preventx = this.x;
 		this._preventy = this.y;
-		/*物質であるとき*/
+		/* 物質であるとき */
 		if(this.physical){
-			//自由に動いているとき
-			if(!this.kinematic){
+			// 自由に動いているとき
+			if(!this.static){
 				this.vy += this.weight * 0.1;
-				//勝手に動いているときはぶつかったときに自動で反射等の処理をする
-				//自身の登録されたシーン内のオブジェクト同士を比較する
+				// 衝突判定
+				// 自身の登録されたシーン内のオブジェクト同士を比較する
 				this._colled = false;
 				for(var i=this.scene.childNodes.length-1; i>=0; i--){
 					if(		this.scene.childNodes[i].physical &&
@@ -391,8 +395,8 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 							this.intersect(this.scene.childNodes[i])){
 						this._colled = true;
 						this.partner = this.scene.childNodes[i];
-						//（物理演算で）反射させる（未実装）
-						if(this.scene.childNodes[i].kinematic){
+						// (物理演算で) 反発させる (未実装) 
+						if(this.scene.childNodes[i].static){
 							this.vx *= -0.5;
 							this.vy *= -0.5;
 						}else{
@@ -404,12 +408,12 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 						}
 					}
 				}
+				/* 速度制限 */
+				if(this.vx > this.maxspeed)this.vx = this.maxspeed;
+				else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
+				if(this.vy > this.maxspeed)this.vy = this.maxspeed;
+				else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
 			}
-			/*速度制限*/
-			if(this.vx > this.maxspeed)this.vx = this.maxspeed;
-			else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
-			if(this.vy > this.maxspeed)this.vy = this.maxspeed;
-			else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
 			
 			if(this._colled){
 				this.x = this._preventx - Math.abs(this._preventx - this.partner.x);
@@ -430,78 +434,6 @@ function isTouch(){
 	return (document.ontouchstart !== undefined);
 }
 
-/*（Android非対応）マルチタッチを有効にする*/
-/*引数gameにはGameを、enableEventにはマルチタッチを有効にしたいイベントを文字列型で入力する*/
-EnableMultitouch = function(game, enableEvent){//Example: EnableMultitouch(game, 'touchstart,touchmove');
-	var touch = new Sprite(4, 4);//当たり判定用Sprite
-	
-	if(enableEvent == undefined || enableEvent.indexOf('touchstart') != -1){
-		game.addEventListener('touchstart', function(e){
-			if(!isTouch()){/*タッチじゃない＝マウスなら*/
-				event.touches = [];
-				event.touches[0] = {};
-				event.touches[0].pageX = e.x * game.scale;
-				event.touches[0].pageY = e.y * game.scale;
-			}else{
-				event.preventDefault();
-			}
-			for(var j=0; j<event.touches.length; j++){
-				touch.x = (event.touches[j].pageX / game.scale -  touch.width/2)|0;
-				touch.y = (event.touches[j].pageY / game.scale - touch.height/2)|0;
-				for(var i in game.currentScene.childNodes){
-					if(touch.within(game.currentScene.childNodes[i])){
-						game.currentScene.childNodes[i].dispatchEvent('touchstart');
-					}
-				}
-			}
-		});
-	}
-
-	if(enableEvent == undefined || enableEvent.indexOf('touchmove') != -1){
-		game.addEventListener('touchmove', function(e){
-			if(!isTouch()){/*タッチじゃない＝マウスなら*/
-				event.touches = [];
-				event.touches[0] = {};
-				event.touches[0].pageX = e.x * game.scale;
-				event.touches[0].pageY = e.y * game.scale;
-			}else{
-				event.stopPropagation();
-			}
-			for(var j=0; j<event.touches.length; j++){
-				touch.x = (event.touches[j].pageX / game.scale -  touch.width/2)|0;
-				touch.y = (event.touches[j].pageY / game.scale - touch.height/2)|0;
-				for(var i in game.currentScene.childNodes){
-					if(touch.within(game.currentScene.childNodes[i])){
-						game.currentScene.childNodes[i].dispatchEvent('touchmove');
-					}
-				}
-			}
-		});
-	}
-
-	if(enableEvent == undefined || enableEvent.indexOf('touchend') != -1){
-		game.addEventListener('touchend', function(e){
-			if(!isTouch()){/*タッチじゃない＝マウスなら*/
-				event.changeTouches = [];
-				event.changeTouches[0] = {};
-				event.changeTouches[0].pageX = e.x * game.scale;
-				event.changeTouches[0].pageY = e.y * game.scale;
-			}else{
-				event.stopPropagation();
-			}
-			var touches = event.changedTouches;
-			for(var j=0; j<touches.length; j++){
-				touch.x = (touches[j].pageX / game.scale -  touch.width/2)|0;
-				touch.y = (touches[j].pageY / game.scale - touch.height/2)|0;
-				for(var i in game.currentScene.childNodes){
-					if(touch.within(game.currentScene.childNodes[i])){
-						game.currentScene.childNodes[i].dispatchEvent('touchend');
-					}
-				}
-			}
-		});
-	}
+function rand(num){
+    return Math.floor(Math.random() * num);
 }
-
-/*プロンプト*/
-/**/

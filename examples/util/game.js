@@ -12,19 +12,19 @@ window.onload = function() {
 		bar.value = 150;
 		this.rootScene.addChild(bar);
 		
-		var scrlbl = new scoreLabel();
+		var scrlbl = new ScoreLabel();
 		scrlbl.score = 0;
 		scrlbl.row = 1;
 		scrlbl.y = 16;
 		this.rootScene.addChild(scrlbl);
 		
-		var timlbl = new timeLabel(16, 0, 'countdown');
+		var timlbl = new TimeLabel(16, 0, 'countdown');
 		timlbl.time = 30;
 		this.rootScene.addChild(timlbl);
 		
 		var player = new Material(16, 16, 160, 288);
 		player.image = game.assets['icon0.gif'];
-		player.kinematic = true;
+		player.static = true;
 		player.name = 'player';
 		player.frame = 22;
 		player.show();
@@ -76,7 +76,7 @@ window.onload = function() {
 			var shot = new Material(16, 16);
 			shot.image = game.assets['icon0.gif'];
 			shot.frame = 48;
-			shot.kinematic = true;
+			shot.static = true;
 			shot.name = 'missile';
 			shot.x = player.x;
 			shot.y = player.y - 16;
@@ -95,6 +95,6 @@ window.onload = function() {
 			if(timlbl.time <= 0)game.end(scrlbl.score, 'ブタ力:' + scrlbl.score);
 			if(game.rootScene.childNodes.length < 6 + Math.min(scrlbl.score/500, 30))addEnem();
 		});
-	}	
+	}
 	game.start();
 };
