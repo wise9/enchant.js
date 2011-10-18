@@ -1,4 +1,4 @@
-/** nineleap.enchant.js v0.2.6 (2011/09/13)
+/** nineleap.enchant.js v0.2.7 (2011/09/13)
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.4.0 or later
@@ -17,30 +17,34 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         enchant.Game.call(this, width, height);
         this.addEventListener('load', function() {
             var game = this;
-            this.onstart = function(){};
             this.startScene = new SplashScene();
             this.startScene.image = this.assets['start.png'];
             this.startScene.addEventListener('touchend', function() {
+                if (game.started == false) {
+                    if (game.onstart != null) game.onstart();
+                    game.started = true;
+                    gameStart = true;   // deprecated
+                }
                 if (game.currentScene == this) game.popScene();
-                if (this.onstart != null) this.onstart();
-                this.started = true;
-                gameStart = true;   // deprecated
+                this.removeEventListener('touchend', arguments.callee);
             });
             this.addEventListener('keydown', function() {
-                if (this.currentScene == this.startScene) this.popScene();
+                if (this.started == false) {
+                    if(this.onstart != null) this.onstart();
+                    this.started = true;
+                    gameStart = true;   // deprecated
+                }
+                if (game.currentScene == game.startScene) game.popScene();
                 this.removeEventListener('keydown', arguments.callee);
-                if (this.onstart != null) this.onstart();
-                this.started = true;
-                gameStart = true;   // deprecated
             });
             this.pushScene(this.startScene);
 
             this.endScene = new SplashScene();
             this.endScene.image = this.assets['end.png'];
-            this.scoreQueue = false;
-            gameStart = false; // deprecated
-            this.started = false;
         });
+        this.scoreQueue = false;
+        gameStart = false; // deprecated
+        this.started = false;
     },
 
     loadImage: function(src, callback) {

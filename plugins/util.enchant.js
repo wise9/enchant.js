@@ -408,12 +408,20 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 						}
 					}
 				}
+				/* 速度制限 */
+				if(this.vx > this.maxspeed)this.vx = this.maxspeed;
+				else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
+				if(this.vy > this.maxspeed)this.vy = this.maxspeed;
+				else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
 			}
+<<<<<<< HEAD
 			/* 速度制限 */
 			if(this.vx > this.maxspeed)this.vx = this.maxspeed;
 			else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
 			if(this.vy > this.maxspeed)this.vy = this.maxspeed;
 			else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
+=======
+>>>>>>> bc7e20052937f889bb5feae65b5aa3c5f06ee264
 			
 			if(this._colled){
 				this.x = this._preventx - Math.abs(this._preventx - this.partner.x);
