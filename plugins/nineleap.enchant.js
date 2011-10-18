@@ -60,9 +60,10 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
                 return asset in o ? false : o[asset] = true;
             });
             var tAssets = (this._twitterAssets != undefined)? this._twitterAssets : [];
+            var nAssets = (this._netpriceData != undefined)? this._netpriceData : [];
             var mAssets = (this._memoryAssets != undefined) ? this._memoryAssets : [];
             var loaded = 0;
-            var total = assets.length + tAssets.length + mAssets.length;
+            var total = assets.length + tAssets.length + nAssets.length + mAssets.length;
             for (var i = 0, len = assets.length; i < len; i++) {
                 this.load(assets[i], function() {
                     var e = new enchant.Event('progress');
@@ -89,6 +90,19 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             }
             for (var i = 0, len = mAssets.length; i < len; i++) {
                 this.loadImage(mAssets[i], function() {
+                    var e = new enchant.Event('progress');
+                    e.loaded = ++loaded;
+                    e.total = total;
+                    game.dispatchEvent(e);
+                    if (loaded == total) {
+                        game.removeScene(game.loadingScene);
+                        game.dispatchEvent(new enchant.Event('load'));
+                    }
+                });
+            }
+
+            for (var i = 0, len = nAssets.length; i < len; i++) {
+                this.loadImage(nAssets[i], function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
                     e.total = total;
