@@ -37,3 +37,27 @@ test('Entity.id', function () {
 	enchant.Game.instance.rootScene.addChild(label);
 	ok(findElementWithId('myId') !== null);
 });
+
+/**
+ * @see https://github.com/wise9/enchant.js/issues/14
+ */
+test('Entity.frame issue 14', function() {
+	var sprite = new Sprite(32, 32);
+	sprite.frame = 0;
+	sprite.image = enchant.Game.instance.assets['start.png'];
+});
+
+/**
+ * @see https://github.com/wise9/enchant.js/issues/18
+ */
+test('Entity.buttonMode issue 18', function () {
+	var sprite = new Sprite();
+	sprite.buttonMode = 'a';
+
+	ok(!sprite.buttonPressed);
+	sprite.dispatchEvent(new enchant.Event('touchstart'))
+	ok(sprite.buttonPressed);
+	sprite.dispatchEvent(new enchant.Event('touchend'))
+	ok(!sprite.buttonPressed);
+});
+
