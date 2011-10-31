@@ -1,5 +1,0 @@
-.svn/*.*
-*/.svn/*.*
-.DS_Store
-.gitignore
-!.htacess
