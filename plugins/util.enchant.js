@@ -1,5 +1,5 @@
 /**
- * util.enchant.js v0.1.0 (2011/10/06)
+ * util.enchant.js v0.1.2 (2011/11/11)
  * 
  * enchant.js extention plugin
  * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
@@ -8,18 +8,6 @@
  */
 
 enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
-
-// 背景専用スプライト
-enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継承したクラスを作成する
-	initialize: function(backgroundimaget) { // コンストラクタを上書きする
-		Sprite.call(this, game.width, game.height); // 継承元のコンストラクタを適用する
-		if(arguments.length == 1){
-			this.image = arguments[0];
-		}else{
-			this.image = game.assets["back.png"];
-		}
-	}
-});
 
 // 画像でフォントを再現したラベル (参考: draw.text.js)
 enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
@@ -94,7 +82,8 @@ enchant.util.ScoreLabel = enchant.Class.create(enchant.util.MutableText, {
 		this._score = 0;
 		this._current = 0;
 		this.easing = 2.5;
-		this.text = this.label = 'SCORE:';
+		this.label = 'SCORE:';
+		this.text = this.label + '0';
 		this.addEventListener('enterframe', function(){
 			if(this.easing == 0){
 				this.text = this.label + (this._current = this._score);
@@ -131,7 +120,8 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
 		this._time = 0;
 		this._count = 1;// この数を毎フレーム每に足して上げ下げを制御する
 		if(counttype == 'countdown')this._count = -1;
-		this.text = this.label = 'TIME:';
+		this.label = 'TIME:';
+		this.text = this.label + '00.00';
 		this.addEventListener('enterframe', function(){
 			this._time += this._count;
 			this.text = this.label + (this._time / game.fps).toFixed(2);
@@ -187,8 +177,29 @@ enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
 	}
 });
 
+//エフェクトラベル
+enchant.util.EffectLabel = enchant.Class.create(enchant.util.MutableText, {
+	initialize: function(x, y, text) {
+		MutableText.call(this, x, y);
+		this.vx = 0;
+		this.vy = -1;
+		this.vo = 0.05;
+		this.setText(text);
+		this.addEventListener('enterframe', function(){
+			this.x += this.vx;
+			this.y += this.vy;
+			this.opacity -= this.vo;
+			if(this.opacity <= 0){
+				this.scene.removeChild(this);
+				delete this;
+			}
+		});
+		enchant.Game.instance.currentScene.addChild(this);
+	}
+});
+
 // イージング付きのバー (左右方向のみ) 
-enchant.Bar = enchant.Class.create(enchant.Sprite, {
+enchant.util.Bar = enchant.Class.create(enchant.Sprite, {
 	initialize: function(x, y) {
 		Sprite.call(this, 1, 16);
 		var game = enchant.Game.instance;
@@ -253,6 +264,27 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
 		set: function(val){
 			this._maxvalue = val;
 		}
+	}
+});
+
+//爆発
+enchant.util.Blast = enchant.Class.create(enchant.Sprite, {
+	initialize: function(width, height, frame) {
+		Sprite.call(this, (arguments[0] || 16), (arguments[1] || 16));
+		this.image = game.assets['effect0.gif'];
+		this.scale(this.width/16);
+		this.frame = 16;
+		this._blastf = 0;
+		this._blast = (1/frame) || (1/10);
+		this.addEventListener('enterframe', function() {
+			this._blastf += this._blast;
+			if(this._blastf > 1){
+				this.scene.removeChild(this);
+				delete this;
+			}
+			this.frame = (this._blastf*4)|0;
+		});
+		enchant.Game.instance.currentScene.addChild(this);
 	}
 });
 
@@ -364,17 +396,16 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 		this.static = false;		/* 不動か */
 		this.weight = 10;			/* 重さ */
 		this.maxspeed = 10;			/* 最大加速度 */
-		this._colled = false;		/* 前フレーム時に衝突しているか */
-		this.partner = {};			/* 衝突相手 */
+		this.partner = {};			/* 最後に衝突した相手 */
 		this._preventx = 0;			/* 前フレーム時のx座標 */
 		this._preventy = 0;
 		this.vx = 0;
 		this.vy = 0;
 		this.addEventListener('enterframe', function(){
-			if(this._mode != 'blast')this.move();
+			this.move();
 		});
 		this.addEventListener('colled', function(){// 衝突時のイベントリスナ
-			
+			console.log(this.vx);
 		});
 	},
 	move: function() {
@@ -393,19 +424,14 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 							this.y != this.scene.childNodes[i].y &&
 							this.x != this.scene.childNodes[i].x &&
 							this.intersect(this.scene.childNodes[i])){
-						this._colled = true;
-						this.partner = this.scene.childNodes[i];
 						// (物理演算で) 反発させる (未実装) 
-						if(this.scene.childNodes[i].static){
-							this.vx *= -0.5;
-							this.vy *= -0.5;
-						}else{
-							var vx = +(this.x - this.scene.childNodes[i].x);
-							var vy = +(this.y - this.scene.childNodes[i].y);
-							var raito = (this.weight/(this.weight+this.scene.childNodes[i].weight))/2;
-							this.vx = vx/raito;
-							this.vy = vy/raito;
-						}
+						var raito = (this.weight/(this.weight+this.scene.childNodes[i].weight))/2;
+						var vx = (this.vx - this.scene.childNodes[i].vx);
+						var vy = (this.vy - this.scene.childNodes[i].vy);
+						this.vx = -vx/raito;
+						this.vy = -vy/raito;
+						this.partner = this.scene.childNodes[i];
+						this.dispatchEvent('colled');
 					}
 				}
 				/* 速度制限 */
