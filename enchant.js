@@ -1414,72 +1414,56 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      * Operates collision detection based on whether or not rectangle angles are intersecting.
-     * @param {*} other Object with properties of x, y, width, height and if existing scaleX, scaleY, bbox that operate Entity collision detection.
+     * @param {*} other Object with properties of bbox._left, bbox._right, bbox._top, bbox._bottom that operate Entity collision detection.
      * @return {Boolean} Collision detection results.
      */
     intersect: function(other) {
-        //When bounding box is using
-        if(this.bbox.x1 + this.bbox.x2 + this.bbox.y1 + this.bbox.y2 +
-            other.bbox.x1 + other.bbox.x2 + other.bbox.y1 + other.bbox.y2 != 0){
-            if(this._lastxy != this._x + this._y || this._dirty){
-                this._lastxy = this._x + this._y;
-                this.bbox._left = this.x + this.bbox.x1 + (1-this.scaleX)*(this.width/2 - this.bbox.x1);
-                this.bbox._top = this.y + this.bbox.y1 + (1-this.scaleY)*(this.height/2 - this.bbox.y1);
-                this.bbox._right = this.bbox._left + (this.bbox.x2 - this.bbox.x1) * this.scaleX;
-                this.bbox._bottom = this.bbox._top + (this.bbox.y2 - this.bbox.y1) * this.scaleY;
-                if(this.bbox._left > this.bbox._right){
-                    var tmp = this.bbox._left;
-                    this.bbox._left = this.bbox._right;
-                    this.bbox._right = tmp;
-                }
-                if(this.bbox._top > this.bbox._bottom){
-                    var tmp = this.bbox._top;
-                    this.bbox._top = this.bbox._bottom;
-                    this.bbox._bottom = tmp;
-                }
+        if(this._lastxy != this._x + this._y || this._dirty){
+            this.calcbbox();
+        }
+        if(other._lastxy != other._x + other._y || other._dirty){
+            other.calcbbox();
+        }
+        return this.bbox._left < other.bbox._right &&
+            other.bbox._left < this.bbox._right &&
+            this.bbox._top < other.bbox._bottom &&
+            other.bbox._top < this.bbox._bottom;
+    },
+    /**
+     * Operates bounding box for collision detection.
+     * But reflect bounding boxes.
+     * @param {} calculate bounding box.
+    */
+    calcbbox: function() {
+        this._lastxy = this._x + this._y;
+        if(this.bbox.x1 + this.bbox.x2 + this.bbox.y1 + this.bbox.y2 != 0){
+            //When using bounding box.
+            this.bbox._left = this.x + this.bbox.x1 - ((this.bbox.x2 - this.bbox.x1)/2 * (this.scaleX-1));
+            this.bbox._top = this.y + this.bbox.y1 - ((this.bbox.y2 - this.bbox.y1)/2  * (this.scaleY-1));
+            this.bbox._right = this.bbox._left + (this.bbox.x2 - this.bbox.x1) * this.scaleX;
+            this.bbox._bottom = this.bbox._top + (this.bbox.y2 - this.bbox.y1) * this.scaleY;
+            if(this.bbox._left > this.bbox._right){
+                var tmp = this.bbox._left;
+                this.bbox._left = this.bbox._right;
+                this.bbox._right = tmp;
             }
-
-            if(other._lastxy != other._x + other._y || other._dirty){
-                other._lastxy = other._x + other._y;
-                other.bbox._left = other.x + other.bbox.x1 + (1-other.scaleX)*(other.width/2 - other.bbox.x1);
-                other.bbox._top = other.y + other.bbox.y1 + (1-other.scaleY)*(other.height/2 - other.bbox.y1);
-                other.bbox._right = other.bbox._left + (other.bbox.x2 - other.bbox.x1) * other.scaleX;
-                other.bbox._bottom = other.bbox._top + (other.bbox.y2 - other.bbox.y1) * other.scaleY;
-                if(other.bbox._left > other.bbox._right){
-                    var tmp = other.bbox._left;
-                    other.bbox._left = other.bbox._right;
-                    other.bbox._right = tmp;
-                }
-                if(other.bbox._top > other.bbox._bottom){
-                    var tmp = other.bbox._top;
-                    other.bbox._top = other.bbox._bottom;
-                    other.bbox._bottom = tmp;
-                }
+            if(this.bbox._top > this.bbox._bottom){
+                var tmp = this.bbox._top;
+                this.bbox._top = this.bbox._bottom;
+                this.bbox._bottom = tmp;
             }
-            
-            return this.bbox._left < other.bbox._right &&
-                other.bbox._left < this.bbox._right &&
-                this.bbox._top < other.bbox._bottom &&
-                other.bbox._top < this.bbox._bottom;
-        } else if(this.scaleX + this.scaleY + other.scaleX + other.scaleY > 4){
+        } else if(this.scaleX + this.scaleY != 2) {
             //When scale is changed
             this.bbox._left = this._x + this.width/2 - Math.abs(this.scaleX * this.width/2);
             this.bbox._top = this._y + this.height/2 - Math.abs(this.scaleY * this.height/2);
             this.bbox._right = this.bbox._left + Math.abs(this.width * this.scaleX);
             this.bbox._bottom = this.bbox._top + Math.abs(this.height * this.scaleY);
-
-            other.bbox._left = other._x + other.width/2 - Math.abs(other.scaleX * other.width/2);
-            other.bbox._top = other._y + other.height/2 - Math.abs(other.scaleY * other.height/2);
-            other.bbox._right = other.bbox._left + Math.abs(other.width * other.scaleX);
-            other.bbox._bottom = other.bbox._top + Math.abs(other.height * other.scaleY); 
-            
-            return this.bbox._left < other.bbox._right &&
-                other.bbox._left < this.bbox._right &&
-                this.bbox._top < other.bbox._bottom &&
-                other.bbox._top < this.bbox._bottom;
         } else {
-            return this.x < other.x + other.width && other.x < this.x + this.width &&
-                this.y < other.y + other.height && other.y < this.y + this.height;
+            //When normally.
+            this.bbox._left = this.x;
+            this.bbox._right = this.x + this.width;
+            this.bbox._top = this.y;
+            this.bbox._bottom = this.y + this.height;
         }
     },
     /**
