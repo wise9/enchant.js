@@ -38,5 +38,3 @@ License
 -------
 
 Dual licensed under the MIT or GPL Version 3 licenses
-
-Copyright (c) Ubiquitous Entertainment Inc.
