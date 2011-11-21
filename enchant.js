@@ -526,6 +526,12 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
+     * Clear EventListener.
+     */
+    clearEventListener: function() {
+        this._listeners = {};
+    },
+    /**
      * Issue event.
      * @param {enchant.Event} e Event issued.
      */
