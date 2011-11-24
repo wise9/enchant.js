@@ -509,6 +509,7 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
+            
         }
     },
     /**
@@ -527,9 +528,14 @@ enchant.EventTarget = enchant.Class.create({
     },
     /**
      * Clear EventListener.
+     * @param {String} type Event type.
      */
-    clearEventListener: function() {
-        this._listeners = {};
+    clearEventListener: function(type) {
+        if(type != null){
+            this._listeners[type] = {};
+        }else{
+            this._listeners = {};
+        }
     },
     /**
      * Issue event.
@@ -1176,6 +1182,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this._offsetX = this._x;
             this._offsetY = this._y;
         }
+    },
+    remove: function(){
+        if(this._listener){
+            this.clearEventListener();
+        }
+        if(this.parentNode){
+            this.removeChild(this);
+        }
     }
 });
 
@@ -1218,14 +1232,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this.addEventListener('touchstart', function() {
             if (!this.buttonMode) return;
             this.buttonPressed = true;
-            var e = new Event(button + 'buttondown');
+            var e = new Event(this.buttonMode + 'buttondown');
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
         this.addEventListener('touchend', function() {
             if (!this.buttonMode) return;
             this.buttonPressed = false;
-            var e = new Event(button + 'buttonup');
+            var e = new Event(this.buttonMode + 'buttonup');
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
@@ -1530,8 +1544,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                     this._element.appendChild(image._element);
                 }
             }
-
             this._image = image;
+            this.frame = this.frame;
        }
     },
     /**
@@ -1546,16 +1560,18 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         },
         set: function(frame) {
             this._frame = frame;
-            var row = this._image.width / this._width | 0;
-            if (this._image._css) {
-                this._style.backgroundPosition = [
-                    -(frame % row) * this._width, 'px ',
-                    -(frame / row | 0) * this._height, 'px'
-                ].join('');
-            } else if (this._element.firstChild) {
-                var style = this._element.firstChild.style;
-                style.left = -(frame % row) * this._width + 'px';
-                style.top = -(frame / row | 0) * this._height + 'px';
+            if (this._image != null){
+                var row = this._image.width / this._width | 0;
+                if (this._image._css) {
+                    this._style.backgroundPosition = [
+                        -(frame % row) * this._width, 'px ',
+                        -(frame / row | 0) * this._height, 'px'
+                    ].join('');
+                } else if (this._element.firstChild) {
+                    var style = this._element.firstChild.style;
+                    style.left = -(frame % row) * this._width + 'px';
+                    style.top = -(frame / row | 0) * this._height + 'px';
+                }
             }
         }
     },
