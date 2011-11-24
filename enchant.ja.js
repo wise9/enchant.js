@@ -534,7 +534,7 @@ enchant.EventTarget = enchant.Class.create({
      */
     clearEventListener: function(type) {
         if(type != null){
-            this._listeners[type] = {};
+            delete this._listeners[type];
         }else{
             this._listeners = {};
         }
