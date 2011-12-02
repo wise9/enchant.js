@@ -61,3 +61,34 @@ test('Entity.buttonMode issue 18', function () {
 	ok(!sprite.buttonPressed);
 });
 
+
+/**
+ * add/remove/clearEventListener
+ */
+test('add/remove/clear EventListeners', function () {
+	var sprite = new Sprite();
+	listener = function(){};
+	listener2 = function(){};
+
+    sprite.addEventListener('enterframe', listener);
+    equal(sprite._listeners['enterframe'].length, 1);
+    sprite.removeEventListener('enterframe', listener);
+    equal(sprite._listeners['enterframe'].length, 0);
+
+    sprite.addEventListener('enterframe', listener);
+    equal(sprite._listeners['enterframe'].length, 1);
+    sprite.addEventListener('enterframe', listener2);
+    equal(sprite._listeners['enterframe'].length, 2);
+    sprite.clearEventListener('enterframe');
+    equal(sprite._listeners['enterframe'], undefined);
+
+    sprite.addEventListener('enterframe', listener);
+    equal(sprite._listeners['enterframe'].length, 1);
+    sprite.addEventListener('enterframe', listener2);
+    equal(sprite._listeners['enterframe'].length, 2);
+    sprite.clearEventListener();
+    equal(sprite._listeners['enterframe'], undefined);
+    console.log(sprite._listeners);
+
+});
+
