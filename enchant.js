@@ -823,7 +823,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      *   game.preload('player.gif');
      *   game.onload = function() {
      *      var sprite = new Sprite(32, 32);
-     *      sprite.image = game.assets['player.gif']; // パス名でアクセス
+     *      sprite.image = game.assets['player.gif']; // Access via path
      *      ...
      *   };
      *   game.start();
@@ -958,6 +958,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         while (nodes.length) {
             var node = nodes.pop();
             node.dispatchEvent(e);
+            node.age ++;
             if (node.childNodes) {
                 push.apply(nodes, node.childNodes);
             }
@@ -1100,6 +1101,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._y = 0;
         this._offsetX = 0;
         this._offsetY = 0;
+
+        this.age = 0;
 
         /**
          * Parent Node for Node.

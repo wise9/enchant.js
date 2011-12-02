@@ -35,7 +35,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 if (typeof Object.defineProperty != 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) obj[prop] =  desc.value;
@@ -539,7 +538,6 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners = {};
         }
     },
-
     /**
      * イベントを発行する.
      * @param {enchant.Event} e 発行するイベント.
@@ -961,6 +959,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         while (nodes.length) {
             var node = nodes.pop();
             node.dispatchEvent(e);
+            node.age ++;
             if (node.childNodes) {
                 push.apply(nodes, node.childNodes);
             }
@@ -1103,6 +1102,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._y = 0;
         this._offsetX = 0;
         this._offsetY = 0;
+
+        this.age = 0;
 
         /**
          * Nodeの親Node.
@@ -1543,12 +1544,14 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this.frame = this.frame;
        }
     },
+    
     /**
      * 表示するフレームのインデックス.
      * Spriteと同じ横幅と高さを持ったフレームがimageプロパティの画像に左上から順に
      * 配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
      * @type {Number}
      */
+
     frame: {
         get: function() {
             return this._frame;
