@@ -11,8 +11,8 @@ enchant.nineleap = { assets: ['start.png', 'end.png'] };
 /**
  * @scope enchant.nineleap.Game.prototype
  */
+ 
 enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
-
     initialize: function(width, height) {
         enchant.Game.call(this, width, height);
         this.addEventListener('load', function() {
@@ -43,8 +43,8 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             this.endScene.image = this.assets['end.png'];
         });
         this.scoreQueue = false;
-        gameStart = false; // deprecated
         this.started = false;
+        gameStart = false; // deprecated
     },
 
     loadImage: function(src, callback) {

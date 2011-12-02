@@ -7,10 +7,11 @@ RELEASES = ['enchant.js', 'enchant.min.js', 'doc/index.html', 'sound.swf']
 CLEAN << 'enchant.min.js' << 'doc/index.html' << 'sound.swf'
 
 SOURCE = File.read('enchant.js')
-VERSION = SOURCE[/enchant\.js\s+(v\d+\.\d+\.\d+)/, 1]
+VER = SOURCE[/enchant\.js\s+(v\d+\.\d+\.\d+)/, 1]
+
 Copyright = <<EOS
 /*
-enchant.js #{VERSION}
+enchant.js #{VER}
 Copyright (c) Ubiquitous Entertainment Inc.
 Dual licensed under the MIT or GPL Version 3 licenses
 http://www.opensource.org/licenses/mit-license.php
@@ -47,7 +48,8 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
 end
 
 file 'doc/index.html' do |t|
-  sh 'jsdoc -d=doc -t=doc/template enchant.js'
+  sh 'jsdoc -d=doc/ja -t=doc/template enchant.js'
+  sh 'jsdoc -d=doc/en -t=doc/template enchant.ja.js'
 end
 
 file 'sound.swf' do |t|
