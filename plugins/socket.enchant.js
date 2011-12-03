@@ -1,5 +1,5 @@
-/** socket.enchant.js beta (2011/11/30)
- * 
+/** 
+ * socket.enchant.js beta (2011/11/30)
  * enchant.js extention for online game
  * @requires enchant.js v0.4.1 or later
  * @see http://wise9.jp/archives/5659
@@ -20,7 +20,7 @@ enchant.socket.Socket = enchant.Class.create({
                 alert('gameID required. (it will be autodetected if you upload it to 9leap.net)');
             }
         }
-        
+        this.gameID = gameID;
         // デバッグ用引数があるかどうか
         if (twitterID !== undefined) {
             this.twitterID = twitterID;
@@ -57,6 +57,7 @@ enchant.socket.Socket = enchant.Class.create({
                 send: function (roomType, apiName, option, func) {
                     callbackList[roomType+'-'+apiName] = func;
                     var jsonpCallback = '?callback=_onlineCallback("'+roomType+'-'+apiName+'")';
+console.log(socket.gameID);
                     var src = [url, 'api/online/', socket.gameID, '/', roomType,'/', apiName,'.json', jsonpCallback, '&twitterID='+socket.twitterID].join('');
 
                     if (option) 
