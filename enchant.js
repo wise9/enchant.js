@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.4.1
+ * enchant.js v0.4.2
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -867,8 +867,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 req.open('GET', src, true);
                 req.onreadystatechange = function(e) {
                     if (req.readyState == 4) {
-                        if (req.status != 200) {
-                            throw new Error('Cannot load an asset: ' + src);
+                        if (req.status != 200 && req.status != 0) {
+                            throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
                         }
 
                         var type = req.getResponseHeader('Content-Type') || '';
@@ -879,7 +879,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                             game.assets[src] = enchant.Sound.load(src, type);
                             game.assets[src].addEventListener('load', callback);
                         } else {
-                            game.assets[asset] = req.responseText;
+                            game.assets[src] = req.responseText;
                             callback();
                         }
                     }
