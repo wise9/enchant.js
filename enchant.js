@@ -1235,14 +1235,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this.addEventListener('touchstart', function() {
             if (!this.buttonMode) return;
             this.buttonPressed = true;
-            var e = new Event(this.buttonMode + 'buttondown');
+            var e = new enchant.Event(this.buttonMode + 'buttondown');
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
         this.addEventListener('touchend', function() {
             if (!this.buttonMode) return;
             this.buttonPressed = false;
-            var e = new Event(this.buttonMode + 'buttonup');
+            var e = new enchant.Event(this.buttonMode + 'buttonup');
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
