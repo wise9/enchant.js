@@ -900,12 +900,12 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         } else if (this._assets.length) {
             if (enchant.Sound.enabledInMobileSafari && !game._touched &&
                 VENDER_PREFIX == 'webkit' && TOUCH_ENABLED) {
-                var scene = new Scene();
+                var scene = new enchant.Scene();
                 scene.backgroundColor = '#000';
                 var size = Math.round(game.width / 10);
-                var sprite = new Sprite(game.width, size);
+                var sprite = new enchant.Sprite(game.width, size);
                 sprite.y = (game.height - size) / 2;
-                sprite.image = new Surface(game.width, size);
+                sprite.image = new enchant.Surface(game.width, size);
                 sprite.image.context.fillStyle = '#fff';
                 sprite.image.context.font = (size-1) + 'px bold Helvetica,Arial,sans-serif';
                 var width = sprite.image.context.measureText('Touch to Start').width;
@@ -1885,7 +1885,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         set: function(image) {
             this._image = image;
             if (RETINA_DISPLAY && game.scale == 2) {
-                var img = new Surface(image.width * 2, image.height * 2);
+                var img = new enchant.Surface(image.width * 2, image.height * 2);
                 var tileWidth = this._tileWidth || image.width;
                 var tileHeight = this._tileHeight || image.height;
                 var row = image.width / tileWidth | 0;
