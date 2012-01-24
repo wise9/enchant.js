@@ -73,6 +73,8 @@ if (typeof Object.getPrototypeOf != 'function') {
  * 全てがエクスポートされる. 引数が一つ以上の場合はenchant.jsで定義されたクラスのみ
  * がデフォルトでエクスポートされ, プラグインのクラスをエクスポートしたい場合は明示的に
  * プラグインの識別子を引数として渡す必要がある.
+ *
+ * @example
  *   enchant();     // 全てのクラスがエクスポートされる
  *   enchant('');   // enchant.js本体のクラスのみがエクスポートされる
  *   enchant('ui'); // enchant.js本体のクラスとui.enchant.jsのクラスがエクスポートされる
@@ -497,7 +499,6 @@ enchant.EventTarget = enchant.Class.create({
      */
     initialize: function() {
         this._listeners = {};
-        this.age = 0;
     },
     /**
      * イベントリスナを追加する.
@@ -545,7 +546,6 @@ enchant.EventTarget = enchant.Class.create({
         e.target = this;
         e.localX = e.x - this._offsetX;
         e.localY = e.y - this._offsetY;
-        if (e.type == enchant.Event.ENTER_FRAME) this.age ++;
         if (this['on' + e.type] != null) this['on' + e.type]();
         var listeners = this._listeners[e.type];
         if (listeners != null) {
@@ -959,6 +959,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         while (nodes.length) {
             var node = nodes.pop();
             node.dispatchEvent(e);
+            node.age ++;
             if (node.childNodes) {
                 push.apply(nodes, node.childNodes);
             }
@@ -1101,6 +1102,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._y = 0;
         this._offsetX = 0;
         this._offsetY = 0;
+
+        this.age = 0;
 
         /**
          * Nodeの親Node.
