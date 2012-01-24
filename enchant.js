@@ -497,6 +497,7 @@ enchant.EventTarget = enchant.Class.create({
      */
     initialize: function() {
         this._listeners = {};
+        this.age = 0;
     },
     /**
      * Add EventListener.
@@ -545,6 +546,7 @@ enchant.EventTarget = enchant.Class.create({
         e.target = this;
         e.localX = e.x - this._offsetX;
         e.localY = e.y - this._offsetY;
+        if (e.type == enchant.Event.ENTER_FRAME) this.age ++;
         if (this['on' + e.type] != null) this['on' + e.type]();
         var listeners = this._listeners[e.type];
         if (listeners != null) {
@@ -958,7 +960,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         while (nodes.length) {
             var node = nodes.pop();
             node.dispatchEvent(e);
-            node.age ++;
             if (node.childNodes) {
                 push.apply(nodes, node.childNodes);
             }
@@ -1101,8 +1102,6 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._y = 0;
         this._offsetX = 0;
         this._offsetY = 0;
-
-        this.age = 0;
 
         /**
          * Parent Node for Node.
@@ -1928,6 +1927,25 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     * Get the tile in the specified coordinates
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} layer 
+     */
+    checkTile: function(x, y, layer) {
+        if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
+            return false;
+        }
+        var width = this._image.width;
+        var height = this._image.height;
+        var tileWidth = this._tileWidth || width;
+        var tileHeight = this._tileHeight || height;
+        x = x / tileWidth | 0;
+        y = y / tileHeight | 0;
+        var data = this._data[layer];
+        return data[y][x];
+    },
+    /**
      * @private
      */
     width: {
@@ -2029,6 +2047,14 @@ enchant.Group = enchant.Class.create(enchant.Node, {
          * @type {Array.<enchant.Node>}
          */
         this.childNodes = [];
+
+        this._element = document.createElement('div');
+        this._element.style.position = 'absolute';
+        this._element.style.overflow = 'hidden';
+        this._element.style.width = (this.width = game.width) + 'px';
+        this._element.style.height = (this.height = game.height) + 'px';
+        this._element.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
+        this._element.style[VENDER_PREFIX + 'Transform'] = 'scale(' +  game.scale + ')';
 
         this._x = 0;
         this._y = 0;
@@ -2241,14 +2267,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      */
     initialize: function() {
         enchant.Group.call(this);
-
-        this._element = document.createElement('div');
-        this._element.style.position = 'absolute';
-        this._element.style.overflow = 'hidden';
-        this._element.style.width = (this.width = game.width) + 'px';
-        this._element.style.height = (this.height = game.height) + 'px';
-        this._element.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[VENDER_PREFIX + 'Transform'] = 'scale(' +  game.scale + ')';
 
         this.scene = this;
 
