@@ -609,7 +609,7 @@ enchant.Event.INPUT_START = 'inputstart';
 /**
 [lang:ja]
  * ボタン入力が変化したとき発生するイベント.
- * 発行するオブジェクト: g, enchant.Scene
+ * 発行するオブジェクト: enchant.Game, enchant.Scene
  * @type {String}
 [/lang]
 [lang:en]
