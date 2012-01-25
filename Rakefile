@@ -1,12 +1,18 @@
+# 'rake' コマンドを実行することで、enchant.dev.js から、
+# コメント翻訳ファイル enchant.js, enchant.ja.js を生成し、また
+# minified ファイル enchant.min.js を生成します。
+# 
+# rake docs
+
 require 'rubygems'
 require 'rake'
 require 'rake/clean'
 require 'net/http'
 
 RELEASES = ['enchant.js', 'enchant.min.js', 'doc/index.html', 'sound.swf']
-CLEAN << 'enchant.min.js' << 'doc/index.html' << 'sound.swf'
+CLEAN << 'enchant.js' << 'enchant.ja.js' << 'enchant.min.js' << 'doc/index.html'
 
-SOURCE = File.read('enchant.js')
+SOURCE = File.read('enchant.dev.js')
 VER = SOURCE[/enchant\.js\s+(v\d+\.\d+\.\d+)/, 1]
 
 Copyright = <<EOS
@@ -19,9 +25,23 @@ http://www.gnu.org/licenses/gpl-3.0.html
 */
 EOS
 
-task :default => [:test]
+task :default => [:clean, :lang, :minify]
 
 task :create => RELEASES
+
+task :lang => ['enchant.js', 'enchant.ja.js']
+
+file 'enchant.js' => ['enchant.dev.js'] do |t|
+  File.open('enchant.js', 'w'){ |f|
+    f << SOURCE.gsub(/\[lang\:en\]\n(.*?)\[\/lang\]\n/m, "\\1").gsub(/\[lang\:ja\]\n(.*?)\[\/lang\]\n/m, "")  }
+end
+
+
+file 'enchant.ja.js' => ['enchant.dev.js'] do |t|
+  File.open('enchant.ja.js', 'w'){ |f|
+    f << SOURCE.gsub(/\[lang\:en\]\n(.*?)\[\/lang\]\n/m, "").gsub(/\[lang\:ja\]\n(.*?)\[\/lang\]\n/m, "\\1")
+  }
+end
 
 task :test do |t|
   Dir.glob('./examples/**/index.html') {|example|
@@ -31,7 +51,11 @@ task :test do |t|
 end
 
 task :doc => ['doc/index.html'] do |t|
+   print 'rm -r doc/index.html'
+  `rm -r doc/index.html`
 end
+
+task :minify => ['enchant.min.js']
 
 file 'enchant.min.js' => ['enchant.js'] do |t|
   File.open(t.name, 'w') {|f|
@@ -47,7 +71,7 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
   }
 end
 
-file 'doc/index.html' do |t|
+file ['doc/ja/index.html','doc/en/index.html'] do |t|
   sh 'jsdoc -d=doc/ja -t=doc/template enchant.js'
   sh 'jsdoc -d=doc/en -t=doc/template enchant.ja.js'
 end
