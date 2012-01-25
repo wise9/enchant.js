@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.4.2
+ * enchant.js v0.4.3
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -35,6 +35,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 if (typeof Object.defineProperty != 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) obj[prop] =  desc.value;
@@ -222,6 +223,7 @@ enchant.Class.create = function(superclass, definition) {
             superclass.apply(this, arguments);
         };
     }
+
     return constructor;
 };
 
@@ -391,7 +393,7 @@ enchant.Event.INPUT_START = 'inputstart';
 
 /**
  * ボタン入力が変化したとき発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: g, enchant.Scene
  * @type {String}
  */
 enchant.Event.INPUT_CHANGE = 'inputchange';
@@ -511,6 +513,7 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
+            
         }
     },
     /**
@@ -948,6 +951,23 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }, 1000 / this.fps);
         this.running = true;
     },
+    /**
+     * ゲームをデバッグモードで開始する.
+     *
+     * enchant.Game.instance._debug フラグを true にすることでもデバッグモードをオンにすることができる
+     */
+    debug: function() {
+        this._debug = true;
+        this.rootScene.addEventListener("enterframe", function(time){
+            this._actualFps = (1 / time);
+        })
+        this.start();
+    },
+    actualFps: {
+        get: function(){
+            return this._actualFps || this.fps;
+        }
+    },
     _tick: function() {
         var now = Date.now();
         var e = new enchant.Event('enterframe');
@@ -996,6 +1016,17 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             this._intervalID = null;
         }
     },
+    /**
+     * ゲームを再開する。
+     */
+    resume: function() {
+        this.currentTime = Date.now();
+        this._intervalID = window.setInterval(function() {
+            game._tick()
+        }, 1000 / this.fps);
+        this.running = true;
+    },
+        
     /**
      * 新しいSceneに移行する.
      *
@@ -1186,6 +1217,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this._offsetX = this._x;
             this._offsetY = this._y;
         }
+    },
+    remove: function(){
+        if(this._listener){
+            this.clearEventListener();
+        }
+        if(this.parentNode){
+            this.removeChild(this);
+        }
     }
 });
 
@@ -1211,6 +1250,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._opacity = 1;
         this._visible = true;
         this._buttonMode = null;
+
+        if(enchant.Game.instance._debug){
+            this._style.border = "1px solid blue";
+            this._style.margin = "-1px";
+        }
 
         /**
          * Entityにボタンの機能を設定する.
@@ -1239,7 +1283,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
-        
+
         var that = this;
         var render = function() {
             that.dispatchEvent(new enchant.Event('render'));
@@ -1492,6 +1536,14 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 this._dirty = false;
             }
         });
+        
+        if(enchant.Game.instance._debug){
+            this._style.border = "1px solid red";
+            this._style.margin = "-1px";
+            this.addEventListener("touchstart", function(){
+                if(!enchant.Game.instance.running) console.log("touchstart", this);
+            });
+        }
     },
     /**
      * Spriteで表示する画像.
@@ -1544,14 +1596,12 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this.frame = this.frame;
        }
     },
-    
     /**
      * 表示するフレームのインデックス.
      * Spriteと同じ横幅と高さを持ったフレームがimageプロパティの画像に左上から順に
      * 配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
      * @type {Number}
      */
-
     frame: {
         get: function() {
             return this._frame;
@@ -2682,6 +2732,30 @@ enchant.Sound.load = function(src, type) {
     return sound;
 };
 
-enchant.Sound.enabledInMobileSafari = false;
+window.addEventListener("message", function(msg, origin){
+    var data = JSON.parse(msg.data);
+    if (data.type == "event") {
+		game.dispatchEvent(new Event(data.value));
+    }else if (data.type == "debug"){
+        switch(data.value) {
+            case "start":
+                enchant.Game.instance.start();
+                break;
+            case "pause":
+                enchant.Game.instance.pause();
+                break;
+            case "resume":
+                enchant.Game.instance.resume();
+                break;
+            case "tick":
+                enchant.Game.instance._tick();
+                break;
+            default:
+                break;
+        }
+            
+    }
+})
 
+enchant.Sound.enabledInMobileSafari = false;
 })();
