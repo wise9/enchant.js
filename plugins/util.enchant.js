@@ -414,6 +414,11 @@ enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
 				if(this.vy > this.maxspeed)this.vy = this.maxspeed;
 				else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
 			}
+			/* 速度制限 */
+			if(this.vx > this.maxspeed)this.vx = this.maxspeed;
+			else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
+			if(this.vy > this.maxspeed)this.vy = this.maxspeed;
+			else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
 			
 			if(this._colled){
 				this.x = this._preventx - Math.abs(this._preventx - this.partner.x);
