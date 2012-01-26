@@ -2266,77 +2266,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 });
 
 /**
-<<<<<<< HEAD
- * @scope enchant.RGroup.prototype
- */
-enchant.RGroup = enchant.Class.create(enchant.Group, {
-    /**
-     * 回転できるGroup。ただし高さ・幅を指定しなければならない
-     *
-     * @example
-     *   var scene = new RotateGroup();
-     *   scene.addChild(player);
-     *   scene.addChild(enemy);
-     *   game.pushScene(scene);
-     *
-     * @constructs
-     * @extends enchant.Group
-     */
-    initialize: function(width, height) {
-        enchant.Group.call(this);
-
-        if(arguments.length < 2) throw("Width and height of RGroup must be specified");
-        this.width = width;
-        this.height = height;
-        this.rotationOrigin = {
-            x : width/2 ,
-            y : height/2
-        }
-        console.log(this.x, this.y, this.rotationOrigin.x, this.rotationOrigin.y);
-        this._rotation = 0;
-    },
-    addChild: function(node) {
-        console.log(node);
-        enchant.Group.prototype.addChild.apply(this, arguments);
-        node.transformOrigin = "0 0";
-    },
-    rotation: {
-        get: function(){
-            return this._rotation;
-        },
-        set: function(rotation){
-            var diff_rotation = (rotation - this._rotation);
-
-            if(diff_rotation == 0)return;
-            var rad = diff_rotation / 180 * Math.PI;
-            var sin = Math.sin(rad);
-            var cos = Math.cos(rad);
-            var origin = {
-                x : this.width/2,
-                y : this.height/2
-            }
-            console.log("diff_rotation", diff_rotation, "rad", rad);
-            console.log("origin", origin.x, origin.y);
-            console.log("sin", sin, "cos", cos);
-
-            for(var i = 0, len = this.childNodes.length; i < len; i++){
-                var node = this.childNodes[i];
-                node.rotation -= diff_rotation;
-                var rx = (node.x - origin.x);
-                var ry = (node.y - origin.y);
-                console.log(origin.x, origin.y, cos, sin, origin, rx, ry, node.x, node.y);
-                node.x = +cos * rx + sin * ry + origin.x;
-                node.y = -sin * rx + cos * ry + origin.y;
-            }
-
-            this._rotation = rotation;
-        }
-    }    
-});
-
-/**
-=======
->>>>>>> parent of 5145367... v0.5.0
  * @scope enchant.Scene.prototype
  */
 enchant.Scene = enchant.Class.create(enchant.Group, {
@@ -2801,10 +2730,6 @@ enchant.Sound.load = function(src, type) {
     return sound;
 };
 
-<<<<<<< HEAD
-enchant.Sound.enabledInMobileSafari = false;
-
-=======
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
@@ -2831,5 +2756,4 @@ window.addEventListener("message", function(msg, origin){
 })
 
 enchant.Sound.enabledInMobileSafari = false;
->>>>>>> parent of 5145367... v0.5.0
 })();

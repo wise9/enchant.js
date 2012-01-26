@@ -1,4 +1,4 @@
-# 'rake' コマンドを実行することで、enchant.dev.js から、
+# 'rake' コマンドを実行することで、dev/enchant.dev.js から、
 # コメント翻訳ファイル enchant.js, enchant.ja.js を生成し、また
 # minified ファイル enchant.min.js を生成します。
 # 
@@ -12,7 +12,7 @@ require 'net/http'
 RELEASES = ['enchant.js', 'enchant.min.js', 'doc/index.html', 'sound.swf']
 CLEAN << 'enchant.js' << 'enchant.ja.js' << 'enchant.min.js' << 'doc/index.html'
 
-SOURCE = File.read('enchant.dev.js')
+SOURCE = File.read('dev/enchant.dev.js')
 VER = SOURCE[/enchant\.js\s+(v\d+\.\d+\.\d+)/, 1]
 
 Copyright = <<EOS
@@ -31,16 +31,22 @@ task :create => RELEASES
 
 task :lang => ['enchant.js', 'enchant.ja.js']
 
-file 'enchant.js' => ['enchant.dev.js'] do |t|
-  File.open('enchant.js', 'w'){ |f|
-    f << SOURCE.gsub(/\[lang\:en\]\n(.*?)\[\/lang\]\n/m, "\\1").gsub(/\[lang\:ja\]\n(.*?)\[\/lang\]\n/m, "")  }
+task :bind do
+    p ARGV.pop
+end
+
+file 'enchant.js' => ['dev/enchant.dev.js'] do |t|
+    File.open('enchant.js', 'w'){ |f|
+        f << SOURCE.gsub(/\[lang\:en\]\n(.*?)\[\/lang\]\n/m, "\\1").gsub(/\[lang\:ja\]\n(.*?)\[\/lang\]\n/m, "")  }
+    print "generated: enchant.js\n"
 end
 
 
-file 'enchant.ja.js' => ['enchant.dev.js'] do |t|
-  File.open('enchant.ja.js', 'w'){ |f|
-    f << SOURCE.gsub(/\[lang\:en\]\n(.*?)\[\/lang\]\n/m, "").gsub(/\[lang\:ja\]\n(.*?)\[\/lang\]\n/m, "\\1")
-  }
+file 'enchant.ja.js' => ['dev/enchant.dev.js'] do |t|
+    File.open('enchant.ja.js', 'w'){ |f|
+        f << SOURCE.gsub(/\[lang\:en\]\n(.*?)\[\/lang\]\n/m, "").gsub(/\[lang\:ja\]\n(.*?)\[\/lang\]\n/m, "\\1")
+    }
+    print "generated: enchant.ja.js\n"
 end
 
 task :test do |t|
@@ -58,7 +64,8 @@ end
 task :minify => ['enchant.min.js']
 
 file 'enchant.min.js' => ['enchant.js'] do |t|
-  File.open(t.name, 'w') {|f|
+	print "generated: #{t.name} ..";
+	File.open(t.name, 'w') {|f|
 		uri = URI.parse('http://closure-compiler.appspot.com/compile')
 		req = Net::HTTP::Post.new(uri.request_uri)
 		req.set_form_data({
@@ -69,6 +76,7 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
 		})
 		f << Net::HTTP.start(uri.host, uri.port) {|http| Copyright + http.request(req).body }
   }
+	print "done\n"
 end
 
 file ['doc/ja/index.html','doc/en/index.html'] do |t|
