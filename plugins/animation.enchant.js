@@ -94,7 +94,6 @@ enchant.Action = enchant.Class.create({
         if(!this.loaded){
             if(this.onload)this.onload.call(this);
             this.loaded = true;
-            console.log(this.onload, 'loaded');
         }
         if(this.func){
             this.func();
@@ -309,9 +308,7 @@ enchant.Timeline = enchant.Class.create({
         this.pushAction({
             time: 0,
             callback: function(){
-                console.log(this);
                 this.node.opacity = 0;
-                console.log(this);
             }
         });
         return this;
