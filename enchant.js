@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.5.0
+ * enchant.js v0.4.3
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -955,6 +955,9 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      */
     debug: function() {
         this._debug = true;
+        this.rootScene.addEventListener("enterframe", function(time){
+            this._actualFps = (1 / time);
+        })
         this.start();
     },
     actualFps: {
@@ -978,8 +981,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 push.apply(nodes, node.childNodes);
             }
         }
-        
-        this._actualFps = (e.elapsed == 0) ? this.fps : Math.round(1000/e.elapsed * 10)/10;
 
         this.currentScene.dispatchEvent(e);
         this.dispatchEvent(e);
@@ -1018,7 +1019,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     resume: function() {
         this.currentTime = Date.now();
         this._intervalID = window.setInterval(function() {
-            game._tick();
+            game._tick()
         }, 1000 / this.fps);
         this.running = true;
     },
@@ -1132,11 +1133,6 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
 
         this.age = 0;
 
-        this.animation = new Timeline(this);
-        this.addEventListener("enterframe", function(){
-            this.animation.tick();
-        });
-
         /**
          * Parent Node for Node.
          * @type {enchant.Group}
@@ -1245,30 +1241,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._style = this._element.style;
         this._style.position = 'absolute';
 
-        this._scaleX = 1;
-        this._scaleY = 1;
-        this._rotation = 0;
-        this._dirty = false;
-
-        this._transformOrigin = "";
-
         this._width = 0;
         this._height = 0;
         this._backgroundColor = null;
         this._opacity = 1;
         this._visible = true;
         this._buttonMode = null;
-        
-        
-        this.addEventListener('render', function() {
-            if (this._dirty) {
-                this._style[VENDER_PREFIX + 'Transform'] = [
-                    'rotate(', this._rotation, 'deg)',
-                    'scale(', this._scaleX, ',', this._scaleY, ')'
-                ].join('');
-                this._dirty = false;
-            }
-        });
 
         if(enchant.Game.instance._debug){
             this._style.border = "1px solid blue";
@@ -1434,83 +1412,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Spriteを拡大縮小・回転する時の原点.
-     * CSSの'color'プロパティと同様の形式で指定できる.
-     * @type {String} 
-     */
-    transformOrigin: {
-        get: function() {
-            return this._transformOrigin;
-        },
-        set: function(transformOrigin) {
-            this._style[VENDER_PREFIX + 'TransformOrigin'] = this._transformOrigin = transformOrigin;
-        }
-        
-    },
-    /**
-     * Expand or contract Sprite.
-     * @param {Number} x Scaling for x axis to be expanded.
-     * @param {Number} [y] Scaling for y axis to be expanded.
-     */
-    scale: function(x, y) {
-        if (y == null) y = x;
-        this._scaleX *= x;
-        this._scaleY *= y;
-        this._dirty = true;
-    },
-    /**
-     * Rotate Sprite.
-     * @param {Number} deg Rotation angle (frequency).
-     */
-    rotate: function(deg) {
-        this._rotation += deg;
-        this._dirty = true;
-    },
-    /**
-     * Scaling for Sprite's x axis direction.
-     * @type {Number}
-     */
-    scaleX: {
-        get: function() {
-            return this._scaleX;
-        },
-        set: function(scaleX) {
-            this._scaleX = scaleX;
-            this._dirty = true;
-        }
-    },
-    /**
-     * Scaling for Sprite's y axis direction.
-     * @type {Number}
-     */
-    scaleY: {
-        get: function() {
-            return this._scaleY;
-        },
-        set: function(scaleY) {
-            this._scaleY = scaleY;
-            this._dirty = true;
-        }
-    },
-    /**
-     * Sprite rotation angle (frequency).
-     * @type {Number}
-     */
-    rotation: {
-        get: function() {
-            return this._rotation;
-        },
-        set: function(rotation) {
-            this._rotation = rotation;
-            this._dirty = true;
-        }
-    },
-    /**
      * Entity background color.
      * Designates as same format as CSS 'color' properties.
      * @type {String}
      */
-     backgroundColor: {
+    backgroundColor: {
         get: function() {
             return this._backgroundColor;
         },
@@ -1609,10 +1515,24 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 
         this.width = width;
         this.height = height;
+        this._scaleX = 1;
+        this._scaleY = 1;
+        this._rotation = 0;
+        this._dirty = false;
         this._image = null;
         this._frame = 0;
 
         this._style.overflow = 'hidden';
+
+        this.addEventListener('render', function() {
+            if (this._dirty) {
+                this._style[VENDER_PREFIX + 'Transform'] = [
+                    'rotate(', this._rotation, 'deg)',
+                    'scale(', this._scaleX, ',', this._scaleY, ')'
+                ].join('');
+                this._dirty = false;
+            }
+        });
         
         if(enchant.Game.instance._debug){
             this._style.border = "1px solid red";
@@ -1698,6 +1618,64 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                     style.top = -(frame / row | 0) * this._height + 'px';
                 }
             }
+        }
+    },
+    /**
+     * Expand or contract Sprite.
+     * @param {Number} x Scaling for x axis to be expanded.
+     * @param {Number} [y] Scaling for y axis to be expanded.
+     */
+    scale: function(x, y) {
+        if (y == null) y = x;
+        this._scaleX *= x;
+        this._scaleY *= y;
+        this._dirty = true;
+    },
+    /**
+     * Rotate Sprite.
+     * @param {Number} deg Rotation angle (frequency).
+     */
+    rotate: function(deg) {
+        this._rotation += deg;
+        this._dirty = true;
+    },
+    /**
+     * Scaling for Sprite's x axis direction.
+     * @type {Number}
+     */
+    scaleX: {
+        get: function() {
+            return this._scaleX;
+        },
+        set: function(scaleX) {
+            this._scaleX = scaleX;
+            this._dirty = true;
+        }
+    },
+    /**
+     * Scaling for Sprite's y axis direction.
+     * @type {Number}
+     */
+    scaleY: {
+        get: function() {
+            return this._scaleY;
+        },
+        set: function(scaleY) {
+            this._scaleY = scaleY;
+            this._dirty = true;
+        }
+    },
+    /**
+     * Sprite rotation angle (frequency).
+     * @type {Number}
+     */
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            this._rotation = rotation;
+            this._dirty = true;
         }
     }
 });
@@ -2288,6 +2266,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 });
 
 /**
+<<<<<<< HEAD
  * @scope enchant.RGroup.prototype
  */
 enchant.RGroup = enchant.Class.create(enchant.Group, {
@@ -2356,6 +2335,8 @@ enchant.RGroup = enchant.Class.create(enchant.Group, {
 });
 
 /**
+=======
+>>>>>>> parent of 5145367... v0.5.0
  * @scope enchant.Scene.prototype
  */
 enchant.Scene = enchant.Class.create(enchant.Group, {
@@ -2820,6 +2801,35 @@ enchant.Sound.load = function(src, type) {
     return sound;
 };
 
+<<<<<<< HEAD
 enchant.Sound.enabledInMobileSafari = false;
 
+=======
+window.addEventListener("message", function(msg, origin){
+    var data = JSON.parse(msg.data);
+    if (data.type == "event") {
+		game.dispatchEvent(new Event(data.value));
+    }else if (data.type == "debug"){
+        switch(data.value) {
+            case "start":
+                enchant.Game.instance.start();
+                break;
+            case "pause":
+                enchant.Game.instance.pause();
+                break;
+            case "resume":
+                enchant.Game.instance.resume();
+                break;
+            case "tick":
+                enchant.Game.instance._tick();
+                break;
+            default:
+                break;
+        }
+            
+    }
+})
+
+enchant.Sound.enabledInMobileSafari = false;
+>>>>>>> parent of 5145367... v0.5.0
 })();
