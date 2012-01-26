@@ -638,6 +638,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }
             stage.style.position = 'relative';
             var bounding = stage.getBoundingClientRect();
+            var scrollX = isNaN(window.scrollX) ? 0 : window.scrollX;
+            var scrollY = isNaN(window.scrollY) ? 0 : window.scrollY;
             this._pageX = Math.round(window.scrollX + bounding.left);
             this._pageY = Math.round(window.scrollY + bounding.top);
         }

@@ -1026,6 +1026,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }
             stage.style.position = 'relative';
             var bounding = stage.getBoundingClientRect();
+            var scrollX = isNaN(window.scrollX) ? 0 : window.scrollX;
+            var scrollY = isNaN(window.scrollY) ? 0 : window.scrollY;
             this._pageX = Math.round(window.scrollX + bounding.left);
             this._pageY = Math.round(window.scrollY + bounding.top);
         }
@@ -1667,8 +1669,22 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      * @param {String} button Assign button.
 [/lang]
      */
-    keybind: function(key, button) {
-        this._keybind[key] = button;
+    keybind: function(key, type) {
+        this._keybind[key] = type;
+        this.addEventListener(type + 'buttondown', function(e) {
+            if (!this.input[type]) {
+                this.input[type] = true;
+                this.dispatchEvent(new enchant.Event((this._keyCount++) ? 'inputchange' : 'inputstart'));
+            }
+            this.currentScene.dispatchEvent(e);
+        });
+        this.addEventListener(type + 'buttonup', function(e) {
+            if (this.input[type]) {
+                this.input[type] = false;
+                this.dispatchEvent(new enchant.Event((--this._keyCount) ? 'inputchange' : 'inputend'));
+            }
+            this.currentScene.dispatchEvent(e);
+        });
     }
 });
 
