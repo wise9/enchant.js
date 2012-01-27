@@ -39,8 +39,8 @@ if (enchant.gl != undefined) {
             var collada = new Collada();
             collada.onload = function(model){
                 var root = new Sprite3D();
-                root.skin = new Mesh();
-                root.skin.vertices = 0;
+                root.mesh = new Mesh();
+                root.mesh.vertices = 0;
                 model.getCorrespondingGeometry = function(node){
                 	for(var i = 0; i < this.geometries.length; i++){
                 		if(node.url == this.geometries[i].id){
@@ -52,8 +52,8 @@ if (enchant.gl != undefined) {
                 function createSprite3D(model, node, geometry){
                     var mesh = geometry.meshes[0];
                     var ep_mesh = new Sprite3D();
-                    ep_mesh.skin = new Mesh();
-                    var texture = ep_mesh.skin.texture;
+                    ep_mesh.mesh = new Mesh();
+                    var texture = ep_mesh.mesh.texture;
                     var material = mesh.material;
                     if (material) {
                         texture.src = material.src;
@@ -79,18 +79,18 @@ if (enchant.gl != undefined) {
                     	}
                     }
                     
-                    ep_mesh.skin.vertices = mesh.vertices;
+                    ep_mesh.mesh.vertices = mesh.vertices;
                     var colors = [];
-                    for(var i = 0; i < ep_mesh.skin.vertices.length / 3; i++){
+                    for(var i = 0; i < ep_mesh.mesh.vertices.length / 3; i++){
                     	colors[colors.length] = 1.0;
                     	colors[colors.length] = 1.0;
                     	colors[colors.length] = 1.0;
                     	colors[colors.length] = 1.0;
                     }
-                    ep_mesh.skin.colors = colors;
-                    ep_mesh.skin.normals = mesh.normals;
-                    ep_mesh.skin.texCoords = mesh.uv;
-                    ep_mesh.skin.indices = mesh.indices;
+                    ep_mesh.mesh.colors = colors;
+                    ep_mesh.mesh.normals = mesh.normals;
+                    ep_mesh.mesh.texCoords = mesh.uv;
+                    ep_mesh.mesh.indices = mesh.indices;
                     if(node.translate){
                         ep_mesh.x = node.translate[0];
                         ep_mesh.y = node.translate[1];

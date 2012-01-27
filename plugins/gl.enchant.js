@@ -125,9 +125,273 @@ storage.color2sprite = function(color) {
     return this.detectColorList[this.decodeDetectColor(color)];
 };
 
-enchant.gl.Game = enchant.Class.create(enchant.Game, {
+enchant.gl.collision = {};
+(function() {
+    var point2point = function(p1, p2) {
+        var vx = p1.x + p1.parent.x - p2.x - p2.parent.x;
+        var vy = p1.y + p1.parent.y - p2.y - p2.parent.y;
+        var vz = p1.z + p1.parent.z - p2.z - p2.parent.z;
+        return (vx * vx + vy * vy + vz * vz);
+    };
+    var point2BS = function(p, bs) {
+        return (point2point(p, bs) - bs.radius * bs.radius);
+    };
+    var point2AABB = function(p, aabb) {
+        var ppx = p.x + p.parent.x;
+        var ppy = p.y + p.parent.y;
+        var ppz = p.z + p.parent.z;
+        var px = aabb.parent.x + aabb.x + aabb.scale;
+        var py = aabb.parent.y + aabb.y + aabb.scale;
+        var pz = aabb.parent.z + aabb.z + aabb.scale;
+        var nx = aabb.parent.x + (aabb.x - aabb.scale);
+        var ny = aabb.parent.y + (aabb.y - aabb.scale);
+        var nz = aabb.parent.z + (aabb.z - aabb.scale);
+        var dist = 0;
+        if (ppx < nx) {
+            dist += (ppx - nx) * (ppx - nx);
+        } else if (px < ppx) {
+            dist += (ppx - px) * (ppx - px);
+        }
+        if (ppy < ny) {
+            dist += (ppy - ny) * (ppy - ny);
+        } else if (py < ppy) {
+            dist += (ppy - py) * (ppy - py);
+        }
+        if (ppz < nz) {
+            dist += (ppz - nz) * (ppz - nz);
+        } else if (pz < ppz) {
+            dist += (ppz - pz) * (ppz - pz);
+        }
+        return dist;
+    };
+    var point2OBB = function(p, obb) {
+
+
+        return 1;
+    };
+    var BS2BS = function(bs1, bs2) {
+        return (point2point(bs1, bs2) - (bs1.radius + bs2.radius) * (bs1.radius + bs2.radius));
+    };
+    var BS2AABB = function(bs, aabb) {
+        return (point2AABB(bs, aabb) - bs.radius * bs.radius);
+    };
+    var BS2OBB = function(bs, obb) {
+        return 1;
+    };
+    var AABB2AABB = function(aabb1, aabb2) {
+        var px1 = aabb1.parent.x + aabb1.x + aabb1.scale;
+        var py1 = aabb1.parent.y + aabb1.y + aabb1.scale;
+        var pz1 = aabb1.parent.z + aabb1.z + aabb1.scale;
+
+        var nx1 = aabb1.parent.x + (aabb1.x - aabb1.scale);
+        var ny1 = aabb1.parent.y + (aabb1.y - aabb1.scale);
+        var nz1 = aabb1.parent.z + (aabb1.z - aabb1.scale);
+
+        var px2 = aabb2.parent.x + aabb2.x + aabb2.scale;
+        var py2 = aabb2.parent.y + aabb2.y + aabb2.scale;
+        var pz2 = aabb2.parent.z + aabb2.z + aabb2.scale;
+
+        var nx2 = aabb2.parent.x + (aabb2.x - aabb2.scale);
+        var ny2 = aabb2.parent.y + (aabb2.y - aabb2.scale);
+        var nz2 = aabb2.parent.z + (aabb2.z - aabb2.scale);
+        return ((nx2 <= px1) && (nx1 <= px2)
+            && (ny2 <= py1) && (ny1 <= py2)
+            && (nz2 <= pz1) && (nz1 <= pz2)) ? 0.0 : 1.0;
+    };
+    var AABB2OBB = function(aabb, obb) {
+        return 1;
+    };
+    var OBB2OBB = function(obb1, obb2) {
+        return 1;
+    };
+
+    /**
+     * @scope enchant.gl.collision.Bounding.prototype
+     */
+    enchant.gl.collision.Bounding = enchant.Class.create({
+        /**
+         * Sprite3Dの衝突判定を設定するクラス.
+         * 点として定義されている.
+         * enchant.gl.collision.Boundingを継承したクラスとして, 
+         * {@link enchant.gl.collision.BS}, {@link enchant.gl.collision.AABB},
+         * {@link enchant.gl.collision.OBB}, がある.
+         * 現在, OBBはサポートされていない.
+         * @constructs
+         */
+        initialize: function() {
+            this.type = 'point';
+            this.threshold = 0.0001;
+            this.x = 0;
+            this.y = 0;
+            this.z = 0;
+            this.parent = {
+                x: 0,
+                y: 0,
+                z: 0
+            };
+        },
+        /**
+         * 点との距離を計算する.
+         * @param {enchant.gl.collision.Bounding} bounding 衝突点オブジェクト
+         * @return {Number}
+         */
+        toBounding: function(another) {
+            return point2point(this, another);
+        },
+        /**
+         * 球との距離を計算する.
+         * @param {enchant.gl.collision.BS} boudning 衝突球オブジェクト
+         * @return {Number}
+         */
+        toBS: function(another) {
+            return point2BS(this, another);
+        },
+        /**
+         * 回転しない立方体との距離を計算する.
+         * 現在, 衝突していなければ1, 衝突していれば0が返される.
+         * @param {enchant.gl.collision.AABB} bounding AABB
+         * @return {Number}
+         */
+        toAABB: function(another) {
+            return point2AABB(this, another);
+        },
+        /**
+         * 回転する直方体との距離を計算する.
+         * 現在, サポートされていない.
+         * @param {enchant.gl.collision.OBB} bounding OBB
+         * @return {Number}
+         */
+        toOBB: function(another) {
+            return point2OBB(this, another);
+        },
+        /**
+         * 他の衝突判定オブジェクトとの衝突判定.
+         * 衝突判定オブジェクトか, x, y, zプロパティを持っているオブジェクトとの衝突を判定することができる.
+         * @param {enchant.gl.collision.Bounding|enchant.gl.collision.BS|enchant.gl.collision.AABB|enchant.gl.collision.OBB} bounding 衝突判定オブジェクト
+         * @return {Boolean}
+         */
+        intersect: function(another) {
+            switch (another.type) {
+                case 'point':
+                    return (this.toBounding(another) < this.threshold);
+                case 'BS':
+                    return (this.toBS(another) < this.threshold);
+                case 'AABB':
+                    return (this.toAABB(another) < this.threshold);
+                case 'OBB':
+                    return (this.toOBB(another) < this.threshold);
+                default:
+                    return false;
+            }
+        }
+    });
+
+    /**
+     * @scope enchant.gl.collision.BS.prototype
+     */
+    enchant.gl.collision.BS = enchant.Class.create(enchant.gl.collision.Bounding, {
+        /**
+         * Sprite3Dの衝突判定を設定するクラス.
+         * 球として定義されている.
+         * @constructs
+         * @see enchant.gl.collision.Bounding
+         */
+        initialize: function() {
+            enchant.gl.collision.Bounding.call(this);
+            this.type = 'BS';
+            this.radius = 0.5;
+        },
+        toBounding: function(another) {
+            return BS2point(this, another);
+        },
+        toBS: function(another) {
+            return BS2BS(this, another);
+        },
+        toAABB: function(another) {
+            return BS2AABB(this, another);
+        },
+        toOBB: function(another) {
+            return BS2OBB(this, another);
+        }
+    });
+
+    /**
+     * @scope enchant.gl.collision.AABB.prototype
+     */
+    enchant.gl.collision.AABB = enchant.Class.create(enchant.gl.collision.Bounding, {
+        /**
+         * Sprite3Dの衝突判定を設定するクラス.
+         * 回転しない立方体として定義されている.
+         * @constructs
+         * @see enchant.gl.collision.Bounding
+         */
+        initialize: function() {
+            enchant.gl.collision.Bounding.call(this);
+            this.type = 'AABB';
+            this.scale = 0.5;
+        },
+        toBounding: function(another) {
+            return AABB2point(this, another);
+        },
+        toBS: function(another) {
+            return AABB2BS(this, another);
+        },
+        toAABB: function(another) {
+            return AABB2AABB(this, another);
+        },
+        toOBB: function(another) {
+            return AABB2OBB(this, another);
+        }
+    });
+
+    /**
+     * @scope enchant.gl.collision.OBB.prototype
+     */
+    enchant.gl.collision.OBB = enchant.Class.create(enchant.gl.collision.Bounding, {
+        /**
+         * Sprite3Dの衝突判定を設定するクラス.
+         * 回転するとして定義されている.
+         * @constructs
+         * @see enchant.gl.collision.Bounding
+         */
+        initialize: function() {
+            enchant.gl.collision.Bounding.call(this);
+            this.type = 'OBB';
+        },
+        toBounding: function(another) {
+            return OBB2point(this, another);
+        },
+        toBS: function(another) {
+            return OBB2BS(this, another);
+        },
+        toAABB: function(another) {
+            return OBB2AABB(this, another);
+        },
+        toOBB: function(another) {
+            return OBB2OBB(this, another);
+        }
+    });
+})();
+
+var parentModule = null;
+(function() {
+    enchant();
+    if (enchant.nineleap != undefined) {
+        if (enchant.nineleap.memory != undefined &&
+            Object.getPrototypeOf(enchant.nineleap.memory) == Object.prototype) {
+            parentModule = enchant.nineleap.memory;
+        } else if (enchant.nineleap != undefined &&
+            Object.getPrototypeOf(enchant.nineleap) == Object.prototype) {
+            parentModule = enchant.nineleap;
+        }
+    } else {
+        parentModule = enchant;
+    }
+})();
+
+enchant.gl.Game = enchant.Class.create(parentModule.Game, {
     initialize: function(width, height) {
-        enchant.Game.call(this, width, height);
+        parentModule.Game.call(this, width, height);
         this.currentScene3D = null;
         this.addEventListener('enterframe', function(e) {
             if (!this.currentScene3D) {
@@ -205,6 +469,68 @@ enchant.gl.Game = enchant.Class.create(enchant.Game, {
             alert('could not initialized WebGL');
         }
 
+    }
+});
+
+/**
+ * @scope enchant.gl.Quat.prototype
+ */
+enchant.gl.Quat = enchant.Class.create({
+    /**
+     * クォータニオンを簡単に使用するクラス.
+     * @param {Number} x
+     * @param {Number} y
+     * @param {Number} z
+     * @param {Number} rad
+     * @constructs
+     */
+    initialize: function(x, y, z, rad) {
+        var l = Math.sqrt(x * x + y * y + z * z);
+        if (l) {
+            x /= l;
+            y /= l;
+            z /= l;
+        }
+        var s = Math.sin(rad/2);
+        var c = Math.cos(rad/2);
+        this._quat = quat4.create([s*x, s*y, s*z, c]);
+    },
+
+    /**
+     * クォータニオン同士で球面線形補間を行う.
+     * 自身ともう一つのクォータニオンの間の回転移動を補完したクォータニオンを計算する.
+     * 回転の度合いは0から1の値で表される. 0が自身側, 1がもう一つ側.
+     * 新しいインスタンスが返される.
+     * @param {enchant.gl.Quat} Quaternion
+     * @param {Number} ratio
+     * @return {enchant.gl.Quat}
+     */
+    slerp: function(another, ratio) {
+        var q = new Quat(0, 0, 0, 0);
+        quat4.slerp(this._quat, another._quat, ratio, q);
+        return q;
+    },
+    /**
+     * クォータニオン同士で球面線形補間を行う.
+     * 自身ともう一つのクォータニオンの間の回転移動を補完したクォータニオンを計算する.
+     * 回転の度合いは0から1の値で表される. 0が自身側, 1がもう一つ側.
+     * 自身の値が上書きされる.
+     * @param {enchant.gl.Quat} Quaternion
+     * @param {Number} ratio
+     * @return {enchant.gl.Quat}
+     */
+    slerpApply: function(another, ratio) {
+        quat4.slerp(this._quat, another._quat, ratio);
+        return this;
+    },
+    /**
+     * クォータニオンを回転行列に変換する.
+     * @param {Number[]} matrix
+     * @return {Number[]}
+     */
+    toMat4: function(matrix) {
+        quat4.toMat4(this._quat, matrix);
+        return matrix;
     }
 });
 
@@ -363,7 +689,7 @@ enchant.gl.PointLight.prototype.z = 0;
  */
 enchant.gl.Texture = enchant.Class.create({
     /**
-     * Sprite3Dのテクスチャ情報を格納するクラス.
+     * テクスチャ情報を格納するクラス.
      * @example
      *   var sprite = new Sprite3D();
      *   var texture = new Texture();
@@ -450,7 +776,15 @@ enchant.gl.Texture = enchant.Class.create({
     }
 });
 
+/**
+ * @scope enchant.gl.Mesh.prototype
+ */
 enchant.gl.Mesh = enchant.Class.create({
+    /**
+     * 頂点配列やテクスチャを格納するクラス.
+     * スプライトのプロパティとして使用される.
+     * @constructs
+     */
     initialize: function() {
         this.verticesBuffer = gl.createBuffer();
         this.normalsBuffer = gl.createBuffer();
@@ -468,23 +802,44 @@ enchant.gl.Mesh = enchant.Class.create({
     },
 
     /**
-     * Sprite3Dの頂点配列.
+     * Meshの色を変更する.
+     * Mesh.colorsを指定した色の頂点配列にする.
+     * @param {Number[]|String} z z軸方向の平行移動量
+     * @example
+     *   var sprite = new Sprite3D();
+     *   //紫色に設定. どれも同じ結果が得られる.
+     *   sprite.mesh.setBaseColor([1.0, 0.0, 1.0, 0.0]);
+     *   sprite.mesh.setBaseColor('#ff00ff');
+     *   sprite.mesh.setBaseColor('rgb(255, 0, 255');
+     *   sprite.mesh.setBaseColor('rgba(255, 0, 255, 1.0');
+     */
+    setBaseColor: function(color) {
+        var c = parseColor(color);
+        var newColors = [];
+        for (var i = 0, l = this.vertices.length / 3; i < l; i++) {
+            Array.prototype.push.apply(newColors, c);
+        }
+        this.colors = newColors;
+    },
+
+    /**
+     * Meshの頂点配列.
      * 3つの要素を一組として頂点を指定する. 全体の要素数は, 頂点の個数nに対して3nとなる.
      * 3n, 3n+1, 3n+2番目の要素はそれぞれ, n番目の頂点のx, y, z座標である.
      * @example
      *   var sprite = new Sprite3D();
      *   //頂点配列を代入
      *   //データはx, y, z, x, y, z...の順に格納する
-     *   sprite.vertices = [
+     *   sprite.mesh.vertices = [
      *       0.0, 0.0, 0.0,  //0番目の頂点(0.0, 0.0, 0.0)
      *       1.0, 0.0, 0.0,  //1番目の頂点(1.0, 0.0, 0.0)
      *       1.0, 1.0, 0.0,  //2番目の頂点(1.0, 1.0, 0.0)
      *       0.0, 1.0, 0.0   //3番目の頂点(0.0, 1.0, 0.0)
      *   ];
      * @type Number[]
-     * @see enchant.gl.Sprite3D#indices
-     * @see enchant.gl.Sprite3D#normals
-     * @see enchant.gl.Sprite3D#texCoords
+     * @see enchant.gl.Mesh#indices
+     * @see enchant.gl.Mesh#normals
+     * @see enchant.gl.Mesh#texCoords
      */
     vertices: {
         set: function(array) {
@@ -498,7 +853,7 @@ enchant.gl.Mesh = enchant.Class.create({
     },
 
     /**
-     * Sprite3Dの頂点法線ベクトル配列.
+     * Meshの頂点法線ベクトル配列.
      * 3つの要素を一組として法線ベクトルを指定する. 全体の要素数は, 法線ベクトルの個数nに対して3nとなる.
      * 3n, 3n+1, 3n+2番目の要素はそれぞれ, n番目の頂点の法線ベクトルのx, y, z成分である.
      * 法線ベクトルはライティングの影の計算に利用される.
@@ -506,7 +861,7 @@ enchant.gl.Mesh = enchant.Class.create({
      *   var sprite = new Sprite3D();
      *   //頂点配列を代入
      *   //データはx, y, z, x, y, z...の順に格納する
-     *   sprite.vertices = [
+     *   sprite.mesh.vertices = [
      *       0.0, 0.0, 0.0,  //0番目の頂点(0.0, 0.0, 0.0)
      *       1.0, 0.0, 0.0,  //1番目の頂点(1.0, 0.0, 0.0)
      *       1.0, 1.0, 0.0,  //2番目の頂点(1.0, 1.0, 0.0)
@@ -522,9 +877,9 @@ enchant.gl.Mesh = enchant.Class.create({
      *       0.0, 1.0, 0.0   //3番目の頂点の法線ベクトル(0.0, 1.0, 0.0)
      *   ];
      * @type Number[]
-     * @see enchant.gl.Sprite3D#vertices
-     * @see enchant.gl.Sprite3D#indices
-     * @see enchant.gl.Sprite3D#texCoords
+     * @see enchant.gl.Mesh#vertices
+     * @see enchant.gl.Mesh#indices
+     * @see enchant.gl.Mesh#texCoords
      */
     normals: {
         set: function(array) {
@@ -538,7 +893,7 @@ enchant.gl.Mesh = enchant.Class.create({
     },
 
     /**
-     * Sprite3Dのテクスチャマッピング配列.
+     * Meshのテクスチャマッピング配列.
      * 2つの要素を一組としてuv座標を指定する. 全体の要素数は, 頂点の個数nに対して2nとなる.
      * 2n, 2n+1番目の要素はそれぞれ, n番目の頂点のテクスチャのu, v座標である.
      * それぞれの座標のとりうる値は0<=u,v<=1である.
@@ -546,11 +901,11 @@ enchant.gl.Mesh = enchant.Class.create({
      *   var sprite = new Sprite3D();
      *   var texture = new Texture();
      *   texture.src = "texture.png";
-     *   sprite.texture = texture;
+     *   sprite.mesh.texture = texture;
      *
      *   //頂点配列を代入
      *   //データはx, y, z, x, y, z...の順に格納する
-     *   sprite.vertices = [
+     *   sprite.mesh.vertices = [
      *       0.0, 0.0, 0.0,  //0番目の頂点(0.0, 0.0, 0.0)
      *       1.0, 0.0, 0.0,  //1番目の頂点(1.0, 0.0, 0.0)
      *       1.0, 1.0, 0.0,  //2番目の頂点(1.0, 1.0, 0.0)
@@ -559,17 +914,17 @@ enchant.gl.Mesh = enchant.Class.create({
      *
      *   //uv座標配列を代入
      *   //データはu, v, u, v...の順に格納する
-     *   sprite.texCoords = [
+     *   sprite.mesh.texCoords = [
      *       0.0, 0.0,  //0番目の頂点のuv座標(0.0, 0.0)
      *       1.0, 0.0,  //1番目の頂点のuv座標(1.0, 0.0)
      *       1.0, 1.0,  //2番目の頂点のuv座標(1.0, 1.0)
      *       0.0, 1.0   //3番目の頂点のuv座標(0.0, 1.0)
      *   ];
      * @type Number[]
-     * @see enchant.gl.Sprite3D#vertices
-     * @see enchant.gl.Sprite3D#indices
-     * @see enchant.gl.Sprite3D#normals
-     * @see enchant.gl.Sprite3D#texture#
+     * @see enchant.gl.Mesh#vertices
+     * @see enchant.gl.Mesh#indices
+     * @see enchant.gl.Mesh#normals
+     * @see enchant.gl.Mesh#texture#
      */
     texCoords: {
         set: function(array) {
@@ -583,9 +938,9 @@ enchant.gl.Mesh = enchant.Class.create({
     },
 
     /**
-     * Sprite3Dの頂点インデックス配列.
+     * Meshの頂点インデックス配列.
      * 3つの要素を一組として三角形を指定する.全体の要素数は, 三角形の個数nに対して3nとなる.
-     * インデックスの値は, {@link enchant.gl.Sprite3D#vertices}で指定した頂点の番号である.
+     * インデックスの値は, {@link enchant.gl.Mesh#vertices}で指定した頂点の番号である.
      * @example
      *   var sprite = new Sprite3D();
      *   //頂点配列を代入
@@ -608,9 +963,9 @@ enchant.gl.Mesh = enchant.Class.create({
      *   var scene = new Scene3D();
      *   scene.addChild(sprite);
      * @type Integer[]
-     * @see enchant.gl.Sprite3D#vertices
-     * @see enchant.gl.Sprite3D#normals
-     * @see enchant.gl.Sprite3D#texCoords
+     * @see enchant.gl.Mesh#vertices
+     * @see enchant.gl.Mesh#normals
+     * @see enchant.gl.Mesh#texCoords
      */
     indices: {
         set: function(array) {
@@ -624,16 +979,16 @@ enchant.gl.Mesh = enchant.Class.create({
     },
 
     /**
-     * Sprite3Dの頂点色配列.
+     * Meshの頂点色配列.
      * 4つの要素を一組として頂点色を指定する. 全体の要素数は, 頂点の個数nに対して4nとなる.
      * 4n, 4n+1, 4n+2, 4n+3番目の要素はそれぞれ, n番目の頂点の色のr, g, b, a成分である.
-     * 頂点色はSprite3DのTextureにTextureが割り当てられていない場合の描画に使用される.
-     * {@link enchant.gl.Sprite3D#setBaseColor}で一括して変更することができる.
+     * 頂点色はMeshのtextureにテクスチャが割り当てられていない場合の描画に使用される.
+     * {@link enchant.gl.Mesh#setBaseColor}で一括して変更することができる.
      * @example
      *   var sprite = new Sprite3D();
      *   //頂点配列を代入
      *   //データはx, y, z, x, y, z...の順に格納する
-     *   sprite.vertices = [
+     *   sprite.mesh.vertices = [
      *       0.0, 0.0, 0.0,  //0番目の頂点(0.0, 0.0, 0.0)
      *       1.0, 0.0, 0.0,  //1番目の頂点(1.0, 0.0, 0.0)
      *       1.0, 1.0, 0.0,  //2番目の頂点(1.0, 1.0, 0.0)
@@ -642,14 +997,14 @@ enchant.gl.Mesh = enchant.Class.create({
      *
      *   //頂点色配列を代入
      *   //データはr, g, b, ,a, r, g, b, a...の順に格納する
-     *   sprite.normals = [
+     *   sprite.mesh.normals = [
      *       0.0, 0.0, 1.0, 1.0, //0番目の頂点の色(0.0, 0.0, 1.0, 1.0)
      *       0.0, 1.0, 0.0, 1.0, //1番目の頂点の色(0.0, 1.0, 0.0, 1.0)
      *       0.0, 1.0, 1.0, 1.0, //2番目の頂点の色(0.0, 1.0, 1.0, 1.0)
      *       1.0, 0.0, 0.0, 1.0  //3番目の頂点の色(1.0, 0.0, 0.0, 1.0)
      *   ];
      * @type Number[]
-     * @see enchant.gl.Sprite3D#setBaseColor
+     * @see enchant.gl.Mesh#setBaseColor
      */
     colors: {
         set: function(array) {
@@ -668,7 +1023,7 @@ enchant.gl.Mesh = enchant.Class.create({
  */
 enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     /**
-     * 3DSprite3D表示機能を持ったクラス.
+     * Sprite3D表示機能を持ったクラス.
      * <p>デフォルトでは立方体がロードされる.</p>
      * <p>{@link enchant.gl.Scene3D}のインスタンスに追加することで, 画面上に表示することができる.
      * {@link enchant.gl.Sprite3D#vertices}, {@link enchant.gl.Sprite3D#indices},
@@ -716,26 +1071,16 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         this.parentNode = null;
 
         /**
-         * Sprite3Dに貼付けられるテクスチャオブジェクト.
-         * テクスチャのマッピングは{@link enchant.gl.Sprite3D#texCoords}にて設定可能である.
-         * @type enchant.gl.Texture
+         * Sprite3Dに適用されるメッシュオブジェクト.
+         * @type enchant.gl.Mesh
          * @example
          *   var sprite = new Sprite3D();
-         *   var textur = new Texture();
-         *   texture.src = "texture.png";
-         *   sprite.texture = texture;
-         * @see enchant.gl.Sprite3D#texCoords
+         *   sprite.mesh = new Mesh();
          */
-        //this.texture = new Texture();
+        this.mesh = new Mesh();
 
-        this.skin = {
-            vertices: [],
-            normals: [],
-            colors: [],
-            texCoords: [],
-            indices: []
-        };
-        this.skin.texture = new Texture();
+        this.bounding = new BS();
+        this.bounding.parent = this;
 
         this.age = 0;
 
@@ -762,8 +1107,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         this.detectColor = storage.attachDetectColor(this);
 
         var parentEvent = function(e) {
-            if (this.parentNode instanceof Sprite3D
-                /*|| this.scene != null*/) {
+            if (this.parentNode instanceof Sprite3D) {
                 this.parentNode.dispatchEvent(e);
             }
         }
@@ -819,14 +1163,45 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
                 clone[prop] = this[prop].filter(function() { return true; });
             }
         }
-        //clone.parentNode = this.parentNode;
-        clone.skin = this.skin;
+        clone.mesh = this.mesh;
         if (this.childNodes) {
             for (var i = 0, l = this.childNodes.length; i < l; i++) {
                 clone.addChild(this.childNodes[i].clone());
             }
         }
         return clone;
+    },
+
+    /**
+     * 他のSprite3Dの状態をセットする.
+     * Colladaファイルを読み込んだassetsに対して使用できる.
+     * @example
+     *   var sp = new Sprite3D();
+     *   sp.set(game.assets['sample.dae']);
+     *   //sample.daeのモデル情報を持ったSprite3Dになる
+     *   
+     */
+    set: function(sprite) {
+        for (prop in sprite) {
+            if (typeof sprite[prop] == 'number' ||
+                typeof sprite[prop] == 'string') {
+                this[prop] = sprite[prop];
+            } else if (sprite[prop] instanceof WebGLBuffer) {
+                this[prop] = sprite[prop];
+            } else if (sprite[prop] instanceof Float32Array) {
+                this[prop] = new Float32Array(sprite[prop]);
+            } else if (sprite[prop] instanceof Array 
+                && prop != 'childNodes'
+                && prop != 'detectColor') {
+                this[prop] = sprite[prop].filter(function() { return true; });
+            }
+        }
+        this.mesh = sprite.mesh;
+        if (sprite.childNodes) {
+            for (var i = 0, l = sprite.childNodes.length; i < l; i++) {
+                this.addChild(sprite.childNodes[i].clone());
+            }
+        }
     },
 
     /**
@@ -881,25 +1256,15 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         }
     },
 
+    
     /**
-     * Sprite3Dの色を変更する.
-     * Sprite3D.colorsを指定した色の頂点配列にする.
-     * @param {Number[]|String} z z軸方向の平行移動量
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //紫色に設定. どれも同じ結果が得られる.
-     *   sprite.setBaseColor([1.0, 0.0, 1.0, 0.0]);
-     *   sprite.setBaseColor('#ff00ff');
-     *   sprite.setBaseColor('rgb(255, 0, 255');
-     *   sprite.setBaseColor('rgba(255, 0, 255, 1.0');
+     * 他のオブジェクトとの衝突判定.
+     * 衝突判定オブジェクトか, x, y, zプロパティを持っているオブジェクトとの衝突を判定することができる.
+     * @param {enchant.gl.Sprite3D} bounding 対象のオブジェクト
+     * @return {Boolean}
      */
-    setBaseColor: function(color) {
-        var c = parseColor(color);
-        var newColors = [];
-        for (var i = 0, l = this.skin.vertices.length / 3; i < l; i++) {
-            newColors = newColors.concat(c);
-        }
-        this.skin.colors = newColors;
+    intersect: function(another) {
+        return this.bounding.intersect(another.bounding);
     },
 
     /**
@@ -984,6 +1349,24 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     },
 
     /**
+     * 回転行列にクォータニオンから得られる回転行列をセットする.
+     * @type enchant.gl.Quat
+     */
+    rotationSet: function(quat) {
+        quat.toMat4(this._rotation);
+    },
+
+    
+    /**
+     * 回転行列にクォータニオンから得られる回転行列を適用する.
+     * @type enchant.gl.Quat
+     */
+    rotationApply: function(quat) {
+        quat.toMat4(this.tmpMat);
+        mat4.multiply(this._rotation, this.tmpMat);
+    },
+
+    /**
      * Sprite3Dに適用する変換行列.
      * @deprecated
      * @type Number[]
@@ -994,6 +1377,20 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         },
         get: function() {
             return this._matrix;
+        }
+    },
+
+    /**
+     * Sprite3Dの当たり判定に利用されるオブジェクト.
+     * @type enchant.gl.Bounding | enchant.gl.BS | enchant.gl.AABB
+     */
+    bounding: {
+        set: function(bounding) {
+            this._bounding = bounding;
+            this._bounding.parent = this;
+        },
+        get: function() {
+            return this._bounding;
         }
     },
 
@@ -1016,43 +1413,43 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
                 this.childNodes[i]._draw(scene, detectTouch, this.tmpMat);
             }
         }
-        if (this.skin.vertices) {
+        if (this.mesh.vertices) {
             gl.uniformMatrix4fv(scene.shaderUniforms.modelMat, false, this.tmpMat);
             mat4.toInverseMat3(this.tmpMat, scene.normMat);
             mat3.transpose(scene.normMat);
             gl.uniformMatrix3fv(scene.shaderUniforms.normMat, false, scene.normMat);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.skin.verticesBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.verticesBuffer);
             gl.vertexAttribPointer(scene.shaderAttributes.vertexPosition, 3, gl.FLOAT, false, 0, 0);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.skin.normalsBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.normalsBuffer);
             gl.vertexAttribPointer(scene.shaderAttributes.normal, 3, gl.FLOAT, false, 0, 0);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.skin.texCoordsBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.texCoordsBuffer);
             gl.vertexAttribPointer(scene.shaderAttributes.textureCoord, 2, gl.FLOAT, false, 0, 0);
 
             gl.uniform4fv(scene.shaderUniforms.detectColor, this.detectColor);
 
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.skin.colorsBuffer);
+            gl.bindBuffer(gl.ARRAY_BUFFER, this.mesh.colorsBuffer);
             gl.vertexAttribPointer(scene.shaderAttributes.vertexColor, 4, gl.FLOAT, false, 0, 0);
 
 
-            if (this.skin.texture._image) {
-                gl.bindTexture(gl.TEXTURE_2D, this.skin.texture._glTexture);
+            if (this.mesh.texture._image) {
+                gl.bindTexture(gl.TEXTURE_2D, this.mesh.texture._glTexture);
                 gl.uniform1f(scene.shaderUniforms.useTexture, 1.0);
             } else {
                 gl.uniform1f(scene.shaderUniforms.useTexture, 0.0);
             }
 
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.skin.indicesBuffer);
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.mesh.indicesBuffer);
 
-            gl.uniform4fv(scene.shaderUniforms.diffuse, this.skin.texture.diffuse);
-            gl.uniform4fv(scene.shaderUniforms.specular, this.skin.texture.specular);
-            gl.uniform4fv(scene.shaderUniforms.emission, this.skin.texture.emission);
-            gl.uniform4fv(scene.shaderUniforms.ambient, this.skin.texture.ambient);
-            gl.uniform1f(scene.shaderUniforms.shininess, this.skin.texture.shininess);
+            gl.uniform4fv(scene.shaderUniforms.diffuse, this.mesh.texture.diffuse);
+            gl.uniform4fv(scene.shaderUniforms.specular, this.mesh.texture.specular);
+            gl.uniform4fv(scene.shaderUniforms.emission, this.mesh.texture.emission);
+            gl.uniform4fv(scene.shaderUniforms.ambient, this.mesh.texture.ambient);
+            gl.uniform1f(scene.shaderUniforms.shininess, this.mesh.texture.shininess);
 
-            gl.drawElements(gl.TRIANGLES, this.skin.indices.length, gl.UNSIGNED_SHORT, 0);
+            gl.drawElements(gl.TRIANGLES, this.mesh.indices.length, gl.UNSIGNED_SHORT, 0);
 
             this.dispatchEvent(new enchant.Event('render'));
 
@@ -1299,6 +1696,8 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         this.modelMat = mat4.create();
         this.normMat = mat3.create();
         this.cameraMat = mat4.create();
+        this.cameraMatInverse = mat4.create();
+        this.cameraMatInverseY = mat4.create();
         this._backgroundColor = [0.0, 0.0, 0.0, 1.0];
 
         this.shaderAttributes = [];
@@ -1328,11 +1727,18 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         // タッチ検出用のフレームバッファ
         this.detectFramebuffer = gl.createFramebuffer();
         this.detectColorbuffer = gl.createRenderbuffer();
+        this.detectDepthbuffer = gl.createRenderbuffer();
 
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.detectFramebuffer);
+
         gl.bindRenderbuffer(gl.RENDERBUFFER, this.detectColorbuffer);
         gl.renderbufferStorage(gl.RENDERBUFFER, gl.RGBA4, game.width, game.height);
         gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.RENDERBUFFER, this.detectColorbuffer);
+
+        gl.bindRenderbuffer(gl.RENDERBUFFER, this.detectDepthbuffer);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16, game.width, game.height);
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT, gl.RENDERBUFFER, this.detectDepthbuffer);
+
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.bindRenderbuffer(gl.RENDERBUFFER, null);
 
@@ -1521,10 +1927,26 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
                 this._camera._changedCenter ||
                 this._camera._changedUpVector) {
                 mat4.lookAt(
-                            [this._camera._x, this._camera._y, this._camera._z], 
-                            [this._camera._centerX, this._camera._centerY, this._camera._centerZ],
-                            [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
-                            this.cameraMat);
+                    [this._camera._x, this._camera._y, this._camera._z], 
+                    [this._camera._centerX, this._camera._centerY, this._camera._centerZ],
+                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
+                    this.cameraMat);
+                mat4.lookAt(
+                    [0, 0, 0], 
+                    [-this._camera._x + this._camera._centerX,
+                    -this._camera._y + this._camera._centerY,
+                    -this._camera._z + this._camera._centerZ],
+                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
+                    this.cameraMatInverse);
+                mat4.inverse(this.cameraMatInverse);
+                mat4.lookAt(
+                    [0, 0, 0], 
+                    [-this._camera._x + this._camera._centerX,
+                    0,
+                    -this._camera._z + this._camera._centerZ],
+                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
+                    this.cameraMatInverseY);
+                mat4.inverse(this.cameraMatInverseY);
                 gl.uniformMatrix4fv(this.shaderUniforms.cameraMat, false, this.cameraMat);
                 gl.uniform3fv(this.shaderUniforms.lookVec, [this._camera._centerX - this._camera._x,
                                                             this._camera._centerY - this._camera._y,
@@ -1561,7 +1983,7 @@ varying vec3 vNormal;\n\
 \n\
 void main() {\n\
     vec4 p = uModelMat * vec4(aVertexPosition, 1.0);\n\
-        gl_Position = uProjMat * (uCameraMat * uUseCamera) * p + uProjMat * p * (1.0 - uUseCamera);\n\
+    gl_Position = uProjMat * (uCameraMat * uUseCamera) * p + uProjMat * p * (1.0 - uUseCamera);\n\
     vTextureCoord = aTextureCoord;\n\
     vColor = aVertexColor;\n\
     vNormal = uNormMat * aNormal;\n\
@@ -1591,9 +2013,9 @@ varying vec3 vNormal;\n\
 \n\
 void main() {\n\
     vec4 texColor = texture2D(uSampler, vTextureCoord);\n\
-    vec4 baseColor = vColor * (1.0 - uUseTexture);\n\
-    baseColor += texColor * uUseTexture;\n\
-    if (baseColor.a < 0.5) {\n\
+    vec4 baseColor = vColor ;\n\
+    baseColor *= texColor * uUseTexture + vec4(1.0, 1.0, 1.0, 1.0) * (1.0 - uUseTexture);\n\
+    if (baseColor.a < 0.2) {\n\
         discard;\n\
     }\n\
     else {\n\
@@ -1606,8 +2028,8 @@ void main() {\n\
         phongColor += uDiffuse * lamber;\n\
         float s = max(dot(R,-E), 0.0);\n\
         vec4 specularColor= uSpecular * pow(s, uShininess) * sign(lamber);\n\
-        gl_FragColor = (uEmission + specularColor + vec4(baseColor.rgb * phongColor.rgb * uLightColor.rgb, baseColor.a)) * (1.0 - uDetectTouch)\
-            + uDetectColor * uDetectTouch;\n\
+        gl_FragColor = (uEmission * baseColor + specularColor + vec4(baseColor.rgb * phongColor.rgb * uLightColor.rgb, baseColor.a)) \
+            * (1.0 - uDetectTouch) + uDetectColor * uDetectTouch;\n\
     }\n\
 }';
 
