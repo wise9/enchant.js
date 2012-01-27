@@ -3904,7 +3904,7 @@ window.addEventListener("message", function(msg, origin){
         }
             
     }
-})
+}, false);
 
 enchant.Sound.enabledInMobileSafari = false;
 })();
