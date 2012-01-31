@@ -1,4 +1,4 @@
-/** nineleap.enchant.js v0.2.7 (2011/09/13)
+/** nineleap.enchant.js v0.2.8 (2012/01/31)
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.4.0 or later
@@ -142,6 +142,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             this.endScene.addEventListener('touchend', submit);
             window.setTimeout(submit, 3000);
         }
+        enchant.Game.instance.end = function(){ };
     },
 
 });
