@@ -1,10 +1,10 @@
 /**
- * util.enchant.js v0.1.0 (2011/10/06)
- * 
- * enchant.js extention plugin
+ * util.enchant.js v0.2 (2011/10/06)
+ * @author Ubiquitous Entertainment Inc.
+ * @require enchant.js v0.4.0 or later
+ * @description
+ * enchant.js extension plugin
  * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
- * 
- * @requires enchant.js v0.4.0 or later
  */
 
 enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };

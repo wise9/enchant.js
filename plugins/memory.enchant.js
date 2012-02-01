@@ -1,9 +1,13 @@
-/** memory.enchant.js v0.2.2 (2011/07/31)
- * 
- * enchant.js extention for 9leap.net
+/**
+ * memory.enchant.js
+ * @version 0.2.2 (2011/07/31)
  * @requires enchant.js v0.3.1 or later
  * @requires nineleap.enchant.js v0.2.2 or later
- * 
+ * @author Ubiquitous Entertainment Inc.
+ *
+ * @description
+ * enchant.js extention for 9leap.net
+ * @usage
  * EXAMPLE: use user memory
  * var game = new Game();
  * game.memory.player.preload();
@@ -17,7 +21,6 @@
  */
 
 (function() {
-
 enchant();
 /**
  * 依存ライブラリcheck

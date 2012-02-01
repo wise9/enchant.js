@@ -1,10 +1,14 @@
-/** twitter.enchant.js v0.2.0 (2011/07/20)
- * 
+/**
+ * twitter.enchant.js
+ * @version 0.2 (2011/07/20)
+ * @requires enchant.js v0.4.0 or later
+ * @requires nineleap.enchant.js v0.3 or later
+ *
+ * @description
  * enchant.js extention for 9leap.net
- * @requires enchant.js v0.3.1 or later
- * @requires nineleap.enchant.js v0.2.2 or later
- * 
-EXAMPLE: use twitter icon as a sprite
+ *
+ * @usage
+ * EXAMPLE: use twitter icon as a sprite
 
 enchant();
 window.onload = function() {

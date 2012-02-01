@@ -1,9 +1,13 @@
-/*
-canvas.enchant.js v0.1 (2011/01/26)
- * 
- * enchant.js extention for canvas
- * @requires enchant.js v0.4.3 or later
+/**
+ * canvas.enchant.js
+ * @version v0.1 (2011/01/26)
+ * @require enchant.js v0.4.3+
+ * @author shi3z (http://wise9.jp)
  *
+ * @description
+ * enable rendering via canvas
+ * @usage
+
 EXAMPLE: use canvas to drawing sprite
 
 enchant();
@@ -105,7 +109,7 @@ enchant.CanvasGroup = enchant.Class.create(enchant.Group,{
 		};
 	},
 	removeChild:function(node){
-		for(i = 0;,len= this.canvasChildNodes.length;i<len; i++){
+		for(i = 0, len= this.canvasChildNodes.length; i < len; i++){
 	 		if(this.canvasChildNodes[i] === node){
  				this.canvasChildNodes.splice(i,1);
 			}

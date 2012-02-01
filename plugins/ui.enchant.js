@@ -39,6 +39,7 @@
  */
 
 enchant.ui = { assets: ['pad.png', 'apad.png'] };
+
 /**
  * 方向キーパッドのクラス: Pad
  * @scope enchant.ui.Pad
@@ -131,6 +132,7 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
 		insideImage.draw(image, w/4, h/4, w/2, h/2, 0, 0, w/2, h/2);
 		this.inside.image = insideImage;
         this.r = w/2;
+
         /**
          * isTouched
          * @type {Boolean}
@@ -145,6 +147,7 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
          */
         this.vx = 0;
 		this.vy = 0;
+
         /**
          * rad, dist
          * @type {Number}
@@ -253,14 +256,15 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
 		} else if (x > 0 && y >= 0) {
 			add = 0;
 			rad = y / x;
-		}
+		} 
 		if (x == 0 || y == 0) {
 			rad = 0;
 		}
-		this.rad = Math.abs(Math.atan(rad)) + add;
+		this.rad = Math.abs(Math.atan(rad)) + add; 
 		this.dist = dist;
 	}
 });
+
 /**
  * ボタンオブジェクトのクラス: Button
  * @scope enchant.ui.Button.prototype
@@ -272,6 +276,8 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
      * @extends enchant.Entity
      */
     initialize: function(text, theme, height, width) {
+        enchant.Entity.call(this);
+        
         // ベンタプレフィクスを判定
         this.VENDOR_PREFIX = (function() {
             var ua = navigator.userAgent;
