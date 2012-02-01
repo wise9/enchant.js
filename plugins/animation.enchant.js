@@ -1,6 +1,9 @@
 /**
- * animation.enchant.js v0.1
+ * animation.enchant.js
+ * @version 0.1
+ * @require enchant.js v0.4.3 or later
  * @author sidestepism
+ *
  * @example
  * var bear = new AnimationSprite(32, 32);
  * bear.image = game.assets['icon0.gif'];
