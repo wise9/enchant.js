@@ -1,3 +1,20 @@
+/**
+ * collada.gl.enchant.js
+ * @version v0.3
+ * @require gl.enchant.js v0.3+
+ * @author Ubiquitous Entertainment Inc.
+ *
+ * @description
+ * WebGLを用いた描画ライブラリ
+ * enchant.js と組み合わせることで高度な3D描画と、2D描画を組み合わせることができる
+ *
+ * @detail
+ * ベクトル・行列演算にglMatrix.jsを使用しています.
+ * glMatrix.js:
+ * http://code.google.com/p/glmatrix/
+ * glMatrix.jsの詳しい使い方:
+ * http://code.google.com/p/glmatrix/wiki/Usage
+ */
 
 if (enchant.gl != undefined) {
 	enchant.Game.prototype._original_load = enchant.Game.prototype.load;

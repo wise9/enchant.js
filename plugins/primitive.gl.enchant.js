@@ -1,3 +1,13 @@
+/**
+ * primitive.gl.enchant.js
+ * @version 0.3
+ * @require gl.enchant.js v0.3+
+ * @author Ubiquitous Entertainment Inc.
+ *
+ * @description
+ * gl.enchant.js で使える基本立体オブジェクト
+ *
+ */
 if(enchant.gl){
 	(function(){
         enchant.gl.primitive = {};
