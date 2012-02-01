@@ -145,6 +145,7 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
          */
         this.vx = 0;
 		this.vy = 0;
+
         /**
          * rad, dist
          * @type {Number}
