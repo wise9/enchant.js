@@ -1,19 +1,12 @@
-/**
+/*
  * gl.enchant.js
- * @version 0.3
- * @require enchant.js v0.4.3+
- * @author Ubiquitous Entertainment Inc.
  *
- * @description
- * WebGLを用いた描画ライブラリ
- * enchant.js と組み合わせることで高度な3D描画と、2D描画を組み合わせることができる
- *
- * @detail
  * ベクトル・行列演算にglMatrix.jsを使用しています.
  * glMatrix.js:
  * http://code.google.com/p/glmatrix/
  * glMatrix.jsの詳しい使い方:
  * http://code.google.com/p/glmatrix/wiki/Usage
+ *
  */
 
 var VENDER_PREFIX = (function() {

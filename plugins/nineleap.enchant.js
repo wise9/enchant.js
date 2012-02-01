@@ -1,26 +1,7 @@
-/**
- * nineleap.enchant.js
- * @version 0.3 (2012/02/01)
+/** nineleap.enchant.js v0.2.8 (2012/01/31)
+ * 
+ * enchant.js extention for 9leap.net
  * @requires enchant.js v0.4.0 or later
- *
- * @description
- * enchant.js extension for 9leap.net
- * 9leap.net 向けの enchant.js 拡張プラグイン。
- * game.end の引数にスコアと結果の文字列を渡すことで、ランキングに登録できる。
- * (9leapにアップロードした後のみランキング画面にジャンプする)
- *
- * @usage
-
- var game = new Game(320, 320);
-
- game.onload = function(){
-     // executed after player pushed "START"
-     // ...
-     if(some.condition)game.end(score, result);
- };
-
- game.start();
-
  */
 
 (function () {
@@ -30,12 +11,8 @@ enchant.nineleap = { assets: ['start.png', 'end.png'] };
 /**
  * @scope enchant.nineleap.Game.prototype
  */
+ 
 enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
-    /**
-     *
-     * @param width
-     * @param height
-     */
     initialize: function(width, height) {
         enchant.Game.call(this, width, height);
         this.addEventListener('load', function() {
@@ -166,7 +143,8 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             window.setTimeout(submit, 3000);
         }
         enchant.Game.instance.end = function(){ };
-    }
+    },
+
 });
 
 /**

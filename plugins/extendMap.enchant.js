@@ -1,12 +1,8 @@
 /**
- * extendMap.enchant.js
- * @version 1.0
- * @require enchant.js v0.4 or later
- * @author rtsan
+ *  extendMap.enchant.js
  *
- * @description
- * enchantMapEditor:
- * http://github.com/wise9/enchantMapEditor
+ *  enchantMapEditor:
+ *  http://github.com/wise9/enchantMapEditor
  */
 
 enchant.extendMap = {};
