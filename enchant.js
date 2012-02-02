@@ -574,6 +574,10 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      * @extends enchant.EventTarget
      */
     initialize: function(width, height) {
+        if (window.document.body === null){
+            throw new Error("document.body is null. Please excute 'new Game()' in window.onload.");
+        }
+
         enchant.EventTarget.call(this);
 
         var initial = true;
@@ -1053,7 +1057,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      */
     popScene: function() {
         if (this.currentScene == this.rootScene) {
-            return;
+            return this.currentScene;
         }
         this._element.removeChild(this.currentScene._element);
         this.currentScene.dispatchEvent(new enchant.Event('exit'));
@@ -1521,6 +1525,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._dirty = false;
         this._image = null;
         this._frame = 0;
+        this._frameSequence = [];
 
         this._style.overflow = 'hidden';
 
@@ -1533,7 +1538,23 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 this._dirty = false;
             }
         });
-        
+
+        /**
+         * frame に配列が指定されたときの処理。
+         * _frameSeuence に
+         */
+        this.addEventListener('enterframe', function(){
+            if(this._frameSequence.length !== 0){
+                var nextFrame = this._frameSequence.shift();
+                if(nextFrame === null){
+                    this._frameSequence = [];
+                }else{
+                    this._setFrame(nextFrame);
+                    this._frameSequence.push(nextFrame);
+                }
+            }
+        })
+
         if(enchant.Game.instance._debug){
             this._style.border = "1px solid red";
             this._style.margin = "-1px";
@@ -1597,26 +1618,38 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * Frame index display.
      * Frames with same width and height as Sprite will be arrayed in order from upper left of image properties image.
      * By setting the index to start with 0, frames are switched.
-     * @type {Number}
+     * @type {Number|Array}
      */
     frame: {
         get: function() {
             return this._frame;
         },
         set: function(frame) {
-            this._frame = frame;
-            if (this._image != null){
-                var row = this._image.width / this._width | 0;
-                if (this._image._css) {
-                    this._style.backgroundPosition = [
-                        -(frame % row) * this._width, 'px ',
-                        -(frame / row | 0) * this._height, 'px'
-                    ].join('');
-                } else if (this._element.firstChild) {
-                    var style = this._element.firstChild.style;
-                    style.left = -(frame % row) * this._width + 'px';
-                    style.top = -(frame / row | 0) * this._height + 'px';
-                }
+            if(frame instanceof Array){
+                console.log("sequence");
+                var frameSequence = frame;
+                var nextFrame = frameSequence.shift();
+                this._setFrame(nextFrame);
+                frameSequence.push(nextFrame);
+                this._frameSequence = frameSequence;
+            }else{
+                this._setFrame(frame);
+                this._frameSequence = [];
+            }
+        }
+    },
+    _setFrame: function(frame){
+        if (this._image != null){
+            var row = this._image.width / this._width | 0;
+            if (this._image._css) {
+                this._style.backgroundPosition = [
+                    -(frame % row) * this._width, 'px ',
+                    -(frame / row | 0) * this._height, 'px'
+                ].join('');
+            } else if (this._element.firstChild) {
+                var style = this._element.firstChild.style;
+                style.left = -(frame % row) * this._width + 'px';
+                style.top = -(frame / row | 0) * this._height + 'px';
             }
         }
     },

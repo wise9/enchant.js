@@ -3,13 +3,13 @@ var game;
 window.onload = function(){
     game = new Game(320, 320);
     game.fps = 60;
-    game.preload(['../../images/enchant.png', '../../images/chara1.gif']);
+    game.preload(['enchant.png', 'chara1.gif']);
     game.onload = function(){
          var scene = new Scene3D();
          scene.backgroundColor = [0.7, 0.7, 0.7, 1];
          var light = new DirectionalLight();
          scene.setDirectionalLight(light);
-         var texture = new Texture('../../images/enchant.png');
+         var texture = new Texture('enchant.png');
 		 texture.ambient = [0.7, 0.7, 0.7, 1.0];
          for (var i = 0; i < 5; i++) {
              var box = new Cube();
@@ -47,7 +47,7 @@ window.onload = function(){
              scene.addChild(box);
          }
          var kuma = new Sprite(32, 32);
-         kuma.image = game.assets['../../images/chara1.gif'];
+         kuma.image = game.assets['chara1.gif'];
          kuma.walk = 0;
          kuma.vx = parseInt(Math.random() * 10);
          kuma.vy = parseInt(Math.random() * 10);

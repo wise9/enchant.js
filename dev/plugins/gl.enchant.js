@@ -1,6 +1,7 @@
-/**
+/*
+[lang:ja]
  * gl.enchant.js
- * @version v0.3
+ * @version 0.3.1
  * @require enchant.js v0.4.3+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -14,6 +15,26 @@
  * http://code.google.com/p/glmatrix/
  * glMatrix.jsの詳しい使い方:
  * http://code.google.com/p/glmatrix/wiki/Usage
+ *
+ [/lang]
+[lang:en]
+ * gl.enchant.js
+ * @version 0.3.1
+ * @require enchant.js v0.4.3+
+ * @author Ubiquitous Entertainment Inc.
+ *
+  @description
+ * Drawing library using WebGL
+ * By combining with enchant.js, high quality 3D drawing and combination with 2D drawing is possible
+ *
+ * @detail
+ * Uses glMatrix.js in hector, matrix operation.
+ * glMatrix.js:
+ * http://code.google.com/p/glmatrix/
+ * More on how to use glMatrix:
+ * http://code.google.com/p/glmatrix/wiki/Usage
+ *
+ [/lang]
  */
 
 var VENDER_PREFIX = (function() {
@@ -33,11 +54,11 @@ var VENDER_PREFIX = (function() {
 
 /**
 [lang:ja]
- * enchantにenchantPROライブラリのクラスをエクスポートする.
-[/lang]
+ * enchantにgl.enchant.jsのクラスをエクスポートする.
+ [/lang]
 [lang:en]
- * Exports enchantPRO library class to enchant.
-[/lang]
+ * Exports gl.enchant.js class to enchant.
+ [/lang]
  */
 enchant.gl= {};
 var gl;
@@ -177,8 +198,6 @@ enchant.gl.collision = {};
         return dist;
     };
     var point2OBB = function(p, obb) {
-
-
         return 1;
     };
     var BS2BS = function(bs1, bs2) {
@@ -218,25 +237,25 @@ enchant.gl.collision = {};
     };
 
     /**
-[lang:ja]
+    [lang:ja]
      * @scope enchant.gl.collision.Bounding.prototype
-[/lang]
-[lang:en]
+     [/lang]
+    [lang:en]
      * @scope enchant.gl.collision.Bounding.prototype
-[/lang]
+     [/lang]
      */
     enchant.gl.collision.Bounding = enchant.Class.create({
         /**
-[lang:ja]
+        [lang:ja]
          * Sprite3Dの衝突判定を設定するクラス.
          * 点として定義されている.
-         * enchant.gl.collision.Boundingを継承したクラスとして,
+         * enchant.gl.collision.Boundingを継承したクラスとして, 
          * {@link enchant.gl.collision.BS}, {@link enchant.gl.collision.AABB},
          * {@link enchant.gl.collision.OBB}, がある.
          * 現在, OBBはサポートされていない.
          * @constructs
-[/lang]
-[lang:en]
+        [/lang]
+        [lang:en]
          * Class to set Sprite3D collision detection.
          * Defined as a point.
          * {@link enchant.gl.collision.BS}, {@link enchant.gl.collision.AABB},
@@ -244,7 +263,7 @@ enchant.gl.collision = {};
 		 * inherited classes of enchant.gl.collision.Bounding
          * Currently, OBB is not supported.
          * @constructs
-[/lang]
+         [/lang]
          */
         initialize: function() {
             this.type = 'point';
@@ -259,82 +278,82 @@ enchant.gl.collision = {};
             };
         },
         /**
-[lang:ja]
+        [lang:ja]
          * 点との距離を計算する.
          * @param {enchant.gl.collision.Bounding} bounding 衝突点オブジェクト
          * @return {Number}
-[/lang]
-[lang:en]
+         [/lang]
+        [lang:en]
          * Calculates distance between points.
          * @param {enchant.gl.collision.Bounding} bounding Collision point object
          * @return {Number}
-[/lang]
+         [/lang]
          */
         toBounding: function(another) {
             return point2point(this, another);
         },
         /**
-[lang:ja]
+        [lang:ja]
          * 球との距離を計算する.
          * @param {enchant.gl.collision.BS} boudning 衝突球オブジェクト
          * @return {Number}
-[/lang]
-[lang:en]
+         [/lang]
+        [lang:en]
          * Calculates distance between balls.
          * @param {enchant.gl.collision.BS} boudning Collision ball object
          * @return {Number}
-[/lang]
+         [/lang]
          */
         toBS: function(another) {
             return point2BS(this, another);
         },
         /**
-[lang:ja]
+        [lang:ja]
          * 回転しない立方体との距離を計算する.
          * 現在, 衝突していなければ1, 衝突していれば0が返される.
          * @param {enchant.gl.collision.AABB} bounding AABB
          * @return {Number}
-[/lang]
-[lang:en]
+         [/lang]
+        [lang:en]
          * Calculates distance from non-rotating cube.
          *Currently, 0 will be returned with or without collision.
          * @param {enchant.gl.collision.AABB} bounding AABB
          * @return {Number}
-[/lang]
+         [/lang]
          */
         toAABB: function(another) {
             return point2AABB(this, another);
         },
         /**
-[lang:ja]
+        [lang:ja]
          * 回転する直方体との距離を計算する.
          * 現在, サポートされていない.
          * @param {enchant.gl.collision.OBB} bounding OBB
          * @return {Number}
-[/lang]
-[lang:en]
+         [/lang]
+        [lang:en]
          * Calculates distance from rotating cuboid.
          * Not currently supported.
          * @param {enchant.gl.collision.OBB} bounding OBB
          * @return {Number}
-[/lang]
+         [/lang]
          */
         toOBB: function(another) {
             return point2OBB(this, another);
         },
         /**
-[lang:ja]
+        [lang:ja]
          * 他の衝突判定オブジェクトとの衝突判定.
          * 衝突判定オブジェクトか, x, y, zプロパティを持っているオブジェクトとの衝突を判定することができる.
          * @param {enchant.gl.collision.Bounding|enchant.gl.collision.BS|enchant.gl.collision.AABB|enchant.gl.collision.OBB} bounding 衝突判定オブジェクト
          * @return {Boolean}
-[/lang]
-[lang:en]
+         [/lang]
+        [lang:en]
          * Collision detection with other collision detection object.
          * A collision detection object can detect collision with an object with x, y, z properties.
          * @param {enchant.gl.collision.Bounding|enchant.gl.collision.BS|enchant.gl.collision.AABB|enchant.gl.collision.OBB} bounding Collision detection object
          * @return {Boolean}
-[/lang]
+         [/lang]
          */
         intersect: function(another) {
             switch (another.type) {
@@ -353,27 +372,27 @@ enchant.gl.collision = {};
     });
 
     /**
-[lang:ja]
+    [lang:ja]
      * @scope enchant.gl.collision.BS.prototype
-[/lang]
-[lang:en]
+     [/lang]
+    [lang:en]
      * @scope enchant.gl.collision.BS.prototype
-[/lang]
+     [/lang]
      */
     enchant.gl.collision.BS = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
-[lang:ja]
+        [lang:ja]
          * Sprite3Dの衝突判定を設定するクラス.
          * 球として定義されている.
          * @constructs
          * @see enchant.gl.collision.Bounding
-[/lang]
-[lang:en]
+        [/lang]
+        [lang:en]
          * Class that sets Sprite3D collision detection.
          * Defined as a ball.
          * @constructs
          * @see enchant.gl.collision.Bounding
-[/lang]
+        [/lang]
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
@@ -381,7 +400,7 @@ enchant.gl.collision = {};
             this.radius = 0.5;
         },
         toBounding: function(another) {
-            return BS2point(this, another);
+            return point2BS(another, this);
         },
         toBS: function(another) {
             return BS2BS(this, another);
@@ -395,27 +414,27 @@ enchant.gl.collision = {};
     });
 
     /**
-[lang:ja]
+    [lang:ja]
      * @scope enchant.gl.collision.AABB.prototype
-[/lang]
-[lang:en]
+    [/lang]
+    [lang:en]
      * @scope enchant.gl.collision.AABB.prototype
-[/lang]
+    [/lang]
      */
     enchant.gl.collision.AABB = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
-[lang:ja]
+        [lang:ja]
          * Sprite3Dの衝突判定を設定するクラス.
          * 回転しない立方体として定義されている.
          * @constructs
          * @see enchant.gl.collision.Bounding
-[/lang]
-[lang:en]
+        [/lang]
+        [lang:en]
          * Class that sets Sprite3D collision detection.
          * Defined as non-rotating cube.
          * @constructs
          * @see enchant.gl.collision.Bounding
-[/lang]
+        [/lang]
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
@@ -423,10 +442,10 @@ enchant.gl.collision = {};
             this.scale = 0.5;
         },
         toBounding: function(another) {
-            return AABB2point(this, another);
+            return point2AABB(another, this);
         },
         toBS: function(another) {
-            return AABB2BS(this, another);
+            return BS2AABB(another, this);
         },
         toAABB: function(another) {
             return AABB2AABB(this, another);
@@ -437,40 +456,40 @@ enchant.gl.collision = {};
     });
 
     /**
-[lang:ja]
+    [lang:ja]
      * @scope enchant.gl.collision.OBB.prototype
-[/lang]
-[lang:en]
+    [/lang]
+    [lang:en]
      * @scope enchant.gl.collision.OBB.prototype
-[/lang]
+    [/lang]
      */
     enchant.gl.collision.OBB = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
-[lang:ja]
+        [lang:ja]
          * Sprite3Dの衝突判定を設定するクラス.
          * 回転するとして定義されている.
          * @constructs
          * @see enchant.gl.collision.Bounding
-[/lang]
-[lang:en]
+        [/lang]
+        [lang:en]
          * Class that sets Sprite3D collision detection.
          * Defined as rotating.
          * @constructs
          * @see enchant.gl.collision.Bounding
-[/lang]
+        [/lang]
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
             this.type = 'OBB';
         },
         toBounding: function(another) {
-            return OBB2point(this, another);
+            return point2OBB(another, this);
         },
         toBS: function(another) {
-            return OBB2BS(this, another);
+            return BS2OBB(another, this);
         },
         toAABB: function(another) {
-            return OBB2AABB(this, another);
+            return AABB2OBB(another, this);
         },
         toOBB: function(another) {
             return OBB2OBB(this, another);
@@ -554,15 +573,15 @@ enchant.gl.Game = enchant.Class.create(parentModule.Game, {
             }
             scene.touching = null;
         });
-
+            
         var stage = document.getElementById('enchant-stage');
         glParent.appendChild(canvas);
         this.rootScene.addChild(detect);
         stage.appendChild(glParent)
 
         try {
-            //gl = createDebugContext(canvas.getContext('experimental-webgl'));
-            gl = canvas.getContext('experimental-webgl');
+            gl = createDebugContext(canvas.getContext('experimental-webgl'));
+            //gl = canvas.getContext('experimental-webgl');
             gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
             gl.viewport(0, 0, this.width, this.height);
@@ -583,27 +602,26 @@ enchant.gl.Game = enchant.Class.create(parentModule.Game, {
 [/lang]
 [lang:en]
  * @scope enchant.gl.Quat.prototype
-  * @scope enchant.gl.Quat.prototype
 [/lang]
  */
 enchant.gl.Quat = enchant.Class.create({
     /**
-[lang:ja]
+    [lang:ja]
      * クォータニオンを簡単に使用するクラス.
      * @param {Number} x
      * @param {Number} y
      * @param {Number} z
      * @param {Number} rad
      * @constructs
-[/lang]
-[lang:en]
+    [/lang]
+    [lang:en]
      * Class that easily uses quaternions.
      * @param {Number} x
      * @param {Number} y
      * @param {Number} z
      * @param {Number} rad
      * @constructs
-[/lang]
+    [/lang]
      */
     initialize: function(x, y, z, rad) {
         var l = Math.sqrt(x * x + y * y + z * z);
@@ -618,7 +636,7 @@ enchant.gl.Quat = enchant.Class.create({
     },
 
     /**
-[lang:ja]
+    [lang:ja]
      * クォータニオン同士で球面線形補間を行う.
      * 自身ともう一つのクォータニオンの間の回転移動を補完したクォータニオンを計算する.
      * 回転の度合いは0から1の値で表される. 0が自身側, 1がもう一つ側.
@@ -626,8 +644,8 @@ enchant.gl.Quat = enchant.Class.create({
      * @param {enchant.gl.Quat} Quaternion
      * @param {Number} ratio
      * @return {enchant.gl.Quat}
-[/lang]
-[lang:en]
+     [/lang]
+    [lang:en]
      * Performs spherical linear interpolation between quarternions.
      * Calculates quarternion that supplements rotation between this quarternion and another.
      * Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.
@@ -635,7 +653,7 @@ enchant.gl.Quat = enchant.Class.create({
      * @param {enchant.gl.Quat} Quaternion
      * @param {Number} ratio
      * @return {enchant.gl.Quat}
-[/lang]
+    [/lang]
      */
     slerp: function(another, ratio) {
         var q = new Quat(0, 0, 0, 0);
@@ -643,7 +661,7 @@ enchant.gl.Quat = enchant.Class.create({
         return q;
     },
     /**
-[lang:ja]
+    [lang:ja]
      * クォータニオン同士で球面線形補間を行う.
      * 自身ともう一つのクォータニオンの間の回転移動を補完したクォータニオンを計算する.
      * 回転の度合いは0から1の値で表される. 0が自身側, 1がもう一つ側.
@@ -651,8 +669,8 @@ enchant.gl.Quat = enchant.Class.create({
      * @param {enchant.gl.Quat} Quaternion
      * @param {Number} ratio
      * @return {enchant.gl.Quat}
-[/lang]
-[lang:en]
+    [/lang]
+    [lang:en]
      * Performs spherical linear interpolation between quarternions.
      * Calculates quarternion that supplements rotation between this quarternion and another.
      * Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.
@@ -660,38 +678,48 @@ enchant.gl.Quat = enchant.Class.create({
      * @param {enchant.gl.Quat} Quaternion
      * @param {Number} ratio
      * @return {enchant.gl.Quat}
-[/lang]
+    [/lang]
      */
     slerpApply: function(another, ratio) {
         quat4.slerp(this._quat, another._quat, ratio);
         return this;
     },
     /**
-[lang:ja]
+    [lang:ja]
      * クォータニオンを回転行列に変換する.
      * @param {Number[]} matrix
      * @return {Number[]}
-[/lang]
-[lang:en]
+     [/lang]
+    [lang:en]
      * Convert quarternion to rotation line.
      * @param {Number[]} matrix
      * @return {Number[]}
-[/lang]
+     [/lang]
      */
     toMat4: function(matrix) {
         quat4.toMat4(this._quat, matrix);
         return matrix;
+    },
+    /**
+    [lang:ja]
+     * クォータニオンをベクトルに適用する.
+     * @param {Number[]} vector
+     * @return {Number[]}
+    [/lang]
+     */
+    multiplyVec3: function(vector) {
+        quat4.multiplyVec3(this._quat, vector);
+        return vector;
     }
 });
 
 /**
 [lang:ja]
  * @scope enchant.gl.Light3D.prototype
-[/lang]
+ [/lang]
 [lang:en]
  * @scope enchant.gl.Light3D.prototype
-  * @scope enchant.gl.Light3D.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.Light3D = enchant.Class.create(enchant.EventTarget, {
     /**
@@ -700,17 +728,13 @@ enchant.gl.Light3D = enchant.Class.create(enchant.EventTarget, {
      *
      * @constructs
      * @extends enchant.EventTarget
-[/lang]
+     [/lang]
 [lang:en]
-     * Class that becomes light source class' parent class.
+     * Light source class parent class.
      *
      * @constructs
      * @extends enchant.EventTarget
-          * Light source class parent class.
-     *
-     * @constructs
-     * @extends enchant.EventTarget
-[/lang]
+     [/lang]
      */
     initialize: function() {
         this._changedColor = true;
@@ -721,13 +745,11 @@ enchant.gl.Light3D = enchant.Class.create(enchant.EventTarget, {
 [lang:ja]
      * 光源の光の色
      * @type Number[]
-[/lang]
+     [/lang]
 [lang:en]
      * Light source light color
      * @type Number[]
-          * Light source light color
-     * @type Number[]
-[/lang]
+     [/lang]
      */
     color: {
         set: function(array) {
@@ -743,11 +765,10 @@ enchant.gl.Light3D = enchant.Class.create(enchant.EventTarget, {
 /**
 [lang:ja]
  * @scope enchant.gl.DirectionalLight.prototype
-[/lang]
+ [/lang]
 [lang:en]
  * @scope enchant.gl.DirectionalLight.prototype
-  * @scope enchant.gl.DirectionalLight.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.DirectionalLight = enchant.Class.create(enchant.gl.Light3D, {
     /**
@@ -763,20 +784,9 @@ enchant.gl.DirectionalLight = enchant.Class.create(enchant.gl.Light3D, {
      *
      * @constructs
      * @extends enchant.gl.Light3D
-[/lang]
+     [/lang]
 [lang:en]
-     * Class to set light source for 3D scene.
-     * Directional light source without position.
-     * @example
-     *   var scene = new Scene3D();
-     *   var light = new DirectionalLight();
-     *   light.color = [1.0, 1.0, 0.0];
-     *   light.directionY = 10;
-     *   scene.setDirectionalLight(light);
-     *
-     * @constructs
-     * @extends enchant.gl.Light3D
-          * Class for setting light source in 3D scene.
+     * Class for setting light source in 3D scene.
      * Directioned light source without position.
      * @example
      *   var scene = new Scene3D();
@@ -787,7 +797,7 @@ enchant.gl.DirectionalLight = enchant.Class.create(enchant.gl.Light3D, {
      *
      * @constructs
      * @extends enchant.gl.Light3D
-[/lang]
+     [/lang]
      */
     initialize: function() {
         enchant.gl.Light3D.call(this);
@@ -802,13 +812,11 @@ enchant.gl.DirectionalLight = enchant.Class.create(enchant.gl.Light3D, {
 [lang:ja]
  * 光源の照射方向のx成分
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
- * x element of light source illumination direction
+ * Light source exposure direction x component
  * @type Number
-  * Light source exposure direction x component
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.DirectionalLight.prototype.directionX = 0.5;
 
@@ -816,13 +824,11 @@ enchant.gl.DirectionalLight.prototype.directionX = 0.5;
 [lang:ja]
  * 光源の照射方向のy成分
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
-* Light source exposure direction y component
+ * Light source exposure direction y component
  * @type Number
-  * Light source exposure direction y component
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.DirectionalLight.prototype.directionY = 0.5;
 
@@ -830,13 +836,11 @@ enchant.gl.DirectionalLight.prototype.directionY = 0.5;
 [lang:ja]
  * 光源の照射方向のz成分
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Light source exposure direction z component
  * @type Number
-  * Light source exposure direction z component
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.DirectionalLight.prototype.directionZ = 1.0;
 
@@ -844,13 +848,11 @@ enchant.gl.DirectionalLight.prototype.directionZ = 1.0;
 [lang:ja]
  * 光源の照射方向
  * @type {Number}
-[/lang]
+ [/lang]
 [lang:en]
  * Light source exposure direction
  * @type {Number}
-  * Light source exposure direction
- * @type {Number}
-[/lang]
+ [/lang]
  */
 'directionX directionY directionZ'.split(' ').forEach(function(prop) {
     Object.defineProperty(enchant.gl.DirectionalLight.prototype, prop, {
@@ -868,12 +870,10 @@ enchant.gl.DirectionalLight.prototype.directionZ = 1.0;
 /**
 [lang:ja]
  * @scope enchant.gl.PointLight.prototype
-[/lang]
+ [/lang]
 [lang:en]
-[lang:ja]
  * @scope enchant.gl.PointLight.prototype
-  * @scope enchant.gl.PointLight.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.PointLight = enchant.Class.create(enchant.gl.Light3D, {
     /**
@@ -890,21 +890,9 @@ enchant.gl.PointLight = enchant.Class.create(enchant.gl.Light3D, {
      *
      * @constructs
      * @extends enchant.gl.Light3D
-[/lang]
+     [/lang]
 [lang:en]
-     * Class to set light source for 3D scene.
-     * Point light source without direction.
-     * Currently, will not be applied even if added to scene.
-     * @example
-     *   var scene = new Scene3D();
-     *   var light = new PointLight();
-     *   light.color = [1.0, 1.0, 0.0];
-     *   light.y = 10;
-     *   scene.addLight(light);
-     *
-     * @constructs
-     * @extends enchant.gl.Light3D
-          * Class that sets 3D scene light source.
+     * Class that sets 3D scene light source.
      * Directionless positional light source.
      * At present, will not be applied even if added to scene.
      * @example
@@ -916,7 +904,7 @@ enchant.gl.PointLight = enchant.Class.create(enchant.gl.Light3D, {
      *
      * @constructs
      * @extends enchant.gl.Light3D
-[/lang]
+     [/lang]
      */
     initialize: function() {
         enchant.gl.Light3D.call(this);
@@ -931,13 +919,11 @@ enchant.gl.PointLight = enchant.Class.create(enchant.gl.Light3D, {
 [lang:ja]
  * 光源のx座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
- * Light source x coordinates
+ * Light source x axis
  * @type Number
-  * Light source x axis
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.PointLight.prototype.x = 0;
 
@@ -945,13 +931,11 @@ enchant.gl.PointLight.prototype.x = 0;
 [lang:ja]
  * 光源のy座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
- * Light source y coordinates
+ * Light source y axis
  * @type Number
-  * Light source y axis
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.PointLight.prototype.y = 0;
 
@@ -959,13 +943,11 @@ enchant.gl.PointLight.prototype.y = 0;
 [lang:ja]
  * 光源のz座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
- * Light source z coordinates
+ * Light source z axis
  * @type Number
-  * Light source z axis
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.PointLight.prototype.z = 0;
 
@@ -986,11 +968,10 @@ enchant.gl.PointLight.prototype.z = 0;
 /**
 [lang:ja]
  * @scope enchant.gl.Texture.prototype
-[/lang]
+ [/lang]
 [lang:en]
  * @scope enchant.gl.Texture.prototype
-  * @scope enchant.gl.Texture.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.Texture = enchant.Class.create({
     /**
@@ -1004,18 +985,9 @@ enchant.gl.Texture = enchant.Class.create({
      *   // var texture = new Texture("http://example.com/texture.png");
      *   sprite.texture = texture;
      * @constructs
-[/lang]
+     [/lang]
 [lang:en]
-     * Class to store texture information.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   var texture = new Texture();
-     *   texture.src = "http://example.com/texture.png";
-     *   // Can be declared as below.
-     *   // var texture = new Texture("http://example.com/texture.png");
-     *   sprite.texture = texture;
-     * @constructs
-          * Class to store Sprite3D texture information.
+     * Class to store Sprite3D texture information.
      * @example
      *   var sprite = new Sprite3D();
      *   var texture = new Texture();
@@ -1024,20 +996,18 @@ enchant.gl.Texture = enchant.Class.create({
      *   // var texture = new Texture("http://example.com/texture.png");
      *   sprite.texture = texture;
      * @constructs
-[/lang]
+     [/lang]
      */
     initialize: function(src) {
         /**
 [lang:ja]
          * 環境光のパラメータ
          * @type Number[]
-[/lang]
+         [/lang]
 [lang:en]
          * Ambient light parameter
          * @type Number[]
-                  * Ambient light parameter
-         * @type Number[]
-[/lang]
+         [/lang]
          */
         this.ambient = [ 0.1, 0.1, 0.1, 1.0 ];
 
@@ -1045,13 +1015,11 @@ enchant.gl.Texture = enchant.Class.create({
 [lang:ja]
          * 拡散光のパラメータ
          * @type Number[]
-[/lang]
+         [/lang]
 [lang:en]
          * Light scattering parameter
          * @type Number[]
-                  * Light scattering parameter
-         * @type Number[]
-[/lang]
+         [/lang]
          */
         this.diffuse = [ 1.0, 1.0, 1.0, 1.0];
 
@@ -1059,13 +1027,11 @@ enchant.gl.Texture = enchant.Class.create({
 [lang:ja]
          * 光の反射量
          * @type Number[]
-[/lang]
+         [/lang]
 [lang:en]
          * Amount of light reflection
          * @type Number[]
-                  * Amount of light reflection
-         * @type Number[]
-[/lang]
+         [/lang]
          */
         this.specular = [ 1.0, 1.0, 1.0, 1.0 ];
 
@@ -1073,13 +1039,11 @@ enchant.gl.Texture = enchant.Class.create({
 [lang:ja]
          * 光の発光量
          * @type Number[]
-[/lang]
+         [/lang]
 [lang:en]
-         * Amount of luminesence
+         * Amount of luminescence
          * @type Number[]
-                  * Amount of luminescence
-         * @type Number[]
-[/lang]
+         [/lang]
          */
         this.emission = [ 0.0, 0.0, 0.0, 1.0 ];
 
@@ -1087,13 +1051,11 @@ enchant.gl.Texture = enchant.Class.create({
 [lang:ja]
          * 鏡面計数
          * @type Number
-[/lang]
+         [/lang]
 [lang:en]
          * Specular figures
          * @type Number
-                  * Specular figures
-         * @type Number
-[/lang]
+         [/lang]
          */
         this.shininess =20;
 
@@ -1110,17 +1072,13 @@ enchant.gl.Texture = enchant.Class.create({
      * URLかgame.assets内のデータを指定できる.
      * @type String
      * @type enchant.Surface
-[/lang]
+     [/lang]
 [lang:en]
      * Texture image source.
      * You can set URL or game.assets data.
      * @type String
      * @type enchant.Surface
-          * Texture image source.
-     * You can set URL or game.assets data.
-     * @type String
-     * @type enchant.Surface
-[/lang]
+     [/lang]
      */
     src: {
         get: function() {
@@ -1158,11 +1116,10 @@ enchant.gl.Texture = enchant.Class.create({
 /**
 [lang:ja]
  * @scope enchant.gl.Mesh.prototype
-[/lang]
+ [/lang]
 [lang:en]
  * @scope enchant.gl.Mesh.prototype
-  * @scope enchant.gl.Mesh.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.Mesh = enchant.Class.create({
     /**
@@ -1170,19 +1127,16 @@ enchant.gl.Mesh = enchant.Class.create({
      * 頂点配列やテクスチャを格納するクラス.
      * スプライトのプロパティとして使用される.
      * @constructs
-[/lang]
+     [/lang]
 [lang:en]
      * Class to store peak arrays and textures.
      * Used as a sprite property.
      * @constructs
-[/lang]
+     [/lang]
      */
     initialize: function() {
-        this.verticesBuffer = gl.createBuffer();
-        this.normalsBuffer = gl.createBuffer();
-        this.colorsBuffer = gl.createBuffer();
-        this.texCoordsBuffer = gl.createBuffer();
-        this.indicesBuffer = gl.createBuffer();
+        this.__count = 0;
+        this._appear = false;
 
         this.vertices = [];
         this.normals = [];
@@ -1191,6 +1145,60 @@ enchant.gl.Mesh = enchant.Class.create({
         this.indices = [];
 
         this.texture = new Texture();
+    },
+
+    _createBuffer: function() {
+        this.verticesBuffer = gl.createBuffer();
+        this.normalsBuffer = gl.createBuffer();
+        this.colorsBuffer = gl.createBuffer();
+        this.texCoordsBuffer = gl.createBuffer();
+        this.indicesBuffer = gl.createBuffer();
+        this._bufferData(this.verticesBuffer, this._vertices, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
+        this._bufferData(this.normalsBuffer, this._normals, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
+        this._bufferData(this.colorsBuffer, this._colors, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
+        this._bufferData(this.texCoordsBuffer, this._texCoords, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
+        this._bufferData(this.indicesBuffer, this._indices, gl.ELEMENT_ARRAY_BUFFER, gl.STATIC_DRAW, Uint16Array);
+        console.log('create');
+    },
+
+    _deleteBuffer: function() {
+        gl.deleteBuffer(this.verticesBuffer);
+        gl.deleteBuffer(this.normalsBuffer);
+        gl.deleteBuffer(this.colorsBuffer);
+        gl.deleteBuffer(this.texCoordsBuffer);
+        gl.deleteBuffer(this.indicesBuffer);
+        console.log('delete');
+    },
+
+    _bufferData: function(buffer, array, target, usage, type) {
+        if (this._appear) {
+            gl.bindBuffer(target, buffer);
+            gl.bufferData(target, new type(array), usage);
+        }
+    },
+
+    _controlBuffer: function() {
+        if (this._appear) {
+            if (this.__count <= 0) {
+                this._appear = false;
+                this._deleteBuffer();
+            }
+        } else {
+            if (this.__count > 0) {
+                this._appear = true;
+                this._createBuffer();
+            }
+        }
+    },
+    
+    _count: {
+        get: function() {
+            return this.__count;
+        },
+        set: function(c) {
+            this.__count = c;
+            this._controlBuffer();
+        }
     },
 
     /**
@@ -1205,7 +1213,7 @@ enchant.gl.Mesh = enchant.Class.create({
      *   sprite.mesh.setBaseColor('#ff00ff');
      *   sprite.mesh.setBaseColor('rgb(255, 0, 255');
      *   sprite.mesh.setBaseColor('rgba(255, 0, 255, 1.0');
-[/lang]
+     [/lang]
 [lang:en]
      * Change Mesh color.
      * Becomes peak array for Mesh.colors set color.
@@ -1217,17 +1225,7 @@ enchant.gl.Mesh = enchant.Class.create({
      *   sprite.mesh.setBaseColor('#ff00ff');
      *   sprite.mesh.setBaseColor('rgb(255, 0, 255');
      *   sprite.mesh.setBaseColor('rgba(255, 0, 255, 1.0');
-          * Change Sprite3D color.
-     * Puts Sprite3D.colors in the designated color's peak array.
-     * @param {Number[]|String} z Amount of parallel displacement on z axis
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Sets to purple. All yield the same result.
-     *   sprite.mesh.setBaseColor([1.0, 0.0, 1.0, 0.0]);
-     *   sprite.mesh.setBaseColor('#ff00ff');
-     *   sprite.mesh.setBaseColor('rgb(255, 0, 255');
-     *   sprite.mesh.setBaseColor('rgba(255, 0, 255, 1.0');
-[/lang]
+     [/lang]
      */
     setBaseColor: function(color) {
         var c = parseColor(color);
@@ -1257,7 +1255,7 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texCoords
-[/lang]
+     [/lang]
 [lang:en]
      * Mesh peak array.
      * Sets 3 elements together at peak. The complete number of elements becomes 3n corresponding to the quantity of the peak.
@@ -1276,30 +1274,12 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texCoords
-          * Sprite3D peak array.
-     * Sets 3 elements together at peak. The complete number of elements becomes 3n corresponding to the quantity of the peak.
-     * The 3n, 3n+1, and 3n+2 elements become, respectively, the n peak x, y, and z coordinates.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Substitute peak array
-     *   //Data is stored in an order of x, y, z, x, y, z...
-     *   sprite.vertices = [
-     *       0.0, 0.0, 0.0,  //0 peak (0.0, 0.0, 0.0)
-     *       1.0, 0.0, 0.0,  //1 peak (1.0, 0.0, 0.0)
-     *       1.0, 1.0, 0.0,  //2 peak (1.0, 1.0, 0.0)
-     *       0.0, 1.0, 0.0   //3 peak (0.0, 1.0, 0.0)
-     *   ];
-     * @type Number[]
-     * @see enchant.gl.Mesh#indices
-     * @see enchant.gl.Mesh#normals
-     * @see enchant.gl.Mesh#texCoords
-[/lang]
+     [/lang]
      */
     vertices: {
         set: function(array) {
             this._vertices = array;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.verticesBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._vertices), gl.STATIC_DRAW);
+            this._bufferData(this.verticesBuffer, this._vertices, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
         },
         get: function() {
             return this._vertices;
@@ -1335,7 +1315,7 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#vertices
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#texCoords
-[/lang]
+     [/lang]
 [lang:en]
      * Mesh peak normal vector array.
      * Sets 3 elements as one in normal vector. The complete element number becomes 3n for normal vector quantity n.
@@ -1364,40 +1344,12 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#vertices
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#texCoords
-          * Sprite3D peak normal vector array.
-     * Sets 3 elements as one in normal vector. The complete element number becomes 3n for normal vector quantity n.
-     * 3n, 3n+1, and 3n+2 elements are the n level peak x, y, and z elements of the normal vector.
-     * The normal vector is used in calculations for lighting and shadow.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Substitutes peak array
-     *   //Data is stored in an order of x, y, z, x, y, z...
-     *   sprite.vertices = [
-     *       0.0, 0.0, 0.0,  //0 peak (0.0, 0.0, 0.0)
-     *       1.0, 0.0, 0.0,  //1 peak (1.0, 0.0, 0.0)
-     *       1.0, 1.0, 0.0,  //2 peak (1.0, 1.0, 0.0)
-     *       0.0, 1.0, 0.0   //3 peak (0.0, 1.0, 0.0)
-     *   ];
-     *
-     *   //Substitutes normal vector array
-     *   //Data is a stored in an order of x, y, z, x, y, z...
-     *   sprite.normals = [
-     *       0.0, 0.0, 0.0,  //0 level peak normal vector (0.0, 0.0, 0.0)
-     *       1.0, 0.0, 0.0,  //1 level peak normal vector (1.0, 0.0, 0.0)
-     *       1.0, 1.0, 0.0,  //2 level peak normal vector (1.0, 1.0, 0.0)
-     *       0.0, 1.0, 0.0   //3 level peak normal vector (0.0, 1.0, 0.0)
-     *   ];
-     * @type Number[]
-     * @see enchant.gl.Sprite3D#vertices
-     * @see enchant.gl.Sprite3D#indices
-     * @see enchant.gl.Sprite3D#texCoords
-[/lang]
+     [/lang]
      */
     normals: {
         set: function(array) {
             this._normals = array;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.normalsBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._normals), gl.STATIC_DRAW);
+            this._bufferData(this.normalsBuffer, this._normals, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
         },
         get: function() {
             return this._normals;
@@ -1438,8 +1390,7 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texture#
-[/lang]
-[lang:en]
+     [/lang]
 [lang:ja]
      * Mesh texture mapping array.
      * Sets two elements as one in uv coordinates. The total number of elements becomes 2n in response to the peak quantity.
@@ -1473,45 +1424,12 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texture#
-          * Sprite3D texture mapping array.
-     * Sets two elements as one in uv coordinates. The total number of elements becomes 2n in response to the peak quantity.
-     * 2n, 2n+1 level elements correspond to n level peak texture u, v coordinates.
-     * The coordinates that can be acquired for each coordinate correspond to 0<=u, v<=1.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   var texture = new Texture();
-     *   texture.src = "texture.png";
-     *   sprite.texture = texture;
-     *
-     *   //Substitutes peak level
-     *   //Data is stored in an order of x, y, z, x, y, z...
-     *   sprite.vertices = [
-     *       0.0, 0.0, 0.0,  //0 peak (0.0, 0.0, 0.0)
-     *       1.0, 0.0, 0.0,  //1 peak (1.0, 0.0, 0.0)
-     *       1.0, 1.0, 0.0,  //2 peak (1.0, 1.0, 0.0)
-     *       0.0, 1.0, 0.0   //3 peak (0.0, 1.0, 0.0)
-     *   ];
-     *
-     *   //Substitutes uv coordinate array
-     *   //Data is stored in an order of u, v, u, v...
-     *   sprite.texCoords = [
-     *       0.0, 0.0,  //0番目の頂点のuv座標(0.0, 0.0)
-     *       1.0, 0.0,  //1番目の頂点のuv座標(1.0, 0.0)
-     *       1.0, 1.0,  //2番目の頂点のuv座標(1.0, 1.0)
-     *       0.0, 1.0   //3番目の頂点のuv座標(0.0, 1.0)
-     *   ];
-     * @type Number[]
-     * @see enchant.gl.Mesh#vertices
-     * @see enchant.gl.Mesh#indices
-     * @see enchant.gl.Mesh#normals
-     * @see enchant.gl.Mesh#texture#
-[/lang]
+     [/lang]
      */
     texCoords: {
         set: function(array) {
             this._texCoords = array;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.texCoordsBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._texCoords), gl.STATIC_DRAW);
+            this._bufferData(this.texCoordsBuffer, this._texCoords, gl.ARRAY_BUFFER, gl.STATIC_DRAW, Float32Array);
         },
         get: function() {
             return this._texCoords;
@@ -1548,37 +1466,9 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#vertices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texCoords
-[/lang]
+     [/lang]
 [lang:en]
-     * Meshの頂点インデックス配列. Mesh peak index array.
-     * 3 elements are set as one in a triangle. The total number of elements becomes 3n corresponding to the triangle's total quantity n.
-     * Index level is the peak number designated in {@link enchant.gl.Mesh#vertices}.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Substitutes peak array
-     *   //Data is stored in an order of x, y, z, x, y, z...
-     *   sprite.vertices = [
-     *       0.0, 0.0, 0.0,  //0 peak (0.0, 0.0, 0.0)
-     *       1.0, 0.0, 0.0,  //1 peak (1.0, 0.0, 0.0)
-     *       1.0, 1.0, 0.0,  //2 peak (1.0, 1.0, 0.0)
-     *       0.0, 1.0, 0.0   //3 peak (0.0, 1.0, 0.0)
-     *   ];
-     *
-     *   //Substitutes peak index
-     *   //Draws triangle with 3 elements as one
-     *   //In this example the two triangles (0,0,0), (1,0,0), (1,1,0) and
-     *   //(1,1,0), (0,1,0), (0,0,0) are drawn.
-     *   sprite.indices = [
-     *       0, 1, 2,
-     *       2, 3, 0
-     *   ];
-     *   var scene = new Scene3D();
-     *   scene.addChild(sprite);
-     * @type Integer[]
-     * @see enchant.gl.Mesh#vertices
-     * @see enchant.gl.Mesh#normals
-     * @see enchant.gl.Mesh#texCoords
-          * Sprite3D peak index array.
+     * Sprite3D peak index array.
      * 3 elements are set as one in a triangle. The total number of elements becomes 3n corresponding to the triangle's total quantity n.
      * Index level is the peak number designated in {@link enchant.gl.Sprite3D#vertices}.
      * @example
@@ -1594,7 +1484,7 @@ enchant.gl.Mesh = enchant.Class.create({
      *
      *   //Substitutes peak index
      *   //Draws triangle with 3 elements as one
-     *   //In this example the two triangles (0,0,0), (1,0,0), (1,1,0) and
+     *   //In this example the two triangles (0,0,0), (1,0,0), (1,1,0) and 
      *   //(1,1,0), (0,1,0), (0,0,0) are drawn.
      *   sprite.indices = [
      *       0, 1, 2,
@@ -1606,13 +1496,12 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#vertices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texCoords
-[/lang]
+     [/lang]
      */
     indices: {
         set: function(array) {
             this._indices = array;
-            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indicesBuffer);
-            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this._indices), gl.STATIC_DRAW);
+            this._bufferData(this.indicesBuffer, this._indices, gl.ELEMENT_ARRAY_BUFFER, gl.STATIC_DRAW, Uint16Array);
         },
         get: function() {
             return this._indices;
@@ -1647,7 +1536,7 @@ enchant.gl.Mesh = enchant.Class.create({
      *   ];
      * @type Number[]
      * @see enchant.gl.Mesh#setBaseColor
-[/lang]
+     [/lang]
 [lang:en]
      * Mesh peak color array.
      * The 4 elements are set as one peak color. The entire number of elements becomes 4n corresponding to the peak quantity n.
@@ -1675,39 +1564,12 @@ enchant.gl.Mesh = enchant.Class.create({
      *   ];
      * @type Number[]
      * @see enchant.gl.Mesh#setBaseColor
-          * Sprite3D peak color array.
-     * The 4 elements are set as one peak color. The entire number of elements becomes 4n corresponding to the peak quantity n.
-     * The 4n, 4n+1, 4n+2, and 4n+3 elements are the n level peak colors r, g, b, a.
-     * Peak color is used for drawing when Texture is not assigned to Sprite3D Texture.
-     * {@link enchant.gl.Sprite3D#setBaseColor} can be used to bundle together and change.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Substitutes peak array
-     *   //Data is stored in an order of x, y, z, x, y, z...
-     *   sprite.vertices = [
-     *       0.0, 0.0, 0.0,  //0 peak (0.0, 0.0, 0.0)
-     *       1.0, 0.0, 0.0,  //1 peak (1.0, 0.0, 0.0)
-     *       1.0, 1.0, 0.0,  //2 peak (1.0, 1.0, 0.0)
-     *       0.0, 1.0, 0.0   //3 peak (0.0, 1.0, 0.0)
-     *   ];
-     *
-     *   //Substitutes peak level array
-     *   //Data is stored in an order of r, g, b, a, r, g, b, a...
-     *   sprite.normals = [
-     *       0.0, 0.0, 1.0, 1.0, //0 peak color (0.0, 0.0, 1.0, 1.0)
-     *       0.0, 1.0, 0.0, 1.0, //1 peak color (0.0, 1.0, 0.0, 1.0)
-     *       0.0, 1.0, 1.0, 1.0, //2 peak color (0.0, 1.0, 1.0, 1.0)
-     *       1.0, 0.0, 0.0, 1.0  //3 peak color (1.0, 0.0, 0.0, 1.0)
-     *   ];
-     * @type Number[]
-     * @see enchant.gl.Mesh#setBaseColor
-[/lang]
+     [/lang]
      */
     colors: {
         set: function(array) {
             this._colors = array;
-            gl.bindBuffer(gl.ARRAY_BUFFER, this.colorsBuffer);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(this._colors), gl.STATIC_DRAW);
+            this._bufferData(this.colorsBuffer, this._colors);
         },
         get: function() {
             return this._colors;
@@ -1718,12 +1580,10 @@ enchant.gl.Mesh = enchant.Class.create({
 /**
 [lang:ja]
  * @scope enchant.gl.Sprite3D.prototype
-[/lang]
+ [/lang]
 [lang:en]
-[lang:ja]
  * @scope enchant.gl.Sprite3D.prototype
-  * @scope enchant.gl.Sprite3D.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     /**
@@ -1745,11 +1605,11 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *
      * @constructs
      * @extends enchant.EventTarget
-[/lang]
+     [/lang]
 [lang:en]
      * Class with Sprite3D display function.
      * <p>Cube loaded by default.</p>
-     * <p>By adding {@link enchant.gl.Scene3D} instance, you can display atop an image.
+     * <p>By adding {@link enchant.gl.Scene3D} instance, you can display atop an image. 
      * By changing {@link enchant.gl.Sprite3D#vertices}, {@link enchant.gl.Sprite3D#indices},
      * {@link enchant.gl.Sprite3D#normals} and others, you can freely draw Sprite3D,
      * as well as pasting texture and more.</p>
@@ -1764,24 +1624,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *
      * @constructs
      * @extends enchant.EventTarget
-          * Class with Sprite3D display function.
-     * <p>Cube loaded by default.</p>
-     * <p>By adding {@link enchant.gl.Scene3D} instance, you can display atop an image.
-     * By changing {@link enchant.gl.Sprite3D#vertices}, {@link enchant.gl.Sprite3D#indices},
-     * {@link enchant.gl.Sprite3D#normals} and others, you can freely draw Sprite3D,
-     * as well as pasting texture and more.</p>
-     * <p>In addition, it is also possible to add Sprite3D as a child, and all child classes will be drawn with coordinates based on their parents.</p>
-     * @example
-     *   //Scene initialization
-     *   var scene = new Scene3D();
-     *   //Sprite3D initialization
-     *   var sprite = new Sprite3D();
-     *   //Add Sprite3D to scene
-     *   scene.addChild(sprite);
-     *
-     * @constructs
-     * @extends enchant.EventTarget
-[/lang]
+     [/lang]
      */
     initialize: function() {
         enchant.EventTarget.call(this);
@@ -1795,7 +1638,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
          * @type enchant.gl.Sprite3D[]
          * @see enchant.gl.Sprite3D#addChild
          * @see enchant.gl.Sprite3D#removeChild
-[/lang]
+         [/lang]
 [lang:en]
          * Array for child Sprite 3D element.
          * Can acquire list of Sprite3Ds added as child classes to this element.
@@ -1804,14 +1647,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
          * @type enchant.gl.Sprite3D[]
          * @see enchant.gl.Sprite3D#addChild
          * @see enchant.gl.Sprite3D#removeChild
-                  * Array for child Sprite 3D element.
-         * Can acquire list of Sprite3Ds added as child classes to this element.
-         * When adding or subtracting child classes, without directly operating this array,
-         * {@link enchant.gl.Sprite3D#addChild} or {@link enchant.gl.Sprite3D#removeChild} is used.
-         * @type enchant.gl.Sprite3D[]
-         * @see enchant.gl.Sprite3D#addChild
-         * @see enchant.gl.Sprite3D#removeChild
-[/lang]
+         [/lang]
          */
         this.childNodes = [];
 
@@ -1821,17 +1657,13 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
          * どのシーンにも追加されていないときにはnull.
          * @type enchant.gl.Scene3D
          * @see enchant.gl.Scene3D#addChild
-[/lang]
+         [/lang]
 [lang:en]
          * The scene object currently added by this Sprite3D.
          * When no scene is added this is null.
          * @type enchant.gl.Scene3D
          * @see enchant.gl.Scene3D#addChild
-                  * The scene object currently added by this Sprite3D.
-         * When no scene is added this is null.
-         * @type enchant.gl.Scene3D
-         * @see enchant.gl.Scene3D#addChild
-[/lang]
+         [/lang]
          */
         this.scene = null;
 
@@ -1840,15 +1672,12 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
          * Sprite3Dの親要素.
          * 親が存在しない場合にはnull.
          * @type enchant.gl.Sprite3D|enchant.gl.Scene3D
-[/lang]
+         [/lang]
 [lang:en]
          * Sprite3D parent element.
          * When no parent exists this is null.
          * @type enchant.gl.Sprite3D|enchant.gl.Scene3D
-                  * Sprite3D parent element.
-         * When no parent exists this is null.
-         * @type enchant.gl.Sprite3D|enchant.gl.Scene3D
-[/lang]
+         [/lang]
          */
         this.parentNode = null;
 
@@ -1859,16 +1688,17 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
          * @example
          *   var sprite = new Sprite3D();
          *   sprite.mesh = new Mesh();
-[/lang]
+         [/lang]
 [lang:en]
          * Mesh object applied to Sprite3D.
          * @type enchant.gl.Mesh
          * @example
          *   var sprite = new Sprite3D();
          *   sprite.mesh = new Mesh();
-[/lang]
+         [/lang]
          */
-        this.mesh = new Mesh();
+        //this.mesh = new Mesh();
+        this._mesh = null;
 
         this.bounding = new BS();
         this.bounding.parent = this;
@@ -1883,6 +1713,12 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         this._scaleZ = 1;
         this._changedTranslation = true;
         this._changedScale = true;
+        this._touchable = true;
+
+        this._global = vec3.create();
+        this.globalX = 0;
+        this.globalY = 0;
+        this.globalZ = 0;
 
         this._matrix = mat4.create();
         mat4.identity(this._matrix);
@@ -1907,6 +1743,9 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         this.addEventListener('touchend', parentEvent);
 
         var added = function(e) {
+            if (this.mesh != null) {
+                this.mesh._count++;
+            }
             if (this.childNodes.length) {
                 for (var i = 0, l = this.childNodes.length; i < l; i++) {
                     this.childNodes[i].scene = this.scene;
@@ -1917,6 +1756,9 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         this.addEventListener('addedtoscene', added);
 
         var removed = function(e) {
+            if (this.mesh != null) {
+                this.mesh._count--;
+            }
             if (this.childNodes.length) {
                 for (var i = 0, l = this.childNodes.length; i < l; i++) {
                     this.childNodes[i].scene = null;
@@ -1938,7 +1780,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *   var sp2 = sp.clone();
      *   //sp2.x = 15;
      * @return {enchant.gl.Sprite3D}
-[/lang]
+     [/lang]
 [lang:en]
      * Executes the reproduction of Sprite3D.
      * Position, rotation line, and others will be returned to a copied, new instance.
@@ -1948,15 +1790,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *   var sp2 = sp.clone();
      *   //sp2.x = 15;
      * @return {enchant.gl.Sprite3D}
-          * Executes the reproduction of Sprite3D.
-     * Position, rotation line, and others will be returned to a copied, new instance.
-     * @example
-     *   var sp = new Sprite3D();
-     *   sp.x = 15;
-     *   var sp2 = sp.clone();
-     *   //sp2.x = 15;
-     * @return {enchant.gl.Sprite3D}
-[/lang]
+     [/lang]
      */
     clone: function() {
         var clone = new Sprite3D();
@@ -1968,13 +1802,16 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
                 clone[prop] = this[prop];
             } else if (this[prop] instanceof Float32Array) {
                 clone[prop] = new Float32Array(this[prop]);
-            } else if (this[prop] instanceof Array
+            } else if (this[prop] instanceof Array 
                 && prop != 'childNodes'
                 && prop != 'detectColor') {
-                clone[prop] = this[prop].filter(function() { return true; });
+                //clone[prop] = this[prop].filter(function() { return true; });
+                clone[prop] = this[prop].slice(0);
             }
         }
-        clone.mesh = this.mesh;
+        if (this.mesh != null) {
+            clone.mesh = this.mesh;
+        }
         if (this.childNodes) {
             for (var i = 0, l = this.childNodes.length; i < l; i++) {
                 clone.addChild(this.childNodes[i].clone());
@@ -1991,8 +1828,8 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *   var sp = new Sprite3D();
      *   sp.set(game.assets['sample.dae']);
      *   //sample.daeのモデル情報を持ったSprite3Dになる
-     *
-[/lang]
+     *   
+     [/lang]
 [lang:en]
      * Sets condition of other Sprite3D.
      * Can be used corresponding Collada file's loaded assets.
@@ -2000,8 +1837,8 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *   var sp = new Sprite3D();
      *   sp.set(game.assets['sample.dae']);
      *   //Becomes Sprite3D with sample.dae model information
-     *
-[/lang]
+     *   
+     [/lang]
      */
     set: function(sprite) {
         for (prop in sprite) {
@@ -2012,13 +1849,15 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
                 this[prop] = sprite[prop];
             } else if (sprite[prop] instanceof Float32Array) {
                 this[prop] = new Float32Array(sprite[prop]);
-            } else if (sprite[prop] instanceof Array
+            } else if (sprite[prop] instanceof Array 
                 && prop != 'childNodes'
                 && prop != 'detectColor') {
                 this[prop] = sprite[prop].filter(function() { return true; });
             }
         }
-        this.mesh = sprite.mesh;
+        if (sprite.mesh != null) {
+            this.mesh = sprite.mesh;
+        }
         if (sprite.childNodes) {
             for (var i = 0, l = sprite.childNodes.length; i < l; i++) {
                 this.addChild(sprite.childNodes[i].clone());
@@ -2041,13 +1880,13 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#removeChild
      * @see enchant.gl.Sprite3D#childNodes
      * @see enchant.gl.Sprite3D#parentNode
-[/lang]
+     [/lang]
 [lang:en]
      * Add child Sprite3D.
      * When it is added, an "added" event will be created for child Sprite3D.
      * When a parent is already added to scene, it will be added to scene,
      * and an "addedtoscene" event will be created.
-     * Child Sprite3D for adding @param {enchant.gl.Sprite3D} sprite.
+     * Child Sprite3D for adding @param {enchant.gl.Sprite3D} sprite. 
      * @example
      *   var parent = new Sprite3D();
      *   var child = new Sprite3D();
@@ -2056,20 +1895,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#removeChild
      * @see enchant.gl.Sprite3D#childNodes
      * @see enchant.gl.Sprite3D#parentNode
-          * Add child Sprite3D.
-     * When it is added, an "added" event will be created for child Sprite3D.
-     * When a parent is already added to scene, it will be added to scene,
-     * and an "addedtoscene" event will be created.
-     * Child Sprite3D for adding @param {enchant.gl.Sprite3D} sprite.
-     * @example
-     *   var parent = new Sprite3D();
-     *   var child = new Sprite3D();
-     *   //Add Sprite3D as child to another Sprite3D
-     *   parent.addChild(child);
-     * @see enchant.gl.Sprite3D#removeChild
-     * @see enchant.gl.Sprite3D#childNodes
-     * @see enchant.gl.Sprite3D#parentNode
-[/lang]
+     [/lang]
      */
     addChild: function(sprite) {
         this.childNodes.push(sprite);
@@ -2095,7 +1921,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#addChild
      * @see enchant.gl.Sprite3D#childNodes
      * @see enchant.gl.Sprite3D#parentNode
-[/lang]
+     [/lang]
 [lang:en]
      * Deletes designated child Sprite3D.
      * When deletion is complete, a "removed" event will be created for child Sprite3D.
@@ -2109,19 +1935,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#addChild
      * @see enchant.gl.Sprite3D#childNodes
      * @see enchant.gl.Sprite3D#parentNode
-          * Deletes designated child Sprite3D.
-     * When deletion is complete, a "removed" event will be created for child Sprite3D.
-     * When added to scene, it will be deleted from that scene,
-     * and a "removedfromscene" event will be created.
-     * Child Sprite3D for deleting @param {enchant.gl.Sprite3D} sprite.
-     * @example
-     *   var scene = new Scene3D();
-     *   //Deletes scene's first child
-     *   scene.removeChild(scene.childNodes[0]);
-     * @see enchant.gl.Sprite3D#addChild
-     * @see enchant.gl.Sprite3D#childNodes
-     * @see enchant.gl.Sprite3D#parentNode
-[/lang]
+     [/lang]
      */
     removeChild: function(sprite) {
         var i;
@@ -2130,26 +1944,26 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         }
         sprite.parentNode = null;
         sprite.dispatchEvent(new enchant.Event('removed'));
-        if (this.scene) {
+        if (this.scene) { 
             sprite.scene = null;
             sprite.dispatchEvent(new enchant.Event('removedfromscene'));
         }
     },
 
-
+    
     /**
 [lang:ja]
      * 他のオブジェクトとの衝突判定.
      * 衝突判定オブジェクトか, x, y, zプロパティを持っているオブジェクトとの衝突を判定することができる.
      * @param {enchant.gl.Sprite3D} bounding 対象のオブジェクト
      * @return {Boolean}
-[/lang]
+     [/lang]
 [lang:en]
      * Other object collison detection.
      * Can detect collisions with collision detection objects with x, y, z properties.
      * @param {enchant.gl.Sprite3D} bounding Target object
      * @return {Boolean}
-[/lang]
+     [/lang]
      */
     intersect: function(another) {
         return this.bounding.intersect(another.bounding);
@@ -2170,7 +1984,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#y
      * @see enchant.gl.Sprite3D#z
      * @see enchant.gl.Sprite3D#scale
-[/lang]
+     [/lang]
 [lang:en]
      * Parallel displacement of Sprite3D.
      * Displaces each coordinate a designated amount from its current location.
@@ -2185,20 +1999,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#y
      * @see enchant.gl.Sprite3D#z
      * @see enchant.gl.Sprite3D#scale
-          * Parallel displacement of Sprite3D.
-     * Displaces each coordinate a designated amount from its current location.
-     * @param {Number} x Parallel displacement of x axis
-     * @param {Number} y Parallel displacement of y axis
-     * @param {Number} z Parallel displacement of z axis
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Parallel displacement by 10 along the x axis, 3 along the y axis, and -20 along the z axis
-     *   sprite.translate(10, 3, -20);
-     * @see enchant.gl.Sprite3D#x
-     * @see enchant.gl.Sprite3D#y
-     * @see enchant.gl.Sprite3D#z
-     * @see enchant.gl.Sprite3D#scale
-[/lang]
+     [/lang]
      */
     translate: function(x, y, z) {
         this._x += x;
@@ -2222,7 +2023,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#scaleY
      * @see enchant.gl.Sprite3D#scaleZ
      * @see enchant.gl.Sprite3D#translate
-[/lang]
+     [/lang]
 [lang:en]
      * Expand or contract Sprite3D.
      * Expands each axis by a designated expansion rate.
@@ -2237,20 +2038,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#scaleY
      * @see enchant.gl.Sprite3D#scaleZ
      * @see enchant.gl.Sprite3D#translate
-          * Expand or contract Sprite3D.
-     * Expands each axis by a designated expansion rate.
-     * @param {Number} x x axis expansion rate
-     * @param {Number} y y axis expansion rate
-     * @param {Number} z z axis expansion rate
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //Expand x axis by 2.0 times, y axis by 3.0 times, and z axis by 0.5 times
-     *   sprite.scale(2,0, 3.0, 0.5);
-     * @see enchant.gl.Sprite3D#scaleX
-     * @see enchant.gl.Sprite3D#scaleY
-     * @see enchant.gl.Sprite3D#scaleZ
-     * @see enchant.gl.Sprite3D#translate
-[/lang]
+     [/lang]
      */
     scale: function(x, y, z) {
         this._scaleX *= x;
@@ -2263,13 +2051,11 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
 [lang:ja]
      * Sprite3Dの名前
      * @type String
-[/lang]
+     [/lang]
 [lang:en]
      * Sprite3D name
      * @type String
-          * Sprite3D name
-     * @type String
-[/lang]
+     [/lang]
      */
     name: {
         get: function() {
@@ -2295,22 +2081,9 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *       0, 0, 0, 1
      *   ];
      * @type Number[]
-[/lang]
+     [/lang]
 [lang:en]
      * Sprite3D rotation line.
-     * Array is a one-dimensional array of length 16, interpreted as the 4x4 line destination.
-     * @example
-     *   var sprite = new Sprite3D();
-     *   //45 degree rotation along the x axiss
-     *   var rotX = Math.PI() / 4;
-     *   sprite.rotation = [
-     *       1, 0, 0, 0,
-     *       0, Math.cos(rotX), -Math.sin(rotX), 0,
-     *       0, Math.sin(rotX), Math.cos(rotX), 0,
-     *       0, 0, 0, 1
-     *   ];
-     * @type Number[]
-          * Sprite3D rotation line.
      * Array is a one-dimensional array of length 16, interpreted as the 4x4 line destination.
      * @example
      *   var sprite = new Sprite3D();
@@ -2323,7 +2096,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      *       0, 0, 0, 1
      *   ];
      * @type Number[]
-[/lang]
+     [/lang]
      */
     rotation: {
         get: function() {
@@ -2338,30 +2111,39 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
 [lang:ja]
      * 回転行列にクォータニオンから得られる回転行列をセットする.
      * @type enchant.gl.Quat
-[/lang]
+     [/lang]
 [lang:en]
      * Sets rotation line in rotation line received from quarterion.
      * @type enchant.gl.Quat
-[/lang]
+     [/lang]
      */
     rotationSet: function(quat) {
         quat.toMat4(this._rotation);
     },
 
-
+    
     /**
 [lang:ja]
      * 回転行列にクォータニオンから得られる回転行列を適用する.
      * @type enchant.gl.Quat
-[/lang]
+     [/lang]
 [lang:en]
      * Applies rotation line in rotation line received from quarterion.
      * @type enchant.gl.Quat
-[/lang]
+     [/lang]
      */
     rotationApply: function(quat) {
         quat.toMat4(this.tmpMat);
         mat4.multiply(this._rotation, this.tmpMat);
+    },
+
+    mesh: {
+        get: function() {
+            return this._mesh;
+        },
+        set: function(mesh) {
+            this._mesh = mesh;
+        }
     },
 
     /**
@@ -2369,22 +2151,19 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * Sprite3Dに適用する変換行列.
      * @deprecated
      * @type Number[]
-[/lang]
+     [/lang]
 [lang:en]
      * Conversion line applied to Sprite3D.
      * @deprecated
      * @type Number[]
-          * Conversion line applied to Sprite3D.
-     * @deprecated
-     * @type Number[]
-[/lang]
+     [/lang]
      */
     matrix: {
-        set: function(matrix) {
-            this._matrix = matrix;
-        },
         get: function() {
             return this._matrix;
+        },
+        set: function(matrix) {
+            this._matrix = matrix;
         }
     },
 
@@ -2392,19 +2171,40 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
 [lang:ja]
      * Sprite3Dの当たり判定に利用されるオブジェクト.
      * @type enchant.gl.Bounding | enchant.gl.BS | enchant.gl.AABB
-[/lang]
+     [/lang]
 [lang:en]
      * Object used in Sprite3D collision detection.
      * @type enchant.gl.Bounding | enchant.gl.BS | enchant.gl.AABB
-[/lang]
+     [/lang]
      */
     bounding: {
+        get: function() {
+            return this._bounding;
+        },
         set: function(bounding) {
             this._bounding = bounding;
             this._bounding.parent = this;
-        },
+        }
+    },
+
+    /**
+[lang:ja]
+     * Sprite3Dをタッチ可能にするか決定する.
+     * falseに設定するとタッチ判定の際無視される.
+     * @type bool
+     [/lang]
+     */
+    touchable: {
         get: function() {
-            return this._bounding;
+            return this._touchable;
+        },
+        set: function(bool) {
+            this._touchable = bool;
+            if (this._touchable) {
+                this.detectColor[3] = 1.0;
+            } else {
+                this.detectColor[3] = 0.0;
+            }
         }
     },
 
@@ -2421,13 +2221,20 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         mat4.multiply(this.tmpMat, this._matrix, this.tmpMat);
         mat4.multiply(baseMatrix, this.tmpMat, this.tmpMat);
 
+        this._global[0] = this._x;
+        this._global[1] = this._y;
+        this._global[2] = this._z;
+        mat4.multiplyVec3(this.tmpMat, this._global);
+        this.globalX = this._global[0];
+        this.globalY = this._global[1];
+        this.globalZ = this._global[2];
 
         if (this.childNodes.length) {
             for (var i = 0, l = this.childNodes.length; i < l; i++) {
                 this.childNodes[i]._draw(scene, detectTouch, this.tmpMat);
             }
         }
-        if (this.mesh.vertices) {
+        if (this.mesh != null) {
             gl.uniformMatrix4fv(scene.shaderUniforms.modelMat, false, this.tmpMat);
             mat4.toInverseMat3(this.tmpMat, scene.normMat);
             mat3.transpose(scene.normMat);
@@ -2479,17 +2286,13 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
  * @default 0
  * @type Number
  * @see enchant.gl.Sprite3D#translate
-[/lang]
+ [/lang]
 [lang:en]
  * Sprite3D x coordinates.
  * @default 0
  * @type Number
  * @see enchant.gl.Sprite3D#translate
-  * Sprite3D x coordinates.
- * @default 0
- * @type Number
- * @see enchant.gl.Sprite3D#translate
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D.prototype.x = 0;
 
@@ -2499,17 +2302,13 @@ enchant.gl.Sprite3D.prototype.x = 0;
  * @default 0
  * @type Number
  * @see enchant.gl.Sprite3D#translate
-[/lang]
+ [/lang]
 [lang:en]
  * Sprite3D y coordinates.
  * @default 0
  * @type Number
  * @see enchant.gl.Sprite3D#translate
-  * Sprite3D y coordinates.
- * @default 0
- * @type Number
- * @see enchant.gl.Sprite3D#translate
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D.prototype.y = 0;
 
@@ -2519,17 +2318,13 @@ enchant.gl.Sprite3D.prototype.y = 0;
  * @default 0
  * @type Number
  * @see enchant.gl.Sprite3D#translate
-[/lang]
+ [/lang]
 [lang:en]
  * Sprite3D z coordinates.
  * @default 0
  * @type Number
  * @see enchant.gl.Sprite3D#translate
-  * Sprite3D z coordinates.
- * @default 0
- * @type Number
- * @see enchant.gl.Sprite3D#translate
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D.prototype.z = 0;
 
@@ -2551,17 +2346,13 @@ enchant.gl.Sprite3D.prototype.z = 0;
  * @default 1.0
  * @type Number
  * @see enchant.gl.Sprite3D#scale
-[/lang]
+ [/lang]
 [lang:en]
  * Sprite3D x axis direction expansion rate
  * @default 1.0
  * @type Number
  * @see enchant.gl.Sprite3D#scale
-  * Sprite3D x axis direction expansion rate
- * @default 1.0
- * @type Number
- * @see enchant.gl.Sprite3D#scale
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D.prototype.scaleX = 1;
 
@@ -2571,17 +2362,13 @@ enchant.gl.Sprite3D.prototype.scaleX = 1;
  * @default 1.0
  * @type Number
  * @see enchant.gl.Sprite3D#scale
-[/lang]
+ [/lang]
 [lang:en]
  * Sprite3D y axis direction expansion rate
  * @default 1.0
  * @type Number
  * @see enchant.gl.Sprite3D#scale
-  * Sprite3D y axis direction expansion rate
- * @default 1.0
- * @type Number
- * @see enchant.gl.Sprite3D#scale
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D.prototype.scaleY = 1;
 /**
@@ -2590,17 +2377,13 @@ enchant.gl.Sprite3D.prototype.scaleY = 1;
  * @default 1.0
  * @type Number
  * @see enchant.gl.Sprite3D#scale
-[/lang]
+ [/lang]
 [lang:en]
  * Sprite3D z axis direction expansion rate
  * @default 1.0
  * @type Number
  * @see enchant.gl.Sprite3D#scale
-  * Sprite3D z axis direction expansion rate
- * @default 1.0
- * @type Number
- * @see enchant.gl.Sprite3D#scale
-[/lang]
+ [/lang]
  */
 enchant.gl.Sprite3D.prototype.scaleZ = 1;
 
@@ -2618,12 +2401,59 @@ enchant.gl.Sprite3D.prototype.scaleZ = 1;
 
 /**
 [lang:ja]
+ * Sprite3Dのグローバルのx座標.
+ * @default 0
+ * @type Number
+ * @see enchant.gl.Sprite3D#translate
+ [/lang]
+ [lang:en]
+ * Sprite3D global x coordinates.
+ * @default 0
+ * @type Number
+ * @see enchant.gl.Sprite3D#translate
+ [/lang]
+ */
+enchant.gl.Sprite3D.prototype.globalX = 0;
+
+/**
+[lang:ja]
+ * Sprite3Dのグローバルのy座標.
+ * @default 0
+ * @type Number
+ * @see enchant.gl.Sprite3D#translate
+ [/lang]
+ [lang:en]
+ * Sprite 3D global y coordinates.
+ * @default 0
+ * @type Number
+ * @see enchant.gl.Sprite3D#translate
+ [/lang]
+ */
+enchant.gl.Sprite3D.prototype.globalY = 0;
+
+/**
+[lang:ja]
+ * Sprite3Dのグローバルのz座標.
+ * @default 0
+ * @type Number
+ * @see enchant.gl.Sprite3D#translate
+ [/lang]
+ [lang:en]
+ * Sprite3D global 3D coordinates.
+ * @default 0
+ * @type Number
+ * @see enchant.gl.Sprite3D#translate
+ [/lang]
+ */
+enchant.gl.Sprite3D.prototype.globalZ = 0;
+
+/**
+[lang:ja]
  * @scope enchant.gl.Camera3D.prototype
-[/lang]
+ [/lang]
 [lang:en]
  * @scope enchant.gl.Camera3D.prototype
-  * @scope enchant.gl.Camera3D.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D = enchant.Class.create({
     /**
@@ -2637,7 +2467,7 @@ enchant.gl.Camera3D = enchant.Class.create({
      * camera.z = 10;
      * scene.setCamera(camera);
      * @constructs
-[/lang]
+     [/lang]
 [lang:en]
      * Class to set 3D scene camera
      * @example
@@ -2648,16 +2478,7 @@ enchant.gl.Camera3D = enchant.Class.create({
      * camera.z = 10;
      * scene.setCamera(camera);
      * @constructs
-          * Class to set 3D scene camera
-     * @example
-     * var scene = new Scene3D();
-     * var camera = new Camera3D();
-     * camera.x = 0;
-     * camera.y = 0;
-     * camera.z = 10;
-     * scene.setCamera(camera);
-     * @constructs
-[/lang]
+     [/lang]
      */
     initialize: function() {
         this._changedPosition = false;
@@ -2679,13 +2500,11 @@ enchant.gl.Camera3D = enchant.Class.create({
 [lang:ja]
  * カメラのx座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera x coordinates
  * @type Number
-  * Camera x coordinates
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.x = 0;
 
@@ -2693,13 +2512,11 @@ enchant.gl.Camera3D.prototype.x = 0;
 [lang:ja]
  * カメラのy座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera y coordinates
  * @type Number
-  * Camera y coordinates
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.y = 0;
 
@@ -2707,13 +2524,11 @@ enchant.gl.Camera3D.prototype.y = 0;
 [lang:ja]
  * カメラのz座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera z coordinates
  * @type Number
-  * Camera z coordinates
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.z = 0;
 
@@ -2733,13 +2548,11 @@ enchant.gl.Camera3D.prototype.z = 0;
 [lang:ja]
  * カメラの視点のx座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera perspective x coordinates
  * @type Number
-  * Camera perspective x coordinates
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.centerX = 0;
 
@@ -2747,13 +2560,11 @@ enchant.gl.Camera3D.prototype.centerX = 0;
 [lang:ja]
  * カメラの視点のy座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera perspective y coordinates
  * @type Number
-  * Camera perspective y coordinates
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.centerY = 0;
 
@@ -2761,13 +2572,11 @@ enchant.gl.Camera3D.prototype.centerY = 0;
 [lang:ja]
  * カメラの視点のz座標
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera perspective z coordinates
  * @type Number
-  * Camera perspective z coordinates
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.centerZ = 0;
 
@@ -2787,13 +2596,11 @@ enchant.gl.Camera3D.prototype.centerZ = 0;
 [lang:ja]
  * カメラの上方向ベクトルのx成分
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera upper hector x component
  * @type Number
-  * Camera upper hector x component
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.upVectorX = 0;
 
@@ -2801,13 +2608,11 @@ enchant.gl.Camera3D.prototype.upVectorX = 0;
 [lang:ja]
  * カメラの上方向ベクトルのy成分
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera upper hector y component
  * @type Number
-  * Camera upper hector y component
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.upVectorY = 1;
 
@@ -2815,13 +2620,11 @@ enchant.gl.Camera3D.prototype.upVectorY = 1;
 [lang:ja]
  * カメラの上方向ベクトルのz成分
  * @type Number
-[/lang]
+ [/lang]
 [lang:en]
  * Camera upper hector z component
  * @type Number
-  * Camera upper hector z component
- * @type Number
-[/lang]
+ [/lang]
  */
 enchant.gl.Camera3D.prototype.upVectorZ = 0;
 
@@ -2840,11 +2643,10 @@ enchant.gl.Camera3D.prototype.upVectorZ = 0;
 /**
 [lang:ja]
  * @scope enchant.gl.Scene3D.prototype
-[/lang]
+ [/lang]
 [lang:en]
  * @scope enchant.gl.Scene3D.prototype
-  * @scope enchant.gl.Scene3D.prototype
-[/lang]
+ [/lang]
  */
 enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
     /**
@@ -2859,7 +2661,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      *
      * @constructs
      * @extends enchant.EventTarget
-[/lang]
+     [/lang]
 [lang:en]
      * Class for displayed Sprite3D tree route.
      * Currently, multiple definitions are impossible, and the Scene3D defined first will be returned.
@@ -2871,17 +2673,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      *
      * @constructs
      * @extends enchant.EventTarget
-          * Class for displayed Sprite3D tree route.
-     * Currently, multiple definitions are impossible, and the Scene3D defined first will be returned.
-     *
-     * @example
-     *   var scene = new Scene3D();
-     *   var sprite = new Sprite3D();
-     *   scene.addChild(sprite);
-     *
-     * @constructs
-     * @extends enchant.EventTarget
-[/lang]
+     [/lang]
      */
     initialize: function() {
         var game = enchant.Game.instance;
@@ -2896,19 +2688,14 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
          * 子を追加したり削除したりする場合には, この配列を直接操作せずに,
          * {@link enchant.gl.Scene3D#addChild}や{@link enchant.gl.Scene3D#removeChild}を利用する.
          * @type enchant.gl.Sprite3D[]
-[/lang]
+         [/lang]
 [lang:en]
          * Child element array.
          * A list of Sprite3D added as child classes in this scene can be acquired.
-         * When adding or subtracting child classes, without directly operating this array,
+         * When adding or subtracting child classes, without directly operating this array, 
          * {@link enchant.gl.Scene3D#addChild} or {@link enchant.gl.Scene3D#removeChild} is used.
          * @type enchant.gl.Sprite3D[]
-                  * Child element array.
-         * A list of Sprite3D added as child classes in this scene can be acquired.
-         * When adding or subtracting child classes, without directly operating this array,
-         * {@link enchant.gl.Scene3D#addChild} or {@link enchant.gl.Scene3D#removeChild} is used.
-         * @type enchant.gl.Sprite3D[]
-[/lang]
+         [/lang]
          */
         this.childNodes = [];
 
@@ -2920,7 +2707,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
          * 照明を追加したり削除したりする場合には, この配列を直接操作せずに,
          * {@link enchant.gl.Scene3D#addLight}や{@link enchant.gl.Scene3D#removeLight}を利用する.
          * @type enchant.gl.PointLight[]
-[/lang]
+         [/lang]
 [lang:en]
          * Lighting array.
          * At present, the only light source active in the scene is 0.
@@ -2928,13 +2715,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
          * When lighting is added or deleted, without directly operating this array,
          * {@link enchant.gl.Scene3D#addLight} or {@link enchant.gl.Scene3D#removeLight} is used.
          * @type enchant.gl.PointLight[]
-                  * Lighting array.
-         * At present, the only light source active in the scene is 0.
-         * Acquires a list of light sources acquired in this scene.
-         * When lighting is added or deleted, without directly operating this array,
-         * {@link enchant.gl.Scene3D#addLight} or {@link enchant.gl.Scene3D#removeLight} is used.
-         * @type enchant.gl.PointLight[]
-[/lang]
+         [/lang]
          */
         this.lights = [];
 
@@ -2970,7 +2751,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         this.fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
         this.shaderProgram = gl.createProgram();
 
-        // Touch detection frame buffer
+        // タッチ検出用のフレームバッファ
         this.detectFramebuffer = gl.createFramebuffer();
         this.detectColorbuffer = gl.createRenderbuffer();
         this.detectDepthbuffer = gl.createRenderbuffer();
@@ -3049,13 +2830,11 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
 [lang:ja]
      * Scene3Dの背景色
      * @type Number[]
-[/lang]
+     [/lang]
 [lang:en]
      * Scene3D background color
      * @type Number[]
-          * Scene3D background color
-     * @type Number[]
-[/lang]
+     [/lang]
      */
     backgroundColor: {
         get: function() {
@@ -3078,7 +2857,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      * @param {enchant.gl.Sprite3D} sprite 追加するSprite3D
      * @see enchant.gl.Scene3D#removeChild
      * @see enchant.gl.Scene3D#childNodes
-[/lang]
+     [/lang]
 [lang:en]
      * Add Sprite3D to scene.
      * Adds Sprite3D delivered to argument and child classes to scene.
@@ -3087,14 +2866,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      * @param {enchant.gl.Sprite3D} sprite Sprite3D to be added
      * @see enchant.gl.Scene3D#removeChild
      * @see enchant.gl.Scene3D#childNodes
-          * Add Sprite3D to scene.
-     * Adds Sprite3D delivered to argument and child classes to scene.
-     * Sprite3D will automatically be displayed on screen if added to scene.
-     * Use {@link enchant.gl.Scene3D#removeChild} to delete object added once.
-     * @param {enchant.gl.Sprite3D} sprite Sprite3D to be added
-     * @see enchant.gl.Scene3D#removeChild
-     * @see enchant.gl.Scene3D#childNodes
-[/lang]
+     [/lang]
      */
     addChild: function(sprite) {
         this.childNodes.push(sprite);
@@ -3113,7 +2885,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      * @param {enchant.gl.Sprite3D} sprite 削除するSprite3D
      * @see enchant.gl.Scene3D#addChild
      * @see enchant.gl.Scene3D#childNodes
-[/lang]
+     [/lang]
 [lang:en]
      * Delete Sprite3D from scene.
      * Deletes designated Sprite3D from scene.
@@ -3122,14 +2894,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      * @param {enchant.gl.Sprite3D} sprite Sprite3D to delete
      * @see enchant.gl.Scene3D#addChild
      * @see enchant.gl.Scene3D#childNodes
-          * Delete Sprite3D from scene.
-     * Deletes designated Sprite3D from scene.
-     * The deleted Sprite3D will no longer be displayed on the screen.
-     * Use {@link enchant.gl.Scene3D#addChild} to add Sprite3D.
-     * @param {enchant.gl.Sprite3D} sprite Sprite3D to delete
-     * @see enchant.gl.Scene3D#addChild
-     * @see enchant.gl.Scene3D#childNodes
-[/lang]
+     [/lang]
      */
     removeChild: function(sprite) {
         var i;
@@ -3146,15 +2911,12 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      * シーンのカメラ位置をセットする.
      * @param {enchant.gl.Camera3D} camera セットするカメラ
      * @see enchant.gl.Camera3D
-[/lang]
+     [/lang]
 [lang:en]
      * Sets scene's camera postion.
      * @param {enchant.gl.Camera3D} camera Camera to set
      * @see enchant.gl.Camera3D
-          * Sets scene's camera postion.
-     * @param {enchant.gl.Camera3D} camera Camera to set
-     * @see enchant.gl.Camera3D
-[/lang]
+     [/lang]
      */
     setCamera: function(camera) {
         camera._changedPosition = true;
@@ -3162,22 +2924,19 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         camera._changedUpVector = true;
         this._camera = camera;
         gl.uniform1f(this.shaderUniforms.useCamera, 1.0);
-    },
+    },   
 
     /**
 [lang:ja]
      * シーンに平行光源を設定する.
      * @param {enchant.gl.DirectionalLight} light 設定する照明
      * @see enchant.gl.DirectionalLight
-[/lang]
+     [/lang]
 [lang:en]
      * Sets directional light source in scene.
      * @param {enchant.gl.DirectionalLight} light Lighting to set
      * @see enchant.gl.DirectionalLight
-          * Sets directional light source in scene.
-     * @param {enchant.gl.DirectionalLight} light Lighting to set
-     * @see enchant.gl.DirectionalLight
-[/lang]
+     [/lang]
      */
     setDirectionalLight: function(light) {
         this.directionalLight = light;
@@ -3191,43 +2950,36 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
      * 現在, シーンに追加しても適用されない.
      * @param {enchant.gl.PointLight} light 追加する照明
      * @see enchant.gl.PointLight
-[/lang]
+     [/lang]
 [lang:en]
      * Add lighting to scene.
      * Currently, will not be used even if added to scene.
      * @param {enchant.gl.PointLight} light Lighting to add
      * @see enchant.gl.PointLight
-          * Add lighting to scene.
-     * Currently, will not be used even if added to scene.
-     * @param {enchant.gl.PointLight} light Lighting to add
-     * @see enchant.gl.PointLight
-[/lang]
+     [/lang]
      */
     addLight: function(light){
         this.lights.push(light);
         this.usePointLight = true;
-    },
+    },   
 
     /**
 [lang:ja]
      * シーンから照明を削除する
      * @param {enchant.gl.PointLight} light 削除する照明
      * @see enchant.gl.PointLight.
-[/lang]
+     [/lang]
 [lang:en]
      * Delete lighting from scene
      * @param {enchant.gl.PointLight} light Lighting to delete
      * @see enchant.gl.PointLight.
-          * Delete lighting from scene
-     * @param {enchant.gl.PointLight} light Lighting to delete
-     * @see enchant.gl.PointLight.
-[/lang]
+     [/lang]
      */
     removeLight: function(light){
         var i;
         if ((i = this.lights.indexOf(light)) != -1) {
             this.lights.splice(i, 1);
-        }
+        }    
     },
 
     _draw: function(detectTouch) {
@@ -3259,24 +3011,24 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
                 this._camera._changedCenter ||
                 this._camera._changedUpVector) {
                 mat4.lookAt(
-                    [this._camera._x, this._camera._y, this._camera._z],
+                    [this._camera._x, this._camera._y, this._camera._z], 
                     [this._camera._centerX, this._camera._centerY, this._camera._centerZ],
-                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ],
+                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
                     this.cameraMat);
                 mat4.lookAt(
-                    [0, 0, 0],
+                    [0, 0, 0], 
                     [-this._camera._x + this._camera._centerX,
                     -this._camera._y + this._camera._centerY,
                     -this._camera._z + this._camera._centerZ],
-                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ],
+                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
                     this.cameraMatInverse);
                 mat4.inverse(this.cameraMatInverse);
                 mat4.lookAt(
-                    [0, 0, 0],
+                    [0, 0, 0], 
                     [-this._camera._x + this._camera._centerX,
                     0,
                     -this._camera._z + this._camera._centerZ],
-                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ],
+                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ], 
                     this.cameraMatInverseY);
                 mat4.inverse(this.cameraMatInverseY);
                 gl.uniformMatrix4fv(this.shaderUniforms.cameraMat, false, this.cameraMat);
@@ -3347,7 +3099,8 @@ void main() {\n\
     vec4 texColor = texture2D(uSampler, vTextureCoord);\n\
     vec4 baseColor = vColor ;\n\
     baseColor *= texColor * uUseTexture + vec4(1.0, 1.0, 1.0, 1.0) * (1.0 - uUseTexture);\n\
-    if (baseColor.a < 0.2) {\n\
+    float alpha = uDetectColor.a * uDetectTouch + baseColor.a * (1.0 - uDetectTouch);\n\
+    if (alpha < 0.2) {\n\
         discard;\n\
     }\n\
     else {\n\
@@ -3364,3 +3117,4 @@ void main() {\n\
             * (1.0 - uDetectTouch) + uDetectColor * uDetectTouch;\n\
     }\n\
 }';
+

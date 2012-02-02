@@ -1,12 +1,12 @@
 /**
+[lang:ja]
  * collada.gl.enchant.js
- * @version v0.3
- * @require gl.enchant.js v0.3+
+ * @version v0.3.1
+ * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
- * WebGLを用いた描画ライブラリ
- * enchant.js と組み合わせることで高度な3D描画と、2D描画を組み合わせることができる
+ * gl.enchant.jsでcolladaファイル(.dae)を読み込むためのプラグイン
  *
  * @detail
  * ベクトル・行列演算にglMatrix.jsを使用しています.
@@ -14,6 +14,23 @@
  * http://code.google.com/p/glmatrix/
  * glMatrix.jsの詳しい使い方:
  * http://code.google.com/p/glmatrix/wiki/Usage
+ [/lang]
+ [lang:en]
+ * collada.gl.enchant.js
+ * @version v0.3.1
+ * @require gl.enchant.js v0.3.1+
+ * @author Ubiquitous Entertainment Inc.
+ *
+ * @description
+ * Plugin to load collada format (.dae) files on gl.enchant.js
+ *
+ * @detail
+ * Uses glMatrix.js in hectors and matrix operations.
+ * glMatrix.js:
+ * http://code.google.com/p/glmatrix/
+ * For more information on glMatrix.js usage:
+ * http://code.google.com/p/glmatrix/wiki/Usage
+ [/lang]
  */
 
 if (enchant.gl != undefined) {
@@ -23,7 +40,7 @@ if (enchant.gl != undefined) {
 		if (ext) ext = ext.slice(1).toLowerCase();
 		if(ext == 'dae'){
 			if (callback == null) callback = function() {};
-			enchant.gl.Sprite3D.loadCollada(src, function(collada){
+			enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
 				enchant.Game.instance.assets[src] = collada;
 				callback();
 			});
@@ -33,6 +50,7 @@ if (enchant.gl != undefined) {
 	};
     (function(){
 		/**
+        [lang:ja]
 		 * ColladaデータからSprite3Dを作成する
 		 * @example
 		 *   var scene = new Scene3D();
@@ -42,6 +60,18 @@ if (enchant.gl != undefined) {
 		 * @param {String} url コラーダモデルのURL
 		 * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
 		 * @static
+        [/lang]
+        [lang:en]
+		 * Create Sprite3D from Collada data
+		 * @example
+		 *   var scene = new Scene3D();
+		 *   Sprite3D.loadCollada("hoge.dae",　function(model){
+		 *       scene.addChild(model);
+		 *   });
+		 * @param {String} url Collada model URL,
+		 * @param {function(enchant.pro.Sprite3D)} onload Callback when loading is complete. Sprite3D created from model will be delivered to argument
+		 * @static
+        [/lang]
 		 */
         enchant.gl.Sprite3D.loadCollada = function(url, onload){
             var _this = this;
@@ -56,8 +86,10 @@ if (enchant.gl != undefined) {
             var collada = new Collada();
             collada.onload = function(model){
                 var root = new Sprite3D();
+                /*
                 root.mesh = new Mesh();
                 root.mesh.vertices = 0;
+                */
                 model.getCorrespondingGeometry = function(node){
                 	for(var i = 0; i < this.geometries.length; i++){
                 		if(node.url == this.geometries[i].id){
@@ -163,12 +195,13 @@ if (enchant.gl != undefined) {
                 	var geometry = model.getCorrespondingGeometry(node);
                 	if(geometry) root.addChild(createSprite3D(model, node, geometry));
                 }
-                _this.onload(root);
+                _this.onload(root, url);
             };
             collada.loadModel(url);
         }
         
         /**
+[lang:ja]
          * ColladafNX
          */
         function Collada(){
@@ -466,11 +499,14 @@ if (enchant.gl != undefined) {
                             }
                             temp = 0;
                             
-                            temp = xml.getElementsByTagName("transparent")[0].getElementsByTagName("color")[0].textContent;
-                            if (temp) {
-                                this.transparent = parseFloatArray(temp);
+                            // TODO
+                            if (false) {
+                                temp = xml.getElementsByTagName("transparent")[0].getElementsByTagName("color")[0].textContent;
+                                if (temp) {
+                                    this.transparent = parseFloatArray(temp);
+                                }
+                                temp = 0;
                             }
-                            temp = 0;
                             
                             temp = xml.getElementsByTagName("transparency")[0].getElementsByTagName("float")[0].textContent;
                             if (temp) {
@@ -600,6 +636,7 @@ if (enchant.gl != undefined) {
                 this.name = xml.getAttribute("name");
                 this.nodes = getNodeHierarchy(xml);
                 /**
+[lang:ja]
                  params
                  id
                  name
@@ -672,7 +709,10 @@ if (enchant.gl != undefined) {
                                 var technique = profileCommon.technique;
                                 var phong = technique.phong;
                                 var rm = [];
-                                var initfrom = profileCommon.surface.initFrom;
+                                var initfrom = null;
+                                if (profileCommon.surface) {
+                                    initfrom = profileCommon.surface.initFrom;
+                                }
                                 var images = _this.images;
                                 for (var l = 0; l < images.length; l++) {
                                     if (images[l].id == initfrom) {

@@ -46,7 +46,7 @@ window.onload = function(){
 
 		for(i=0;i<40;i++){
 		    var ball = new Sphere();
-		    ball.mesh.texture = new Texture("../images/enchant-sphere.png");
+		    ball.mesh.texture = new Texture("enchant-sphere.png");
 		    ball.x = i%2*10-5;
 		    ball.y = i%3*2-2;
 		    ball.z = i*5;
