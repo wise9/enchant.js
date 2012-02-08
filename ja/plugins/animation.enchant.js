@@ -1,6 +1,6 @@
 /**
  * animation.enchant.js
- * @version 0.1
+ * @version 0.2
  * @require enchant.js v0.4.3 or later
  * @author sidestepism
  *
@@ -21,7 +21,7 @@
  * game.rootScene.addChild(bear);
  **/
 
-enchant.Action = enchant.Class.create({
+enchant.animation.Action = enchant.Class.create({
     /**
      * アクションオブジェクトのコンストラクタ。
      * 第二引数で親となるタイムラインを指定する。
@@ -34,7 +34,7 @@ enchant.Action = enchant.Class.create({
     initialize: function(timeline, args){
         /**
          * 親となるタイムライン
-         * @type {enchant.Timeline}
+         * @type {enchant.animation.Timeline}
          */
         this.timeline = timeline;
 
@@ -122,7 +122,7 @@ enchant.Action = enchant.Class.create({
 
 
 
-enchant.Tween = enchant.Class.create(enchant.Action, {
+enchant.animation.Tween = enchant.Class.create(enchant.animation.Action, {
     /**
      * トゥイーンクラス。
      * アクションクラスを継承しており、座標や回転・大きさ・透明度などを、時間に従って変更するために使う。
@@ -139,12 +139,12 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
      * @param {enchant.Node} [node] 親となるノード
      * @param {*} [args] パラメータ
      * @constructs
-     * @extends enchant.Action
+     * @extends enchant.animation.Action
      */
     initialize: function(node, args){
         this._origin = {};
         this._target = {};
-        enchant.Action.call(this, node, args);
+        enchant.animation.Action.call(this, node, args);
 
         if(typeof this.easing === "undefined"){
             this.easing = function(t, b, c, d) {
@@ -186,7 +186,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
 });
 
 
-enchant.Timeline = enchant.Class.create({
+enchant.animation.Timeline = enchant.Class.create({
     /**
      * タイムラインクラス。
      * ノードに関するアクションの実行を管理するオブジェクト。
