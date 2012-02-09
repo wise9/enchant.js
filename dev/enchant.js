@@ -2400,6 +2400,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     _setFrame: function(frame){
         if (this._image != null){
+            this._frame = frame
             var row = this._image.width / this._width | 0;
             if (this._image._css) {
                 this._style.backgroundPosition = [
