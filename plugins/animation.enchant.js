@@ -243,7 +243,7 @@ enchant.Timeline = enchant.Class.create({
      * @time {Number} フレーム数 optional
      */
     pushTween: function(args, time){
-        var tween = new Tween(this.node, args);
+        var tween = new enchant.Tween(this.node, args);
         if(time !== undefined)tween.time = time;
         this.queue.push(tween);
         return this;
@@ -257,7 +257,7 @@ enchant.Timeline = enchant.Class.create({
      * @time {Number} フレーム数 optional
      */
     pushAction: function(args, time){
-        var action = new Action(this, args)
+        var action = new enchant.Action(this, args)
         if(time !== undefined)tween.time = time;
         this.queue.push(action);
         return this;
@@ -548,10 +548,10 @@ enchant.Timeline = enchant.Class.create({
     }
 })
 
-var AnimationSprite = enchant.Class.create(enchant.Sprite, {
+enchant.AnimationSprite = enchant.Class.create(enchant.Sprite, {
     initialize: function(width, height) {
         enchant.Sprite.call(this, width, height);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
