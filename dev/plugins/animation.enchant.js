@@ -1,6 +1,6 @@
 /**
  * animation.enchant.js
- * @version 0.1
+ * @version 0.2
  * @require enchant.js v0.4.3 or later
  * @author sidestepism
  *
@@ -21,20 +21,31 @@
  * game.rootScene.addChild(bear);
  **/
 
-enchant.Action = enchant.Class.create({
+/**
+ * plugin object
+ * enchant(); によってグローバルにエクスポートされる
+ */
+enchant.animation = {};
+
+/**
+ * アクションクラス
+ * 一つ一つのアクションを管理するオブジェクト
+ * enchant.animation.Timeline に登録して実行する
+ * @scope enchant.animation.Action.prototype
+ */
+enchant.animation.Action = enchant.Class.create({
     /**
-     * アクションオブジェクトのコンストラクタ。
+     * アクションクラスのコンストラクタ。
      * 第二引数で親となるタイムラインを指定する。
      * 第三引数にオブジェクトを渡すと、パラメータを上書きできる。
      * アクションを管理するオブジェクト(タイムラインオブジェクト) と組み合わせて利用する。
-     *
      * @param timeline
      * @param args
      */
     initialize: function(timeline, args){
         /**
          * 親となるタイムライン
-         * @type {enchant.Timeline}
+         * @type {enchant.animation.Timeline}
          */
         this.timeline = timeline;
 
@@ -121,8 +132,10 @@ enchant.Action = enchant.Class.create({
 });
 
 
-
-enchant.Tween = enchant.Class.create(enchant.Action, {
+/**
+ * @scope enchant.animation.Tween.prototype
+ */
+enchant.animation.Tween = enchant.Class.create(enchant.animation.Action, {
     /**
      * トゥイーンクラス。
      * アクションクラスを継承しており、座標や回転・大きさ・透明度などを、時間に従って変更するために使う。
@@ -139,12 +152,12 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
      * @param {enchant.Node} [node] 親となるノード
      * @param {*} [args] パラメータ
      * @constructs
-     * @extends enchant.Action
+     * @extends enchant.animation.Action
      */
     initialize: function(node, args){
         this._origin = {};
         this._target = {};
-        enchant.Action.call(this, node, args);
+        enchant.animation.Action.call(this, node, args);
 
         if(typeof this.easing === "undefined"){
             this.easing = function(t, b, c, d) {
@@ -185,20 +198,21 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
     }
 });
 
-
-enchant.Timeline = enchant.Class.create({
+/**
+ * タイムラインクラス。
+ * ノードに関するアクションの実行を管理するオブジェクト。
+ * タイムラインに追加されたアクションは順に実行され、すべて実行し終わると待機状態となる。
+ *
+ * タイムライン自身に様々なアクション・トゥイーンを追加するメソッドが用意されており、
+ * メソッドチェーンによりアクションを次々に追加することも可能。
+ * @example
+ * var bear = new AnimationSprite(32, 32);
+ * bear.animation.delay(30).moveTo(0, 320, 60);
+ */
+enchant.animation.Timeline = enchant.Class.create(
+    {
     /**
-     * タイムラインクラス。
-     * ノードに関するアクションの実行を管理するオブジェクト。
-     * タイムラインに追加されたアクションは順に実行され、すべて実行し終わると待機状態となる。
-     *
-     * タイムライン自身に様々なアクション・トゥイーンを追加するメソッドが用意されており、
-     * メソッドチェーンによりアクションを次々に追加することも可能。
-     *
-     * @example
-     * var bear = new AnimationSprite(32, 32);
-     * bear.animation.delay(30).moveTo(0, 320, 60);
-     *
+     * @construct
      * @param {enchant.Node} [node] アクションの対象となるノード (スプライトなど)
      */
     initialize: function(node){
@@ -305,7 +319,9 @@ enchant.Timeline = enchant.Class.create({
         return this;
     },
     /**
-     * 消す (opacity = 0)
+     * Entity を画面から消すアクションを追加。
+     * removeChild しているわけではなく、透明になるだけなので (opacity = 0)、
+     * クリックイベントなどは受け取ることができる。
      */
     hide: function(){
         this.pushAction({
@@ -317,7 +333,8 @@ enchant.Timeline = enchant.Class.create({
         return this;
     },
     /**
-     * 出す (opacity = 1)
+     * hide() や fadeOut() などで画面から消した
+     * Entityを再度出現させるアクションを追加 (opacity = 1)
      */
     show: function(){
         this.pushAction({
@@ -548,13 +565,85 @@ enchant.Timeline = enchant.Class.create({
     }
 })
 
-var AnimationSprite = enchant.Class.create(enchant.Sprite, {
-    initialize: function(width, height) {
-        enchant.Sprite.call(this, width, height);
+
+enchant.animation._oldNode = enchant.Node;
+enchant.Node = enchant.Class.create(enchant)
+
+/**
+ * @scope enchant.animation.Node.prototype
+ */
+enchant.animation.Node = enchant.Class.create(enchant.Node, {
+    initialize: function(){
+        enchant.Node.apply(this, arguments);
         this.animation = new Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
+
+/**
+ * @scope enchant.animation.Entity.prototype
+ */
+enchant.animation.Entity = enchant.Class.create(enchant.Entity, {
+    initialize: function(){
+        enchant.Entity.apply(this, arguments);
+        this.animation = new Timeline(this);
+        this.addEventListener("enterframe", function(){ this.animation.tick(); });
+    }
+});
+
+/**
+ * @scope enchant.animation.Sprite.prototype
+ */
+enchant.animation.Sprite = enchant.Class.create(enchant.Sprite, {
+    initialize: function(){
+        enchant.Sprite.apply(this, arguments);
+        this.animation = new Timeline(this);
+        this.addEventListener("enterframe", function(){ this.animation.tick(); });
+    }
+});
+
+/**
+ * @scope enchant.animation.Label.prototype
+ */
+enchant.animation.Label = enchant.Class.create(enchant.Label, {
+    initialize: function(){
+        enchant.Label.apply(this, arguments);
+        this.animation = new Timeline(this);
+        this.addEventListener("enterframe", function(){ this.animation.tick(); });
+    }
+});
+
+/**
+ * @scope enchant.animation.Scene.prototype
+ */
+enchant.animation.Scene = enchant.Class.create(enchant.Scene, {
+    initialize: function(){
+        enchant.Scene.apply(this, arguments);
+        this.animation = new Timeline(this);
+        this.addEventListener("enterframe", function(){ this.animation.tick(); });
+    }
+});
+
+/**
+ * @scope enchant.animation.Group.prototype
+ */
+enchant.animation.Group = enchant.Class.create(enchant.Group, {
+    initialize: function(){
+        enchant.Group.apply(this, arguments);
+        this.animation = new Timeline(this);
+        this.addEventListener("enterframe", function(){ this.animation.tick(); });
+    }
+});
+
+if(enchant.RGroup){
+    enchant.animation.RGroup = enchant.Class.create(enchant.RGroup, {
+        initialize: function(){
+            enchant.RGroup.apply(this, arguments);
+            this.animation = new Timeline(this);
+            this.addEventListener("enterframe", function(){ this.animation.tick(); });
+        }
+    });
+}
 
 /**
  * ============================================================================================
@@ -565,6 +654,12 @@ var AnimationSprite = enchant.Class.create(enchant.Sprite, {
  * ============================================================================================
  */
 
+/**
+ * イージング関数ライブラリ
+ * ActionScript で広く使われている
+ * Robert Penner による Easing Equations を JavaScript に移植した。
+ * @scope enchant.Easing
+ */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {
 		return c*t/d + b;
@@ -701,3 +796,7 @@ enchant.Easing = {
 		return c/2 * (-Math.pow(2, -10 * --t) + 2) + b;
 	}
 };
+
+/**
+ * Easing Equations v2.0
+ */

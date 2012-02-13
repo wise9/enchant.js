@@ -35,6 +35,10 @@
  */
 
 (function(){
+    /**
+     * plugin object
+     * enchant(); でこのオブジェクトのメソッドはすべてグローバルにエクスポートされる
+     */
     enchant.box2d = {
         WORLD_SCALE: 32,
         world: null
@@ -110,7 +114,7 @@
          *       sprite1.destroy();
          *       sprite2.destroy();
          *   });
-         * @param {function(sprite1:enchant.PhySprite, sprite2:enchant.PhySprite)} [func] 当たり判定時の処理
+         * @param {function(sprite1:enchant.box2d.PhySprite, sprite2:enchant.box2d.PhySprite)} [func] 当たり判定時の処理
          */
         contact: function (func) {
             var c = world.m_contactList;
@@ -131,9 +135,9 @@
 
 
     /**
-     * @scope enchant.PhySprite.prototype
+     * @scope enchant.box2d.PhySprite.prototype
      */
-    enchant.PhySprite = enchant.Class.create(enchant.Sprite, {
+    enchant.box2d.PhySprite = enchant.Class.create(enchant.Sprite, {
         /**
         * 画像表示機能を持った物理シミュレーションクラス.
         * @param {Number} [width] Spriteの横幅.
@@ -405,7 +409,7 @@
          *      sprite.destroy();
          *   });
          *
-         * @param {function(sprite:enchant.PhySprite)} [func] ぶつかったSpriteを引数とする関数
+         * @param {function(sprite:enchant.box2d.PhySprite)} [func] ぶつかったSpriteを引数とする関数
          */
         contact: function (func) {
             var c = this.body.m_body.m_contactList;
@@ -440,9 +444,9 @@
     });
 
     /**
-    * @scope enchant.PhyBoxSprite.prototype
+    * @scope enchant.box2d.PhyBoxSprite.prototype
     */
-    enchant.PhyBoxSprite = enchant.Class.create(enchant.PhySprite, {
+    enchant.box2d.PhyBoxSprite = enchant.Class.create(enchant.box2d.PhySprite, {
         /**
          * 四角形の物理シミュレーション用Sprite
          * @example
@@ -457,10 +461,10 @@
          * @param {Number} [restitution] Spriteの反発.
          * @param {Boolean}   [isSleeping] Spriteが初めから物理演算を行うか.
          * @constructs
-         * @extends enchant.PhySprite
+         * @extends enchant.box2d.PhySprite
          */
         initialize: function (width, height, staticOrDynamic, density, friction, restitution, isSleeping) {
-            enchant.PhySprite.call(this, width, height);
+            enchant.box2d.PhySprite.call(this, width, height);
 
             //物理オブジェクトの生成
             this.body = this.createPhyBox(staticOrDynamic, density, friction, restitution, isSleeping);
@@ -469,9 +473,9 @@
 
 
     /**
-     * @scope enchant.PhyCircleSprite.prototype
+     * @scope enchant.box2d.PhyCircleSprite.prototype
      */
-    enchant.PhyCircleSprite = enchant.Class.create(enchant.PhySprite, {
+    enchant.box2d.PhyCircleSprite = enchant.Class.create(enchant.box2d.PhySprite, {
         /**
          * 円の物理シミュレーション用Sprite
          * @example
@@ -485,10 +489,10 @@
          * @param {Number} [restitution] Spriteの反発.
          * @param {Boolean} [awake] Spriteが初めから物理演算を行うか.
          * @constructs
-         * @extends enchant.PhySprite
+         * @extends enchant.box2d.PhySprite
          */
         initialize: function (radius, staticOrDynamic, density, friction, restitution, awake) {
-            enchant.PhySprite.call(this, radius * 2, radius * 2);
+            enchant.box2d.PhySprite.call(this, radius * 2, radius * 2);
 
             //物理オブジェクトの生成
             this.body = this.createPhyCircle(staticOrDynamic, density, friction, restitution, awake);

@@ -9,7 +9,7 @@ window.onload = function(){
         var camera = new Camera3D();
         scene.setCamera(camera);
 	    var ball = new Sphere();
-	    ball.mesh.texture = new Texture("../../images/enchant-sphere.png");
+	    ball.mesh.texture = new Texture("enchant-sphere.png");
 	    ball.z =-10;
 	    ball.rotX = 0;
 	    ball.addEventListener('enterframe', function(e){

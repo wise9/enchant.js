@@ -18,7 +18,7 @@ window.onload = function(){
         game.rootScene.addChild(labelA);
         
 	    var cubeA = new Cube();
-	    cubeA.mesh.texture = new Texture("../../images/enchant.png");
+	    cubeA.mesh.texture = new Texture("enchant.png");
 	    cubeA.mesh.texture.ambient = [0.2 ,0.2, 0.2, 1.0];
 	    cubeA.x =-1;
 	    cubeA.z =-12;
@@ -49,7 +49,7 @@ window.onload = function(){
         
 
 	    cubeB = new Cube();
-	    cubeB.mesh.texture = new Texture("../../images/enchant.png");
+	    cubeB.mesh.texture = new Texture("enchant.png");
 	    cubeB.mesh.texture.ambient = [0.2 ,0.2, 0.2, 1.0];
 	    cubeB.x = 1;
 	    cubeB.z =-12;

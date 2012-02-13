@@ -1,161 +1,55 @@
 /**
+ [lang:ja]
  * primitive.gl.enchant.js
- * @version 0.3
- * @require gl.enchant.js v0.3+
+ * @version 0.3.1
+ * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
  * gl.enchant.js で使える基本立体オブジェクト
+ [/lang]
+ [lang:en]
+ * primitive.gl.enchant.js
+ * @version 0.3.1
+ * @require gl.enchant.js v0.3.1+
+ * @author Ubiquitous Entertainment Inc.
  *
+ * @description
+ * Primitive objects for gl.enchant.js
+ [/lang]
  */
-if(enchant.gl){
+if(enchant.gl != undefined){
 	(function(){
         enchant.gl.primitive = {};
         enchant.gl.primitive.Plane = enchant.Class.create(enchant.gl.Sprite3D, {
             initialize:function(){
                 enchant.gl.Sprite3D.call(this);
-                this.mesh.vertices = [
-                     0.5,  0.5,  0.0,
-                    -0.5,  0.5,  0.0,
-                    -0.5, -0.5,  0.0,
-                     0.5, -0.5,  0.0
-                ];
-                this.mesh.colors = [
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0
-                ];
-                this.mesh.normals =[
-                    0.0, 0.0,  1.0,
-                    0.0, 0.0,  1.0,
-                    0.0, 0.0,  1.0,
-                    0.0, 0.0,  1.0,
-                ];
-                this.mesh.texCoords = [
-                    1.0, 1.0,
-                    0.0, 1.0,
-                    0.0, 0.0,
-                    1.0, 0.0
-                ];
-                this.mesh.indices = [
-                    0, 1, 2,
-                    2, 3, 0,
-                    2, 1, 0,
-                    0, 3, 2
-                ];
+                this.mesh = meshFactory.createPlane();
             }
         });
         enchant.gl.primitive.PlaneXY = enchant.Class.create(enchant.gl.Sprite3D, {
             initialize:function(){
                 enchant.gl.Sprite3D.call(this);
-                this.mesh.vertices = [
-                     0.5,  0.5,  0.0,
-                    -0.5,  0.5,  0.0,
-                    -0.5, -0.5,  0.0,
-                     0.5, -0.5,  0.0
-                ];
-                this.mesh.colors = [
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0
-                ];
-                this.mesh.normals =[
-                    0.0, 0.0,  1.0,
-                    0.0, 0.0,  1.0,
-                    0.0, 0.0,  1.0,
-                    0.0, 0.0,  1.0,
-                ];
-                this.mesh.texCoords = [
-                    1.0, 1.0,
-                    0.0, 1.0,
-                    0.0, 0.0,
-                    1.0, 0.0
-                ];
-                this.mesh.indices = [
-                    0, 1, 2,
-                    2, 3, 0,
-                    2, 1, 0,
-                    0, 3, 2
-                ];
+                this.mesh = meshFactory.createPlaneXY();
             }
         });
         enchant.gl.primitive.PlaneYZ = enchant.Class.create(enchant.gl.Sprite3D, {
             initialize:function(){
                 enchant.gl.Sprite3D.call(this);
-                this.mesh.vertices = [
-                     0.0,  0.5,  0.5,
-                     0.0, -0.5,  0.5,
-                     0.0, -0.5, -0.5,
-                     0.0,  0.5, -0.5,
-                ];
-                this.mesh.colors = [
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0
-                ];
-                this.mesh.normals =[
-                    1.0, 0.0, 0.0,
-                    1.0, 0.0, 0.0,
-                    1.0, 0.0, 0.0,
-                    1.0, 0.0, 0.0,
-                ];
-                this.mesh.texCoords = [
-                    1.0, 1.0,
-                    0.0, 1.0,
-                    0.0, 0.0,
-                    1.0, 0.0
-                ];
-                this.mesh.indices = [
-                    0, 1, 2,
-                    2, 3, 0,
-                    2, 1, 0,
-                    0, 3, 2
-                ];
+                this.mesh = meshFactory.createPlaneYZ();
             }
         });
         enchant.gl.primitive.PlaneXZ = enchant.Class.create(enchant.gl.Sprite3D, {
             initialize:function(){
                 enchant.gl.Sprite3D.call(this);
-                this.mesh.vertices = [
-                     0.5,  0.0,  0.5,
-                    -0.5,  0.0,  0.5,
-                    -0.5,  0.0, -0.5,
-                     0.5,  0.0, -0.5,
-                ];
-                this.mesh.colors = [
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0,
-                    1.0, 0.0, 0.0, 1.0
-                ];
-                this.mesh.normals =[
-                    0.0, 1.0, 0.0,
-                    0.0, 1.0, 0.0,
-                    0.0, 1.0, 0.0,
-                    0.0, 0.0, 0.0,
-                ];
-                 this.mesh.texCoords = [
-                    0.0, 0.0,
-                    1.0, 0.0,
-                    1.0, 1.0,
-                    0.0, 1.0
-                ];
-                this.mesh.indices = [
-                    0, 1, 2,
-                    2, 3, 0,
-                    2, 1, 0,
-                    0, 3, 2
-                ];
+                this.mesh = meshFactory.createPlaneXZ();
             }
         });
         enchant.gl.primitive.Billboard = enchant.Class.create(enchant.gl.primitive.Plane, {
             initialize: function() {
                 var game = enchant.Game.instance;
                 enchant.gl.primitive.Plane.call(this);
-                this.addEventListener('render', function() {
+                this.addEventListener('enterframe', function() {
                     if (game.currentScene3D._camera) {
                         this.rotation = game.currentScene3D.cameraMatInverse;
                     }
@@ -165,10 +59,10 @@ if(enchant.gl){
         enchant.gl.primitive.BillboardAnimation = enchant.Class.create(enchant.gl.primitive.Billboard, {
             initialize: function(divide) {
                 enchant.gl.primitive.Billboard.call(this);
-                if (typeof divide == 'undefined') {
-                    this.divide = 4;
-                } else {
+                if (typeof divide != 'undefined') {
                     this.divide = divide;
+                } else {
+                    this.divide = 4;
                 }
                 this.frame = 0;
             },
@@ -202,10 +96,167 @@ if(enchant.gl){
                 });
             }
         });
-        enchant.gl.primitive.Cube= enchant.Class.create(enchant.gl.Sprite3D, {
+        enchant.gl.primitive.Cube = enchant.Class.create(enchant.gl.Sprite3D, {
             initialize:function(){
                 enchant.gl.Sprite3D.call(this);
-                this.mesh.vertices = [
+                this.mesh = meshFactory.createCube();
+            }
+        });
+        enchant.gl.primitive.Sphere = enchant.Class.create(enchant.gl.Sprite3D, {
+            initialize:function(){
+                enchant.gl.Sprite3D.call(this);
+                this.mesh = meshFactory.createSphere();
+            }
+        });
+        enchant.gl.primitive.Cylinder = enchant.Class.create(enchant.gl.Sprite3D, {
+            initialize: function(r, h, v) {
+                enchant.gl.Sprite3D.call(this);
+                this.mesh = meshFactory.createCylinder(r, h, v);
+            }
+        });
+
+        enchant.gl.primitive.MeshFactory = enchant.Class.create({
+            initialize: function() {
+            },
+            createPlane: function() {
+                var mesh = new enchant.gl.Mesh();
+                mesh.vertices = [
+                     0.5,  0.5, 0.0,
+                    -0.5,  0.5, 0.0,
+                    -0.5, -0.5, 0.0,
+                     0.5, -0.5, 0.0
+                ];
+                mesh.colors = [
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0
+                ];
+                mesh.normals =[
+                    0.0, 0.0, 1.0,
+                    0.0, 0.0, 1.0,
+                    0.0, 0.0, 1.0,
+                    0.0, 0.0, 1.0,
+                ];
+                mesh.texCoords = [
+                    1.0, 1.0,
+                    0.0, 1.0,
+                    0.0, 0.0,
+                    1.0, 0.0
+                ];
+                mesh.indices = [
+                    0, 1, 2,
+                    2, 3, 0,
+                    2, 1, 0,
+                    0, 3, 2
+                ];
+                return mesh;
+            },
+            createPlaneXY: function() {
+                var mesh = new enchant.gl.Mesh();
+                mesh.vertices = [
+                     0.5,  0.5,  0.0,
+                    -0.5,  0.5,  0.0,
+                    -0.5, -0.5,  0.0,
+                     0.5, -0.5,  0.0
+                ];
+                mesh.colors = [
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0
+                ];
+                mesh.normals =[
+                    0.0, 0.0,  1.0,
+                    0.0, 0.0,  1.0,
+                    0.0, 0.0,  1.0,
+                    0.0, 0.0,  1.0,
+                ];
+                mesh.texCoords = [
+                    1.0, 1.0,
+                    0.0, 1.0,
+                    0.0, 0.0,
+                    1.0, 0.0
+                ];
+                mesh.indices = [
+                    0, 1, 2,
+                    2, 3, 0,
+                    2, 1, 0,
+                    0, 3, 2
+                ];
+                return mesh;
+            },
+            createPlaneYZ: function() {
+                var mesh = new enchant.gl.Mesh();
+                mesh.vertices = [
+                     0.0,  0.5,  0.5,
+                     0.0, -0.5,  0.5,
+                     0.0, -0.5, -0.5,
+                     0.0,  0.5, -0.5,
+                ];
+                mesh.colors = [
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0
+                ];
+                mesh.normals =[
+                    1.0, 0.0, 0.0,
+                    1.0, 0.0, 0.0,
+                    1.0, 0.0, 0.0,
+                    1.0, 0.0, 0.0,
+                ];
+                mesh.texCoords = [
+                    1.0, 1.0,
+                    0.0, 1.0,
+                    0.0, 0.0,
+                    1.0, 0.0
+                ];
+                mesh.indices = [
+                    0, 1, 2,
+                    2, 3, 0,
+                    2, 1, 0,
+                    0, 3, 2
+                ];
+                return mesh;
+            },
+            createPlaneXZ: function() {
+                var mesh = new enchant.gl.Mesh();
+                mesh.vertices = [
+                     0.5,  0.0,  0.5,
+                    -0.5,  0.0,  0.5,
+                    -0.5,  0.0, -0.5,
+                     0.5,  0.0, -0.5,
+                ];
+                mesh.colors = [
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0,
+                    1.0, 1.0, 1.0, 1.0
+                ];
+                mesh.normals =[
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 1.0, 0.0,
+                    0.0, 0.0, 0.0,
+                ];
+                mesh.texCoords = [
+                    0.0, 0.0,
+                    1.0, 0.0,
+                    1.0, 1.0,
+                    0.0, 1.0
+                ];
+                mesh.indices = [
+                    0, 1, 2,
+                    2, 3, 0,
+                    2, 1, 0,
+                    0, 3, 2
+                ];
+                return mesh;
+            },
+            createCube: function() {
+                var mesh = new enchant.gl.Mesh();
+                mesh.vertices = [
                      0.5,  0.5,  0.5,
                     -0.5,  0.5,  0.5,
                     -0.5, -0.5,  0.5,
@@ -236,7 +287,7 @@ if(enchant.gl){
                     -0.5, -0.5, -0.5,
                     -0.5,  0.5, -0.5
                 ];
-                this.mesh.colors = [
+                mesh.colors = [
                     1.0, 1.0, 1.0, 1.0,
                     1.0, 1.0, 1.0, 1.0,
                     1.0, 1.0, 1.0, 1.0,
@@ -267,8 +318,8 @@ if(enchant.gl){
                     1.0, 1.0, 1.0, 1.0,
                     1.0, 1.0, 1.0, 1.0
                 ];
-                this.mesh.normals = this.mesh.vertices;
-                this.mesh.texCoords = [
+                mesh.normals = mesh.vertices;
+                mesh.texCoords = [
                     1.0, 0.0,
                     0.0, 0.0,
                     0.0, 1.0,
@@ -333,14 +384,14 @@ if(enchant.gl){
                 for(var i = 0; i < 6 * 12; i++){
                     a[i] += Math.floor(i / 12) * 4;
                 }
-                this.mesh.indices = a;
-            }
-        });
-        enchant.gl.primitive.Sphere = enchant.Class.create(enchant.gl.Sprite3D, {
-            initialize:function(){
+                mesh.indices = a;
+                return mesh;
+            },
+            createSphere: function() {
                 var v = 10;
                 var h = 10;
                 enchant.gl.Sprite3D.call(this);
+                var mesh = new enchant.gl.Mesh();
                 var vertices = [];
                 var texCoords = [];
                 for(var i = 0; i < v; i++){
@@ -352,14 +403,14 @@ if(enchant.gl){
                         texCoords[texCoords.length] = 1.0 - i / (v - 1);
                     }
                 }
-                this.mesh.vertices = vertices;
-                this.mesh.texCoords = texCoords;
+                mesh.vertices = vertices;
+                mesh.texCoords = texCoords;
                 var colors = [];
-                for(var i = 0, l = this.mesh.vertices.length / 3 * 4; i < l; i++){
+                for(var i = 0, l = mesh.vertices.length / 3 * 4; i < l; i++){
                     colors[colors.length] = 1.0;
                 }
-                this.mesh.colors = colors;
-                this.mesh.normals = vertices;
+                mesh.colors = colors;
+                mesh.normals = vertices;
                 var indices = [];
                 for(var i = 0; i < v - 1; i++){
                     for(var j = 0; j < h; j++){
@@ -371,17 +422,16 @@ if(enchant.gl){
                         indices[indices.length] = h * i + j;
                     }
                 }
-                this.mesh.indices = indices;
-            }
-        });
-        enchant.gl.primitive.Cylinder = enchant.Class.create(enchant.gl.Sprite3D, {
-            initialize: function(r, h, v) {
-                if (typeof r == 'undefined') {
-                    var r = 10;
-                } if (typeof h == 'undefined') {
-                    var h = 1;
-                } if (typeof v == 'undefined') {
-                    var v = 20;
+                mesh.indices = indices;
+                return mesh;
+            },
+            createCylinder: function(r, h, v) {
+                if (r == 'undefined') {
+                    r = 0.5;
+                } if (h == 'undefined') {
+                    h = 1;
+                } if (v == 'undefined') {
+                    v = 20;
                 }
                 enchant.gl.Sprite3D.call(this);
                 var vertices = [];
@@ -396,8 +446,8 @@ if(enchant.gl){
                 normals[normals.length] = 1;
                 normals[normals.length] = 0;
 
-                texCoords[texCoords.length] = 0.0;
-                texCoords[texCoords.length] = 1.0;
+                texCoords[texCoords.length] = 0;
+                texCoords[texCoords.length] = 1;
 
                 vertices[vertices.length] = 0;
                 vertices[vertices.length] = -h / 2;
@@ -407,15 +457,15 @@ if(enchant.gl){
                 normals[normals.length] = -1;
                 normals[normals.length] = 0;
 
-                texCoords[texCoords.length] = 0.0;
-                texCoords[texCoords.length] = 0.0;
+                texCoords[texCoords.length] = 0;
+                texCoords[texCoords.length] = 0;
 
                 var cos = 0;
                 var sin = 0;
                 var len = 0;
                 for (var i = 0; i < v; i++) {
-                    cos = Math.cos(Math.PI * 2 * i / (v - 1));
-                    sin = Math.sin(Math.PI * 2 * i / (v - 1));
+                    cos = Math.cos(Math.PI * 2 * i / (v-1));
+                    sin = Math.sin(Math.PI * 2 * i / (v-1));
                     len = Math.sqrt(cos * cos + sin * sin + 0.25);
 
                     vertices[vertices.length] = cos * r;
@@ -426,8 +476,8 @@ if(enchant.gl){
                     normals[normals.length] = 0.5 * len;
                     normals[normals.length] = sin * len;
 
-                    texCoords[texCoords.length] = 1 - i / (v - 1);
-                    texCoords[texCoords.length] = 1.0;
+                    texCoords[texCoords.length] = i / v;
+                    texCoords[texCoords.length] = 1;
 
                     vertices[vertices.length] = cos * r;
                     vertices[vertices.length] = -h / 2;
@@ -437,8 +487,8 @@ if(enchant.gl){
                     normals[normals.length] = -0.5 * len;
                     normals[normals.length] = sin * len;
 
-                    texCoords[texCoords.length] = 1 - i / (v - 1);
-                    texCoords[texCoords.length] = 0.0;
+                    texCoords[texCoords.length] = i / v;
+                    texCoords[texCoords.length] = 0;
                 }
                 for (var i = 0; i < v - 1; i++) {
                     indices[indices.length] = 0;
@@ -456,12 +506,16 @@ if(enchant.gl){
                     indices[indices.length] = i * 2 + 2;
                 }
 
-                this.mesh.vertices = vertices;
-                this.mesh.indices = indices;
-                this.mesh.texCoords = texCoords;
-                this.mesh.normals = normals;
-                this.mesh.setBaseColor('#ffaacc');
+                var mesh = new enchant.gl.Mesh();
+                mesh.vertices = vertices;
+                mesh.indices = indices;
+                mesh.texCoords = texCoords;
+                mesh.normals = normals;
+                mesh.setBaseColor('#ffffff');
+                return mesh;
             }
         });
+
+        window['meshFactory'] = new enchant.gl.primitive.MeshFactory();
     })();
 }

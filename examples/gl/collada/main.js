@@ -3,13 +3,13 @@ var game;
 window.onload = function(){
     game = new Game(320, 320);
     game.fps = 120;
-    game.preload('../../images/droid.dae');
+    game.preload('droid.dae');
     game.onload = function(){
         scene = new Scene3D();
         scene.setDirectionalLight(new DirectionalLight());
         scene.setCamera(new Camera3D());
         var droid = Sprite3D();
-        droid.set(game.assets['../../images/droid.dae']);
+        droid.set(game.assets['droid.dae']);
 		droid.y= -1;
 		droid.z=-10;
         scene.addChild(droid);
