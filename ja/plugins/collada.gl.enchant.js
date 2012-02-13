@@ -1,5 +1,4 @@
 /**
-[lang:ja]
  * collada.gl.enchant.js
  * @version v0.3.1
  * @require gl.enchant.js v0.3.1+
@@ -14,23 +13,6 @@
  * http://code.google.com/p/glmatrix/
  * glMatrix.jsの詳しい使い方:
  * http://code.google.com/p/glmatrix/wiki/Usage
- [/lang]
- [lang:en]
- * collada.gl.enchant.js
- * @version v0.3.1
- * @require gl.enchant.js v0.3.1+
- * @author Ubiquitous Entertainment Inc.
- *
- * @description
- * Plugin to load collada format (.dae) files on gl.enchant.js
- *
- * @detail
- * Uses glMatrix.js in hectors and matrix operations.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * For more information on glMatrix.js usage:
- * http://code.google.com/p/glmatrix/wiki/Usage
- [/lang]
  */
 
 if (enchant.gl != undefined) {
@@ -50,7 +32,6 @@ if (enchant.gl != undefined) {
 	};
     (function(){
 		/**
-        [lang:ja]
 		 * ColladaデータからSprite3Dを作成する
 		 * @example
 		 *   var scene = new Scene3D();
@@ -60,18 +41,6 @@ if (enchant.gl != undefined) {
 		 * @param {String} url コラーダモデルのURL
 		 * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
 		 * @static
-        [/lang]
-        [lang:en]
-		 * Create Sprite3D from Collada data
-		 * @example
-		 *   var scene = new Scene3D();
-		 *   Sprite3D.loadCollada("hoge.dae",　function(model){
-		 *       scene.addChild(model);
-		 *   });
-		 * @param {String} url Collada model URL,
-		 * @param {function(enchant.pro.Sprite3D)} onload Callback when loading is complete. Sprite3D created from model will be delivered to argument
-		 * @static
-        [/lang]
 		 */
         enchant.gl.Sprite3D.loadCollada = function(url, onload){
             var _this = this;
