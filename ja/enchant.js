@@ -16,7 +16,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -513,7 +513,7 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
-            
+
         }
     },
     /**
@@ -582,7 +582,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }
 
         enchant.EventTarget.call(this);
-
         var initial = true;
         if (game) {
             initial = false;
@@ -1030,7 +1029,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }, 1000 / this.fps);
         this.running = true;
     },
-        
+
     /**
      * 新しいSceneに移行する.
      *
@@ -1648,6 +1647,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }else{
                 this._setFrame(frame);
                 this._frameSequence = [];
+                this._frame = frame;
             }
         }
     },
@@ -2596,7 +2596,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Surface.load = function(src) {
     var image = new Image();
-    var surface = Object.create(Surface.prototype, {
+    var surface = Object.create(enchant.Surface.prototype, {
         context: { value: null },
         _css: { value: 'url(' + src + ')' },
         _element: { value: image }
@@ -2796,7 +2796,7 @@ window.addEventListener("message", function(msg, origin){
             default:
                 break;
         }
-            
+
     }
 }, false);
 

@@ -16,7 +16,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -86,7 +86,9 @@ if (typeof Object.getPrototypeOf != 'function') {
 [lang:en]
  * Export library classes globally.
  *
- * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in  * plugins will be exported. When more than one argument is delivered, by default only classes defined  * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
+ * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in
+ * plugins will be exported. When more than one argument is delivered, by default only classes defined
+ * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
  *
  * @example
  *   enchant();     // All classes will be exported.
@@ -224,7 +226,7 @@ enchant.Class = function(superclass, definition) {
  *
  * When making classes that succeed other classes, the previous class is used as a base with
  * constructor as default. In order to override the constructor, it is necessary to explicitly
- * call up the previous constructor to use it. 
+ * call up the previous constructor to use it.
  *
  * @example
  *   var Ball = Class.create({ // Creates independent class.
@@ -278,12 +280,7 @@ enchant.Class.create = function(superclass, definition) {
 };
 
 /**
-[lang:ja]
  * @scope enchant.Event.prototype
-[/lang]
-[lang:en]
- * @scope enchant.Event.prototype
-[/lang]
  */
 enchant.Event = enchant.Class.create({
     /**
@@ -845,7 +842,7 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
-            
+
         }
     },
     /**
@@ -952,7 +949,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }
 
         enchant.EventTarget.call(this);
-
         var initial = true;
         if (game) {
             initial = false;
@@ -1066,7 +1062,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
          * @type {Boolean}
 [/lang]
 [lang:en]
-         * Game executability (valid or not). 
+         * Game executability (valid or not).
          * @type {Boolean}
 [/lang]
          */
@@ -1447,7 +1443,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 [/lang]
 [lang:en]
      * Begin game debug mode.
-     * 
+     *
      * Game debug mode can be set to on even if enchant.Game.instance._debug flag is set to true.
 [/lang]
      */
@@ -1542,7 +1538,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }, 1000 / this.fps);
         this.running = true;
     },
-        
+
     /**
 [lang:ja]
      * 新しいSceneに移行する.
@@ -2395,6 +2391,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }else{
                 this._setFrame(frame);
                 this._frameSequence = [];
+                this._frame = frame;
             }
         }
     },
@@ -2747,7 +2744,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 [/lang]
 [lang:en]
      * Set data.
-     * Sees that tiles are set in order in array from the upper left of image properties image, 
+     * Sees that tiles are set in order in array from the upper left of image properties image,
      * and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
      * @param {...Array<Array.<Number>>} data Two-dimensional display of tile index. Multiple designations possible.
 [/lang]
@@ -3665,12 +3662,12 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
 [lang:en]
  * Loads image and creates Surface object.
  *
- * Surface created with this method does not allow access to wrap img elements context properties, 
- * or image operation via Canvas API called up by draw,clear, getPixel, setPixel and other methods. 
+ * Surface created with this method does not allow access to wrap img elements context properties,
+ * or image operation via Canvas API called up by draw,clear, getPixel, setPixel and other methods.
  * However it is possible to make draw method arguments, and you can operate images drawn on other surfaces
- * (when loading in cross domain, pixel acquisition and other image manipulation is limited). 
+ * (when loading in cross domain, pixel acquisition and other image manipulation is limited).
  *
- * 
+ *
  *
  * @param {String} src Loaded image file path.
  * @static
@@ -3678,7 +3675,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Surface.load = function(src) {
     var image = new Image();
-    var surface = Object.create(Surface.prototype, {
+    var surface = Object.create(enchant.Surface.prototype, {
         context: { value: null },
         _css: { value: 'url(' + src + ')' },
         _element: { value: image }
@@ -3945,7 +3942,7 @@ window.addEventListener("message", function(msg, origin){
             default:
                 break;
         }
-            
+
     }
 }, false);
 
