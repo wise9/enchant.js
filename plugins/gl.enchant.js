@@ -957,6 +957,38 @@ enchant.gl.Mesh = enchant.Class.create({
     },
 
     /**
+     * Mesh texture mapping array.
+     * Sets two elements as one in uv coordinates. The total number of elements becomes 2n in response to the peak quantity.
+     * 2n, 2n+1 level elements correspond to n level peak texture u, v coordinates.
+     * The coordinates that can be acquired for each coordinate correspond to 0<=u, v<=1.
+     * @example
+     *   var sprite = new Sprite3D();
+     *   var texture = new Texture();
+     *   texture.src = "texture.png";
+     *   sprite.mesh.texture = texture;
+     *
+     *   //Substitutes peak level
+     *   //Data is stored in an order of x, y, z, x, y, z...
+     *   sprite.vertices = [
+     *       0.0, 0.0, 0.0,  //0 peak (0.0, 0.0, 0.0)
+     *       1.0, 0.0, 0.0,  //1 peak (1.0, 0.0, 0.0)
+     *       1.0, 1.0, 0.0,  //2 peak (1.0, 1.0, 0.0)
+     *       0.0, 1.0, 0.0   //3 peak (0.0, 1.0, 0.0)
+     *   ];
+     *
+     *   //Substitutes uv coordinate array
+     *   //Data is stored in an order of u, v, u, v...
+     *   sprite.texCoords = [
+     *       0.0, 0.0,  //0番目の頂点のuv座標(0.0, 0.0)
+     *       1.0, 0.0,  //1番目の頂点のuv座標(1.0, 0.0)
+     *       1.0, 1.0,  //2番目の頂点のuv座標(1.0, 1.0)
+     *       0.0, 1.0   //3番目の頂点のuv座標(0.0, 1.0)
+     *   ];
+     * @type Number[]
+     * @see enchant.gl.Mesh#vertices
+     * @see enchant.gl.Mesh#indices
+     * @see enchant.gl.Mesh#normals
+     * @see enchant.gl.Mesh#texture#
      */
     texCoords: {
         set: function(array) {

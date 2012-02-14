@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		<title>enchant.gl.Quat | enchantPRO</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="mobileoptimized" content="0" />
+	
+		<link rel="stylesheet" href="../css/all.css" media="all" />
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)" />
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld" />
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)" />
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../allclasses.html">Classes</a>
+			<a href="../index.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
+				
+					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
+				
+					<li><a href="../symbols/enchant.Event.html">enchant<span class='break'> </span>.<span class='break'> </span>Event</a></li>
+				
+					<li><a href="../symbols/enchant.EventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>EventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.Game.html">enchant<span class='break'> </span>.<span class='break'> </span>Game</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Camera3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Camera3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.AABB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>AABB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.Bounding.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>Bounding</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.BS.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>BS</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.OBB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>OBB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.DirectionalLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>DirectionalLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Light3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Light3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Mesh.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Mesh</a></li>
+				
+					<li><a href="../symbols/enchant.gl.PointLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>PointLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Quat.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Quat</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Scene3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Scene3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Sprite3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Sprite3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Texture.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Texture</a></li>
+				
+					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
+				
+					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
+				
+					<li><a href="../symbols/enchant.Node.html">enchant<span class='break'> </span>.<span class='break'> </span>Node</a></li>
+				
+					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+				
+					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
+				
+					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
+				
+					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		<footer>
+			
+			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+			Generated on:
+			<time datetime='2012-1-14' pubdate>2012-1-14 12:14</time>
+		</footer>
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<article>
+			<header>
+				<h1 class="classTitle">
+					
+					Class <span>enchant.gl.Quat</span>
+				</h1>
+				
+				<div class="intro">
+					<p class="description summary">
+						
+					</p>
+						
+					
+						<ul class="summary">
+							
+							
+							
+								<li>Defined in: <a href="../symbols/src/gl.enchant.js.html">gl.enchant.js</a></li>
+							
+							
+						</ul>
+					
+				</div>
+			</header>
+			
+			
+				<section>
+					<div class="props">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.gl.Quat.">
+							<caption class="sectionTitle">Class Summary</caption>
+							<thead>
+								<tr>
+									<th scope="col">Constructor Attributes</th>
+									<th scope="col">Constructor Name and Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription" >
+										<div class="fixedFont">
+											<b><a href="../symbols/enchant.gl.Quat.html#constructor">enchant.gl.Quat</a></b>(x, y, z, rad)
+										</div>
+										<div class="description">Class that easily uses quaternions.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			
+			
+			
+	<!--
+	#### METHODS SUMMARY
+	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+							<nav>
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class enchant.gl.Quat.">
+									<thead>
+										<tr>
+											<th scope="col">Method Attributes</th>
+											<th scope="col">Method Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										
+											<tr
+												 class='item0'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Quat.html#multiplyVec3">multiplyVec3</a></b>(vector)
+													</div>
+													<div class="description">Apply quarternion to vector.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item1'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Quat.html#slerp">slerp</a></b>(Quaternion, ratio)
+													</div>
+													<div class="description">Performs spherical linear interpolation between quarternions.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item2'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Quat.html#slerpApply">slerpApply</a></b>(Quaternion, ratio)
+													</div>
+													<div class="description">Performs spherical linear interpolation between quarternions.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Quat.html#toMat4">toMat4</a></b>(matrix)
+													</div>
+													<div class="description">Convert quarternion to rotation matrix.</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</nav>
+						
+					
+						
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENTS SUMMARY
+	-->
+			
+	<!--
+	#### CONSTRUCTOR DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle" id="constructor">
+								Class Detail
+							</h2>
+							
+							<div class="fixedFont">
+								<b>enchant.gl.Quat</b>(x, y, z, rad)
+							</div>
+							
+							<div class="description">
+								Class that easily uses quaternions.
+								
+							</div>
+						
+							
+								<dl class="detailList params">
+									<dt class="heading">Parameters:</dt>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>x</b>
+											
+										</dt>
+										<dd></dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>y</b>
+											
+										</dt>
+										<dd></dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>z</b>
+											
+										</dt>
+										<dd></dd>
+									
+										<dt>
+											<span class="light fixedFont">{Number}</span>  <b>rad</b>
+											
+										</dt>
+										<dd></dd>
+									
+								</dl>
+							
+							
+							
+							
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### FIELD DETAILS
+	-->
+			
+	<!--
+	#### METHOD DETAILS
+	-->		
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Method Detail
+							</h2>
+							
+							<ul class="methodDetail" id="MethodDetail">
+								
+								
+									<li 
+										 class='item0'
+									>
+										<div class="fixedFont heading" id="multiplyVec3">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{Number[]}</span>
+											
+											<b>multiplyVec3</b>(vector)
+										</div>
+										
+										<div class="description">
+											Apply quarternion to vector.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Number[]}</span> <b>vector</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Number[]}</span> </dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item1'
+									>
+										<div class="fixedFont heading" id="slerp">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span>
+											
+											<b>slerp</b>(Quaternion, ratio)
+										</div>
+										
+										<div class="description">
+											Performs spherical linear interpolation between quarternions.Calculates quarternion that supplements rotation between this quarternion and another.Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.New instance will be returned.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span> <b>Quaternion</b>
+														
+													</dt>
+													<dd></dd>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>ratio</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span> </dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item2'
+									>
+										<div class="fixedFont heading" id="slerpApply">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span>
+											
+											<b>slerpApply</b>(Quaternion, ratio)
+										</div>
+										
+										<div class="description">
+											Performs spherical linear interpolation between quarternions.Calculates quarternion that supplements rotation between this quarternion and another.Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.This side's value will be overwritten.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span> <b>Quaternion</b>
+														
+													</dt>
+													<dd></dd>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>ratio</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span> </dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
+									>
+										<div class="fixedFont heading" id="toMat4">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{Number[]}</span>
+											
+											<b>toMat4</b>(matrix)
+										</div>
+										
+										<div class="description">
+											Convert quarternion to rotation matrix.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Number[]}</span> <b>matrix</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Number[]}</span> </dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										
+									</li>
+								
+							</ul>
+						</div>
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENT DETAILS
+	-->		
+			
+		</article>
+	</div>
+</div>
+
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+

@@ -1396,7 +1396,7 @@ enchant.gl.Mesh = enchant.Class.create({
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texture#
     [/lang]
-    [lang:ja]
+    [lang:en]
      * Mesh texture mapping array.
      * Sets two elements as one in uv coordinates. The total number of elements becomes 2n in response to the peak quantity.
      * 2n, 2n+1 level elements correspond to n level peak texture u, v coordinates.
