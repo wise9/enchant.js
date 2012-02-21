@@ -16,7 +16,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -70,7 +70,9 @@ if (typeof Object.getPrototypeOf != 'function') {
 /**
  * Export library classes globally.
  *
- * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in  * plugins will be exported. When more than one argument is delivered, by default only classes defined  * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
+ * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in
+ * plugins will be exported. When more than one argument is delivered, by default only classes defined
+ * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
  *
  * @example
  *   enchant();     // All classes will be exported.
@@ -94,7 +96,7 @@ var enchant = function(modules) {
         for (var prop in module) if (module.hasOwnProperty(prop)) {
             if (typeof module[prop] == 'function') {
                 window[prop] = module[prop];
-            } else if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+            } else if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
                 if (modules == null) {
                     submodules.push(prop);
                 } else {
@@ -172,7 +174,7 @@ enchant.Class = function(superclass, definition) {
  *
  * When making classes that succeed other classes, the previous class is used as a base with
  * constructor as default. In order to override the constructor, it is necessary to explicitly
- * call up the previous constructor to use it. 
+ * call up the previous constructor to use it.
  *
  * @example
  *   var Ball = Class.create({ // Creates independent class.
@@ -200,7 +202,7 @@ enchant.Class.create = function(superclass, definition) {
     }
 
     for (var prop in definition) if (definition.hasOwnProperty(prop)) {
-        if (Object.getPrototypeOf(definition[prop]) == Object.prototype) {
+        if (typeof definition[prop] == 'object' && Object.getPrototypeOf(definition[prop]) == Object.prototype) {
             if (!('enumerable' in definition[prop])) definition[prop].enumerable = true;
         } else {
             definition[prop] = { value: definition[prop], enumerable: true, writable: true };
@@ -510,7 +512,7 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
-            
+
         }
     },
     /**
@@ -574,8 +576,11 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      * @extends enchant.EventTarget
      */
     initialize: function(width, height) {
-        enchant.EventTarget.call(this);
+        if (window.document.body === null){
+            throw new Error("document.body is null. Please excute 'new Game()' in window.onload.");
+        }
 
+        enchant.EventTarget.call(this);
         var initial = true;
         if (game) {
             initial = false;
@@ -656,7 +661,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
          */
         this.frame = 0;
         /**
-         * Game executability (valid or not). 
+         * Game executability (valid or not).
          * @type {Boolean}
          */
         this.ready = null;
@@ -676,7 +681,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 [].push.apply(assets, module.assets);
             }
             for (var prop in module) if (module.hasOwnProperty(prop)) {
-                if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+                if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
                     detectAssets(module[prop]);
                 }
             }
@@ -952,7 +957,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * Begin game debug mode.
-     * 
+     *
      * Game debug mode can be set to on even if enchant.Game.instance._debug flag is set to true.
      */
     debug: function() {
@@ -1024,7 +1029,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }, 1000 / this.fps);
         this.running = true;
     },
-        
+
     /**
      * Switch to new Scene.
      *
@@ -1054,7 +1059,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      */
     popScene: function() {
         if (this.currentScene == this.rootScene) {
-            return;
+            return this.currentScene;
         }
         this._element.removeChild(this.currentScene._element);
         this.currentScene.dispatchEvent(new enchant.Event('exit'));
@@ -1622,9 +1627,40 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this.height = height;
         this._image = null;
         this._frame = 0;
+        this._frameSequence = [];
 
         this._style.overflow = 'hidden';
+<<<<<<< HEAD
         
+=======
+
+        this.addEventListener('render', function() {
+            if (this._dirty) {
+                this._style[VENDER_PREFIX + 'Transform'] = [
+                    'rotate(', this._rotation, 'deg)',
+                    'scale(', this._scaleX, ',', this._scaleY, ')'
+                ].join('');
+                this._dirty = false;
+            }
+        });
+
+        /**
+         * frame に配列が指定されたときの処理。
+         * _frameSeuence に
+         */
+        this.addEventListener('enterframe', function(){
+            if(this._frameSequence.length !== 0){
+                var nextFrame = this._frameSequence.shift();
+                if(nextFrame === null){
+                    this._frameSequence = [];
+                }else{
+                    this._setFrame(nextFrame);
+                    this._frameSequence.push(nextFrame);
+                }
+            }
+        })
+
+>>>>>>> master
         if(enchant.Game.instance._debug){
             this._style.border = "1px solid red";
             this._style.margin = "-1px";
@@ -1688,26 +1724,39 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * Frame index display.
      * Frames with same width and height as Sprite will be arrayed in order from upper left of image properties image.
      * By setting the index to start with 0, frames are switched.
-     * @type {Number}
+     * @type {Number|Array}
      */
     frame: {
         get: function() {
             return this._frame;
         },
         set: function(frame) {
-            this._frame = frame;
-            if (this._image != null){
-                var row = this._image.width / this._width | 0;
-                if (this._image._css) {
-                    this._style.backgroundPosition = [
-                        -(frame % row) * this._width, 'px ',
-                        -(frame / row | 0) * this._height, 'px'
-                    ].join('');
-                } else if (this._element.firstChild) {
-                    var style = this._element.firstChild.style;
-                    style.left = -(frame % row) * this._width + 'px';
-                    style.top = -(frame / row | 0) * this._height + 'px';
-                }
+            if(frame instanceof Array){
+                console.log("sequence");
+                var frameSequence = frame;
+                var nextFrame = frameSequence.shift();
+                this._setFrame(nextFrame);
+                frameSequence.push(nextFrame);
+                this._frameSequence = frameSequence;
+            }else{
+                this._setFrame(frame);
+                this._frameSequence = [];
+                this._frame = frame;
+            }
+        }
+    },
+    _setFrame: function(frame){
+        if (this._image != null){
+            var row = this._image.width / this._width | 0;
+            if (this._image._css) {
+                this._style.backgroundPosition = [
+                    -(frame % row) * this._width, 'px ',
+                    -(frame / row | 0) * this._height, 'px'
+                ].join('');
+            } else if (this._element.firstChild) {
+                var style = this._element.firstChild.style;
+                style.left = -(frame % row) * this._width + 'px';
+                style.top = -(frame / row | 0) * this._height + 'px';
             }
         }
     }
@@ -1896,7 +1945,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Set data.
-     * Sees that tiles are set in order in array from the upper left of image properties image, 
+     * Sees that tiles are set in order in array from the upper left of image properties image,
      * and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
      * @param {...Array<Array.<Number>>} data Two-dimensional display of tile index. Multiple designations possible.
      */
@@ -2634,19 +2683,19 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
 /**
  * Loads image and creates Surface object.
  *
- * Surface created with this method does not allow access to wrap img elements context properties, 
- * or image operation via Canvas API called up by draw,clear, getPixel, setPixel and other methods. 
+ * Surface created with this method does not allow access to wrap img elements context properties,
+ * or image operation via Canvas API called up by draw,clear, getPixel, setPixel and other methods.
  * However it is possible to make draw method arguments, and you can operate images drawn on other surfaces
- * (when loading in cross domain, pixel acquisition and other image manipulation is limited). 
+ * (when loading in cross domain, pixel acquisition and other image manipulation is limited).
  *
- * 
+ *
  *
  * @param {String} src Loaded image file path.
  * @static
  */
 enchant.Surface.load = function(src) {
     var image = new Image();
-    var surface = Object.create(Surface.prototype, {
+    var surface = Object.create(enchant.Surface.prototype, {
         context: { value: null },
         _css: { value: 'url(' + src + ')' },
         _element: { value: image }
@@ -2848,8 +2897,8 @@ window.addEventListener("message", function(msg, origin){
             default:
                 break;
         }
-            
+
     }
-})
+}, false);
 
 })();
