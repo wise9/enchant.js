@@ -852,6 +852,21 @@ enchant.EventTarget = enchant.Class.create({
     },
     /**
 [lang:ja]
+     * addEventListenerのエイリアス
+     * @param {String} type イベントのタイプ.
+     * @param {function(e:enchant.Event)} listener 追加するイベントリスナ.
+[/lang]
+[lang:en]
+     * Alias of addEventListener
+     * @param {String} type Event type.
+     * @param {function(e:enchant.Event)} listener EventListener added.
+[/lang]
+     */
+    on: function(type, listener) {
+        this.addEventListener(type, listener)
+    },
+    /**
+[lang:ja]
      * イベントリスナを削除する.
      * @param {String} type イベントのタイプ.
      * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
@@ -1233,28 +1248,40 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }, true);
             if (TOUCH_ENABLED) {
                 document.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                 }, true);
                 document.addEventListener('touchmove', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('touchend', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
             } else {
                 document.addEventListener('mousedown', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     game._mousedownID++;
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mousemove', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mouseup', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
             }

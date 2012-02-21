@@ -517,6 +517,14 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
+     * addEventListenerのエイリアス
+     * @param {String} type イベントのタイプ.
+     * @param {function(e:enchant.Event)} listener 追加するイベントリスナ.
+     */
+    on: function(type, listener) {
+        this.addEventListener(type, listener)
+    },
+    /**
      * イベントリスナを削除する.
      * @param {String} type イベントのタイプ.
      * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
@@ -789,28 +797,40 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }, true);
             if (TOUCH_ENABLED) {
                 document.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                 }, true);
                 document.addEventListener('touchmove', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('touchend', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
             } else {
                 document.addEventListener('mousedown', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     game._mousedownID++;
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mousemove', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mouseup', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
             }
@@ -1754,6 +1774,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     _setFrame: function(frame){
         if (this._image != null){
+            this._frame = frame
             var row = this._image.width / this._width | 0;
             if (this._image._css) {
                 this._style.backgroundPosition = [

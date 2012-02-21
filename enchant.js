@@ -516,6 +516,14 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
+     * Alias of addEventListener
+     * @param {String} type Event type.
+     * @param {function(e:enchant.Event)} listener EventListener added.
+     */
+    on: function(type, listener) {
+        this.addEventListener(type, listener)
+    },
+    /**
      * Delete EventListener.
      * @param {String} type Event type.
      * @param {function(e:enchant.Event)} listener EventListener deleted.
@@ -788,28 +796,40 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }, true);
             if (TOUCH_ENABLED) {
                 document.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                 }, true);
                 document.addEventListener('touchmove', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('touchend', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
             } else {
                 document.addEventListener('mousedown', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     game._mousedownID++;
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mousemove', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('mouseup', function(e) {
-                    e.preventDefault();
+                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
+                        e.preventDefault();
+                    }
                     if (!game.running) e.stopPropagation();
                 }, true);
             }
@@ -1630,9 +1650,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameSequence = [];
 
         this._style.overflow = 'hidden';
-<<<<<<< HEAD
-        
-=======
 
         this.addEventListener('render', function() {
             if (this._dirty) {
@@ -1660,7 +1677,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }
         })
 
->>>>>>> master
         if(enchant.Game.instance._debug){
             this._style.border = "1px solid red";
             this._style.margin = "-1px";
@@ -1747,6 +1763,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     _setFrame: function(frame){
         if (this._image != null){
+            this._frame = frame
             var row = this._image.width / this._width | 0;
             if (this._image._css) {
                 this._style.backgroundPosition = [
@@ -1758,6 +1775,64 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 style.left = -(frame % row) * this._width + 'px';
                 style.top = -(frame / row | 0) * this._height + 'px';
             }
+        }
+    },
+    /**
+     * Expand or contract Sprite.
+     * @param {Number} x Scaling for x axis to be expanded.
+     * @param {Number} [y] Scaling for y axis to be expanded.
+     */
+    scale: function(x, y) {
+        if (y == null) y = x;
+        this._scaleX *= x;
+        this._scaleY *= y;
+        this._dirty = true;
+    },
+    /**
+     * Rotate Sprite.
+     * @param {Number} deg Rotation angle (frequency).
+     */
+    rotate: function(deg) {
+        this._rotation += deg;
+        this._dirty = true;
+    },
+    /**
+     * Scaling for Sprite's x axis direction.
+     * @type {Number}
+     */
+    scaleX: {
+        get: function() {
+            return this._scaleX;
+        },
+        set: function(scaleX) {
+            this._scaleX = scaleX;
+            this._dirty = true;
+        }
+    },
+    /**
+     * Scaling for Sprite's y axis direction.
+     * @type {Number}
+     */
+    scaleY: {
+        get: function() {
+            return this._scaleY;
+        },
+        set: function(scaleY) {
+            this._scaleY = scaleY;
+            this._dirty = true;
+        }
+    },
+    /**
+     * Sprite rotation angle (frequency).
+     * @type {Number}
+     */
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            this._rotation = rotation;
+            this._dirty = true;
         }
     }
 });
