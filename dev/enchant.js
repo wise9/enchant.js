@@ -113,7 +113,7 @@ var enchant = function(modules) {
         for (var prop in module) if (module.hasOwnProperty(prop)) {
             if (typeof module[prop] == 'function') {
                 window[prop] = module[prop];
-            } else if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+            } else if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
                 if (modules == null) {
                     submodules.push(prop);
                 } else {
@@ -255,7 +255,7 @@ enchant.Class.create = function(superclass, definition) {
     }
 
     for (var prop in definition) if (definition.hasOwnProperty(prop)) {
-        if (Object.getPrototypeOf(definition[prop]) == Object.prototype) {
+        if (typeof definition[prop] == 'object' && Object.getPrototypeOf(definition[prop]) == Object.prototype) {
             if (!('enumerable' in definition[prop])) definition[prop].enumerable = true;
         } else {
             definition[prop] = { value: definition[prop], enumerable: true, writable: true };
@@ -1095,7 +1095,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 [].push.apply(assets, module.assets);
             }
             for (var prop in module) if (module.hasOwnProperty(prop)) {
-                if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+                if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
                     detectAssets(module[prop]);
                 }
             }
