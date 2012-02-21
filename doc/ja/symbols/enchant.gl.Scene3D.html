@@ -1,0 +1,923 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		<title>enchant.gl.Scene3D | enchantPRO</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="mobileoptimized" content="0" />
+	
+		<link rel="stylesheet" href="../css/all.css" media="all" />
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)" />
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld" />
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)" />
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../allclasses.html">Classes</a>
+			<a href="../index.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
+				
+					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
+				
+					<li><a href="../symbols/enchant.Event.html">enchant<span class='break'> </span>.<span class='break'> </span>Event</a></li>
+				
+					<li><a href="../symbols/enchant.EventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>EventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.Game.html">enchant<span class='break'> </span>.<span class='break'> </span>Game</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Camera3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Camera3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.AABB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>AABB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.Bounding.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>Bounding</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.BS.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>BS</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.OBB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>OBB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.DirectionalLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>DirectionalLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Light3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Light3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Mesh.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Mesh</a></li>
+				
+					<li><a href="../symbols/enchant.gl.PointLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>PointLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Quat.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Quat</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Scene3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Scene3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Sprite3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Sprite3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Texture.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Texture</a></li>
+				
+					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
+				
+					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
+				
+					<li><a href="../symbols/enchant.Node.html">enchant<span class='break'> </span>.<span class='break'> </span>Node</a></li>
+				
+					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+				
+					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
+				
+					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
+				
+					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		<footer>
+			
+			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+			Generated on:
+			<time datetime='2012-1-14' pubdate>2012-1-14 12:15</time>
+		</footer>
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<article>
+			<header>
+				<h1 class="classTitle">
+					
+					Class <span>enchant.gl.Scene3D</span>
+				</h1>
+				
+				<div class="intro">
+					<p class="description summary">
+						
+					</p>
+						
+					
+						<ul class="summary">
+							
+							
+							
+								<li>Defined in: <a href="../symbols/src/gl.enchant.js.html">gl.enchant.js</a></li>
+							
+							<li>Extends <span class="fixedFont">
+								<a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span></li>
+							
+						</ul>
+					
+				</div>
+			</header>
+			
+			
+				<section>
+					<div class="props">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.gl.Scene3D.">
+							<caption class="sectionTitle">Class Summary</caption>
+							<thead>
+								<tr>
+									<th scope="col">Constructor Attributes</th>
+									<th scope="col">Constructor Name and Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription" >
+										<div class="fixedFont">
+											<b><a href="../symbols/enchant.gl.Scene3D.html#constructor">enchant.gl.Scene3D</a></b>()
+										</div>
+										<div class="description">表示Sprite3Dツリーのルートになるクラス.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			
+			
+			
+				
+				<section>
+					
+						<nav>
+							<div class="props">
+								<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.gl.Scene3D.">
+									<caption class="sectionTitle">Field Summary</caption>
+									
+									<thead>
+										<tr>
+											<th scope="col">Field Attributes</th>
+											<th scope="col">Field Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Scene3D.html#backgroundColor">backgroundColor</a></b>
+													</div>
+													<div class="description">Scene3Dの背景色</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Scene3D.html#childNodes">childNodes</a></b>
+													</div>
+													<div class="description">子要素の配列.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Scene3D.html#lights">lights</a></b>
+													</div>
+													<div class="description">照明の配列.</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</div>
+						</nav>
+					
+					
+					
+						<nav>
+							<dl class="inheritsList">
+							
+							</dl>
+						</nav>
+					
+				</section>
+			
+	<!--
+	#### METHODS SUMMARY
+	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+							<nav>
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class enchant.gl.Scene3D.">
+									<thead>
+										<tr>
+											<th scope="col">Method Attributes</th>
+											<th scope="col">Method Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										
+											<tr
+												 class='item0'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#addChild">addChild</a></b>(sprite)
+													</div>
+													<div class="description">シーンにSprite3Dを追加する.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item1'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#addLight">addLight</a></b>(light)
+													</div>
+													<div class="description">シーンに照明を追加する.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item2'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#getDirectionalLight">getDirectionalLight</a></b>()
+													</div>
+													<div class="description">シーンに設定されている平行光源を取得する.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#removeChild">removeChild</a></b>(sprite)
+													</div>
+													<div class="description">シーンからSprite3Dを削除する.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item4'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#removeLight">removeLight</a></b>(light)
+													</div>
+													<div class="description">シーンから照明を削除する</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item5'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#setCamera">setCamera</a></b>(camera)
+													</div>
+													<div class="description">シーンのカメラ位置をセットする.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item6'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Scene3D.html#setDirectionalLight">setDirectionalLight</a></b>(light)
+													</div>
+													<div class="description">シーンに平行光源を設定する.</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</nav>
+						
+					
+						
+							<nav>
+								<dl class="inheritsList" id="MethodsListInherited">
+								<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
+								</dl>
+							</nav>
+						
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENTS SUMMARY
+	-->
+			
+	<!--
+	#### CONSTRUCTOR DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle" id="constructor">
+								Class Detail
+							</h2>
+							
+							<div class="fixedFont">
+								<b>enchant.gl.Scene3D</b>()
+							</div>
+							
+							<div class="description">
+								表示Sprite3Dツリーのルートになるクラス.現在, 複数定義することは出来ず, 最初に定義したScene3Dが返される.
+								
+							</div>
+						
+							
+							
+							
+								<dl class="detailList">
+								<dt class="heading">Examples:</dt>
+								
+									<dd><pre class="code">  var scene = new Scene3D();  var sprite = new Sprite3D();  scene.addChild(sprite);</pre></dd>
+								
+								</dl>
+							
+							
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### FIELD DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Field Detail
+							</h2>
+							
+							
+								<div class="fixedFont heading" id="backgroundColor">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number[]}</span>
+									
+									<b>backgroundColor</b>							
+								</div>
+								
+								<div class="description">
+									Scene3Dの背景色
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="childNodes">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>[]}</span>
+									
+									<b>childNodes</b>							
+								</div>
+								
+								<div class="description">
+									子要素の配列.このシーンに子として追加されているSprite3Dの一覧を取得できる.子を追加したり削除したりする場合には, この配列を直接操作せずに,<a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a>や<a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a>を利用する.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="lights">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.gl.PointLight.html">enchant.gl.PointLight</a>[]}</span>
+									
+									<b>lights</b>							
+								</div>
+								
+								<div class="description">
+									照明の配列.現在, シーンに適用される光源は0番目のみ.このシーンに追加されている光源の一覧を取得する.照明を追加したり削除したりする場合には, この配列を直接操作せずに,<a href="../symbols/enchant.gl.Scene3D.html#addLight">enchant.gl.Scene3D#addLight</a>や<a href="../symbols/enchant.gl.Scene3D.html#removeLight">enchant.gl.Scene3D#removeLight</a>を利用する.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### METHOD DETAILS
+	-->		
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Method Detail
+							</h2>
+							
+							<ul class="methodDetail" id="MethodDetail">
+								
+								
+									<li 
+										 class='item0'
+									>
+										<div class="fixedFont heading" id="addChild">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>addChild</b>(sprite)
+										</div>
+										
+										<div class="description">
+											シーンにSprite3Dを追加する.引数に渡されたSprite3Dと, その子を全てシーンに追加する.シーンに追加されると自動的にSprite3Dは画面上に表示される.一度追加したオブジェクトを削除するには<a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a>を利用する.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>}</span> <b>sprite</b>
+														
+													</dt>
+													<dd>追加するSprite3D</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Scene3D.html#childNodes">enchant.gl.Scene3D#childNodes</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item1'
+									>
+										<div class="fixedFont heading" id="addLight">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>addLight</b>(light)
+										</div>
+										
+										<div class="description">
+											シーンに照明を追加する.現在, シーンに追加しても適用されない.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.PointLight.html">enchant.gl.PointLight</a>}</span> <b>light</b>
+														
+													</dt>
+													<dd>追加する照明</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.PointLight.html">enchant.gl.PointLight</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item2'
+									>
+										<div class="fixedFont heading" id="getDirectionalLight">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{<a href="../symbols/enchant.gl.DirectionalLight.html">enchant.gl.DirectionalLight</a>}</span>
+											
+											<b>getDirectionalLight</b>()
+										</div>
+										
+										<div class="description">
+											シーンに設定されている平行光源を取得する.
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/enchant.gl.DirectionalLight.html">enchant.gl.DirectionalLight</a>}</span> </dd>
+													
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.DirectionalLight.html">enchant.gl.DirectionalLight</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
+									>
+										<div class="fixedFont heading" id="removeChild">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>removeChild</b>(sprite)
+										</div>
+										
+										<div class="description">
+											シーンからSprite3Dを削除する.シーンから指定されたSprite3Dを削除する.削除されたSprite3Dは画面上に表示されなくなる.Sprite3Dを追加するには<a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a>を利用する.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>}</span> <b>sprite</b>
+														
+													</dt>
+													<dd>削除するSprite3D</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Scene3D.html#childNodes">enchant.gl.Scene3D#childNodes</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item4'
+									>
+										<div class="fixedFont heading" id="removeLight">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>removeLight</b>(light)
+										</div>
+										
+										<div class="description">
+											シーンから照明を削除する
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.PointLight.html">enchant.gl.PointLight</a>}</span> <b>light</b>
+														
+													</dt>
+													<dd>削除する照明</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd>enchant.gl.PointLight.</dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item5'
+									>
+										<div class="fixedFont heading" id="setCamera">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>setCamera</b>(camera)
+										</div>
+										
+										<div class="description">
+											シーンのカメラ位置をセットする.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.Camera3D.html">enchant.gl.Camera3D</a>}</span> <b>camera</b>
+														
+													</dt>
+													<dd>セットするカメラ</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Camera3D.html">enchant.gl.Camera3D</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item6'
+									>
+										<div class="fixedFont heading" id="setDirectionalLight">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>setDirectionalLight</b>(light)
+										</div>
+										
+										<div class="description">
+											シーンに平行光源を設定する.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.DirectionalLight.html">enchant.gl.DirectionalLight</a>}</span> <b>light</b>
+														
+													</dt>
+													<dd>設定する照明</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.DirectionalLight.html">enchant.gl.DirectionalLight</a></dd>
+													
+												
+											
+											</dl>
+										
+										
+									</li>
+								
+							</ul>
+						</div>
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENT DETAILS
+	-->		
+			
+		</article>
+	</div>
+</div>
+
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+

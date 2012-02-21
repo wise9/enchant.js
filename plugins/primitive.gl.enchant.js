@@ -379,7 +379,6 @@ if(enchant.gl != undefined){
             createSphere: function() {
                 var v = 10;
                 var h = 10;
-                enchant.gl.Sprite3D.call(this);
                 var mesh = new enchant.gl.Mesh();
                 var vertices = [];
                 var texCoords = [];
@@ -422,7 +421,6 @@ if(enchant.gl != undefined){
                 } if (v == 'undefined') {
                     v = 20;
                 }
-                enchant.gl.Sprite3D.call(this);
                 var vertices = [];
                 var indices = [];
                 var texCoords = [];

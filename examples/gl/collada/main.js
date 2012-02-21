@@ -9,7 +9,7 @@ window.onload = function(){
         scene.setDirectionalLight(new DirectionalLight());
         scene.setCamera(new Camera3D());
         var droid = Sprite3D();
-        droid.set(game.assets['droid.dae']);
+        droid.set(game.assets['../../../images/droid.dae']);
 		droid.y= -1;
 		droid.z=-10;
         scene.addChild(droid);

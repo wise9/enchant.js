@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		<title>enchant.gl.DirectionalLight | enchantPRO</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="mobileoptimized" content="0" />
+	
+		<link rel="stylesheet" href="../css/all.css" media="all" />
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)" />
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld" />
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)" />
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../allclasses.html">Classes</a>
+			<a href="../index.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
+				
+					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
+				
+					<li><a href="../symbols/enchant.Event.html">enchant<span class='break'> </span>.<span class='break'> </span>Event</a></li>
+				
+					<li><a href="../symbols/enchant.EventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>EventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.Game.html">enchant<span class='break'> </span>.<span class='break'> </span>Game</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Camera3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Camera3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.AABB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>AABB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.Bounding.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>Bounding</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.BS.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>BS</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.OBB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>OBB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.DirectionalLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>DirectionalLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Light3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Light3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Mesh.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Mesh</a></li>
+				
+					<li><a href="../symbols/enchant.gl.PointLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>PointLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Quat.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Quat</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Scene3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Scene3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Sprite3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Sprite3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Texture.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Texture</a></li>
+				
+					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
+				
+					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
+				
+					<li><a href="../symbols/enchant.Node.html">enchant<span class='break'> </span>.<span class='break'> </span>Node</a></li>
+				
+					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+				
+					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
+				
+					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
+				
+					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		<footer>
+			
+			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+			Generated on:
+			<time datetime='2012-1-14' pubdate>2012-1-14 12:14</time>
+		</footer>
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<article>
+			<header>
+				<h1 class="classTitle">
+					
+					Class <span>enchant.gl.DirectionalLight</span>
+				</h1>
+				
+				<div class="intro">
+					<p class="description summary">
+						
+					</p>
+						
+					
+						<ul class="summary">
+							
+							
+							
+								<li>Defined in: <a href="../symbols/src/gl.enchant.js.html">gl.enchant.js</a></li>
+							
+							<li>Extends <span class="fixedFont">
+								<a href="../symbols/enchant.gl.Light3D.html">enchant.gl.Light3D</a></span></li>
+							
+						</ul>
+					
+				</div>
+			</header>
+			
+			
+				<section>
+					<div class="props">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.gl.DirectionalLight.">
+							<caption class="sectionTitle">Class Summary</caption>
+							<thead>
+								<tr>
+									<th scope="col">Constructor Attributes</th>
+									<th scope="col">Constructor Name and Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription" >
+										<div class="fixedFont">
+											<b><a href="../symbols/enchant.gl.DirectionalLight.html#constructor">enchant.gl.DirectionalLight</a></b>()
+										</div>
+										<div class="description">Class for setting light source in 3D scene.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			
+			
+			
+				
+				<section>
+					
+						<nav>
+							<div class="props">
+								<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.gl.DirectionalLight.">
+									<caption class="sectionTitle">Field Summary</caption>
+									
+									<thead>
+										<tr>
+											<th scope="col">Field Attributes</th>
+											<th scope="col">Field Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.DirectionalLight.html#directionX">directionX</a></b>
+													</div>
+													<div class="description">Light source exposure direction x component</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.DirectionalLight.html#directionY">directionY</a></b>
+													</div>
+													<div class="description">Light source exposure direction y component</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.DirectionalLight.html#directionZ">directionZ</a></b>
+													</div>
+													<div class="description">Light source exposure direction z component</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</div>
+						</nav>
+					
+					
+					
+						<nav>
+							<dl class="inheritsList">
+							<dt>Fields borrowed from class <a href="../symbols/enchant.gl.Light3D.html">enchant.gl.Light3D</a>: </dt><dd><a href="../symbols/enchant.gl.Light3D.html#color">color</a></dd>
+							</dl>
+						</nav>
+					
+				</section>
+			
+	<!--
+	#### METHODS SUMMARY
+	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+					
+						
+							<nav>
+								<dl class="inheritsList" id="MethodsListInherited">
+								<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
+								</dl>
+							</nav>
+						
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENTS SUMMARY
+	-->
+			
+	<!--
+	#### CONSTRUCTOR DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle" id="constructor">
+								Class Detail
+							</h2>
+							
+							<div class="fixedFont">
+								<b>enchant.gl.DirectionalLight</b>()
+							</div>
+							
+							<div class="description">
+								Class for setting light source in 3D scene.Directioned light source without position.
+								
+							</div>
+						
+							
+							
+							
+								<dl class="detailList">
+								<dt class="heading">Examples:</dt>
+								
+									<dd><pre class="code">  var scene = new Scene3D();  var light = new DirectionalLight();  light.color = [1.0, 1.0, 0.0];  light.directionY = 10;  scene.setDirectionalLight(light);</pre></dd>
+								
+								</dl>
+							
+							
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### FIELD DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Field Detail
+							</h2>
+							
+							
+								<div class="fixedFont heading" id="directionX">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>directionX</b>							
+								</div>
+								
+								<div class="description">
+									Light source exposure direction x component
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="directionY">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>directionY</b>							
+								</div>
+								
+								<div class="description">
+									Light source exposure direction y component
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="directionZ">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>directionZ</b>							
+								</div>
+								
+								<div class="description">
+									Light source exposure direction z component
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### METHOD DETAILS
+	-->		
+			
+			
+	<!--
+	#### EVENT DETAILS
+	-->		
+			
+		</article>
+	</div>
+</div>
+
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+

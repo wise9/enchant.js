@@ -1,0 +1,1807 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="generator" content="JsDoc Toolkit" />
+		<title>enchant.gl.Sprite3D | enchantPRO</title>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="mobileoptimized" content="0" />
+	
+		<link rel="stylesheet" href="../css/all.css" media="all" />
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)" />
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld" />
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)" />
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../allclasses.html">Classes</a>
+			<a href="../index.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
+				
+					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
+				
+					<li><a href="../symbols/enchant.Event.html">enchant<span class='break'> </span>.<span class='break'> </span>Event</a></li>
+				
+					<li><a href="../symbols/enchant.EventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>EventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.Game.html">enchant<span class='break'> </span>.<span class='break'> </span>Game</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Camera3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Camera3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.AABB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>AABB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.Bounding.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>Bounding</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.BS.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>BS</a></li>
+				
+					<li><a href="../symbols/enchant.gl.collision.OBB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>OBB</a></li>
+				
+					<li><a href="../symbols/enchant.gl.DirectionalLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>DirectionalLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Light3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Light3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Mesh.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Mesh</a></li>
+				
+					<li><a href="../symbols/enchant.gl.PointLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>PointLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Quat.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Quat</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Scene3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Scene3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Sprite3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Sprite3D</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Texture.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Texture</a></li>
+				
+					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
+				
+					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
+				
+					<li><a href="../symbols/enchant.Node.html">enchant<span class='break'> </span>.<span class='break'> </span>Node</a></li>
+				
+					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+				
+					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
+				
+					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
+				
+					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		<footer>
+			
+			Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+			Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+			Generated on:
+			<time datetime='2012-1-14' pubdate>2012-1-14 12:14</time>
+		</footer>
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<article>
+			<header>
+				<h1 class="classTitle">
+					
+					Class <span>enchant.gl.Sprite3D</span>
+				</h1>
+				
+				<div class="intro">
+					<p class="description summary">
+						
+					</p>
+						
+					
+						<ul class="summary">
+							
+							
+							
+								<li>Defined in: <a href="../symbols/src/gl.enchant.js.html">gl.enchant.js</a></li>
+							
+							<li>Extends <span class="fixedFont">
+								<a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span></li>
+							
+						</ul>
+					
+				</div>
+			</header>
+			
+			
+				<section>
+					<div class="props">
+						<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.gl.Sprite3D.">
+							<caption class="sectionTitle">Class Summary</caption>
+							<thead>
+								<tr>
+									<th scope="col">Constructor Attributes</th>
+									<th scope="col">Constructor Name and Description</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription" >
+										<div class="fixedFont">
+											<b><a href="../symbols/enchant.gl.Sprite3D.html#constructor">enchant.gl.Sprite3D</a></b>()
+										</div>
+										<div class="description">Class with Sprite3D display function.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</section>
+			
+			
+			
+				
+				<section>
+					
+						<nav>
+							<div class="props">
+								<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.gl.Sprite3D.">
+									<caption class="sectionTitle">Field Summary</caption>
+									
+									<thead>
+										<tr>
+											<th scope="col">Field Attributes</th>
+											<th scope="col">Field Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#bounding">bounding</a></b>
+													</div>
+													<div class="description">Object used in Sprite3D collision detection.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#childNodes">childNodes</a></b>
+													</div>
+													<div class="description">Array for child Sprite 3D element.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#globalX">globalX</a></b>
+													</div>
+													<div class="description">Sprite3D global x coordinates.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#globalY">globalY</a></b>
+													</div>
+													<div class="description">Sprite 3D global y coordinates.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#globalZ">globalZ</a></b>
+													</div>
+													<div class="description">Sprite3D global 3D coordinates.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#matrix">matrix</a></b>
+													</div>
+													<div class="description">Conversion line applied to Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#name">name</a></b>
+													</div>
+													<div class="description">Sprite3D name</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#parentNode">parentNode</a></b>
+													</div>
+													<div class="description">Sprite3D parent element.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#rotation">rotation</a></b>
+													</div>
+													<div class="description">Sprite3D rotation line.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#scaleX">scaleX</a></b>
+													</div>
+													<div class="description">Sprite3D x axis direction expansion rate</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#scaleY">scaleY</a></b>
+													</div>
+													<div class="description">Sprite3D y axis direction expansion rate</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#scaleZ">scaleZ</a></b>
+													</div>
+													<div class="description">Sprite3D z axis direction expansion rate</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#scene">scene</a></b>
+													</div>
+													<div class="description">The scene object currently added by this Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#touchable">touchable</a></b>
+													</div>
+													<div class="description"></div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#x">x</a></b>
+													</div>
+													<div class="description">Sprite3D x coordinates.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#y">y</a></b>
+													</div>
+													<div class="description">Sprite3D y coordinates.</div>
+												</td>
+											</tr>
+										
+											<tr>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">
+													<b><a href="../symbols/enchant.gl.Sprite3D.html#z">z</a></b>
+													</div>
+													<div class="description">Sprite3D z coordinates.</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</div>
+						</nav>
+					
+					
+					
+						<nav>
+							<dl class="inheritsList">
+							
+							</dl>
+						</nav>
+					
+				</section>
+			
+	<!--
+	#### METHODS SUMMARY
+	-->
+			
+				<section>
+					
+					
+					<div class="props">
+						<h2 class="sectionTitle">Method Summary</h2>
+						
+						
+							<nav>
+								<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class enchant.gl.Sprite3D.">
+									<thead>
+										<tr>
+											<th scope="col">Method Attributes</th>
+											<th scope="col">Method Name and Description</th>
+										</tr>
+									</thead>
+									
+									<tbody>
+										
+										
+											<tr
+												 class='item0'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#addChild">addChild</a></b>(sprite)
+													</div>
+													<div class="description">Add child Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item1'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#clone">clone</a></b>()
+													</div>
+													<div class="description">Executes the reproduction of Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item2'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#intersect">intersect</a></b>(bounding)
+													</div>
+													<div class="description">Other object collison detection.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item3'
+											>
+												<td class="attributes">&lt;static&gt; &nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont">enchant.gl.Sprite3D.<b><a href="../symbols/enchant.gl.Sprite3D.html#.loadCollada">loadCollada</a></b>(url, onload, url, onload)
+													</div>
+													<div class="description">[lang:ja]ColladaデータからSprite3Dを作成する</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item4'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#removeChild">removeChild</a></b>(sprite)
+													</div>
+													<div class="description">Deletes designated child Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item5'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#rotationApply">rotationApply</a></b>(quat)
+													</div>
+													<div class="description">Applies rotation line in rotation line received from quarterion.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item6'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#rotationSet">rotationSet</a></b>(quat)
+													</div>
+													<div class="description">Sets rotation line in rotation line received from quarterion.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item7'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#scale">scale</a></b>(x, y, z)
+													</div>
+													<div class="description">Expand or contract Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item8'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#set">set</a></b>(sprite)
+													</div>
+													<div class="description">Sets condition of other Sprite3D.</div>
+												</td>
+											</tr>
+										
+											<tr
+												 class='item9'
+											>
+												<td class="attributes">&nbsp;</td>
+												<td class="nameDescription">
+													<div class="fixedFont"><b><a href="../symbols/enchant.gl.Sprite3D.html#translate">translate</a></b>(x, y, z)
+													</div>
+													<div class="description">Parallel displacement of Sprite3D.</div>
+												</td>
+											</tr>
+										
+									</tbody>
+								</table>
+							</nav>
+						
+					
+						
+							<nav>
+								<dl class="inheritsList" id="MethodsListInherited">
+								<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
+								</dl>
+							</nav>
+						
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENTS SUMMARY
+	-->
+			
+	<!--
+	#### CONSTRUCTOR DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle" id="constructor">
+								Class Detail
+							</h2>
+							
+							<div class="fixedFont">
+								<b>enchant.gl.Sprite3D</b>()
+							</div>
+							
+							<div class="description">
+								Class with Sprite3D display function.<p>Cube loaded by default.</p><p>By adding <a href="../symbols/enchant.gl.Scene3D.html">enchant.gl.Scene3D</a> instance, you can display atop an image. By changing enchant.gl.Sprite3D#vertices, enchant.gl.Sprite3D#indices,enchant.gl.Sprite3D#normals and others, you can freely draw Sprite3D,as well as pasting texture and more.</p><p>In addition, it is also possible to add Sprite3D as a child, and all child classes will be drawn with coordinates based on their parents.</p>
+								
+							</div>
+						
+							
+							
+							
+								<dl class="detailList">
+								<dt class="heading">Examples:</dt>
+								
+									<dd><pre class="code">  //Scene initialization  var scene = new Scene3D();  //Sprite3D initialization  var sprite = new Sprite3D();  //Add Sprite3D to scene  scene.addChild(sprite);</pre></dd>
+								
+								</dl>
+							
+							
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### FIELD DETAILS
+	-->
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Field Detail
+							</h2>
+							
+							
+								<div class="fixedFont heading" id="bounding">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{enchant.gl.Bounding | enchant.gl.BS | enchant.gl.AABB}</span>
+									
+									<b>bounding</b>							
+								</div>
+								
+								<div class="description">
+									Object used in Sprite3D collision detection.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="childNodes">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>[]}</span>
+									
+									<b>childNodes</b>							
+								</div>
+								
+								<div class="description">
+									Array for child Sprite 3D element.Can acquire list of Sprite3Ds added as child classes to this element.When adding or subtracting child classes, without directly operating this array,<a href="../symbols/enchant.gl.Sprite3D.html#addChild">enchant.gl.Sprite3D#addChild</a> or <a href="../symbols/enchant.gl.Sprite3D.html#removeChild">enchant.gl.Sprite3D#removeChild</a> is used.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#addChild">enchant.gl.Sprite3D#addChild</a></dd>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#removeChild">enchant.gl.Sprite3D#removeChild</a></dd>
+											
+										
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="globalX">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>globalX</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D global x coordinates.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="globalY">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>globalY</b>							
+								</div>
+								
+								<div class="description">
+									Sprite 3D global y coordinates.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="globalZ">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>globalZ</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D global 3D coordinates.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="matrix">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number[]}</span>
+									
+									<b>matrix</b>							
+								</div>
+								
+								<div class="description">
+									Conversion line applied to Sprite3D.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="name">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{String}</span>
+									
+									<b>name</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D name
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="parentNode">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>|<a href="../symbols/enchant.gl.Scene3D.html">enchant.gl.Scene3D</a>}</span>
+									
+									<b>parentNode</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D parent element.When no parent exists this is null.
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="rotation">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number[]}</span>
+									
+									<b>rotation</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D rotation line.Array is a one-dimensional array of length 16, interpreted as the 4x4 line destination.
+									
+									
+									
+								</div>
+								
+								
+									<dl class="detailList">
+									<dt class="heading">Examples:</dt>
+									
+										<dd><pre class="code">  var sprite = new Sprite3D();  //45 degree rotation along the x axis  var rotX = Math.PI() / 4;  sprite.rotation = [      1, 0, 0, 0,      0, Math.cos(rotX), -Math.sin(rotX), 0,      0, Math.sin(rotX), Math.cos(rotX), 0,      0, 0, 0, 1  ];</pre></dd>
+									
+									</dl>
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="scaleX">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>scaleX</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D x axis direction expansion rate
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#scale">enchant.gl.Sprite3D#scale</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												1.0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="scaleY">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>scaleY</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D y axis direction expansion rate
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#scale">enchant.gl.Sprite3D#scale</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												1.0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="scaleZ">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>scaleZ</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D z axis direction expansion rate
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#scale">enchant.gl.Sprite3D#scale</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												1.0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="scene">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.gl.Scene3D.html">enchant.gl.Scene3D</a>}</span>
+									
+									<b>scene</b>							
+								</div>
+								
+								<div class="description">
+									The scene object currently added by this Sprite3D.When no scene is added this is null.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a></dd>
+											
+										
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="touchable">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>touchable</b>							
+								</div>
+								
+								<div class="description">
+									
+									
+									
+									
+								</div>
+								
+								
+									
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="x">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>x</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D x coordinates.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="y">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>y</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D y coordinates.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												0
+											</dd>
+										
+									</dl>
+								
+								
+								<div class="hr"></div>
+							
+								<div class="fixedFont heading" id="z">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Number}</span>
+									
+									<b>z</b>							
+								</div>
+								
+								<div class="description">
+									Sprite3D z coordinates.
+									
+									
+									
+								</div>
+								
+								
+									
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+											
+										
+										
+											<dt class="heading">Default Value:</dt>
+											<dd>
+												0
+											</dd>
+										
+									</dl>
+								
+								
+								
+							
+						</div>
+					</div>
+				</section>
+			
+	<!--
+	#### METHOD DETAILS
+	-->		
+			
+				<section>
+					<div class="details props">
+						<div class="innerProps">
+							<h2 class="sectionTitle">
+								Method Detail
+							</h2>
+							
+							<ul class="methodDetail" id="MethodDetail">
+								
+								
+									<li 
+										 class='item0'
+									>
+										<div class="fixedFont heading" id="addChild">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>addChild</b>(sprite)
+										</div>
+										
+										<div class="description">
+											Add child Sprite3D.When it is added, an "added" event will be created for child Sprite3D.When a parent is already added to scene, it will be added to scene,and an "addedtoscene" event will be created.Child Sprite3D for adding @param {enchant.gl.Sprite3D} sprite.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>sprite</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var parent = new Sprite3D();  var child = new Sprite3D();  //Add Sprite3D as child to another Sprite3D  parent.addChild(child);</pre></dd>
+											
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#removeChild">enchant.gl.Sprite3D#removeChild</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#childNodes">enchant.gl.Sprite3D#childNodes</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#parentNode">enchant.gl.Sprite3D#parentNode</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item1'
+									>
+										<div class="fixedFont heading" id="clone">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>}</span>
+											
+											<b>clone</b>()
+										</div>
+										
+										<div class="description">
+											Executes the reproduction of Sprite3D.Position, rotation line, and others will be returned to a copied, new instance.
+											
+											
+											
+											
+										</div>
+										
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var sp = new Sprite3D();  sp.x = 15;  var sp2 = sp.clone();  //sp2.x = 15;</pre></dd>
+											
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>}</span> </dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item2'
+									>
+										<div class="fixedFont heading" id="intersect">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{Boolean}</span>
+											
+											<b>intersect</b>(bounding)
+										</div>
+										
+										<div class="description">
+											Other object collison detection.Can detect collisions with collision detection objects with x, y, z properties.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{<a href="../symbols/enchant.gl.Sprite3D.html">enchant.gl.Sprite3D</a>}</span> <b>bounding</b>
+														
+													</dt>
+													<dd>Target object</dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">Returns:</dt>
+													
+														<dd><span class="light fixedFont">{Boolean}</span> </dd>
+													
+												
+												
+												
+												
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item3'
+									>
+										<div class="fixedFont heading" id=".loadCollada">
+											<span class='lighter'>
+											&lt;static&gt; 
+											</span>
+											
+											
+											
+											<span class="light">enchant.gl.Sprite3D.</span><b>loadCollada</b>(url, onload, url, onload)
+										</div>
+										
+										<div class="description">
+											[lang:ja]ColladaデータからSprite3Dを作成する
+											
+											
+												<br />
+												<i>Defined in: </i> <a href="../symbols/src/collada.gl.enchant.js.html">collada.gl.enchant.js</a>.
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>url</b>
+														
+													</dt>
+													<dd>コラーダモデルのURL</dd>
+												
+													<dt>
+														<span class="light fixedFont">{function(enchant.pro.Sprite3D)}</span> <b>onload</b>
+														
+													</dt>
+													<dd>ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される</dd>
+												
+													<dt>
+														<span class="light fixedFont">{String}</span> <b>url</b>
+														
+													</dt>
+													<dd>Collada model URL,</dd>
+												
+													<dt>
+														<span class="light fixedFont">{function(enchant.pro.Sprite3D)}</span> <b>onload</b>
+														
+													</dt>
+													<dd>Callback when loading is complete. Sprite3D created from model will be delivered to argument</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var scene = new Scene3D();  Sprite3D.loadCollada("hoge.dae",　function(model){      scene.addChild(model);  });</pre></dd>
+											
+												<dd><pre class="code">  var scene = new Scene3D();  Sprite3D.loadCollada("hoge.dae",　function(model){      scene.addChild(model);  });</pre></dd>
+											
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item4'
+									>
+										<div class="fixedFont heading" id="removeChild">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>removeChild</b>(sprite)
+										</div>
+										
+										<div class="description">
+											Deletes designated child Sprite3D.When deletion is complete, a "removed" event will be created for child Sprite3D.When added to scene, it will be deleted from that scene,and a "removedfromscene" event will be created.Child Sprite3D for deleting @param {enchant.gl.Sprite3D} sprite.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>sprite</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var scene = new Scene3D();  //Deletes scene's first child  scene.removeChild(scene.childNodes[0]);</pre></dd>
+											
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#addChild">enchant.gl.Sprite3D#addChild</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#childNodes">enchant.gl.Sprite3D#childNodes</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#parentNode">enchant.gl.Sprite3D#parentNode</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item5'
+									>
+										<div class="fixedFont heading" id="rotationApply">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span>
+											
+											<b>rotationApply</b>(quat)
+										</div>
+										
+										<div class="description">
+											Applies rotation line in rotation line received from quarterion.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>quat</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item6'
+									>
+										<div class="fixedFont heading" id="rotationSet">
+											<span class='lighter'>
+											
+											</span>
+											
+											<span class="light">{<a href="../symbols/enchant.gl.Quat.html">enchant.gl.Quat</a>}</span>
+											
+											<b>rotationSet</b>(quat)
+										</div>
+										
+										<div class="description">
+											Sets rotation line in rotation line received from quarterion.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>quat</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item7'
+									>
+										<div class="fixedFont heading" id="scale">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>scale</b>(x, y, z)
+										</div>
+										
+										<div class="description">
+											Expand or contract Sprite3D.Expands each axis by a designated expansion rate.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>x</b>
+														
+													</dt>
+													<dd>x axis expansion rate</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>y</b>
+														
+													</dt>
+													<dd>y axis expansion rate</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>z</b>
+														
+													</dt>
+													<dd>z axis expansion rate</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var sprite = new Sprite3D();  //Expand x axis by 2.0 times, y axis by 3.0 times, and z axis by 0.5 times  sprite.scale(2,0, 3.0, 0.5);</pre></dd>
+											
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#scaleX">enchant.gl.Sprite3D#scaleX</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#scaleY">enchant.gl.Sprite3D#scaleY</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#scaleZ">enchant.gl.Sprite3D#scaleZ</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#translate">enchant.gl.Sprite3D#translate</a></dd>
+													
+												
+											
+											</dl>
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item8'
+									>
+										<div class="fixedFont heading" id="set">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>set</b>(sprite)
+										</div>
+										
+										<div class="description">
+											Sets condition of other Sprite3D.Can be used corresponding Collada file's loaded assets.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<b>sprite</b>
+														
+													</dt>
+													<dd></dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var sp = new Sprite3D();  sp.set(game.assets['sample.dae']);  //Becomes Sprite3D with sample.dae model information</pre></dd>
+											
+											</dl>
+										
+										
+										
+										<div class="hr"></div>
+									</li>
+								
+									<li 
+										 class='item9'
+									>
+										<div class="fixedFont heading" id="translate">
+											<span class='lighter'>
+											
+											</span>
+											
+											
+											
+											<b>translate</b>(x, y, z)
+										</div>
+										
+										<div class="description">
+											Parallel displacement of Sprite3D.Displaces each coordinate a designated amount from its current location.
+											
+											
+											
+											
+										</div>
+										
+										
+											<dl class="detailList params">
+												<dt class="heading">Parameters:</dt>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>x</b>
+														
+													</dt>
+													<dd>Parallel displacement of x axis</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>y</b>
+														
+													</dt>
+													<dd>Parallel displacement of y axis</dd>
+												
+													<dt>
+														<span class="light fixedFont">{Number}</span> <b>z</b>
+														
+													</dt>
+													<dd>Parallel displacement of z axis</dd>
+												
+											</dl>
+										
+										
+										
+											<dl class="detailList">
+											<dt class="heading">Examples:</dt>
+											
+												<dd><pre class="code">  var sprite = new Sprite3D();  //Parallel displacement by 10 along the x axis, 3 along the y axis, and -20 along the z axis  sprite.translate(10, 3, -20);</pre></dd>
+											
+											</dl>
+										
+										
+										
+											<dl class="detailList nomargin">
+											
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+												
+													<dt class="heading">See:</dt>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#x">enchant.gl.Sprite3D#x</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#y">enchant.gl.Sprite3D#y</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#z">enchant.gl.Sprite3D#z</a></dd>
+													
+														<dd><a href="../symbols/enchant.gl.Sprite3D.html#scale">enchant.gl.Sprite3D#scale</a></dd>
+													
+												
+											
+											</dl>
+										
+										
+									</li>
+								
+							</ul>
+						</div>
+					</div>
+				</section>
+			
+			
+	<!--
+	#### EVENT DETAILS
+	-->		
+			
+		</article>
+	</div>
+</div>
+
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+

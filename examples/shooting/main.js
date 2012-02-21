@@ -33,8 +33,7 @@ window.onload = function () {
      */
     game.onload = function () {
         player = new Player(0, 152);
-        enemies = new Group(320, 320);
-        game.rootScene.addChild(enemies);
+        enemies = new Array();
         /**
          * 背景は黒一色
          */
