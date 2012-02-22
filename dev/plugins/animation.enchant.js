@@ -257,7 +257,7 @@ enchant.animation.Timeline = enchant.Class.create(
      * @time {Number} フレーム数 optional
      */
     pushTween: function(args, time){
-        var tween = new Tween(this.node, args);
+        var tween = new enchant.animation.Tween(this.node, args);
         if(time !== undefined)tween.time = time;
         this.queue.push(tween);
         return this;
@@ -271,7 +271,7 @@ enchant.animation.Timeline = enchant.Class.create(
      * @time {Number} フレーム数 optional
      */
     pushAction: function(args, time){
-        var action = new Action(this, args)
+        var action = new enchant.animation.Action(this, args)
         if(time !== undefined)tween.time = time;
         this.queue.push(action);
         return this;
@@ -571,7 +571,7 @@ enchant.animation.Timeline = enchant.Class.create(
 enchant.animation.Node = enchant.Class.create(enchant.Node, {
     initialize: function(){
         enchant.Node.apply(this, arguments);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.animation.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
@@ -582,7 +582,7 @@ enchant.animation.Node = enchant.Class.create(enchant.Node, {
 enchant.animation.Entity = enchant.Class.create(enchant.Entity, {
     initialize: function(){
         enchant.Entity.apply(this, arguments);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.animation.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
@@ -593,7 +593,7 @@ enchant.animation.Entity = enchant.Class.create(enchant.Entity, {
 enchant.animation.Sprite = enchant.Class.create(enchant.Sprite, {
     initialize: function(){
         enchant.Sprite.apply(this, arguments);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.animation.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
@@ -604,7 +604,7 @@ enchant.animation.Sprite = enchant.Class.create(enchant.Sprite, {
 enchant.animation.Label = enchant.Class.create(enchant.Label, {
     initialize: function(){
         enchant.Label.apply(this, arguments);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.animation.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
@@ -615,7 +615,7 @@ enchant.animation.Label = enchant.Class.create(enchant.Label, {
 enchant.animation.Scene = enchant.Class.create(enchant.Scene, {
     initialize: function(){
         enchant.Scene.apply(this, arguments);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.animation.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
@@ -626,7 +626,7 @@ enchant.animation.Scene = enchant.Class.create(enchant.Scene, {
 enchant.animation.Group = enchant.Class.create(enchant.Group, {
     initialize: function(){
         enchant.Group.apply(this, arguments);
-        this.animation = new Timeline(this);
+        this.animation = new enchant.animation.Timeline(this);
         this.addEventListener("enterframe", function(){ this.animation.tick(); });
     }
 });
@@ -635,7 +635,7 @@ if(enchant.RGroup){
     enchant.animation.RGroup = enchant.Class.create(enchant.RGroup, {
         initialize: function(){
             enchant.RGroup.apply(this, arguments);
-            this.animation = new Timeline(this);
+            this.animation = new enchant.animation.Timeline(this);
             this.addEventListener("enterframe", function(){ this.animation.tick(); });
         }
     });
