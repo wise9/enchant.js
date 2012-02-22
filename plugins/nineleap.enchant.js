@@ -41,6 +41,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         this.addEventListener('load', function() {
             var game = this;
             this.startScene = new SplashScene();
+            this.startScene._element.style.zIndex = 10;
             this.startScene.image = this.assets['start.png'];
             this.startScene.addEventListener('touchend', function() {
                 if (game.started == false) {
@@ -151,7 +152,10 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         this.running = true;
     },
 
-    end: function(score, result) {
+    end: function(score, result, img) {
+        if(img !== undefined){
+            this.endScene.image = img;
+        }
         this.pushScene(this.endScene);
         if (location.hostname == 'r.jsgames.jp') {
             var submit = function() {
