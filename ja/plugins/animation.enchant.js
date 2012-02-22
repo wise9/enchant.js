@@ -219,7 +219,7 @@ enchant.animation.Timeline = enchant.Class.create(
         this.queue = [];
         this.node = node;
         this.paused = false;
-        this.looped = true;
+        this.looped = false;
     },
     /**
      * 1フレームごとに実行するメソッド。
@@ -283,7 +283,7 @@ enchant.animation.Timeline = enchant.Class.create(
      * @param {Function} easing トゥイーン関数
      */
     fadeTo: function(opacity, time, easing){
-        if(arguments.length < 2)time = enchant.Game.fps;
+        if(arguments.length < 2)time = enchant.Game.instance.fps;
         if(arguments.length < 3)easing = enchant.Easing.LINEAR;
         this.pushTween({
             time: time,
@@ -351,7 +351,7 @@ enchant.animation.Timeline = enchant.Class.create(
      * @param {Function} easing トゥイーン関数
      */
     scaleTo: function(scale, time, easing){
-        if(arguments.length < 2)time = enchant.Game.fps;
+        if(arguments.length < 2)time = enchant.Game.instance.fps;
         if(arguments.length < 3)easing = enchant.Easing.LINEAR;
         this.pushTween({
             time: time,
@@ -564,10 +564,6 @@ enchant.animation.Timeline = enchant.Class.create(
         return this;
     }
 })
-
-
-enchant.animation._oldNode = enchant.Node;
-enchant.Node = enchant.Class.create(enchant)
 
 /**
  * @scope enchant.animation.Node.prototype
