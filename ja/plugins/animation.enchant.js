@@ -5,15 +5,15 @@
  * @author sidestepism
  *
  * @example
- * var bear = new AnimationSprite(32, 32);
+ * var bear = new Sprite(32, 32);
  * bear.image = game.assets['icon0.gif'];
  * bear.animation.moveTo(64, 64, 30).fadeOut(30);
  * game.rootScene.addChild(bear);
  *
  * @example
- * var bear = new AnimationSprite(32, 32);
+ * var bear = new Sprite(32, 32);
  * bear.animation.hide().pushTween({
- *     opacity: 1,
+ *     opacity: 0,
  *     scaleX: 3,
  *     scaleY: 3,
  *     time: 30
