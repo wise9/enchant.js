@@ -1,4 +1,4 @@
-/** nineleap.enchant.js v0.2.7 (2011/09/13)
+﻿/** nineleap.enchant.js v0.2.8 (2012/02/19)
  * 
  * enchant.js extention for 9leap.net
  * @requires enchant.js v0.4.0 or later
@@ -11,13 +11,14 @@ enchant.nineleap = { assets: ['start.png', 'end.png'] };
 /**
  * @scope enchant.nineleap.Game.prototype
  */
+ 
 enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
-
     initialize: function(width, height) {
         enchant.Game.call(this, width, height);
         this.addEventListener('load', function() {
             var game = this;
             this.startScene = new SplashScene();
+            this.startScene._element.style.zIndex = 10;
             this.startScene.image = this.assets['start.png'];
             this.startScene.addEventListener('touchend', function() {
                 if (game.started == false) {
@@ -43,8 +44,8 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             this.endScene.image = this.assets['end.png'];
         });
         this.scoreQueue = false;
-        gameStart = false; // deprecated
         this.started = false;
+        gameStart = false; // deprecated
     },
 
     loadImage: function(src, callback) {
@@ -128,7 +129,10 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         this.running = true;
     },
 
-    end: function(score, result) {
+    end: function(score, result, img) {
+        if(img !== undefined){
+            this.endScene.image = img;
+        }
         this.pushScene(this.endScene);
         if (location.hostname == 'r.jsgames.jp') {
             var submit = function() {
@@ -142,7 +146,7 @@ enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
             this.endScene.addEventListener('touchend', submit);
             window.setTimeout(submit, 3000);
         }
-    },
+    }
 
 });
 
