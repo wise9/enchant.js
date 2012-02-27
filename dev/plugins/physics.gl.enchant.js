@@ -1242,7 +1242,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             });
         });
         'scaleX scaleY scaleZ'.split(' ').forEach(function(prop) {
-            Object.defineProperty(enchant.gl.Sprite3D.prototype, prop, {
+            Object.defineProperty(enchant.gl.physics.PhySprite3D.prototype, prop, {
                 get: function() {
                     return this['_' + prop];
                 },
