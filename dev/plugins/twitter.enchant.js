@@ -91,7 +91,7 @@ enchant.nineleap.twitter.Game = enchant.Class.create(parentModule.Game, {
         }
         this.twitterQueue++;
         var id = this._twitterRequests.length;
-        var request = new enchant.twitter.TwitterRequest(id, path, option, checkError);
+        var request = new enchant.nineleap.twitter.TwitterRequest(id, path, option, checkError);
         this._twitterRequests.push(request);
     },
 
