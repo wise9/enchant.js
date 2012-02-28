@@ -1725,8 +1725,8 @@ enchant.gl.Camera3D = enchant.Class.create({
     },
     chase: function(sprite, position, speed) {
         if (sprite instanceof Sprite3D) {
-            var vx = sprite.x + sprite.rotation[2] * position;
-            var vy = sprite.y + sprite.rotation[6] * position;
+            var vx = sprite.x + sprite.rotation[8] * position;
+            var vy = sprite.y + sprite.rotation[9] * position;
             var vz = sprite.z + sprite.rotation[10] * position;
             this._x += (vx - this._x) / speed;
             this._y += (vy - this._y) / speed;
