@@ -10,7 +10,7 @@ window.onload = function(){
          var light = new DirectionalLight();
          scene.setDirectionalLight(light);
          var texture = new Texture('../../../images/enchant.png');
-		 texture.ambient = [0.7, 0.7, 0.7, 1.0];
+         texture.ambient = [0.7, 0.7, 0.7, 1.0];
          for (var i = 0; i < 5; i++) {
              var box = new Cube();
              box.x = Math.random() * 4 - 2;
