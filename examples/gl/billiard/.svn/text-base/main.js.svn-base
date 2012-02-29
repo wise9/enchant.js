@@ -1,0 +1,114 @@
+enchant();
+var game;
+
+var DebugLabel = enchant.Class.create(enchant.Label, {
+    initialize: function() {
+        enchant.Label.call(this);
+        this._log = new Array();
+        this.text = '';
+    },
+    push: function(text) {
+        if (this._log.length == 10) {
+            this._log.splice(0, 1);
+        }
+        this._log.push(text);
+        this._update();
+    },
+    _update: function() {
+        this.text = '';
+        for (var i = 0, l = this._log.length; i < l; i++) {
+            this.text += this._log[i];
+            this.text += '<br>'
+        }
+    }
+});
+
+window.onload = function(){
+    game = new Game(640, 640);
+    game.fps = 60;
+    game.keybind(32, 'a');
+    game.onload = function(){
+        var gravity = -10.0;
+        //var ballsNum = 30;
+        var ballsNum = 1;
+        var balls = new Array(ballsNum);
+
+        var label = new Label();
+        label.font = '24px white helvetica';
+        label._style.color = '#ffffff';
+        game.rootScene.addChild(label);
+
+	    var scene = new PhyScene3D();
+        scene.timeStep = 1 / 60;
+        camera = scene.getCamera();
+        camera.y = 16;
+        camera.z = 5;
+        camera.x = 0;
+
+	    var boxtex = new Texture("../../images/enchant.png");
+        boxtex.ambient = [ 0.6, 0.6, 0.7, 1.0 ];
+        boxtex.diffuse = [ 0.4, 0.4, 0.3, 1.0 ];
+        boxtex.specular = [ 0.1, 0.1, 0.2, 1.0 ];
+
+	    var spheretex = new Texture("../../images/enchant-sphere.png");
+        spheretex.ambient = [ 0.6, 0.6, 0.7, 1.0 ];
+        spheretex.diffuse = [ 0.4, 0.4, 0.3, 1.0 ];
+        spheretex.specular = [ 0.1, 0.1, 0.2, 1.0 ];
+
+        var container = new PhyContainer(1, 10); 
+        for (var i = 0, l = container.childNodes.length; i < l; i++) {
+            container.childNodes[i].mesh.texture = boxtex;
+        }
+        container.translate(0, 1, 0);
+        container.rotationSet(new Quat(0, 1, 0, Math.PI/16));
+
+        container.addEventListener('touchend', function() {
+            //this.applyImpulse(0, 10, 0, 0, 0, 0);
+            this.rotationApply(new Quat(0, 1, 0, Math.PI/16));
+        });
+        scene.addChild(container);
+
+        for (var i = 0; i < ballsNum; i++) {
+            var x = Math.random() * 0.5 - 0.25;
+            var y = i * 1.0 + 5;
+            var z = Math.random() * 0.5 - 0.25;
+            var ball = new PhySphere(0.2, 0.35);
+            ball.mesh.texture = spheretex;
+            ball.translate(x, y, z);
+            scene.addChild(ball);
+            balls[i] = ball;
+            ball.addEventListener('touchend', function() {
+                this.applyImpulse(4, 1, 2, 0, 0, 0);
+            });
+        }
+
+        var plane = new PhyPlane(0, 1, 0, 0);
+        scene.addChild(plane);
+
+        scene.play();
+        playing = true;
+        game.addEventListener('enterframe', function() {
+            if (this.frame % this.fps == 0) {
+                label.text = this.actualFps.toFixed(2);
+            }
+            if (this.input.up) {
+                gravity += 0.1;
+                scene.setGravity(0, gravity, 0);
+            } if (this.input.down) {
+                gravity -= 0.1;
+                scene.setGravity(0, gravity, 0);
+            }
+        });
+        game.addEventListener('abuttonup', function() {
+            if (playing) {
+                scene.stop();
+                playing = false;
+            } else {
+                scene.play();
+                playing = true;
+            }
+        });
+
+    };
+    game.debug();
+};

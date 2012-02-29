@@ -58,11 +58,6 @@ task :test do |t|
     }
 end
 
-task :doc => ['doc/index.html'] do |t|
-    print 'rm -r doc/index.html'
-    `rm -r doc/index.html`
-end
-
 task :minify => ['enchant.min.js']
 
 file 'enchant.min.js' => ['enchant.js'] do |t|
@@ -81,9 +76,9 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
     print "done\n"
 end
 
-file ['doc/ja/index.html','doc/en/index.html'] do |t|
-    sh 'jsdoc -d=doc/ja -t=doc/template enchant.js'
-    sh 'jsdoc -d=doc/en -t=doc/template enchant.ja.js'
+task :doc => ['doc/ja/index.html','doc/en/index.html'] do |t|
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/ja'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/en'
 end
 
 file 'sound.swf' do |t|

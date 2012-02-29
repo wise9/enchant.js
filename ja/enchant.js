@@ -16,7 +16,7 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
@@ -97,7 +97,7 @@ var enchant = function(modules) {
         for (var prop in module) if (module.hasOwnProperty(prop)) {
             if (typeof module[prop] == 'function') {
                 window[prop] = module[prop];
-            } else if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+            } else if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
                 if (modules == null) {
                     submodules.push(prop);
                 } else {
@@ -203,7 +203,7 @@ enchant.Class.create = function(superclass, definition) {
     }
 
     for (var prop in definition) if (definition.hasOwnProperty(prop)) {
-        if (Object.getPrototypeOf(definition[prop]) == Object.prototype) {
+        if (typeof definition[prop] == 'object' && Object.getPrototypeOf(definition[prop]) == Object.prototype) {
             if (!('enumerable' in definition[prop])) definition[prop].enumerable = true;
         } else {
             definition[prop] = { value: definition[prop], enumerable: true, writable: true };
@@ -513,7 +513,7 @@ enchant.EventTarget = enchant.Class.create({
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
-            
+
         }
     },
     /**
@@ -582,7 +582,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }
 
         enchant.EventTarget.call(this);
-
         var initial = true;
         if (game) {
             initial = false;
@@ -681,7 +680,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 [].push.apply(assets, module.assets);
             }
             for (var prop in module) if (module.hasOwnProperty(prop)) {
-                if (Object.getPrototypeOf(module[prop]) == Object.prototype) {
+                if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
                     detectAssets(module[prop]);
                 }
             }
@@ -1030,7 +1029,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }, 1000 / this.fps);
         this.running = true;
     },
-        
+
     /**
      * 新しいSceneに移行する.
      *
@@ -1648,11 +1647,13 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }else{
                 this._setFrame(frame);
                 this._frameSequence = [];
+                this._frame = frame;
             }
         }
     },
     _setFrame: function(frame){
         if (this._image != null){
+            this._frame = frame
             var row = this._image.width / this._width | 0;
             if (this._image._css) {
                 this._style.backgroundPosition = [
@@ -2596,7 +2597,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Surface.load = function(src) {
     var image = new Image();
-    var surface = Object.create(Surface.prototype, {
+    var surface = Object.create(enchant.Surface.prototype, {
         context: { value: null },
         _css: { value: 'url(' + src + ')' },
         _element: { value: image }
@@ -2796,7 +2797,7 @@ window.addEventListener("message", function(msg, origin){
             default:
                 break;
         }
-            
+
     }
 }, false);
 

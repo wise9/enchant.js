@@ -12,11 +12,11 @@ enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
 // 背景専用スプライト
 enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継承したクラスを作成する
 	initialize: function(backgroundimaget) { // コンストラクタを上書きする
-		Sprite.call(this, game.width, game.height); // 継承元のコンストラクタを適用する
+		Sprite.call(this, enchant.Game.instance.width, enchant.Game.instance.height); // 継承元のコンストラクタを適用する
 		if(arguments.length == 1){
 			this.image = arguments[0];
 		}else{
-			this.image = game.assets["back.png"];
+			this.image = enchant.Game.instance.assets["back.png"];
 		}
 	}
 });
@@ -25,9 +25,8 @@ enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継�
 enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 	initialize: function(posX, posY, width, height) {
 		enchant.Sprite.call(this, 0, 0);
-		var game = enchant.Game.instance;
-		var width = (arguments[2] || game.width);
-		var height = (arguments[3] || game.height);
+		var width = (arguments[2] || enchant.Game.instance.width);
+		var height = (arguments[3] || enchant.Game.instance.height);
 		this.fontSize = 16;
 		this.widthItemNum = 16;
 		// font.png の横の文字数
@@ -40,7 +39,6 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 	},
 	setText: function(txt) {
 		var i, x, y, wNum, charCode, charPos;
-		var game = enchant.Game.instance;
 		this._text = txt;
 		this.width = this.returnLength * this.widthItemNum;
 		this.height = this.fontSize * (((this._text.length / this.returnLength)|0)+1);
@@ -54,7 +52,7 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 			}
 			x = charPos % this.widthItemNum;
 			y = (charPos / this.widthItemNum)|0;
-			this.image.draw(game.assets['font.png'], 
+			this.image.draw(enchant.Game.instance.assets['font.png'], 
 				x * this.fontSize, y * this.fontSize, this.fontSize, this.fontSize,
 				(i%this.returnLength)*this.fontSize, ((i/this.returnLength)|0)*this.fontSize, this.fontSize, this.fontSize);
 		}
@@ -134,15 +132,15 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
 		this.text = this.label = 'TIME:';
 		this.addEventListener('enterframe', function(){
 			this._time += this._count;
-			this.text = this.label + (this._time / game.fps).toFixed(2);
+			this.text = this.label + (this._time / enchant.Game.instance.fps).toFixed(2);
 		});
 	},
 	time: {
 		get: function() {
-			return this._time;
+			return Math.floor(this._time / enchant.Game.instance.fps);
 		},
 		set: function(newtime){
-			this._time = newtime * game.fps;
+			this._time = newtime * enchant.Game.instance.fps;
 		}
 	}
 });
@@ -160,7 +158,7 @@ enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
 		this.heart = [];
 		for(var i=0; i<this._maxlife; i++){
 			this.heart[i] = new Sprite(16, 16);
-			this.heart[i].image = game.assets['icon0.gif'];
+			this.heart[i].image = enchant.Game.instance.assets['icon0.gif'];
 			this.heart[i].x = this.label.width + i*16;
 			this.heart[i].y = -3;
 			this.heart[i].frame = 11;
@@ -191,13 +189,12 @@ enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
 enchant.Bar = enchant.Class.create(enchant.Sprite, {
 	initialize: function(x, y) {
 		Sprite.call(this, 1, 16);
-		var game = enchant.Game.instance;
 		this.image = new Surface(1, 16);// Null用
 		this.image.context.fillColor = 'RGB(0, 0, 256)';
 		this.image.context.fillRect(0, 0, 1, 16);
 		this._direction = 'right';
 		this._origin = 0;
-		this._maxvalue = game.width;
+		this._maxvalue = enchant.Game.instance.width;
 		this._lastvalue = 0;
 		this.value = 0;
 		this.easing = 5;
@@ -256,182 +253,46 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
 	}
 });
 
-enchant.util.ExSprite = enchant.Class.create(enchant.Sprite, {
-	initialize: function(width, height) {
-		Sprite.call(this, arguments[0], arguments[1]);
-		this._mode = 'normal';	// 状態
-		this._fade = 0;			// フェードイン・フェードアウトを制御
-		this._blastf = 0;		// 爆発中の状態を保持する変数 (%) 
-		this._blast = 0;		// 爆発の速度 (%) 
-		this.addEventListener('enterframe', function(){
-			switch(this._mode){
-			case 'normal':
-				break;
-			case 'blast':
-				this._blastf += this._blast;
-				if(this._blastf > 1){
-					this.scene.removeChild(this);
-					delete this;
-				}
-				this.frame = (this._blastf*4)|0;
-				break;
-			case 'fadein':
-				this.opacity += this._fade;
-				if(this.opacity > 1){
-					this.opacity = 1;
-					this._fade = 0;
-					this._mode = 'normal';
-				}
-				break;
-			case 'fadeout':
-				this.opacity -= this._fade;
-				if(this.opacity < 0){
-					this.opacity = 0;
-					this._fade = 0;
-					this._mode = 'normal';
-				}
-				break;
-			default:
-				break;
-			}
-		});
-	},
-	show: function() {
-		game.rootScene.addChild(this);
-	},
-	hide: function() {
-		game.rootScene.removeChild(this);
-	},
-	blast: function(frame) {
-		if(this._mode == 'normal'){
-			this._mode = 'blast';
-			this.scale(this.width/16);
-			this.image = game.assets['effect0.gif'];
-			this.width = 16;
-			this.height = 16;
-			this.frame = 16;
-			this._blastf = 0;
-			this._blast = (1/frame) || (1/10);
-		}
-	},
-	fadeOut: function(frame) {
-		this._mode = 'fadeout';
-		this._fade = (1/frame) || (1/10);
-	},
-	fadeIn: function(frame) {
-		this._mode = 'fadein';
-		this._fade = (1/frame) || (1/10);
-	},
-	intersect: function(target) {
-		var mygapx = (1 - this.scaleX)*this.width;
-		var mygapy = (1 - this.scaleY)*this.height;
-		var tagapx = (1 - target.scaleX)*target.width;
-		var tagapy = (1 - target.scaleY)*target.height;
-		
-		var myright = this.x + this.width - mygapx;
-		var taright = target.x + target.width - mygapy;
-		var mybottom = this.y + this.height - tagapx;
-		var tabottom = target.y + target.height - tagapy;
-		
-		if (this.x + mygapx < taright && myright > target.x + tagapx &&
-			this.y + mygapy < tabottom && mybottom > target.y + tagapy) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-});
-
-// 引数豊富なスプライト (自動移動付き) 
-enchant.util.Material = enchant.Class.create(enchant.util.ExSprite, {
-	initialize: function(width, height, x, y, toSpriteImage) {
-		ExSprite.call(this, arguments[0], arguments[1]);
-		switch(arguments.length){
-			case 5:
-				this.image = arguments[4];
-			case 4:
-				this.y = arguments[3];
-			case 3:
-				this.x = arguments[2];
-			case 2:
-				this.height = arguments[1];
-			case 1:
-				this.width = arguments[0];
-				break;
-		}
-		this.name = '';				/* 名前 (IDとして使用) */
-		this.physical = true;		/* 物理演算っぽいことを行うか */
-		this.static = false;		/* 不動か */
-		this.weight = 10;			/* 重さ */
-		this.maxspeed = 10;			/* 最大加速度 */
-		this._colled = false;		/* 前フレーム時に衝突しているか */
-		this.partner = {};			/* 衝突相手 */
-		this._preventx = 0;			/* 前フレーム時のx座標 */
-		this._preventy = 0;
-		this.vx = 0;
-		this.vy = 0;
-		this.addEventListener('enterframe', function(){
-			if(this._mode != 'blast')this.move();
-		});
-		this.addEventListener('colled', function(){// 衝突時のイベントリスナ
-			
-		});
-	},
-	move: function() {
-		this._preventx = this.x;
-		this._preventy = this.y;
-		/* 物質であるとき */
-		if(this.physical){
-			// 自由に動いているとき
-			if(!this.static){
-				this.vy += this.weight * 0.1;
-				// 衝突判定
-				// 自身の登録されたシーン内のオブジェクト同士を比較する
-				this._colled = false;
-				for(var i=this.scene.childNodes.length-1; i>=0; i--){
-					if(		this.scene.childNodes[i].physical &&
-							this.y != this.scene.childNodes[i].y &&
-							this.x != this.scene.childNodes[i].x &&
-							this.intersect(this.scene.childNodes[i])){
-						this._colled = true;
-						this.partner = this.scene.childNodes[i];
-						// (物理演算で) 反発させる (未実装) 
-						if(this.scene.childNodes[i].static){
-							this.vx *= -0.5;
-							this.vy *= -0.5;
-						}else{
-							var vx = +(this.x - this.scene.childNodes[i].x);
-							var vy = +(this.y - this.scene.childNodes[i].y);
-							var raito = (this.weight/(this.weight+this.scene.childNodes[i].weight))/2;
-							this.vx = vx/raito;
-							this.vy = vy/raito;
-						}
-					}
-				}
-				/* 速度制限 */
-				if(this.vx > this.maxspeed)this.vx = this.maxspeed;
-				else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
-				if(this.vy > this.maxspeed)this.vy = this.maxspeed;
-				else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
-			}
-			/* 速度制限 */
-			if(this.vx > this.maxspeed)this.vx = this.maxspeed;
-			else if(this.vx < -this.maxspeed)this.vx = -this.maxspeed;
-			if(this.vy > this.maxspeed)this.vy = this.maxspeed;
-			else if(this.vy < -this.maxspeed)this.vy = -this.maxspeed;
-			
-			if(this._colled){
-				this.x = this._preventx - Math.abs(this._preventx - this.partner.x);
-				this.y = this._preventy - Math.abs(this._preventy - this.partner.y);
-			}else{
-				this.x += this.vx;
-				this.y += this.vy;
-			}
-		}else{
-			this.x += this.vx;
-			this.y += this.vy;
-		}
-	}
+/**
+ * マップライクなGroup
+ * bind というメソッドで Sprite 等を追加すると、自動的に mx, my プロパティが追加され、 
+ * VirtualMap内での座標で Sprite を操作できる
+ *
+ * 使い方
+ * //20 x 20の縦横320ピクセルの盤を作って、その上に16 x 16の駒を8つ並べる
+ * var board = new VirtualMap(320, 320, 20, 20);
+ * for(var i=0; i<8; i++){
+ *     var piece = new Sprite(16, 16);
+ *     piece.image = game.assets['icon0.gif'];
+ *     board.bind(piece);
+ *     piece.mx = i + 3;
+ *     piece.my = 16;
+ * }
+ * game.rootScene.addChild(board);
+ */
+enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
+    initialize: function(width, height, column, row){
+        enchant.Group.call(this);
+        this.column = column || 16;
+        this.row = row || 16;
+        this.width = width || enchant.Game.instance.width;
+        this.height = height || enchant.Game.instance.height;
+    },
+    bind: function(obj){
+        obj.__defineGetter__("mx", function(){
+            return Math.floor(this.x / this.parentNode.width * this.parentNode.column);
+        });
+        obj.__defineSetter__("mx", function(arg){
+            this.x = arg * this.parentNode.column;
+        });
+        obj.__defineGetter__("my", function(){
+            return Math.floor(this.y / this.parentNode.height * this.parentNode.row);
+        });
+        obj.__defineSetter__("my", function(arg){
+            this.y = arg * this.parentNode.row;
+        });
+        this.addChild(obj);
+    }
 });
 
 /*タッチイベントが使えるかを調べる関数*/
