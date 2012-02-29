@@ -1324,8 +1324,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     load: function(src, callback) {
         if (callback == null) callback = function() {};
 
-        var ext = src.match(/\.\w+$/)[0];
-        if (ext) ext = ext.slice(1).toLowerCase();
+        var ext = findExt(src);
+
         switch (ext) {
             case 'jpg':
             case 'gif':
@@ -3858,9 +3858,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Sound.load = function(src, type) {
     if (type == null) {
-        var ext = src.match(/\.\w+$/)[0];
+        var ext = findExt(src);
         if (ext) {
-            type = 'audio/' + ext.slice(1).toLowerCase();
+            type = 'audio/' + ext;
         } else {
             type = '';
         }
@@ -3948,4 +3948,18 @@ window.addEventListener("message", function(msg, origin){
 }, false);
 
 enchant.Sound.enabledInMobileSafari = false;
+
+function findExt(path) {
+    var matched = path.match(/\.\w+$/);
+    if (matched && matched.length > 0) {
+        return matched[0].slice(1).toLowerCase();
+    }
+
+    // for data URI
+    if (path.indexOf('data:') === 0) {
+        return path.split(/[\/;]/)[1].toLowerCase();
+    }
+    return null;
+}
+
 })();
