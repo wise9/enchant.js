@@ -154,6 +154,14 @@ var RETINA_DISPLAY = (function() {
         return false;
     }
 })();
+var USE_FLASH_SOUND = (function() {
+    var ua = navigator.userAgent;
+    var vendor = navigator.vendor;
+    if(location.href.indexOf('http') == 0 && ua.indexOf('Mobile') == -1 && vendor.indexOf('Apple') != -1){
+        return true;
+    }
+    return false;
+})();
 
 // the running instance
 var game;
@@ -760,7 +768,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 this.currentScene.dispatchEvent(e);
             });
         }, this);
-
+                
         if (initial) {
             document.addEventListener('keydown', function(e) {
                 game.dispatchEvent(new enchant.Event('keydown'));
@@ -798,17 +806,26 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 }, true);
             } else {
                 document.addEventListener('mousedown', function(e) {
-                    e.preventDefault();
-                    game._mousedownID++;
-                    if (!game.running) e.stopPropagation();
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if(tagName !== "input" && tagName !== "textarea"){
+                        e.preventDefault();
+                        game._mousedownID++;
+                        if (!game.running) e.stopPropagation();
+                    }
                 }, true);
                 document.addEventListener('mousemove', function(e) {
-                    e.preventDefault();
-                    if (!game.running) e.stopPropagation();
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if(tagName !== "input" && tagName !== "textarea"){
+                        e.preventDefault();
+                        if (!game.running) e.stopPropagation();
+                    }
                 }, true);
                 document.addEventListener('mouseup', function(e) {
-                    e.preventDefault();
-                    if (!game.running) e.stopPropagation();
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if(tagName !== "input" && tagName !== "textarea"){
+                        e.preventDefault();
+                        if (!game.running) e.stopPropagation();
+                    }
                 }, true);
             }
         }
@@ -1627,7 +1644,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         },
         set: function(frame) {
             if(frame instanceof Array){
-                console.log("sequence");
                 var frameSequence = frame;
                 var nextFrame = frameSequence.shift();
                 this._setFrame(nextFrame);
@@ -2661,6 +2677,8 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
                 _element: { value: this._element.cloneNode(false) },
                 duration: { value: this.duration }
             });
+        } else if(USE_FLASH_SOUND) {
+                       return this;
         } else {
             clone = Object.create(enchant.Sound.prototype);
         }
@@ -2720,7 +2738,7 @@ enchant.Sound.load = function(src, type) {
             sound.dispatchEvent(new enchant.Event('load'));
         }, 0);
     } else {
-        if (audio.canPlayType(type)) {
+        if (!USE_FLASH_SOUND && audio.canPlayType(type)) {
             audio.src = src;
             audio.load();
             audio.autoplay = false;
