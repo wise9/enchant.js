@@ -1385,6 +1385,39 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     },
 
     /**
+     * Sprite3DをローカルのZ軸方向に動かす.
+     * @param {Number} speed
+     */
+    forward: function(speed) {
+        this._x += this._rotation[8] * speed;
+        this._y += this._rotation[9] * speed;
+        this._z += this._rotation[10] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Sprite3DをローカルのX軸方向に動かす.
+     * @param {Number} speed
+     */
+    sidestep: function(speed) {
+        this._x += this._rotation[0] * speed;
+        this._y += this._rotation[1] * speed;
+        this._z += this._rotation[2] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Sprite3DをローカルのY軸方向に動かす.
+     * @param {Number} speed
+     */
+    altitude: function(speed) {
+        this._x += this._rotation[4] * speed;
+        this._y += this._rotation[5] * speed;
+        this._z += this._rotation[6] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
      * Sprite3Dを拡大縮小する.
      * 現在の拡大率から, 各軸に対して指定された倍率分だけ拡大縮小をする.
      * @param {Number} x x軸方向の拡大率

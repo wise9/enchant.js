@@ -1385,6 +1385,39 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     },
 
     /**
+     * Moves forward Sprite3D.
+     * @param {Number} speed
+     */
+    forward: function(speed) {
+        this._x += this._rotation[8] * speed;
+        this._y += this._rotation[9] * speed;
+        this._z += this._rotation[10] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Moves side Sprite3D.
+     * @param {Number} speed
+     */
+    sidestep: function(speed) {
+        this._x += this._rotation[0] * speed;
+        this._y += this._rotation[1] * speed;
+        this._z += this._rotation[2] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Moves up Sprite3D.
+     * @param {Number} speed
+     */
+    altitude: function(speed) {
+        this._x += this._rotation[4] * speed;
+        this._y += this._rotation[5] * speed;
+        this._z += this._rotation[6] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
      * Expand or contract Sprite3D.
      * Expands each axis by a designated expansion rate.
      * @param {Number} x x axis expansion rate
