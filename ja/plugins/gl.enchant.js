@@ -1,6 +1,6 @@
 /*
  * gl.enchant.js
- * @version 0.3.2
+ * @version 0.3.4
  * @require enchant.js v0.4.3+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -1458,6 +1458,30 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     rotationApply: function(quat) {
         quat.toMat4(this.tmpMat);
         mat4.multiply(this._rotation, this.tmpMat);
+    },
+
+    /**
+     * Sprite3DのローカルのZ軸を軸に回転させる.
+     * @param {Number} radius
+     */
+    rotateHead: function(rad) {
+        this.rotationApply(new Quat(0, 0, 1, rad));
+    },
+
+    /**
+     * Sprite3DのローカルのY軸を軸に回転させる.
+     * @param {Number} radius
+     */
+    rotateYaw: function(rad) {
+        this.rotationApply(new Quat(0, 1, 0, rad));
+    },
+
+    /**
+     * Sprite3DのローカルのX軸を軸に回転させる.
+     * @param {Number} radius
+     */
+    rotatePitch: function(rad) {
+        this.rotationApply(new Quat(1, 0, 0, rad));
     },
 
     mesh: {

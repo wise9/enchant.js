@@ -1,6 +1,6 @@
 /*
  * gl.enchant.js
- * @version 0.3.2
+ * @version 0.3.4
  * @require enchant.js v0.4.3+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -1458,6 +1458,30 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     rotationApply: function(quat) {
         quat.toMat4(this.tmpMat);
         mat4.multiply(this._rotation, this.tmpMat);
+    },
+
+    /**
+     * Rotate Sprite3D in local Z acxis.
+     * @param {Number} radius
+     */
+    rotateHead: function(rad) {
+        this.rotationApply(new Quat(0, 0, 1, rad));
+    },
+
+    /**
+     * Rotate Sprite3D in local Y acxis.
+     * @param {Number} radius
+     */
+    rotateYaw: function(rad) {
+        this.rotationApply(new Quat(0, 1, 0, rad));
+    },
+
+    /**
+     * Rotate Sprite3D in local X acxis.
+     * @param {Number} radius
+     */
+    rotatePitch: function(rad) {
+        this.rotationApply(new Quat(1, 0, 0, rad));
     },
 
     mesh: {
