@@ -38,7 +38,9 @@ window.onload = function(){
             this.animation.fadeOut(30).delay(30).fadeIn(30);
         });
         sprites[7].addEventListener("touchstart", function(){
-            this.animation.scaleTo(3, 30, enchant.Easing.BOUNCE_EASEOUT).scaleTo(1, 60);
+//            this.animation.scaleTo(3, 30, enchant.Easing.BOUNCE_EASEOUT).scaleTo(1, 60);
+            this.animation.pushTween({x: 100, y: 100, scaleX:2, scaleY:2, time: 30})
+            
         });
         sprites[8].addEventListener("touchstart", function(){
             this.animation.rotateBy(720, 300, enchant.Easing.QUINT_EASEOUT);

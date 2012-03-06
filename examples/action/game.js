@@ -1,5 +1,7 @@
 enchant();
 
+enchant.Sound.enabledInMobileSafari = true;
+
 window.onload = function() {
     var Rectangle = enchant.Class.create({
         initialize: function(x, y, width, height) {
