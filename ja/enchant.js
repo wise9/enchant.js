@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.5.0
+ * enchant.js v0.4.3
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -525,14 +525,6 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
-     * addEventListenerのエイリアス
-     * @param {String} type イベントのタイプ.
-     * @param {function(e:enchant.Event)} listener 追加するイベントリスナ.
-     */
-    on: function(type, listener) {
-        this.addEventListener(type, listener)
-    },
-    /**
      * イベントリスナを削除する.
      * @param {String} type イベントのタイプ.
      * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
@@ -657,8 +649,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }
             stage.style.position = 'relative';
             var bounding = stage.getBoundingClientRect();
-            var scrollX = isNaN(window.scrollX) ? 0 : window.scrollX;
-            var scrollY = isNaN(window.scrollY) ? 0 : window.scrollY;
             this._pageX = Math.round(window.scrollX + bounding.left);
             this._pageY = Math.round(window.scrollY + bounding.top);
         }
@@ -805,25 +795,18 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }, true);
             if (TOUCH_ENABLED) {
                 document.addEventListener('touchstart', function(e) {
-                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
-                        e.preventDefault();
-                    }
+                    e.preventDefault();
                 }, true);
                 document.addEventListener('touchmove', function(e) {
-                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
-                        e.preventDefault();
-                    }
+                    e.preventDefault();
                     if (!game.running) e.stopPropagation();
                 }, true);
                 document.addEventListener('touchend', function(e) {
-                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
-                        e.preventDefault();
-                    }
+                    e.preventDefault();
                     if (!game.running) e.stopPropagation();
                 }, true);
             } else {
                 document.addEventListener('mousedown', function(e) {
-<<<<<<< HEAD
                     var tagName = (e.target.tagName).toLowerCase();
                     if(tagName !== "input" && tagName !== "textarea"){
                         e.preventDefault();
@@ -844,25 +827,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                         e.preventDefault();
                         if (!game.running) e.stopPropagation();
                     }
-=======
-                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
-                        e.preventDefault();
-                    }
-                    game._mousedownID++;
-                    if (!game.running) e.stopPropagation();
-                }, true);
-                document.addEventListener('mousemove', function(e) {
-                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
-                        e.preventDefault();
-                    }
-                    if (!game.running) e.stopPropagation();
-                }, true);
-                document.addEventListener('mouseup', function(e) {
-                    if(e.toElement.tagName !== "INPUT" && e.toElement.tagName !== "TEXTAREA"){
-                        e.preventDefault();
-                    }
-                    if (!game.running) e.stopPropagation();
->>>>>>> f936e4
                 }, true);
             }
         }
@@ -909,8 +873,10 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         switch (ext) {
             case 'jpg':
+            case 'jpeg':
             case 'gif':
             case 'png':
+            case 'bmp':
                 game.assets[src] = enchant.Surface.load(src);
                 game.assets[src].addEventListener('load', callback);
                 break;
@@ -1014,6 +980,9 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      */
     debug: function() {
         this._debug = true;
+        this.rootScene.addEventListener("enterframe", function(time){
+            this._actualFps = (1 / time);
+        })
         this.start();
     },
     actualFps: {
@@ -1037,8 +1006,6 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 push.apply(nodes, node.childNodes);
             }
         }
-        
-        this._actualFps = (e.elapsed == 0) ? this.fps : Math.round(1000/e.elapsed * 10)/10;
 
         this.currentScene.dispatchEvent(e);
         this.dispatchEvent(e);
@@ -1077,7 +1044,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     resume: function() {
         this.currentTime = Date.now();
         this._intervalID = window.setInterval(function() {
-            game._tick();
+            game._tick()
         }, 1000 / this.fps);
         this.running = true;
     },
@@ -1159,22 +1126,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      * @param {Number} key キーバインドを設定するキーコード.
      * @param {String} button 割り当てるボタン.
      */
-    keybind: function(key, type) {
-        this._keybind[key] = type;
-        this.addEventListener(type + 'buttondown', function(e) {
-            if (!this.input[type]) {
-                this.input[type] = true;
-                this.dispatchEvent(new enchant.Event((this._keyCount++) ? 'inputchange' : 'inputstart'));
-            }
-            this.currentScene.dispatchEvent(e);
-        });
-        this.addEventListener(type + 'buttonup', function(e) {
-            if (this.input[type]) {
-                this.input[type] = false;
-                this.dispatchEvent(new enchant.Event((--this._keyCount) ? 'inputchange' : 'inputend'));
-            }
-            this.currentScene.dispatchEvent(e);
-        });
+    keybind: function(key, button) {
+        this._keybind[key] = button;
     }
 });
 
@@ -1204,7 +1157,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetY = 0;
 
         this.age = 0;
-        
+
         /**
          * Nodeの親Node.
          * @type {enchant.Group}
@@ -1313,30 +1266,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._style = this._element.style;
         this._style.position = 'absolute';
 
-        this._scaleX = 1;
-        this._scaleY = 1;
-        this._rotation = 0;
-        this._dirty = false;
-
-        this._transformOrigin = "";
-
         this._width = 0;
         this._height = 0;
         this._backgroundColor = null;
         this._opacity = 1;
         this._visible = true;
         this._buttonMode = null;
-        
-        
-        this.addEventListener('render', function() {
-            if (this._dirty) {
-                this._style[VENDER_PREFIX + 'Transform'] = [
-                    'rotate(', this._rotation, 'deg)',
-                    'scale(', this._scaleX, ',', this._scaleY, ')'
-                ].join('');
-                this._dirty = false;
-            }
-        });
 
         if(enchant.Game.instance._debug){
             this._style.border = "1px solid blue";
@@ -1502,83 +1437,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Spriteを拡大縮小・回転する時の原点.
-     * CSSの'color'プロパティと同様の形式で指定できる.
-     * @type {String} 
-     */
-    transformOrigin: {
-        get: function() {
-            return this._transformOrigin;
-        },
-        set: function(transformOrigin) {
-            this._style[VENDER_PREFIX + 'TransformOrigin'] = this._transformOrigin = transformOrigin;
-        }
-        
-    },
-    /**
-     * Spriteを拡大縮小する.
-     * @param {Number} x 拡大するx軸方向の倍率.
-     * @param {Number} [y] 拡大するy軸方向の倍率.
-     */
-    scale: function(x, y) {
-        if (y == null) y = x;
-        this._scaleX *= x;
-        this._scaleY *= y;
-        this._dirty = true;
-    },
-    /**
-     * Spriteを回転する.
-     * @param {Number} deg 回転する角度 (度数法).
-     */
-    rotate: function(deg) {
-        this._rotation += deg;
-        this._dirty = true;
-    },
-    /**
-     * Spriteのx軸方向の倍率.
-     * @type {Number}
-     */
-    scaleX: {
-        get: function() {
-            return this._scaleX;
-        },
-        set: function(scaleX) {
-            this._scaleX = scaleX;
-            this._dirty = true;
-        }
-    },
-    /**
-     * Spriteのy軸方向の倍率.
-     * @type {Number}
-     */
-    scaleY: {
-        get: function() {
-            return this._scaleY;
-        },
-        set: function(scaleY) {
-            this._scaleY = scaleY;
-            this._dirty = true;
-        }
-    },
-    /**
-     * Spriteの回転角 (度数法).
-     * @type {Number}
-     */
-    rotation: {
-        get: function() {
-            return this._rotation;
-        },
-        set: function(rotation) {
-            this._rotation = rotation;
-            this._dirty = true;
-        }
-    },
-    /**
      * Entityの背景色.
      * CSSの'color'プロパティと同様の形式で指定できる.
      * @type {String}
      */
-     backgroundColor: {
+    backgroundColor: {
         get: function() {
             return this._backgroundColor;
         },
@@ -1677,6 +1540,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 
         this.width = width;
         this.height = height;
+        this._scaleX = 1;
+        this._scaleY = 1;
+        this._rotation = 0;
+        this._dirty = false;
         this._image = null;
         this._frame = 0;
         this._frameSequence = [];
@@ -2464,68 +2331,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 });
 
 /**
- * @scope enchant.RGroup.prototype
- */
-enchant.RGroup = enchant.Class.create(enchant.Group, {
-    /**
-     * 回転できるGroup。ただし高さ・幅を指定しなければならない
-     *
-     * @example
-     *   var scene = new RotateGroup();
-     *   scene.addChild(player);
-     *   scene.addChild(enemy);
-     *   game.pushScene(scene);
-     *
-     * @constructs
-     * @extends enchant.Group
-     */
-    initialize: function(width, height) {
-        enchant.Group.call(this);
-
-        if(arguments.length < 2) throw("Width and height of RGroup must be specified");
-        this.width = width;
-        this.height = height;
-        this.rotationOrigin = {
-            x : width/2 ,
-            y : height/2
-        }
-        this._rotation = 0;
-    },
-    addChild: function(node) {
-        enchant.Group.prototype.addChild.apply(this, arguments);
-        node.transformOrigin = "0 0";
-    },
-    rotation: {
-        get: function(){
-            return this._rotation;
-        },
-        set: function(rotation){
-            var diff_rotation = (rotation - this._rotation);
-
-            if(diff_rotation == 0)return;
-            var rad = diff_rotation / 180 * Math.PI;
-            var sin = Math.sin(rad);
-            var cos = Math.cos(rad);
-            var origin = {
-                x : this.width/2,
-                y : this.height/2
-            }
-
-            for(var i = 0, len = this.childNodes.length; i < len; i++){
-                var node = this.childNodes[i];
-                node.rotation -= diff_rotation;
-                var rx = (node.x - origin.x);
-                var ry = (node.y - origin.y);
-                node.x = +cos * rx + sin * ry + origin.x;
-                node.y = -sin * rx + cos * ry + origin.y;
-            }
-
-            this._rotation = rotation;
-        }
-    }    
-});
-
-/**
  * @scope enchant.Scene.prototype
  */
 enchant.Scene = enchant.Class.create(enchant.Group, {
@@ -2991,8 +2796,6 @@ enchant.Sound.load = function(src, type) {
     return sound;
 };
 
-enchant.Sound.enabledInMobileSafari = false;
-
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
@@ -3018,7 +2821,6 @@ window.addEventListener("message", function(msg, origin){
     }
 }, false);
 
-<<<<<<< HEAD
 enchant.Sound.enabledInMobileSafari = false;
 
 function findExt(path) {
@@ -3034,6 +2836,4 @@ function findExt(path) {
     return null;
 }
 
-=======
->>>>>>> f936e4
 })();

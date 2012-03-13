@@ -1345,8 +1345,10 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         switch (ext) {
             case 'jpg':
+            case 'jpeg':
             case 'gif':
             case 'png':
+            case 'bmp':
                 game.assets[src] = enchant.Surface.load(src);
                 game.assets[src].addEventListener('load', callback);
                 break;
