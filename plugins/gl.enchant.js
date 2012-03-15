@@ -2030,6 +2030,7 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     },
 
     /**
+<<<<<<< HEAD
     [lang:ja]
      * Sprite3Dを拡大縮小する.
      * 現在の拡大率から, 各軸に対して指定された倍率分だけ拡大縮小をする.
@@ -2046,6 +2047,41 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
      * @see enchant.gl.Sprite3D#translate
     [/lang]
     [lang:en]
+=======
+     * Moves forward Sprite3D.
+     * @param {Number} speed
+     */
+    forward: function(speed) {
+        this._x += this._rotation[8] * speed;
+        this._y += this._rotation[9] * speed;
+        this._z += this._rotation[10] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Moves side Sprite3D.
+     * @param {Number} speed
+     */
+    sidestep: function(speed) {
+        this._x += this._rotation[0] * speed;
+        this._y += this._rotation[1] * speed;
+        this._z += this._rotation[2] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Moves up Sprite3D.
+     * @param {Number} speed
+     */
+    altitude: function(speed) {
+        this._x += this._rotation[4] * speed;
+        this._y += this._rotation[5] * speed;
+        this._z += this._rotation[6] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+>>>>>>> d2150ec2f9cd14c794a972dc6d9f16170e74b3fa
      * Expand or contract Sprite3D.
      * Expands each axis by a designated expansion rate.
      * @param {Number} x x axis expansion rate
