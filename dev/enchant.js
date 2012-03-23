@@ -1210,7 +1210,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         }, this);
                 
         if (initial) {
-            document.addEventListener('keydown', function(e) {
+            var stage = enchant.Game.instance._element;
+            stage.addEventListener('keydown', function(e) {
                 game.dispatchEvent(new enchant.Event('keydown'));
                 if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode == 32) {
                     e.preventDefault();
@@ -1224,7 +1225,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     game.dispatchEvent(e);
                 }
             }, true);
-            document.addEventListener('keyup', function(e) {
+            stage.addEventListener('keyup', function(e) {
                 if (!game.running) return;
                 var button = game._keybind[e.keyCode];
                 if (button) {
@@ -1233,19 +1234,19 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 }
             }, true);
             if (TOUCH_ENABLED) {
-                document.addEventListener('touchstart', function(e) {
+                stage.addEventListener('touchstart', function(e) {
                     e.preventDefault();
                 }, true);
-                document.addEventListener('touchmove', function(e) {
+                stage.addEventListener('touchmove', function(e) {
                     e.preventDefault();
                     if (!game.running) e.stopPropagation();
                 }, true);
-                document.addEventListener('touchend', function(e) {
+                stage.addEventListener('touchend', function(e) {
                     e.preventDefault();
                     if (!game.running) e.stopPropagation();
                 }, true);
             } else {
-                document.addEventListener('mousedown', function(e) {
+                stage.addEventListener('mousedown', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(tagName !== "input" && tagName !== "textarea"){
                         e.preventDefault();
@@ -1253,14 +1254,14 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                         if (!game.running) e.stopPropagation();
                     }
                 }, true);
-                document.addEventListener('mousemove', function(e) {
+                stage.addEventListener('mousemove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(tagName !== "input" && tagName !== "textarea"){
                         e.preventDefault();
                         if (!game.running) e.stopPropagation();
                     }
                 }, true);
-                document.addEventListener('mouseup', function(e) {
+                stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(tagName !== "input" && tagName !== "textarea"){
                         e.preventDefault();
