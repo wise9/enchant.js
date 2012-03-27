@@ -82,7 +82,7 @@ if (typeof Object.getPrototypeOf != 'function') {
  * @param {...String} [modules] Export module. Multiple designations possible.
  */
 var enchant = function(modules) {
-    if (modules !== null) {
+    if (typeof modules !== "undefined") {
         if (!(modules instanceof Array)) {
             modules = Array.prototype.slice.call(arguments);
         }
@@ -97,7 +97,7 @@ var enchant = function(modules) {
             if (typeof module[prop] == 'function') {
                 window[prop] = module[prop];
             } else if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
-                if (modules === null) {
+                if (typeof modules === "undefined") {
                     submodules.push(prop);
                 } else {
                     i = modules.indexOf(prefix + prop);
@@ -113,7 +113,7 @@ var enchant = function(modules) {
         }
     })(enchant, '');
 
-    if (modules !== null && modules.length) {
+    if (typeof modules !== "undefined" && modules.length) {
         throw new Error('Cannot load module: ' + modules.join(', '));
     }
 };
