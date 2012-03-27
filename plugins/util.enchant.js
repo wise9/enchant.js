@@ -280,18 +280,17 @@ enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
     },
     bind: function(obj){
         obj.__defineGetter__("mx", function(){
-            return Math.floor(this.x / this.parentNode.width * this.parentNode.column);
+        return Math.floor(this.x * this.parentNode.column / this.parentNode.width);
         });
         obj.__defineSetter__("mx", function(arg){
-            this.x = arg * this.parentNode.column;
+        this.x = Math.floor(arg * this.parentNode.width / this.parentNode.column);
         });
         obj.__defineGetter__("my", function(){
-            return Math.floor(this.y / this.parentNode.height * this.parentNode.row);
+        return Math.floor(this.y * this.parentNode.row / this.parentNode.height);
         });
         obj.__defineSetter__("my", function(arg){
-            this.y = arg * this.parentNode.row;
+        this.y = Math.floor(arg * this.parentNode.height / this.parentNode.row);
         });
-        this.addChild(obj);
     }
 });
 
