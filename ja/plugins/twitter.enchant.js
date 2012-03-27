@@ -121,14 +121,14 @@ enchant.nineleap.twitter.Game = enchant.Class.create(parentModule.Game, {
         } else {
             for (var i = 0, l = resBody.length; i < l; i++) {
                 if ('name' in resBody[i]) {
-                    this.twitterAssets[path][i] = new enchant.twitter.TwitterUserData(resBody[i]);
+                    this.twitterAssets[path][i] = new enchant.nineleap.twitter.TwitterUserData(resBody[i]);
                     this._twitterAssets.push(resBody[i]['profile_image_url']);
                     if ('status' in resBody[i]) {
-                        this.twitterAssets[path][i].status = new enchant.twitter.TwitterStatusData(resBody[i].status);
+                        this.twitterAssets[path][i].status = new enchant.nineleap.twitter.TwitterStatusData(resBody[i].status);
                     }
                 } else {
-                    this.twitterAssets[path][i] = new enchant.twitter.TwitterStatusData(resBody[i]);
-                    this.twitterAssets[path][i].user = new enchant.twitter.TwitterUserData(resBody[i].user);
+                    this.twitterAssets[path][i] = new enchant.nineleap.twitter.TwitterStatusData(resBody[i]);
+                    this.twitterAssets[path][i].user = new enchant.nineleap.twitter.TwitterUserData(resBody[i].user);
                     this._twitterAssets.push(resBody[i].user['profile_image_url']);
                 }
             }

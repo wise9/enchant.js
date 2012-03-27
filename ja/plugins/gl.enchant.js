@@ -1,6 +1,6 @@
 /*
  * gl.enchant.js
- * @version 0.3.2
+ * @version 0.3.4
  * @require enchant.js v0.4.3+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -1385,6 +1385,39 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     },
 
     /**
+     * Sprite3DをローカルのZ軸方向に動かす.
+     * @param {Number} speed
+     */
+    forward: function(speed) {
+        this._x += this._rotation[8] * speed;
+        this._y += this._rotation[9] * speed;
+        this._z += this._rotation[10] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Sprite3DをローカルのX軸方向に動かす.
+     * @param {Number} speed
+     */
+    sidestep: function(speed) {
+        this._x += this._rotation[0] * speed;
+        this._y += this._rotation[1] * speed;
+        this._z += this._rotation[2] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Sprite3DをローカルのY軸方向に動かす.
+     * @param {Number} speed
+     */
+    altitude: function(speed) {
+        this._x += this._rotation[4] * speed;
+        this._y += this._rotation[5] * speed;
+        this._z += this._rotation[6] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
      * Sprite3Dを拡大縮小する.
      * 現在の拡大率から, 各軸に対して指定された倍率分だけ拡大縮小をする.
      * @param {Number} x x軸方向の拡大率
@@ -1458,6 +1491,30 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     rotationApply: function(quat) {
         quat.toMat4(this.tmpMat);
         mat4.multiply(this._rotation, this.tmpMat);
+    },
+
+    /**
+     * Sprite3DのローカルのZ軸を軸に回転させる.
+     * @param {Number} radius
+     */
+    rotateHead: function(rad) {
+        this.rotationApply(new Quat(0, 0, 1, rad));
+    },
+
+    /**
+     * Sprite3DのローカルのY軸を軸に回転させる.
+     * @param {Number} radius
+     */
+    rotateYaw: function(rad) {
+        this.rotationApply(new Quat(0, 1, 0, rad));
+    },
+
+    /**
+     * Sprite3DのローカルのX軸を軸に回転させる.
+     * @param {Number} radius
+     */
+    rotatePitch: function(rad) {
+        this.rotationApply(new Quat(1, 0, 0, rad));
     },
 
     mesh: {
@@ -1729,8 +1786,8 @@ enchant.gl.Camera3D = enchant.Class.create({
     },
     chase: function(sprite, position, speed) {
         if (sprite instanceof Sprite3D) {
-            var vx = sprite.x + sprite.rotation[8] * position;
-            var vy = sprite.y + sprite.rotation[9] * position;
+            var vx = sprite.x + sprite.rotation[2] * position;
+            var vy = sprite.y + sprite.rotation[6] * position;
             var vz = sprite.z + sprite.rotation[10] * position;
             this._x += (vx - this._x) / speed;
             this._y += (vy - this._y) / speed;
@@ -2154,8 +2211,8 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
                                                             this._camera._centerZ - this._camera._z]);
             }
         }
-		var identityMatrix = mat4.create();
-		mat4.identity(identityMatrix);
+        var identityMatrix = mat4.create();
+        mat4.identity(identityMatrix);
         for (var i = 0, l = this.childNodes.length; i < l; i++) {
             this.childNodes[i]._draw(this, detectTouch, identityMatrix);
         }

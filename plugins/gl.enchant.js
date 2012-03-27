@@ -219,8 +219,8 @@ enchant.gl.collision = {};
          * Class to set Sprite3D collision detection.
          * Defined as a point.
          * {@link enchant.gl.collision.BS}, {@link enchant.gl.collision.AABB},
-		 * {@link enchant.gl.collision.OBB} exist as
-		 * inherited classes of enchant.gl.collision.Bounding
+         * {@link enchant.gl.collision.OBB} exist as
+         * inherited classes of enchant.gl.collision.Bounding
          * Currently, OBB is not supported.
          * @constructs
          */
@@ -1385,6 +1385,39 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     },
 
     /**
+     * Moves forward Sprite3D.
+     * @param {Number} speed
+     */
+    forward: function(speed) {
+        this._x += this._rotation[8] * speed;
+        this._y += this._rotation[9] * speed;
+        this._z += this._rotation[10] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Moves side Sprite3D.
+     * @param {Number} speed
+     */
+    sidestep: function(speed) {
+        this._x += this._rotation[0] * speed;
+        this._y += this._rotation[1] * speed;
+        this._z += this._rotation[2] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
+     * Moves up Sprite3D.
+     * @param {Number} speed
+     */
+    altitude: function(speed) {
+        this._x += this._rotation[4] * speed;
+        this._y += this._rotation[5] * speed;
+        this._z += this._rotation[6] * speed;
+        this._changedTranslation = true;
+    },
+
+    /**
      * Expand or contract Sprite3D.
      * Expands each axis by a designated expansion rate.
      * @param {Number} x x axis expansion rate
@@ -1458,6 +1491,30 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
     rotationApply: function(quat) {
         quat.toMat4(this.tmpMat);
         mat4.multiply(this._rotation, this.tmpMat);
+    },
+
+    /**
+     * Rotate Sprite3D in local Z acxis.
+     * @param {Number} radius
+     */
+    rotateHead: function(rad) {
+        this.rotationApply(new Quat(0, 0, 1, rad));
+    },
+
+    /**
+     * Rotate Sprite3D in local Y acxis.
+     * @param {Number} radius
+     */
+    rotateYaw: function(rad) {
+        this.rotationApply(new Quat(0, 1, 0, rad));
+    },
+
+    /**
+     * Rotate Sprite3D in local X acxis.
+     * @param {Number} radius
+     */
+    rotatePitch: function(rad) {
+        this.rotationApply(new Quat(1, 0, 0, rad));
     },
 
     mesh: {
@@ -1725,8 +1782,8 @@ enchant.gl.Camera3D = enchant.Class.create({
     },
     chase: function(sprite, position, speed) {
         if (sprite instanceof Sprite3D) {
-            var vx = sprite.x + sprite.rotation[8] * position;
-            var vy = sprite.y + sprite.rotation[9] * position;
+            var vx = sprite.x + sprite.rotation[2] * position;
+            var vy = sprite.y + sprite.rotation[6] * position;
             var vz = sprite.z + sprite.rotation[10] * position;
             this._x += (vx - this._x) / speed;
             this._y += (vy - this._y) / speed;
@@ -2150,8 +2207,8 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
                                                             this._camera._centerZ - this._camera._z]);
             }
         }
-		var identityMatrix = mat4.create();
-		mat4.identity(identityMatrix);
+        var identityMatrix = mat4.create();
+        mat4.identity(identityMatrix);
         for (var i = 0, l = this.childNodes.length; i < l; i++) {
             this.childNodes[i]._draw(this, detectTouch, identityMatrix);
         }
