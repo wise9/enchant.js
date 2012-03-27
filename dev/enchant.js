@@ -3579,7 +3579,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         pixel.data[1] = g;
         pixel.data[2] = b;
         pixel.data[3] = a;
-        this.context.putImageData(pixel, x, y, 1, 1);
+        this.context.putImageData(pixel, x, y);
     },
     /**
 [lang:ja]

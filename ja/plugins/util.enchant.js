@@ -254,13 +254,13 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
 });
 
 /**
- * マップライクなGroup
+ * マップライクな Group
  * bind というメソッドで Sprite 等を追加すると、自動的に mx, my プロパティが追加され、 
  * VirtualMap内での座標で Sprite を操作できる
  *
  * 使い方
- * //20 x 20の縦横320ピクセルの盤を作って、その上に16 x 16の駒を8つ並べる
- * var board = new VirtualMap(320, 320, 20, 20);
+ * //20 x 20 メッシュの縦横320ピクセルの盤を作り、その上に16 x 16の駒を8つ並べる
+ * var board = new VirtualMap(20, 20);
  * for(var i=0; i<8; i++){
  *     var piece = new Sprite(16, 16);
  *     piece.image = game.assets['icon0.gif'];
@@ -271,26 +271,29 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
  * game.rootScene.addChild(board);
  */
 enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
-    initialize: function(width, height, column, row){
+    initialize: function(column, row){
         enchant.Group.call(this);
         this.column = column || 16;
         this.row = row || 16;
-        this.width = width || enchant.Game.instance.width;
-        this.height = height || enchant.Game.instance.height;
     },
-    bind: function(obj){
-        obj.__defineGetter__("mx", function(){
-        return Math.floor(this.x * this.parentNode.column / this.parentNode.width);
-        });
-        obj.__defineSetter__("mx", function(arg){
-        this.x = Math.floor(arg * this.parentNode.width / this.parentNode.column);
-        });
-        obj.__defineGetter__("my", function(){
-        return Math.floor(this.y * this.parentNode.row / this.parentNode.height);
-        });
-        obj.__defineSetter__("my", function(arg){
-        this.y = Math.floor(arg * this.parentNode.height / this.parentNode.row);
-        });
+    addChild: function(obj){
+        enchant.Group.addChild.call(this, obj);
+        obj.mx = {
+           get: function(){
+               return Math.floor(this.x * this.parentNode.column / this.parentNode.width);
+           },
+           set: function(arg){
+               this.x = Math.floor(arg * this.parentNode.width / this.parentNode.column);
+           }
+        };
+        obj.my = {
+            get: function(){
+                return Math.floor(this.y * this.parentNode.row / this.parentNode.height);
+            },
+            set: function(arg){
+                this.y = Math.floor(arg * this.parentNode.height / this.parentNode.row);
+            }
+        };
     }
 });
 
