@@ -1235,15 +1235,24 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             }, true);
             if (TOUCH_ENABLED) {
                 stage.addEventListener('touchstart', function(e) {
-                    e.preventDefault();
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if(tagName !== "input" && tagName !== "textarea"){
+                        e.preventDefault();
+                    }
                 }, true);
                 stage.addEventListener('touchmove', function(e) {
-                    e.preventDefault();
-                    if (!game.running) e.stopPropagation();
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if(tagName !== "input" && tagName !== "textarea"){
+                        e.preventDefault();
+                        if (!game.running) e.stopPropagation();
+                    }
                 }, true);
                 stage.addEventListener('touchend', function(e) {
-                    e.preventDefault();
-                    if (!game.running) e.stopPropagation();
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if(tagName !== "input" && tagName !== "textarea"){
+                        e.preventDefault();
+                        if (!game.running) e.stopPropagation();
+                    }
                 }, true);
             } else {
                 stage.addEventListener('mousedown', function(e) {
