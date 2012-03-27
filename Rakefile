@@ -76,9 +76,11 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
     print "done\n"
 end
 
-task :doc => ['doc/ja/index.html','doc/en/index.html'] do |t|
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/ja'
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/en'
+task :doc => ['doc/ja/index.html', 'doc/en/index.html'] do |t|
+#    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/ja'
+#    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/en'
+    sh 'jsduck ja/enchant.js ja/plugins/*.enchant.js --output duck/ja';
+    sh 'jsduck enchant.js plugins/*.enchant.js --output duck/en';
 end
 
 file 'sound.swf' do |t|
