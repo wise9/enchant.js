@@ -173,7 +173,7 @@ var RETINA_DISPLAY = (function() {
 })();
 var USE_FLASH_SOUND = (function() {
     var ua = navigator.userAgent;
-    var vendor = navigator.vendor;
+    var vendor = navigator.vendor || "";
     if(location.href.indexOf('http') == 0 && ua.indexOf('Mobile') == -1 && vendor.indexOf('Apple') != -1){
         return true;
     }
