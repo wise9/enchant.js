@@ -116,7 +116,7 @@ window.onload = function(){
              * クマの画像を変えて走るアニメーションを表現するために、
              * frame を 6 -> 7 -> 6 -> 7.. と順番に変えている。
              */
-            this.frame = this.age % 2 + 1;
+            this.frame = this.age % 2 + 6;
         });
 
         /**
