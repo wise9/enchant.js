@@ -31,7 +31,7 @@ window.onload = function(){
      * 必要なファイルを相対パスで引数に指定する。
      * ファイルはすべて、ゲームが始まる前にロードされる。
      */
-    game.preload("chara1.gif");
+    game.preload("chara1.png");
     
     /**
      * Game#onload
@@ -59,7 +59,7 @@ window.onload = function(){
          * Game#preload で指定されたファイルは、Game.assets のプロパティとして格納される。
          * Sprite.image にこれを代入することで、画像を表示することができる
          */
-        bear.image = game.assets["chara1.gif"];
+        bear.image = game.assets["chara1.png"];
 
         /**
          * Node.x Node.y {Number}
@@ -116,7 +116,7 @@ window.onload = function(){
              * クマの画像を変えて走るアニメーションを表現するために、
              * frame を 6 -> 7 -> 6 -> 7.. と順番に変えている。
              */
-            this.frame = this.age % 2 + 6;
+            this.frame = this.age % 2 + 1;
         });
 
         /**
