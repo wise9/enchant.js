@@ -1211,7 +1211,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 
         if (initial) {
             var stage = enchant.Game.instance._element;
-            stage.addEventListener('keydown', function(e) {
+            document.addEventListener('keydown', function(e) {
                 game.dispatchEvent(new enchant.Event('keydown'));
                 if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode == 32) {
                     e.preventDefault();
@@ -1225,7 +1225,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     game.dispatchEvent(e);
                 }
             }, true);
-            stage.addEventListener('keyup', function(e) {
+            document.addEventListener('keyup', function(e) {
                 if (!game.running) return;
                 var button = game._keybind[e.keyCode];
                 if (button) {
