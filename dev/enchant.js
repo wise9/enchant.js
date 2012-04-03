@@ -1,4 +1,4 @@
-/**
+﻿/**
  * enchant.js v0.4.3
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
@@ -2683,6 +2683,8 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
         this._listeners['render'] = null;
         this.addEventListener('render', function() {
+            this._offsetX = ~~this._offsetX;    //this._offestX = Math.floor(this._offsetX);
+            this._offsetY = ~~this._offsetY;    //this._offestY = Math.floor(this._offsetY);
             if (this._dirty || this._previousOffsetX == null) {
                 this._dirty = false;
                 this.redraw(0, 0, game.width, game.height);
