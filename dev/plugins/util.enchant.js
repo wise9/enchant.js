@@ -37,14 +37,15 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 		this.y = posY;
 		this.text = '';
 	},
-	setText: function(txt) {
+	_redraw: function() {
 		var i, x, y, wNum, charCode, charPos;
-		this._text = txt;
-		this.width = this.returnLength * this.widthItemNum;
-		this.height = this.fontSize * (((this._text.length / this.returnLength)|0)+1);
 		this.image.context.clearRect(0, 0, this.width, this.height);
-		for(i=0; i<txt.length; i++) {
-			charCode = txt.charCodeAt(i);
+		if (this._bgcolor) {
+			this.image.context.fillStyle = this._bgcolor;
+			this.image.context.fillRect(0, 0, this.width, this.height);
+		}
+		for(i=0; i<this._text.length; i++) {
+			charCode = this._text.charCodeAt(i);
 			if (charCode >= 32 && charCode <= 127) {
 				charPos = charCode - 32;
 			} else {
@@ -57,12 +58,30 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 				(i%this.returnLength)*this.fontSize, ((i/this.returnLength)|0)*this.fontSize, this.fontSize, this.fontSize);
 		}
 	},
+	setText: function(txt) {
+		this._text = txt;
+		this.width = this.returnLength * this.widthItemNum;
+		this.height = this.fontSize * (((this._text.length / this.returnLength)|0)+1);
+		this._redraw();
+	},
+	setBackgroundColor: function(bgcolor) {
+		this._bgcolor = bgcolor;
+		this._redraw();
+	},
 	text: {
 		get: function() {
 			return this._text;
 		},
 		set: function(txt) {
 			this.setText(txt);
+		}
+	},
+	backgroundColor: {
+		get: function() {
+			return this._bgcolor;
+		},
+		set: function(bgcolor) {
+			this.setBackgroundColor(bgcolor);
 		}
 	},
 	row: {
