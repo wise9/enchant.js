@@ -1137,7 +1137,13 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      */
     keybind: function(key, button) {
         this._keybind[key] = button;
-    }
+    },
+    /**
+     * 
+     */
+    getSeconds: function() {
+        return (this.frame / this.fps);
+    },
 });
 
 /**
