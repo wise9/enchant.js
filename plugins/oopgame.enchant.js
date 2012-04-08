@@ -1,6 +1,6 @@
 /**
- * enchant.OOPGame.js
- * @version v0.1 (2012/4/07)
+ * oopgame.enchant.js
+ * @version v0.1 (2012/4/08)
  * @require enchant.js v0.4.3+
  * @author HAZAMA (http://funprogramming.ojaru.jp)
  * 
@@ -140,22 +140,6 @@ function isInRangeOnValue(range, target, val){
     return(Math.abs(val - target) < range);
 }
 
-if(!Object.prototype.extend){
-    Object.prototype.extend = function(destination, source){
-        for(var property in source){
-    		destination[property] = source[property];
-    	}
-    	
-    	return destination;
-    };
-}
-
-if(!Object.prototype.clone){
-	Object.prototype.clone = function(obj){
-		return Object.prototype.extend.call(this, {}, obj);
-	};
-}
-
 /**
  * Inspects the array contains the object
  * @param obj The object to be checked
@@ -164,44 +148,6 @@ if(!Object.prototype.clone){
 Array.prototype.contains = function(obj){
 	return (this.indexOf(obj) != -1);
 };
-
-if(!Array.prototype.deepCopy){
-    
-    /**
-     * Deep copies the array.
-     * @returns {Array} The resulting array
-     */
-    Array.prototype.deepCopy = function(){
-        var cloned = [];
-        this.forEach(function(obj, index){
-            if(obj instanceof Array){
-                cloned[index] = obj.slice(0);
-            }else if(obj && typeof obj == "object"){
-                cloned[index] = obj.clone(obj);
-            }else{
-                cloned[index] = obj;
-            }
-        });
-        
-        return cloned;
-    };
-}
-
-if(!Object.prototype.copyFrom){
-    
-    /**
-     * Copies the object. The difference between this and Object.clone is that this function doesn't track the prototype
-     * @returns {Object} The resulting object
-     */
-    Object.prototype.copyFrom = function(){
-        var tmp = {};
-        for(var property in this){
-            if(this.hasOwnProperty(property)){tmp[property] = this[property];}
-        }
-        
-        return tmp;
-    };
-}
 
 /**
  * The start screen

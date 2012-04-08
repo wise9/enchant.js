@@ -1,6 +1,6 @@
 /**
- * enchant.OOPGame.js
- * @version v0.1 (2012/4/07)
+ * oopgame.enchant.js
+ * @version v0.1 (2012/4/08)
  * @require enchant.js v0.4.3+
  * @author HAZAMA (http://funprogramming.ojaru.jp)
  * 
@@ -66,19 +66,22 @@ if(navigator.userAgent.toLowerCase().search("chrome") != -1){   //Chromeだと�
     };
 }
 
-/**
- * 文字列とRulerに指定したスタイルからその文字列を表示するのに最低限必要な幅と高さを算出する
- * @returns {Object}
- */
-String.prototype.getExpansion = function(){
-	var e = document.getElementById("ruler");
-	var c;
-	while(c = e.lastChild){e.removeChild(c);}
-	var text = e.appendChild(document.createTextNode(this));
-	var expansion = {width : e.offsetWidth, height : e.offsetHeight};
-	e.removeChild(text);
-	return expansion;
-};
+if(!String.prototype.getExpansion){
+   
+   /**
+     * 文字列とRulerに指定したスタイルからその文字列を表示するのに最低限必要な幅と高さを算出する
+     * @returns {Object}
+     */
+    String.prototype.getExpansion = function(){
+    	var e = document.getElementById("ruler");
+    	var c;
+    	while(c = e.lastChild){e.removeChild(c);}
+    	var text = e.appendChild(document.createTextNode(this));
+    	var expansion = {width : e.offsetWidth, height : e.offsetHeight};
+    	e.removeChild(text);
+    	return expansion;
+    };
+}
 
 /**
  * getExpansionで使用するCSSスタイルを設定する。getExpansionを使用するにはメインのHTMLファイルにid="ruler"というdiv要素が必要です。
@@ -91,33 +94,36 @@ function setRulerStyle(style){
 	elem.setAttribute("style", new_style);
 }
 
-/**
- * 与えられた幅に収まるようにこの文字列に改行を追加する
- * @param max_width 許容できる最大幅
- * @param num_lines 改行の追加によって何行になったかがこのオブジェクトにセットされる
- * @returns {String} 改行が追加された文字列
- */
-String.prototype.fitInWidth = function(max_width, num_lines){
-	num_lines.val = 1;
-	if(this.length === 0){return "";}
-	if(this.getExpansion().width <= max_width){return this;}
-	var first, last, result = "";
-	for(first = 0; first < this.length; first = last){
-		for(last = this.length; last >= first; --last){
-			var s = this.slice(first, last);
-			if(s.getExpansion().width <= max_width){
-				if(last != this.length){			//文字列の最後には<br>を追加しない
-					s += "<br>";
-					++num_lines.val;
-				}
-				result = result.concat(s);
-				break;
-			}
-		}
-	}
-
-	return result;
-};
+if(!String.prototype.fitInWidth){
+    
+    /**
+     * 与えられた幅に収まるようにこの文字列に改行を追加する
+     * @param max_width 許容できる最大幅
+     * @param num_lines 改行の追加によって何行になったかがこのオブジェクトにセットされる
+     * @returns {String} 改行が追加された文字列
+     */
+    String.prototype.fitInWidth = function(max_width, num_lines){
+    	num_lines.val = 1;
+    	if(this.length === 0){return "";}
+    	if(this.getExpansion().width <= max_width){return this;}
+    	var first, last, result = "";
+    	for(first = 0; first < this.length; first = last){
+    		for(last = this.length; last >= first; --last){
+    			var s = this.slice(first, last);
+    			if(s.getExpansion().width <= max_width){
+    				if(last != this.length){			//文字列の最後には<br>を追加しない
+    					s += "<br>";
+    					++num_lines.val;
+    				}
+    				result = result.concat(s);
+    				break;
+    			}
+    		}
+    	}
+    
+    	return result;
+    };
+}
 
 /**
  * valがlower以上upper未満であるか調べる
@@ -141,50 +147,15 @@ function isInRangeOnValue(range, target, val){
     return(Math.abs(val - target) < range);
 }
 
-/**
- * この配列に引数のオブジェクトがすでに含まれているかを返す
- * @param obj 調べたいオブジェクト
- * @returns {boolean} 配列にそのオブジェクトが含まれていたかどうか
- */
-Array.prototype.contains = function(obj){
-	return (this.indexOf(obj) != -1);
-};
-
-if(!Array.prototype.deepCopy){
+if(!Array.prototype.contains){
     
     /**
-     * 配列の深いコピーをする。これを使うと数字や文字列などのプリミティブ型以外のオブジェクトもディープコピーされる
-     * @returns {Array} コピーされた配列
+     * この配列に引数のオブジェクトがすでに含まれているかを返す
+     * @param obj 調べたいオブジェクト
+     * @returns {boolean} 配列にそのオブジェクトが含まれていたかどうか
      */
-    Array.prototype.deepCopy = function(){
-        var cloned = [];
-        this.forEach(function(obj, index){
-            if(obj instanceof Array){
-                cloned[index] = obj.slice(0);
-            }else if(obj && typeof obj == "object"){    //ここでエラーが出たら、このファイルよりも先にfullbasic.parse.jsを読み込んでください
-                cloned[index] = obj.clone(obj);
-            }else{
-                cloned[index] = obj;
-            }
-        });
-        
-        return cloned;
-    };
-}
-
-if(!Object.prototype.copyFrom){
-    
-    /**
-     * オブジェクトのコピーをする。Object.cloneとの違いは、prototypeを辿らない点
-     * @returns {Object} コピーされたオブジェクト
-     */
-    Object.prototype.copyFrom = function(){
-        var tmp = {};
-        for(var property in this){
-            if(this.hasOwnProperty(property)){tmp[property] = this[property];}
-        }
-        
-        return tmp;
+    Array.prototype.contains = function(obj){
+    	return (this.indexOf(obj) != -1);
     };
 }
 
