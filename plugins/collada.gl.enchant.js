@@ -35,19 +35,14 @@
 
 if (enchant.gl != undefined) {
 	enchant.Game.prototype._original_load = enchant.Game.prototype.load;
-	enchant.Game.prototype.load = function(src, callback){
-		var ext = src.match(/\.\w+$/)[0];
-		if (ext) ext = ext.slice(1).toLowerCase();
-		if(ext == 'dae'){
-			if (callback == null) callback = function() {};
-			enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
-				enchant.Game.instance.assets[src] = collada;
-				callback();
-			});
-		}else{
-			this._original_load(src, callback);
-		}
+	enchant.Game.loadFuncs['dae'] = function(src, callback) {
+        if (callback == null) callback = function() {};
+        enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
+            enchant.Game.instance.assets[src] = collada;
+            callback();
+        });
 	};
+	
     (function(){
 		/**
         [lang:ja]
