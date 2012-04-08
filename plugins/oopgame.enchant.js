@@ -65,19 +65,22 @@ if(navigator.userAgent.toLowerCase().search("chrome") != -1){   //Just a workaro
     };
 }
 
-/**
- * Calculates the width and height of a string based on the style set in "ruler"
- * @returns {Object}
- */
-String.prototype.getExpansion = function(){
-	var e = document.getElementById("ruler");
-	var c;
-	while(c = e.lastChild){e.removeChild(c);}
-	var text = e.appendChild(document.createTextNode(this));
-	var expansion = {width : e.offsetWidth, height : e.offsetHeight};
-	e.removeChild(text);
-	return expansion;
-};
+if(!String.prototype.getExpansion){
+    
+    /**
+     * Calculates the width and height of a string based on the style set in "ruler"
+     * @returns {Object}
+     */
+    String.prototype.getExpansion = function(){
+    	var e = document.getElementById("ruler");
+    	var c;
+    	while(c = e.lastChild){e.removeChild(c);}
+    	var text = e.appendChild(document.createTextNode(this));
+    	var expansion = {width : e.offsetWidth, height : e.offsetHeight};
+    	e.removeChild(text);
+    	return expansion;
+    };
+}
 
 /**
  * Sets the "ruler" style. The getExpansion method requires you to have a div element with id "ruler" in your HTML.
@@ -90,33 +93,36 @@ function setRulerStyle(style){
 	elem.setAttribute("style", new_style);
 }
 
-/**
- * Makes the string fit into a certain width
- * @param max_width Max allowed width
- * @param num_lines This object will indicate how many lines the string has after calling this method
- * @returns {String} The resulting string
- */
-String.prototype.fitInWidth = function(max_width, num_lines){
-	num_lines.val = 1;
-	if(this.length === 0){return "";}
-	if(this.getExpansion().width <= max_width){return this;}
-	var first, last, result = "";
-	for(first = 0; first < this.length; first = last){
-		for(last = this.length; last >= first; --last){
-			var s = this.slice(first, last);
-			if(s.getExpansion().width <= max_width){
-				if(last != this.length){			//We don't need to add a <br> to the end of the string.
-					s += "<br>";
-					++num_lines.val;
-				}
-				result = result.concat(s);
-				break;
-			}
-		}
-	}
-
-	return result;
-};
+if(!String.prototype.fitInWidth){
+    
+    /**
+     * Makes the string fit into a certain width
+     * @param max_width Max allowed width
+     * @param num_lines This object will indicate how many lines the string has after calling this method
+     * @returns {String} The resulting string
+     */
+    String.prototype.fitInWidth = function(max_width, num_lines){
+    	num_lines.val = 1;
+    	if(this.length === 0){return "";}
+    	if(this.getExpansion().width <= max_width){return this;}
+    	var first, last, result = "";
+    	for(first = 0; first < this.length; first = last){
+    		for(last = this.length; last >= first; --last){
+    			var s = this.slice(first, last);
+    			if(s.getExpansion().width <= max_width){
+    				if(last != this.length){			//We don't need to add a <br> to the end of the string.
+    					s += "<br>";
+    					++num_lines.val;
+    				}
+    				result = result.concat(s);
+    				break;
+    			}
+    		}
+    	}
+    
+    	return result;
+    };
+}
 
 /**
  * Checks "val" is over "lower" and smaller than "upper"
@@ -140,14 +146,17 @@ function isInRangeOnValue(range, target, val){
     return(Math.abs(val - target) < range);
 }
 
-/**
- * Inspects the array contains the object
- * @param obj The object to be checked
- * @returns {boolean} Whether the array contains the object
- */
-Array.prototype.contains = function(obj){
-	return (this.indexOf(obj) != -1);
-};
+if(!Array.prototype.contains){
+    
+    /**
+     * Inspects the array contains the object
+     * @param obj The object to be checked
+     * @returns {boolean} Whether the array contains the object
+     */
+    Array.prototype.contains = function(obj){
+    	return (this.indexOf(obj) != -1);
+    };
+}
 
 /**
  * The start screen
