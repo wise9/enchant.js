@@ -1,5 +1,5 @@
 /**
- * util.enchant.js v0.3 (2012/04/05)
+ * util.enchant.js v0.2 (2011/10/06)
  * @author Ubiquitous Entertainment Inc.
  * @require enchant.js v0.4.0 or later
  * @description
