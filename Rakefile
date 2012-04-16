@@ -76,11 +76,29 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
     print "done\n"
 end
 
-task :doc => ['doc/ja/index.html', 'doc/en/index.html'] do |t|
+task :doc => ['doc/ja/index.html', 'doc/en/index.html', 'jsdoc-toolkit'] do |t|
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/en'
 #    sh 'jsduck ja/enchant.js ja/plugins/*.enchant.js --output duck/ja';
 #    sh 'jsduck enchant.js plugins/*.enchant.js --output duck/en';
+end
+
+file 'jsdoc-toolkit' do |t|
+    zip_name = "#{t.name}.zip"
+    File.open(zip_name, 'w') {|f|
+        f << download('http://jsdoc-toolkit.googlecode.com/files/jsdoc_toolkit-2.4.0.zip')
+    }
+    sh "unzip #{zip_name}"
+    sh "mv jsdoc_toolkit-2.4.0/#{t.name} #{t.name}"
+    sh 'rm -rf jsdoc_toolkit-2.4.0'
+    sh "rm #{zip_name}"
+end
+
+def download(path)
+  uri = URI.parse(path)
+  http = Net::HTTP.new(uri.host, uri.port)
+  request = Net::HTTP::Get.new(uri.request_uri)
+  http.request(request).body
 end
 
 file 'sound.swf' do |t|
