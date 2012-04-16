@@ -2556,6 +2556,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 
         this.width = 300;
         this.text = text;
+        this.textAlign = 'left';
     },
     /**
 [lang:ja]
@@ -2573,6 +2574,26 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         },
         set: function(text) {
             this._element.innerHTML = text;
+        }
+    },
+    /**
+[lang:ja]
+     * テキストの水平位置の指定.
+     * CSSの'text-align'プロパティと同様の形式で指定できる.
+     * @type {String}
+[/lang]
+[lang:en]
+     * Specifies horizontal alignment of text.
+     * Can be set to same format as CSS 'text-align' property.
+     * @type {String}
+[/lang]
+     */
+    textAlign: {
+        get: function() {
+            return this._style.textAlign;
+        },
+        set: function(textAlign) {
+            this._style.textAlign = textAlign;
         }
     },
     /**
