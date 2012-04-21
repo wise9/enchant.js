@@ -22,7 +22,7 @@
  *
  * @example
  * var bear = new Sprite(32, 32);
- * bear.setQueue({
+ * bear.cue({
  *      0: function(){ do.something(); },
  *     10: function(){ do.something(); },
  *     20: function(){ do.something(); },
@@ -86,7 +86,7 @@ enchant.tl.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
             this.node = null;
         }
 
-        if (this['on' + e.type] != null) this['on' + e.type]();
+        if (this['on' + e.type] != null) this['on' + e.type].call(target, e);
         var listeners = this._listeners[e.type];
         if (listeners != null) {
             listeners = listeners.slice();
@@ -358,23 +358,26 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     then: function(func){
+        var timeline = this;
         this.add(new enchant.tl.Action({
-            onactionstart: func,
-            onactiontick: function(evt){
-                evt.timeline.next();
-            }
-        }));
+                    onactionstart: func,
+                    onactiontick: function(evt){
+                        timeline.next();
+                    }
+                }));
         return this;
     },
     cue: function(cue){
-        var ptr;
+        var ptr = 0;
         for(var frame in cue)if(cue.hasOwnProperty(frame)){
-            ptr = cue[frame]
+            this.delay(frame - ptr);
+            this.then(cue[frame]);
+            ptr = frame;
         }
     },
     repeat: function(func, time){
-        this.add(new enchnat.tl.Action({
-            onactiontick: function(tl){
+        this.add(new enchant.tl.Action({
+            onactiontick: function(evt){
                 func.call(this);
             },
             time: time
