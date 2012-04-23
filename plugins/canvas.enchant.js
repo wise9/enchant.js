@@ -48,18 +48,30 @@ enchant.CanvasGroup = enchant.Class.create(enchant.Group,{
 			node._dh = 	~~(node.height*node.scaleY);
 			if((node._image.width==node.width)&&(node.scaleX==1&&node.scaleY==1)){
 				node.draw = function(context){
-						context.drawImage(this.image._element,
-							this.x+this._dx,
-							this.y+this._dy);					
+                    context.save();
+                    var rad = this._rotation * Math.PI / 180;
+                    context.translate(this.x + this._dw/2,
+                                      this.y + this._dh/2);
+                    context.rotate(rad);
+					context.drawImage(this.image._element,
+							          this._dw/-2,
+							          this._dh/-2);
+                    context.restore();
 				}
 			}else{
 				node.draw = function(context){
+                    context.save();
+                    var rad = this._rotation * Math.PI / 180;
+                    context.translate(this.x + this._dw/2,
+                                      this.y + this._dh/2);
+                    context.rotate(rad);
 					context.drawImage(this.image._element,
-						this._sx,this._sy,
-						this._sw,this._sh,
-						this.x+this._dx,
-						this.y+this._dy,
-						this._dw,this._dh);	
+						              this._sx,this._sy,
+						              this._sw,this._sh,
+						              this._dw/-2,
+							          this._dh/-2,
+						              this._dw,this._dh);	
+                    context.restore();
 				}
 			}
 		};
