@@ -1194,18 +1194,26 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         var c = 0;
         ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
             this.addEventListener(type + 'buttondown', function(e) {
+                var inputEvent;
                 if (!this.input[type]) {
                     this.input[type] = true;
-                    this.dispatchEvent(new enchant.Event((c++) ? 'inputchange' : 'inputstart'));
+                    inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
+                    this.dispatchEvent(inputEvent);
                 }
                 this.currentScene.dispatchEvent(e);
+                if(inputEvent)
+                    this.currentScene.dispatchEvent(inputEvent);
             });
             this.addEventListener(type + 'buttonup', function(e) {
+                var inputEvent;
                 if (this.input[type]) {
                     this.input[type] = false;
-                    this.dispatchEvent(new enchant.Event((--c) ? 'inputchange' : 'inputend'));
+                    inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
+                    this.dispatchEvent(inputEvent);
                 }
                 this.currentScene.dispatchEvent(e);
+                if(inputEvent)
+                    this.currentScene.dispatchEvent(inputEvent);
             });
         }, this);
                 
