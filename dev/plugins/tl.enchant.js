@@ -531,14 +531,14 @@ enchant.Easing = {
         if((t /= d / 2) < 1) return c / 2 * t * t + b;
         return -c / 2 * ((--t) * (t - 2) - 1) + b;
     },
-    // qubic
-    QUBIC_EASEIN: function (t, b, c, d) {
+    // cubic
+    CUBIC_EASEIN: function (t, b, c, d) {
         return c * (t /= d) * t * t + b;
     },
-    QUBIC_EASEOUT: function (t, b, c, d) {
+    CUBIC_EASEOUT: function (t, b, c, d) {
         return c * ((t = t / d - 1) * t * t + 1) + b;
     },
-    QUBIC_EASEINOUT: function (t, b, c, d) {
+    CUBIC_EASEINOUT: function (t, b, c, d) {
         if((t /= d / 2) < 1) return c / 2 * t * t * t + b;
         return c / 2 * ((t -= 2) * t * t + 2) + b;
     },
@@ -671,4 +671,3 @@ enchant.Easing = {
 /**
  * Easing Equations v2.0
  */
-
