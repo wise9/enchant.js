@@ -183,18 +183,17 @@ var GLUtil = enchant.Class.create({
                 touching = null;
             });
         })();
-        try {
-            window['gl'] = this._gl = this._getContext(cvs);
-        } catch(e) {
-            alert('could not initialized WebGL');
-            throw e;
-        }
+        window['gl'] = this._gl = this._getContext(cvs);
         div.appendChild(cvs);
         stage.appendChild(div);
         game.rootScene.addChild(detect);
     },
     _getContext: function(canvas, debug) {
         var ctx = canvas.getContext(CONTEXT_NAME);
+        if (!ctx) {
+            alert('could not initialized WebGL');
+            throw new Error('could not initialized WebGL');
+        }
         if (debug) {
             ctx = createDebugContext(ctx);
         }
@@ -425,8 +424,8 @@ enchant.gl.FrameBuffer = enchant.Class.create({
      * @param {String} width フレームバッファの横幅
      * @param {String} height フレームバッファの縦幅
      * @constructs
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Class for controlling WebGL frame buffers
      * @param {String} width Frame buffer width
      * @param {String} height Frame buffer height
@@ -460,8 +459,8 @@ enchant.gl.FrameBuffer = enchant.Class.create({
     /**
     [lang:ja]
      * フレームバッファをバインドする.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Bind frame buffer.
     [/lang]
      */
@@ -471,8 +470,8 @@ enchant.gl.FrameBuffer = enchant.Class.create({
     /**
     [lang:ja]
      * フレームバッファをアンバインドする.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Unbind frame buffer.
     [/lang]
      */
@@ -482,8 +481,8 @@ enchant.gl.FrameBuffer = enchant.Class.create({
     /**
     [lang:ja]
      * オブジェクトを破棄する.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Destroy object.
     [/lang]
     */
@@ -511,8 +510,8 @@ enchant.gl.Shader = enchant.Class.create({
      * @param {String} vshader バーテックスシェーダのソース
      * @param {String} fshader フラグメントシェーダのソース
      * @constructs
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Class to control WebGL shader program.
      * A shader program will be created by delivering the vertex shader source and fragment shader source.
      * @param {String} vshader Vertex shader source
@@ -546,8 +545,8 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:ja]
      * バーテックスシェーダのソース
      * @type String
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Vertex shader source
      * @type String
     [/lang]
@@ -565,8 +564,8 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:ja]
      * フラグメントシェーダのソース
      * @type String
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Fragment shader source
      * @type String
     [/lang]
@@ -591,8 +590,8 @@ enchant.gl.Shader = enchant.Class.create({
      * shader.fShaderSource = frag;
      * // コンパイル.
      * shader.compile();
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Compile shader program.
      * Will be automatically compiled when shader source is delivered from constructor.
      * @example
@@ -630,8 +629,8 @@ enchant.gl.Shader = enchant.Class.create({
     /**
     [lang:ja]
      * シェーダプログラムを使用するように設定する.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Set shader program to be used.
     [/lang]
      */
@@ -649,8 +648,8 @@ enchant.gl.Shader = enchant.Class.create({
      *     aVertexPosition: indices,
      *     aNormal: normals
      * });
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Sets attribute variables to shader program.
      * Used in enchant.gl.Sprite3D contents and elsewhere.
      * @param {*} Level
@@ -678,8 +677,8 @@ enchant.gl.Shader = enchant.Class.create({
      *     uDiffuse: diffuse,
      *     uLightColor: lightColor
      * });
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Set uniform variables to shader program.
      * Used in enchant.gl.Sprite3D and elsewhere.
      * @param {*} Level
@@ -737,8 +736,8 @@ enchant.gl.Shader = enchant.Class.create({
     /**
     [lang:ja]
      * オブジェクトを破棄する.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Destroy object.
     [/lang]
     */
@@ -1410,8 +1409,8 @@ enchant.gl.Buffer = enchant.Class.create({
      * var indices = new Buffer(Buffer.INDICES, index);
      *
      * @constructs
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Controls peak and other array information.
      * Used as enchant.gl.Mesh property.
      * @param {*} parameter
@@ -1436,8 +1435,8 @@ enchant.gl.Buffer = enchant.Class.create({
     /**
     [lang:ja]
      * バッファをバインドする.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Bind buffer.
     [/lang]
     */
@@ -1447,8 +1446,8 @@ enchant.gl.Buffer = enchant.Class.create({
     /**
     [lang:ja]
      * バッファをアンバインドする.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Unbind buffer.
     [/lang]
      */
@@ -1484,8 +1483,8 @@ enchant.gl.Buffer = enchant.Class.create({
     /**
     [lang:ja]
      * オブジェクトを破棄する.
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Destroy object.
     [/lang]
     */
@@ -1680,7 +1679,7 @@ enchant.gl.Mesh = enchant.Class.create({
     [lang:ja]
      * オブジェクトを破棄する.
     [/lang]
-	[lang:en]
+    [lang:en]
      * Destroy object.
     [/lang]
     */
@@ -3044,8 +3043,8 @@ enchant.gl.Camera3D = enchant.Class.create({
     [lang:ja]
      * カメラの注視点をSprite3Dの位置に合わせる.
      * @param {enchant.gl.Sprite3D} sprite 注視するSprite3D
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Fit camera perspective to Sprite3D position.
      * @param {enchant.gl.Sprite3D} sprite Sprite3D being focused on
     [/lang]
@@ -3072,8 +3071,8 @@ enchant.gl.Camera3D = enchant.Class.create({
      *     camera.lookAt(sp);
      *     camera.chase(sp, -10, 20);
      * });
-	[/lang]
-	[lang:en]
+    [/lang]
+    [lang:en]
      * Bring camera position closer to that of Sprite3D.
      * @param {enchant.gl.Sprite3D} sprite Target Sprite3D
      * @param {Number} position Distance from target

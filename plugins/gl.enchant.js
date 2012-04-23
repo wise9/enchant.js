@@ -158,18 +158,17 @@ var GLUtil = enchant.Class.create({
                 touching = null;
             });
         })();
-        try {
-            window['gl'] = this._gl = this._getContext(cvs);
-        } catch(e) {
-            alert('could not initialized WebGL');
-            throw e;
-        }
+        window['gl'] = this._gl = this._getContext(cvs);
         div.appendChild(cvs);
         stage.appendChild(div);
         game.rootScene.addChild(detect);
     },
     _getContext: function(canvas, debug) {
         var ctx = canvas.getContext(CONTEXT_NAME);
+        if (!ctx) {
+            alert('could not initialized WebGL');
+            throw new Error('could not initialized WebGL');
+        }
         if (debug) {
             ctx = createDebugContext(ctx);
         }
@@ -390,7 +389,7 @@ var DetectColorManager = enchant.Class.create({
  */
 enchant.gl.FrameBuffer = enchant.Class.create({
     /**
-	     * Class for controlling WebGL frame buffers
+     * Class for controlling WebGL frame buffers
      * @param {String} width Frame buffer width
      * @param {String} height Frame buffer height
      * @constructs
@@ -420,19 +419,19 @@ enchant.gl.FrameBuffer = enchant.Class.create({
         gl.bindRenderbuffer(gl.RENDERBUFFER, null);
     },
     /**
-	     * Bind frame buffer.
+     * Bind frame buffer.
      */
     bind: function() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
     },
     /**
-	     * Unbind frame buffer.
+     * Unbind frame buffer.
      */
     unbind: function() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     },
     /**
-	     * Destroy object.
+     * Destroy object.
     */
     destroy: function() {
         gl.deleteFramebuffer(this.framebuffer);
@@ -447,7 +446,7 @@ enchant.gl.FrameBuffer = enchant.Class.create({
  */
 enchant.gl.Shader = enchant.Class.create({
     /**
-	     * Class to control WebGL shader program.
+     * Class to control WebGL shader program.
      * A shader program will be created by delivering the vertex shader source and fragment shader source.
      * @param {String} vshader Vertex shader source
      * @param {String} fshader Fragment shader source
@@ -476,7 +475,7 @@ enchant.gl.Shader = enchant.Class.create({
         }
     },
     /**
-	     * Vertex shader source
+     * Vertex shader source
      * @type String
      */
     vShaderSource: {
@@ -489,7 +488,7 @@ enchant.gl.Shader = enchant.Class.create({
         }
     },
     /**
-	     * Fragment shader source
+     * Fragment shader source
      * @type String
      */
     fShaderSource: {
@@ -502,7 +501,7 @@ enchant.gl.Shader = enchant.Class.create({
         }
     },
     /**
-	     * Compile shader program.
+     * Compile shader program.
      * Will be automatically compiled when shader source is delivered from constructor.
      * @example
      * var shader = new Shader();
@@ -536,13 +535,13 @@ enchant.gl.Shader = enchant.Class.create({
         this._getUniformsProperties();
     },
     /**
-	     * Set shader program to be used.
+     * Set shader program to be used.
      */
     use: function() {
         gl.useProgram(this._program);
     },
     /**
-	     * Sets attribute variables to shader program.
+     * Sets attribute variables to shader program.
      * Used in enchant.gl.Sprite3D contents and elsewhere.
      * @param {*} Level
      * @example
@@ -558,7 +557,7 @@ enchant.gl.Shader = enchant.Class.create({
         }
     },
     /**
-	     * Set uniform variables to shader program.
+     * Set uniform variables to shader program.
      * Used in enchant.gl.Sprite3D and elsewhere.
      * @param {*} Level
      * @example
@@ -612,7 +611,7 @@ enchant.gl.Shader = enchant.Class.create({
         }
     },
     /**
-	     * Destroy object.
+     * Destroy object.
     */
     destroy: function() {
         gl.deleteProgram(this._vShaderProgram);
@@ -1057,7 +1056,7 @@ enchant.gl.Texture = enchant.Class.create({
  */
 enchant.gl.Buffer = enchant.Class.create({
     /**
-	     * Controls peak and other array information.
+     * Controls peak and other array information.
      * Used as enchant.gl.Mesh property.
      * @param {*} parameter
      * @param {Number[]} array
@@ -1078,13 +1077,13 @@ enchant.gl.Buffer = enchant.Class.create({
         this._buffer = null;
     },
     /**
-	     * Bind buffer.
+     * Bind buffer.
     */
     bind: function() {
         gl.bindBuffer(this.btype, this._buffer);
     },
     /**
-	     * Unbind buffer.
+     * Unbind buffer.
      */
     unbind: function() {
         gl.bindBuffer(this.btype, null);
@@ -1116,7 +1115,7 @@ enchant.gl.Buffer = enchant.Class.create({
         this.unbind();
     },
     /**
-	     * Destroy object.
+     * Destroy object.
     */
     destroy: function() {
         this._delete();
@@ -1275,7 +1274,7 @@ enchant.gl.Mesh = enchant.Class.create({
         this.indices = indices;
     },
     /**
-	     * Destroy object.
+     * Destroy object.
     */
     destroy: function() {
         this._deleteBuffer();
@@ -2145,7 +2144,7 @@ enchant.gl.Camera3D = enchant.Class.create({
         };
     },
     /**
-	     * Fit camera perspective to Sprite3D position.
+     * Fit camera perspective to Sprite3D position.
      * @param {enchant.gl.Sprite3D} sprite Sprite3D being focused on
      */
     lookAt: function(sprite) {
@@ -2157,7 +2156,7 @@ enchant.gl.Camera3D = enchant.Class.create({
         }
     },
     /**
-	     * Bring camera position closer to that of Sprite3D.
+     * Bring camera position closer to that of Sprite3D.
      * @param {enchant.gl.Sprite3D} sprite Target Sprite3D
      * @param {Number} position Distance from target
      * @param {Number} speed Speed of approach to target

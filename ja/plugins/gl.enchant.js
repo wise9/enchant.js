@@ -158,18 +158,17 @@ var GLUtil = enchant.Class.create({
                 touching = null;
             });
         })();
-        try {
-            window['gl'] = this._gl = this._getContext(cvs);
-        } catch(e) {
-            alert('could not initialized WebGL');
-            throw e;
-        }
+        window['gl'] = this._gl = this._getContext(cvs);
         div.appendChild(cvs);
         stage.appendChild(div);
         game.rootScene.addChild(detect);
     },
     _getContext: function(canvas, debug) {
         var ctx = canvas.getContext(CONTEXT_NAME);
+        if (!ctx) {
+            alert('could not initialized WebGL');
+            throw new Error('could not initialized WebGL');
+        }
         if (debug) {
             ctx = createDebugContext(ctx);
         }
@@ -394,7 +393,7 @@ enchant.gl.FrameBuffer = enchant.Class.create({
      * @param {String} width フレームバッファの横幅
      * @param {String} height フレームバッファの縦幅
      * @constructs
-		     */
+     */
     initialize: function(width, height) {
         var game = enchant.Game.instance;
         if (typeof width == 'undefined') {
@@ -421,19 +420,19 @@ enchant.gl.FrameBuffer = enchant.Class.create({
     },
     /**
      * フレームバッファをバインドする.
-		     */
+     */
     bind: function() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
     },
     /**
      * フレームバッファをアンバインドする.
-		     */
+     */
     unbind: function() {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     },
     /**
      * オブジェクトを破棄する.
-		    */
+    */
     destroy: function() {
         gl.deleteFramebuffer(this.framebuffer);
         gl.deleteFramebuffer(this.colorbuffer);
@@ -452,7 +451,7 @@ enchant.gl.Shader = enchant.Class.create({
      * @param {String} vshader バーテックスシェーダのソース
      * @param {String} fshader フラグメントシェーダのソース
      * @constructs
-		     */
+     */
     initialize: function(vshader, fshader) {
         this._vShaderSource = '';
         this._fShaderSource = '';
@@ -478,7 +477,7 @@ enchant.gl.Shader = enchant.Class.create({
     /**
      * バーテックスシェーダのソース
      * @type String
-		     */
+     */
     vShaderSource: {
         get: function() {
             return this._vShaderSource;
@@ -491,7 +490,7 @@ enchant.gl.Shader = enchant.Class.create({
     /**
      * フラグメントシェーダのソース
      * @type String
-		     */
+     */
     fShaderSource: {
         get: function() {
             return this._fShaderSource;
@@ -511,7 +510,7 @@ enchant.gl.Shader = enchant.Class.create({
      * shader.fShaderSource = frag;
      * // コンパイル.
      * shader.compile();
-		     */
+     */
     compile: function() {
         if (this._updatedVShaderSource) {
             this._prepareVShader();
@@ -537,7 +536,7 @@ enchant.gl.Shader = enchant.Class.create({
     },
     /**
      * シェーダプログラムを使用するように設定する.
-		     */
+     */
     use: function() {
         gl.useProgram(this._program);
     },
@@ -551,7 +550,7 @@ enchant.gl.Shader = enchant.Class.create({
      *     aVertexPosition: indices,
      *     aNormal: normals
      * });
-		     */
+     */
     setAttributes: function(params) {
         for (prop in params) {
             this._attributes[prop] = params[prop];
@@ -567,7 +566,7 @@ enchant.gl.Shader = enchant.Class.create({
      *     uDiffuse: diffuse,
      *     uLightColor: lightColor
      * });
-		     */
+     */
     setUniforms: function(params) {
         for (prop in params) {
             this._uniforms[prop] = params[prop];
@@ -613,7 +612,7 @@ enchant.gl.Shader = enchant.Class.create({
     },
     /**
      * オブジェクトを破棄する.
-		    */
+    */
     destroy: function() {
         gl.deleteProgram(this._vShaderProgram);
         gl.deleteProgram(this._fShaderProgram);
@@ -1067,7 +1066,7 @@ enchant.gl.Buffer = enchant.Class.create({
      * var indices = new Buffer(Buffer.INDICES, index);
      *
      * @constructs
-		     */
+     */
     initialize: function(params, array) {
         this._setParams(params);
         if (typeof array != 'undefined') {
@@ -1079,13 +1078,13 @@ enchant.gl.Buffer = enchant.Class.create({
     },
     /**
      * バッファをバインドする.
-		    */
+    */
     bind: function() {
         gl.bindBuffer(this.btype, this._buffer);
     },
     /**
      * バッファをアンバインドする.
-		     */
+     */
     unbind: function() {
         gl.bindBuffer(this.btype, null);
     },
@@ -1117,7 +1116,7 @@ enchant.gl.Buffer = enchant.Class.create({
     },
     /**
      * オブジェクトを破棄する.
-		    */
+    */
     destroy: function() {
         this._delete();
         delete this;
@@ -1276,7 +1275,7 @@ enchant.gl.Mesh = enchant.Class.create({
     },
     /**
      * オブジェクトを破棄する.
-	    */
+    */
     destroy: function() {
         this._deleteBuffer();
         delete this;
@@ -2147,7 +2146,7 @@ enchant.gl.Camera3D = enchant.Class.create({
     /**
      * カメラの注視点をSprite3Dの位置に合わせる.
      * @param {enchant.gl.Sprite3D} sprite 注視するSprite3D
-		     */
+     */
     lookAt: function(sprite) {
         if (sprite instanceof Sprite3D) {
             this._centerX = sprite.x;
@@ -2169,7 +2168,7 @@ enchant.gl.Camera3D = enchant.Class.create({
      *     camera.lookAt(sp);
      *     camera.chase(sp, -10, 20);
      * });
-		     */
+     */
     chase: function(sprite, position, speed) {
         if (sprite instanceof Sprite3D) {
             var vx = sprite.x + sprite.rotation[8] * position;
