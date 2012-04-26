@@ -1,0 +1,25 @@
+このサンプルには, モデル・モーションデータ, 使用する外部ライブラリを付属していません.
+それらを以下のように配置してください.
+
+pmdファイル:
+./model/ に配置
+※ トゥーン用テクスチャ等もモデルと同じディレクトリに
+
+vmdファイル:
+./motion/ に配置
+
+MMD.Model.js, MMD.Motion.js,
+sjis.js, DataView.js:
+./libs/ に配置
+
+
+また, main.js以下の
+
+MODEL_NAME
+MOTION_NAME
+
+を適宜書き換えてください.
+
+MMD.js, sjis.js, DataView.jsは以下より入手できます.
+
+https://github.com/edvakf/MMD.js
