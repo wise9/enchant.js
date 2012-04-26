@@ -38,8 +38,6 @@
 				
 					<li><a href="../symbols/_global_.html">_global_</a></li>
 				
-					<li><a href="../symbols/enchant.animation.Tween.html">enchant<span class='break'> </span>.<span class='break'> </span>animation<span class='break'> </span>.<span class='break'> </span>Tween</a></li>
-				
 					<li><a href="../symbols/enchant.box2d.PhysicsWorld.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhysicsWorld</a></li>
 				
 					<li><a href="../symbols/enchant.box2d.PhySprite.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhySprite</a></li>
@@ -142,13 +140,15 @@
 				
 					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
 				
+					<li><a href="../symbols/enchant.tl.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>tl<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.tl.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>tl<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
+				
 					<li><a href="../symbols/enchant.ui.APad.html">enchant<span class='break'> </span>.<span class='break'> </span>ui<span class='break'> </span>.<span class='break'> </span>APad</a></li>
 				
 					<li><a href="../symbols/enchant.ui.Button.html">enchant<span class='break'> </span>.<span class='break'> </span>ui<span class='break'> </span>.<span class='break'> </span>Button</a></li>
 				
 					<li><a href="../symbols/enchant.ui.Pad.html">enchant<span class='break'> </span>.<span class='break'> </span>ui<span class='break'> </span>.<span class='break'> </span>Pad</a></li>
-				
-					<li><a href="../symbols/initialize.html">initialize</a></li>
 				
 			</ul>
 		</nav>
@@ -157,7 +157,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-3-21 8:38
+		Generated on: 2012-3-26 5:46
 	</div>
 </div>
 
@@ -492,9 +492,9 @@
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">enchant.gl.Sprite3D.<b><a href="../symbols/enchant.gl.Sprite3D.html#.loadCollada">loadCollada</a></b>(url, onload)
+										<div class="fixedFont">enchant.gl.Sprite3D.<b><a href="../symbols/enchant.gl.Sprite3D.html#.loadCollada">loadCollada</a></b>(url, onload, url, onload)
 										</div>
-										<div class="description">Create Sprite3D from Collada data</div>
+										<div class="description">[lang:ja]ColladaデータからSprite3Dを作成する</div>
 									</td>
 								</tr>
 							
@@ -639,13 +639,23 @@
 					</div>
 					
 					<div class="description">
-						Class with Sprite3D display function.<p>By adding <a href="../symbols/enchant.gl.Scene3D.html">enchant.gl.Scene3D</a> instance, you can display atop an image.By changing enchant.gl.Sprite3D#vertices, enchant.gl.Sprite3D#indices,enchant.gl.Sprite3D#normals and others, you can freely draw Sprite3D,as well as pasting texture and more.</p><p>In addition, it is also possible to add Sprite3D as a child, and all child classes will be drawn with coordinates based on their parents.</p>
+						Class with Sprite3D display function.
+<p>By adding <a href="../symbols/enchant.gl.Scene3D.html">enchant.gl.Scene3D</a> instance, you can display atop an image.
+By changing enchant.gl.Sprite3D#vertices, enchant.gl.Sprite3D#indices,
+enchant.gl.Sprite3D#normals and others, you can freely draw Sprite3D,
+as well as pasting texture and more.</p>
+<p>In addition, it is also possible to add Sprite3D as a child, and all child classes will be drawn with coordinates based on their parents.</p>
 						
 					</div>
 					
 					
 						
-							<pre class="code">  //Scene initialization  var scene = new Scene3D();  //Sprite3D initialization  var sprite = new Sprite3D();  //Add Sprite3D to scene  scene.addChild(sprite);</pre>
+							<pre class="code">  //Scene initialization
+  var scene = new Scene3D();
+  //Sprite3D initialization
+  var sprite = new Sprite3D();
+  //Add Sprite3D to scene
+  scene.addChild(sprite);</pre>
 						
 					
 				
@@ -699,7 +709,10 @@
 						</div>
 						
 						<div class="description">
-							Array for child Sprite 3D element.Can acquire list of Sprite3Ds added as child classes to this element.When adding or subtracting child classes, without directly operating this array,<a href="../symbols/enchant.gl.Sprite3D.html#addChild">enchant.gl.Sprite3D#addChild</a> or <a href="../symbols/enchant.gl.Sprite3D.html#removeChild">enchant.gl.Sprite3D#removeChild</a> is used.
+							Array for child Sprite 3D element.
+Can acquire list of Sprite3Ds added as child classes to this element.
+When adding or subtracting child classes, without directly operating this array,
+<a href="../symbols/enchant.gl.Sprite3D.html#addChild">enchant.gl.Sprite3D#addChild</a> or <a href="../symbols/enchant.gl.Sprite3D.html#removeChild">enchant.gl.Sprite3D#removeChild</a> is used.
 							
 							
 							
@@ -900,7 +913,8 @@
 						</div>
 						
 						<div class="description">
-							Sprite3D parent element.When no parent exists this is null.
+							Sprite3D parent element.
+When no parent exists this is null.
 							
 							
 							
@@ -922,7 +936,8 @@
 						</div>
 						
 						<div class="description">
-							Sprite3D rotation line.Array is a one-dimensional array of length 16, interpreted as the 4x4 line destination.
+							Sprite3D rotation line.
+Array is a one-dimensional array of length 16, interpreted as the 4x4 line destination.
 							
 							
 							
@@ -930,7 +945,15 @@
 						
 						
 							
-								<pre class="code">  var sprite = new Sprite3D();  //45 degree rotation along the x axis  var rotX = Math.PI() / 4;  sprite.rotation = [      1, 0, 0, 0,      0, Math.cos(rotX), -Math.sin(rotX), 0,      0, Math.sin(rotX), Math.cos(rotX), 0,      0, 0, 0, 1  ];</pre>
+								<pre class="code">  var sprite = new Sprite3D();
+  //45 degree rotation along the x axis
+  var rotX = Math.PI() / 4;
+  sprite.rotation = [
+      1, 0, 0, 0,
+      0, Math.cos(rotX), -Math.sin(rotX), 0,
+      0, Math.sin(rotX), Math.cos(rotX), 0,
+      0, 0, 0, 1
+  ];</pre>
 							
 						
 							
@@ -1068,7 +1091,8 @@
 						</div>
 						
 						<div class="description">
-							The scene object currently added by this Sprite3D.When no scene is added this is null.
+							The scene object currently added by this Sprite3D.
+When no scene is added this is null.
 							
 							
 							
@@ -1103,7 +1127,8 @@
 						</div>
 						
 						<div class="description">
-							Determine whether to make Sprite3D touch compatible.If set to false, will be ignored each time touch detection occurs.
+							Determine whether to make Sprite3D touch compatible.
+If set to false, will be ignored each time touch detection occurs.
 							
 							
 							
@@ -1264,7 +1289,11 @@
 								</div>
 								
 								<div class="description">
-									Add child Sprite3D.When it is added, an "added" event will be created for child Sprite3D.When a parent is already added to scene, it will be added to scene,and an "addedtoscene" event will be created.Child Sprite3D for adding @param {enchant.gl.Sprite3D} sprite.
+									Add child Sprite3D.
+When it is added, an "added" event will be created for child Sprite3D.
+When a parent is already added to scene, it will be added to scene,
+and an "addedtoscene" event will be created.
+Child Sprite3D for adding @param {enchant.gl.Sprite3D} sprite.
 									
 									
 									
@@ -1273,7 +1302,10 @@
 								
 								
 									
-										<pre class="code">  var parent = new Sprite3D();  var child = new Sprite3D();  //Add Sprite3D as child to another Sprite3D  parent.addChild(child);</pre>
+										<pre class="code">  var parent = new Sprite3D();
+  var child = new Sprite3D();
+  //Add Sprite3D as child to another Sprite3D
+  parent.addChild(child);</pre>
 									
 								
 								
@@ -1373,7 +1405,8 @@
 								</div>
 								
 								<div class="description">
-									Executes the reproduction of Sprite3D.Position, rotation line, and others will be returned to a copied, new instance.
+									Executes the reproduction of Sprite3D.
+Position, rotation line, and others will be returned to a copied, new instance.
 									
 									
 									
@@ -1382,7 +1415,10 @@
 								
 								
 									
-										<pre class="code">  var sp = new Sprite3D();  sp.x = 15;  var sp2 = sp.clone();  //sp2.x = 15;</pre>
+										<pre class="code">  var sp = new Sprite3D();
+  sp.x = 15;
+  var sp2 = sp.clone();
+  //sp2.x = 15;</pre>
 									
 								
 								
@@ -1467,7 +1503,8 @@
 								</div>
 								
 								<div class="description">
-									Other object collison detection.Can detect collisions with collision detection objects with x, y, z properties.
+									Other object collison detection.
+Can detect collisions with collision detection objects with x, y, z properties.
 									
 									
 									
@@ -1524,11 +1561,11 @@
 									
 									
 									
-									<span class="light">enchant.gl.Sprite3D.</span><b>loadCollada</b>(url, onload)
+									<span class="light">enchant.gl.Sprite3D.</span><b>loadCollada</b>(url, onload, url, onload)
 								</div>
 								
 								<div class="description">
-									Create Sprite3D from Collada data
+									[lang:ja]ColladaデータからSprite3Dを作成する
 									
 									
 										<br />
@@ -1542,11 +1579,25 @@
 									
 										<pre class="code">  var scene = new Scene3D();  Sprite3D.loadCollada("hoge.dae",　function(model){      scene.addChild(model);  });</pre>
 									
+										<pre class="code">  var scene = new Scene3D();  Sprite3D.loadCollada("hoge.dae",　function(model){      scene.addChild(model);  });</pre>
+									
 								
 								
 								
 									<dl class="detailList params">
 										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>url</b>
+												
+											</dt>
+											<dd>コラーダモデルのURL</dd>
+										
+											<dt>
+												<span class="light fixedFont">{function(enchant.pro.Sprite3D)}</span> <b>onload</b>
+												
+											</dt>
+											<dd>ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される</dd>
 										
 											<dt>
 												<span class="light fixedFont">{String}</span> <b>url</b>
@@ -1581,7 +1632,11 @@
 								</div>
 								
 								<div class="description">
-									Deletes designated child Sprite3D.When deletion is complete, a "removed" event will be created for child Sprite3D.When added to scene, it will be deleted from that scene,and a "removedfromscene" event will be created.Child Sprite3D for deleting @param {enchant.gl.Sprite3D} sprite.
+									Deletes designated child Sprite3D.
+When deletion is complete, a "removed" event will be created for child Sprite3D.
+When added to scene, it will be deleted from that scene,
+and a "removedfromscene" event will be created.
+Child Sprite3D for deleting @param {enchant.gl.Sprite3D} sprite.
 									
 									
 									
@@ -1590,7 +1645,9 @@
 								
 								
 									
-										<pre class="code">  var scene = new Scene3D();  //Deletes scene's first child  scene.removeChild(scene.childNodes[0]);</pre>
+										<pre class="code">  var scene = new Scene3D();
+  //Deletes scene's first child
+  scene.removeChild(scene.childNodes[0]);</pre>
 									
 								
 								
@@ -1850,7 +1907,8 @@
 								</div>
 								
 								<div class="description">
-									Expand or contract Sprite3D.Expands each axis by a designated expansion rate.
+									Expand or contract Sprite3D.
+Expands each axis by a designated expansion rate.
 									
 									
 									
@@ -1859,7 +1917,9 @@
 								
 								
 									
-										<pre class="code">  var sprite = new Sprite3D();  //Expand x axis by 2.0 times, y axis by 3.0 times, and z axis by 0.5 times  sprite.scale(2,0, 3.0, 0.5);</pre>
+										<pre class="code">  var sprite = new Sprite3D();
+  //Expand x axis by 2.0 times, y axis by 3.0 times, and z axis by 0.5 times
+  sprite.scale(2,0, 3.0, 0.5);</pre>
 									
 								
 								
@@ -1933,7 +1993,8 @@
 								</div>
 								
 								<div class="description">
-									Sets condition of other Sprite3D.Can be used corresponding Collada file's loaded assets.
+									Sets condition of other Sprite3D.
+Can be used corresponding Collada file's loaded assets.
 									
 									
 									
@@ -1942,7 +2003,9 @@
 								
 								
 									
-										<pre class="code">  var sp = new Sprite3D();  sp.set(game.assets['sample.dae']);  //Becomes Sprite3D with sample.dae model information</pre>
+										<pre class="code">  var sp = new Sprite3D();
+  sp.set(game.assets['sample.dae']);
+  //Becomes Sprite3D with sample.dae model information</pre>
 									
 								
 								
@@ -2017,7 +2080,8 @@
 								</div>
 								
 								<div class="description">
-									Parallel displacement of Sprite3D.Displaces each coordinate a designated amount from its current location.
+									Parallel displacement of Sprite3D.
+Displaces each coordinate a designated amount from its current location.
 									
 									
 									
@@ -2026,7 +2090,9 @@
 								
 								
 									
-										<pre class="code">  var sprite = new Sprite3D();  //Parallel displacement by 10 along the x axis, 3 along the y axis, and -20 along the z axis  sprite.translate(10, 3, -20);</pre>
+										<pre class="code">  var sprite = new Sprite3D();
+  //Parallel displacement by 10 along the x axis, 3 along the y axis, and -20 along the z axis
+  sprite.translate(10, 3, -20);</pre>
 									
 								
 								
