@@ -736,16 +736,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * Entity をなめらかに拡大・縮小するアクションを追加する。
-     * @param x x方向の縮尺
-     * @param y y方向の縮尺
+     * @param scale 相対縮尺
      * @param time
      * @param [easing]
      */
-    scaleTo: function(x, y, time, easing){
-        if(y == null)y = x;
+    scaleTo: function(scale, time, easing){
         return this.tween({
-            scaleX: x,
-            scaleY: y,
+            scaleX: scale,
+            scaleY: scale,
             time: time,
             easing: easing
         });
@@ -753,16 +751,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * Entity をなめらかに拡大・縮小させるアクションを追加する。
      * 相対縮尺 (ex. アクション開始時の縮尺の n 倍) で指定する。
-     * @param x x方向の相対縮尺
-     * @param y y方向の相対縮尺
+     * @param scale 相対縮尺
      * @param time
      * @param [easing]
      */
-    scaleBy: function(x, y, time, easing){
-        if(y == null)y = x;
+    scaleBy: function(scale, time, easing){
         return this.tween({
-            scaleX: function(){ return this.scaleX * x },
-            scaleY: function(){ return this.scaleY * y },
+            scaleX: function(){ return this.scaleX * scale },
+            scaleY: function(){ return this.scaleY * scale },
             time: time,
             easing: easing
         })
