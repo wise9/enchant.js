@@ -543,7 +543,7 @@ enchant.gl.Shader = enchant.Class.create({
     /**
      * Sets attribute variables to shader program.
      * Used in enchant.gl.Sprite3D contents and elsewhere.
-     * @param {*} Level
+     * @param params {*} attributes
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setAttributes({
@@ -552,14 +552,14 @@ enchant.gl.Shader = enchant.Class.create({
      * });
      */
     setAttributes: function(params) {
-        for (prop in params) {
+        for (prop in params) if(params.hasOwnProperty(prop)) {
             this._attributes[prop] = params[prop];
         }
     },
     /**
      * Set uniform variables to shader program.
      * Used in enchant.gl.Sprite3D and elsewhere.
-     * @param {*} Level
+     * @param params {*} attributes
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setUniforms({
@@ -568,7 +568,7 @@ enchant.gl.Shader = enchant.Class.create({
      * });
      */
     setUniforms: function(params) {
-        for (prop in params) {
+        for (prop in params) if(params.hasOwnProperty(prop)) {
             this._uniforms[prop] = params[prop];
         }
     },

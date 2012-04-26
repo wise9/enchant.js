@@ -641,7 +641,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:ja]
      * シェーダプログラムにattribute変数をセットする.
      * enchant.gl.Sprite3Dの内部などで使用される.
-     * @param {*} 値
+     * @param params {*} 値
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setAttributes({
@@ -652,7 +652,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:en]
      * Sets attribute variables to shader program.
      * Used in enchant.gl.Sprite3D contents and elsewhere.
-     * @param {*} Level
+     * @param params {*} attributes
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setAttributes({
@@ -662,7 +662,7 @@ enchant.gl.Shader = enchant.Class.create({
     [/lang]
      */
     setAttributes: function(params) {
-        for (prop in params) {
+        for (prop in params) if(params.hasOwnProperty(prop)) {
             this._attributes[prop] = params[prop];
         }
     },
@@ -670,7 +670,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:ja]
      * シェーダプログラムにuniform変数をセットする.
      * enchant.gl.Sprite3Dの内部などで使用される.
-     * @param {*} 値
+     * @param params {*} 値
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setUniforms({
@@ -681,7 +681,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:en]
      * Set uniform variables to shader program.
      * Used in enchant.gl.Sprite3D and elsewhere.
-     * @param {*} Level
+     * @param params {*} attributes
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setUniforms({
@@ -691,7 +691,7 @@ enchant.gl.Shader = enchant.Class.create({
     [/lang]
      */
     setUniforms: function(params) {
-        for (prop in params) {
+        for (prop in params) if(params.hasOwnProperty(prop)) {
             this._uniforms[prop] = params[prop];
         }
     },

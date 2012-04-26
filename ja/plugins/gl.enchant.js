@@ -543,7 +543,7 @@ enchant.gl.Shader = enchant.Class.create({
     /**
      * シェーダプログラムにattribute変数をセットする.
      * enchant.gl.Sprite3Dの内部などで使用される.
-     * @param {*} 値
+     * @param params {*} 値
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setAttributes({
@@ -552,14 +552,14 @@ enchant.gl.Shader = enchant.Class.create({
      * });
      */
     setAttributes: function(params) {
-        for (prop in params) {
+        for (prop in params) if(params.hasOwnProperty(prop)) {
             this._attributes[prop] = params[prop];
         }
     },
     /**
      * シェーダプログラムにuniform変数をセットする.
      * enchant.gl.Sprite3Dの内部などで使用される.
-     * @param {*} 値
+     * @param params {*} 値
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setUniforms({
@@ -568,7 +568,7 @@ enchant.gl.Shader = enchant.Class.create({
      * });
      */
     setUniforms: function(params) {
-        for (prop in params) {
+        for (prop in params) if(params.hasOwnProperty(prop)) {
             this._uniforms[prop] = params[prop];
         }
     },
