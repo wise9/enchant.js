@@ -1174,6 +1174,9 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         this._soundID = 0;
         this._intervalID = null;
 
+        this._offsetX = 0;
+        this._offsetY = 0;
+
         /**
 [lang:ja]
          * ゲームに対する入力状態を保存するオブジェクト.

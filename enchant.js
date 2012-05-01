@@ -740,6 +740,9 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         this._soundID = 0;
         this._intervalID = null;
 
+        this._offsetX = 0;
+        this._offsetY = 0;
+
         /**
          * Object that saves input conditions for game.
          * @type {Object.<String, Boolean>}
