@@ -43,7 +43,6 @@ window.onload = function(){
         sprites[8].addEventListener("touchstart", function(){
             this.tl.rotateBy(720, 300, enchant.Easing.QUINT_EASEOUT);
         });
-
     }
     game.start();
 }

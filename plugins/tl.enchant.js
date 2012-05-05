@@ -160,6 +160,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
         this.addEventListener(enchant.Event.ADDED_TO_TIMELINE, function(evt){
             action.timeline = evt.timeline;
             action.node = evt.timeline.node;
+            action.frame = 0;
         });
 
         this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function(evt){
@@ -367,6 +368,8 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
             e = new enchant.Event("addedtotimeline");
             e.timeline = this;
             action.dispatchEvent(e);
+
+            action.frame = 0;
 
             this.add(action);
         }else{
