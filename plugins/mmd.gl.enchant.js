@@ -58,7 +58,7 @@ var MMD = {};
         },
         _addAttribute: function(buffer, prop) {
             this['_' + prop] = buffer;
-            Object.defineProperty(enchant.gl.mmd.MMesh.prototype, prop, {
+            Object.defineProperty(this, prop, {
                 get: function() {
                     return this['_' + prop]._array;
                 },
