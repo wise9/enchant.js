@@ -2789,7 +2789,19 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
             uShininess: this.mesh.texture.shininess,
             uNormMat: this._normMat,
             uSampler: this.mesh.texture,
-            uUseTexture: useTexture
+            uUseTexture: useTexture,
+            uProjMat: this.scene.projMat,
+    		uUseCamera: 1.0,
+			uUseDirectionalLight: 1.0,
+			uLightDirection: [ this.scene.directionalLight.directionX,
+					this.scene.directionalLight.directionY,
+					this.scene.directionalLight.directionZ ],
+			uLightColor: this.scene.directionalLight.color,
+			uCameraMat: this.scene.cameraMat,
+			uLookVec: [
+					this.scene._camera._centerX - this.scene._camera._x,
+					this.scene._camera._centerY - this.scene._camera._y,
+					this.scene._camera._centerZ - this.scene._camera._z ]
         };
 
         var length = this.mesh.indices.length;
