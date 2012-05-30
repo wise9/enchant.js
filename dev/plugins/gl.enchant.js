@@ -3023,6 +3023,7 @@ enchant.gl.Camera3D = enchant.Class.create({
     [/lang]
      */
     initialize: function() {
+        var game = enchant.Game.instance;
         this.mat = mat4.create();
         this.invMat = mat4.create();
         this.invMatY = mat4.create();
