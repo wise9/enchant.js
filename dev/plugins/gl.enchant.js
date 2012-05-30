@@ -383,7 +383,7 @@ var TextureManager = enchant.Class.create({
 
 var DetectColorManager = enchant.Class.create({
     initialize: function() {
-        this.reference = new Array();                                                                                                                           
+        this.reference = new Array();
         this.detectColorNum = 0; 
     },   
     attachDetectColor: function(sprite) {
@@ -641,7 +641,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:ja]
      * シェーダプログラムにattribute変数をセットする.
      * enchant.gl.Sprite3Dの内部などで使用される.
-     * @param params {*} 値
+     * @param {*} 値
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setAttributes({
@@ -652,7 +652,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:en]
      * Sets attribute variables to shader program.
      * Used in enchant.gl.Sprite3D contents and elsewhere.
-     * @param params {*} attributes
+     * @param {*} Level
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setAttributes({
@@ -662,7 +662,7 @@ enchant.gl.Shader = enchant.Class.create({
     [/lang]
      */
     setAttributes: function(params) {
-        for (prop in params) if(params.hasOwnProperty(prop)) {
+        for (prop in params) {
             this._attributes[prop] = params[prop];
         }
     },
@@ -670,7 +670,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:ja]
      * シェーダプログラムにuniform変数をセットする.
      * enchant.gl.Sprite3Dの内部などで使用される.
-     * @param params {*} 値
+     * @param {*} 値
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setUniforms({
@@ -681,7 +681,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:en]
      * Set uniform variables to shader program.
      * Used in enchant.gl.Sprite3D and elsewhere.
-     * @param params {*} attributes
+     * @param {*} Level
      * @example
      * var shader = new Shader(vert, frag);
      * shader.setUniforms({
@@ -691,7 +691,7 @@ enchant.gl.Shader = enchant.Class.create({
     [/lang]
      */
     setUniforms: function(params) {
-        for (prop in params) if(params.hasOwnProperty(prop)) {
+        for (prop in params) {
             this._uniforms[prop] = params[prop];
         }
     },
@@ -912,7 +912,7 @@ enchant.gl.Quat = enchant.Class.create({
      */
     slerp: function(another, ratio) {
         var q = new Quat(0, 0, 0, 0);
-        quat4.slerp(this._quat, another._quat, ratio, q._quat);
+        quat4.slerp(this._quat, another._quat, ratio, q);
         return q;
     },
     /**
@@ -3023,9 +3023,15 @@ enchant.gl.Camera3D = enchant.Class.create({
     [/lang]
      */
     initialize: function() {
+        this.mat = mat4.create();
+        this.invMat = mat4.create();
+        this.invMatY = mat4.create();
+        this._projMat = mat4.create();
+        mat4.perspective(20, game.width / game.height, 1.0, 1000.0, this._projMat);
         this._changedPosition = false;
         this._changedCenter = false;
         this._changedUpVector = false;
+        this._changedProjection = false;
         this._x = 0;
         this._y = 0;
         this._z = 10;
@@ -3038,6 +3044,15 @@ enchant.gl.Camera3D = enchant.Class.create({
         this._focus;
         this._focusing = function() {
         };
+    },
+    projMat: {
+        get: function() {
+            return this._projMat;
+        },
+        set: function(mat) {
+            this._projMat = mat;
+            this._changedProjection = true;
+        }
     },
     /**
     [lang:ja]
@@ -3242,6 +3257,32 @@ enchant.gl.Camera3D = enchant.Class.create({
         this._centerY = this._y + vec[1];
         this._centerZ = this._z + vec[2];
         this._changedCenter = true;
+    },
+    _updateMatrix: function() {
+        this.mat;
+        this.invMat;
+        this.invMatY;
+        mat4.lookAt(
+            [this._x, this._y, this._z],
+            [this._centerX, this._centerY, this._centerZ],
+            [this._upVectorX, this._upVectorY, this._upVectorZ],
+            this.mat);
+        mat4.lookAt(
+            [0, 0, 0],
+            [-this._x + this._centerX,
+            -this._y + this._centerY,
+            -this._z + this._centerZ],
+            [this._upVectorX, this._upVectorY, this._upVectorZ],
+            this.invMat);
+        mat4.inverse(this.invMat);
+        mat4.lookAt(
+            [0, 0, 0],
+            [-this._x + this._centerX,
+            0,
+            -this._z + this._centerZ],
+            [this._upVectorX, this._upVectorY, this._upVectorZ],
+            this.invMatY);
+        mat4.inverse(this.invMatY);
     }
 });
 
@@ -3468,11 +3509,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
          */
         this.lights = [];
 
-        this.projMat = mat4.create();
         this.identityMat = mat4.create();
-        this.cameraMat = mat4.create();
-        this.cameraMatInverse = mat4.create();
-        this.cameraMatInverseY = mat4.create();
         this._backgroundColor = [0.0, 0.0, 0.0, 1.0];
 
         var listener = function(e) {
@@ -3493,9 +3530,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         game.addEventListener('enterframe', func);
 
 
-        mat4.perspective(20, game.width / game.height, 1.0, 1000.0, this.projMat);
         var uniforms = {};
-        uniforms['uProjMat'] = this.projMat;
         uniforms['uUseCamera'] = 0.0;
         gl.activeTexture(gl.TEXTURE0);
         game.GL.defaultProgram.setUniforms(uniforms);
@@ -3604,6 +3639,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         camera._changedPosition = true;
         camera._changedCenter = true;
         camera._changedUpVector = true;
+        camera._changedProjection = true;
         this._camera = camera;
         enchant.Game.instance.GL.defaultProgram.setUniforms({
             uUseCamera: 1.0
@@ -3727,29 +3763,11 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         if (this._camera) {
             if (this._camera._changedPosition ||
                 this._camera._changedCenter ||
-                this._camera._changedUpVector) {
-                mat4.lookAt(
-                    [this._camera._x, this._camera._y, this._camera._z],
-                    [this._camera._centerX, this._camera._centerY, this._camera._centerZ],
-                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ],
-                    this.cameraMat);
-                mat4.lookAt(
-                    [0, 0, 0],
-                    [-this._camera._x + this._camera._centerX,
-                    -this._camera._y + this._camera._centerY,
-                    -this._camera._z + this._camera._centerZ],
-                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ],
-                    this.cameraMatInverse);
-                mat4.inverse(this.cameraMatInverse);
-                mat4.lookAt(
-                    [0, 0, 0],
-                    [-this._camera._x + this._camera._centerX,
-                    0,
-                    -this._camera._z + this._camera._centerZ],
-                    [this._camera._upVectorX, this._camera._upVectorY, this._camera._upVectorZ],
-                    this.cameraMatInverseY);
-                mat4.inverse(this.cameraMatInverseY);
-                uniforms['uCameraMat'] = this.cameraMat;
+                this._camera._changedUpVector ||
+                this._camera._changedProjection) {
+                this._camera._updateMatrix();
+                uniforms['uCameraMat'] = this._camera.mat;
+                uniforms['uProjMat'] = this._camera._projMat;
                 uniforms['uLookVec'] = [
                     this._camera._centerX - this._camera._x,
                     this._camera._centerY - this._camera._y,
