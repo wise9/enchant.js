@@ -1,10 +1,10 @@
 /*
 [lang:ja]
  * physics.gl.enchant.js
- * @version 0.3.2
+ * @version 0.3.5
  * @require enchant.js v0.4.3+
- * @require gl.enchant.js v0.3.2+
- * @require primitive.gl.enchant.js v0.3.2+
+ * @require gl.enchant.js v0.3.5+
+ * @require primitive.gl.enchant.js v0.3.5+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -16,10 +16,10 @@
 [/lang]
  [lang:en]
  * physics.gl.enchant.js
- * @version 0.3.2
+ * @version 0.3.5
  * @require enchant.js v0.4.3+
- * @require gl.enchant.js v0.3.2+
- * @require primitive.gl.enchant.js v0.3.2+
+ * @require gl.enchant.js v0.3.5+
+ * @require primitive.gl.enchant.js v0.3.5+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -30,6 +30,9 @@
  * https://github.com/kripken/ammo.js
 [/lang]
  */
+if(typeof Ammo == 'undefined') {
+    throw new Error('physics.gl.enchant.js must be loaded after ammo.js');
+}
 if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
     (function() {
         enchant.gl.physics = {};
@@ -359,7 +362,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              */
             rotationSet: function(quat) {
                 var qq = quat._quat;
-                var q = new Ammo.btQuaternion(qq[0], qq[1], qq[2], qq[3]);
+                var q = new Ammo.btQuaternion(qq[0], qq[1], qq[2], -qq[3]);
                 var t = this._getTransform();
                 t.setRotation(q);
                 this.rigidBody.setWorldTransform(t);
@@ -380,9 +383,9 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var quat1 = quat._quat;
                 var t = this._getTransform();
                 var qq = t.getRotation();
-                var quat2 = quat4.create([qq.x(), qq.y(), qq.z(), qq.w()]);
+                var quat2 = quat4.create([qq.x(), qq.y(), qq.z(), -qq.w()]);
                 quat4.multiply(quat2, quat1, quat2);
-                var q = new Ammo.btQuaternion(quat2[0], quat2[1], quat2[2], quat2[3]);
+                var q = new Ammo.btQuaternion(quat2[0], quat2[1], quat2[2], -quat2[3]);
                 t.setRotation(q);
                 this.rigidBody.setWorldTransform(t);
                 Ammo.destroy(q);
@@ -1506,8 +1509,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var axis = vec3.create();
                 vec3.cross(norm, up, axis);
                 var rad = Math.acos(vec3.dot(up, norm) / (vec3.length(up) * vec3.length(norm)));
-                var rad = Math.acos(vec3.dot(up, norm));
-                var q = new Quat(axis[0], axis[1], axis[2], rad);
+                var q = new Quat(axis[0], axis[1], axis[2], -rad);
                 var vertices = new Array();
                 for (i = 0, l = this.mesh.vertices.length; i < l; i+=3) {
                     var x = this.mesh.vertices[i];

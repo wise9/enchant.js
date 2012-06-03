@@ -448,7 +448,7 @@ enchant.box2d = {};
         /**
          * 四角形の物理シミュレーション用Sprite
          * @example
-         *   var bear = new PhyBoxSprite(32, 32, DYNAMIC_SPRITE, 1.0, 0.5, 0.3, true);
+         *   var bear = new PhyBoxSprite(32, 32, enchant.box2d.DYNAMIC_SPRITE, 1.0, 0.5, 0.3, true);
          *   bear.image = game.assets['chara1.gif'];
          *
          * @param {Number} [width] Spriteの横幅.
@@ -477,7 +477,7 @@ enchant.box2d = {};
         /**
          * 円の物理シミュレーション用Sprite
          * @example
-         *   var bear = new PhyCircleSprite(16, DYNAMIC_SPRITE, 1.0, 0.5, 0.3, true);
+         *   var bear = new PhyCircleSprite(16, enchant.box2d.DYNAMIC_SPRITE, 1.0, 0.5, 0.3, true);
          *   bear.image = game.assets['chara1.gif'];
          *
          @param {Number} [radius] Spriteの半径.

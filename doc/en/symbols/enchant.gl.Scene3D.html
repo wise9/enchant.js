@@ -38,8 +38,6 @@
 				
 					<li><a href="../symbols/_global_.html">_global_</a></li>
 				
-					<li><a href="../symbols/enchant.animation.Tween.html">enchant<span class='break'> </span>.<span class='break'> </span>animation<span class='break'> </span>.<span class='break'> </span>Tween</a></li>
-				
 					<li><a href="../symbols/enchant.box2d.PhysicsWorld.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhysicsWorld</a></li>
 				
 					<li><a href="../symbols/enchant.box2d.PhySprite.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhySprite</a></li>
@@ -54,6 +52,8 @@
 				
 					<li><a href="../symbols/enchant.Game.html">enchant<span class='break'> </span>.<span class='break'> </span>Game</a></li>
 				
+					<li><a href="../symbols/enchant.gl.Buffer.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Buffer</a></li>
+				
 					<li><a href="../symbols/enchant.gl.Camera3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Camera3D</a></li>
 				
 					<li><a href="../symbols/enchant.gl.collision.AABB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>AABB</a></li>
@@ -65,6 +65,8 @@
 					<li><a href="../symbols/enchant.gl.collision.OBB.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>collision<span class='break'> </span>.<span class='break'> </span>OBB</a></li>
 				
 					<li><a href="../symbols/enchant.gl.DirectionalLight.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>DirectionalLight</a></li>
+				
+					<li><a href="../symbols/enchant.gl.Framebuffer.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Framebuffer</a></li>
 				
 					<li><a href="../symbols/enchant.gl.Light3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Light3D</a></li>
 				
@@ -112,6 +114,8 @@
 				
 					<li><a href="../symbols/enchant.gl.Scene3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Scene3D</a></li>
 				
+					<li><a href="../symbols/enchant.gl.Shader.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Shader</a></li>
+				
 					<li><a href="../symbols/enchant.gl.Sprite3D.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Sprite3D</a></li>
 				
 					<li><a href="../symbols/enchant.gl.Texture.html">enchant<span class='break'> </span>.<span class='break'> </span>gl<span class='break'> </span>.<span class='break'> </span>Texture</a></li>
@@ -136,13 +140,15 @@
 				
 					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
 				
+					<li><a href="../symbols/enchant.tl.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>tl<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.tl.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>tl<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
+				
 					<li><a href="../symbols/enchant.ui.APad.html">enchant<span class='break'> </span>.<span class='break'> </span>ui<span class='break'> </span>.<span class='break'> </span>APad</a></li>
 				
 					<li><a href="../symbols/enchant.ui.Button.html">enchant<span class='break'> </span>.<span class='break'> </span>ui<span class='break'> </span>.<span class='break'> </span>Button</a></li>
 				
 					<li><a href="../symbols/enchant.ui.Pad.html">enchant<span class='break'> </span>.<span class='break'> </span>ui<span class='break'> </span>.<span class='break'> </span>Pad</a></li>
-				
-					<li><a href="../symbols/initialize.html">initialize</a></li>
 				
 			</ul>
 		</nav>
@@ -151,7 +157,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-2-1 22:16
+		Generated on: 2012-3-26 5:46
 	</div>
 </div>
 
@@ -405,13 +411,16 @@
 					</div>
 					
 					<div class="description">
-						Class for displayed Sprite3D tree route.Currently, multiple definitions are impossible, and the Scene3D defined first will be returned.
+						Class for displayed Sprite3D tree route.
+Currently, multiple definitions are impossible, and the Scene3D defined first will be returned.
 						
 					</div>
 					
 					
 						
-							<pre class="code">  var scene = new Scene3D();  var sprite = new Sprite3D();  scene.addChild(sprite);</pre>
+							<pre class="code">  var scene = new Scene3D();
+  var sprite = new Sprite3D();
+  scene.addChild(sprite);</pre>
 						
 					
 				
@@ -465,7 +474,10 @@
 						</div>
 						
 						<div class="description">
-							Child element array.A list of Sprite3D added as child classes in this scene can be acquired.When adding or subtracting child classes, without directly operating this array, <a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a> or <a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a> is used.
+							Child element array.
+A list of Sprite3D added as child classes in this scene can be acquired.
+When adding or subtracting child classes, without directly operating this array,
+<a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a> or <a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a> is used.
 							
 							
 							
@@ -487,7 +499,11 @@
 						</div>
 						
 						<div class="description">
-							Lighting array.At present, the only light source active in the scene is 0.Acquires a list of light sources acquired in this scene.When lighting is added or deleted, without directly operating this array,<a href="../symbols/enchant.gl.Scene3D.html#addLight">enchant.gl.Scene3D#addLight</a> or <a href="../symbols/enchant.gl.Scene3D.html#removeLight">enchant.gl.Scene3D#removeLight</a> is used.
+							Lighting array.
+At present, the only light source active in the scene is 0.
+Acquires a list of light sources acquired in this scene.
+When lighting is added or deleted, without directly operating this array,
+<a href="../symbols/enchant.gl.Scene3D.html#addLight">enchant.gl.Scene3D#addLight</a> or <a href="../symbols/enchant.gl.Scene3D.html#removeLight">enchant.gl.Scene3D#removeLight</a> is used.
 							
 							
 							
@@ -528,7 +544,10 @@
 								</div>
 								
 								<div class="description">
-									Add Sprite3D to scene.Adds Sprite3D delivered to argument and child classes to scene.Sprite3D will automatically be displayed on screen if added to scene.Use <a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a> to delete object added once.
+									Add Sprite3D to scene.
+Adds Sprite3D delivered to argument and child classes to scene.
+Sprite3D will automatically be displayed on screen if added to scene.
+Use <a href="../symbols/enchant.gl.Scene3D.html#removeChild">enchant.gl.Scene3D#removeChild</a> to delete object added once.
 									
 									
 									
@@ -591,7 +610,8 @@
 								</div>
 								
 								<div class="description">
-									Add lighting to scene.Currently, will not be used even if added to scene.
+									Add lighting to scene.
+Currently, will not be used even if added to scene.
 									
 									
 									
@@ -762,7 +782,10 @@
 								</div>
 								
 								<div class="description">
-									Delete Sprite3D from scene.Deletes designated Sprite3D from scene.The deleted Sprite3D will no longer be displayed on the screen.Use <a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a> to add Sprite3D.
+									Delete Sprite3D from scene.
+Deletes designated Sprite3D from scene.
+The deleted Sprite3D will no longer be displayed on the screen.
+Use <a href="../symbols/enchant.gl.Scene3D.html#addChild">enchant.gl.Scene3D#addChild</a> to add Sprite3D.
 									
 									
 									

@@ -7,7 +7,7 @@
  * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
  */
 
-enchant.util = { assets: ['icon0.gif', 'font.png'] };
+enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
 
 // 背景専用スプライト
 enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継承したクラスを作成する
@@ -23,29 +23,31 @@ enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継�
 
 // 画像でフォントを再現したラベル (参考: draw.text.js)
 enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
-	initialize: function(posX, posY, width, height) {
+	initialize: function(posX, posY, width) {
 		enchant.Sprite.call(this, 0, 0);
-		var width = (arguments[2] || enchant.Game.instance.width);
-		var height = (arguments[3] || enchant.Game.instance.height);
 		this.fontSize = 16;
 		this.widthItemNum = 16;
 		// font.png の横の文字数
-		this.returnLength = width/this.fontSize;
-		// 改行を入れる文字数
-		this.image = new Surface(width, height);
 		this.x = posX;
 		this.y = posY;
 		this.text = '';
-	},
-	_redraw: function() {
-		var i, x, y, wNum, charCode, charPos;
-		this.image.context.clearRect(0, 0, this.width, this.height);
-		if (this._bgcolor) {
-			this.image.context.fillStyle = this._bgcolor;
-			this.image.context.fillRect(0, 0, this.width, this.height);
+		if (arguments[2]) {
+			this.row = Math.floor(arguments[2] / this.fontSize);
 		}
-		for(i=0; i<this._text.length; i++) {
-			charCode = this._text.charCodeAt(i);
+	},
+	setText: function(txt) {
+		var i, x, y, wNum, charCode, charPos;
+		this._text = txt;
+		if (!this.returnLength) {
+			this.width = Math.min(this.fontSize * this._text.length, enchant.Game.instance.width);
+		} else {
+			this.width = Math.min(this.returnLength * this.fontSize, enchant.Game.instance.width);
+		}
+		this.height = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
+		this.image = new Surface(this.width, this.height);
+		this.image.context.clearRect(0, 0, this.width, this.height);
+		for(i=0; i<txt.length; i++) {
+			charCode = txt.charCodeAt(i);
 			if (charCode >= 32 && charCode <= 127) {
 				charPos = charCode - 32;
 			} else {
@@ -55,18 +57,8 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 			y = (charPos / this.widthItemNum)|0;
 			this.image.draw(enchant.Game.instance.assets['font.png'], 
 				x * this.fontSize, y * this.fontSize, this.fontSize, this.fontSize,
-				(i%this.returnLength)*this.fontSize, ((i/this.returnLength)|0)*this.fontSize, this.fontSize, this.fontSize);
+				(i%this.row)*this.fontSize, ((i/this.row)|0)*this.fontSize, this.fontSize, this.fontSize);
 		}
-	},
-	setText: function(txt) {
-		this._text = txt;
-		this.width = this.returnLength * this.widthItemNum;
-		this.height = this.fontSize * (((this._text.length / this.returnLength)|0)+1);
-		this._redraw();
-	},
-	setBackgroundColor: function(bgcolor) {
-		this._bgcolor = bgcolor;
-		this._redraw();
 	},
 	text: {
 		get: function() {
@@ -76,17 +68,9 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 			this.setText(txt);
 		}
 	},
-	backgroundColor: {
-		get: function() {
-			return this._bgcolor;
-		},
-		set: function(bgcolor) {
-			this.setBackgroundColor(bgcolor);
-		}
-	},
 	row: {
 		get: function() {
-			return this.returnLength;
+			return this.returnLength || this.width/this.fontSize;
 		},
 		set: function(row) {
 			this.returnLength = row;

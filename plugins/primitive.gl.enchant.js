@@ -1,7 +1,7 @@
 /**
  * primitive.gl.enchant.js
- * @version 0.3.2
- * @require gl.enchant.js v0.3.1+
+ * @version 0.3.5
+ * @require gl.enchant.js v0.3.5+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -23,7 +23,7 @@ if(enchant.gl != undefined){
             }
         });
         enchant.gl.primitive.PlaneYZ = enchant.Class.create(enchant.gl.Sprite3D, {
-            initialize: function() {
+            initialize: function(scale) {
                 enchant.gl.Sprite3D.call(this);
                 this.mesh = Mesh.createPlaneYZ(scale);
             }
@@ -40,7 +40,8 @@ if(enchant.gl != undefined){
                 enchant.gl.primitive.Plane.call(this, scale);
                 this.addEventListener('enterframe', function() {
                     if (game.currentScene3D._camera) {
-                        this.rotation = game.currentScene3D.cameraMatInverse;
+                        console.log(game.currentScene3D._camera);
+                        this.rotation = game.currentScene3D._camera.invMat;
                     }
                 });
             }
@@ -80,7 +81,7 @@ if(enchant.gl != undefined){
                 enchant.gl.primitive.Plane.call(this, scale);
                 this.addEventListener('render', function() {
                     if (game.currentScene3D._camera) {
-                        this.rotation = game.currentScene3D.cameraMatInverseY;
+                        this.rotation = game.currentScene3D._camera.invMatY;
                     }
                 });
             }
@@ -109,6 +110,12 @@ if(enchant.gl != undefined){
                 this.mesh = Mesh.createCylinder(r, h, v);
             }
         });
+        enchant.gl.primitive.Torus = enchant.Class.create(enchant.gl.Sprite3D, {
+            initialize: function(r, r2, v, v2) {
+                enchant.gl.Sprite3D.call(this);
+                this.mesh = Mesh.createTorus(r, r2, v, v2);
+            }
+        });
 
         var proto = Object.getPrototypeOf(enchant.gl.Mesh);
         proto._createPlane = function(type, scale) {
@@ -124,12 +131,22 @@ if(enchant.gl != undefined){
                          0.0, -1.0,  1.0,
                          0.0, -1.0, -1.0,
                          0.0,  1.0, -1.0,
+
+                         0.0,  1.0,  1.0,
+                         0.0, -1.0,  1.0,
+                         0.0, -1.0, -1.0,
+                         0.0,  1.0, -1.0
                     ];
                     mesh.normals = [
                         1.0, 0.0, 0.0,
                         1.0, 0.0, 0.0,
                         1.0, 0.0, 0.0,
                         1.0, 0.0, 0.0,
+
+                        -1.0, 0.0, 0.0,
+                        -1.0, 0.0, 0.0,
+                        -1.0, 0.0, 0.0,
+                        -1.0, 0.0, 0.0
                     ];
                 break;
 
@@ -139,12 +156,22 @@ if(enchant.gl != undefined){
                         -1.0,  0.0,  1.0,
                         -1.0,  0.0, -1.0,
                          1.0,  0.0, -1.0,
+
+                         1.0,  0.0,  1.0,
+                        -1.0,  0.0,  1.0,
+                        -1.0,  0.0, -1.0,
+                         1.0,  0.0, -1.0
                     ];
                     mesh.normals = [
-                        0.0, 1.0, 0.0,
-                        0.0, 1.0, 0.0,
-                        0.0, 1.0, 0.0,
-                        0.0, 0.0, 0.0,
+                         0.0, -1.0, 0.0,
+                         0.0, -1.0, 0.0,
+                         0.0, -1.0, 0.0,
+                         0.0, -1.0, 0.0,
+
+                         0.0, 1.0, 0.0,
+                         0.0, 1.0, 0.0,
+                         0.0, 1.0, 0.0,
+                         0.0, 1.0, 0.0
                     ];
                 break;
 
@@ -154,13 +181,23 @@ if(enchant.gl != undefined){
                          1.0,  1.0, 0.0,
                         -1.0,  1.0, 0.0,
                         -1.0, -1.0, 0.0,
+                         1.0, -1.0, 0.0,
+
+                         1.0,  1.0, 0.0,
+                        -1.0,  1.0, 0.0,
+                        -1.0, -1.0, 0.0,
                          1.0, -1.0, 0.0
                     ];
                     mesh.normals = [
-                        0.0, 0.0, 1.0,
-                        0.0, 0.0, 1.0,
-                        0.0, 0.0, 1.0,
-                        0.0, 0.0, 1.0,
+                         0.0, 0.0, 1.0,
+                         0.0, 0.0, 1.0,
+                         0.0, 0.0, 1.0,
+                         0.0, 0.0, 1.0,
+
+                         0.0, 0.0, -1.0,
+                         0.0, 0.0, -1.0,
+                         0.0, 0.0, -1.0,
+                         0.0, 0.0, -1.0
                     ];
                 break;
             }
@@ -172,9 +209,19 @@ if(enchant.gl != undefined){
                 1.0, 1.0, 1.0, 1.0,
                 1.0, 1.0, 1.0, 1.0,
                 1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0,
+
+                1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0,
+                1.0, 1.0, 1.0, 1.0,
                 1.0, 1.0, 1.0, 1.0
             ];
             mesh.texCoords = [
+                1.0, 1.0,
+                0.0, 1.0,
+                0.0, 0.0,
+                1.0, 0.0,
+
                 1.0, 1.0,
                 0.0, 1.0,
                 0.0, 0.0,
@@ -183,8 +230,8 @@ if(enchant.gl != undefined){
             mesh.indices = [
                 0, 1, 2,
                 2, 3, 0,
-                2, 1, 0,
-                0, 3, 2
+                6, 5, 4,
+                4, 7, 6
             ];
             return mesh;
         };
@@ -278,7 +325,32 @@ if(enchant.gl != undefined){
                 1.0, 1.0, 1.0, 1.0,
                 1.0, 1.0, 1.0, 1.0
             ];
-            mesh.normals = mesh.vertices;
+            mesh.normals = [
+                0.0,  0.0,  1.0,
+                0.0,  0.0,  1.0,
+                0.0,  0.0,  1.0,
+                0.0,  0.0,  1.0,
+                0.0,  0.0, -1.0,
+                0.0,  0.0, -1.0,
+                0.0,  0.0, -1.0,
+                0.0,  0.0, -1.0,
+                0.0,  1.0,  0.0,
+                0.0,  1.0,  0.0,
+                0.0,  1.0,  0.0,
+                0.0,  1.0,  0.0,
+                0.0, -1.0,  0.0,
+                0.0, -1.0,  0.0,
+                0.0, -1.0,  0.0,
+                0.0, -1.0,  0.0,
+                1.0,  0.0,  0.0,
+                1.0,  0.0,  0.0,
+                1.0,  0.0,  0.0,
+                1.0,  0.0,  0.0,
+               -1.0,  0.0,  0.0,
+               -1.0,  0.0,  0.0,
+               -1.0,  0.0,  0.0,
+               -1.0,  0.0,  0.0
+            ];
             mesh.texCoords = [
                 1.0, 0.0,
                 0.0, 0.0,
@@ -313,36 +385,24 @@ if(enchant.gl != undefined){
             var a = [
                 0, 1, 2,
                 2, 3, 0,
+
+                2, 1, 0,
+                0, 3, 2,
+
                 2, 1, 0,
                 0, 3, 2,
 
                 0, 1, 2,
                 2, 3, 0,
-                2, 1, 0,
-                0, 3, 2,
 
                 0, 1, 2,
                 2, 3, 0,
-                2, 1, 0,
-                0, 3, 2,
 
-                0, 1, 2,
-                2, 3, 0,
-                2, 1, 0,
-                0, 3, 2,
-
-                0, 1, 2,
-                2, 3, 0,
-                2, 1, 0,
-                0, 3, 2,
-
-                0, 1, 2,
-                2, 3, 0,
                 2, 1, 0,
                 0, 3, 2
             ];
-            for(var i = 0; i < 6 * 12; i++){
-                a[i] += Math.floor(i / 12) * 4;
+            for(var i = 0; i < 6 * 6; i++){
+                a[i] += Math.floor(i / 6) * 4;
             }
             mesh.indices = a;
             return mesh;
@@ -377,7 +437,7 @@ if(enchant.gl != undefined){
                 colors[colors.length] = 1.0;
             }
             mesh.colors = colors;
-            mesh.normals = vertices;
+            mesh.normals = vertices.slice(0);;
             var indices = [];
             for(var i = 0; i < v - 1; i++){
                 for(var j = 0; j < h; j++){
@@ -428,48 +488,68 @@ if(enchant.gl != undefined){
 
             var cos = 0;
             var sin = 0;
-            var len = 0;
             for (var i = 0; i < v; i++) {
                 cos = Math.cos(Math.PI * 2 * i / (v-1));
                 sin = Math.sin(Math.PI * 2 * i / (v-1));
-                len = Math.sqrt(cos * cos + sin * sin + 0.25);
 
                 vertices[vertices.length] = cos * r;
                 vertices[vertices.length] = h;
                 vertices[vertices.length] = sin * r;
 
-                normals[normals.length] = cos * len;
-                normals[normals.length] = 0.5 * len;
-                normals[normals.length] = sin * len;
+                normals[normals.length] = 0;
+                normals[normals.length] = 1;
+                normals[normals.length] = 0;
 
-                texCoords[texCoords.length] = i / v;
+                texCoords[texCoords.length] = i / (v - 1);
                 texCoords[texCoords.length] = 1;
 
                 vertices[vertices.length] = cos * r;
                 vertices[vertices.length] = -h;
                 vertices[vertices.length] = sin * r;
 
-                normals[normals.length] = cos * len;
-                normals[normals.length] = -0.5 * len;
-                normals[normals.length] = sin * len;
+                normals[normals.length] = 0;
+                normals[normals.length] = -1;
+                normals[normals.length] = 0;
 
-                texCoords[texCoords.length] = i / v;
+                texCoords[texCoords.length] = i / (v - 1);
+                texCoords[texCoords.length] = 0;
+
+                vertices[vertices.length] = cos * r;
+                vertices[vertices.length] = h;
+                vertices[vertices.length] = sin * r;
+
+                normals[normals.length] = cos;
+                normals[normals.length] = 0;
+                normals[normals.length] = sin;
+
+                texCoords[texCoords.length] = i / (v - 1);
+                texCoords[texCoords.length] = 1;
+
+                vertices[vertices.length] = cos * r;
+                vertices[vertices.length] = -h;
+                vertices[vertices.length] = sin * r;
+
+                normals[normals.length] = cos;
+                normals[normals.length] = 0;
+                normals[normals.length] = sin;
+
+                texCoords[texCoords.length] = i / (v - 1);
                 texCoords[texCoords.length] = 0;
             }
             for (var i = 0; i < v - 1; i++) {
                 indices[indices.length] = 0;
-                indices[indices.length] = i * 2 + 4;
-                indices[indices.length] = i * 2 + 2;
+                indices[indices.length] = 2 + i * 4 + 4;
+                indices[indices.length] = 2 + i * 4 + 0;
                 indices[indices.length] = 1;
-                indices[indices.length] = i * 2 + 3;
-                indices[indices.length] = i * 2 + 5;
+                indices[indices.length] = 2 + i * 4 + 1;
+                indices[indices.length] = 2 + i * 4 + 5;
 
-                indices[indices.length] = i * 2 + 2;
-                indices[indices.length] = i * 2 + 4;
-                indices[indices.length] = i * 2 + 5;
-                indices[indices.length] = i * 2 + 5;
-                indices[indices.length] = i * 2 + 3;
-                indices[indices.length] = i * 2 + 2;
+                indices[indices.length] = 2 + i * 4 + 2;
+                indices[indices.length] = 2 + i * 4 + 6;
+                indices[indices.length] = 2 + i * 4 + 3;
+                indices[indices.length] = 2 + i * 4 + 6;
+                indices[indices.length] = 2 + i * 4 + 7;
+                indices[indices.length] = 2 + i * 4 + 3;
             }
 
             var mesh = new enchant.gl.Mesh();
@@ -478,6 +558,73 @@ if(enchant.gl != undefined){
             mesh.texCoords = texCoords;
             mesh.normals = normals;
             mesh.setBaseColor('#ffffff');
+            return mesh;
+        };
+        proto.createTorus = function(r, r2, v, v2) {
+            if (typeof r == 'undefined') {
+                r = 1.0;
+            } if (typeof r2 == 'undefined') {
+                r2 = 0.3;
+            } if (typeof v == 'undefined') {
+                v = 20;
+            } if (typeof v2 == 'undefined') {
+                v2 = 20;
+            }
+            var ring = [];
+            var norm = [];
+            var rad;
+            var cos;
+            var sin;
+            for (var i = 0; i < v2; i++) {
+                rad = Math.PI * 2 * i / (v2-1);
+                cos = Math.cos(rad);
+                sin = Math.sin(rad);
+                ring[ring.length] = 0;
+                ring[ring.length] = sin * r2;
+                ring[ring.length] = cos * r2 + r - r2;
+                norm[norm.length] = 0;
+                norm[norm.length] = sin;
+                norm[norm.length] = cos;
+            }
+            var vertices = [];
+            var normals = [];
+            var texCoords = [];
+            for (var i = 0; i < v; i++) {
+                rad = Math.PI * 2 * i / (v-1);
+                cos = Math.cos(rad);
+                sin = Math.sin(rad);
+                for (var j = 0; j < ring.length; j += 3) {
+                    vertices[vertices.length] = ring[j] * cos - ring[j + 2] * sin;
+                    vertices[vertices.length] = ring[j + 1];
+                    vertices[vertices.length] = ring[j + 2] * cos + ring[j] * sin;
+                    normals[normals.length] = norm[j] * cos - ring[j + 2] * sin;
+                    normals[normals.length] = norm[j + 1];
+                    normals[normals.length] = norm[j + 2] * cos + ring[j] + sin;
+                    texCoords[texCoords.length] = 1.0 - i / (v - 1);
+                    texCoords[texCoords.length] = j / (ring.length - 3);
+                }
+            }
+            var indices = [];
+            var c, c2;
+            for (var i = 0; i < v - 1; i++) {
+                for (var j = 0; j < v2 - 1; j++) {
+                    c = v2 * i + j;
+                    c2 = v2 * (i + 1) + j;
+                    indices[indices.length] = c;
+                    indices[indices.length] = c + 1;
+                    indices[indices.length] = c2;
+                    indices[indices.length] = c2 + 1;
+                    indices[indices.length] = c2;
+                    indices[indices.length] = c + 1;
+                }
+            }
+            var mesh = new enchant.gl.Mesh();
+            mesh.vertices = vertices;
+            mesh.normals = normals;
+            mesh.texCoords = texCoords;
+            mesh.indices = indices;
+            mesh.setBaseColor('#ffffff');
+
             return mesh;
         };
     })();

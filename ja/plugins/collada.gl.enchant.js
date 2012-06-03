@@ -1,7 +1,7 @@
 /**
 [lang:ja]
  * collada.gl.enchant.js
- * @version v0.3.1
+ * @version v0.3.5
  * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -17,7 +17,7 @@
  [/lang]
  [lang:en]
  * collada.gl.enchant.js
- * @version v0.3.1
+ * @version v0.3.5
  * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -84,12 +84,9 @@ if (enchant.gl != undefined) {
                 _this.onload = onload;
             }
             var collada = new Collada();
+            var that = this;
             collada.onload = function(model){
                 var root = new Sprite3D();
-                /*
-                root.mesh = new Mesh();
-                root.mesh.vertices = 0;
-                */
                 model.getCorrespondingGeometry = function(node){
                 	for(var i = 0; i < this.geometries.length; i++){
                 		if(node.url == this.geometries[i].id){
@@ -113,6 +110,13 @@ if (enchant.gl != undefined) {
                     	if(material){
                     		var instanceEffectUrl = material.instanceEffect.url;
                     		var effect = collada.getEffectById(instanceEffectUrl);
+                            if (effect && effect.profileCommon && effect.profileCommon.surface &&
+                                effect.profileCommon.surface.initFrom) {
+                                var img = that.getImageById(effect.profileCommon.surface.initFrom)
+                                if (img) {
+                                    texture.src = img.initFrom;
+                                }
+                            }
                     		if(effect && effect.profileCommon && effect.profileCommon.technique &&
                     			effect.profileCommon.technique.phong){
 	                            texture.emission = effect.profileCommon.technique.phong.emission;
@@ -121,10 +125,6 @@ if (enchant.gl != undefined) {
 	                            texture.specular = effect.profileCommon.technique.phong.specular;
 	                            texture.shininess = effect.profileCommon.technique.phong.shininess;
                     		}
-//                            ep_mesh.reflective = [0, 0, 0, 0];
-//                            ep_mesh.reflectivity = 0;
-//                            ep_mesh.transparent = [0, 0, 0, 0];
-//                            ep_mesh.transparency = 0;
                     	}
                     }
                     
@@ -200,11 +200,7 @@ if (enchant.gl != undefined) {
             collada.loadModel(url);
         }
         
-        /**
-[lang:ja]
-         * ColladafNX
-         */
-        function Collada(){
+        function Collada() {
             var _this = this;
             this.debug = true;
             this.materials = new Array();
@@ -226,6 +222,12 @@ if (enchant.gl != undefined) {
             this.getGeometryById = function(id){
             	for(var i = 0; i < this.geometries.length; i++){
             		if(this.geometries[i].id == id) return this.geometries[i];
+            	}
+            	return null;
+            }
+            this.getImageById = function(id){
+            	for(var i = 0; i < this.images.length; i++){
+            		if(this.images[i].id == id) return this.images[i];
             	}
             	return null;
             }
@@ -269,7 +271,7 @@ if (enchant.gl != undefined) {
                     var model = _this.convert();
                     _this.onload(model);
                 }
-                req.send(null); // Sending Request
+                req.send(null);
             }
             
             function loadGeometries(xml){
@@ -445,15 +447,15 @@ if (enchant.gl != undefined) {
                         }
                         function Phong(xml){
                             var _this = this;
-                            this.emission = [0, 0, 0, 0];
-                            this.ambient = [0, 0, 0, 0];
-                            this.diffuse = [0, 0, 0, 0];
-                            this.specular = [0, 0, 0, 0];
-                            this.shininess = 0;
-                            this.reflective = [0, 0, 0, 0];
-                            this.reflectivity = 0;
-                            this.transparent = [0, 0, 0, 0];
-                            this.transparency = 0;
+                            this.emission = [0, 0, 0, 1];
+                            this.ambient = [0.3, 0.3, 0.3, 1];
+                            this.diffuse = [1, 1, 1, 1];
+                            this.specular = [0, 0, 0, 1];
+                            this.shininess = 100;
+                            this.reflective = [0, 0, 0, 1];
+                            this.reflectivity = 0.1;
+                            this.transparent = [0, 0, 0, 1];
+                            this.transparency = 1.0;
                             var temp = xml.getElementsByTagName("emission")[0].getElementsByTagName("color")[0].textContent;
                             if (temp) {
                                 this.emission = parseFloatArray(temp);
@@ -499,7 +501,6 @@ if (enchant.gl != undefined) {
                             }
                             temp = 0;
                             
-                            // TODO
                             if (false) {
                                 temp = xml.getElementsByTagName("transparent")[0].getElementsByTagName("color")[0].textContent;
                                 if (temp) {
@@ -531,11 +532,11 @@ if (enchant.gl != undefined) {
                 this.id = xmlMaterial.getAttribute("id");
                 this.name = xmlMaterial.getAttribute("name");
                 this.instanceEffect = new InstanceEffect(instance_effects_xml[0]);
-                this.emission = [0, 0, 0, 0];
-                this.ambient = [0, 0, 0, 0];
-                this.diffuse = [0, 0, 0, 0];
-                this.specular = [0, 0, 0, 0];
-                this.shininess = [0, 0, 0, 0];
+                this.emission = [0, 0, 0, 1];
+                this.ambient = [0.3, 0.3, 0.3, 1];
+                this.diffuse = [1, 1, 1, 1];
+                this.specular = [0, 0, 0, 1];
+                this.shininess = [0, 0, 0, 1];
                 
                 var setParams = xmlMaterial.getElementsByTagName("setparam");
                 for (var i = 0; i < setParams.length; i++) {
@@ -635,18 +636,6 @@ if (enchant.gl != undefined) {
                 this.id = xml.getAttribute("id");
                 this.name = xml.getAttribute("name");
                 this.nodes = getNodeHierarchy(xml);
-                /**
-[lang:ja]
-                 params
-                 id
-                 name
-                 translate
-                 rotateX
-                 rotateY
-                 rotateZ
-                 scale
-                 url
-                 **/
             }
             
             this.onload = function(){
@@ -658,9 +647,7 @@ if (enchant.gl != undefined) {
                 for (var i = 0; i < _this.geometries.length; i++) {
                     var geometry = _this.geometries[i];
                     var resultGeometry = new Object();
-                    //id
                     resultGeometry.id = geometry.id;
-                    //mesh
                     resultGeometry.meshes = new Array();
                     for (var j = 0; j < geometry.meshes.length; j++) {
                     
@@ -759,11 +746,11 @@ if (enchant.gl != undefined) {
                     this.material;
                 }
                 function Material(){
-                    this.emission = [0, 0, 0, 0];
-                    this.ambient = [0, 0, 0, 0];
-                    this.diffuse = [0, 0, 0, 0];
-                    this.specular = [0, 0, 0, 0];
-                    this.shininess = [0, 0, 0, 0];
+                    this.emission = [0, 0, 0, 1];
+                    this.ambient = [0.3, 0.3, 0.3, 1];
+                    this.diffuse = [1, 1, 1, 1];
+                    this.specular = [0, 0, 0, 1];
+                    this.shininess = [0, 0, 0, 1];
                 }
             }
             

@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.4.3
+ * enchant.js v0.4.4
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -905,7 +905,7 @@ enchant.EventTarget = enchant.Class.create({
         e.target = this;
         e.localX = e.x - this._offsetX;
         e.localY = e.y - this._offsetY;
-        if (this['on' + e.type] != null) this['on' + e.type]();
+        if (this['on' + e.type] != null) this['on' + e.type](e);
         var listeners = this._listeners[e.type];
         if (listeners != null) {
             listeners = listeners.slice();
@@ -1174,6 +1174,9 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         this._soundID = 0;
         this._intervalID = null;
 
+        this._offsetX = 0;
+        this._offsetY = 0;
+
         /**
 [lang:ja]
          * ゲームに対する入力状態を保存するオブジェクト.
@@ -1194,18 +1197,26 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         var c = 0;
         ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
             this.addEventListener(type + 'buttondown', function(e) {
+                var inputEvent;
                 if (!this.input[type]) {
                     this.input[type] = true;
-                    this.dispatchEvent(new enchant.Event((c++) ? 'inputchange' : 'inputstart'));
+                    inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
+                    this.dispatchEvent(inputEvent);
                 }
                 this.currentScene.dispatchEvent(e);
+                if(inputEvent)
+                    this.currentScene.dispatchEvent(inputEvent);
             });
             this.addEventListener(type + 'buttonup', function(e) {
+                var inputEvent;
                 if (this.input[type]) {
                     this.input[type] = false;
-                    this.dispatchEvent(new enchant.Event((--c) ? 'inputchange' : 'inputend'));
+                    inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
+                    this.dispatchEvent(inputEvent);
                 }
                 this.currentScene.dispatchEvent(e);
+                if(inputEvent)
+                    this.currentScene.dispatchEvent(inputEvent);
             });
         }, this);
                 
@@ -1699,6 +1710,19 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
      */
     keybind: function(key, button) {
         this._keybind[key] = button;
+    },
+    /**
+[lang:ja]
+     * Game#start が呼ばれてから経過した時間を取得する
+     * @return {Number} 経過した時間 (秒)
+[/lang]
+[lang:en]
+     * get elapsed time from game.start is called
+     * @return {Number} elapsed time (seconds)
+[/lang]
+     */
+    getElapsedTime: function(){
+        return this.frame / this.fps;
     }
 });
 
@@ -1874,7 +1898,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this.clearEventListener();
         }
         if(this.parentNode){
-            this.removeChild(this);
+            this.parentNode.removeChild(this);
         }
     }
 });
@@ -2556,6 +2580,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 
         this.width = 300;
         this.text = text;
+        this.textAlign = 'left';
     },
     /**
 [lang:ja]
@@ -2573,6 +2598,26 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         },
         set: function(text) {
             this._element.innerHTML = text;
+        }
+    },
+    /**
+[lang:ja]
+     * テキストの水平位置の指定.
+     * CSSの'text-align'プロパティと同様の形式で指定できる.
+     * @type {String}
+[/lang]
+[lang:en]
+     * Specifies horizontal alignment of text.
+     * Can be set to same format as CSS 'text-align' property.
+     * @type {String}
+[/lang]
+     */
+    textAlign: {
+        get: function() {
+            return this._style.textAlign;
+        },
+        set: function(textAlign) {
+            this._style.textAlign = textAlign;
         }
     },
     /**
@@ -3278,6 +3323,70 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     }
 });
+
+/**
+ * @scope enchant.RGroup.prototype
+ */
+enchant.RGroup = enchant.Class.create(enchant.Group, {
+    /**
+     * 回転できるGroup。ただし高さ・幅を指定しなければならない
+     *
+     * @example
+     *   var scene = new RotateGroup();
+     *   scene.addChild(player);
+     *   scene.addChild(enemy);
+     *   game.pushScene(scene);
+     *
+     * @constructs
+     * @extends enchant.Group
+     */
+    initialize: function(width, height) {
+        enchant.Group.call(this);
+
+        if(arguments.length < 2) throw("Width and height of RGroup must be specified");
+        this.width = width;
+        this.height = height;
+        this.rotationOrigin = {
+            x : width/2 ,
+            y : height/2
+        }
+        this._rotation = 0;
+    },
+    addChild: function(node) {
+        enchant.Group.prototype.addChild.apply(this, arguments);
+        node.transformOrigin = "0 0";
+    },
+    rotation: {
+        get: function(){
+            return this._rotation;
+        },
+        set: function(rotation){
+            var diff_rotation = (rotation - this._rotation);
+
+            if(diff_rotation == 0)return;
+            var rad = diff_rotation / 180 * Math.PI;
+            var sin = Math.sin(rad);
+            var cos = Math.cos(rad);
+            var origin = {
+                x : this.width/2,
+                y : this.height/2
+            }
+
+            for(var i = 0, len = this.childNodes.length; i < len; i++){
+                var node = this.childNodes[i];
+                node.rotation -= diff_rotation;
+                var rx = (node.x - origin.x);
+                var ry = (node.y - origin.y);
+                node.x = +cos * rx + sin * ry + origin.x;
+                node.y = -sin * rx + cos * ry + origin.y;
+            }
+
+            this._rotation = rotation;
+        }
+    }
+});
+
+
 
 /**
 [lang:ja]
