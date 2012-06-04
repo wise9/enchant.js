@@ -513,14 +513,18 @@ enchant.EventTarget = enchant.Class.create({
      * Add EventListener.
      * @param {String} type Event type.
      * @param {function(e:enchant.Event)} listener EventListener added.
+     * @param {Object} thisArgs specify this scope when listener called.
      */
-    addEventListener: function(type, listener) {
+    addEventListener: function(type, listener, thisArgs) {
+        if (thisArgs == null) {
+          thisArgs = this;
+        }
+        listener.scope = thisArgs;
         var listeners = this._listeners[type];
         if (listeners == null) {
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
-
         }
     },
     /**
@@ -561,7 +565,8 @@ enchant.EventTarget = enchant.Class.create({
         if (listeners != null) {
             listeners = listeners.slice();
             for (var i = 0, len = listeners.length; i < len; i++) {
-                listeners[i].call(this, e);
+                var listener = listeners[i];
+                listener.call(listener.scope, e);
             }
         }
     }
