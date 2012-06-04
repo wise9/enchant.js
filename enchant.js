@@ -2942,7 +2942,7 @@ function findExt(path) {
 /**
  * @scope enchant.Timer.prototype
  */
-enchant.Timer = enchant.Class.create({
+enchant.Timer = enchant.Class.create(enchant.EventTarget, {
     /**
      * Class to wrap setInterval.
      *
@@ -2951,6 +2951,7 @@ enchant.Timer = enchant.Class.create({
      * @constructs
      */
     initialize: function(delay, repeatCount) {
+        enchant.EventTarget.call(this);
         this.id = null;
         this.delay = delay;
         this.repeatCount = repeatCount;
