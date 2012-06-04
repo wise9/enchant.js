@@ -2954,6 +2954,9 @@ enchant.Timer = enchant.Class.create(enchant.EventTarget, {
         enchant.EventTarget.call(this);
         this.id = null;
         this.delay = delay;
+        if (isNaN(repeatCount) || repeatCount < 0) {
+          repeatCount = 1;
+        }
         this.repeatCount = repeatCount;
         this.currentCount = 0;
         this.running = false;
@@ -2975,6 +2978,7 @@ enchant.Timer = enchant.Class.create(enchant.EventTarget, {
         if (!this.running) {
             var self = this;
             this.id = setInterval(function() { self.tickerHandler(); }, this.delay);
+            this.running = true;
         }
     },
     /**
@@ -2992,7 +2996,7 @@ enchant.Timer = enchant.Class.create(enchant.EventTarget, {
         this.currentCount++;
         var tickerEvent = new Event(enchant.Event.TIMER);
         this.dispatchEvent(tickerEvent);
-        if (this.currentCount >= this.repeatCount) {
+        if (this.currentCount >= this.repeatCount && this.repeatCount != 0) {
             var completeEvent = new Event(enchant.Event.TIMER_COMPLETE);
             this.dispatchEvent(completeEvent);
             this.reset();
