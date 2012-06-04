@@ -2938,3 +2938,77 @@ function findExt(path) {
 }
 
 })();
+
+/**
+ * @scope enchant.Timer.prototype
+ */
+enchant.Timer = enchant.Class.create({
+    /**
+     * Class to wrap setInterval.
+     *
+     * @param {Number} delay The delay, in milliseconds, between timer events.
+     * @param {Number} The total number of times the timer is set to run.
+     * @constructs
+     */
+    initialize: function(delay, repeatCount) {
+        this.id = null;
+        this.delay = delay;
+        this.repeatCount = repeatCount;
+        this.currentCount = 0;
+        this.running = false;
+    },
+    /**
+     * Stops the timer, if it is running, and sets the currentCount property
+     * back to 0, like the reset button of a stopwatch.
+     */
+    reset: function() {
+        clearInterval(this.id);
+        this.id = null;
+        this.currentCount = 0;
+        this.running = false;
+    },
+    /**
+     * Starts the timer, if it is not already running.
+     */
+    start: function() {
+        if (!this.running) {
+            var self = this;
+            this.id = setInterval(function() { self.tickerHandler(); }, this.delay);
+        }
+    },
+    /**
+     * Stops the timer.
+     */
+    stop: function() {
+        clearInterval(this.id);
+        this.id = null;
+        this.running = false;
+    },
+    /**
+     * @private
+     */
+    tickerHandler: function() {
+        this.currentCount++;
+        var tickerEvent = new Event(enchant.Event.TIMER);
+        this.dispatchEvent(tickerEvent);
+        if (this.currentCount >= this.repeatCount) {
+            var completeEvent = new Event(enchant.Event.TIMER_COMPLETE);
+            this.dispatchEvent(completeEvent);
+            this.reset();
+        }
+    }
+});
+
+/**
+ * The Timer object that has reached its interval.
+ * Issued object: enchant.Timer
+ * @type {String}
+ */
+enchant.Event.TIMER = 'timer';
+
+/**
+ * The Timer object that has completed its requests.
+ * Issued object: enchant.Timer
+ * @type {String}
+ */
+enchant.Event.TIMER_COMPLETE = 'timerComplete';
