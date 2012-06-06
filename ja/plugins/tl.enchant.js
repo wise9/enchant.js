@@ -228,6 +228,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
                     action.dispatchEvent(e);
                 }
             };
+
             var e = new enchant.Event("actiontick");
             e.timeline = timeline;
             for(i = 0, len = that.actions.length; i < len; i++){
@@ -364,11 +365,6 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
             e.timeline = this;
             action.dispatchEvent(e);
 
-            // 再度追加する
-            e = new enchant.Event("addedtotimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-
             action.frame = 0;
 
             this.add(action);
@@ -405,6 +401,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         }else{
             this.queue.push(action);
         }
+        action.frame = 0;
 
         var e = new enchant.Event("addedtotimeline");
         e.timeline = this;
@@ -512,8 +509,8 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     then: function(func){
         var timeline = this;
         this.add(new enchant.tl.Action({
-                    onactionstart: func,
                     onactiontick: function(evt){
+                        func.call(timeline.node);
                         timeline.next();
                     }
                 }));
