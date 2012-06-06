@@ -1898,7 +1898,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this.clearEventListener();
         }
         if(this.parentNode){
-            this.removeChild(this);
+            this.parentNode.removeChild(this);
         }
     }
 });

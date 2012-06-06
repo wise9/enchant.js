@@ -51,7 +51,8 @@ if(enchant.gl != undefined){
                 enchant.gl.primitive.Plane.call(this, scale);
                 this.addEventListener('enterframe', function() {
                     if (game.currentScene3D._camera) {
-                        this.rotation = game.currentScene3D.cameraMatInverse;
+                        console.log(game.currentScene3D._camera);
+                        this.rotation = game.currentScene3D._camera.invMat;
                     }
                 });
             }
@@ -80,10 +81,6 @@ if(enchant.gl != undefined){
                         right, top,
                         left, top,
                         left, bottom,
-                        right, bottom,
-                        right, top,
-                        left, top,
-                        left, bottom,
                         right, bottom
                     ];
                 }
@@ -95,7 +92,7 @@ if(enchant.gl != undefined){
                 enchant.gl.primitive.Plane.call(this, scale);
                 this.addEventListener('render', function() {
                     if (game.currentScene3D._camera) {
-                        this.rotation = game.currentScene3D.cameraMatInverseY;
+                        this.rotation = game.currentScene3D._camera.invMatY;
                     }
                 });
             }
