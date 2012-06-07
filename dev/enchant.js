@@ -3221,13 +3221,16 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     while (nodes.length) {
                         node = nodes.pop();
                         if (node._element) {
-                            nextSibling = node._element;
-                            break;
+                            if (node._element == reference._element) {
+                                nextSibling = node._element;
+                                break;
+                            }
                         } else if (node.childNodes) {
                             push.apply(nodes, node.childNodes.slice().reverse());
                         }
                     }
                     thisNode = thisNode.parentNode;
+                    if (nextSibling) break;
                 }
                 if (nextSibling) {
                     this.scene._element.insertBefore(fragment, nextSibling);
