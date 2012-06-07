@@ -1163,7 +1163,6 @@ enchant.Game.loadFuncs['ogg'] = function(src, callback, ext) {
     game.assets[src].addEventListener('load', callback);
 };
 
-
 /**
  * Current Game instance.
  * @type {enchant.Game}
@@ -1278,7 +1277,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this.clearEventListener();
         }
         if(this.parentNode){
-            this.removeChild(this);
+            this.parentNode.removeChild(this);
         }
     }
 });
@@ -2901,7 +2900,7 @@ enchant.Sound.load = function(src, type) {
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
-		game.dispatchEvent(new Event(data.value));
+        game.dispatchEvent(new Event(data.value));
     }else if (data.type == "debug"){
         switch(data.value) {
             case "start":
