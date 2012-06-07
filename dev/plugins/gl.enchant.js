@@ -485,7 +485,7 @@ enchant.gl.FrameBuffer = enchant.Class.create({
     [lang:en]
      * Destroy object.
     [/lang]
-    */
+     */
     destroy: function() {
         gl.deleteFramebuffer(this.framebuffer);
         gl.deleteFramebuffer(this.colorbuffer);
@@ -740,7 +740,7 @@ enchant.gl.Shader = enchant.Class.create({
     [lang:en]
      * Destroy object.
     [/lang]
-    */
+     */
     destroy: function() {
         gl.deleteProgram(this._vShaderProgram);
         gl.deleteProgram(this._fShaderProgram);
@@ -1439,7 +1439,7 @@ enchant.gl.Buffer = enchant.Class.create({
     [lang:en]
      * Bind buffer.
     [/lang]
-    */
+     */
     bind: function() {
         gl.bindBuffer(this.btype, this._buffer);
     },
@@ -1487,7 +1487,7 @@ enchant.gl.Buffer = enchant.Class.create({
     [lang:en]
      * Destroy object.
     [/lang]
-    */
+     */
     destroy: function() {
         this._delete();
         delete this;
@@ -1682,7 +1682,7 @@ enchant.gl.Mesh = enchant.Class.create({
     [lang:en]
      * Destroy object.
     [/lang]
-    */
+     */
     destroy: function() {
         this._deleteBuffer();
         delete this;
