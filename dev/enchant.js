@@ -3210,7 +3210,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 if (!fragment.childNodes.length) return;
 
                 var nextSibling, thisNode = reference;
-                while (thisNode.parentNode) {
+                while (thisNode != this) {
                     if (i != null) {
                         nodes = this.childNodes.slice(i+1).reverse();
                         i = null;
