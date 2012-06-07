@@ -779,7 +779,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     this.currentScene.dispatchEvent(inputEvent);
             });
         }, this);
-                
+
         if (initial) {
             var stage = enchant.Game.instance._element;
             document.addEventListener('keydown', function(e) {
@@ -890,7 +890,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         if (callback == null) callback = function() {};
 
         var ext = findExt(src);
-        
+
         if (enchant.Game.loadFuncs[ext]) {
             enchant.Game.loadFuncs[ext].call(this, src, callback, ext);
         }
@@ -1145,24 +1145,23 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 });
 // img
 enchant.Game.loadFuncs = {};
-enchant.Game.loadFuncs['jpg']  = 
-enchant.Game.loadFuncs['jpeg'] = 
-enchant.Game.loadFuncs['gif']  = 
-enchant.Game.loadFuncs['png']  = 
+enchant.Game.loadFuncs['jpg']  =
+enchant.Game.loadFuncs['jpeg'] =
+enchant.Game.loadFuncs['gif']  =
+enchant.Game.loadFuncs['png']  =
 enchant.Game.loadFuncs['bmp']  = function(src, callback) {
     this.assets[src] = enchant.Surface.load(src);
     this.assets[src].addEventListener('load', callback);
 };
 // sound
-enchant.Game.loadFuncs['mp3'] = 
-enchant.Game.loadFuncs['aac'] = 
-enchant.Game.loadFuncs['m4a'] = 
-enchant.Game.loadFuncs['wav'] = 
+enchant.Game.loadFuncs['mp3'] =
+enchant.Game.loadFuncs['aac'] =
+enchant.Game.loadFuncs['m4a'] =
+enchant.Game.loadFuncs['wav'] =
 enchant.Game.loadFuncs['ogg'] = function(src, callback, ext) {
-    game.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
-    game.assets[src].addEventListener('load', callback);
+    this.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
+    this.assets[src].addEventListener('load', callback);
 };
-
 
 /**
  * Current Game instance.
@@ -1278,7 +1277,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this.clearEventListener();
         }
         if(this.parentNode){
-            this.removeChild(this);
+            this.parentNode.removeChild(this);
         }
     }
 });
@@ -2901,7 +2900,7 @@ enchant.Sound.load = function(src, type) {
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
-		game.dispatchEvent(new Event(data.value));
+        game.dispatchEvent(new Event(data.value));
     }else if (data.type == "debug"){
         switch(data.value) {
             case "start":

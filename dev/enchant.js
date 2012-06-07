@@ -1219,7 +1219,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     this.currentScene.dispatchEvent(inputEvent);
             });
         }, this);
-                
+
         if (initial) {
             var stage = enchant.Game.instance._element;
             document.addEventListener('keydown', function(e) {
@@ -1364,46 +1364,32 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         var ext = findExt(src);
 
-        switch (ext) {
-            case 'jpg':
-            case 'jpeg':
-            case 'gif':
-            case 'png':
-            case 'bmp':
-                game.assets[src] = enchant.Surface.load(src);
-                game.assets[src].addEventListener('load', callback);
-                break;
-            case 'mp3':
-            case 'aac':
-            case 'm4a':
-            case 'wav':
-            case 'ogg':
-                game.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
-                game.assets[src].addEventListener('load', callback);
-                break;
-            default:
-                var req = new XMLHttpRequest();
-                req.open('GET', src, true);
-                req.onreadystatechange = function(e) {
-                    if (req.readyState == 4) {
-                        if (req.status != 200 && req.status != 0) {
-                            throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
-                        }
-
-                        var type = req.getResponseHeader('Content-Type') || '';
-                        if (type.match(/^image/)) {
-                            game.assets[src] = enchant.Surface.load(src);
-                            game.assets[src].addEventListener('load', callback);
-                        } else if (type.match(/^audio/)) {
-                            game.assets[src] = enchant.Sound.load(src, type);
-                            game.assets[src].addEventListener('load', callback);
-                        } else {
-                            game.assets[src] = req.responseText;
-                            callback();
-                        }
+        if (enchant.Game._loadFuncs[ext]) {
+            enchant.Game._loadFuncs[ext].call(this, src, callback, ext);
+        }
+        else {
+            var req = new XMLHttpRequest();
+            req.open('GET', src, true);
+            req.onreadystatechange = function(e) {
+                if (req.readyState == 4) {
+                    if (req.status != 200 && req.status != 0) {
+                        throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
                     }
-                };
-                req.send(null);
+
+                    var type = req.getResponseHeader('Content-Type') || '';
+                    if (type.match(/^image/)) {
+                        game.assets[src] = enchant.Surface.load(src);
+                        game.assets[src].addEventListener('load', callback);
+                    } else if (type.match(/^audio/)) {
+                        game.assets[src] = enchant.Sound.load(src, type);
+                        game.assets[src].addEventListener('load', callback);
+                    } else {
+                        game.assets[src] = req.responseText;
+                        callback();
+                    }
+                }
+            };
+            req.send(null);
         }
     },
     /**
@@ -1725,6 +1711,25 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
         return this.frame / this.fps;
     }
 });
+// img
+enchant.Game._loadFuncs = {};
+enchant.Game._loadFuncs['jpg']  =
+enchant.Game._loadFuncs['jpeg'] =
+enchant.Game._loadFuncs['gif']  =
+enchant.Game._loadFuncs['png']  =
+enchant.Game._loadFuncs['bmp']  = function(src, callback) {
+    this.assets[src] = enchant.Surface.load(src);
+    this.assets[src].addEventListener('load', callback);
+};
+// sound
+enchant.Game._loadFuncs['mp3'] =
+enchant.Game._loadFuncs['aac'] =
+enchant.Game._loadFuncs['m4a'] =
+enchant.Game._loadFuncs['wav'] =
+enchant.Game._loadFuncs['ogg'] = function(src, callback, ext) {
+    this.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
+    this.assets[src].addEventListener('load', callback);
+};
 
 /**
 [lang:ja]
@@ -4064,7 +4069,7 @@ enchant.Sound.load = function(src, type) {
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
-		game.dispatchEvent(new Event(data.value));
+        game.dispatchEvent(new Event(data.value));
     }else if (data.type == "debug"){
         switch(data.value) {
             case "start":

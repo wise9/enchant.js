@@ -758,7 +758,7 @@ enchant.gl.Quat = enchant.Class.create({
      */
     slerp: function(another, ratio) {
         var q = new Quat(0, 0, 0, 0);
-        quat4.slerp(this._quat, another._quat, ratio, q);
+        quat4.slerp(this._quat, another._quat, ratio, q._quat);
         return q;
     },
     /**
