@@ -1,5 +1,4 @@
 /**
-[lang:ja]
  * collada.gl.enchant.js
  * @version v0.3.5
  * @require gl.enchant.js v0.3.1+
@@ -14,65 +13,29 @@
  * http://code.google.com/p/glmatrix/
  * glMatrix.jsの詳しい使い方:
  * http://code.google.com/p/glmatrix/wiki/Usage
- [/lang]
- [lang:en]
- * collada.gl.enchant.js
- * @version v0.3.5
- * @require gl.enchant.js v0.3.1+
- * @author Ubiquitous Entertainment Inc.
- *
- * @description
- * Plugin to load collada format (.dae) files on gl.enchant.js
- *
- * @detail
- * Uses glMatrix.js in hectors and matrix operations.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * For more information on glMatrix.js usage:
- * http://code.google.com/p/glmatrix/wiki/Usage
- [/lang]
  */
 
 if (enchant.gl != undefined) {
-	enchant.Game.prototype._original_load = enchant.Game.prototype.load;
-	enchant.Game.prototype.load = function(src, callback){
-		var ext = src.match(/\.\w+$/)[0];
-		if (ext) ext = ext.slice(1).toLowerCase();
-		if(ext == 'dae'){
-			if (callback == null) callback = function() {};
-			enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
-				enchant.Game.instance.assets[src] = collada;
-				callback();
-			});
-		}else{
-			this._original_load(src, callback);
-		}
-	};
+    enchant.Game.loadFuncs['dae'] = function(src, callback) {
+        if (callback == null) callback = function() {};
+        enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
+            enchant.Game.instance.assets[src] = collada;
+            callback();
+        });
+    };
+
     (function(){
-		/**
-        [lang:ja]
-		 * ColladaデータからSprite3Dを作成する
-		 * @example
-		 *   var scene = new Scene3D();
-		 *   Sprite3D.loadCollada("hoge.dae",　function(model){
-		 *       scene.addChild(model);
-		 *   });
-		 * @param {String} url コラーダモデルのURL
-		 * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
-		 * @static
-        [/lang]
-        [lang:en]
-		 * Create Sprite3D from Collada data
-		 * @example
-		 *   var scene = new Scene3D();
-		 *   Sprite3D.loadCollada("hoge.dae",　function(model){
-		 *       scene.addChild(model);
-		 *   });
-		 * @param {String} url Collada model URL,
-		 * @param {function(enchant.pro.Sprite3D)} onload Callback when loading is complete. Sprite3D created from model will be delivered to argument
-		 * @static
-        [/lang]
-		 */
+        /**
+         * ColladaデータからSprite3Dを作成する
+         * @example
+         *   var scene = new Scene3D();
+         *   Sprite3D.loadCollada("hoge.dae",　function(model){
+         *       scene.addChild(model);
+         *   });
+         * @param {String} url コラーダモデルのURL
+         * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
+         * @static
+         */
         enchant.gl.Sprite3D.loadCollada = function(url, onload){
             var _this = this;
             this.url = url;
@@ -88,12 +51,12 @@ if (enchant.gl != undefined) {
             collada.onload = function(model){
                 var root = new Sprite3D();
                 model.getCorrespondingGeometry = function(node){
-                	for(var i = 0; i < this.geometries.length; i++){
-                		if(node.url == this.geometries[i].id){
-                			return this.geometries[i];
-                		}
-                	}
-                	return null;
+                    for(var i = 0; i < this.geometries.length; i++){
+                        if(node.url == this.geometries[i].id){
+                            return this.geometries[i];
+                        }
+                    }
+                    return null;
                 };
                 function createSprite3D(model, node, geometry){
                     var mesh = geometry.meshes[0];
@@ -105,11 +68,11 @@ if (enchant.gl != undefined) {
                         texture.src = material.src;
                     }
                     if(node.instance_material_target){
-                    	var target = node.instance_material_target;
-                    	var material = collada.getMaterialById(target);
-                    	if(material){
-                    		var instanceEffectUrl = material.instanceEffect.url;
-                    		var effect = collada.getEffectById(instanceEffectUrl);
+                        var target = node.instance_material_target;
+                        var material = collada.getMaterialById(target);
+                        if(material){
+                            var instanceEffectUrl = material.instanceEffect.url;
+                            var effect = collada.getEffectById(instanceEffectUrl);
                             if (effect && effect.profileCommon && effect.profileCommon.surface &&
                                 effect.profileCommon.surface.initFrom) {
                                 var img = that.getImageById(effect.profileCommon.surface.initFrom)
@@ -117,24 +80,24 @@ if (enchant.gl != undefined) {
                                     texture.src = img.initFrom;
                                 }
                             }
-                    		if(effect && effect.profileCommon && effect.profileCommon.technique &&
-                    			effect.profileCommon.technique.phong){
-	                            texture.emission = effect.profileCommon.technique.phong.emission;
-	                            texture.ambient = effect.profileCommon.technique.phong.ambient;
-	                            texture.diffuse = effect.profileCommon.technique.phong.diffuse;
-	                            texture.specular = effect.profileCommon.technique.phong.specular;
-	                            texture.shininess = effect.profileCommon.technique.phong.shininess;
-                    		}
-                    	}
+                            if(effect && effect.profileCommon && effect.profileCommon.technique &&
+                                effect.profileCommon.technique.phong){
+                                texture.emission = effect.profileCommon.technique.phong.emission;
+                                texture.ambient = effect.profileCommon.technique.phong.ambient;
+                                texture.diffuse = effect.profileCommon.technique.phong.diffuse;
+                                texture.specular = effect.profileCommon.technique.phong.specular;
+                                texture.shininess = effect.profileCommon.technique.phong.shininess;
+                            }
+                        }
                     }
-                    
+
                     ep_mesh.mesh.vertices = mesh.vertices;
                     var colors = [];
                     for(var i = 0; i < ep_mesh.mesh.vertices.length / 3; i++){
-                    	colors[colors.length] = 1.0;
-                    	colors[colors.length] = 1.0;
-                    	colors[colors.length] = 1.0;
-                    	colors[colors.length] = 1.0;
+                        colors[colors.length] = 1.0;
+                        colors[colors.length] = 1.0;
+                        colors[colors.length] = 1.0;
+                        colors[colors.length] = 1.0;
                     }
                     ep_mesh.mesh.colors = colors;
                     ep_mesh.mesh.normals = mesh.normals;
@@ -145,7 +108,7 @@ if (enchant.gl != undefined) {
                         ep_mesh.y = node.translate[1];
                         ep_mesh.z = node.translate[2];
                     }else{
-                    	ep_mesh.x = ep_mesh.y = ep_mesh.z = 0;
+                        ep_mesh.x = ep_mesh.y = ep_mesh.z = 0;
                     }
                     var rotation = new Array();
                     if (node.rotateX && node.rotateY && node.rotateZ) {
@@ -157,49 +120,49 @@ if (enchant.gl != undefined) {
                     }
                     rotation.push(0, 0, 0, 1);
                     ep_mesh.rotation = rotation;
-                    
+
                     if(node.matrix){
-                    	var transposed = [
-                    		node.matrix[0], node.matrix[4], node.matrix[8], node.matrix[12],
-                    		node.matrix[1], node.matrix[5], node.matrix[9], node.matrix[13],
-                    		node.matrix[2], node.matrix[6], node.matrix[10], node.matrix[14],
-                    		node.matrix[3], node.matrix[7], node.matrix[11], node.matrix[15],
-                    	];
-                    	ep_mesh.matrix = transposed;
+                        var transposed = [
+                            node.matrix[0], node.matrix[4], node.matrix[8], node.matrix[12],
+                            node.matrix[1], node.matrix[5], node.matrix[9], node.matrix[13],
+                            node.matrix[2], node.matrix[6], node.matrix[10], node.matrix[14],
+                            node.matrix[3], node.matrix[7], node.matrix[11], node.matrix[15],
+                        ];
+                        ep_mesh.matrix = transposed;
                     }else{
-                    	ep_mesh.matrix = [
-                     		1, 0, 0, 0,
-                     		0, 1, 0, 0,
-                     		0, 0, 1, 0,
-                     		0, 0, 0, 1];
+                        ep_mesh.matrix = [
+                            1, 0, 0, 0,
+                            0, 1, 0, 0,
+                            0, 0, 1, 0,
+                            0, 0, 0, 1];
                     }
                     if(node.scale){
-                    	ep_mesh.scaleX = node.scale[0];
-                    	ep_mesh.scaleY = node.scale[1];
-                    	ep_mesh.scaleZ = node.scale[2];
+                        ep_mesh.scaleX = node.scale[0];
+                        ep_mesh.scaleY = node.scale[1];
+                        ep_mesh.scaleZ = node.scale[2];
                     }else{
-                    	ep_mesh.scaleX = ep_mesh.scaleY = ep_mesh.scaleZ = 1;
+                        ep_mesh.scaleX = ep_mesh.scaleY = ep_mesh.scaleZ = 1;
                     }
                     ep_mesh.name = geometry.id;
                     if(node.nodes){
-                    	for(var i = 0; i < node.nodes.length; i++){
-                    		var childNode = node.nodes[i];
-                    		var childGeometry = model.getCorrespondingGeometry(childNode);
-                    		if(childGeometry) ep_mesh.addChild(createSprite3D(model, childNode, childGeometry));
-                    	}
+                        for(var i = 0; i < node.nodes.length; i++){
+                            var childNode = node.nodes[i];
+                            var childGeometry = model.getCorrespondingGeometry(childNode);
+                            if(childGeometry) ep_mesh.addChild(createSprite3D(model, childNode, childGeometry));
+                        }
                     }
                     return ep_mesh;
                 }
                 for (var i = 0; i < model.visualScene.nodes.length; i++) {
-                	var node = model.visualScene.nodes[i];
-                	var geometry = model.getCorrespondingGeometry(node);
-                	if(geometry) root.addChild(createSprite3D(model, node, geometry));
+                    var node = model.visualScene.nodes[i];
+                    var geometry = model.getCorrespondingGeometry(node);
+                    if(geometry) root.addChild(createSprite3D(model, node, geometry));
                 }
                 _this.onload(root, url);
             };
             collada.loadModel(url);
         }
-        
+
         function Collada() {
             var _this = this;
             this.debug = true;
@@ -208,30 +171,30 @@ if (enchant.gl != undefined) {
             this.effects = new Array();
             this.images = new Array();
             this.getEffectById = function(id){
-            	for(var i = 0; i < this.effects.length; i++){
-            		if(this.effects[i].id == id) return this.effects[i];
-            	}
-            	return null;
+                for(var i = 0; i < this.effects.length; i++){
+                    if(this.effects[i].id == id) return this.effects[i];
+                }
+                return null;
             }
             this.getMaterialById = function(id){
-            	for(var i = 0; i < this.materials.length; i++){
-            		if(this.materials[i].id == id) return this.materials[i];
-            	}
-            	return null;
+                for(var i = 0; i < this.materials.length; i++){
+                    if(this.materials[i].id == id) return this.materials[i];
+                }
+                return null;
             }
             this.getGeometryById = function(id){
-            	for(var i = 0; i < this.geometries.length; i++){
-            		if(this.geometries[i].id == id) return this.geometries[i];
-            	}
-            	return null;
+                for(var i = 0; i < this.geometries.length; i++){
+                    if(this.geometries[i].id == id) return this.geometries[i];
+                }
+                return null;
             }
             this.getImageById = function(id){
-            	for(var i = 0; i < this.images.length; i++){
-            		if(this.images[i].id == id) return this.images[i];
-            	}
-            	return null;
+                for(var i = 0; i < this.images.length; i++){
+                    if(this.images[i].id == id) return this.images[i];
+                }
+                return null;
             }
-            
+
             function getParentDirectory(path){
                 var strary = path.split("/");
                 var result = "";
@@ -240,7 +203,7 @@ if (enchant.gl != undefined) {
                 }
                 return result;
             }
-            
+
             function parseFloatArray(str){
                 var array = new Array();
                 var floatStrings = str.split(" ");
@@ -257,7 +220,7 @@ if (enchant.gl != undefined) {
                 }
                 return array;
             }
-            
+
             this.loadModel = function(url){
                 var req = new XMLHttpRequest();
                 req.open("GET", url, true);
@@ -273,7 +236,7 @@ if (enchant.gl != undefined) {
                 }
                 req.send(null);
             }
-            
+
             function loadGeometries(xml){
                 var geometries = xml.getElementsByTagName("library_geometries")[0].getElementsByTagName("geometry");
                 for (var i = 0; i < geometries.length; i++) {
@@ -291,12 +254,12 @@ if (enchant.gl != undefined) {
                 }
                 function Mesh(xml){
                     var _this = this;
-                    
+
                     var triangles = xml.getElementsByTagName("triangles")[0];
                     this.triangles = new Triangles(triangles);
                     var vertices = xml.getElementsByTagName("vertices")[0];
                     this.verticesInfo = new Vertices(vertices);
-                    
+
                     var sources = xml.getElementsByTagName("source");
                     for (var i = 0; i < sources.length; i++) {
                         var source = sources[i];
@@ -309,20 +272,20 @@ if (enchant.gl != undefined) {
                         }else if (id == this.triangles.uvId) {
                             this.uv = parseFloatArray(source.getElementsByTagName("float_array")[0].textContent);
                             for(var i = 1; i < this.uv.length; i+=2){
-                            	this.uv[i] = 1.0 - this.uv[i];
+                                this.uv[i] = 1.0 - this.uv[i];
                             }
                         }
                     }
-                    
+
                     function Triangles(xml){
-                        
+
                         var _this = this;
                         this.count = xml.getAttribute("count");
                         this.material = xml.getAttribute("material");
-                        
+
                         var inputs = xml.getElementsByTagName("input");
                         this.stride = 0;
-                        
+
                         this.vertexOffset = -1;
                         this.normalOffset = -1;
                         this.uvOffset = -1;
@@ -349,7 +312,7 @@ if (enchant.gl != undefined) {
                             }
                         }
                         this.primitive = parseFloatArray(xml.getElementsByTagName("p")[0].textContent);
-                        
+
                     }
                     function Vertices(xml){
                         var _this = this;
@@ -366,7 +329,7 @@ if (enchant.gl != undefined) {
                     }
                 }
             }
-            
+
             function loadImage(xml, url){
                 var lib_images = xml.getElementsByTagName("library_images")[0];
                 if (lib_images) {
@@ -378,7 +341,7 @@ if (enchant.gl != undefined) {
                     _this.images.push(new Image(imgs[i], url));
                 }
             }
-            
+
             function Image(xml, url){
                 this.id = xml.getAttribute("id");
                 this.name = xml.getAttribute("name");
@@ -393,15 +356,15 @@ if (enchant.gl != undefined) {
                     }
                 }
             }
-            
+
             function loadEffects(xml){
                 var effects = xml.getElementsByTagName("effect");
                 for (var i = 0; i < effects.length; i++) {
                     _this.effects.push(new Effect(effects[i]));
                 }
-                
+
             }
-            
+
             function Effect(xml){
                 var _this = this;
                 this.id = xml.getAttribute("id");
@@ -411,12 +374,12 @@ if (enchant.gl != undefined) {
                     var _this = this;
                     this.technique;
                     this.surface;
-                    
+
                     var technique = xml.getElementsByTagName("technique")[0];
                     if (technique) {
                         this.technique = new Technique(technique);
                     }
-                    
+
                     var newParams = xml.getElementsByTagName("newparam");
                     for (var i = 0; i < newParams.length; i++) {
                         var surface = newParams[i].getElementsByTagName("surface")[0];
@@ -426,7 +389,7 @@ if (enchant.gl != undefined) {
                     }
                     function Surface(xml){
                         var _this = this;
-                        
+
                         this.type = xml.getAttribute("type");
                         var initFrom = xml.getElementsByTagName("init_from")[0];
                         if (initFrom) {
@@ -437,10 +400,10 @@ if (enchant.gl != undefined) {
                             this.format = format.textContent;
                         }
                     }
-                    
+
                     function Technique(xml){
                         var _this = this;
-                        
+
                         var phong = xml.getElementsByTagName("phong")[0];
                         if (phong) {
                             this.phong = new Phong(phong);
@@ -461,13 +424,13 @@ if (enchant.gl != undefined) {
                                 this.emission = parseFloatArray(temp);
                             }
                             temp = 0;
-                            
+
                             temp = xml.getElementsByTagName("ambient")[0].getElementsByTagName("color")[0].textContent;
                             if (temp) {
                                 this.ambient = parseFloatArray(temp);
                             }
                             temp = 0;
-                            
+
                             temp = xml.getElementsByTagName("diffuse")[0].getElementsByTagName("color")[0];
                             if (temp) {
                                 temp = temp.textContent;
@@ -476,31 +439,31 @@ if (enchant.gl != undefined) {
                                 this.diffuse = parseFloatArray(temp);
                             }
                             temp = 0;
-                            
+
                             temp = xml.getElementsByTagName("specular")[0].getElementsByTagName("color")[0].textContent;
                             if (temp) {
                                 this.specular = parseFloatArray(temp);
                             }
                             temp = 0;
-                            
+
                             temp = xml.getElementsByTagName("shininess")[0].getElementsByTagName("float")[0].textContent;
                             if (temp) {
                                 this.shininess = parseFloat(temp);
                             }
                             temp = 0;
-                            
+
                             temp = xml.getElementsByTagName("reflective")[0].getElementsByTagName("color")[0].textContent;
                             if (temp) {
                                 this.reflective = parseFloatArray(temp);
                             }
                             temp = 0;
-                            
+
                             temp = xml.getElementsByTagName("reflectivity")[0].getElementsByTagName("float")[0].textContent;
                             if (temp) {
                                 this.reflectivity = parseFloat(temp);
                             }
                             temp = 0;
-                            
+
                             if (false) {
                                 temp = xml.getElementsByTagName("transparent")[0].getElementsByTagName("color")[0].textContent;
                                 if (temp) {
@@ -508,7 +471,7 @@ if (enchant.gl != undefined) {
                                 }
                                 temp = 0;
                             }
-                            
+
                             temp = xml.getElementsByTagName("transparency")[0].getElementsByTagName("float")[0].textContent;
                             if (temp) {
                                 this.transparency = parseFloat(temp);
@@ -518,14 +481,14 @@ if (enchant.gl != undefined) {
                     }
                 }
             }
-            
+
             function loadMaterials(xml){
                 var materials = xml.getElementsByTagName("library_materials")[0].getElementsByTagName("material");
                 for (var i = 0; i < materials.length; i++) {
                     _this.materials.push(new Material(materials[i]));
                 }
             }
-            
+
             function Material(xmlMaterial){
                 var _this = this;
                 var instance_effects_xml = xmlMaterial.getElementsByTagName("instance_effect");
@@ -537,7 +500,7 @@ if (enchant.gl != undefined) {
                 this.diffuse = [1, 1, 1, 1];
                 this.specular = [0, 0, 0, 1];
                 this.shininess = [0, 0, 0, 1];
-                
+
                 var setParams = xmlMaterial.getElementsByTagName("setparam");
                 for (var i = 0; i < setParams.length; i++) {
                     var param = setParams[i];
@@ -546,23 +509,23 @@ if (enchant.gl != undefined) {
                     if (ref == "DIFFUSE") {
                         _this.diffuse = parseFloatArray(val);
                     }else if (ref == "AMBIENT") {
-                    	_this.ambient = parseFloatArray(val);
+                        _this.ambient = parseFloatArray(val);
                     }else if (ref == "EMISSION") {
-	                	_this.emission = parseFloatArray(val);
+                        _this.emission = parseFloatArray(val);
                     }else if (ref == "SPECULAR") {
-                    	_this.specular = parseFloatArray(val);
+                        _this.specular = parseFloatArray(val);
                     }else if (ref == "SHININESS") {
-                    	_this.shininess = parseFloatArray(val);
+                        _this.shininess = parseFloatArray(val);
                     }
                 }
-                
+
                 function InstanceEffect(xml){
                     var _this = this;
                     this.url = xml.getAttribute("url");
                     this.url = this.url.slice(1);
                 }
             }
-            
+
             function loadVisualScenes(xml){
                 var visualScenes = xml.getElementsByTagName("visual_scene");
                 _this.visualScenes = new Array();
@@ -571,13 +534,13 @@ if (enchant.gl != undefined) {
                     _this.visualScenes.push(new VisualScene(visualScene));
                 }
             }
-            
+
             function VisualScene(xml){
                 function Node(xml){
                     var _this = this;
                     this.id = xml.getAttribute("id");
                     this.name = xml.getAttribute("name");
-                    
+
                     var translate = xml.getElementsByTagName("translate")[0];
                     if (translate) {
                         this.translate = parseFloatArray(translate.textContent);
@@ -600,7 +563,7 @@ if (enchant.gl != undefined) {
                     }
                     var matrix = xml.getElementsByTagName("matrix")[0];
                     if(matrix){
-                    	this.matrix = parseFloatArray(matrix.textContent);
+                        this.matrix = parseFloatArray(matrix.textContent);
                     }
                     var instance_geometry = xml.getElementsByTagName("instance_geometry")[0];
                     if (instance_geometry) {
@@ -610,37 +573,37 @@ if (enchant.gl != undefined) {
                         }
                         var instance_material = instance_geometry.getElementsByTagName("instance_material")[0];
                         if(instance_material){
-                        	var target = instance_material.getAttribute("target");
-                        	if(target){
-                        		this.instance_material_target = target.replace("#", "");
-                        	}
+                            var target = instance_material.getAttribute("target");
+                            if(target){
+                                this.instance_material_target = target.replace("#", "");
+                            }
                         }
                     }
                 }
-                
-				function getNodeHierarchy(element){
-					var array = [];
-				    for(var i = 0; i < element.childNodes.length; i++){
-				        var child = element.childNodes[i];
-				        if(child.nodeName == 'node'){
-				        	var childNode = new Node(child);
-				            array.push(childNode);
-				            var grandChildren = getNodeHierarchy(child);
-				            if(grandChildren) childNode.nodes = grandChildren;
-				        }
-				    }
-				    return array;
-				}
-				
+
+                function getNodeHierarchy(element){
+                    var array = [];
+                    for(var i = 0; i < element.childNodes.length; i++){
+                        var child = element.childNodes[i];
+                        if(child.nodeName == 'node'){
+                            var childNode = new Node(child);
+                            array.push(childNode);
+                            var grandChildren = getNodeHierarchy(child);
+                            if(grandChildren) childNode.nodes = grandChildren;
+                        }
+                    }
+                    return array;
+                }
+
                 var _this = this;
                 this.id = xml.getAttribute("id");
                 this.name = xml.getAttribute("name");
                 this.nodes = getNodeHierarchy(xml);
             }
-            
+
             this.onload = function(){
             }
-            
+
             this.convert = function(){
                 var model = new EPModel();
                 var resultGeometries = new Array();
@@ -650,7 +613,7 @@ if (enchant.gl != undefined) {
                     resultGeometry.id = geometry.id;
                     resultGeometry.meshes = new Array();
                     for (var j = 0; j < geometry.meshes.length; j++) {
-                    
+
                         var mesh = geometry.meshes[j];
                         var resultMesh = new Object();
                         var triangles = mesh.triangles;
@@ -672,11 +635,11 @@ if (enchant.gl != undefined) {
                                 resultMesh.uv.push(mesh.uv[index], 1.0 - mesh.uv[index + 1]);
                             }
                         }
-                        
+
                         for (var k = 0; k < triangles.primitive.length / triangles.stride; k++) {
                             resultMesh.indices.push(k);
                         }
-                        
+
                         var material = false;
                         for (k = 0; k < _this.materials.length; k++) {
                             if (_this.materials[k].id == triangles.material) {
@@ -707,7 +670,7 @@ if (enchant.gl != undefined) {
                                         break;
                                     }
                                 }
-                                
+
                                 rm.emission = material.emission;
                                 rm.ambient = material.ambient;
                                 rm.diffuse = material.diffuse;
@@ -723,18 +686,18 @@ if (enchant.gl != undefined) {
                 model.geometries = resultGeometries;
                 var visualScene = _this.visualScenes[0];
                 if (visualScene) {
-                	model.visualScene = visualScene;
+                    model.visualScene = visualScene;
                 }
-                
+
                 return model;
             }
-            
-            
+
+
             function EPModel(){
                 var _this = this;
                 this.geometries = new Array();
-                
-                
+
+
                 function Geometry(){
                     this.meshes = new Array();
                 }
@@ -753,9 +716,6 @@ if (enchant.gl != undefined) {
                     this.shininess = [0, 0, 0, 1];
                 }
             }
-            
         }
-        
-        
     })();
 }
