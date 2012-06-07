@@ -1159,8 +1159,8 @@ enchant.Game.loadFuncs['aac'] =
 enchant.Game.loadFuncs['m4a'] =
 enchant.Game.loadFuncs['wav'] =
 enchant.Game.loadFuncs['ogg'] = function(src, callback, ext) {
-    game.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
-    game.assets[src].addEventListener('load', callback);
+    this.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
+    this.assets[src].addEventListener('load', callback);
 };
 
 /**
