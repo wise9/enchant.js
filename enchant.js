@@ -513,14 +513,18 @@ enchant.EventTarget = enchant.Class.create({
      * Add EventListener.
      * @param {String} type Event type.
      * @param {function(e:enchant.Event)} listener EventListener added.
+     * @param {Object} thisArgs specify this scope when listener called.
      */
-    addEventListener: function(type, listener) {
+    addEventListener: function(type, listener, thisArgs) {
+        if (thisArgs == null) {
+          thisArgs = this;
+        }
+        listener.scope = thisArgs;
         var listeners = this._listeners[type];
         if (listeners == null) {
             this._listeners[type] = [listener];
         } else if (listeners.indexOf(listener) == -1) {
             listeners.unshift(listener);
-
         }
     },
     /**
@@ -561,7 +565,8 @@ enchant.EventTarget = enchant.Class.create({
         if (listeners != null) {
             listeners = listeners.slice();
             for (var i = 0, len = listeners.length; i < len; i++) {
-                listeners[i].call(this, e);
+                var listener = listeners[i];
+                listener.call(listener.scope, e);
             }
         }
     }
@@ -2939,3 +2944,82 @@ function findExt(path) {
 }
 
 })();
+
+/**
+ * @scope enchant.Timer.prototype
+ */
+enchant.Timer = enchant.Class.create(enchant.EventTarget, {
+    /**
+     * Class to wrap setInterval.
+     *
+     * @param {Number} delay The delay, in milliseconds, between timer events.
+     * @param {Number} The total number of times the timer is set to run.
+     * @constructs
+     */
+    initialize: function(delay, repeatCount) {
+        enchant.EventTarget.call(this);
+        this.id = null;
+        this.delay = delay;
+        if (isNaN(repeatCount) || repeatCount < 0) {
+          repeatCount = 1;
+        }
+        this.repeatCount = repeatCount;
+        this.currentCount = 0;
+        this.running = false;
+    },
+    /**
+     * Stops the timer, if it is running, and sets the currentCount property
+     * back to 0, like the reset button of a stopwatch.
+     */
+    reset: function() {
+        clearInterval(this.id);
+        this.id = null;
+        this.currentCount = 0;
+        this.running = false;
+    },
+    /**
+     * Starts the timer, if it is not already running.
+     */
+    start: function() {
+        if (!this.running) {
+            var self = this;
+            this.id = setInterval(function() { self.tickerHandler(); }, this.delay);
+            this.running = true;
+        }
+    },
+    /**
+     * Stops the timer.
+     */
+    stop: function() {
+        clearInterval(this.id);
+        this.id = null;
+        this.running = false;
+    },
+    /**
+     * @private
+     */
+    tickerHandler: function() {
+        this.currentCount++;
+        var tickerEvent = new Event(enchant.Event.TIMER);
+        this.dispatchEvent(tickerEvent);
+        if (this.currentCount >= this.repeatCount && this.repeatCount != 0) {
+            var completeEvent = new Event(enchant.Event.TIMER_COMPLETE);
+            this.dispatchEvent(completeEvent);
+            this.reset();
+        }
+    }
+});
+
+/**
+ * The Timer object that has reached its interval.
+ * Issued object: enchant.Timer
+ * @type {String}
+ */
+enchant.Event.TIMER = 'timer';
+
+/**
+ * The Timer object that has completed its requests.
+ * Issued object: enchant.Timer
+ * @type {String}
+ */
+enchant.Event.TIMER_COMPLETE = 'timerComplete';
