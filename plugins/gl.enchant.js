@@ -432,7 +432,7 @@ enchant.gl.FrameBuffer = enchant.Class.create({
     },
     /**
      * Destroy object.
-    */
+     */
     destroy: function() {
         gl.deleteFramebuffer(this.framebuffer);
         gl.deleteFramebuffer(this.colorbuffer);
@@ -612,7 +612,7 @@ enchant.gl.Shader = enchant.Class.create({
     },
     /**
      * Destroy object.
-    */
+     */
     destroy: function() {
         gl.deleteProgram(this._vShaderProgram);
         gl.deleteProgram(this._fShaderProgram);
@@ -758,7 +758,7 @@ enchant.gl.Quat = enchant.Class.create({
      */
     slerp: function(another, ratio) {
         var q = new Quat(0, 0, 0, 0);
-        quat4.slerp(this._quat, another._quat, ratio, q._quat);
+        quat4.slerp(this._quat, another._quat, ratio, q);
         return q;
     },
     /**
@@ -1274,8 +1274,8 @@ enchant.gl.Mesh = enchant.Class.create({
         this.indices = indices;
     },
     /**
-         * Destroy object.
-    */
+     * Destroy object.
+     */
     destroy: function() {
         this._deleteBuffer();
         delete this;
