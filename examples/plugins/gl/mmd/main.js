@@ -2,18 +2,16 @@ enchant();
 
 var game;
 
-// PMDファイルのディレクトリパス
-var MODEL_PATH = 'model';
-// PMDファイルのファイル名
-var MODEL_NAME = 'Miku_Hatsune_Metal.pmd';
+// PMDファイルのパス
+var MODEL_PATH = 'model/Miku_Hatsune_Metal.pmd';
 
-// VMDファイルのディレクトリパス
-var MOTION_PATH = 'motion';
-// VMDファイルのファイル名
-var MOTION_NAME = 'kishimen.vmd';
+// VMDファイルのパス
+var MOTION_PATH = 'motion/kishimen.vmd';
 
 window.onload = function(){
     game = new Game(800, 800);
+    // v0.2.1よりgame.preloadから読み込めるようになった.
+    game.preload(MODEL_PATH, MOTION_PATH);
     game.onload = function() {
 
         var scene = new Scene3D();
@@ -24,16 +22,13 @@ window.onload = function(){
         camera.z = 80;
         camera.centerY = 10;
 
-        // PMDファイル読み込み
-        var miku = new MSprite3D();
-        miku.loadPmd(MODEL_PATH, MODEL_NAME, function() {
-            scene.addChild(miku);
-        });
+        // PMDファイル読み込み.
+        // colladaの読み込みと同様にcloneかsetして使用する.
+        var miku = game.assets[MODEL_PATH].clone();
+        scene.addChild(miku);
 
         // VMDファイル読み込み
-        var animation = new MAnimation(MOTION_PATH, MOTION_NAME, function() {
-            miku.pushAnimation(animation);
-        });
+        miku.pushAnimation(game.assets[MOTION_PATH]);
 
         var oldX = 0;
         r = Math.PI / 2;

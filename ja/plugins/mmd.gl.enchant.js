@@ -1,9 +1,9 @@
 /**
  * mmd.gl.enchant.js
- * @version 0.2.0
- * @require enchant.js v0.4.3+
+ * @version 0.2.1
+ * @require enchant.js v0.4.5+
  * @require gl.enchant.js v0.3.5+
- * @require bone.gl.enchant.js v0.2.0+
+ * @require bone.gl.enchant.js v0.2.1+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -24,7 +24,31 @@ var MMD = {};
 
 (function() {
 
+    var splitPath = function(path) {
+        var split = path.match(/(.{0,})\/([\S^/]{1,}\.pmd)/);
+        if (split == null) {
+            split = [ '.' + path, '.', path ];
+        }
+        return split;
+    };
+
     enchant.gl.mmd = {};
+
+    enchant.Game._loadFuncs['pmd'] = function(src, callback) {
+        if (callback == null) callback = function() {};
+        var model = new enchant.gl.mmd.MSprite3D(src, function() {
+            enchant.Game.instance.assets[src] = model;
+            callback();
+        });
+    };
+
+    enchant.Game._loadFuncs['vmd'] = function(src, callback) {
+        if (callback == null) callback = function() {};
+        var anim = new enchant.gl.mmd.MAnimation(src, function() {
+            enchant.Game.instance.assets[src] = anim;
+            callback();
+        });
+    };
 
     /**
      * @scope enchant.gl.mmd.MMesh.prototype
@@ -127,10 +151,13 @@ var MMD = {};
     enchant.gl.mmd.MSprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
         /**
          * PMDファイルに対応したSprite3D.
+         * 引数を渡すと{@link enchant.gl.mmd.MAnimation#loadVmd}が呼び出される.
+         * @param {String} path ファイルパス
+         * @param {Function} callback コールバック関数
          * @constructs
          * @extends enchant.gl.Sprite3D
          */
-        initialize: function() {
+        initialize: function(path, callback) {
             enchant.gl.Sprite3D.call(this);
             this.program = enchant.gl.mmd.MMD_SHADER_PROGRAM;
             this.animation = [];
@@ -161,6 +188,9 @@ var MMD = {};
                     }
                 }
             });
+            if (arguments.length == 2) {
+                this.loadPmd(path, callback);
+            }
         },
         /**
          * アニメーションを追加する.
@@ -274,115 +304,132 @@ var MMD = {};
         /**
          * .pmdファイルをロードする.
          * @param {String} path ファイルパス
-         * @param {String} name ファイル名
          * @param {Function} callback コールバック関数
          * @example
          * // model/miku.pmd を読み込む.
          * var mk = new MSprite3D();
-         * mk.loadPmd('model', 'miku.pmd', function() {
+         * mk.loadPmd('model/miku.pmd', function() {
          *     scene.addChild(mk);
          * });
          */
-        loadPmd: function(path, name, callback) {
-            var model = new MMD.Model(path, name);
+        loadPmd: function(path, callback) {
+            var split = splitPath(path);
+            var model = new MMD.Model(split[1], split[2]);
             var that = this;
+            this._data = model;
             model.load(function() {
-                var data;
-                var original;
-                var params = [ 'ambient', 'diffuse', 'specular', 'shininess', 'alpha', 'face_vert_count', 'edge_flag' ];
-
-                var mesh = new MMesh();
-                var length = model.vertices.length;
-                var v;
-                var b1, b2;
-                var ind;
-                var material;
-                var vertices = new Float32Array(length * 3);
-                var normals = new Float32Array(length * 3);
-                var texCoords = new Float32Array(length * 2);
-                var indices = new Uint16Array(model.triangles);
-                var vpos1 = new Float32Array(length * 3);
-                var vpos2 = new Float32Array(length * 3);
-                var bone1pos = new Float32Array(length * 3);
-                var bone2pos = new Float32Array(length * 3);
-                var quats1 = new Float32Array(length * 4);
-                var quats2 = new Float32Array(length * 4);
-                var morphs = new Float32Array(length * 3);
-                var weights = new Float32Array(length);
-                var edges = new Uint16Array(length);
-                var bindex1 = new Float32Array(length);
-                var bindex2 = new Float32Array(length);
-                var tmp = vec3.create();
-                var tmp2 = vec3.create();
-                for (var i = 0; i < length; i++) {
-                    v = model.vertices[i];
-                    b1 = model.bones[v.bone_num1];
-                    b2 = model.bones[v.bone_num2];
-                    bindex1[i] = v.bone_num1;
-                    bindex2[i] = v.bone_num2;
-                    tmp.set([v.x, v.y, v.z]);
-                    vertices.set(tmp, i * 3);
-                    vec3.subtract(tmp, b1.head_pos, tmp2);
-                    vpos1.set(tmp2, i * 3);
-                    vec3.subtract(tmp, b2.head_pos, tmp2);
-                    vpos2.set(tmp2, i * 3);
-                    normals.set([v.nx, v.ny, v.nz], i * 3);
-                    texCoords.set([v.u, v.v], i * 2);
-                    bone1pos.set(b1.head_pos, i * 3);
-                    bone2pos.set(b2.head_pos, i * 3);
-                    quats1.set([0, 0, 0, 1], i * 4);
-                    quats2.set([0, 0, 0, 1], i * 4);
-                    morphs.set([0, 0, 0], i * 3);
-                    weights[i] = v.bone_weight;
-                    edges[i] = 1 - v.edge_flag;
-                }
-
-
-                mesh.vertices = vertices;
-                mesh.normals = normals;
-                mesh.texCoords = texCoords;
-                mesh.indices = indices;
-                mesh.vpos1 = vpos1;
-                mesh.vpos2 = vpos2;
-                mesh.bone1pos = bone1pos;
-                mesh.bone2pos = bone2pos;
-                mesh.quats1 = quats1;
-                mesh.quats2 = quats2;
-                mesh.weights = weights;
-                mesh.edges = edges;
-                mesh.morphs = morphs;
-                mesh.colors = new Float32Array(length * 4);
-                mesh.bindex1 = bindex1;
-                mesh.bindex2 = bindex2;
-
-                that.mesh = mesh;
-
-                that.mesh.materials = new Array();
-
-                that.skeleton = new MSkeleton(model.bones);
-                for (var i = 0, l = model.iks.length; i < l; i++) {
-                    data = model.iks[i];
-                    that.skeleton._addIK(data);
-                }
-
-                that.morph = new MMorph(model.morphs);
-
-                for (var i = 0, l = model.materials.length; i < l; i++) {
-                    original = model.materials[i];
-                    material = that.mesh.materials[i] = {};
-                    for (prop in params) {
-                        material[params[prop]] = original[params[prop]];
-                    }
-                    if (typeof model.toon_file_names[i] != 'undefined') {
-                        material.toon = new Texture(model.directory + '/' + model.toon_file_names[original.toon_index], {flipY:false});
-                    }
-                    if (original.texture_file_name) {
-                        material.texture = new Texture(model.directory + '/' + original.texture_file_name);
-                    }
-                }
-
-                callback(that);
+                return that._parse(model, callback);
             });
+        },
+        set: function(sp) {
+            this._parse(sp._data);
+            this._data = sp._data;
+        },
+        clone: function() {
+            var sp = new enchant.gl.mmd.MSprite3D();
+            sp._parse(this._data);
+            sp._data = this._data;
+            return sp;
+        },
+        _parse: function(model, callback) {
+            if (typeof callback != 'function') {
+                callback = function() {};
+            }
+            var data;
+            var original;
+            var params = [ 'ambient', 'diffuse', 'specular', 'shininess', 'alpha', 'face_vert_count', 'edge_flag' ];
+
+            var mesh = new MMesh();
+            var length = model.vertices.length;
+            var v;
+            var b1, b2;
+            var ind;
+            var material;
+            var vertices = new Float32Array(length * 3);
+            var normals = new Float32Array(length * 3);
+            var texCoords = new Float32Array(length * 2);
+            var indices = new Uint16Array(model.triangles);
+            var vpos1 = new Float32Array(length * 3);
+            var vpos2 = new Float32Array(length * 3);
+            var bone1pos = new Float32Array(length * 3);
+            var bone2pos = new Float32Array(length * 3);
+            var quats1 = new Float32Array(length * 4);
+            var quats2 = new Float32Array(length * 4);
+            var morphs = new Float32Array(length * 3);
+            var weights = new Float32Array(length);
+            var edges = new Uint16Array(length);
+            var bindex1 = new Float32Array(length);
+            var bindex2 = new Float32Array(length);
+            var tmp = vec3.create();
+            var tmp2 = vec3.create();
+            for (var i = 0; i < length; i++) {
+                v = model.vertices[i];
+                b1 = model.bones[v.bone_num1];
+                b2 = model.bones[v.bone_num2];
+                bindex1[i] = v.bone_num1;
+                bindex2[i] = v.bone_num2;
+                tmp.set([v.x, v.y, v.z]);
+                vertices.set(tmp, i * 3);
+                vec3.subtract(tmp, b1.head_pos, tmp2);
+                vpos1.set(tmp2, i * 3);
+                vec3.subtract(tmp, b2.head_pos, tmp2);
+                vpos2.set(tmp2, i * 3);
+                normals.set([v.nx, v.ny, v.nz], i * 3);
+                texCoords.set([v.u, v.v], i * 2);
+                bone1pos.set(b1.head_pos, i * 3);
+                bone2pos.set(b2.head_pos, i * 3);
+                quats1.set([0, 0, 0, 1], i * 4);
+                quats2.set([0, 0, 0, 1], i * 4);
+                morphs.set([0, 0, 0], i * 3);
+                weights[i] = v.bone_weight;
+                edges[i] = 1 - v.edge_flag;
+            }
+
+
+            mesh.vertices = vertices;
+            mesh.normals = normals;
+            mesh.texCoords = texCoords;
+            mesh.indices = indices;
+            mesh.vpos1 = vpos1;
+            mesh.vpos2 = vpos2;
+            mesh.bone1pos = bone1pos;
+            mesh.bone2pos = bone2pos;
+            mesh.quats1 = quats1;
+            mesh.quats2 = quats2;
+            mesh.weights = weights;
+            mesh.edges = edges;
+            mesh.morphs = morphs;
+            mesh.colors = new Float32Array(length * 4);
+            mesh.bindex1 = bindex1;
+            mesh.bindex2 = bindex2;
+
+            this.mesh = mesh;
+
+            this.mesh.materials = new Array();
+
+            this.skeleton = new MSkeleton(model.bones);
+            for (var i = 0, l = model.iks.length; i < l; i++) {
+                data = model.iks[i];
+                this.skeleton._addIK(data);
+            }
+
+            this.morph = new MMorph(model.morphs);
+
+            for (var i = 0, l = model.materials.length; i < l; i++) {
+                original = model.materials[i];
+                material = this.mesh.materials[i] = {};
+                for (prop in params) {
+                    material[params[prop]] = original[params[prop]];
+                }
+                if (typeof model.toon_file_names[i] != 'undefined') {
+                    material.toon = new Texture(model.directory + '/' + model.toon_file_names[original.toon_index], {flipY:false});
+                }
+                if (original.texture_file_name) {
+                    material.texture = new Texture(model.directory + '/' + original.texture_file_name);
+                }
+            }
+
+            callback(this);
         },
         _applySkeleton: function() {
             var sk = this.skeleton;
@@ -444,9 +491,9 @@ var MMD = {};
             }
         },
         _load: function(data) {
-            this._base = data.splice(0, 1)[0];
+            this._base = data.slice(0, 1)[0];
             var m, name, vert, morph;
-            for (var i = 0, l = data.length; i < l; i++) {
+            for (var i = 1, l = data.length; i < l; i++) {
                 m = data[i];
                 name = m.name;
                 vert = m.vert_data;
@@ -459,6 +506,7 @@ var MMD = {};
                     morph.vert[j * 3 + 1] = vert[j].y;
                     morph.vert[j * 3 + 2] = vert[j].z;
                 }
+                console.log(j, ll);
             }
         },
         morphing: function(data, target) {
@@ -506,33 +554,30 @@ var MMD = {};
          * キャラクターの姿勢とモーフィングのデータが読み込まれる.
          * 引数を渡すと{@link enchant.gl.mmd.MAnimation#loadVmd}が呼び出される.
          * @param {String} path ファイルパス
-         * @param {String} name ファイル名
          * @param {Function} callback コールバック関数
          * @constructs
          * @extends enchant.gl.Sprite3D
          * @see enchant.gl.mmd.MAnimation#loadVmd
          */
-        initialize: function(path, name, callback) {
+        initialize: function(path, callback) {
             this.length = -1;
-            if (arguments.length == 3) {
-                this.loadVmd(path, name, callback);
+            if (arguments.length == 2) {
+                this.loadVmd(path, callback);
             }
         },
         /**
          * .vmdファイルをロードする.
          * @param {String} path ファイルパス
-         * @param {String} name ファイル名
          * @param {Function} callback コールバック関数
          * @example
          * // motion/dance.vmd を読み込む.
          * var dance = new MAnimation();
-         * dance.loadVmd('motion', 'dance.vmd', function() {
+         * dance.loadVmd('motion/dance.vmd', function() {
          *     mk.pushAnimation(dance);
          * });
          */
-        loadVmd: function(path, name, callback) {
-            this.path = path + '/' + name;
-            var motion = new MMD.Motion(this.path);
+        loadVmd: function(path, callback) {
+            var motion = new MMD.Motion(path);
             var frame;
             var that = this;
             motion.load(function() {
