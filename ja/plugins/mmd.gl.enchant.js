@@ -198,7 +198,7 @@ var MMD = {};
             var l = scene.directionalLight;
             var lvec = [l._directionX, l._directionY, l._directionZ];
             var uMVMatrix = mat4.identity(this.uMVMatrix);
-            mat4.multiply(scene.cameraMat, this.tmpMat, uMVMatrix);
+            mat4.multiply(scene._camera.mat, this.tmpMat, uMVMatrix);
             var uNMatrix = mat4.identity(this.uNMatrix);
             mat4.transpose(mat4.inverse(uMVMatrix, uNMatrix));
             var uLightDirection = vec3.normalize(lvec);
@@ -219,7 +219,7 @@ var MMD = {};
             });
             game.GL.currentProgram.setUniforms({
                 uLightDirection: uLightDirection,
-                uPMatrix: scene.projMat,
+                uPMatrix: scene._camera.projMat,
                 uMVMatrix: uMVMatrix,
                 uNMatrix: uNMatrix
             });
