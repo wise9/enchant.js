@@ -15,8 +15,8 @@ sjis.js, DataView.js:
 
 また, main.js以下の
 
-MODEL_NAME
-MOTION_NAME
+MODEL_PATH
+MOTION_PATH
 
 を適宜書き換えてください.
 
