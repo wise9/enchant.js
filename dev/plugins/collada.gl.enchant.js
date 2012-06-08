@@ -34,7 +34,7 @@
  */
 
 if (enchant.gl != undefined) {
-    enchant.Game.loadFuncs['dae'] = function(src, callback) {
+    enchant.Game._loadFuncs['dae'] = function(src, callback) {
         if (callback == null) callback = function() {};
         enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
             enchant.Game.instance.assets[src] = collada;
