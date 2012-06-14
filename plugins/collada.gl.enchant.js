@@ -26,7 +26,9 @@ if (enchant.gl != undefined) {
 
     (function(){
         /**
-         * Create Sprite3D from Collada data
+         * Create Sprite3D from Collada data.
+         * At present, data that has joint and animation is not supported.
+         * In addition, vertex attributes should be triangles.
          * @example
          *   var scene = new Scene3D();
          *   Sprite3D.loadCollada("hoge.dae",　function(model){
