@@ -26,7 +26,9 @@ if (enchant.gl != undefined) {
 
     (function(){
         /**
-         * ColladaデータからSprite3Dを作成する
+         * ColladaデータからSprite3Dを作成する.
+         * 現在, ジョイント, アニメーションを含むデータに対応していません.
+         * また, 頂点属性がtrianglesである必要があります.
          * @example
          *   var scene = new Scene3D();
          *   Sprite3D.loadCollada("hoge.dae",　function(model){

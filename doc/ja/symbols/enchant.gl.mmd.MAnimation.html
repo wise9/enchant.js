@@ -173,7 +173,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-5-7 23:20
+		Generated on: 2012-5-14 15:02
 	</div>
 </div>
 
@@ -220,7 +220,7 @@
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/enchant.gl.mmd.MAnimation.html#constructor">enchant.gl.mmd.MAnimation</a></b>(path, name, callback)
+									<b><a href="../symbols/enchant.gl.mmd.MAnimation.html#constructor">enchant.gl.mmd.MAnimation</a></b>(path, callback)
 								</div>
 								<div class="description">VMDファイルに対応したSprite3D.</div>
 							</td>
@@ -266,7 +266,7 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.gl.mmd.MAnimation.html#loadVmd">loadVmd</a></b>(path, name, callback)
+										<div class="fixedFont"><b><a href="../symbols/enchant.gl.mmd.MAnimation.html#loadVmd">loadVmd</a></b>(path, callback)
 										</div>
 										<div class="description">.vmdファイルをロードする.</div>
 									</td>
@@ -299,7 +299,7 @@
 					</h2>
 					
 					<div class="fixedFont">
-						<b>enchant.gl.mmd.MAnimation</b>(path, name, callback)
+						<b>enchant.gl.mmd.MAnimation</b>(path, callback)
 					</div>
 					
 					<div class="description">
@@ -320,12 +320,6 @@
 									
 								</dt>
 								<dd>ファイルパス</dd>
-							
-								<dt>
-									<span class="light fixedFont">{String}</span>  <b>name</b>
-									
-								</dt>
-								<dd>ファイル名</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Function}</span>  <b>callback</b>
@@ -386,7 +380,7 @@
 									
 									
 									
-									<b>loadVmd</b>(path, name, callback)
+									<b>loadVmd</b>(path, callback)
 								</div>
 								
 								<div class="description">
@@ -401,7 +395,7 @@
 									
 										<pre class="code">// motion/dance.vmd を読み込む.
 var dance = new MAnimation();
-dance.loadVmd('motion', 'dance.vmd', function() {
+dance.loadVmd('motion/dance.vmd', function() {
     mk.pushAnimation(dance);
 });</pre>
 									
@@ -416,12 +410,6 @@ dance.loadVmd('motion', 'dance.vmd', function() {
 												
 											</dt>
 											<dd>ファイルパス</dd>
-										
-											<dt>
-												<span class="light fixedFont">{String}</span> <b>name</b>
-												
-											</dt>
-											<dd>ファイル名</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Function}</span> <b>callback</b>

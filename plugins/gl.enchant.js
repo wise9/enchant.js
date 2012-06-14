@@ -1025,6 +1025,10 @@ enchant.gl.Texture = enchant.Class.create({
             return this._src;
         },
         set: function(source) {
+            if (typeof source == 'undefined'
+                || source == null) {
+                return;
+            }
             var that = this;
             var game = enchant.Game.instance;
             var onload = (function(that) {

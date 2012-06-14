@@ -45,7 +45,9 @@ if (enchant.gl != undefined) {
     (function(){
         /**
         [lang:ja]
-         * ColladaデータからSprite3Dを作成する
+         * ColladaデータからSprite3Dを作成する.
+         * 現在, ジョイント, アニメーションを含むデータに対応していません.
+         * また, 頂点属性がtrianglesである必要があります.
          * @example
          *   var scene = new Scene3D();
          *   Sprite3D.loadCollada("hoge.dae",　function(model){
@@ -56,7 +58,9 @@ if (enchant.gl != undefined) {
          * @static
         [/lang]
         [lang:en]
-         * Create Sprite3D from Collada data
+         * Create Sprite3D from Collada data.
+         * At present, data that has joint and animation is not supported.
+         * In addition, vertex attributes should be triangles.
          * @example
          *   var scene = new Scene3D();
          *   Sprite3D.loadCollada("hoge.dae",　function(model){
