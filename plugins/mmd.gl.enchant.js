@@ -503,7 +503,6 @@ var MMD = {};
                     morph.vert[j * 3 + 1] = vert[j].y;
                     morph.vert[j * 3 + 2] = vert[j].z;
                 }
-                console.log(j, ll);
             }
         },
         morphing: function(data, target) {

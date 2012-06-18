@@ -527,11 +527,11 @@
             }
         },
         _ccd: function(effector, target, origin, maxangle, threshold) {
-            ve = _tmp.ve;
-            vt = _tmp.vt;
-            axis = _tmp.axis;
-            quat = _tmp.quat;
-            inv = _tmp.inv;
+            var ve = _tmp.ve;
+            var vt = _tmp.vt;
+            var axis = _tmp.axis;
+            var quat = _tmp.quat;
+            var inv = _tmp.inv;
             vec3.subtract(effector._globalpos, origin._globalpos, ve);
             vec3.subtract(target._globalpos, origin._globalpos, vt);
             vec3.cross(vt, ve, axis);

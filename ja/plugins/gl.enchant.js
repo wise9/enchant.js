@@ -160,7 +160,7 @@ var GLUtil = enchant.Class.create({
         })();
         window['gl'] = this._gl = this._getContext(cvs);
         div.appendChild(cvs);
-        stage.appendChild(div);
+        stage.insertBefore(div, game.rootScene._element);
         game.rootScene.addChild(detect);
     },
     _getContext: function(canvas, debug) {
