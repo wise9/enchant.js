@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.4.4
+ * enchant.js v0.4.5
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -892,8 +892,8 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
 
         var ext = findExt(src);
 
-        if (enchant.Game.loadFuncs[ext]) {
-            enchant.Game.loadFuncs[ext].call(this, src, callback, ext);
+        if (enchant.Game._loadFuncs[ext]) {
+            enchant.Game._loadFuncs[ext].call(this, src, callback, ext);
         }
         else {
             var req = new XMLHttpRequest();
@@ -1145,21 +1145,21 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
     }
 });
 // img
-enchant.Game.loadFuncs = {};
-enchant.Game.loadFuncs['jpg']  =
-enchant.Game.loadFuncs['jpeg'] =
-enchant.Game.loadFuncs['gif']  =
-enchant.Game.loadFuncs['png']  =
-enchant.Game.loadFuncs['bmp']  = function(src, callback) {
+enchant.Game._loadFuncs = {};
+enchant.Game._loadFuncs['jpg']  =
+enchant.Game._loadFuncs['jpeg'] =
+enchant.Game._loadFuncs['gif']  =
+enchant.Game._loadFuncs['png']  =
+enchant.Game._loadFuncs['bmp']  = function(src, callback) {
     this.assets[src] = enchant.Surface.load(src);
     this.assets[src].addEventListener('load', callback);
 };
 // sound
-enchant.Game.loadFuncs['mp3'] =
-enchant.Game.loadFuncs['aac'] =
-enchant.Game.loadFuncs['m4a'] =
-enchant.Game.loadFuncs['wav'] =
-enchant.Game.loadFuncs['ogg'] = function(src, callback, ext) {
+enchant.Game._loadFuncs['mp3'] =
+enchant.Game._loadFuncs['aac'] =
+enchant.Game._loadFuncs['m4a'] =
+enchant.Game._loadFuncs['wav'] =
+enchant.Game._loadFuncs['ogg'] = function(src, callback, ext) {
     this.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
     this.assets[src].addEventListener('load', callback);
 };
@@ -2281,7 +2281,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 if (!fragment.childNodes.length) return;
 
                 var nextSibling, thisNode = reference;
-                while (thisNode.parentNode) {
+                while (thisNode != this) {
                     if (i != null) {
                         nodes = this.childNodes.slice(i+1).reverse();
                         i = null;
@@ -2910,7 +2910,7 @@ enchant.Sound.load = function(src, type) {
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
-        game.dispatchEvent(new Event(data.value));
+        enchant.Game.instance.dispatchEvent(new Event(data.value));
     }else if (data.type == "debug"){
         switch(data.value) {
             case "start":

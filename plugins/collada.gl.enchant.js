@@ -16,7 +16,7 @@
  */
 
 if (enchant.gl != undefined) {
-    enchant.Game.loadFuncs['dae'] = function(src, callback) {
+    enchant.Game._loadFuncs['dae'] = function(src, callback) {
         if (callback == null) callback = function() {};
         enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
             enchant.Game.instance.assets[src] = collada;
@@ -26,7 +26,9 @@ if (enchant.gl != undefined) {
 
     (function(){
         /**
-         * Create Sprite3D from Collada data
+         * Create Sprite3D from Collada data.
+         * At present, data that has joint and animation is not supported.
+         * In addition, vertex attributes should be triangles.
          * @example
          *   var scene = new Scene3D();
          *   Sprite3D.loadCollada("hoge.dae",　function(model){
@@ -419,64 +421,26 @@ if (enchant.gl != undefined) {
                             this.reflectivity = 0.1;
                             this.transparent = [0, 0, 0, 1];
                             this.transparency = 1.0;
-                            var temp = xml.getElementsByTagName("emission")[0].getElementsByTagName("color")[0].textContent;
-                            if (temp) {
-                                this.emission = parseFloatArray(temp);
-                            }
-                            temp = 0;
 
-                            temp = xml.getElementsByTagName("ambient")[0].getElementsByTagName("color")[0].textContent;
-                            if (temp) {
-                                this.ambient = parseFloatArray(temp);
-                            }
-                            temp = 0;
-
-                            temp = xml.getElementsByTagName("diffuse")[0].getElementsByTagName("color")[0];
-                            if (temp) {
-                                temp = temp.textContent;
-                            }
-                            if (temp) {
-                                this.diffuse = parseFloatArray(temp);
-                            }
-                            temp = 0;
-
-                            temp = xml.getElementsByTagName("specular")[0].getElementsByTagName("color")[0].textContent;
-                            if (temp) {
-                                this.specular = parseFloatArray(temp);
-                            }
-                            temp = 0;
-
-                            temp = xml.getElementsByTagName("shininess")[0].getElementsByTagName("float")[0].textContent;
-                            if (temp) {
-                                this.shininess = parseFloat(temp);
-                            }
-                            temp = 0;
-
-                            temp = xml.getElementsByTagName("reflective")[0].getElementsByTagName("color")[0].textContent;
-                            if (temp) {
-                                this.reflective = parseFloatArray(temp);
-                            }
-                            temp = 0;
-
-                            temp = xml.getElementsByTagName("reflectivity")[0].getElementsByTagName("float")[0].textContent;
-                            if (temp) {
-                                this.reflectivity = parseFloat(temp);
-                            }
-                            temp = 0;
-
-                            if (false) {
-                                temp = xml.getElementsByTagName("transparent")[0].getElementsByTagName("color")[0].textContent;
-                                if (temp) {
-                                    this.transparent = parseFloatArray(temp);
+                            var props = [
+                                'emission', 'ambient', 'diffuse',
+                                'specular', 'shininess', 'refrective',
+                                'refrectivity', 'transparent', 'transparency'
+                            ];
+                            var temp;
+                            var property;
+                            var body;
+                            for (var i = 0, l = props.length; i < l; i++) {
+                                property = props[i];
+                                body = xml.getElementsByTagName(property);
+                                if (body.length == 1) {
+                                    temp = body[0].getElementsByTagName('color');
+                                    if (temp.length == 1) {
+                                        this[property] = parseFloatArray(temp[0].textContent);
+                                        temp = false;
+                                    }
                                 }
-                                temp = 0;
                             }
-
-                            temp = xml.getElementsByTagName("transparency")[0].getElementsByTagName("float")[0].textContent;
-                            if (temp) {
-                                this.transparency = parseFloat(temp);
-                            }
-                            temp = 0;
                         }
                     }
                 }
@@ -629,10 +593,14 @@ if (enchant.gl != undefined) {
                             if (triangles.normalOffset >= 0) {
                                 var index = triangles.primitive[k + triangles.normalOffset] * 3;
                                 resultMesh.normals.push(mesh.normals[index], mesh.normals[index + 1], mesh.normals[index + 2]);
+                            } else {
+                                resultMesh.normals.push(0, 0, 1);
                             }
                             if (triangles.uvOffset >= 0) {
                                 var index = triangles.primitive[k + triangles.uvOffset] * 2;
                                 resultMesh.uv.push(mesh.uv[index], 1.0 - mesh.uv[index + 1]);
+                            } else {
+                                resultMesh.uv.push(0, 0);
                             }
                         }
 

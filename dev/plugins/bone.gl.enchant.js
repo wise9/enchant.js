@@ -1,8 +1,8 @@
 /**
 [lang:ja]
  * bone.gl.enchant.js
- * @version 0.2.0
- * @require enchant.js v0.4.3+
+ * @version 0.2.1
+ * @require enchant.js v0.4.5+
  * @require gl.enchant.js v0.3.5+
  * @author Ubiquitous Entertainment Inc.
  *
@@ -372,6 +372,14 @@
         }
     });
 
+    var _tmp = {
+        ve:  vec3.create(),
+        vt: vec3.create(),
+        axis: vec3.create(),
+        quat: quat4.create(),
+        inv: quat4.create()
+    };
+
     /**
      * @scope enchant.gl.Skeleton.prototype
      */
@@ -394,13 +402,6 @@
             this._globalpos = vec3.create();
             this._globalrot = quat4.create([0, 0, 0, 1]);
             this._iks = [];
-            this._tmp = {
-                ve:  vec3.create(),
-                vt: vec3.create(),
-                axis: vec3.create(),
-                quat: quat4.create(),
-                inv: quat4.create()
-            };
         },
         /**
         [lang:ja]
@@ -510,7 +511,7 @@
         },
         _solveIK: function(effector, target, bones, maxangle, iteration) {
             var len;
-            var tmp = this._tmp.inv;
+            var tmp = _tmp.inv;
             vec3.subtract(target._origin, target.parentNode._origin, tmp);
             var threshold = vec3.length(tmp) * 0.1;
             for (var i = 0; i < iteration; i++) {
@@ -526,11 +527,11 @@
             }
         },
         _ccd: function(effector, target, origin, maxangle, threshold) {
-            ve = this._tmp.ve;
-            vt = this._tmp.vt;
-            axis = this._tmp.axis;
-            quat = this._tmp.quat;
-            inv = this._tmp.inv;
+            var ve = _tmp.ve;
+            var vt = _tmp.vt;
+            var axis = _tmp.axis;
+            var quat = _tmp.quat;
+            var inv = _tmp.inv;
             vec3.subtract(effector._globalpos, origin._globalpos, ve);
             vec3.subtract(target._globalpos, origin._globalpos, vt);
             vec3.cross(vt, ve, axis);
