@@ -4069,7 +4069,7 @@ enchant.Sound.load = function(src, type) {
 window.addEventListener("message", function(msg, origin){
     var data = JSON.parse(msg.data);
     if (data.type == "event") {
-        game.dispatchEvent(new Event(data.value));
+        enchant.Game.instance.dispatchEvent(new Event(data.value));
     }else if (data.type == "debug"){
         switch(data.value) {
             case "start":
