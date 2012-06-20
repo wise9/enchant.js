@@ -2,7 +2,7 @@ enchant();
 var game;
 window.onload = function() {
     game = new Game(320, 320);
-    game.preload('../../images/enchant-sphere.png');
+    game.preload('../../../../images/enchant-sphere.png');
     game.onload = function() {
         /**
          * 3D用のシーンを定義する.
@@ -20,7 +20,7 @@ window.onload = function() {
          * Sprite3Dのmeshプロパティが表示上の実体となる.
          * テクスチャのソースはpreloadでロードしたデータの他に, canvasオブジェクト, imageオブジェクト, 画像のURLを表す文字列が使用できる.
          */
-        ball.mesh.texture.src = game.assets['../../images/enchant-sphere.png'];
+        ball.mesh.texture.src = game.assets['../../../../images/enchant-sphere.png'];
         ball.z = -20;
 
         ball.addEventListener('enterframe', function(e) {
