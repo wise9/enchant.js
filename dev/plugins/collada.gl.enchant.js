@@ -110,7 +110,7 @@ if (enchant.gl != undefined) {
                             var effect = collada.getEffectById(instanceEffectUrl);
                             if (effect && effect.profileCommon && effect.profileCommon.surface &&
                                 effect.profileCommon.surface.initFrom) {
-                                var img = that.getImageById(effect.profileCommon.surface.initFrom)
+                                var img = collada.getImageById(effect.profileCommon.surface.initFrom)
                                 if (img) {
                                     texture.src = img.initFrom;
                                 }
