@@ -177,7 +177,7 @@ enchant.ENV = {
         return typeof div.ontouchstart == 'function';
     })(),
     /**
-     * Is this browser iPhone with Retina display ?
+     * Is this browser iPhone with Retina display?
      * @type {String}
      */
     RETINA_DISPLAY: (function() {
@@ -194,7 +194,7 @@ enchant.ENV = {
         }
     })(),
     /**
-     * Use Flash instead of native Audio class ?
+     * Use Flash instead of native Audio class?
      * @type {String}
      */
     USE_FLASH_SOUND: (function() {
@@ -203,11 +203,10 @@ enchant.ENV = {
         return (location.href.indexOf('http') == 0 && ua.indexOf('Mobile') == -1 && vendor.indexOf('Apple') != -1);
     })(),
     /**
-     * Default Event Tag Branch
+     * On click/touch event in these tags, setPreventDefault() will not be called
      */
     USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select']
 };
-
 
 // the running instance
 var game;
@@ -1278,20 +1277,21 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
+                        e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchmove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchend', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        e.stopPropagation();
                     }
                 }, true);
             } else {

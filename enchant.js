@@ -119,49 +119,69 @@ var enchant = function(modules) {
 };
 
 (function() {
-
 "use strict";
 
-var VENDER_PREFIX = (function() {
-    var ua = navigator.userAgent;
-    if (ua.indexOf('Opera') != -1) {
-        return 'O';
-    } else if (ua.indexOf('MSIE') != -1) {
-        return 'ms';
-    } else if (ua.indexOf('WebKit') != -1) {
-        return 'webkit';
-    } else if (navigator.product == 'Gecko') {
-        return 'Moz';
-    } else {
-        return '';
-    }
-})();
-var TOUCH_ENABLED = (function() {
-    var div = document.createElement('div');
-    div.setAttribute('ontouchstart', 'return');
-    return typeof div.ontouchstart == 'function';
-})();
-var RETINA_DISPLAY = (function() {
-    if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
-        var viewport = document.querySelector('meta[name="viewport"]');
-        if (viewport == null) {
-            viewport = document.createElement('meta');
-            document.head.appendChild(viewport);
+/**
+ */
+enchant.ENV = {
+    /**
+     * css vendor prefix in current browser
+     * @type {String}
+     */
+    VENDOR_PREFIX: (function() {
+        var ua = navigator.userAgent;
+        if (ua.indexOf('Opera') != -1) {
+            return 'O';
+        } else if (ua.indexOf('MSIE') != -1) {
+            return 'ms';
+        } else if (ua.indexOf('WebKit') != -1) {
+            return 'webkit';
+        } else if (navigator.product == 'Gecko') {
+            return 'Moz';
+        } else {
+            return '';
         }
-        viewport.setAttribute('content', 'width=640');
-        return true;
-    } else {
-        return false;
-    }
-})();
-var USE_FLASH_SOUND = (function() {
-    var ua = navigator.userAgent;
-    var vendor = navigator.vendor || "";
-    if(location.href.indexOf('http') == 0 && ua.indexOf('Mobile') == -1 && vendor.indexOf('Apple') != -1){
-        return true;
-    }
-    return false;
-})();
+    })(),
+    /**
+     * CSS vendor prefix in current browser
+     * @type {String}
+     */
+    TOUCH_ENABLED: (function() {
+        var div = document.createElement('div');
+        div.setAttribute('ontouchstart', 'return');
+        return typeof div.ontouchstart == 'function';
+    })(),
+    /**
+     * Is this browser iPhone with Retina display?
+     * @type {String}
+     */
+    RETINA_DISPLAY: (function() {
+        if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
+            var viewport = document.querySelector('meta[name="viewport"]');
+            if (viewport == null) {
+                viewport = document.createElement('meta');
+                document.head.appendChild(viewport);
+            }
+            viewport.setAttribute('content', 'width=640');
+            return true;
+        } else {
+            return false;
+        }
+    })(),
+    /**
+     * Use Flash instead of native Audio class?
+     * @type {String}
+     */
+    USE_FLASH_SOUND: (function() {
+        var ua = navigator.userAgent;
+        var vendor = navigator.vendor || "";
+        return (location.href.indexOf('http') == 0 && ua.indexOf('Mobile') == -1 && vendor.indexOf('Apple') != -1);
+    })(),
+    /**
+     * On click/touch event in these tags, setPreventDefault() will not be called
+     */
+    USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select']
+};
 
 // the running instance
 var game;
@@ -804,31 +824,32 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     game.dispatchEvent(e);
                 }
             }, true);
-            if (TOUCH_ENABLED) {
+            if (enchant.ENV.TOUCH_ENABLED) {
                 stage.addEventListener('touchstart', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(tagName !== "input" && tagName !== "textarea"){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
+                        e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchmove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(tagName !== "input" && tagName !== "textarea"){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchend', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(tagName !== "input" && tagName !== "textarea"){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        e.stopPropagation();
                     }
                 }, true);
             } else {
                 stage.addEventListener('mousedown', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(tagName !== "input" && tagName !== "textarea"){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
                         game._mousedownID++;
                         if (!game.running) e.stopPropagation();
@@ -836,14 +857,14 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                 }, true);
                 stage.addEventListener('mousemove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(tagName !== "input" && tagName !== "textarea"){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
                         if (!game.running) e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(tagName !== "input" && tagName !== "textarea"){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
                         if (!game.running) e.stopPropagation();
                     }
@@ -931,7 +952,7 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             window.clearInterval(this._intervalID);
         } else if (this._assets.length) {
             if (enchant.Sound.enabledInMobileSafari && !game._touched &&
-                VENDER_PREFIX == 'webkit' && TOUCH_ENABLED) {
+                enchant.ENV.VENDOR_PREFIX == 'webkit' && enchant.ENV.TOUCH_ENABLED) {
                 var scene = new enchant.Scene();
                 scene.backgroundColor = '#000';
                 var size = Math.round(game.width / 10);
@@ -1361,7 +1382,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         });
 
         var that = this;
-        if (TOUCH_ENABLED) {
+        if (enchant.ENV.TOUCH_ENABLED) {
             this._element.addEventListener('touchstart', function(e) {
                 var touches = e.touches;
                 for (var i = 0, len = touches.length; i < len; i++) {
@@ -1584,7 +1605,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 
         this.addEventListener('render', function() {
             if (this._dirty) {
-                this._style[VENDER_PREFIX + 'Transform'] = [
+                this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = [
                     'rotate(', this._rotation, 'deg)',
                     'scale(', this._scaleX, ',', this._scaleY, ')'
                 ].join('');
@@ -1852,7 +1873,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         enchant.Entity.call(this);
 
         var canvas = document.createElement('canvas');
-        if (RETINA_DISPLAY && game.scale == 2) {
+        if (enchant.ENV.RETINA_DISPLAY && game.scale == 2) {
             canvas.width = game.width * 2;
             canvas.height = game.height * 2;
             this._style.webkitTransformOrigin = '0 0';
@@ -2027,7 +2048,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         },
         set: function(image) {
             this._image = image;
-            if (RETINA_DISPLAY && game.scale == 2) {
+            if (enchant.ENV.RETINA_DISPLAY && game.scale == 2) {
                 var img = new enchant.Surface(image.width * 2, image.height * 2);
                 var tileWidth = this._tileWidth || image.width;
                 var tileHeight = this._tileHeight || image.height;
@@ -2454,13 +2475,13 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element.style.overflow = 'hidden';
         this._element.style.width = (this.width = game.width) + 'px';
         this._element.style.height = (this.height = game.height) + 'px';
-        this._element.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[VENDER_PREFIX + 'Transform'] = 'scale(' +  game.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' +  game.scale + ')';
 
         this.scene = this;
 
         var that = this;
-        if (TOUCH_ENABLED) {
+        if (enchant.ENV.TOUCH_ENABLED) {
             this._element.addEventListener('touchstart', function(e) {
                 var touches = e.touches;
                 for (var i = 0, len = touches.length; i < len; i++) {
@@ -2790,7 +2811,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
                 _element: { value: this._element.cloneNode(false) },
                 duration: { value: this.duration }
             });
-        } else if(USE_FLASH_SOUND) {
+        } else if(enchant.ENV.USE_FLASH_SOUND) {
                        return this;
         } else {
             clone = Object.create(enchant.Sound.prototype);
@@ -2846,12 +2867,12 @@ enchant.Sound.load = function(src, type) {
     enchant.EventTarget.call(sound);
     var audio = new Audio();
     if (!enchant.Sound.enabledInMobileSafari &&
-        VENDER_PREFIX == 'webkit' && TOUCH_ENABLED) {
+        enchant.ENV.VENDOR_PREFIX == 'webkit' && enchant.ENV.TOUCH_ENABLED) {
         window.setTimeout(function() {
             sound.dispatchEvent(new enchant.Event('load'));
         }, 0);
     } else {
-        if (!USE_FLASH_SOUND && audio.canPlayType(type)) {
+        if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
             audio.src = src;
             audio.load();
             audio.autoplay = false;
