@@ -1275,46 +1275,47 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
             if (enchant.ENV.TOUCH_ENABLED) {
                 stage.addEventListener('touchstart', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1){
                         e.preventDefault();
-                        e.stopPropagation();
+                        if(!game.running)e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchmove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1){
                         e.preventDefault();
-                        e.stopPropagation();
+                        if(!game.running)e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchend', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1){
                         e.preventDefault();
-                        e.stopPropagation();
+                        if(!game.running)e.stopPropagation();
                     }
                 }, true);
             } else {
                 stage.addEventListener('mousedown', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1){
                         e.preventDefault();
                         game._mousedownID++;
-                        if (!game.running) e.stopPropagation();
+                        if(!game.running)e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('mousemove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        if(!game.running)e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
-                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
+                    if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1){
+                        // フォームじゃない
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        if(!game.running)e.stopPropagation();
                     }
                 }, true);
             }
@@ -2327,7 +2328,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      *   var bear = new Sprite(32, 32);
      *   bear.image = game.assets['chara1.gif'];
      *
-     * @param {Number} [width] Sprite width.
+     * @param {Number} [width] Sprite width.g
      * @param {Number} [height] Sprite height.
      * @constructs
      * @extends enchant.Entity
@@ -4096,27 +4097,30 @@ enchant.Sound.load = function(src, type) {
 };
 
 window.addEventListener("message", function(msg, origin){
-    var data = JSON.parse(msg.data);
-    if (data.type == "event") {
-        enchant.Game.instance.dispatchEvent(new Event(data.value));
-    }else if (data.type == "debug"){
-        switch(data.value) {
-            case "start":
-                enchant.Game.instance.start();
-                break;
-            case "pause":
-                enchant.Game.instance.pause();
-                break;
-            case "resume":
-                enchant.Game.instance.resume();
-                break;
-            case "tick":
-                enchant.Game.instance._tick();
-                break;
-            default:
-                break;
+    try{
+        var data = JSON.parse(msg.data);
+        if (data.type == "event") {
+            enchant.Game.instance.dispatchEvent(new Event(data.value));
+        }else if (data.type == "debug"){
+            switch(data.value) {
+                case "start":
+                    enchant.Game.instance.start();
+                    break;
+                case "pause":
+                    enchant.Game.instance.pause();
+                    break;
+                case "resume":
+                    enchant.Game.instance.resume();
+                    break;
+                case "tick":
+                    enchant.Game.instance._tick();
+                    break;
+                default:
+                    break;
+            }
         }
-
+    }catch(e){
+        // ignore
     }
 }, false);
 

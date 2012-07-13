@@ -926,7 +926,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             initialize: function(nx, ny, nz, dist, scale) {
                 if (!scale) {
                     scale = 50;
-                }:
+                };
                 var rigid = new RigidPlane(nx, ny, nz, dist);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
                 this.mesh = Mesh.createPlaneXZ(scale);
