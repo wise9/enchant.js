@@ -1277,20 +1277,21 @@ enchant.Game = enchant.Class.create(enchant.EventTarget, {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
+                        e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchmove', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        e.stopPropagation();
                     }
                 }, true);
                 stage.addEventListener('touchend', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if(enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) > -1){
                         e.preventDefault();
-                        if (!game.running) e.stopPropagation();
+                        e.stopPropagation();
                     }
                 }, true);
             } else {
