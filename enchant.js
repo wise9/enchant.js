@@ -2862,7 +2862,7 @@ enchant.Sound.load = function(src, type) {
             type = '';
         }
     }
-    type = type.replace('mp3', 'mpeg');
+    type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
 
     var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);

@@ -736,7 +736,8 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * Entity をなめらかに拡大・縮小するアクションを追加する。
-     * @param scale 相対縮尺
+     * @param scaleX 縮尺
+     * @param [scaleY] 縮尺。省略した場合 scaleX と同じ
      * @param time
      * @param [easing]
      */
@@ -759,7 +760,8 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * Entity をなめらかに拡大・縮小させるアクションを追加する。
      * 相対縮尺 (ex. アクション開始時の縮尺の n 倍) で指定する。
-     * @param scale 相対縮尺
+     * @param scaleX 相対縮尺
+     * @param [scaleY] 相対縮尺。省略した場合 scaleX と同じ
      * @param time
      * @param [easing]
      */
