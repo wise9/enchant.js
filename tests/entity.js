@@ -45,6 +45,7 @@ test('Entity.frame issue 14', function() {
 	var sprite = new Sprite(32, 32);
 	sprite.frame = 0;
 	sprite.image = enchant.Game.instance.assets['start.png'];
+	ok(true);
 });
 
 /**
@@ -71,14 +72,14 @@ test('add/remove/clear EventListeners', function () {
 	listener2 = function(){};
 
     sprite.addEventListener('enterframe', listener);
-    equal(sprite._listeners['enterframe'].length, 1);
+    equal(sprite._listeners['enterframe'].length, 2);
     sprite.removeEventListener('enterframe', listener);
-    equal(sprite._listeners['enterframe'].length, 0);
+    equal(sprite._listeners['enterframe'].length, 1);
 
     sprite.addEventListener('enterframe', listener);
-    equal(sprite._listeners['enterframe'].length, 1);
-    sprite.addEventListener('enterframe', listener2);
     equal(sprite._listeners['enterframe'].length, 2);
+    sprite.addEventListener('enterframe', listener2);
+    equal(sprite._listeners['enterframe'].length, 3);
     sprite.clearEventListener('enterframe');
     equal(sprite._listeners['enterframe'], undefined);
 
