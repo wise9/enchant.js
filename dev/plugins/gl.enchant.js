@@ -2148,16 +2148,11 @@ enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         this.globalY = 0;
         this.globalZ = 0;
 
-        this._matrix = mat4.create();
-        mat4.identity(this._matrix);
-        this.tmpMat = mat4.create();
-        mat4.identity(this.tmpMat);
-        this.modelMat = mat4.create();
-        mat4.identity(this.modelMat);
-        this._rotation = mat4.create();
-        mat4.identity(this._rotation);
-        this._normMat = mat3.create();
-        mat3.identity(this._normMat);
+        this._matrix = mat4.identity();
+        this.tmpMat = mat4.identity();
+        this.modelMat = mat4.identity();
+        this._rotation = mat4.identity();
+        this._normMat = mat3.identity();
 
         var game = enchant.Game.instance;
         this.detectColor = game.GL.detectColorManager.attachDetectColor(this);
@@ -3026,9 +3021,9 @@ enchant.gl.Camera3D = enchant.Class.create({
      */
     initialize: function() {
         var game = enchant.Game.instance;
-        this.mat = mat4.create();
-        this.invMat = mat4.create();
-        this.invMatY = mat4.create();
+        this.mat = mat4.identity();
+        this.invMat = mat4.identity();
+        this.invMatY = mat4.identity();
         this._projMat = mat4.create();
         mat4.perspective(20, game.width / game.height, 1.0, 1000.0, this._projMat);
         this._changedPosition = false;
@@ -3512,7 +3507,7 @@ enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
          */
         this.lights = [];
 
-        this.identityMat = mat4.create();
+        this.identityMat = mat4.identity();
         this._backgroundColor = [0.0, 0.0, 0.0, 1.0];
 
         var listener = function(e) {
