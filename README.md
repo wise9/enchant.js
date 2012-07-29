@@ -34,6 +34,17 @@ Platform
 - iOS
 - Android 2.1+
 
+Generating
+__________
+
+You can generate Japanese-commented and minified file from dev/enchant.js with rake command.
+
+  rake
+
+You can generate docs with jsdoc with:
+
+  rake doc
+
 License
 -------
 
