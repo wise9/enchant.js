@@ -39,11 +39,11 @@ __________
 
 You can generate Japanese-commented and minified file from dev/enchant.js with rake command.
 
-  rake
+    rake
 
 You can generate docs with jsdoc with:
 
-  rake doc
+    rake doc
 
 License
 -------
