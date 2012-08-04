@@ -55,9 +55,7 @@ if (typeof Object.defineProperties != 'function') {
 if (typeof Object.create != 'function') {
     Object.create = function(prototype, descs) {
         function F() {
-        }
-
-        ;
+        };
         F.prototype = prototype;
         var obj = new F();
         if (descs != null) Object.defineProperties(obj, descs);
@@ -67,6 +65,22 @@ if (typeof Object.create != 'function') {
 if (typeof Object.getPrototypeOf != 'function') {
     Object.getPrototypeOf = function(obj) {
         return obj.__proto__;
+    };
+}
+
+if (typeof Function.prototype.bind !== 'function') {
+    Function.prototype.bind = function(thisObject) {
+        var func = this;
+        var args = Array.prototype.slice.call(arguments, 1);
+        var nop = function() {};
+        var bound = function() {
+            var a = args.concat(Array.prototype.slice.call(arguments));
+            return func.apply(
+                this instanceof nop? this: thisObject || window, a);
+        };
+        nop.prototype = func.prototype;
+        bound.prototype = new nop();
+        return bound;
     };
 }
 
