@@ -107,7 +107,6 @@ var enchant = function(modules) {
             return [module].join();
         });
     }
-
     (function include(module, prefix) {
         var submodules = [];
         for (var prop in module) if (module.hasOwnProperty(prop)) {
@@ -200,7 +199,7 @@ var enchant = function(modules) {
         USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select']
     };
 
-// the running instance
+    // the running instance
     var game;
 
     /**
@@ -1588,6 +1587,64 @@ var enchant = function(modules) {
             var _;
             return (_ = this.x - other.x + (this.width - other.width) / 2) * _ +
                 (_ = this.y - other.y + (this.height - other.height) / 2) * _ < distance * distance;
+        },
+        /**
+         * Expand or contract Sprite.
+         * @param {Number} x Scaling for x axis to be expanded.
+         * @param {Number} [y] Scaling for y axis to be expanded.
+         */
+        scale: function(x, y) {
+            if (y == null) y = x;
+            this._scaleX *= x;
+            this._scaleY *= y;
+            this._dirty = true;
+        },
+        /**
+         * Rotate Sprite.
+         * @param {Number} deg Rotation angle (frequency).
+         */
+        rotate: function(deg) {
+            this._rotation += deg;
+            this._dirty = true;
+        },
+        /**
+         * Scaling for Sprite's x axis direction.
+         * @type {Number}
+         */
+        scaleX: {
+            get: function() {
+                return this._scaleX;
+            },
+            set: function(scaleX) {
+                this._scaleX = scaleX;
+                this._dirty = true;
+            }
+        },
+        /**
+         * Scaling for Sprite's y axis direction.
+         * @type {Number}
+         */
+        scaleY: {
+            get: function() {
+                return this._scaleY;
+            },
+            set: function(scaleY) {
+                this._scaleY = scaleY;
+                this._dirty = true;
+            }
+        },
+        /**
+         * Sprite rotation angle (frequency).
+         * @type {Number}
+         */
+        rotation: {
+            get: function() {
+                return this._rotation;
+            },
+            set: function(rotation) {
+                this._rotation = rotation;
+                this._dirty = true;
+            }
         }
     });
 
@@ -1745,64 +1802,6 @@ var enchant = function(modules) {
                     style.left = -(frame % row) * this._width + 'px';
                     style.top = -(frame / row | 0) * this._height + 'px';
                 }
-            }
-        },
-        /**
-         * Expand or contract Sprite.
-         * @param {Number} x Scaling for x axis to be expanded.
-         * @param {Number} [y] Scaling for y axis to be expanded.
-         */
-        scale: function(x, y) {
-            if (y == null) y = x;
-            this._scaleX *= x;
-            this._scaleY *= y;
-            this._dirty = true;
-        },
-        /**
-         * Rotate Sprite.
-         * @param {Number} deg Rotation angle (frequency).
-         */
-        rotate: function(deg) {
-            this._rotation += deg;
-            this._dirty = true;
-        },
-        /**
-         * Scaling for Sprite's x axis direction.
-         * @type {Number}
-         */
-        scaleX: {
-            get: function() {
-                return this._scaleX;
-            },
-            set: function(scaleX) {
-                this._scaleX = scaleX;
-                this._dirty = true;
-            }
-        },
-        /**
-         * Scaling for Sprite's y axis direction.
-         * @type {Number}
-         */
-        scaleY: {
-            get: function() {
-                return this._scaleY;
-            },
-            set: function(scaleY) {
-                this._scaleY = scaleY;
-                this._dirty = true;
-            }
-        },
-        /**
-         * Sprite rotation angle (frequency).
-         * @type {Number}
-         */
-        rotation: {
-            get: function() {
-                return this._rotation;
-            },
-            set: function(rotation) {
-                this._rotation = rotation;
-                this._dirty = true;
             }
         }
     });
@@ -2975,7 +2974,6 @@ var enchant = function(modules) {
             // ignore
         }
     }, false);
-
     enchant.Sound.enabledInMobileSafari = false;
 
     function findExt(path) {
@@ -2990,5 +2988,4 @@ var enchant = function(modules) {
         }
         return null;
     }
-
 })();

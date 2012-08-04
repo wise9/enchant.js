@@ -124,7 +124,6 @@ var enchant = function(modules) {
             return [module].join();
         });
     }
-
     (function include(module, prefix) {
         var submodules = [];
         for (var prop in module) if (module.hasOwnProperty(prop)) {
@@ -225,7 +224,7 @@ var enchant = function(modules) {
         USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select']
     };
 
-// the running instance
+    // the running instance
     var game;
 
     /**
@@ -2314,6 +2313,95 @@ var enchant = function(modules) {
             var _;
             return (_ = this.x - other.x + (this.width - other.width) / 2) * _ +
                 (_ = this.y - other.y + (this.height - other.height) / 2) * _ < distance * distance;
+        },
+        /**
+         [lang:ja]
+         * Spriteを拡大縮小する.
+         * @param {Number} x 拡大するx軸方向の倍率.
+         * @param {Number} [y] 拡大するy軸方向の倍率.
+         [/lang]
+         [lang:en]
+         * Expand or contract Sprite.
+         * @param {Number} x Scaling for x axis to be expanded.
+         * @param {Number} [y] Scaling for y axis to be expanded.
+         [/lang]
+         */
+        scale: function(x, y) {
+            if (y == null) y = x;
+            this._scaleX *= x;
+            this._scaleY *= y;
+            this._dirty = true;
+        },
+        /**
+         [lang:ja]
+         * Spriteを回転する.
+         * @param {Number} deg 回転する角度 (度数法).
+         [/lang]
+         [lang:en]
+         * Rotate Sprite.
+         * @param {Number} deg Rotation angle (frequency).
+         [/lang]
+         */
+        rotate: function(deg) {
+            this._rotation += deg;
+            this._dirty = true;
+        },
+        /**
+         [lang:ja]
+         * Spriteのx軸方向の倍率.
+         * @type {Number}
+         [/lang]
+         [lang:en]
+         * Scaling for Sprite's x axis direction.
+         * @type {Number}
+         [/lang]
+         */
+        scaleX: {
+            get: function() {
+                return this._scaleX;
+            },
+            set: function(scaleX) {
+                this._scaleX = scaleX;
+                this._dirty = true;
+            }
+        },
+        /**
+         [lang:ja]
+         * Spriteのy軸方向の倍率.
+         * @type {Number}
+         [/lang]
+         [lang:en]
+         * Scaling for Sprite's y axis direction.
+         * @type {Number}
+         [/lang]
+         */
+        scaleY: {
+            get: function() {
+                return this._scaleY;
+            },
+            set: function(scaleY) {
+                this._scaleY = scaleY;
+                this._dirty = true;
+            }
+        },
+        /**
+         [lang:ja]
+         * Spriteの回転角 (度数法).
+         * @type {Number}
+         [/lang]
+         [lang:en]
+         * Sprite rotation angle (frequency).
+         * @type {Number}
+         [/lang]
+         */
+        rotation: {
+            get: function() {
+                return this._rotation;
+            },
+            set: function(rotation) {
+                this._rotation = rotation;
+                this._dirty = true;
+            }
         }
     });
 
@@ -2514,95 +2602,6 @@ var enchant = function(modules) {
                     style.left = -(frame % row) * this._width + 'px';
                     style.top = -(frame / row | 0) * this._height + 'px';
                 }
-            }
-        },
-        /**
-         [lang:ja]
-         * Spriteを拡大縮小する.
-         * @param {Number} x 拡大するx軸方向の倍率.
-         * @param {Number} [y] 拡大するy軸方向の倍率.
-         [/lang]
-         [lang:en]
-         * Expand or contract Sprite.
-         * @param {Number} x Scaling for x axis to be expanded.
-         * @param {Number} [y] Scaling for y axis to be expanded.
-         [/lang]
-         */
-        scale: function(x, y) {
-            if (y == null) y = x;
-            this._scaleX *= x;
-            this._scaleY *= y;
-            this._dirty = true;
-        },
-        /**
-         [lang:ja]
-         * Spriteを回転する.
-         * @param {Number} deg 回転する角度 (度数法).
-         [/lang]
-         [lang:en]
-         * Rotate Sprite.
-         * @param {Number} deg Rotation angle (frequency).
-         [/lang]
-         */
-        rotate: function(deg) {
-            this._rotation += deg;
-            this._dirty = true;
-        },
-        /**
-         [lang:ja]
-         * Spriteのx軸方向の倍率.
-         * @type {Number}
-         [/lang]
-         [lang:en]
-         * Scaling for Sprite's x axis direction.
-         * @type {Number}
-         [/lang]
-         */
-        scaleX: {
-            get: function() {
-                return this._scaleX;
-            },
-            set: function(scaleX) {
-                this._scaleX = scaleX;
-                this._dirty = true;
-            }
-        },
-        /**
-         [lang:ja]
-         * Spriteのy軸方向の倍率.
-         * @type {Number}
-         [/lang]
-         [lang:en]
-         * Scaling for Sprite's y axis direction.
-         * @type {Number}
-         [/lang]
-         */
-        scaleY: {
-            get: function() {
-                return this._scaleY;
-            },
-            set: function(scaleY) {
-                this._scaleY = scaleY;
-                this._dirty = true;
-            }
-        },
-        /**
-         [lang:ja]
-         * Spriteの回転角 (度数法).
-         * @type {Number}
-         [/lang]
-         [lang:en]
-         * Sprite rotation angle (frequency).
-         * @type {Number}
-         [/lang]
-         */
-        rotation: {
-            get: function() {
-                return this._rotation;
-            },
-            set: function(rotation) {
-                this._rotation = rotation;
-                this._dirty = true;
             }
         }
     });
@@ -4152,7 +4151,6 @@ var enchant = function(modules) {
             // ignore
         }
     }, false);
-
     enchant.Sound.enabledInMobileSafari = false;
 
     function findExt(path) {
@@ -4167,5 +4165,4 @@ var enchant = function(modules) {
         }
         return null;
     }
-
 })();

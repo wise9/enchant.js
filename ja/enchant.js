@@ -108,7 +108,6 @@ var enchant = function(modules) {
             return [module].join();
         });
     }
-
     (function include(module, prefix) {
         var submodules = [];
         for (var prop in module) if (module.hasOwnProperty(prop)) {
@@ -205,7 +204,7 @@ var enchant = function(modules) {
         USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select']
     };
 
-// the running instance
+    // the running instance
     var game;
 
     /**
@@ -1593,6 +1592,64 @@ var enchant = function(modules) {
             var _;
             return (_ = this.x - other.x + (this.width - other.width) / 2) * _ +
                 (_ = this.y - other.y + (this.height - other.height) / 2) * _ < distance * distance;
+        },
+        /**
+         * Spriteを拡大縮小する.
+         * @param {Number} x 拡大するx軸方向の倍率.
+         * @param {Number} [y] 拡大するy軸方向の倍率.
+         */
+        scale: function(x, y) {
+            if (y == null) y = x;
+            this._scaleX *= x;
+            this._scaleY *= y;
+            this._dirty = true;
+        },
+        /**
+         * Spriteを回転する.
+         * @param {Number} deg 回転する角度 (度数法).
+         */
+        rotate: function(deg) {
+            this._rotation += deg;
+            this._dirty = true;
+        },
+        /**
+         * Spriteのx軸方向の倍率.
+         * @type {Number}
+         */
+        scaleX: {
+            get: function() {
+                return this._scaleX;
+            },
+            set: function(scaleX) {
+                this._scaleX = scaleX;
+                this._dirty = true;
+            }
+        },
+        /**
+         * Spriteのy軸方向の倍率.
+         * @type {Number}
+         */
+        scaleY: {
+            get: function() {
+                return this._scaleY;
+            },
+            set: function(scaleY) {
+                this._scaleY = scaleY;
+                this._dirty = true;
+            }
+        },
+        /**
+         * Spriteの回転角 (度数法).
+         * @type {Number}
+         */
+        rotation: {
+            get: function() {
+                return this._rotation;
+            },
+            set: function(rotation) {
+                this._rotation = rotation;
+                this._dirty = true;
+            }
         }
     });
 
@@ -1760,64 +1817,6 @@ var enchant = function(modules) {
                     style.left = -(frame % row) * this._width + 'px';
                     style.top = -(frame / row | 0) * this._height + 'px';
                 }
-            }
-        },
-        /**
-         * Spriteを拡大縮小する.
-         * @param {Number} x 拡大するx軸方向の倍率.
-         * @param {Number} [y] 拡大するy軸方向の倍率.
-         */
-        scale: function(x, y) {
-            if (y == null) y = x;
-            this._scaleX *= x;
-            this._scaleY *= y;
-            this._dirty = true;
-        },
-        /**
-         * Spriteを回転する.
-         * @param {Number} deg 回転する角度 (度数法).
-         */
-        rotate: function(deg) {
-            this._rotation += deg;
-            this._dirty = true;
-        },
-        /**
-         * Spriteのx軸方向の倍率.
-         * @type {Number}
-         */
-        scaleX: {
-            get: function() {
-                return this._scaleX;
-            },
-            set: function(scaleX) {
-                this._scaleX = scaleX;
-                this._dirty = true;
-            }
-        },
-        /**
-         * Spriteのy軸方向の倍率.
-         * @type {Number}
-         */
-        scaleY: {
-            get: function() {
-                return this._scaleY;
-            },
-            set: function(scaleY) {
-                this._scaleY = scaleY;
-                this._dirty = true;
-            }
-        },
-        /**
-         * Spriteの回転角 (度数法).
-         * @type {Number}
-         */
-        rotation: {
-            get: function() {
-                return this._rotation;
-            },
-            set: function(rotation) {
-                this._rotation = rotation;
-                this._dirty = true;
             }
         }
     });
@@ -2989,7 +2988,6 @@ var enchant = function(modules) {
             // ignore
         }
     }, false);
-
     enchant.Sound.enabledInMobileSafari = false;
 
     function findExt(path) {
@@ -3004,5 +3002,4 @@ var enchant = function(modules) {
         }
         return null;
     }
-
 })();
