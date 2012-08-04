@@ -34,7 +34,7 @@
  * 		chara.y=100;
  *  };
  * game.start();
- **/
+ */
 
 
 /**
@@ -245,7 +245,7 @@ enchant.Avatar = enchant.Class.create(enchant.AvatarCharacter, {
     },
     /**
      * Set avatar code and reflesh avatar image.
-     * @param {String} code;
+     * @param {String} code
      */
     setCode: function(code) {
         data = code.split(":");
