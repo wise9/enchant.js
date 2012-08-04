@@ -35,7 +35,8 @@ var MMD = {};
     enchant.gl.mmd = {};
 
     enchant.Game._loadFuncs['pmd'] = function(src, callback) {
-        if (callback == null) callback = function() {};
+        if (callback == null) callback = function() {
+        };
         var model = new enchant.gl.mmd.MSprite3D(src, function() {
             enchant.Game.instance.assets[src] = model;
             callback();
@@ -43,7 +44,8 @@ var MMD = {};
     };
 
     enchant.Game._loadFuncs['vmd'] = function(src, callback) {
-        if (callback == null) callback = function() {};
+        if (callback == null) callback = function() {
+        };
         var anim = new enchant.gl.mmd.MAnimation(src, function() {
             enchant.Game.instance.assets[src] = anim;
             callback();
@@ -330,7 +332,8 @@ var MMD = {};
         },
         _parse: function(model, callback) {
             if (typeof callback != 'function') {
-                callback = function() {};
+                callback = function() {
+                };
             }
             var data;
             var original;
@@ -419,7 +422,7 @@ var MMD = {};
                     material[params[prop]] = original[params[prop]];
                 }
                 if (typeof model.toon_file_names[i] != 'undefined') {
-                    material.toon = new Texture(model.directory + '/' + model.toon_file_names[original.toon_index], {flipY:false});
+                    material.toon = new Texture(model.directory + '/' + model.toon_file_names[original.toon_index], {flipY: false});
                 }
                 if (original.texture_file_name) {
                     material.texture = new Texture(model.directory + '/' + original.texture_file_name);
@@ -519,9 +522,9 @@ var MMD = {};
             var index;
             for (var i = 0, l = set.index.length; i < l; i++) {
                 index = set.index[i];
-                target[index] += set.vert[i*3] * weight;
-                target[index + 1] += set.vert[i*3+1] * weight;
-                target[index + 2] += set.vert[i*3+2] * weight;
+                target[index] += set.vert[i * 3] * weight;
+                target[index + 1] += set.vert[i * 3 + 1] * weight;
+                target[index + 2] += set.vert[i * 3 + 2] * weight;
             }
         }
     });
@@ -681,9 +684,9 @@ var MMD = {};
         this.GL.setProgram(enchant.gl.mmd.MMD_SHADER_PROGRAM);
         enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms({
             uLightMatrix: [ 1, 0, 0, 0,
-                            0, 1, 0, 0,
-                            0, 0, 1, 0,
-                            0, 0, 0, 1 ],
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1 ],
             uLightColor: [0.6, 0.6, 0.6],
             uSelfShadow: 0,
             uShadowMap: 0,

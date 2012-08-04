@@ -17,14 +17,15 @@
 
 if (enchant.gl != undefined) {
     enchant.Game._loadFuncs['dae'] = function(src, callback) {
-        if (callback == null) callback = function() {};
-        enchant.gl.Sprite3D.loadCollada(src, function(collada, src){
+        if (callback == null) callback = function() {
+        };
+        enchant.gl.Sprite3D.loadCollada(src, function(collada, src) {
             enchant.Game.instance.assets[src] = collada;
             callback();
         });
     };
 
-    (function(){
+    (function() {
         /**
          * ColladaデータからSprite3Dを作成する.
          * 現在, ジョイント, アニメーションを含むデータに対応していません.
@@ -38,7 +39,7 @@ if (enchant.gl != undefined) {
          * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
          * @static
          */
-        enchant.gl.Sprite3D.loadCollada = function(url, onload){
+        enchant.gl.Sprite3D.loadCollada = function(url, onload) {
             var _this = this;
             this.url = url;
             if (typeof onload != "function") {
@@ -50,17 +51,17 @@ if (enchant.gl != undefined) {
             }
             var collada = new Collada();
             var that = this;
-            collada.onload = function(model){
+            collada.onload = function(model) {
                 var root = new Sprite3D();
-                model.getCorrespondingGeometry = function(node){
-                    for(var i = 0; i < this.geometries.length; i++){
-                        if(node.url == this.geometries[i].id){
+                model.getCorrespondingGeometry = function(node) {
+                    for (var i = 0; i < this.geometries.length; i++) {
+                        if (node.url == this.geometries[i].id) {
                             return this.geometries[i];
                         }
                     }
                     return null;
                 };
-                function createSprite3D(model, node, geometry){
+                function createSprite3D(model, node, geometry) {
                     var mesh = geometry.meshes[0];
                     var ep_mesh = new Sprite3D();
                     ep_mesh.mesh = new Mesh();
@@ -69,10 +70,10 @@ if (enchant.gl != undefined) {
                     if (material) {
                         texture.src = material.src;
                     }
-                    if(node.instance_material_target){
+                    if (node.instance_material_target) {
                         var target = node.instance_material_target;
                         var material = collada.getMaterialById(target);
-                        if(material){
+                        if (material) {
                             var instanceEffectUrl = material.instanceEffect.url;
                             var effect = collada.getEffectById(instanceEffectUrl);
                             if (effect && effect.profileCommon && effect.profileCommon.surface &&
@@ -82,8 +83,8 @@ if (enchant.gl != undefined) {
                                     texture.src = img.initFrom;
                                 }
                             }
-                            if(effect && effect.profileCommon && effect.profileCommon.technique &&
-                                effect.profileCommon.technique.phong){
+                            if (effect && effect.profileCommon && effect.profileCommon.technique &&
+                                effect.profileCommon.technique.phong) {
                                 texture.emission = effect.profileCommon.technique.phong.emission;
                                 texture.ambient = effect.profileCommon.technique.phong.ambient;
                                 texture.diffuse = effect.profileCommon.technique.phong.diffuse;
@@ -95,7 +96,7 @@ if (enchant.gl != undefined) {
 
                     ep_mesh.mesh.vertices = mesh.vertices;
                     var colors = [];
-                    for(var i = 0; i < ep_mesh.mesh.vertices.length / 3; i++){
+                    for (var i = 0; i < ep_mesh.mesh.vertices.length / 3; i++) {
                         colors[colors.length] = 1.0;
                         colors[colors.length] = 1.0;
                         colors[colors.length] = 1.0;
@@ -105,11 +106,11 @@ if (enchant.gl != undefined) {
                     ep_mesh.mesh.normals = mesh.normals;
                     ep_mesh.mesh.texCoords = mesh.uv;
                     ep_mesh.mesh.indices = mesh.indices;
-                    if(node.translate){
+                    if (node.translate) {
                         ep_mesh.x = node.translate[0];
                         ep_mesh.y = node.translate[1];
                         ep_mesh.z = node.translate[2];
-                    }else{
+                    } else {
                         ep_mesh.x = ep_mesh.y = ep_mesh.z = 0;
                     }
                     var rotation = new Array();
@@ -118,12 +119,12 @@ if (enchant.gl != undefined) {
                         rotation.push(node.rotateX[1], node.rotateY[1], node.rotateZ[1], 0);
                         rotation.push(node.rotateX[2], node.rotateY[2], node.rotateZ[2], 0);
                     } else {
-                        rotation.push(1,0,0,0,0,1,0,0,0,0,1,0);
+                        rotation.push(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0);
                     }
                     rotation.push(0, 0, 0, 1);
                     ep_mesh.rotation = rotation;
 
-                    if(node.matrix){
+                    if (node.matrix) {
                         var transposed = [
                             node.matrix[0], node.matrix[4], node.matrix[8], node.matrix[12],
                             node.matrix[1], node.matrix[5], node.matrix[9], node.matrix[13],
@@ -131,34 +132,35 @@ if (enchant.gl != undefined) {
                             node.matrix[3], node.matrix[7], node.matrix[11], node.matrix[15],
                         ];
                         ep_mesh.matrix = transposed;
-                    }else{
+                    } else {
                         ep_mesh.matrix = [
                             1, 0, 0, 0,
                             0, 1, 0, 0,
                             0, 0, 1, 0,
                             0, 0, 0, 1];
                     }
-                    if(node.scale){
+                    if (node.scale) {
                         ep_mesh.scaleX = node.scale[0];
                         ep_mesh.scaleY = node.scale[1];
                         ep_mesh.scaleZ = node.scale[2];
-                    }else{
+                    } else {
                         ep_mesh.scaleX = ep_mesh.scaleY = ep_mesh.scaleZ = 1;
                     }
                     ep_mesh.name = geometry.id;
-                    if(node.nodes){
-                        for(var i = 0; i < node.nodes.length; i++){
+                    if (node.nodes) {
+                        for (var i = 0; i < node.nodes.length; i++) {
                             var childNode = node.nodes[i];
                             var childGeometry = model.getCorrespondingGeometry(childNode);
-                            if(childGeometry) ep_mesh.addChild(createSprite3D(model, childNode, childGeometry));
+                            if (childGeometry) ep_mesh.addChild(createSprite3D(model, childNode, childGeometry));
                         }
                     }
                     return ep_mesh;
                 }
+
                 for (var i = 0; i < model.visualScene.nodes.length; i++) {
                     var node = model.visualScene.nodes[i];
                     var geometry = model.getCorrespondingGeometry(node);
-                    if(geometry) root.addChild(createSprite3D(model, node, geometry));
+                    if (geometry) root.addChild(createSprite3D(model, node, geometry));
                 }
                 _this.onload(root, url);
             };
@@ -172,32 +174,32 @@ if (enchant.gl != undefined) {
             this.geometries = new Array();
             this.effects = new Array();
             this.images = new Array();
-            this.getEffectById = function(id){
-                for(var i = 0; i < this.effects.length; i++){
-                    if(this.effects[i].id == id) return this.effects[i];
+            this.getEffectById = function(id) {
+                for (var i = 0; i < this.effects.length; i++) {
+                    if (this.effects[i].id == id) return this.effects[i];
                 }
                 return null;
             }
-            this.getMaterialById = function(id){
-                for(var i = 0; i < this.materials.length; i++){
-                    if(this.materials[i].id == id) return this.materials[i];
+            this.getMaterialById = function(id) {
+                for (var i = 0; i < this.materials.length; i++) {
+                    if (this.materials[i].id == id) return this.materials[i];
                 }
                 return null;
             }
-            this.getGeometryById = function(id){
-                for(var i = 0; i < this.geometries.length; i++){
-                    if(this.geometries[i].id == id) return this.geometries[i];
+            this.getGeometryById = function(id) {
+                for (var i = 0; i < this.geometries.length; i++) {
+                    if (this.geometries[i].id == id) return this.geometries[i];
                 }
                 return null;
             }
-            this.getImageById = function(id){
-                for(var i = 0; i < this.images.length; i++){
-                    if(this.images[i].id == id) return this.images[i];
+            this.getImageById = function(id) {
+                for (var i = 0; i < this.images.length; i++) {
+                    if (this.images[i].id == id) return this.images[i];
                 }
                 return null;
             }
 
-            function getParentDirectory(path){
+            function getParentDirectory(path) {
                 var strary = path.split("/");
                 var result = "";
                 for (var i = 0; i < strary.length - 1; i++) {
@@ -206,7 +208,7 @@ if (enchant.gl != undefined) {
                 return result;
             }
 
-            function parseFloatArray(str){
+            function parseFloatArray(str) {
                 var array = new Array();
                 var floatStrings = str.split(" ");
                 for (var k = 0; k < floatStrings.length; k++) {
@@ -214,7 +216,8 @@ if (enchant.gl != undefined) {
                 }
                 return array;
             }
-            function parseIntArray(str){
+
+            function parseIntArray(str) {
                 var array = new Array();
                 var intStrings = str.split(" ");
                 for (var k = 0; k < intStrings.length; k++) {
@@ -223,10 +226,10 @@ if (enchant.gl != undefined) {
                 return array;
             }
 
-            this.loadModel = function(url){
+            this.loadModel = function(url) {
                 var req = new XMLHttpRequest();
                 req.open("GET", url, true);
-                req.onload = function(){
+                req.onload = function() {
                     var xml = req.responseXML;
                     loadImage(xml, url);
                     loadMaterials(xml);
@@ -239,13 +242,14 @@ if (enchant.gl != undefined) {
                 req.send(null);
             }
 
-            function loadGeometries(xml){
+            function loadGeometries(xml) {
                 var geometries = xml.getElementsByTagName("library_geometries")[0].getElementsByTagName("geometry");
                 for (var i = 0; i < geometries.length; i++) {
                     _this.geometries.push(new Geometry(geometries[i]));
                 }
             }
-            function Geometry(xml){
+
+            function Geometry(xml) {
                 var _this = this;
                 this.id = xml.getAttribute("id");
                 this.meshes = new Array();
@@ -254,7 +258,7 @@ if (enchant.gl != undefined) {
                     var mesh = meshes[i];
                     this.meshes.push(new Mesh(mesh));
                 }
-                function Mesh(xml){
+                function Mesh(xml) {
                     var _this = this;
 
                     var triangles = xml.getElementsByTagName("triangles")[0];
@@ -271,15 +275,15 @@ if (enchant.gl != undefined) {
                         }
                         else if (id == this.triangles.normalId) {
                             this.normals = parseFloatArray(source.getElementsByTagName("float_array")[0].textContent);
-                        }else if (id == this.triangles.uvId) {
+                        } else if (id == this.triangles.uvId) {
                             this.uv = parseFloatArray(source.getElementsByTagName("float_array")[0].textContent);
-                            for(var i = 1; i < this.uv.length; i+=2){
+                            for (var i = 1; i < this.uv.length; i += 2) {
                                 this.uv[i] = 1.0 - this.uv[i];
                             }
                         }
                     }
 
-                    function Triangles(xml){
+                    function Triangles(xml) {
 
                         var _this = this;
                         this.count = xml.getAttribute("count");
@@ -295,18 +299,18 @@ if (enchant.gl != undefined) {
                             var input = inputs[i];
                             var semantic = input.getAttribute("semantic");
                             var offset = parseInt(input.getAttribute("offset"));
-                            if(offset + 1 > this.stride) this.stride = offset + 1;
+                            if (offset + 1 > this.stride) this.stride = offset + 1;
                             if (semantic == "VERTEX") {
                                 if (offset || offset == 0) {
                                     _this.vertexOffset = offset;
                                 }
                                 _this.vertexId = input.getAttribute("source").replace("#", "");
-                            }else if (semantic == "NORMAL") {
+                            } else if (semantic == "NORMAL") {
                                 if (offset || offset == 0) {
                                     _this.normalOffset = offset;
                                 }
                                 _this.normalId = input.getAttribute("source").replace("#", "");
-                            }else if (semantic == "TEXCOORD") {
+                            } else if (semantic == "TEXCOORD") {
                                 if (offset || offset == 0) {
                                     _this.uvOffset = offset;
                                 }
@@ -316,7 +320,8 @@ if (enchant.gl != undefined) {
                         this.primitive = parseFloatArray(xml.getElementsByTagName("p")[0].textContent);
 
                     }
-                    function Vertices(xml){
+
+                    function Vertices(xml) {
                         var _this = this;
                         var inputs = xml.getElementsByTagName("input");
                         for (var i = 0; i < inputs.length; i++) {
@@ -324,7 +329,7 @@ if (enchant.gl != undefined) {
                             var semantic = input.getAttribute("semantic");
                             if (semantic == "POSITION") {
                                 this.positionId = input.getAttribute("source").replace("#", "");
-                            }else if (semantic == "NORMAL") {
+                            } else if (semantic == "NORMAL") {
                                 this.normalId = input.getAttribute("source").replace("#", "");
                             }
                         }
@@ -332,7 +337,7 @@ if (enchant.gl != undefined) {
                 }
             }
 
-            function loadImage(xml, url){
+            function loadImage(xml, url) {
                 var lib_images = xml.getElementsByTagName("library_images")[0];
                 if (lib_images) {
                     var imgs = lib_images.getElementsByTagName("image");
@@ -344,7 +349,7 @@ if (enchant.gl != undefined) {
                 }
             }
 
-            function Image(xml, url){
+            function Image(xml, url) {
                 this.id = xml.getAttribute("id");
                 this.name = xml.getAttribute("name");
                 var init_from = xml.getElementsByTagName("init_from")[0];
@@ -359,7 +364,7 @@ if (enchant.gl != undefined) {
                 }
             }
 
-            function loadEffects(xml){
+            function loadEffects(xml) {
                 var effects = xml.getElementsByTagName("effect");
                 for (var i = 0; i < effects.length; i++) {
                     _this.effects.push(new Effect(effects[i]));
@@ -367,12 +372,12 @@ if (enchant.gl != undefined) {
 
             }
 
-            function Effect(xml){
+            function Effect(xml) {
                 var _this = this;
                 this.id = xml.getAttribute("id");
                 var profile_common = xml.getElementsByTagName("profile_COMMON")[0];
                 this.profileCommon = new ProfileCommon(profile_common);
-                function ProfileCommon(xml){
+                function ProfileCommon(xml) {
                     var _this = this;
                     this.technique;
                     this.surface;
@@ -389,7 +394,7 @@ if (enchant.gl != undefined) {
                             this.surface = new Surface(surface);
                         }
                     }
-                    function Surface(xml){
+                    function Surface(xml) {
                         var _this = this;
 
                         this.type = xml.getAttribute("type");
@@ -403,14 +408,14 @@ if (enchant.gl != undefined) {
                         }
                     }
 
-                    function Technique(xml){
+                    function Technique(xml) {
                         var _this = this;
 
                         var phong = xml.getElementsByTagName("phong")[0];
                         if (phong) {
                             this.phong = new Phong(phong);
                         }
-                        function Phong(xml){
+                        function Phong(xml) {
                             var _this = this;
                             this.emission = [0, 0, 0, 1];
                             this.ambient = [0.3, 0.3, 0.3, 1];
@@ -446,14 +451,14 @@ if (enchant.gl != undefined) {
                 }
             }
 
-            function loadMaterials(xml){
+            function loadMaterials(xml) {
                 var materials = xml.getElementsByTagName("library_materials")[0].getElementsByTagName("material");
                 for (var i = 0; i < materials.length; i++) {
                     _this.materials.push(new Material(materials[i]));
                 }
             }
 
-            function Material(xmlMaterial){
+            function Material(xmlMaterial) {
                 var _this = this;
                 var instance_effects_xml = xmlMaterial.getElementsByTagName("instance_effect");
                 this.id = xmlMaterial.getAttribute("id");
@@ -472,25 +477,25 @@ if (enchant.gl != undefined) {
                     var val = param.firstChild.nodevalue;
                     if (ref == "DIFFUSE") {
                         _this.diffuse = parseFloatArray(val);
-                    }else if (ref == "AMBIENT") {
+                    } else if (ref == "AMBIENT") {
                         _this.ambient = parseFloatArray(val);
-                    }else if (ref == "EMISSION") {
+                    } else if (ref == "EMISSION") {
                         _this.emission = parseFloatArray(val);
-                    }else if (ref == "SPECULAR") {
+                    } else if (ref == "SPECULAR") {
                         _this.specular = parseFloatArray(val);
-                    }else if (ref == "SHININESS") {
+                    } else if (ref == "SHININESS") {
                         _this.shininess = parseFloatArray(val);
                     }
                 }
 
-                function InstanceEffect(xml){
+                function InstanceEffect(xml) {
                     var _this = this;
                     this.url = xml.getAttribute("url");
                     this.url = this.url.slice(1);
                 }
             }
 
-            function loadVisualScenes(xml){
+            function loadVisualScenes(xml) {
                 var visualScenes = xml.getElementsByTagName("visual_scene");
                 _this.visualScenes = new Array();
                 for (var i = 0; i < visualScenes.length; i++) {
@@ -499,8 +504,8 @@ if (enchant.gl != undefined) {
                 }
             }
 
-            function VisualScene(xml){
-                function Node(xml){
+            function VisualScene(xml) {
+                function Node(xml) {
                     var _this = this;
                     this.id = xml.getAttribute("id");
                     this.name = xml.getAttribute("name");
@@ -515,9 +520,9 @@ if (enchant.gl != undefined) {
                         var sid = rotate.getAttribute("sid");
                         if (sid == "rotateZ") {
                             this.rotateZ = parseFloatArray(rotate.textContent);
-                        }else if (sid == "rotateY") {
+                        } else if (sid == "rotateY") {
                             this.rotateY = parseFloatArray(rotate.textContent);
-                        }else if (sid == "rotateX") {
+                        } else if (sid == "rotateX") {
                             this.rotateX = parseFloatArray(rotate.textContent);
                         }
                     }
@@ -526,7 +531,7 @@ if (enchant.gl != undefined) {
                         this.scale = parseFloatArray(scale.textContent);
                     }
                     var matrix = xml.getElementsByTagName("matrix")[0];
-                    if(matrix){
+                    if (matrix) {
                         this.matrix = parseFloatArray(matrix.textContent);
                     }
                     var instance_geometry = xml.getElementsByTagName("instance_geometry")[0];
@@ -536,24 +541,24 @@ if (enchant.gl != undefined) {
                             this.url = url.replace("#", "");
                         }
                         var instance_material = instance_geometry.getElementsByTagName("instance_material")[0];
-                        if(instance_material){
+                        if (instance_material) {
                             var target = instance_material.getAttribute("target");
-                            if(target){
+                            if (target) {
                                 this.instance_material_target = target.replace("#", "");
                             }
                         }
                     }
                 }
 
-                function getNodeHierarchy(element){
+                function getNodeHierarchy(element) {
                     var array = [];
-                    for(var i = 0; i < element.childNodes.length; i++){
+                    for (var i = 0; i < element.childNodes.length; i++) {
                         var child = element.childNodes[i];
-                        if(child.nodeName == 'node'){
+                        if (child.nodeName == 'node') {
                             var childNode = new Node(child);
                             array.push(childNode);
                             var grandChildren = getNodeHierarchy(child);
-                            if(grandChildren) childNode.nodes = grandChildren;
+                            if (grandChildren) childNode.nodes = grandChildren;
                         }
                     }
                     return array;
@@ -565,10 +570,10 @@ if (enchant.gl != undefined) {
                 this.nodes = getNodeHierarchy(xml);
             }
 
-            this.onload = function(){
+            this.onload = function() {
             }
 
-            this.convert = function(){
+            this.convert = function() {
                 var model = new EPModel();
                 var resultGeometries = new Array();
                 for (var i = 0; i < _this.geometries.length; i++) {
@@ -661,22 +666,24 @@ if (enchant.gl != undefined) {
             }
 
 
-            function EPModel(){
+            function EPModel() {
                 var _this = this;
                 this.geometries = new Array();
 
 
-                function Geometry(){
+                function Geometry() {
                     this.meshes = new Array();
                 }
-                function Mesh(){
+
+                function Mesh() {
                     this.vertices = new Array();
                     this.normals = new Array();
                     this.uv = new Array();
                     this.indices = new Array();
                     this.material;
                 }
-                function Material(){
+
+                function Material() {
                     this.emission = [0, 0, 0, 1];
                     this.ambient = [0.3, 0.3, 0.3, 1];
                     this.diffuse = [1, 1, 1, 1];

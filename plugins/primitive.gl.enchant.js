@@ -7,8 +7,8 @@
  * @description
  * Primitive objects for gl.enchant.js
  */
-if(enchant.gl != undefined){
-	(function(){
+if (enchant.gl != undefined) {
+    (function() {
         enchant.gl.primitive = {};
         enchant.gl.primitive.Plane = enchant.Class.create(enchant.gl.Sprite3D, {
             initialize: function(scale) {
@@ -127,15 +127,15 @@ if(enchant.gl != undefined){
             switch (type) {
                 case 'yz':
                     vertices = [
-                         0.0,  1.0,  1.0,
-                         0.0, -1.0,  1.0,
-                         0.0, -1.0, -1.0,
-                         0.0,  1.0, -1.0,
+                        0.0, 1.0, 1.0,
+                        0.0, -1.0, 1.0,
+                        0.0, -1.0, -1.0,
+                        0.0, 1.0, -1.0,
 
-                         0.0,  1.0,  1.0,
-                         0.0, -1.0,  1.0,
-                         0.0, -1.0, -1.0,
-                         0.0,  1.0, -1.0
+                        0.0, 1.0, 1.0,
+                        0.0, -1.0, 1.0,
+                        0.0, -1.0, -1.0,
+                        0.0, 1.0, -1.0
                     ];
                     mesh.normals = [
                         1.0, 0.0, 0.0,
@@ -148,58 +148,58 @@ if(enchant.gl != undefined){
                         -1.0, 0.0, 0.0,
                         -1.0, 0.0, 0.0
                     ];
-                break;
+                    break;
 
                 case 'xz':
                     vertices = [
-                         1.0,  0.0,  1.0,
-                        -1.0,  0.0,  1.0,
-                        -1.0,  0.0, -1.0,
-                         1.0,  0.0, -1.0,
+                        1.0, 0.0, 1.0,
+                        -1.0, 0.0, 1.0,
+                        -1.0, 0.0, -1.0,
+                        1.0, 0.0, -1.0,
 
-                         1.0,  0.0,  1.0,
-                        -1.0,  0.0,  1.0,
-                        -1.0,  0.0, -1.0,
-                         1.0,  0.0, -1.0
+                        1.0, 0.0, 1.0,
+                        -1.0, 0.0, 1.0,
+                        -1.0, 0.0, -1.0,
+                        1.0, 0.0, -1.0
                     ];
                     mesh.normals = [
-                         0.0, -1.0, 0.0,
-                         0.0, -1.0, 0.0,
-                         0.0, -1.0, 0.0,
-                         0.0, -1.0, 0.0,
+                        0.0, -1.0, 0.0,
+                        0.0, -1.0, 0.0,
+                        0.0, -1.0, 0.0,
+                        0.0, -1.0, 0.0,
 
-                         0.0, 1.0, 0.0,
-                         0.0, 1.0, 0.0,
-                         0.0, 1.0, 0.0,
-                         0.0, 1.0, 0.0
+                        0.0, 1.0, 0.0,
+                        0.0, 1.0, 0.0,
+                        0.0, 1.0, 0.0,
+                        0.0, 1.0, 0.0
                     ];
-                break;
+                    break;
 
                 case 'xy':
                 default:
                     vertices = [
-                         1.0,  1.0, 0.0,
-                        -1.0,  1.0, 0.0,
+                        1.0, 1.0, 0.0,
+                        -1.0, 1.0, 0.0,
                         -1.0, -1.0, 0.0,
-                         1.0, -1.0, 0.0,
+                        1.0, -1.0, 0.0,
 
-                         1.0,  1.0, 0.0,
-                        -1.0,  1.0, 0.0,
+                        1.0, 1.0, 0.0,
+                        -1.0, 1.0, 0.0,
                         -1.0, -1.0, 0.0,
-                         1.0, -1.0, 0.0
+                        1.0, -1.0, 0.0
                     ];
                     mesh.normals = [
-                         0.0, 0.0, 1.0,
-                         0.0, 0.0, 1.0,
-                         0.0, 0.0, 1.0,
-                         0.0, 0.0, 1.0,
+                        0.0, 0.0, 1.0,
+                        0.0, 0.0, 1.0,
+                        0.0, 0.0, 1.0,
+                        0.0, 0.0, 1.0,
 
-                         0.0, 0.0, -1.0,
-                         0.0, 0.0, -1.0,
-                         0.0, 0.0, -1.0,
-                         0.0, 0.0, -1.0
+                        0.0, 0.0, -1.0,
+                        0.0, 0.0, -1.0,
+                        0.0, 0.0, -1.0,
+                        0.0, 0.0, -1.0
                     ];
-                break;
+                    break;
             }
             for (var i = 0, l = vertices.length; i < l; i++) {
                 vertices[i] *= scale;
@@ -250,50 +250,52 @@ if(enchant.gl != undefined){
         proto.createBox = function(sx, sy, sz) {
             if (typeof sx == 'undefined') {
                 sx = 0.5;
-            } if (typeof sy == 'undefined') {
+            }
+            if (typeof sy == 'undefined') {
                 sy = 0.5;
-            } if (typeof sz == 'undefined') {
+            }
+            if (typeof sz == 'undefined') {
                 sz = 0.5;
             }
             var mesh = new enchant.gl.Mesh();
             var vertices = [
-                 1.0,  1.0,  1.0,
-                -1.0,  1.0,  1.0,
-                -1.0, -1.0,  1.0,
-                 1.0, -1.0,  1.0,
+                1.0, 1.0, 1.0,
+                -1.0, 1.0, 1.0,
+                -1.0, -1.0, 1.0,
+                1.0, -1.0, 1.0,
 
-                 1.0,  1.0, -1.0,
-                -1.0,  1.0, -1.0,
+                1.0, 1.0, -1.0,
+                -1.0, 1.0, -1.0,
                 -1.0, -1.0, -1.0,
-                 1.0, -1.0, -1.0,
+                1.0, -1.0, -1.0,
 
-                 1.0,  1.0,  1.0,
-                -1.0,  1.0,  1.0,
-                -1.0,  1.0, -1.0,
-                 1.0,  1.0, -1.0,
+                1.0, 1.0, 1.0,
+                -1.0, 1.0, 1.0,
+                -1.0, 1.0, -1.0,
+                1.0, 1.0, -1.0,
 
-                 1.0, -1.0,  1.0,
-                -1.0, -1.0,  1.0,
+                1.0, -1.0, 1.0,
+                -1.0, -1.0, 1.0,
                 -1.0, -1.0, -1.0,
-                 1.0, -1.0, -1.0,
+                1.0, -1.0, -1.0,
 
-                 1.0,  1.0,  1.0,
-                 1.0, -1.0,  1.0,
-                 1.0, -1.0, -1.0,
-                 1.0,  1.0, -1.0,
+                1.0, 1.0, 1.0,
+                1.0, -1.0, 1.0,
+                1.0, -1.0, -1.0,
+                1.0, 1.0, -1.0,
 
-                -1.0,  1.0,  1.0,
-                -1.0, -1.0,  1.0,
+                -1.0, 1.0, 1.0,
+                -1.0, -1.0, 1.0,
                 -1.0, -1.0, -1.0,
-                -1.0,  1.0, -1.0
+                -1.0, 1.0, -1.0
             ];
-            for (var i = 0, l = vertices.length; i < l; i+=3) {
+            for (var i = 0, l = vertices.length; i < l; i += 3) {
                 vertices[i] *= sx;
-                vertices[i+1] *= sy;
-                vertices[i+2] *= sz;
+                vertices[i + 1] *= sy;
+                vertices[i + 2] *= sz;
             }
             mesh.vertices = vertices;
-                
+
             mesh.colors = [
                 1.0, 1.0, 1.0, 1.0,
                 1.0, 1.0, 1.0, 1.0,
@@ -326,30 +328,30 @@ if(enchant.gl != undefined){
                 1.0, 1.0, 1.0, 1.0
             ];
             mesh.normals = [
-                0.0,  0.0,  1.0,
-                0.0,  0.0,  1.0,
-                0.0,  0.0,  1.0,
-                0.0,  0.0,  1.0,
-                0.0,  0.0, -1.0,
-                0.0,  0.0, -1.0,
-                0.0,  0.0, -1.0,
-                0.0,  0.0, -1.0,
-                0.0,  1.0,  0.0,
-                0.0,  1.0,  0.0,
-                0.0,  1.0,  0.0,
-                0.0,  1.0,  0.0,
-                0.0, -1.0,  0.0,
-                0.0, -1.0,  0.0,
-                0.0, -1.0,  0.0,
-                0.0, -1.0,  0.0,
-                1.0,  0.0,  0.0,
-                1.0,  0.0,  0.0,
-                1.0,  0.0,  0.0,
-                1.0,  0.0,  0.0,
-               -1.0,  0.0,  0.0,
-               -1.0,  0.0,  0.0,
-               -1.0,  0.0,  0.0,
-               -1.0,  0.0,  0.0
+                0.0, 0.0, 1.0,
+                0.0, 0.0, 1.0,
+                0.0, 0.0, 1.0,
+                0.0, 0.0, 1.0,
+                0.0, 0.0, -1.0,
+                0.0, 0.0, -1.0,
+                0.0, 0.0, -1.0,
+                0.0, 0.0, -1.0,
+                0.0, 1.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, -1.0, 0.0,
+                0.0, -1.0, 0.0,
+                0.0, -1.0, 0.0,
+                0.0, -1.0, 0.0,
+                1.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                -1.0, 0.0, 0.0,
+                -1.0, 0.0, 0.0,
+                -1.0, 0.0, 0.0,
+                -1.0, 0.0, 0.0
             ];
             mesh.texCoords = [
                 1.0, 0.0,
@@ -401,7 +403,7 @@ if(enchant.gl != undefined){
                 2, 1, 0,
                 0, 3, 2
             ];
-            for(var i = 0; i < 6 * 6; i++){
+            for (var i = 0; i < 6 * 6; i++) {
                 a[i] += Math.floor(i / 6) * 4;
             }
             mesh.indices = a;
@@ -413,16 +415,18 @@ if(enchant.gl != undefined){
         proto.createSphere = function(r, h, v) {
             if (typeof r == 'undefined') {
                 r = 1;
-            } if (typeof h == 'undefined') {
+            }
+            if (typeof h == 'undefined') {
                 h = 20;
-            } if (typeof v == 'undefined') {
+            }
+            if (typeof v == 'undefined') {
                 v = 20;
             }
             var mesh = new enchant.gl.Mesh();
             var vertices = [];
             var texCoords = [];
-            for(var i = 0; i < v; i++){
-                for(var j = 0; j < h; j++){
+            for (var i = 0; i < v; i++) {
+                for (var j = 0; j < h; j++) {
                     vertices[vertices.length] = Math.sin(Math.PI * i / (v - 1)) * Math.cos(Math.PI * 2 * j / (h - 1)) * r;
                     vertices[vertices.length] = Math.cos(Math.PI * i / (v - 1)) * r;
                     vertices[vertices.length] = Math.sin(Math.PI * i / (v - 1)) * Math.sin(Math.PI * 2 * j / (h - 1)) * r;
@@ -433,14 +437,15 @@ if(enchant.gl != undefined){
             mesh.vertices = vertices;
             mesh.texCoords = texCoords;
             var colors = [];
-            for(var i = 0, l = mesh.vertices.length / 3 * 4; i < l; i++){
+            for (var i = 0, l = mesh.vertices.length / 3 * 4; i < l; i++) {
                 colors[colors.length] = 1.0;
             }
             mesh.colors = colors;
-            mesh.normals = vertices.slice(0);;
+            mesh.normals = vertices.slice(0);
+            ;
             var indices = [];
-            for(var i = 0; i < v - 1; i++){
-                for(var j = 0; j < h; j++){
+            for (var i = 0; i < v - 1; i++) {
+                for (var j = 0; j < h; j++) {
                     indices[indices.length] = h * (i + 1) + j;
                     indices[indices.length] = h * i + j;
                     indices[indices.length] = h * (i + 1) + (1 + j) % h;
@@ -455,9 +460,11 @@ if(enchant.gl != undefined){
         proto.createCylinder = function(r, h, v) {
             if (typeof r == 'undefined') {
                 r = 0.5;
-            } if (typeof h == 'undefined') {
+            }
+            if (typeof h == 'undefined') {
                 h = 1;
-            } if (typeof v == 'undefined') {
+            }
+            if (typeof v == 'undefined') {
                 v = 20;
             }
             var vertices = [];
@@ -489,8 +496,8 @@ if(enchant.gl != undefined){
             var cos = 0;
             var sin = 0;
             for (var i = 0; i < v; i++) {
-                cos = Math.cos(Math.PI * 2 * i / (v-1));
-                sin = Math.sin(Math.PI * 2 * i / (v-1));
+                cos = Math.cos(Math.PI * 2 * i / (v - 1));
+                sin = Math.sin(Math.PI * 2 * i / (v - 1));
 
                 vertices[vertices.length] = cos * r;
                 vertices[vertices.length] = h;
@@ -563,11 +570,14 @@ if(enchant.gl != undefined){
         proto.createTorus = function(r, r2, v, v2) {
             if (typeof r == 'undefined') {
                 r = 1.0;
-            } if (typeof r2 == 'undefined') {
+            }
+            if (typeof r2 == 'undefined') {
                 r2 = 0.3;
-            } if (typeof v == 'undefined') {
+            }
+            if (typeof v == 'undefined') {
                 v = 20;
-            } if (typeof v2 == 'undefined') {
+            }
+            if (typeof v2 == 'undefined') {
                 v2 = 20;
             }
             var ring = [];
@@ -576,7 +586,7 @@ if(enchant.gl != undefined){
             var cos;
             var sin;
             for (var i = 0; i < v2; i++) {
-                rad = Math.PI * 2 * i / (v2-1);
+                rad = Math.PI * 2 * i / (v2 - 1);
                 cos = Math.cos(rad);
                 sin = Math.sin(rad);
                 ring[ring.length] = 0;
@@ -590,7 +600,7 @@ if(enchant.gl != undefined){
             var normals = [];
             var texCoords = [];
             for (var i = 0; i < v; i++) {
-                rad = Math.PI * 2 * i / (v-1);
+                rad = Math.PI * 2 * i / (v - 1);
                 cos = Math.cos(rad);
                 sin = Math.sin(rad);
                 for (var j = 0; j < ring.length; j += 3) {

@@ -1,5 +1,5 @@
 /**
-[lang:ja]
+ [lang:ja]
  * mmd.gl.enchant.js
  * @version 0.2.1
  * @require enchant.js v0.4.5+
@@ -18,8 +18,8 @@
  * https://github.com/edvakf/MMD.js
  * MMD.jsについて:
  * http://edv.sakura.ne.jp/mmd/
-[/lang]
-[lang:en]
+ [/lang]
+ [lang:en]
  * mmd.gl.enchant.js
  * @version 0.2.0
  * @require enchant.js v0.4.3+
@@ -38,7 +38,7 @@
  * https://github.com/edvakf/MMD.js
  * About MMD.js:
  * http://edv.sakura.ne.jp/mmd/
-[/lang]
+ [/lang]
  */
 
 // for MMD.js
@@ -57,7 +57,8 @@ var MMD = {};
     enchant.gl.mmd = {};
 
     enchant.Game._loadFuncs['pmd'] = function(src, callback) {
-        if (callback == null) callback = function() {};
+        if (callback == null) callback = function() {
+        };
         var model = new enchant.gl.mmd.MSprite3D(src, function() {
             enchant.Game.instance.assets[src] = model;
             callback();
@@ -65,7 +66,8 @@ var MMD = {};
     };
 
     enchant.Game._loadFuncs['vmd'] = function(src, callback) {
-        if (callback == null) callback = function() {};
+        if (callback == null) callback = function() {
+        };
         var anim = new enchant.gl.mmd.MAnimation(src, function() {
             enchant.Game.instance.assets[src] = anim;
             callback();
@@ -77,16 +79,16 @@ var MMD = {};
      */
     enchant.gl.mmd.MMesh = enchant.Class.create(enchant.gl.Mesh, {
         /**
-        [lang:ja]
+         [lang:ja]
          * MSprite3D用のメッシュオブジェクト.
          * @constructs
          * @extends enchant.gl.Mesh
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * MSprite3D mesh object.
          * @constructs
          * @extends enchant.gl.Mesh
-        [/lang]
+         [/lang]
          */
         initialize: function() {
             enchant.gl.Mesh.call(this);
@@ -179,19 +181,19 @@ var MMD = {};
      */
     enchant.gl.mmd.MSprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
         /**
-        [lang:ja]
+         [lang:ja]
          * PMDファイルに対応したSprite3D.
          * 引数を渡すと{@link enchant.gl.mmd.MAnimation#loadVmd}が呼び出される.
          * @param {String} path ファイルパス
          * @param {Function} callback コールバック関数
          * @constructs
          * @extends enchant.gl.Sprite3D
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Sprite3D optimized for PMD files.
          * @constructs
          * @extends enchant.gl.Sprite3D
-        [/lang]
+         [/lang]
          */
         initialize: function(path, callback) {
             enchant.gl.Sprite3D.call(this);
@@ -229,27 +231,27 @@ var MMD = {};
             }
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * アニメーションを追加する.
          * アニメーションは追加された順に再生されていく.
          * @param {enchant.gl.mmd.MAnimation} animation
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Add animation.
          * Animation will be played in the order that it is added.
          * @param {enchant.gl.mmd.MAnimation} animation
-        [/lang]
+         [/lang]
          */
         pushAnimation: function(animation) {
             this.animation.push({ frame: 0, animation: animation });
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * 追加されたアニメーションを削除する.
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Delete added animation.
-        [/lang]
+         [/lang]
          */
         clearAnimation: function(animation) {
             this.animation = [];
@@ -350,7 +352,7 @@ var MMD = {};
             }
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * .pmdファイルをロードする.
          * @param {String} path ファイルパス
          * @param {Function} callback コールバック関数
@@ -360,8 +362,8 @@ var MMD = {};
          * mk.loadPmd('model/miku.pmd', function() {
          *     scene.addChild(mk);
          * });
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Load .pmd files.
          * @param {String} path File path
          * @param {Function} callback Callback function
@@ -371,7 +373,7 @@ var MMD = {};
          * mk.loadPmd('model/miku.pmd', function() {
          *     scene.addChild(mk);
          * });
-        [/lang]
+         [/lang]
          */
         loadPmd: function(path, callback) {
             var split = splitPath(path);
@@ -394,7 +396,8 @@ var MMD = {};
         },
         _parse: function(model, callback) {
             if (typeof callback != 'function') {
-                callback = function() {};
+                callback = function() {
+                };
             }
             var data;
             var original;
@@ -483,7 +486,7 @@ var MMD = {};
                     material[params[prop]] = original[params[prop]];
                 }
                 if (typeof model.toon_file_names[i] != 'undefined') {
-                    material.toon = new Texture(model.directory + '/' + model.toon_file_names[original.toon_index], {flipY:false});
+                    material.toon = new Texture(model.directory + '/' + model.toon_file_names[original.toon_index], {flipY: false});
                 }
                 if (original.texture_file_name) {
                     material.texture = new Texture(model.directory + '/' + original.texture_file_name);
@@ -583,9 +586,9 @@ var MMD = {};
             var index;
             for (var i = 0, l = set.index.length; i < l; i++) {
                 index = set.index[i];
-                target[index] += set.vert[i*3] * weight;
-                target[index + 1] += set.vert[i*3+1] * weight;
-                target[index + 2] += set.vert[i*3+2] * weight;
+                target[index] += set.vert[i * 3] * weight;
+                target[index + 1] += set.vert[i * 3 + 1] * weight;
+                target[index + 2] += set.vert[i * 3 + 2] * weight;
             }
         }
     });
@@ -610,7 +613,7 @@ var MMD = {};
      */
     enchant.gl.mmd.MAnimation = enchant.Class.create({
         /**
-        [lang:ja]
+         [lang:ja]
          * VMDファイルに対応したSprite3D.
          * キャラクターの姿勢とモーフィングのデータが読み込まれる.
          * 引数を渡すと{@link enchant.gl.mmd.MAnimation#loadVmd}が呼び出される.
@@ -619,8 +622,8 @@ var MMD = {};
          * @constructs
          * @extends enchant.gl.Sprite3D
          * @see enchant.gl.mmd.MAnimation#loadVmd
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Sprite3D optimized to VMD file.
          * Character data and morphing are loaded.
          * If argument is delivered {@link enchant.gl.mmd.MAnimation#loadVmd} will be called up.
@@ -629,7 +632,7 @@ var MMD = {};
          * @constructs
          * @extends enchant.gl.Sprite3D
          * @see enchant.gl.mmd.MAnimation#loadVmd
-        [/lang]
+         [/lang]
          */
         initialize: function(path, callback) {
             this.length = -1;
@@ -638,7 +641,7 @@ var MMD = {};
             }
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * .vmdファイルをロードする.
          * @param {String} path ファイルパス
          * @param {Function} callback コールバック関数
@@ -648,8 +651,8 @@ var MMD = {};
          * dance.loadVmd('motion/dance.vmd', function() {
          *     mk.pushAnimation(dance);
          * });
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Load .vmd file.
          * @param {String} path File path
          * @param {Function} callback Callback function
@@ -659,7 +662,7 @@ var MMD = {};
          * dance.loadVmd('motion/dance.vmd', function() {
          *     mk.pushAnimation(dance);
          * });
-        [/lang]
+         [/lang]
          */
         loadVmd: function(path, callback) {
             var motion = new MMD.Motion(path);
@@ -770,9 +773,9 @@ var MMD = {};
         this.GL.setProgram(enchant.gl.mmd.MMD_SHADER_PROGRAM);
         enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms({
             uLightMatrix: [ 1, 0, 0, 0,
-                            0, 1, 0, 0,
-                            0, 0, 1, 0,
-                            0, 0, 0, 1 ],
+                0, 1, 0, 0,
+                0, 0, 1, 0,
+                0, 0, 0, 1 ],
             uLightColor: [0.6, 0.6, 0.6],
             uSelfShadow: 0,
             uShadowMap: 0,

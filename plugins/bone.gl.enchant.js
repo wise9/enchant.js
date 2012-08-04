@@ -48,12 +48,12 @@
 
     /**
      * @scope enchant.gl.State.prototype
-    */
+     */
     enchant.gl.State = enchant.Class.create({
         /**
          * Base class for expressing animation condition.
          * @param {Number[]} position
-         * @param {Number[]} rotation 
+         * @param {Number[]} rotation
          * @cpnstructs
          */
         initialize: function(position, rotation) {
@@ -73,24 +73,24 @@
 
     /**
      * @scope enchant.gl.Pose.prototype
-    */
+     */
     enchant.gl.Pose = enchant.Class.create(enchant.gl.State, {
         /**
          * Class for processing pose.
          * @param {Number[]} position
-         * @param {Number[]} rotation 
+         * @param {Number[]} rotation
          * @constructs
          * @extends enchant.gl.State
-        */
+         */
         initialize: function(position, rotation) {
             enchant.gl.State.call(this, position, rotation);
         },
         /**
          * Performs interpolation with other pose.
          * @param {enchant.gl.Pose} another
-         * @param {Number} ratio 
+         * @param {Number} ratio
          * @return {enchant.gl.Pose}
-        */
+         */
         getInterpolation: function(another, ratio) {
             var v = vec3.create();
             var q = quat4.create();
@@ -127,7 +127,8 @@
             if (typeof frame != 'number') {
                 this.length += 1;
                 frame = this.length;
-            } if (frame > this.length) {
+            }
+            if (frame > this.length) {
                 this.length = frame;
                 this._lastPose = pose;
             }
@@ -266,7 +267,7 @@
     });
 
     var _tmp = {
-        ve:  vec3.create(),
+        ve: vec3.create(),
         vt: vec3.create(),
         axis: vec3.create(),
         quat: quat4.create(),
@@ -351,7 +352,7 @@
         solveIKs: function() {
             var param;
             for (var i = 0, l = this._iks.length; i < l; i++) {
-                param  = this._iks[i];
+                param = this._iks[i];
                 this._solveIK.apply(this, param);
             }
         },

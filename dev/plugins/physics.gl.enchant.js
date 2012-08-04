@@ -1,5 +1,5 @@
 /*
-[lang:ja]
+ [lang:ja]
  * physics.gl.enchant.js
  * @version 0.3.5
  * @require enchant.js v0.4.3+
@@ -13,7 +13,7 @@
  * @detail
  * ammo.js:
  * https://github.com/kripken/ammo.js
-[/lang]
+ [/lang]
  [lang:en]
  * physics.gl.enchant.js
  * @version 0.3.5
@@ -28,36 +28,36 @@
  * @detail
  * ammo.js:
  * https://github.com/kripken/ammo.js
-[/lang]
+ [/lang]
  */
-if(typeof Ammo == 'undefined') {
+if (typeof Ammo == 'undefined') {
     throw new Error('physics.gl.enchant.js must be loaded after ammo.js');
 }
-if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
+if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
     (function() {
         enchant.gl.physics = {};
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.World.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.World.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.World = enchant.Class.create({
             /**
-            [lang:ja]
+             [lang:ja]
              * 物理演算が適用される世界.
              * ここに剛体オブジェクトを追加し, 時間を進めることで物理演算が実行される.
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * World in which physical calculator is used.
              * Here we add a rigid object, and by proceeding forward in time physical calculation will be processed.
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
-            [/lang]
+             [/lang]
              */
             initialize: function() {
                 var g = new Ammo.btVector3(0, -10, 0);
@@ -74,18 +74,18 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(g);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldの重力を設定する.
              * @param {Number} gx x軸方向の重力.
              * @param {Number} gy y軸方向の重力.
              * @param {Number} gz z軸方向の重力.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Set gravity of World.
              * @param {Number} gx x axis gravity.
              * @param {Number} gy y axis gravity.
              * @param {Number} gz z axis gravity.
-            [/lang]
+             [/lang]
              */
             setGravity: function(gx, gy, gz) {
                 var g = new Ammo.btVector3(gx, gy, gz);
@@ -93,77 +93,79 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(g);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldの時間を進める.
              * timeStepがfixedTimeStepより大きい場合, maxSubStepで指定した回数まで続けて時間を進める.
              * @param {Number} timeStep 進めたい時間.単位は秒.
              * @param {Number} maxSubSteps シミュレーションの最大追加回数.
              * @param {Number} fixedTimeStep 基本となる時間. デフォルト値は1/60.
              * @return {Number} subStepsNum
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Continue World time.
              * When timeStep is bigger than fixedTimeStep, you continue the number of times set in maxSubStep and continue with time.
              * @param {Number} Amount of time you wish to proceed. Units are in seconds.
              * @param {Number} maxSubSteps Maximum number of repetitions to be added to simulation.
              * @param {Number} fixedTimeStep Standard time. The default level is 1/60.
              * @return {Number} subStepsNum
-            [/lang]
+             [/lang]
              */
             stepSimulation: function(timeStep, maxSubSteps, fixedTimeStep) {
                 return this._dynamicsWorld.stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldに剛体を追加する.
              * @param {enchant.gl.physics.Rigid} Rigid 追加する剛体オブジェクト.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Add rigid body to World.
              * @param {enchant.gl.physics.Rigid} Rigid Rigid body object to be added.
-            [/lang]
+             [/lang]
              */
             addRigid: function(rigid) {
                 this._dynamicsWorld.addRigidBody(rigid.rigidBody);
                 rigid.world = this;
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldから剛体を削除する.
              * @param {enchant.gl.physics.Rigid} Rigid 削除する剛体オブジェクト.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Delete rigid body form world.
              * @param {enchant.gl.physics.Rigid} Rigid Rigid body to be deleted.
-            [/lang]
+             [/lang]
              */
             removeRigid: function(rigid) {
                 this._dynamicsWorld.removeRigidBody(rigid.rigidBody);
                 rigid.world = null;
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigid同士が衝突しているかを判定する.
              * @param {enchant.gl.physics.Rigid} rigid1 判定するRigid1.
              * @param {enchant.gl.physics.Rigid} rigid2 判定するRigid2.
              * @return {Boolean} bool 衝突の有無.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Judges whether or not two rigid objects have collided.
              * @param {enchant.gl.physics.Rigid} rigid1 Rigid1 to be judged.
              * @param {enchant.gl.physics.Rigid} rigid2 Rigid2 to be judged.
              * @return {Boolean} bool Collison presence or absence.
-            [/lang]
+             [/lang]
              */
             contactPairTest: function(rigid1, rigid2) {
                 var callback = new Ammo.ConcreteContactResultCallback();
                 var result = false;
-                Ammo.customizeVTable(callback, [{
-                    original: Ammo.ConcreteContactResultCallback.prototype.addSingleResult,
-                    replacement: function(tp, cp, colObj0, partid0, index0, colObj1, partid1, index1) {
-                        result = true;
+                Ammo.customizeVTable(callback, [
+                    {
+                        original: Ammo.ConcreteContactResultCallback.prototype.addSingleResult,
+                        replacement: function(tp, cp, colObj0, partid0, index0, colObj1, partid1, index1) {
+                            result = true;
+                        }
                     }
-                }]);
+                ]);
                 this._dynamicsWorld.contactPairTest(rigid1.rigidBody, rigid2.rigidBody, callback);
                 Ammo.destroy(callback);
                 return result;
@@ -171,16 +173,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.Rigid.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.Rigid.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.Rigid = enchant.Class.create({
             /**
-            [lang:ja]
+             [lang:ja]
              * 剛体オブジェクト.
              * Worldに追加して使用する.
              * @param shape Ammo.btCollisionShapeオブジェクト.
@@ -195,8 +197,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.RigidPlane
              * @see enchant.gl.physics.RigidContainer
              * @constructs
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Rigid body object.
              * Add to World and activate.
              * @param shape Ammo.btCollisionShape object.
@@ -211,12 +213,13 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.RigidPlane
              * @see enchant.gl.physics.RigidContainer
              * @constructs
-            [/lang]
+             [/lang]
              */
             initialize: function(shape, mass, lDamp, aDamp) {
                 if (typeof shape == 'undefined') {
                     shape = new Ammo.btBoxShape(1);
-                } if (typeof mass == 'undefined') {
+                }
+                if (typeof mass == 'undefined') {
                     mass = 1;
                 }
 
@@ -233,28 +236,29 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
 
                 if (typeof lDamp != 'undefined') {
                     rigidBodyInfo.set_m_linearDamping(lDamp);
-                } if (typeof aDamp != 'undefined') {
+                }
+                if (typeof aDamp != 'undefined') {
                     rigidBodyInfo.set_m_angularDamping(aDamp);
                 }
 
                 this.shape = shape;
                 /**
-                [lang:ja]
+                 [lang:ja]
                  * Rigidが所属するWorld
-                [/lang]
-                [lang:en]
+                 [/lang]
+                 [lang:en]
                  * World that Rigid belongs to
-                [/lang]
+                 [/lang]
                  */
                 this.world = null;
 
                 /**
-                [lang:ja]
+                 [lang:ja]
                  * Ammoの剛体オブジェクト
-                [/lang]
-                [lang:en]
+                 [/lang]
+                 [lang:en]
                  * Ammo rigid body object
-                [/lang]
+                 [/lang]
                  */
                 this.rigidBody = new Ammo.btRigidBody(rigidBodyInfo);
                 var p = Ammo.getPointer(this.rigidBody);
@@ -275,20 +279,20 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 this._friction = 0.3;
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidを拡大縮小する.
              * Worldでの現在の拡大率から, 各軸に対して指定された倍率分だけ拡大縮小をする.
              * @param {Number} x x軸方向の拡大率.
              * @param {Number} y y軸方向の拡大率.
              * @param {Number} z z軸方向の拡大率.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Expand and contract Rigid.
              * Expand or contract each axis the designated amount from the current rate of expansion in World.
              * @param {Number} x Rate of expansion on x axis.
              * @param {Number} y Rate of expansion on y axis.
              * @param {Number} z Rate of expansion on z axis.
-            [/lang]
+             [/lang]
              */
             scale: function(x, y, z) {
                 this.activate();
@@ -307,20 +311,20 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(scale);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidを平行移動する.
              * Worldでの現在の位置から, 各軸に対して指定された分だけ平行移動をする.
              * @param {Number} x x軸方向の平行移動量.
              * @param {Number} y y軸方向の平行移動量.
              * @param {Number} z z軸方向の平行移動量.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Move Rigid in a parallel direciton.
              * Move the designated amount in a parallel direction along each axis from the current World position.
              * @param {Number} x Amount of parallel movement along x axis.
              * @param {Number} y Amount of parallel movement along y axis.
              * @param {Number} z Amount of parallel movement along z axis.
-            [/lang]
+             [/lang]
              */
             translate: function(x, y, z) {
                 this.activate();
@@ -351,14 +355,14 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(vec);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * クォータニオンで表した姿勢をRigidにセットする.
              * @param {enchant.gl.Quat} quat
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Set posture expressed in quaternion in Rigid.
              * @param {enchant.gl.Quat} quat
-            [/lang]
+             [/lang]
              */
             rotationSet: function(quat) {
                 var qq = quat._quat;
@@ -370,14 +374,14 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(t);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * クォータニオンで表した回転をRigidに適用する.
              * @param {enchant.gl.Quat} quat
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Applies rotation expressed in quaternion to Rigid.
              * @param {enchant.gl.Quat} quat
-            [/lang]
+             [/lang]
              */
             rotationApply: function(quat) {
                 var quat1 = quat._quat;
@@ -392,12 +396,12 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(t);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidを止める.
-            [/lang]
-            [lang:ja]
+             [/lang]
+             [lang:ja]
              * Stops Rigid object.
-            [/lang]
+             [/lang]
              */
             clearForces: function() {
                 var vec0 = new Ammo.btVector3(0, 0, 0);
@@ -407,16 +411,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(vec0);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 他のRigidとの衝突判定.
              * @param {enchant.gl.physics.Rigid} rigid 判定するRigid.
              * @return {Boolean} bool 衝突の有無.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Collision detection with another Rigid object.
              * @param {enchant.gl.physics.Rigid} rigid Rigid to be judged.
              * @return {Boolean} bool Presence or absence of rigid.
-            [/lang]
+             [/lang]
              */
             contactTest: function(rigid) {
                 if (this.world && rigid.world
@@ -427,33 +431,33 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 }
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidを有効化する.
              * @param {Boolean} force 強制的に有効化する.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Make Rigid valid.
              * @param {Boolean} force Forcibly make valid.
-            [/lang]
+             [/lang]
              */
             activate: function(force) {
                 this.rigidBody.activate(force);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidに力を加える.
              * 力はRigidの中心に加えられる.
              * @param {Number} powerX x軸方向の力.
              * @param {Number} powerY y軸方向の力.
              * @param {Number} powerZ z軸方向の力.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Add power to Rigid.
              * Power is added to the center of Rigid.
              * @param {Number} powerX Power in x axis.
              * @param {Number} powerY Power in y axis.
              * @param {Number} powerZ Power in z axis.
-            [/lang]
+             [/lang]
              */
             applyCentralImpulse: function(powx, powy, powz) {
                 var powv = new Ammo.btVector3(powx, powy, powz);
@@ -462,7 +466,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 Ammo.destroy(powv);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidに力を加える.
              * 力は指定した位置に加えられる.
              * @param {Number} powerX x軸方向の力.
@@ -471,8 +475,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @param {Number} positonX 力を加える位置のx座標.
              * @param {Number} positonY 力を加える位置のy座標.
              * @param {Number} positonZ 力を加える位置のz座標.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Add power to Rigid.
              * Power is added to the specified position.
              * @param {Number} powerX x axis power.
@@ -481,7 +485,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @param {Number} positonX Coordinate on x axis to add power to.
              * @param {Number} positonY Coordinate on y axis to add power to.
              * @param {Number} positonZ Coordinate on z axis to add power to.
-            [/lang]
+             [/lang]
              */
             applyImpulse: function(powx, powy, powz, posx, posy, posz) {
                 var powv = new Ammo.btVector3(powx, powy, powz);
@@ -495,28 +499,28 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 return this.rigidBody.getWorldTransform();
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidをユーザが動かすためのオブジェクトとして設定する.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Kinematize Rigid.
-            [/lang]
+             [/lang]
              */
             kinematize: function() {
                 var flag = this.rigidBody.getCollisionFlags();
                 this.rigidBody.setCollisionFlags(flag | 2);
                 this.rigidBody.setActivationState(4);
             },
-           /**
-           [lang:ja]
-            * Rigidの反発係数.
-            * @type Number
-           [/lang]
-           [lang:en]
-            * Rigid restitutions.
-            * @type Number
-           [/lang]
-            */
+            /**
+             [lang:ja]
+             * Rigidの反発係数.
+             * @type Number
+             [/lang]
+             [lang:en]
+             * Rigid restitutions.
+             * @type Number
+             [/lang]
+             */
             restitution: {
                 get: function() {
                     return this._restitution;
@@ -526,16 +530,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                     this.rigidBody.setRestitution(n);
                 }
             },
-           /**
-           [lang:ja]
-            * Rigidの摩擦係数.
-            * @type Number
-           [/lang]
-           [lang:en]
-            * Rigid frictions.
-            * @type Number
-           [/lang]
-            */
+            /**
+             [lang:ja]
+             * Rigidの摩擦係数.
+             * @type Number
+             [/lang]
+             [lang:en]
+             * Rigid frictions.
+             * @type Number
+             [/lang]
+             */
             friction: {
                 get: function() {
                     return this._friction;
@@ -549,16 +553,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         enchant.gl.physics.Rigid._refs = {};
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidBox.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidBox.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidBox = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 直方体型の剛体オブジェクト.
              * @param {Number} scaleX 直方体の中心からx軸に垂直な面までの距離.
              * @param {Number} scaleY 直方体の中心からy軸に垂直な面までの距離.
@@ -568,8 +572,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyBox
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Rectangular solid rigid body object.
              * @param {Number} scaleX Vertical distance along the x axis from rectangular body's center.
              * @param {Number} scaleY Vertical distance along the y axis from rectangular body's center.
@@ -579,7 +583,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyBox
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
+             [/lang]
              */
             initialize: function(sx, sy, sz, mass) {
                 var scale = new Ammo.btVector3(sx, sy, sz);
@@ -589,16 +593,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             }
         });
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidCube.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidCube.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidCube = enchant.Class.create(enchant.gl.physics.RigidBox, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 立方体型の剛体オブジェクト.
              * @param {Number} scale 箱の中心から面までの距離.
              * @param {Number} mass 剛体の質量.
@@ -606,8 +610,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @constructs
              * @see enchant.gl.physics.Rigid
              * @extends enchant.gl.physics.PhyCube
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Rectangular solid rigid object.
              * @param {Number} scale Distance between center of box and surface.
              * @param {Number} mass Rigid body mass.
@@ -615,7 +619,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @constructs
              * @see enchant.gl.physics.Rigid
              * @extends enchant.gl.physics.PhyCube
-            [/lang]
+             [/lang]
              */
             initialize: function(scale, mass) {
                 enchant.gl.physics.RigidBox.call(this, scale, scale, scale, mass);
@@ -623,16 +627,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidSphere.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidSphere.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidSphere = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 球体型の剛体オブジェクト.
              * @param {Number} radius 球体の半径.
              * @param {Number} mass 剛体の質量.
@@ -640,8 +644,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhySphere
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Spherical rigid object.
              * @param {Number} radius Sphere radius.
              * @param {Number} mass Rigid body mass.
@@ -649,7 +653,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhySphere
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
+             [/lang]
              */
             initialize: function(s, mass, lDamp, aDamp) {
                 var shape = new Ammo.btSphereShape(s);
@@ -658,16 +662,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidCylinder.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidCylinder.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidCylinder = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 円柱型の剛体オブジェクト.
              * @param {Number} radius 円柱の半径.
              * @param {Number} height 円柱の高さ.
@@ -676,8 +680,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyCylinder
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Cylindrical rigid object.
              * @param {Number} radius Cylinder radius.
              * @param {Number} height Cylinder height.
@@ -686,7 +690,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyCylinder
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
+             [/lang]
              */
             initialize: function(r, h, mass) {
                 var scale = new Ammo.btVector3(r, h, r);
@@ -697,16 +701,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidCapsule.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidCapsule.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidCapsule = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
-            [lang:ja]
+             [lang:ja]
              * カプセル型の剛体オブジェクト.
              * y軸に沿う円柱の両端に半球をつけた形状.
              * @param {Number} radius 半球体の半径.
@@ -716,8 +720,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyCapsule
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Capsule-shaped rigid object.
              * A shape with a cylinder running along the y axis and hemispheres at both ends.
              * @param {Number} radius Hemisphere radius.
@@ -727,7 +731,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyCapsule
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
+             [/lang]
              */
             initialize: function(r, h, mass) {
                 var shape = new Ammo.btCapsuleShape(r, h);
@@ -736,16 +740,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidPlane.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidPlane.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidPlane = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 無限平面型の剛体オブジェクト.
              * @param {Number} NormalX 平面の法線ベクトルのx成分.
              * @param {Number} NormalY 平面の法線ベクトルのy成分.
@@ -754,8 +758,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyPlane
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Infinite level surface rigid body object.
              * @param {Number} NormalX Level surface normal vector x component.
              * @param {Number} NormalY Level surface normal vector y component.
@@ -764,7 +768,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyPlane
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
+             [/lang]
              */
             initialize: function(nx, ny, nz, distance) {
                 var normal = new Ammo.btVector3(nx, ny, nz);
@@ -775,16 +779,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.RigidContainer.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.RigidContainer.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.RigidContainer = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 枡型の剛体オブジェクト.
              * @param {Number} scale 枡の中心から枠までの距離.
              * @param {Number} mass 剛体の質量.
@@ -792,8 +796,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyContainer
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Box shape solid object.
              * @param {Number} scale Distance between center of box to border.
              * @param {Number} mass Mass of rigid object.
@@ -801,7 +805,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyContainer
              * @constructs
              * @extends enchant.gl.physics.Rigid
-            [/lang]
+             [/lang]
              */
             initialize: function(s, mass) {
                 var shape = new Ammo.btCompoundShape(s);
@@ -817,39 +821,39 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                     Ammo.destroy(or);
                     Ammo.destroy(tr);
                 };
-                addWall(s, s/8, s, 0, s/8 - s, 0);
-                addWall(s - s/8, s - s/8 - s/8, s/8, s/8, 0, s/8 - s);
-                addWall(s - s/8, s - s/8 - s/8, s/8, -s/8, 0, s - s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s/8 - s, 0, -s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s - s/8, 0, s/8);
+                addWall(s, s / 8, s, 0, s / 8 - s, 0);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, s / 8, 0, s / 8 - s);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, -s / 8, 0, s - s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s / 8 - s, 0, -s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s - s / 8, 0, s / 8);
                 enchant.gl.physics.Rigid.call(this, shape, mass);
             }
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyScene3D.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyScene3D.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyScene3D = enchant.Class.create(enchant.gl.Scene3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldを持つScene3D.
              * 時間を進めることで, addChildされたSprite3Dに物理演算が適用される.
              * @see enchant.gl.physics.World
              * @constructs
              * @extends enchant.gl.Scene3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Scene3D containing World.
              * As time passes, physical calculation will be applied to the Sprite3D effected by addChild.
              * @see enchant.gl.physics.World
              * @constructs
              * @extends enchant.gl.Scene3D
-            [/lang]
+             [/lang]
              */
             initialize: function() {
                 enchant.gl.Scene3D.call(this);
@@ -865,16 +869,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 };
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 子Sprite3Dを追加する.
              * PhySprite3Dを追加した場合, PhySprite3Dが持つ剛体オブジェクトがPhyScene3Dが持つWorldに追加される.
              * @param {enchant.gl.Sprite3D|enchant.gl.physics.PhySprite3D} Sprite3D 追加する子Sprite3D.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Add child Sprite3D.
              * When adding PhySprite3D, the rigid body object containing PhySprite3D will be added to the World containing PhyScene3D.
              * @param {enchant.gl.Sprite3D|enchant.gl.physics.PhySprite3D} Sprite3D Child Sprite3D to be added.
-            [/lang]
+             [/lang]
              */
             addChild: function(sprite) {
                 enchant.gl.Scene3D.prototype.addChild.call(this, sprite);
@@ -883,16 +887,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 }
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 指定された子Sprite3Dを削除する.
              * PhySprite3Dを指定した場合, PhySprite3Dが持つ剛体オブジェクトがPhyScene3Dが持つWorldから削除される.
              * @param {enchant.gl.Sprite3D|enchant.gl.physics.PhySprite3D} Sprite3D 追加する子Sprite3D.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Delete designated child Sprite3D.
              * When PhySprite3D is set, the rigid body object containing PhySprite3D will be deleted from the World containing PhyScene3D.
              * @param {enchant.gl.Sprite3D|enchant.gl.physics.PhySprite3D} Sprite3D 追加する子Sprite3D.
-            [/lang]
+             [/lang]
              */
             removeChild: function(sprite) {
                 enchant.gl.Scene3D.prototype.removeChild.call(this, sprite);
@@ -901,35 +905,35 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 }
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * PhyScene3Dが持つWorldの重力を設定する。
              * @param {Number} gx x軸方向の重力
              * @param {Number} gy y軸方向の重力
              * @param {Number} gz z軸方向の重力
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Set the gravity of World containing PhyScene3D.
              * @param {Number} gx x axis gravity
              * @param {Number} gy y axis gravity
              * @param {Number} gz z axis gravity
-            [/lang]
+             [/lang]
              */
             setGravity: function(x, y, z) {
                 this.world.setGravity(x, y, z);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * PhySprite3Dが持つWorldの時間を進める.
              * @param {Number} timeStep 進めたい時間.単位は秒.
              * @param {Number} maxSubSteps
              * @param {Number} fixedTimeStep
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Proceed forward in time for World containing PhySprite3D.
              * @param {Number} timeStep Amount of time you wish to proceed. Units are seconds.
              * @param {Number} maxSubSteps
              * @param {Number} fixedTimeStep
-            [/lang]
+             [/lang]
              */
             stepSimulation: function(timeStep, maxSubSteps, fixedTimeStep) {
                 subStep = this.world.stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
@@ -944,16 +948,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 }
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldの時間の進行を始める.
              * enterframeごとにstepSimulationが自動で呼び出される.
              *
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Begin World time progress.
              * Ever other enterframe, stepSimulation will be automaticall called up.
              *
-            [/lang]
+             [/lang]
              */
             play: function() {
                 var game = enchant.Game.instance;
@@ -963,12 +967,12 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 }
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Worldの時間の進行を止める.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Stop World time progress.
-            [/lang]
+             [/lang]
              */
             stop: function() {
                 var game = enchant.Game.instance;
@@ -978,16 +982,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhySprite3D.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhySprite3D.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhySprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 物理スプライト.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {enchant.gl.physics.Rigid} rigid
@@ -999,8 +1003,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyPlane
              * @see enchant.gl.physics.PhyContainer
              * @constructs
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Physical Sprite.
              * If you add to PhySprite3D, physical calculation will be applied when stepSimulation is called up.
              * @param {enchant.gl.physics.Rigid} rigid
@@ -1012,7 +1016,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyPlane
              * @see enchant.gl.physics.PhyContainer
              * @constructs
-            [/lang]
+             [/lang]
              */
             initialize: function(rigid) {
                 enchant.gl.Sprite3D.call(this);
@@ -1033,126 +1037,126 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 });
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * PhySprite3Dを拡大縮小する.
              * 表示上の拡大率とWorldでの拡大率が同時に変更される.
              * @param {Number} x x軸方向の拡大率.
              * @param {Number} y y軸方向の拡大率.
              * @param {Number} z z軸方向の拡大率.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Expand and contract PhySprite3D.
              * The expansion rate displayed on the expansion rate in World will be changed at the same time.
              * @param {Number} x x axis expansion rate.
              * @param {Number} y y axis expansion rate.
              * @param {Number} z z axis expansion rate.
-            [/lang]
+             [/lang]
              */
             scale: function(x, y, z) {
                 enchant.gl.Sprite3D.prototype.scale.call(this, x, y, z);
                 this.rigid.scale(x, y, z);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * PhySprite3Dを平行移動する.
              * 表示上の位置とWorldでの位置が変更される.
              * @param {Number} x x軸方向の平行移動量.
              * @param {Number} y y軸方向の平行移動量.
              * @param {Number} z z軸方向の平行移動量.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Move PhySprite3D horizontally.
              * Displayed position and World position will be changed.
              * @param {Number} x Amount of parallel movement on x axis.
              * @param {Number} y Amount of parallel movement on y axis.
              * @param {Number} z Amount of parallel movement on z axis.
-            [/lang]
+             [/lang]
              */
             translate: function(x, y, z) {
                 enchant.gl.Sprite3D.prototype.translate.call(this, x, y, z);
                 this.rigid.translate(x, y, z);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 回転行列にクォータニオンから得られる回転行列をセットする.
              * Worldでの姿勢も変更される.
              * @param {enchant.gl.Quat} quat
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Set rotation line acquired from quaternion in rotation line.
              * Posture in World will also be changed.
              * @param {enchant.gl.Quat} quat
-            [/lang]
+             [/lang]
              */
             rotationSet: function(quat) {
                 enchant.gl.Sprite3D.prototype.rotationSet.call(this, quat);
                 this.rigid.rotationSet(quat);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 回転行列にクォータニオンから得られる回転行列を適用する.
              * Worldでの姿勢も変更される.
              * @param {enchant.gl.Quat} quat
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Rotation line acquired from quaternion is applied in rotation line.
              * Posture in World will also be changed.
              * @param {enchant.gl.Quat} quat
-            [/lang]
+             [/lang]
              */
             rotationApply: function(quat) {
                 enchant.gl.Sprite3D.prototype.rotationApply.call(this, quat);
                 this.rigid.rotationApply(quat);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * Rigidを止める.
-            [/lang]
-            [lang:ja]
+             [/lang]
+             [lang:ja]
              * Stops Rigid object.
-            [/lang]
+             [/lang]
              */
             clearForces: function() {
                 this.rigid.clearForces();
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 他のPhySprite3Dとの衝突判定.
              * @param {enchant.gl.physics.PhySprite3D} sprite 判定するPhySprite3D.
              * @return {Boolean} bool 衝突の有無.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Collision detection with another PhySprite3D.
              * @param {enchant.gl.physics.PhySprite3D} sprite PhySprite3D to be detected.
              * @return {Boolean} bool Presence or absence of collision.
-            [/lang]
+             [/lang]
              */
             contactTest: function(sprite) {
                 return this.rigid.contactTest(sprite.rigid);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 剛体に力を加える.
              * 力は剛体の中心に加えられる.
              * @param {Number} powerX x軸方向の力.
              * @param {Number} powerY y軸方向の力.
              * @param {Number} powerZ z軸方向の力.
              * @see enchant.gl.physics.Rigid#applyCentralImpulse
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Add power to rigid body.
              * Power is added to center of rigid body.
              * @param {Number} powerX Power on x axis.
              * @param {Number} powerY Power on y axis.
              * @param {Number} powerZ Power on z axis.
              * @see enchant.gl.physics.Rigid#applyCentralImpulse
-            [/lang]
+             [/lang]
              */
             applyCentralImpulse: function(powx, powy, powz) {
                 this.rigid.applyCentralImpulse(powx, powy, powz);
             },
             /**
-            [lang:ja]
+             [lang:ja]
              * 剛体に力を加える.
              * 力は指定した位置に加えられる.
              * @param {Number} powerX x軸方向の力.
@@ -1162,8 +1166,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @param {Number} positonY 力を加える位置のy座標.
              * @param {Number} positonZ 力を加える位置のz座標.
              * @see enchant.gl.physics.Rigid#applyImpulse
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Add power to rigid body.
              * Power is added to designated position.
              * @param {Number} powerX x axis power.
@@ -1173,34 +1177,34 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @param {Number} positonY y coordinates to which power is added.
              * @param {Number} positonZ z coordinates to which power is added.
              * @see enchant.gl.physics.Rigid#applyImpulse
-            [/lang]
+             [/lang]
              */
             applyImpulse: function(powx, powy, powz, posx, posy, posz) {
                 this.rigid.applyImpulse(powx, powy, powz, posx, posy, posz);
             },
-           /**
-            [lang:ja]
+            /**
+             [lang:ja]
              * PhySprite3Dをユーザが動かすためのオブジェクトとして設定する.
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Kinematize Rigid.
-            [/lang]
+             [/lang]
              */
             kinematize: function() {
                 this.rigid.kinematize();
             },
-           /**
-           [lang:ja]
-            * PhySprite3Dの反発係数.
-            * @type Number
-            * @see enchant.gl.physics.Rigid#restitution
-           [/lang]
-           [lang:en]
-            * PhySprite3D restitutions.
-            * @type Number
-            * @see enchant.gl.physics.Rigid#restitution
-           [/lang]
-            */
+            /**
+             [lang:ja]
+             * PhySprite3Dの反発係数.
+             * @type Number
+             * @see enchant.gl.physics.Rigid#restitution
+             [/lang]
+             [lang:en]
+             * PhySprite3D restitutions.
+             * @type Number
+             * @see enchant.gl.physics.Rigid#restitution
+             [/lang]
+             */
             restitution: {
                 get: function() {
                     return this.rigid._restitution;
@@ -1210,18 +1214,18 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                     this.rigid.rigidBody.setRestitution(n);
                 }
             },
-           /**
-           [lang:ja]
-            * PhySprite3Dの摩擦係数.
-            * @type Number
-            * @see enchant.gl.physics.Rigid#friction
-           [/lang]
-           [lang:en]
-            * PhySprite3D frictions.
-            * @type Number
-            * @see enchant.gl.physics.Rigid#friction
-           [/lang]
-            */
+            /**
+             [lang:ja]
+             * PhySprite3Dの摩擦係数.
+             * @type Number
+             * @see enchant.gl.physics.Rigid#friction
+             [/lang]
+             [lang:en]
+             * PhySprite3D frictions.
+             * @type Number
+             * @see enchant.gl.physics.Rigid#friction
+             [/lang]
+             */
             friction: {
                 get: function() {
                     return this.rigid._friction;
@@ -1258,16 +1262,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyBox.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyBox.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyBox = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 直方体型のPhySprite3D.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {Number} scaleX 直方体の中心からx軸に垂直な面までの距離.
@@ -1278,8 +1282,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Rectangular PhySprite3D.
              * If PhySprite3D is added, physical calculation will be applied each time stepSimulation is called up.
              * @param {Number} scaleX Distance between center of rectangular body and perpendicular x-axis surface.
@@ -1290,7 +1294,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
+             [/lang]
              */
             initialize: function(sx, sy, sz, mass) {
                 var rigid = new RigidBox(sx, sy, sz, mass);
@@ -1300,16 +1304,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyCube.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyCube.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyCube = enchant.Class.create(enchant.gl.physics.PhyBox, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 立方体型のPhySprite3D.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {Number} scale 箱の中心から面までの距離.
@@ -1318,8 +1322,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhyBox
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Cubic type PhySprite3D.
              * If added to PhySprite3D, physical calculation will be applied each time stepSimulation is called up.
              * @param {Number} scale Distance between center of box and surface.
@@ -1328,7 +1332,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhyBox
-            [/lang]
+             [/lang]
              */
             initialize: function(s, mass) {
                 var rigid = new RigidBox(s, s, s, mass);
@@ -1338,16 +1342,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhySphere.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhySphere.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhySphere = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 球体型のPhySprite3D.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {Number} radius 球体の半径.
@@ -1356,8 +1360,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Spherical PhySprite3D.
              * If added to PhySprite3D, physical calculation will be applied each time stepSimulation is called up.
              * @param {Number} radius Spherical body radius.
@@ -1366,12 +1370,13 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
+             [/lang]
              */
             initialize: function(r, mass, lDamp, aDamp) {
                 if (typeof lDamp == 'undefined') {
                     lDamp = 0.05;
-                } if (typeof aDamp == 'undefined') {
+                }
+                if (typeof aDamp == 'undefined') {
                     aDamp = 0.05;
                 }
                 var rigid = new RigidSphere(r, mass, lDamp, aDamp);
@@ -1384,16 +1389,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyCylinder.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyCylinder.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyCylinder = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 円柱型のPhySprite3D.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {Number} radius 円柱の半径.
@@ -1403,8 +1408,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Cylindrical PhySprite3D.
              * If added to PhySprite3D, physical calculation will be applied each time stepSimulation is called up.
              * @param {Number} radius Cylinder radius.
@@ -1414,7 +1419,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
+             [/lang]
              */
             initialize: function(r, h, mass) {
                 var rigid = new RigidCylinder(r, h, mass);
@@ -1424,16 +1429,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyCapsule.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyCapsule.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyCapsule = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * カプセル型のPhySprite3D.
              * y軸に沿う円柱の両端に半球をつけた形状.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
@@ -1444,8 +1449,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Capsule type PhySprite3D.
              * A shape with a cylinder running along the y axis and hemispheres at both ends.
              * If added to PhySprite3D, physical calculation will be applied each time stepSimulation is called up.
@@ -1456,7 +1461,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
+             [/lang]
              */
             initialize: function(r, h, mass) {
                 var rigid = new RigidCapsule(r, h, mass);
@@ -1468,16 +1473,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyPlane.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyPlane.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyPlane = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 無限平面型のPhySprite3D.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {Number} NormalX 平面の法線ベクトルのx成分.
@@ -1487,8 +1492,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Infinite plane type PhySprite3D.
              * If added to PhySprite3D, physical calculation will be performed each time stepSimulation is called up.
              * @param {Number} NormalX x component on plane normal vector.
@@ -1498,12 +1503,13 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
+             [/lang]
              */
             initialize: function(nx, ny, nz, dist, scale) {
                 if (!scale) {
                     scale = 50;
-                };
+                }
+                ;
                 var rigid = new RigidPlane(nx, ny, nz, dist);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
                 this.mesh = Mesh.createPlaneXZ(scale);
@@ -1514,10 +1520,10 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var rad = Math.acos(vec3.dot(up, norm) / (vec3.length(up) * vec3.length(norm)));
                 var q = new Quat(axis[0], axis[1], axis[2], -rad);
                 var vertices = new Array();
-                for (i = 0, l = this.mesh.vertices.length; i < l; i+=3) {
+                for (i = 0, l = this.mesh.vertices.length; i < l; i += 3) {
                     var x = this.mesh.vertices[i];
-                    var y = this.mesh.vertices[i+1];
-                    var z = this.mesh.vertices[i+2];
+                    var y = this.mesh.vertices[i + 1];
+                    var z = this.mesh.vertices[i + 2];
                     var arr = q.multiplyVec3([x, y, z]);
                     vertices.push(arr[0] + nx * dist);
                     vertices.push(arr[1] + ny * dist);
@@ -1528,16 +1534,16 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-        [lang:ja]
+         [lang:ja]
          * @scope enchant.gl.physics.PhyContainer.prototype
-        [/lang]
-        [lang:en]
+         [/lang]
+         [lang:en]
          * @scope enchant.gl.physics.PhyContainer.prototype
-        [/lang]
+         [/lang]
          */
         enchant.gl.physics.PhyContainer = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
-            [lang:ja]
+             [lang:ja]
              * 枡型のPhySprite3D.
              * PhySprite3Dに追加すると, stepSimulationを呼び出した際に物理演算が適用される.
              * @param {Number} scale 枡の中心から枠までの距離.
@@ -1546,8 +1552,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
-            [lang:en]
+             [/lang]
+             [lang:en]
              * Square type PhySprite3D.
              * If added to PhySprite3D, physical calculation will be performed each time stepSimulation is called up.
              * @param {Number} scale Distance between center and edge of square.
@@ -1556,7 +1562,7 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-            [/lang]
+             [/lang]
              */
             initialize: function(scale, mass) {
                 var s = scale;
@@ -1568,13 +1574,14 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var addWall = function(sx, sy, sz, px, py, pz) {
                     that.mesh._join(Mesh.createBox(sx, sy, sz), px, py, pz);
                 };
-                addWall(s, s/8, s, 0, s/8 - s, 0);
-                addWall(s - s/8, s - s/8 - s/8, s/8, s/8, 0, s/8 - s);
-                addWall(s - s/8, s - s/8 - s/8, s/8, -s/8, 0, s - s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s/8 - s, 0, -s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s - s/8, 0, s/8);
+                addWall(s, s / 8, s, 0, s / 8 - s, 0);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, s / 8, 0, s / 8 - s);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, -s / 8, 0, s - s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s / 8 - s, 0, -s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s - s / 8, 0, s / 8);
             }
 
         });
     })();
-};
+}
+;

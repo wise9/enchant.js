@@ -1,5 +1,5 @@
 /**
-[lang:ja]
+ [lang:ja]
  * bone.gl.enchant.js
  * @version 0.2.1
  * @require enchant.js v0.4.5+
@@ -17,8 +17,8 @@
  * https://github.com/edvakf/MMD.js
  * MMD.jsについて:
  * http://edv.sakura.ne.jp/mmd/
-[/lang]
-[lang:en]
+ [/lang]
+ [lang:en]
  * bone.gl.enchant.js
  * @version 0.2.0
  * @require enchant.js v0.4.3+
@@ -36,7 +36,7 @@
  * https://github.com/edvakf/MMD.js
  * About MMD.js:
  * http://edv.sakura.ne.jp/mmd/
-[/lang]
+ [/lang]
  */
 
 (function() {
@@ -69,21 +69,21 @@
 
     /**
      * @scope enchant.gl.State.prototype
-    */
+     */
     enchant.gl.State = enchant.Class.create({
         /**
-        [lang:ja]
+         [lang:ja]
          * アニメーションの状態を表すための基底クラス.
          * @param {Number[]} position
-         * @param {Number[]} rotation 
+         * @param {Number[]} rotation
          * @cpnstructs
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Base class for expressing animation condition.
          * @param {Number[]} position
-         * @param {Number[]} rotation 
+         * @param {Number[]} rotation
          * @cpnstructs
-        [/lang]
+         [/lang]
          */
         initialize: function(position, rotation) {
             this._position = vec3.create();
@@ -92,12 +92,12 @@
             quat4.set(rotation, this._rotation);
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * 位置・回転をセットする.
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Sets position/rotation.
-        [/lang]
+         [/lang]
          */
         set: function(pose) {
             vec3.set(pose._position, this._position);
@@ -107,41 +107,41 @@
 
     /**
      * @scope enchant.gl.Pose.prototype
-    */
+     */
     enchant.gl.Pose = enchant.Class.create(enchant.gl.State, {
         /**
-        [lang:ja]
+         [lang:ja]
          * 姿勢を処理するためのクラス.
          * @param {Number[]} position
-         * @param {Number[]} rotation 
+         * @param {Number[]} rotation
          * @constructs
          * @extends enchant.gl.State
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Class for processing pose.
          * @param {Number[]} position
-         * @param {Number[]} rotation 
+         * @param {Number[]} rotation
          * @constructs
          * @extends enchant.gl.State
-        [/lang]
-        */
+         [/lang]
+         */
         initialize: function(position, rotation) {
             enchant.gl.State.call(this, position, rotation);
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * 他の姿勢との補間を行う.
          * @param {enchant.gl.Pose} another
-         * @param {Number} ratio 
+         * @param {Number} ratio
          * @return {enchant.gl.Pose}
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Performs interpolation with other pose.
          * @param {enchant.gl.Pose} another
-         * @param {Number} ratio 
+         * @param {Number} ratio
          * @return {enchant.gl.Pose}
-        [/lang]
-        */
+         [/lang]
+         */
         getInterpolation: function(another, ratio) {
             var v = vec3.create();
             var q = quat4.create();
@@ -159,16 +159,16 @@
      */
     enchant.gl.KeyFrameManager = enchant.Class.create({
         /**
-        [lang:ja]
+         [lang:ja]
          * キーフレームアニメーションを実現するためのクラス.
          * enchant.gl.Poseに限らず様々なデータを扱える.
          * @constructs
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Class for realizing key frame animation.
          * Handles various data, not limited to enchant.gl.Pose.
          * @constructs
-        [/lang]
+         [/lang]
          */
         initialize: function() {
             this._frames = new Array();
@@ -177,22 +177,23 @@
             this._lastPose = null;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * フレームを追加する.
          * @param {*} pose キーフレーム.
          * @param {Number} frame フレーム番号.
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Add frame.
          * @param {*} pose Key frame.
          * @param {Number} frame Frame number.
-        [/lang]
+         [/lang]
          */
         addFrame: function(pose, frame) {
             if (typeof frame != 'number') {
                 this.length += 1;
                 frame = this.length;
-            } if (frame > this.length) {
+            }
+            if (frame > this.length) {
                 this.length = frame;
                 this._lastPose = pose;
             }
@@ -200,18 +201,18 @@
             this._units[frame] = pose;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * 指定されたフレーム番号の情報を返す.
          * 指定されたフレーム番号に該当するデータがない場合, 指定されたフレーム番号の前後のデータから補間したデータを取得する.
          * @param {Number} frame フレーム番号
          * @return {*}
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Return information for designated frame number.
          * When there is no data corresponding to the designated frame, interpolated data from before and after are acquired.
          * @param {Number} frame Frame number
          * @return {*}
-        [/lang]
+         [/lang]
          */
         getFrame: function(frame) {
             var prev, next, index, pidx, nidx;
@@ -254,7 +255,7 @@
      */
     enchant.gl.Bone = enchant.Class.create(enchant.gl.State, {
         /**
-        [lang:ja]
+         [lang:ja]
          * ボーンの状態を表すクラス.
          * @param {String} name
          * @param {Number} head
@@ -262,8 +263,8 @@
          * @param {Number} rotation
          * @constructs
          * @extends enchant.gl.State
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Class to display bone status.
          * @param {String} name
          * @param {Number} head
@@ -271,7 +272,7 @@
          * @param {Number} rotation
          * @constructs
          * @extends enchant.gl.State
-        [/lang]
+         [/lang]
          */
         initialize: function(name, head, position, rotation) {
             enchant.gl.State.call(this, position, rotation);
@@ -289,38 +290,38 @@
             this.childNodes = new Array();
 
             /**
-            [lang:ja]
+             [lang:ja]
              * IK解決の際にクォータニオンに変換をかける関数を設定する.
-			[/lang]
-			[lang:en]
+             [/lang]
+             [lang:en]
              * During each IK settlement, function for which change is applied to quaternion is set.
-            [/lang]
+             [/lang]
              */
             this.constraint = null;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * ボーンに子のボーンを追加する.
          * @param {enchant.gl.Bone} child
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Add child bone to bone.
          * @param {enchant.gl.Bone} child
-        [/lang]
+         [/lang]
          */
         addChild: function(child) {
             this.childNodes.push(child);
             child.parentNode = this;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * ボーンから子のボーンを削除する.
          * @param {enchant.gl.Bone} child
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Delete child bone from bone.
          * @param {enchant.gl.Bone} child
-        [/lang]
+         [/lang]
          */
         removeChild: function(child) {
             var i;
@@ -330,14 +331,14 @@
             child.parentNode = null;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * ボーンの姿勢をセットする.
          * @param {*} poses
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Set bone pose.
          * @param {*} poses
-        [/lang]
+         [/lang]
          */
         setPoses: function(poses) {
             var child;
@@ -373,7 +374,7 @@
     });
 
     var _tmp = {
-        ve:  vec3.create(),
+        ve: vec3.create(),
         vt: vec3.create(),
         axis: vec3.create(),
         quat: quat4.create(),
@@ -385,14 +386,14 @@
      */
     enchant.gl.Skeleton = enchant.Class.create({
         /**
-        [lang:ja]
+         [lang:ja]
          * ボーンの構造のルートになるクラス.
          * @constructs
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Class that becomes bone structure route.
          * @constructs
-        [/lang]
+         [/lang]
          */
         initialize: function() {
             this.childNodes = new Array();
@@ -404,28 +405,28 @@
             this._iks = [];
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * Skeletonに子のボーンを追加する.
          * @param {enchant.gl.Bone} child
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Add child bone to skeleton.
          * @param {enchant.gl.Bone} child
-        [/lang]
+         [/lang]
          */
         addChild: function(bone) {
             this.childNodes.push(bone);
             bone.parentNode = this;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * Skeletonから子のボーンを削除する.
          * @param {enchant.gl.Bone} child
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Delete child bone from skeleton.
          * @param {enchant.gl.Bone} child
-        [/lang]
+         [/lang]
          */
         removeChild: function(bone) {
             var i;
@@ -435,14 +436,14 @@
             bone.parentNode = null;
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * 姿勢をセットする.
          * @param {*} poses
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Set pose.
          * @param {*} poses
-        [/lang]
+         [/lang]
          */
         setPoses: function(poses) {
             var child;
@@ -452,14 +453,14 @@
             }
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * FKによって姿勢解決を行う.
          * セットされた姿勢情報から姿勢をつくる.
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Perform pose settlement according to FK.
          * Make pose from set pose information.
-        [/lang]
+         [/lang]
          */
         solveFKs: function() {
             var child;
@@ -469,7 +470,7 @@
             }
         },
         /**
-        [lang:ja]
+         [lang:ja]
          * IKの制御情報を追加する.
          * @param {enchant.gl.Bone} effector
          * @param {enchant.gl.Bone} target
@@ -477,8 +478,8 @@
          * @param {Number} maxangle
          * @param {Number} iteration
          * @see enchant.gl.Skeleton#solveIKs
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Add IK control information.
          * @param {enchant.gl.Bone} effector
          * @param {enchant.gl.Bone} target
@@ -486,26 +487,26 @@
          * @param {Number} maxangle
          * @param {Number} iteration
          * @see enchant.gl.Skeleton#solveIKs
-        [/lang]
+         [/lang]
          */
         addIKControl: function(effector, target, bones, maxangle, iteration) {
             this._iks.push(arguments);
         },
         // by ccd
         /**
-        [lang:ja]
+         [lang:ja]
          * IKによって姿勢解決を行う.
          * {@link enchant.gl.Skeleton#addIKControl}によって追加された情報をもとにする.
-		[/lang]
-		[lang:en]
+         [/lang]
+         [lang:en]
          * Perform pose settlement via IK.
          * Base on information added via {@link enchant.gl.Skeleton#addIKControl}
-        [/lang]
+         [/lang]
          */
         solveIKs: function() {
             var param;
             for (var i = 0, l = this._iks.length; i < l; i++) {
-                param  = this._iks[i];
+                param = this._iks[i];
                 this._solveIK.apply(this, param);
             }
         },

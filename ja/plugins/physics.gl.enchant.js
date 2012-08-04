@@ -13,10 +13,10 @@
  * ammo.js:
  * https://github.com/kripken/ammo.js
  */
-if(typeof Ammo == 'undefined') {
+if (typeof Ammo == 'undefined') {
     throw new Error('physics.gl.enchant.js must be loaded after ammo.js');
 }
-if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
+if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
     (function() {
         enchant.gl.physics = {};
         /**
@@ -90,12 +90,14 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             contactPairTest: function(rigid1, rigid2) {
                 var callback = new Ammo.ConcreteContactResultCallback();
                 var result = false;
-                Ammo.customizeVTable(callback, [{
-                    original: Ammo.ConcreteContactResultCallback.prototype.addSingleResult,
-                    replacement: function(tp, cp, colObj0, partid0, index0, colObj1, partid1, index1) {
-                        result = true;
+                Ammo.customizeVTable(callback, [
+                    {
+                        original: Ammo.ConcreteContactResultCallback.prototype.addSingleResult,
+                        replacement: function(tp, cp, colObj0, partid0, index0, colObj1, partid1, index1) {
+                            result = true;
+                        }
                     }
-                }]);
+                ]);
                 this._dynamicsWorld.contactPairTest(rigid1.rigidBody, rigid2.rigidBody, callback);
                 Ammo.destroy(callback);
                 return result;
@@ -125,7 +127,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             initialize: function(shape, mass, lDamp, aDamp) {
                 if (typeof shape == 'undefined') {
                     shape = new Ammo.btBoxShape(1);
-                } if (typeof mass == 'undefined') {
+                }
+                if (typeof mass == 'undefined') {
                     mass = 1;
                 }
 
@@ -142,7 +145,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
 
                 if (typeof lDamp != 'undefined') {
                     rigidBodyInfo.set_m_linearDamping(lDamp);
-                } if (typeof aDamp != 'undefined') {
+                }
+                if (typeof aDamp != 'undefined') {
                     rigidBodyInfo.set_m_angularDamping(aDamp);
                 }
 
@@ -333,10 +337,10 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 this.rigidBody.setCollisionFlags(flag | 2);
                 this.rigidBody.setActivationState(4);
             },
-           /**
-            * Rigidの反発係数.
-            * @type Number
-            */
+            /**
+             * Rigidの反発係数.
+             * @type Number
+             */
             restitution: {
                 get: function() {
                     return this._restitution;
@@ -346,10 +350,10 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                     this.rigidBody.setRestitution(n);
                 }
             },
-           /**
-            * Rigidの摩擦係数.
-            * @type Number
-            */
+            /**
+             * Rigidの摩擦係数.
+             * @type Number
+             */
             friction: {
                 get: function() {
                     return this._friction;
@@ -513,11 +517,11 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                     Ammo.destroy(or);
                     Ammo.destroy(tr);
                 };
-                addWall(s, s/8, s, 0, s/8 - s, 0);
-                addWall(s - s/8, s - s/8 - s/8, s/8, s/8, 0, s/8 - s);
-                addWall(s - s/8, s - s/8 - s/8, s/8, -s/8, 0, s - s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s/8 - s, 0, -s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s - s/8, 0, s/8);
+                addWall(s, s / 8, s, 0, s / 8 - s, 0);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, s / 8, 0, s / 8 - s);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, -s / 8, 0, s - s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s / 8 - s, 0, -s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s - s / 8, 0, s / 8);
                 enchant.gl.physics.Rigid.call(this, shape, mass);
             }
         });
@@ -732,17 +736,17 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             applyImpulse: function(powx, powy, powz, posx, posy, posz) {
                 this.rigid.applyImpulse(powx, powy, powz, posx, posy, posz);
             },
-           /**
+            /**
              * PhySprite3Dをユーザが動かすためのオブジェクトとして設定する.
              */
             kinematize: function() {
                 this.rigid.kinematize();
             },
-           /**
-            * PhySprite3Dの反発係数.
-            * @type Number
-            * @see enchant.gl.physics.Rigid#restitution
-            */
+            /**
+             * PhySprite3Dの反発係数.
+             * @type Number
+             * @see enchant.gl.physics.Rigid#restitution
+             */
             restitution: {
                 get: function() {
                     return this.rigid._restitution;
@@ -752,11 +756,11 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                     this.rigid.rigidBody.setRestitution(n);
                 }
             },
-           /**
-            * PhySprite3Dの摩擦係数.
-            * @type Number
-            * @see enchant.gl.physics.Rigid#friction
-            */
+            /**
+             * PhySprite3Dの摩擦係数.
+             * @type Number
+             * @see enchant.gl.physics.Rigid#friction
+             */
             friction: {
                 get: function() {
                     return this.rigid._friction;
@@ -853,7 +857,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             initialize: function(r, mass, lDamp, aDamp) {
                 if (typeof lDamp == 'undefined') {
                     lDamp = 0.05;
-                } if (typeof aDamp == 'undefined') {
+                }
+                if (typeof aDamp == 'undefined') {
                     aDamp = 0.05;
                 }
                 var rigid = new RigidSphere(r, mass, lDamp, aDamp);
@@ -930,7 +935,8 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
             initialize: function(nx, ny, nz, dist, scale) {
                 if (!scale) {
                     scale = 50;
-                };
+                }
+                ;
                 var rigid = new RigidPlane(nx, ny, nz, dist);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
                 this.mesh = Mesh.createPlaneXZ(scale);
@@ -941,10 +947,10 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var rad = Math.acos(vec3.dot(up, norm) / (vec3.length(up) * vec3.length(norm)));
                 var q = new Quat(axis[0], axis[1], axis[2], -rad);
                 var vertices = new Array();
-                for (i = 0, l = this.mesh.vertices.length; i < l; i+=3) {
+                for (i = 0, l = this.mesh.vertices.length; i < l; i += 3) {
                     var x = this.mesh.vertices[i];
-                    var y = this.mesh.vertices[i+1];
-                    var z = this.mesh.vertices[i+2];
+                    var y = this.mesh.vertices[i + 1];
+                    var z = this.mesh.vertices[i + 2];
                     var arr = q.multiplyVec3([x, y, z]);
                     vertices.push(arr[0] + nx * dist);
                     vertices.push(arr[1] + ny * dist);
@@ -978,13 +984,14 @@ if(enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var addWall = function(sx, sy, sz, px, py, pz) {
                     that.mesh._join(Mesh.createBox(sx, sy, sz), px, py, pz);
                 };
-                addWall(s, s/8, s, 0, s/8 - s, 0);
-                addWall(s - s/8, s - s/8 - s/8, s/8, s/8, 0, s/8 - s);
-                addWall(s - s/8, s - s/8 - s/8, s/8, -s/8, 0, s - s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s/8 - s, 0, -s/8);
-                addWall(s/8, s - s/8 - s/8, s - s/8, s - s/8, 0, s/8);
+                addWall(s, s / 8, s, 0, s / 8 - s, 0);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, s / 8, 0, s / 8 - s);
+                addWall(s - s / 8, s - s / 8 - s / 8, s / 8, -s / 8, 0, s - s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s / 8 - s, 0, -s / 8);
+                addWall(s / 8, s - s / 8 - s / 8, s - s / 8, s - s / 8, 0, s / 8);
             }
 
         });
     })();
-};
+}
+;
