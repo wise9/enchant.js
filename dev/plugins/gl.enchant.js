@@ -1,8 +1,9 @@
 /*
  [lang:ja]
  * gl.enchant.js
- * @version 0.3.5
- * @require enchant.js v0.4.3+
+ * @version 0.3.6
+ * @require enchant.js v0.4.5+
+ * @require gl-matrix.js 1.3.7+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -10,17 +11,16 @@
  * enchant.js と組み合わせることで高度な3D描画と、2D描画を組み合わせることができる
  *
  * @detail
- * ベクトル・行列演算にglMatrix.jsを使用しています.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * glMatrix.jsの詳しい使い方:
- * http://code.google.com/p/glmatrix/wiki/Usage
+ * ベクトル・行列演算にgl-matrix.jsを使用しています.
+ * gl-matrix.js:
+ * https://github.com/toji/gl-matrix/
  *
  [/lang]
  [lang:en]
  * gl.enchant.js
- * @version 0.3.5
- * @require enchant.js v0.4.3+
+ * @version 0.3.6
+ * @require enchant.js v0.4.5+
+ * @require gl-matrix.js 1.3.7+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -28,11 +28,9 @@
  * By combining with enchant.js, high quality 3D drawing and combination with 2D drawing is possible
  *
  * @detail
- * Uses glMatrix.js in vector, matrix operation.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * More on how to use glMatrix:
- * http://code.google.com/p/glmatrix/wiki/Usage
+ * Uses gl-matrix.js in vector, matrix operation.
+ * gl-matrix.js:
+ * https://github.com/toji/gl-matrix/
  *
  [/lang]
  */
@@ -50,21 +48,6 @@ enchant.gl = {};
 (function() {
 
     var CONTEXT_NAME = 'experimental-webgl';
-
-    var VENDER_PREFIX = (function() {
-        var ua = navigator.userAgent;
-        if (ua.indexOf('Opera') != -1) {
-            return 'O';
-        } else if (ua.indexOf('MSIE') != -1) {
-            return 'ms';
-        } else if (ua.indexOf('WebKit') != -1) {
-            return 'webkit';
-        } else if (navigator.product == 'Gecko') {
-            return 'Moz';
-        } else {
-            return '';
-        }
-    })();
 
     var parentModule = null;
     (function() {
@@ -281,7 +264,7 @@ enchant.gl = {};
         var div = document.createElement('div');
         div.style['position'] = 'absolute',
             div.style['z-index'] = -1;
-        div.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
+        div.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         return div;
     };
 
@@ -291,8 +274,8 @@ enchant.gl = {};
         cvs.height = height;
         cvs.style['position'] = 'absolute',
             cvs.style['z-index'] = -1;
-        cvs.style[VENDER_PREFIX + 'Transform'] = 'scale(' + scale + ')';
-        cvs.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
+        cvs.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + scale + ')';
+        cvs.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         return cvs;
     };
 
@@ -2153,16 +2136,11 @@ enchant.gl = {};
             this.globalY = 0;
             this.globalZ = 0;
 
-            this._matrix = mat4.create();
-            mat4.identity(this._matrix);
-            this.tmpMat = mat4.create();
-            mat4.identity(this.tmpMat);
-            this.modelMat = mat4.create();
-            mat4.identity(this.modelMat);
-            this._rotation = mat4.create();
-            mat4.identity(this._rotation);
-            this._normMat = mat3.create();
-            mat3.identity(this._normMat);
+            this._matrix = mat4.identity();
+            this.tmpMat = mat4.identity();
+            this.modelMat = mat4.identity();
+            this._rotation = mat4.identity();
+            this._normMat = mat3.identity();
 
             var game = enchant.Game.instance;
             this.detectColor = game.GL.detectColorManager.attachDetectColor(this);
@@ -3033,9 +3011,9 @@ enchant.gl = {};
          */
         initialize: function() {
             var game = enchant.Game.instance;
-            this.mat = mat4.create();
-            this.invMat = mat4.create();
-            this.invMatY = mat4.create();
+            this.mat = mat4.identity();
+            this.invMat = mat4.identity();
+            this.invMatY = mat4.identity();
             this._projMat = mat4.create();
             mat4.perspective(20, game.width / game.height, 1.0, 1000.0, this._projMat);
             this._changedPosition = false;
@@ -3519,7 +3497,7 @@ enchant.gl = {};
              */
             this.lights = [];
 
-            this.identityMat = mat4.create();
+            this.identityMat = mat4.identity();
             this._backgroundColor = [0.0, 0.0, 0.0, 1.0];
 
             var listener = function(e) {

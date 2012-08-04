@@ -1836,17 +1836,17 @@ var enchant = function(modules) {
             this.scene = null;
 
             this.addEventListener('touchstart', function(e) {
-                if (this.parentNode && this.parentNode != this.scene) {
+                if (this.parentNode && !this.parentNode._element) {
                     this.parentNode.dispatchEvent(e);
                 }
             });
             this.addEventListener('touchmove', function(e) {
-                if (this.parentNode && this.parentNode != this.scene) {
+                if (this.parentNode && !this.parentNode._element) {
                     this.parentNode.dispatchEvent(e);
                 }
             });
             this.addEventListener('touchend', function(e) {
-                if (this.parentNode && this.parentNode != this.scene) {
+                if (this.parentNode && !this.parentNode._element) {
                     this.parentNode.dispatchEvent(e);
                 }
             });
