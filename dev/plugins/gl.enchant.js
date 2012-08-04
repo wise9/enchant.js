@@ -49,21 +49,6 @@ enchant.gl = {};
 
 var CONTEXT_NAME = 'experimental-webgl';
 
-var VENDER_PREFIX = (function() {
-    var ua = navigator.userAgent;
-    if (ua.indexOf('Opera') != -1) {
-        return 'O';
-    } else if (ua.indexOf('MSIE') != -1) {
-        return 'ms';
-    } else if (ua.indexOf('WebKit') != -1) {
-        return 'webkit';
-    } else if (navigator.product == 'Gecko') {
-        return 'Moz';
-    } else {
-        return '';
-    }
-})();
-
 var parentModule = null;
 (function() {
     enchant();
@@ -278,7 +263,7 @@ var createParentDiv = function() {
     var div = document.createElement('div');
     div.style['position'] = 'absolute',
     div.style['z-index'] = -1;
-    div.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
+    div.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
     return div;
 };
 
@@ -288,8 +273,8 @@ var createGLCanvas = function(width, height, scale) {
     cvs.height = height;
     cvs.style['position'] = 'absolute',
     cvs.style['z-index'] = -1;
-    cvs.style[VENDER_PREFIX + 'Transform'] = 'scale(' + scale + ')';
-    cvs.style[VENDER_PREFIX + 'TransformOrigin'] = '0 0';
+    cvs.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + scale + ')';
+    cvs.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
     return cvs;
 };
 
