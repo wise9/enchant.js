@@ -13,19 +13,38 @@ window.onload = function () {
         var canvasGroup = new CanvasGroup();
         game.rootScene.addChild(canvasGroup);
         
-        var bear = new Sprite(32, 32);
-        bear.image = game.assets['chara1.gif'];
-        canvasGroup.addChild(bear);
-
-        bear.vx = 3;
-        bear.vy = 2;
-        bear.onenterframe = function(){
-            this.x += this.vx;
-            this.y += this.vy;
-            if(bear.x > 288 || this.x < 0)this.vx *= -1;
-            if(bear.y > 288 || this.y < 0)this.vy *= -1;
-            this.rotation += 5;
-        };
+        function addBear () {
+            var bear = new Sprite(32, 32);
+            bear.image = game.assets['chara1.gif'];
+            canvasGroup.addChild(bear);
+            bear.frame = 5;
+            bear.vx = 3;
+            bear.vy = 2;
+            bear.vs = 0.01;
+            bear.onenterframe = function(){
+                this.x += this.vx;
+                this.y += this.vy;
+                if(this.x > 288 || this.x < 0){
+                    this.vx *= -1;
+                    this.vs *= -1;
+                }
+                if(this.y > 288 || this.y < 0){
+                    this.vy *= -1;
+                    this.vs *= -1;
+                }
+                this.rotation += 5;
+                this.scaleX += this.vs;
+                this.scaleY += this.vs;
+            };
+            return bear;
+        }
+        addBear();
+        
+        // クリックするとクマが登場
+        game.rootScene.addEventListener('touchend', function(evt){
+            var bear = addBear();
+            bear.moveTo(evt.localX, evt.localY);
+        })
     };
     game.start();
 };
