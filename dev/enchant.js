@@ -2900,6 +2900,31 @@ var enchant = function(modules) {
         },
         /**
          [lang:ja]
+         * ある座標のタイルが何か調べる
+         * @param x
+         * @param y
+         * @return {*}
+         [/lang]
+         [lang:en]
+         * Check what tile it is on designated position
+         [/lang]
+         */
+        checkTile: function(x, y) {
+            if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
+                return false;
+            }
+            var width = this._image.width;
+            var height = this._image.height;
+            var tileWidth = this._tileWidth || width;
+            var tileHeight = this._tileHeight || height;
+            x = x / tileWidth | 0;
+    		y = y / tileHeight | 0;
+    		//		return this._data[y][x];
+    		var data = this._data[0];
+    		return data[y][x];
+        },
+        /**
+         [lang:ja]
          * Map上に障害物があるかどうかを判定する.
          * @param {Number} x 判定を行うマップ上の点のx座標.
          * @param {Number} y 判定を行うマップ上の点のy座標.

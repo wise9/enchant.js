@@ -2031,6 +2031,28 @@ var enchant = function(modules) {
             }
         },
         /**
+         [land:ja]
+         *
+         * @param x
+         * @param y
+         * @return {*}
+         [/land]
+         */
+        checkTile: function(x, y) {
+            if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
+                return false;
+            }
+            var width = this._image.width;
+            var height = this._image.height;
+            var tileWidth = this._tileWidth || width;
+            var tileHeight = this._tileHeight || height;
+            x = x / tileWidth | 0;
+    		y = y / tileHeight | 0;
+    		//		return this._data[y][x];
+    		var data = this._data[0];
+    		return data[y][x];
+        },
+        /**
          * Judges whether or not obstacles are on top of Map.
          * @param {Number} x x coordinates of detection spot on map.
          * @param {Number} y y coordinates of detection spot on map.
