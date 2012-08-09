@@ -1,6 +1,6 @@
 /*
  * avatar.enchant.js
- * @version 0.1 (2012/04/02)
+ * @version 0.2 (2012/08/09)
  * @requires enchant.js v0.4.0 or later
  * @author shi3z/Ubiquitous Entertainment Inc.
  *
@@ -37,13 +37,14 @@
  */
 
 
+enchant.avatar = {};
+
 /**
  * AvatarCharacter
  * Base class of enchant.Avatar and enchant.AvatarMonster
  * @scope enchant.AvatarCharacter.prototype
  */
-
-enchant.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
+enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
     /**
      * Constructor of AvatarCharacter
      * @param width
@@ -109,7 +110,7 @@ enchant.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
  * subclass of enchant.AvatarCharacter
  * @scope enchant.AvatarMonster.prototype
  */
-enchant.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
+enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
     /**
      * AvatarMonster
      * Manage a monter animations
@@ -136,7 +137,7 @@ enchant.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
  * AvatarBG
  * @scope enchant.AvatarBG.prototype
  */
-enchant.AvatarBG = enchant.Class.create(enchant.Group, {
+enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
     /**
      * A class of infinite scrolling background.
      * @param {mode} 0 to 3
@@ -191,7 +192,7 @@ enchant.AvatarBG = enchant.Class.create(enchant.Group, {
  * Avatar
  * @scope enchant.Avatar.prototype
  */
-enchant.Avatar = enchant.Class.create(enchant.AvatarCharacter, {
+enchant.avatar.Avatar = enchant.Class.create(enchant.AvatarCharacter, {
     /**
      * @param {int}code  Avatar code
      * @extends enchant.AvatarCharacter
