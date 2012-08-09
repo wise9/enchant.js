@@ -2368,7 +2368,7 @@ enchant.widget.ListElement = enchant.Class.create(enchant.widget.EntityGroup, {
     },
     /**
      * ListElementの内容.
-     * @type {*}
+     * @type {enchant.Entity[]}
      */
     content: {
         get: function() {
@@ -2426,8 +2426,8 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
      * @param {Number} width 要素の横幅.
      * @param {Number} height 要素の縦幅.
      * @param {*} [content] ListItemの内容.
-     * @param {*} [icon] ListItemのアイコン.
-     * @param {*} [rightIcon] ListItemの左側のアイコン.
+     * @param {enchant.Sprite|enchant.Surface} [icon] ListItemのアイコン.
+     * @param {enchant.Sprite|enchant.Surface} [rightIcon] ListItemの左側のアイコン.
      * @see enchant.widget.ListItemVertical
      * @constructs
      * @extends enchant.widget.ListElement
@@ -2477,7 +2477,7 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
     /**
      * アイコン.
      * 左側に表示される.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
      */
     icon: {
         get: function() {
@@ -2497,7 +2497,7 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
     /**
      * 右側のアイコン.
      * 右側に表示される.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
      */
     rightIcon: {
         get: function() {
@@ -2717,6 +2717,15 @@ enchant.widget.ListView = enchant.Class.create(enchant.widget.ScrollView, {
         var next = null;
         var pthreshold = 0;
         var nthreshold = 0;
+
+        enchant.widget.GestureDetector.gestureEvents.forEach(function(type) {
+            this.addEventListener(type, function(e) {
+                var item = this.getSelectedItem(e);
+                if (item != null) {
+                    item.dispatchEvent(e);
+                }
+            });
+        }, this);
 
         var removeChild = enchant.widget.EntityGroup.prototype.removeChild;
         var insertBefore = enchant.widget.EntityGroup.prototype.insertBefore;

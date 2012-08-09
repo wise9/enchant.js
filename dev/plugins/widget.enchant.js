@@ -2852,11 +2852,11 @@ enchant.widget.ListElement = enchant.Class.create(enchant.widget.EntityGroup, {
     /**
     [lang:ja]
      * ListElementの内容.
-     * @type {*}
+     * @type {enchant.Entity[]}
     [/lang]
     [lang:en]
      * ListElement content.
-     * @type {*}
+     * @type {enchant.Entity[]}
     [/lang]
      */
     content: {
@@ -2916,8 +2916,8 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
      * @param {Number} width 要素の横幅.
      * @param {Number} height 要素の縦幅.
      * @param {*} [content] ListItemの内容.
-     * @param {*} [icon] ListItemのアイコン.
-     * @param {*} [rightIcon] ListItemの左側のアイコン.
+     * @param {enchant.Sprite|enchant.Surface} [icon] ListItemのアイコン.
+     * @param {enchant.Sprite|enchant.Surface} [rightIcon] ListItemの左側のアイコン.
     [/lang]
     [lang:en]
      * List elements.
@@ -2926,8 +2926,8 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
      * @param {Number} width Element width.
      * @param {Number} height Element height.
      * @param {*} [content] ListItem content.
-     * @param {*} [icon] ListItem icon.
-     * @param {*} [icon] ListItem right side icon.
+     * @param {enchant.Sprite|enchant.Surface} [icon] ListItem icon.
+     * @param {enchant.Sprite|enchant.Surface} [icon] ListItem right side icon.
     [/lang]
      * @see enchant.widget.ListItemVertical
      * @constructs
@@ -2984,12 +2984,12 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
     [lang:ja]
      * アイコン.
      * 左側に表示される.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
     [/lang]
     [lang:en]
      * Icon.
      * It appear on the left.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
     [/lang]
      */
     icon: {
@@ -3011,12 +3011,12 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
     [lang:ja]
      * 右側のアイコン.
      * 右側に表示される.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
     [/lang]
     [lang:en]
      * Icon on the right.
      * It appear on the right.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
     [/lang]
      */
     rightIcon: {
@@ -3295,6 +3295,15 @@ enchant.widget.ListView = enchant.Class.create(enchant.widget.ScrollView, {
         var next = null;
         var pthreshold = 0;
         var nthreshold = 0;
+
+        enchant.widget.GestureDetector.gestureEvents.forEach(function(type) {
+            this.addEventListener(type, function(e) {
+                var item = this.getSelectedItem(e);
+                if (item != null) {
+                    item.dispatchEvent(e);
+                }
+            });
+        }, this);
 
         var removeChild = enchant.widget.EntityGroup.prototype.removeChild;
         var insertBefore = enchant.widget.EntityGroup.prototype.insertBefore;

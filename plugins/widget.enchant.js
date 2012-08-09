@@ -2373,7 +2373,7 @@ enchant.widget.ListElement = enchant.Class.create(enchant.widget.EntityGroup, {
     },
     /**
      * ListElement content.
-     * @type {*}
+     * @type {enchant.Entity[]}
      */
     content: {
         get: function() {
@@ -2431,8 +2431,8 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
      * @param {Number} width Element width.
      * @param {Number} height Element height.
      * @param {*} [content] ListItem content.
-     * @param {*} [icon] ListItem icon.
-     * @param {*} [icon] ListItem right side icon.
+     * @param {enchant.Sprite|enchant.Surface} [icon] ListItem icon.
+     * @param {enchant.Sprite|enchant.Surface} [icon] ListItem right side icon.
      * @see enchant.widget.ListItemVertical
      * @constructs
      * @extends enchant.widget.ListElement
@@ -2482,7 +2482,7 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
     /**
      * Icon.
      * It appear on the left.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
      */
     icon: {
         get: function() {
@@ -2502,7 +2502,7 @@ enchant.widget.ListItem = enchant.Class.create(enchant.widget.ListElement, {
     /**
      * Icon on the right.
      * It appear on the right.
-     * @type {*}
+     * @type {enchant.Sprite|enchant.Surface}
      */
     rightIcon: {
         get: function() {
@@ -2720,6 +2720,15 @@ enchant.widget.ListView = enchant.Class.create(enchant.widget.ScrollView, {
         var next = null;
         var pthreshold = 0;
         var nthreshold = 0;
+
+        enchant.widget.GestureDetector.gestureEvents.forEach(function(type) {
+            this.addEventListener(type, function(e) {
+                var item = this.getSelectedItem(e);
+                if (item != null) {
+                    item.dispatchEvent(e);
+                }
+            });
+        }, this);
 
         var removeChild = enchant.widget.EntityGroup.prototype.removeChild;
         var insertBefore = enchant.widget.EntityGroup.prototype.insertBefore;
