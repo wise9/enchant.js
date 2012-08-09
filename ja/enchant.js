@@ -1820,12 +1820,12 @@ var enchant = function(modules) {
                 var row = this._image.width / this._width | 0;
                 if (this._image._css) {
                     this._style.backgroundPosition = [
-                        -(frame % row) * this._width, 'px ',
+                        -(frame % row | 0) * this._width, 'px ',
                         -(frame / row | 0) * this._height, 'px'
                     ].join('');
                 } else if (this._element.firstChild) {
                     var style = this._element.firstChild.style;
-                    style.left = -(frame % row) * this._width + 'px';
+                    style.left = -(frame % row | 0) * this._width + 'px';
                     style.top = -(frame / row | 0) * this._height + 'px';
                 }
             }
