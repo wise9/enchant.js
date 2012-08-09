@@ -23,7 +23,7 @@ window.onload = function() {
          * ボールのZ座標
          */
         var ballsz = [
-                                   0, -0.05 * Math.sqrt(3) * 1, -0.05 * Math.sqrt(3) * 1, -0.05 * Math.sqrt(3) * 2, -0.05 * Math.sqrt(3) * 2,
+            0, -0.05 * Math.sqrt(3) * 1, -0.05 * Math.sqrt(3) * 1, -0.05 * Math.sqrt(3) * 2, -0.05 * Math.sqrt(3) * 2,
             -0.05 * Math.sqrt(3) * 2, -0.05 * Math.sqrt(3) * 3, -0.05 * Math.sqrt(3) * 3, -0.05 * Math.sqrt(3) * 3, -0.05 * Math.sqrt(3) * 3,
             -0.05 * Math.sqrt(3) * 4, -0.05 * Math.sqrt(3) * 4, -0.05 * Math.sqrt(3) * 4, -0.05 * Math.sqrt(3) * 4, -0.05 * Math.sqrt(3) * 4
         ];
@@ -40,7 +40,7 @@ window.onload = function() {
 
         var tabletex = new Texture();
         tabletex.ambient = [0.8, 0.8, 0.8, 1.0];
-        tabletex.diffuse = [0.1, 0.1, 0.1, 1.0];
+        tabletex.diffuse = [0.1, 2.1, 0.1, 1.0];
         tabletex.specular = [0.01, 0.01, 0.01, 1.0];
 
         /**
@@ -51,10 +51,11 @@ window.onload = function() {
         var table = new PhyBox(0.75, 0.1, 1.5, 0);
         table.mesh.setBaseColor('#446644');
         table.mesh.texture = tabletex;
+
         /**
          * 物体の反発係数.
          */
-        table.restitution = 0.1;
+        table.restitution = 0.3;
         scene.addChild(table);
 
         var tableleft = new PhyBox(0.05, 0.1, 1.4, 0);
@@ -76,7 +77,7 @@ window.onload = function() {
         var tabletop = new PhyBox(0.75, 0.1, 0.05, 0);
         tabletop.mesh.setBaseColor('#664444');
         tabletop.mesh.texture = tabletex;
-        tabletop.restitution = 0.7;
+        tabletop.restitution = 1.0;
         tabletop.y = 0.2;
         tabletop.z = -1.45;
         scene.addChild(tabletop);
@@ -100,6 +101,7 @@ window.onload = function() {
             ball.x = ballsx[i];
             ball.y = 0.15;
             ball.z = ballsz[i];
+            ball.friction = 0.5;
             ball.restitution = 1.0;
             scene.addChild(ball);
             balls.push(ball);
@@ -109,11 +111,11 @@ window.onload = function() {
         player.x = Math.random() * 0.1 - 0.05;
         player.y = 0.15;
         player.z = 0.5;
-        player.restitution = 0.6;
+        player.restitution = 0.5;
         /**
          * 物体の摩擦係数.
          */
-        player.friction = 0.3;
+        player.friction = 0;
         scene.addChild(player);
         player.addEventListener('touchend', function() {
             var args = [

@@ -565,6 +565,14 @@ var enchant = function(modules) {
             }
         },
         /**
+         * Synonym of addEventListener
+         * @param {String} type Event type.
+         * @param {function(e:enchant.Event)} listener EventListener added.
+         */
+        on: function() {
+            this.addEventListener.apply(this, arguments);
+        },
+        /**
          * イベントリスナを削除する.
          * @param {String} type イベントのタイプ.
          * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
@@ -1396,6 +1404,9 @@ var enchant = function(modules) {
             this.addEventListener('render', function() {
                 if (this._offsetX != this._previousOffsetX) {
                     this._style.left = this._offsetX + 'px';
+                    /**
+                     * @TODO transform-left で移動するやつをためす
+                     */
                 }
                 if (this._offsetY != this._previousOffsetY) {
                     this._style.top = this._offsetY + 'px';
