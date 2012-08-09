@@ -91,7 +91,7 @@ enchant.gl = {};
             this._debug = true;
             this.addEventListener("enterframe", function(time) {
                 this._actualFps = (1000 / time.elapsed);
-            })
+            });
             this.start();
         }
     });
@@ -231,7 +231,7 @@ enchant.gl = {};
         var names = {};
         var type = '';
         var val;
-        for (prop in context) {
+        for (var prop in context) if(context.hasOwnProperty(prop)) {
             type = typeof context[prop];
             val = context[prop];
             if (type == 'function') {
@@ -262,8 +262,8 @@ enchant.gl = {};
 
     var createParentDiv = function() {
         var div = document.createElement('div');
-        div.style['position'] = 'absolute',
-            div.style['z-index'] = -1;
+        div.style['position'] = 'absolute';
+        div.style['z-index'] = -1;
         div.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         return div;
     };
@@ -272,8 +272,8 @@ enchant.gl = {};
         var cvs = document.createElement('canvas');
         cvs.width = width;
         cvs.height = height;
-        cvs.style['position'] = 'absolute',
-            cvs.style['z-index'] = -1;
+        cvs.style['position'] = 'absolute';
+        cvs.style['z-index'] = -1;
         cvs.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + scale + ')';
         cvs.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         return cvs;
@@ -298,7 +298,7 @@ enchant.gl = {};
         isPowerOfTwo: function(n) {
             return (n > 0) && ((n & (n - 1)) == 0);
         },
-        setTextureParamater: function(power, target, wrap, mipmap) {
+        setTextureParameter: function(power, target, wrap, mipmap) {
             var filter;
             if (mipmap) {
                 filter = gl.LINEAR_MIPMAP_LINEAR;
@@ -324,7 +324,7 @@ enchant.gl = {};
             if (typeof wrap == 'undefined') {
                 wrap = gl.REPEAT;
             }
-            this.setTextureParamater(power, target, wrap, mipmap);
+            this.setTextureParameter(power, target, wrap, mipmap);
 
             this._texImage(image, target);
             if (mipmap) {
@@ -638,7 +638,7 @@ enchant.gl = {};
          [lang:en]
          * Sets attribute variables to shader program.
          * Used in enchant.gl.Sprite3D contents and elsewhere.
-         * @param {*} Level
+         * @param {*} params Level
          * @example
          * var shader = new Shader(vert, frag);
          * shader.setAttributes({
@@ -648,7 +648,7 @@ enchant.gl = {};
          [/lang]
          */
         setAttributes: function(params) {
-            for (prop in params) {
+            for (var prop in params) if(params.hasOwnProperty(prop)) {
                 this._attributes[prop] = params[prop];
             }
         },
@@ -656,7 +656,7 @@ enchant.gl = {};
          [lang:ja]
          * シェーダプログラムにuniform変数をセットする.
          * enchant.gl.Sprite3Dの内部などで使用される.
-         * @param {*} 値
+         * @param {*} params 値
          * @example
          * var shader = new Shader(vert, frag);
          * shader.setUniforms({
@@ -667,7 +667,7 @@ enchant.gl = {};
          [lang:en]
          * Set uniform variables to shader program.
          * Used in enchant.gl.Sprite3D and elsewhere.
-         * @param {*} Level
+         * @param {*} params Level
          * @example
          * var shader = new Shader(vert, frag);
          * shader.setUniforms({
@@ -677,7 +677,7 @@ enchant.gl = {};
          [/lang]
          */
         setUniforms: function(params) {
-            for (prop in params) {
+            for (prop in params) if(params.hasOwnProperty(prop)) {
                 this._uniforms[prop] = params[prop];
             }
         },
@@ -702,7 +702,7 @@ enchant.gl = {};
             console.log(gl.getShaderInfoLog(this._fShaderProgram));
         },
         _getAttributesProperties: function() {
-            var n, info;
+            var n;
             n = gl.getProgramParameter(this._program, gl.ACTIVE_ATTRIBUTES);
             for (var i = 0; i < n; i++) {
                 var info = gl.getActiveAttrib(this._program, i);
@@ -711,7 +711,7 @@ enchant.gl = {};
             }
         },
         _getUniformsProperties: function() {
-            var n, info;
+            var n;
             n = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
             for (var i = 0; i < n; i++) {
                 var info = gl.getActiveUniform(this._program, i);
@@ -789,7 +789,6 @@ enchant.gl = {};
             case gl.SAMPLER_2D:
             case gl.SAMPLER_CUBE:
                 sampler = true;
-            case gl.INT:
             case gl.INT:
             case gl.BOOL:
                 suffix = '1i';
@@ -882,7 +881,7 @@ enchant.gl = {};
          * 自身ともう一つのクォータニオンの間の回転移動を補完したクォータニオンを計算する.
          * 回転の度合いは0から1の値で表される. 0が自身側, 1がもう一つ側.
          * 新しいインスタンスが返される.
-         * @param {enchant.gl.Quat} Quaternion
+         * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
          [/lang]
@@ -891,7 +890,7 @@ enchant.gl = {};
          * Calculates quarternion that supplements rotation between this quarternion and another.
          * Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.
          * New instance will be returned.
-         * @param {enchant.gl.Quat} Quaternion
+         * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
          [/lang]
@@ -907,7 +906,7 @@ enchant.gl = {};
          * 自身ともう一つのクォータニオンの間の回転移動を補完したクォータニオンを計算する.
          * 回転の度合いは0から1の値で表される. 0が自身側, 1がもう一つ側.
          * 自身の値が上書きされる.
-         * @param {enchant.gl.Quat} Quaternion
+         * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
          [/lang]
@@ -916,7 +915,7 @@ enchant.gl = {};
          * Calculates quarternion that supplements rotation between this quarternion and another.
          * Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.
          * This side's value will be overwritten.
-         * @param {enchant.gl.Quat} Quaternion
+         * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
          [/lang]
@@ -1312,7 +1311,7 @@ enchant.gl = {};
             this._flipY = true;
             if (opt) {
                 var valid = ['flipY', 'wrap', 'mipmap'];
-                for (prop in opt) {
+                for (var prop in opt) if(opt.hasOwnProperty(prop)) {
                     if (valid.indexOf(prop) != -1) {
                         this['_' + prop] = opt[prop];
                     }
@@ -1391,7 +1390,7 @@ enchant.gl = {};
          [lang:ja]
          * 頂点などの配列情報を管理する.
          * enchant.gl.Meshのプロパティとして使用される.
-         * @param {*} parameter
+         * @param {*} params parameter
          * @param {Number[]} array
          *
          * @example
@@ -1403,7 +1402,7 @@ enchant.gl = {};
          [lang:en]
          * Controls peak and other array information.
          * Used as enchant.gl.Mesh property.
-         * @param {*} parameter
+         * @param {*} params parameter
          * @param {Number[]} array
          *
          * @example
@@ -1445,7 +1444,7 @@ enchant.gl = {};
             gl.bindBuffer(this.btype, null);
         },
         _setParams: function(params) {
-            for (prop in params) {
+            for (prop in params) if(params.hasOwnProperty(prop)) {
                 this[prop] = params[prop];
             }
         },
@@ -1557,7 +1556,7 @@ enchant.gl = {};
          [lang:ja]
          * Meshの色を変更する.
          * Mesh.colorsを指定した色の頂点配列にする.
-         * @param {Number[]|String} z z軸方向の平行移動量
+         * @param {Number[]|String} color z z軸方向の平行移動量
          * @example
          *   var sprite = new Sprite3D();
          *   //紫色に設定. どれも同じ結果が得られる.
@@ -1569,7 +1568,7 @@ enchant.gl = {};
          [lang:en]
          * Change Mesh color.
          * Becomes peak array for Mesh.colors set color.
-         * @param {Number[]|String} z Amount of parallel displacement on z axis
+         * @param {Number[]|String} color z Amount of parallel displacement on z axis
          * @example
          *   var sprite = new Sprite3D();
          *   //Sets to purple. All yield the same result.
@@ -1598,11 +1597,11 @@ enchant.gl = {};
         reverse: function() {
             var norm = this.normals;
             var idx = this.indices;
-            var t;
-            for (var i = 0, l = norm.length; i < l; i++) {
+            var t, i, l;
+            for (i = 0, l = norm.length; i < l; i++) {
                 norm[i] *= -1;
             }
-            for (var i = 0, l = idx.length; i < l; i += 3) {
+            for (i = 0, l = idx.length; i < l; i += 3) {
                 t = idx[i + 1];
                 idx[i + 1] = idx[i + 2];
                 idx[i + 2] = t;
@@ -1611,7 +1610,7 @@ enchant.gl = {};
             this._indices._bufferData();
         },
         _createBuffer: function() {
-            for (prop in this) {
+            for (var prop in this) if(this.hasOwnProperty(prop)) {
                 if (this[prop] instanceof enchant.gl.Buffer) {
                     this[prop]._create();
                     this[prop]._bufferData();
@@ -1619,7 +1618,7 @@ enchant.gl = {};
             }
         },
         _deleteBuffer: function() {
-            for (prop in this) {
+            for (var prop in this) if(this.hasOwnProperty(prop)) {
                 if (this[prop] instanceof enchant.gl.Buffer) {
                     this[prop]._delete();
                 }
@@ -1648,9 +1647,10 @@ enchant.gl = {};
             }
         },
         _join: function(another, ox, oy, oz) {
-            var triangles = this.vertices.length / 3;
-            var vertices = this.vertices.slice(0);
-            for (var i = 0, l = another.vertices.length; i < l; i += 3) {
+            var triangles = this.vertices.length / 3,
+                vertices = this.vertices.slice(0),
+                i, l;
+            for (i = 0, l = another.vertices.length; i < l; i += 3) {
                 vertices.push(another.vertices[i] + ox);
                 vertices.push(another.vertices[i + 1] + oy);
                 vertices.push(another.vertices[i + 2] + oz);
@@ -1660,7 +1660,7 @@ enchant.gl = {};
             this.texCoords = this.texCoords.concat(another.texCoords);
             this.colors = this.colors.concat(another.colors);
             var indices = this.indices.slice(0);
-            for (var i = 0, l = another.indices.length; i < l; i++) {
+            for (i = 0, l = another.indices.length; i < l; i++) {
                 indices.push(another.indices[i] + triangles);
             }
             this.indices = indices;
@@ -4102,6 +4102,7 @@ enchant.gl = {};
          * @constructs
          * @see enchant.gl.collision.Bounding
          [/lang]
+
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);

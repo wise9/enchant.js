@@ -67,7 +67,7 @@ enchant.gl = {};
             this._debug = true;
             this.addEventListener("enterframe", function(time) {
                 this._actualFps = (1000 / time.elapsed);
-            })
+            });
             this.start();
         }
     });
@@ -207,7 +207,7 @@ enchant.gl = {};
         var names = {};
         var type = '';
         var val;
-        for (prop in context) {
+        for (var prop in context) if(context.hasOwnProperty(prop)) {
             type = typeof context[prop];
             val = context[prop];
             if (type == 'function') {
@@ -238,8 +238,8 @@ enchant.gl = {};
 
     var createParentDiv = function() {
         var div = document.createElement('div');
-        div.style['position'] = 'absolute',
-            div.style['z-index'] = -1;
+        div.style['position'] = 'absolute';
+        div.style['z-index'] = -1;
         div.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         return div;
     };
@@ -248,8 +248,8 @@ enchant.gl = {};
         var cvs = document.createElement('canvas');
         cvs.width = width;
         cvs.height = height;
-        cvs.style['position'] = 'absolute',
-            cvs.style['z-index'] = -1;
+        cvs.style['position'] = 'absolute';
+        cvs.style['z-index'] = -1;
         cvs.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + scale + ')';
         cvs.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         return cvs;
@@ -274,7 +274,7 @@ enchant.gl = {};
         isPowerOfTwo: function(n) {
             return (n > 0) && ((n & (n - 1)) == 0);
         },
-        setTextureParamater: function(power, target, wrap, mipmap) {
+        setTextureParameter: function(power, target, wrap, mipmap) {
             var filter;
             if (mipmap) {
                 filter = gl.LINEAR_MIPMAP_LINEAR;
@@ -300,7 +300,7 @@ enchant.gl = {};
             if (typeof wrap == 'undefined') {
                 wrap = gl.REPEAT;
             }
-            this.setTextureParamater(power, target, wrap, mipmap);
+            this.setTextureParameter(power, target, wrap, mipmap);
 
             this._texImage(image, target);
             if (mipmap) {
@@ -530,7 +530,7 @@ enchant.gl = {};
         /**
          * Sets attribute variables to shader program.
          * Used in enchant.gl.Sprite3D contents and elsewhere.
-         * @param {*} Level
+         * @param {*} params Level
          * @example
          * var shader = new Shader(vert, frag);
          * shader.setAttributes({
@@ -539,14 +539,14 @@ enchant.gl = {};
          * });
          */
         setAttributes: function(params) {
-            for (prop in params) {
+            for (var prop in params) if(params.hasOwnProperty(prop)) {
                 this._attributes[prop] = params[prop];
             }
         },
         /**
          * Set uniform variables to shader program.
          * Used in enchant.gl.Sprite3D and elsewhere.
-         * @param {*} Level
+         * @param {*} params Level
          * @example
          * var shader = new Shader(vert, frag);
          * shader.setUniforms({
@@ -555,7 +555,7 @@ enchant.gl = {};
          * });
          */
         setUniforms: function(params) {
-            for (prop in params) {
+            for (prop in params) if(params.hasOwnProperty(prop)) {
                 this._uniforms[prop] = params[prop];
             }
         },
@@ -580,7 +580,7 @@ enchant.gl = {};
             console.log(gl.getShaderInfoLog(this._fShaderProgram));
         },
         _getAttributesProperties: function() {
-            var n, info;
+            var n;
             n = gl.getProgramParameter(this._program, gl.ACTIVE_ATTRIBUTES);
             for (var i = 0; i < n; i++) {
                 var info = gl.getActiveAttrib(this._program, i);
@@ -589,7 +589,7 @@ enchant.gl = {};
             }
         },
         _getUniformsProperties: function() {
-            var n, info;
+            var n;
             n = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
             for (var i = 0; i < n; i++) {
                 var info = gl.getActiveUniform(this._program, i);
@@ -662,7 +662,6 @@ enchant.gl = {};
             case gl.SAMPLER_2D:
             case gl.SAMPLER_CUBE:
                 sampler = true;
-            case gl.INT:
             case gl.INT:
             case gl.BOOL:
                 suffix = '1i';
@@ -739,7 +738,7 @@ enchant.gl = {};
          * Calculates quarternion that supplements rotation between this quarternion and another.
          * Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.
          * New instance will be returned.
-         * @param {enchant.gl.Quat} Quaternion
+         * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
          */
@@ -753,7 +752,7 @@ enchant.gl = {};
          * Calculates quarternion that supplements rotation between this quarternion and another.
          * Degree of rotation will be expressed in levels from 0 to 1. 0 is the side of this quarternion, 1 is the side of its counterpart.
          * This side's value will be overwritten.
-         * @param {enchant.gl.Quat} Quaternion
+         * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
          */
@@ -984,7 +983,7 @@ enchant.gl = {};
             this._flipY = true;
             if (opt) {
                 var valid = ['flipY', 'wrap', 'mipmap'];
-                for (prop in opt) {
+                for (var prop in opt) if(opt.hasOwnProperty(prop)) {
                     if (valid.indexOf(prop) != -1) {
                         this['_' + prop] = opt[prop];
                     }
@@ -1049,7 +1048,7 @@ enchant.gl = {};
         /**
          * Controls peak and other array information.
          * Used as enchant.gl.Mesh property.
-         * @param {*} parameter
+         * @param {*} params parameter
          * @param {Number[]} array
          *
          * @example
@@ -1080,7 +1079,7 @@ enchant.gl = {};
             gl.bindBuffer(this.btype, null);
         },
         _setParams: function(params) {
-            for (prop in params) {
+            for (prop in params) if(params.hasOwnProperty(prop)) {
                 this[prop] = params[prop];
             }
         },
@@ -1174,7 +1173,7 @@ enchant.gl = {};
         /**
          * Change Mesh color.
          * Becomes peak array for Mesh.colors set color.
-         * @param {Number[]|String} z Amount of parallel displacement on z axis
+         * @param {Number[]|String} color z Amount of parallel displacement on z axis
          * @example
          *   var sprite = new Sprite3D();
          *   //Sets to purple. All yield the same result.
@@ -1197,11 +1196,11 @@ enchant.gl = {};
         reverse: function() {
             var norm = this.normals;
             var idx = this.indices;
-            var t;
-            for (var i = 0, l = norm.length; i < l; i++) {
+            var t, i, l;
+            for (i = 0, l = norm.length; i < l; i++) {
                 norm[i] *= -1;
             }
-            for (var i = 0, l = idx.length; i < l; i += 3) {
+            for (i = 0, l = idx.length; i < l; i += 3) {
                 t = idx[i + 1];
                 idx[i + 1] = idx[i + 2];
                 idx[i + 2] = t;
@@ -1210,7 +1209,7 @@ enchant.gl = {};
             this._indices._bufferData();
         },
         _createBuffer: function() {
-            for (prop in this) {
+            for (var prop in this) if(this.hasOwnProperty(prop)) {
                 if (this[prop] instanceof enchant.gl.Buffer) {
                     this[prop]._create();
                     this[prop]._bufferData();
@@ -1218,7 +1217,7 @@ enchant.gl = {};
             }
         },
         _deleteBuffer: function() {
-            for (prop in this) {
+            for (var prop in this) if(this.hasOwnProperty(prop)) {
                 if (this[prop] instanceof enchant.gl.Buffer) {
                     this[prop]._delete();
                 }
@@ -1247,9 +1246,10 @@ enchant.gl = {};
             }
         },
         _join: function(another, ox, oy, oz) {
-            var triangles = this.vertices.length / 3;
-            var vertices = this.vertices.slice(0);
-            for (var i = 0, l = another.vertices.length; i < l; i += 3) {
+            var triangles = this.vertices.length / 3,
+                vertices = this.vertices.slice(0),
+                i, l;
+            for (i = 0, l = another.vertices.length; i < l; i += 3) {
                 vertices.push(another.vertices[i] + ox);
                 vertices.push(another.vertices[i + 1] + oy);
                 vertices.push(another.vertices[i + 2] + oz);
@@ -1259,7 +1259,7 @@ enchant.gl = {};
             this.texCoords = this.texCoords.concat(another.texCoords);
             this.colors = this.colors.concat(another.colors);
             var indices = this.indices.slice(0);
-            for (var i = 0, l = another.indices.length; i < l; i++) {
+            for (i = 0, l = another.indices.length; i < l; i++) {
                 indices.push(another.indices[i] + triangles);
             }
             this.indices = indices;
@@ -2893,6 +2893,7 @@ enchant.gl = {};
          * Defined as rotating.
          * @constructs
          * @see enchant.gl.collision.Bounding
+
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
