@@ -310,11 +310,7 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
             for (var prop in target) if (target.hasOwnProperty(prop)) {
                 if (typeof this[prop] === "undefined")continue;
                 var val = target[prop] * ratio + origin[prop] * (1 - ratio);
-                if (prop === "x" || prop === "y") {
-                    tween.node[prop] = Math.round(val);
-                } else {
-                    tween.node[prop] = val;
-                }
+                tween.node[prop] = val;
             }
         });
     }
