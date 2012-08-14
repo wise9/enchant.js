@@ -1582,8 +1582,8 @@ var enchant = function(modules) {
          * @return {Boolean} Collision detection results.
          */
         intersect: function(other) {
-            return this.x < other.x + other.width && other.x < this.x + this.width &&
-                this.y < other.y + other.height && other.y < this.y + this.height;
+            return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
+                this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
         },
         /**
          * Operates collision detection based on distance from Entity's central point.
@@ -1596,10 +1596,9 @@ var enchant = function(modules) {
                 distance = (this.width + this.height + other.width + other.height) / 4;
             }
             var _;
-            return (_ = this.x - other.x + (this.width - other.width) / 2) * _ +
-                (_ = this.y - other.y + (this.height - other.height) / 2) * _ < distance * distance;
-        },
-        /**
+            return (_ = this._offsetX - other._offsetX + (this.width - other.width) / 2) * _ +
+                (_ = this._offsetY - other._offsetY + (this.height - other.height) / 2) * _ < distance * distance;
+        },        /**
          * Expand or contract Sprite.
          * @param {Number} x Scaling for x axis to be expanded.
          * @param {Number} [y] Scaling for y axis to be expanded.

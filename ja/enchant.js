@@ -1587,8 +1587,8 @@ var enchant = function(modules) {
          * @return {Boolean} 衝突判定の結果.
          */
         intersect: function(other) {
-            return this.x < other.x + other.width && other.x < this.x + this.width &&
-                this.y < other.y + other.height && other.y < this.y + this.height;
+            return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
+                this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
         },
         /**
          * Entityの中心点どうしの距離により衝突判定を行う.
@@ -1601,10 +1601,9 @@ var enchant = function(modules) {
                 distance = (this.width + this.height + other.width + other.height) / 4;
             }
             var _;
-            return (_ = this.x - other.x + (this.width - other.width) / 2) * _ +
-                (_ = this.y - other.y + (this.height - other.height) / 2) * _ < distance * distance;
-        },
-        /**
+            return (_ = this._offsetX - other._offsetX + (this.width - other.width) / 2) * _ +
+                (_ = this._offsetY - other._offsetY + (this.height - other.height) / 2) * _ < distance * distance;
+        },        /**
          * Spriteを拡大縮小する.
          * @param {Number} x 拡大するx軸方向の倍率.
          * @param {Number} [y] 拡大するy軸方向の倍率.
