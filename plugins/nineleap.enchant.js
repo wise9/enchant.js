@@ -84,6 +84,30 @@
             if (this._intervalID) {
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
+		 
+		  if (enchant.Sound.enabledInMobileSafari && !game._touched &&
+                    enchant.ENV.VENDOR_PREFIX == 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+										console.log("mobile_first");
+                    var scene = new enchant.Scene();
+                    scene.backgroundColor = '#000';
+                    var size = Math.round(game.width / 10);
+                    var sprite = new enchant.Sprite(game.width, size);
+                    sprite.y = (game.height - size) / 2;
+                    sprite.image = new enchant.Surface(game.width, size);
+                    sprite.image.context.fillStyle = '#fff';
+                    sprite.image.context.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
+                    var width = sprite.image.context.measureText('Touch to Start').width;
+                    sprite.image.context.fillText('Touch to Start', (game.width - width) / 2, size - 1);
+                    scene.addChild(sprite);
+                    document.addEventListener('touchstart', function() {
+                        game._touched = true;
+                        game.removeScene(scene);
+                        game.start();
+                    }, true);
+                    game.pushScene(scene);
+                    return;
+                }
+
                 var o = {};
                 var assets = this._assets.filter(function(asset) {
                     return asset in o ? false : o[asset] = true;
