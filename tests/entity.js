@@ -70,6 +70,9 @@ test('add/remove/clear EventListeners', function () {
 	listener = function(){};
 	listener2 = function(){};
 
+    // clear before test
+    sprite.clearEventListener('enterframe');
+
     sprite.addEventListener('enterframe', listener);
     equal(sprite._listeners['enterframe'].length, 1);
     sprite.removeEventListener('enterframe', listener);
@@ -92,3 +95,36 @@ test('add/remove/clear EventListeners', function () {
 
 });
 
+/**
+ * 異なるGroupの中のEntity同士についてintersectやwithinが誤動作
+ */
+test('Entity#intersect, #within between two entities in different Group', function() {
+    var a = new enchant.Sprite(32, 32);
+    var b = new enchant.Sprite(32, 32);
+    var scene = new enchant.Scene();
+    var ga = new enchant.Group();
+    var gb = new enchant.Group();
+    ga.addChild(a);
+    gb.addChild(b);
+    scene.addChild(ga);
+    scene.addChild(gb);
+
+    equal(a.intersect(b), true);
+    equal(a.within(b), true);
+
+    a.x = 64;
+    equal(a.intersect(b), false);
+    equal(a.within(b), false);
+
+    ga.x = -64;
+    equal(a.intersect(b), true);
+    equal(a.within(b), true);
+
+    b.y = 64;
+    equal(a.intersect(b), false);
+    equal(a.within(b), false);
+
+    gb.y = -64;
+    equal(a.intersect(b), true);
+    equal(a.within(b), true);
+});
