@@ -43,8 +43,16 @@ test('Entity.id', function () {
  */
 test('Entity.frame issue 14', function() {
 	var sprite = new Sprite(32, 32);
-	sprite.frame = 0;
-	sprite.image = enchant.Game.instance.assets['start.png'];
+	var error;
+
+    try{
+        sprite.frame = 0;
+    	sprite.image = enchant.Game.instance.assets['start.png'];
+    }catch(e){
+        error = e;
+    }
+    equal(error, undefined);
+
 });
 
 /**
