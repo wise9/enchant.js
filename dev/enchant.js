@@ -221,7 +221,7 @@ var enchant = function(modules) {
         /**
          * On click/touch event in these tags, setPreventDefault() will not be called
          */
-        USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select']
+        USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select', 'area']
     };
 
     // the running instance
