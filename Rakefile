@@ -34,7 +34,7 @@ task :bind do
 end
 
 task :lang do |t|
-    Dir.glob('./dev/**/*.js') { |file|
+    Dir.glob(['./dev/enchant.js', './dev/plugins/*.js']) { |file|
         p file
         source = File.read(file)
         dest_en = file.gsub(/\/dev\//, '/')

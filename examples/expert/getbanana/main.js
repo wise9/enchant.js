@@ -42,14 +42,13 @@ window.onload = function() {
             this.text = "SCORE: " + game.score + " TIME: " + (20 - game.rootScene.age/game.fps).toFixed(2);
         });
         game.score = 0;
-        
+
         game.rootScene.addEventListener('enterframe',function(){
             if(game.frame % 6 == 0){
                 // 6フレームごとにバナナを増やす関数を実行
                 addBanana();
             }
-            game.frameCount ++;
-            if(game.frameCount > game.fps * 20){
+            if(game.rootScene.age > game.fps * 20){
                 game.end(game.score, game.score + " 本のバナナを取りました!");
                 // 結果を表示 (スコア, 結果のテキストの順で)
             }
