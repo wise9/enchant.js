@@ -540,8 +540,8 @@ enchant.Game.prototype.transitionPush = function(inScene) {
  * @requires widget.enchant.js
  */
 enchant.Game.prototype.transitionPop = function() {
-    if (_transitionLock) return;
-    if (this.currentScene == this.rootScene) return;
+    if (_transitionLock) return null;
+    if (this.currentScene == this.rootScene) return null;
     _transitionLock = true;
     var time = 15;
     var c = 0;

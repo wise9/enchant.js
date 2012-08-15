@@ -509,7 +509,7 @@ var _transitionLock = false;
 
 /**
  * Perform pushScene with transition animation.
- * @param {enchant.Scene} New scene transitioned to.
+ * @param {enchant.Scene} inScene New scene transitioned to.
  * @return {enchant.Scene} New scene
  * @requires widget.enchant.js
  */
@@ -540,8 +540,8 @@ enchant.Game.prototype.transitionPush = function(inScene) {
  * @requires widget.enchant.js
  */
 enchant.Game.prototype.transitionPop = function() {
-    if (_transitionLock) return;
-    if (this.currentScene == this.rootScene) return;
+    if (_transitionLock) return null;
+    if (this.currentScene == this.rootScene) return null;
     _transitionLock = true;
     var time = 15;
     var c = 0;
