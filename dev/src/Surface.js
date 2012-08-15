@@ -208,11 +208,13 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     draw: function(image) {
-        arguments[0] = image = image._element;
+        image = image._element;
         if (arguments.length === 1) {
             this.context.drawImage(image, 0, 0);
         } else {
-            this.context.drawImage.apply(this.context, arguments);
+            var args = arguments;
+            args[0] = image;
+            this.context.drawImage.apply(this.context, args);
         }
     },
     /**

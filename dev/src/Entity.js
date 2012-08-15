@@ -68,14 +68,18 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          */
         this.buttonPressed = false;
         this.addEventListener('touchstart', function() {
-            if (!this.buttonMode) return;
+            if (!this.buttonMode){
+                return;
+            }
             this.buttonPressed = true;
             var e = new enchant.Event(this.buttonMode + 'buttondown');
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
         this.addEventListener('touchend', function() {
-            if (!this.buttonMode) return;
+            if (!this.buttonMode){
+                return;
+            }
             this.buttonPressed = false;
             var e = new enchant.Event(this.buttonMode + 'buttonup');
             this.dispatchEvent(e);
@@ -94,13 +98,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             game.removeEventListener('exitframe', render);
         });
         this.addEventListener('render', function() {
-            if (this._offsetX != this._previousOffsetX) {
+            if (this._offsetX !== this._previousOffsetX) {
                 this._style.left = this._offsetX + 'px';
                 /**
                  * @TODO transform-left で移動するやつをためす
                  */
             }
-            if (this._offsetY != this._previousOffsetY) {
+            if (this._offsetY !== this._previousOffsetY) {
                 this._style.top = this._offsetY + 'px';
             }
             this._previousOffsetX = this._offsetX;
@@ -146,7 +150,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 that._mousedown = true;
             }, false);
             game._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown) return;
+                if (!that._mousedown){
+                    return;
+                }
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchmove');
@@ -155,7 +161,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 that.dispatchEvent(e);
             }, false);
             game._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown) return;
+                if (!that._mousedown){
+                    return;
+                }
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchend');
@@ -372,7 +380,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     scale: function(x, y) {
-        if (y == null) y = x;
+        if (y == null){
+            y = x;
+        }
         this._scaleX *= x;
         this._scaleY *= y;
         this._dirty = true;

@@ -22,18 +22,20 @@ if (typeof Object.defineProperties !== 'function') {
         return obj;
     };
 }
-if (typeof Object.create != 'function') {
+if (typeof Object.create !== 'function') {
     Object.create = function(prototype, descs) {
         function F() {
         }
 
         F.prototype = prototype;
         var obj = new F();
-        if (descs != null) Object.defineProperties(obj, descs);
+        if (descs != null){
+            Object.defineProperties(obj, descs);
+        }
         return obj;
     };
 }
-if (typeof Object.getPrototypeOf != 'function') {
+if (typeof Object.getPrototypeOf !== 'function') {
     Object.getPrototypeOf = function(obj) {
         return obj.__proto__;
     };
@@ -43,15 +45,15 @@ if (typeof Function.prototype.bind !== 'function') {
     Function.prototype.bind = function(thisObject) {
         var func = this;
         var args = Array.prototype.slice.call(arguments, 1);
-        var nop = function() {
+        var Nop = function() {
         };
         var bound = function() {
             var a = args.concat(Array.prototype.slice.call(arguments));
             return func.apply(
-                this instanceof nop ? this : thisObject || window, a);
+                this instanceof Nop ? this : thisObject || window, a);
         };
-        nop.prototype = func.prototype;
-        bound.prototype = new nop();
+        Nop.prototype = func.prototype;
+        bound.prototype = new Nop();
         return bound;
     };
 }
@@ -97,26 +99,30 @@ var enchant = function(modules) {
         });
     }
     (function include(module, prefix) {
-        var submodules = [];
-        for (var prop in module) if (module.hasOwnProperty(prop)) {
-            if (typeof module[prop] == 'function') {
-                window[prop] = module[prop];
-            } else if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
-                if (modules == null) {
-                    submodules.push(prop);
-                } else {
-                    i = modules.indexOf(prefix + prop);
-                    if (i != -1) {
+        var submodules = [],
+            i, len;
+        for (var prop in module){
+            if (module.hasOwnProperty(prop)) {
+                if (typeof module[prop] === 'function') {
+                    window[prop] = module[prop];
+                } else if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                    if (modules == null) {
                         submodules.push(prop);
-                        modules.splice(i, 1);
+                    } else {
+                        i = modules.indexOf(prefix + prop);
+                        if (i !== -1) {
+                            submodules.push(prop);
+                            modules.splice(i, 1);
+                        }
                     }
                 }
             }
         }
-        for (var i = 0, len = submodules.length; i < len; i++) {
+
+        for (i = 0, len = submodules.length; i < len; i++) {
             include(module[submodules[i]], prefix + submodules[i] + '.');
         }
-    })(enchant, '');
+    }(enchant, ''));
 
     if (modules != null && modules.length) {
         throw new Error('Cannot load module: ' + modules.join(', '));
@@ -126,9 +132,9 @@ var enchant = function(modules) {
 window.addEventListener("message", function(msg, origin) {
     try {
         var data = JSON.parse(msg.data);
-        if (data.type == "event") {
-            enchant.Game.instance.dispatchEvent(new Event(data.value));
-        } else if (data.type == "debug") {
+        if (data.type === "event") {
+            enchant.Game.instance.dispatchEvent(new enchant.Event(data.value));
+        } else if (data.type === "debug") {
             switch (data.value) {
                 case "start":
                     enchant.Game.instance.start();

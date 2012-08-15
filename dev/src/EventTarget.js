@@ -38,7 +38,7 @@ enchant.EventTarget = enchant.Class.create({
         var listeners = this._listeners[type];
         if (listeners == null) {
             this._listeners[type] = [listener];
-        } else if (listeners.indexOf(listener) == -1) {
+        } else if (listeners.indexOf(listener) === -1) {
             listeners.unshift(listener);
 
         }
@@ -67,7 +67,7 @@ enchant.EventTarget = enchant.Class.create({
         var listeners = this._listeners[type];
         if (listeners != null) {
             var i = listeners.indexOf(listener);
-            if (i != -1) {
+            if (i !== -1) {
                 listeners.splice(i, 1);
             }
         }
@@ -103,7 +103,9 @@ enchant.EventTarget = enchant.Class.create({
         e.target = this;
         e.localX = e.x - this._offsetX;
         e.localY = e.y - this._offsetY;
-        if (this['on' + e.type] != null) this['on' + e.type](e);
+        if (this['on' + e.type] != null){
+            this['on' + e.type](e);
+        }
         var listeners = this._listeners[e.type];
         if (listeners != null) {
             listeners = listeners.slice();

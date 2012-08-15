@@ -200,7 +200,7 @@
                         }
                     }
                 }
-            })(enchant);
+            }(enchant));
 
             this._scenes = [];
             /**
@@ -556,9 +556,9 @@
                 var assets = this._assets.filter(function(asset) {
                     return asset in o ? false : o[asset] = true;
                 });
-                var loaded = 0;
-                for (var i = 0, len = assets.length; i < len; i++) {
-                    this.load(assets[i], function() {
+                var loaded = 0,
+                    len = assets.length,
+                    loadFunc = function() {
                         var e = new enchant.Event('progress');
                         e.loaded = ++loaded;
                         e.total = len;
@@ -567,7 +567,10 @@
                             game.removeScene(game.loadingScene);
                             game.dispatchEvent(new enchant.Event('load'));
                         }
-                    });
+                    };
+
+                for (var i = 0; i < len; i++) {
+                    this.load(assets[i], loadFunc);
                 }
                 this.pushScene(this.loadingScene);
             } else {
@@ -677,7 +680,7 @@
          [/lang]
          */
         resume: function() {
-            if(this.running){
+            if (this.running) {
                 return;
             }
             this.currentTime = Date.now();
@@ -737,7 +740,7 @@
          [/lang]
          */
         popScene: function() {
-            if (this.currentScene == this.rootScene) {
+            if (this.currentScene === this.rootScene) {
                 return this.currentScene;
             }
             this._element.removeChild(this.currentScene._element);
@@ -787,14 +790,16 @@
          [/lang]
          */
         removeScene: function(scene) {
-            if (this.currentScene == scene) {
+            if (this.currentScene === scene) {
                 return this.popScene();
             } else {
                 var i = this._scenes.indexOf(scene);
-                if (i != -1) {
+                if (i !== -1) {
                     this._scenes.splice(i, 1);
                     this._element.removeChild(scene._element);
                     return scene;
+                } else {
+                    return null;
                 }
             }
         },
@@ -885,4 +890,4 @@
      [/lang]
      */
     enchant.Game.instance = null;
-})();
+}());

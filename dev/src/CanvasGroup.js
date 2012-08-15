@@ -82,7 +82,9 @@
                     that._mousedown = true;
                 }, false);
                 game._element.addEventListener('mousemove', function(e) {
-                    if (!that._mousedown) return;
+                    if (!that._mousedown) {
+                        return;
+                    }
                     var x = e.pageX;
                     var y = e.pageY;
                     e = new enchant.Event('touchmove');
@@ -91,7 +93,9 @@
                     _touchmoveFromDom.call(that, e);
                 }, false);
                 game._element.addEventListener('mouseup', function(e) {
-                    if (!that._mousedown) return;
+                    if (!that._mousedown) {
+                        return;
+                    }
                     var x = e.pageX;
                     var y = e.pageY;
                     e = new enchant.Event('touchend');
@@ -119,7 +123,7 @@
                 this.addEventListener(type, this._stopRendering);
                 this.addEventListener(type, function() {
                     var i = canvasGroupInstances.indexOf(this);
-                    if (i != -1) {
+                    if (i !== -1) {
                         canvasGroupInstances.splice(i, 1);
                     }
                 });
@@ -134,7 +138,9 @@
         },
         _startRendering: function() {
             var game = enchant.Game.instance;
-            if (!game._listeners['exitframe']) game._listeners['exitframe'] = [];
+            if (!game._listeners['exitframe']) {
+                game._listeners['exitframe'] = [];
+            }
             game._listeners['exitframe'].push(this._onexitframe);
         },
         _stopRendering: function() {
@@ -208,7 +214,7 @@
         },
         insertBefore: function(node, reference) {
             var i = this.childNodes.indexOf(reference);
-            if (i != -1) {
+            if (i !== -1) {
                 this.childNodes.splice(i, 0, node);
                 node.dispatchEvent(new enchant.Event('added'));
                 if (this.scene) {
@@ -222,7 +228,7 @@
         },
         removeChild: function(node) {
             var i;
-            if ((i = this.childNodes.indexOf(node)) != -1) {
+            if ((i = this.childNodes.indexOf(node)) !== -1) {
                 this.childNodes.splice(i, 1);
             }
             node.parentNode = null;
@@ -244,7 +250,9 @@
         var group;
         for (var i = canvasGroupInstances.length - 1; i >= 0; i--) {
             group = canvasGroupInstances[i];
-            if (group.scene != game.currentScene) continue;
+            if (group.scene !== game.currentScene) {
+                continue;
+            }
             var sp = group._touchstartPropagation(e);
             if (sp) {
                 touchingEntity = sp;
@@ -268,9 +276,9 @@
 
     if (enchant.widget) {
         enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
-            if (this.background
-                && this.background._element.width > 0
-                && this.background._element.height > 0) {
+            if (this.background &&
+                this.background._element.width > 0 &&
+                this.background._element.height > 0) {
                 ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
             }
             ctx.beginPath();
@@ -316,7 +324,7 @@
 
     var DetectColorManager = enchant.Class.create({
         initialize: function(reso, max) {
-            this.reference = new Array();
+            this.reference = [];
             this.detectColorNum = 0;
             this.colorResolution = reso || 16;
             this.max = max || 1;
@@ -328,7 +336,7 @@
         },
         detachDetectColor: function(sprite) {
             var i = this.reference.indexOf(sprite);
-            if (i != -1) {
+            if (i !== -1) {
                 this.reference[i] = null;
             }
         },
@@ -337,16 +345,16 @@
             var C = this.colorResolution;
             var d = C / this.max;
             return [
-                parseInt((n / C / C) % C) / d,
-                parseInt((n / C) % C) / d,
-                parseInt(n % C) / d, 1.0
+                parseInt((n / C / C) % C, 10) / d,
+                parseInt((n / C) % C, 10) / d,
+                parseInt(n % C, 10) / d, 1.0
             ];
         },
         _decodeDetectColor: function(color) {
             var C = this.colorResolution;
-            return ~~(color[0] * C * C * C / 256)
-                + ~~(color[1] * C * C / 256)
-                + ~~(color[2] * C / 256);
+            return ~~(color[0] * C * C * C / 256) +
+                ~~(color[1] * C * C / 256) +
+                ~~(color[2] * C / 256);
         },
         getSpriteByColor: function(color) {
             return this.reference[this._decodeDetectColor(color)];
@@ -378,13 +386,13 @@
         var width = node.width || 0;
         var height = node.height || 0;
         var rotation = node.rotation || 0;
-        var scaleX = (typeof node.scaleX == 'number') ? node.scaleX : 1;
-        var scaleY = (typeof node.scaleY == 'number') ? node.scaleY : 1;
+        var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
+        var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
         var theta = Math.PI * rotation / 180;
         var tmpcos = Math.cos(theta);
         var tmpsin = Math.sin(theta);
-        var w = (typeof node.originX == 'number') ? node.originX : width / 2;
-        var h = (typeof node.originY == 'number') ? node.originY : height / 2;
+        var w = (typeof node.originX === 'number') ? node.originX : width / 2;
+        var h = (typeof node.originY === 'number') ? node.originY : height / 2;
         var a = scaleX * tmpcos;
         var b = scaleX * tmpsin;
         var c = scaleY * tmpsin;
@@ -395,14 +403,15 @@
         dest[3] = scaleY * tmpcos;
         dest[4] = (-a * w + c * h + x + w);
         dest[5] = (-b * w - d * h + y + h);
-    }
+    };
 
     var dirtyCheck = function(node) {
-        if (node.__dirty
-            || node._cvsCache.x != node.x
-            || node._cvsCache.y != node.y
-            || node._cvsCache.width != node.width
-            || node._cvsCache.height != node.height) {
+        if (node.__dirty ||
+            node._cvsCache.x !== node.x ||
+            node._cvsCache.y !== node.y ||
+            node._cvsCache.width !== node.width ||
+            node._cvsCache.height !== node.height
+            ) {
             makeTransformMatrix(node, node._cvsCache.matrix);
             node.__dirty = false;
             node._cvsCache.x = node.x;
@@ -460,9 +469,9 @@
     );
 
     var array2hexrgb = function(arr) {
-        return '#' + ("00" + Number(parseInt(arr[0])).toString(16)).slice(-2)
-            + ("00" + Number(parseInt(arr[1])).toString(16)).slice(-2)
-            + ("00" + Number(parseInt(arr[2])).toString(16)).slice(-2);
+        return '#' + ("00" + Number(parseInt(arr[0], 10)).toString(16)).slice(-2) +
+            ("00" + Number(parseInt(arr[1], 10)).toString(16)).slice(-2) +
+            ("00" + Number(parseInt(arr[2], 10)).toString(16)).slice(-2);
     };
 
     var detectrender = function(ctx, node) {
@@ -490,7 +499,9 @@
     };
 
     var attachCache = function(colorManager) {
-        if (this._cvsCache) return;
+        if (this._cvsCache) {
+            return;
+        }
         this.addEventListener('render', is__dirty);
         this._cvsCache = {};
         this._cvsCache.matrix = [];
@@ -498,7 +509,9 @@
     };
 
     var detachCache = function(colorManager) {
-        if (!this._cvsCache) return;
+        if (!this._cvsCache) {
+            return;
+        }
         this.removeEventListener('render', is__dirty);
         colorManager.detachDetectColor(this);
         delete this._cvsCache;
@@ -532,8 +545,8 @@
 
     var propagationUp = function(e, end) {
         this.dispatchEvent(e);
-        if (this.parentNode && this.parentNode != end) {
+        if (this.parentNode && this.parentNode !== end) {
             propagationUp.call(this.parentNode, e, end);
         }
     };
-})();
+}());

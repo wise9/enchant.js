@@ -71,33 +71,37 @@ enchant.Class = function(superclass, definition) {
  [/lang]
  */
 enchant.Class.create = function(superclass, definition) {
-    if (arguments.length == 0) {
+    if (arguments.length === 0) {
         return enchant.Class.create(Object, definition);
-    } else if (arguments.length == 1 && typeof arguments[0] != 'function') {
+    } else if (arguments.length === 1 && typeof arguments[0] !== 'function') {
         return enchant.Class.create(Object, arguments[0]);
     }
 
-    for (var prop in definition) if (definition.hasOwnProperty(prop)) {
-        if (typeof definition[prop] == 'object' && Object.getPrototypeOf(definition[prop]) == Object.prototype) {
-            if (!('enumerable' in definition[prop])) definition[prop].enumerable = true;
-        } else {
-            definition[prop] = { value: definition[prop], enumerable: true, writable: true };
+    for (var prop in definition){
+        if (definition.hasOwnProperty(prop)) {
+            if (typeof definition[prop] === 'object' && Object.getPrototypeOf(definition[prop]) === Object.prototype) {
+                if (!('enumerable' in definition[prop])){
+                    definition[prop].enumerable = true;
+                }
+            } else {
+                definition[prop] = { value: definition[prop], enumerable: true, writable: true };
+            }
         }
     }
-    var constructor = function() {
-        if (this instanceof constructor) {
-            constructor.prototype.initialize.apply(this, arguments);
+    var Constructor = function() {
+        if (this instanceof Constructor) {
+            Constructor.prototype.initialize.apply(this, arguments);
         } else {
-            return new constructor();
+            return new Constructor();
         }
     };
-    constructor.prototype = Object.create(superclass.prototype, definition);
-    constructor.prototype.constructor = constructor;
-    if (constructor.prototype.initialize == null) {
-        constructor.prototype.initialize = function() {
+    Constructor.prototype = Object.create(superclass.prototype, definition);
+    Constructor.prototype.constructor = Constructor;
+    if (Constructor.prototype.initialize == null) {
+        Constructor.prototype.initialize = function() {
             superclass.apply(this, arguments);
         };
     }
 
-    return constructor;
+    return Constructor;
 };

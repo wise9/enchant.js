@@ -15,18 +15,18 @@ enchant.ENV = {
      */
     VENDOR_PREFIX: (function() {
         var ua = navigator.userAgent;
-        if (ua.indexOf('Opera') != -1) {
+        if (ua.indexOf('Opera') !== -1) {
             return 'O';
-        } else if (ua.indexOf('MSIE') != -1) {
+        } else if (ua.indexOf('MSIE') !== -1) {
             return 'ms';
-        } else if (ua.indexOf('WebKit') != -1) {
+        } else if (ua.indexOf('WebKit') !== -1) {
             return 'webkit';
-        } else if (navigator.product == 'Gecko') {
+        } else if (navigator.product === 'Gecko') {
             return 'Moz';
         } else {
             return '';
         }
-    })(),
+    }()),
     /**
      * CSS vendor prefix in current browser
      * @type {String}
@@ -34,14 +34,14 @@ enchant.ENV = {
     TOUCH_ENABLED: (function() {
         var div = document.createElement('div');
         div.setAttribute('ontouchstart', 'return');
-        return typeof div.ontouchstart == 'function';
-    })(),
+        return typeof div.ontouchstart === 'function';
+    }()),
     /**
      * Is this browser iPhone with Retina display?
      * @type {String}
      */
     RETINA_DISPLAY: (function() {
-        if (navigator.userAgent.indexOf('iPhone') != -1 && window.devicePixelRatio == 2) {
+        if (navigator.userAgent.indexOf('iPhone') !== -1 && window.devicePixelRatio === 2) {
             var viewport = document.querySelector('meta[name="viewport"]');
             if (viewport == null) {
                 viewport = document.createElement('meta');
@@ -52,7 +52,7 @@ enchant.ENV = {
         } else {
             return false;
         }
-    })(),
+    }()),
     /**
      * Use Flash instead of native Audio class?
      * @type {String}
@@ -60,8 +60,8 @@ enchant.ENV = {
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
         var vendor = navigator.vendor || "";
-        return (location.href.indexOf('http') == 0 && ua.indexOf('Mobile') == -1 && vendor.indexOf('Apple') != -1);
-    })(),
+        return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
+    }()),
     /**
      * On click/touch event in these tags, setPreventDefault() will not be called
      */
