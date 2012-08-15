@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.5.0
+ * enchant.js v0.5.1
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -1076,7 +1076,7 @@ enchant.EventTarget = enchant.Class.create({
             this._debug = true;
             this.rootScene.addEventListener("enterframe", function(time) {
                 this._actualFps = (1 / time);
-            })
+            });
             this.start();
         },
         actualFps: {
@@ -1100,6 +1100,7 @@ enchant.EventTarget = enchant.Class.create({
                     push.apply(nodes, node.childNodes);
                 }
             }
+            this.currentScene.age++;
 
             this.currentScene.dispatchEvent(e);
             this.dispatchEvent(e);

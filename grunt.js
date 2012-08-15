@@ -45,7 +45,7 @@ module.exports = function(grunt) {
             min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Licensed under MIT or GPLv3. (c) Ubiquitous Entertainment Inc. */'
         },
         lint: {
-            files: ['dev/header.js', 'dev/classes/*.js']
+            files: ['dev/header.js', 'dev/src/*.js']
         },
         qunit: {
             files: ['tests/*/index.html']
@@ -54,22 +54,22 @@ module.exports = function(grunt) {
             dist: {
                 src: ['<banner:meta.banner>',
                     'dev/header.js',
-                    'dev/classes/Class.js',
-                    'dev/classes/Env.js',
-                    'dev/classes/Event.js',
-                    'dev/classes/EventTarget.js',
-                    'dev/classes/Game.js',
-                    'dev/classes/Node.js',
-                    'dev/classes/Entity.js',
-                    'dev/classes/Sprite.js',
-                    'dev/classes/Label.js',
-                    'dev/classes/Map.js',
-                    'dev/classes/Group.js',
-                    'dev/classes/RGroup.js',
-                    'dev/classes/CanvasGroup.js',
-                    'dev/classes/Scene.js',
-                    'dev/classes/Surface.js',
-                    'dev/classes/Sound.js'
+                    'dev/src/Class.js',
+                    'dev/src/Env.js',
+                    'dev/src/Event.js',
+                    'dev/src/EventTarget.js',
+                    'dev/src/Game.js',
+                    'dev/src/Node.js',
+                    'dev/src/Entity.js',
+                    'dev/src/Sprite.js',
+                    'dev/src/Label.js',
+                    'dev/src/Map.js',
+                    'dev/src/Group.js',
+                    'dev/src/RGroup.js',
+                    'dev/src/CanvasGroup.js',
+                    'dev/src/Scene.js',
+                    'dev/src/Surface.js',
+                    'dev/src/Sound.js'
                 ],
                 dest: 'dev/enchant.js'
             }

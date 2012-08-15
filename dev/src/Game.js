@@ -333,6 +333,7 @@
                         game.dispatchEvent(e);
                     }
                 }, true);
+
                 if (enchant.ENV.TOUCH_ENABLED) {
                     stage.addEventListener('touchstart', function(e) {
                         var tagName = (e.target.tagName).toLowerCase();
