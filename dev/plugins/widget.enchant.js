@@ -674,7 +674,7 @@ var _transitionLock = false;
  * @requires widget.enchant.js
  */
 enchant.Game.prototype.transitionPush = function(inScene) {
-    if (_transitionLock) return;
+    if (_transitionLock) return null;
     _transitionLock = true;
     var time = 15;
     var c = 0;
