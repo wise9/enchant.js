@@ -343,9 +343,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         var style = this._element.style;
         for (var i in theme) if (theme.hasOwnProperty(i)) {
             var prop = i.replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
-            style[prop] = theme[i].replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
-            console.log("apply theme", i, ":", theme[i]);
-            console.log("# vendor prefix replaced : ", prop, ":", theme[i].replace(/\-VENDOR\-/, this.VENDOR_PREFIX));
+            style[prop] = (theme[i]+'').replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
         }
     },
     /**

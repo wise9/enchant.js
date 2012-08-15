@@ -19,7 +19,7 @@ module('Button', {
 
 
 test('Button.text', function () {
-    var button = new Button("hoge");
+    var button = new Button("fuga");
     ok(button.text === "fuga");
     button.text = "hoge";
     ok(button.text === "hoge");
@@ -30,8 +30,7 @@ test('Button.theme', function () {
     var image = typeof button._element.style["background-image"];
     ok(typeof button._element.style["background-image"] !== "undefined");
     ok(button._element.style["background-image"] !== "");
-    button._applyTheme(enchant.ui.Button.DEFAULT_THEME.light);
-    button.
+    button._applyTheme(enchant.ui.Button.DEFAULT_THEME.light.normal);
     ok(button.text === "hoge");
 });
 

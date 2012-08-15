@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         meta: {
-            version: 'v0.5.0',
+            version: 'v0.5.1',
             banner: '/**\n\
  * enchant.js <%= meta.version %>\n\
  *\n\
@@ -41,13 +41,14 @@ module.exports = function(grunt) {
  *\n\
  * You should have received a copy of the GNU General Public License\n\
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\
- */'
+ */',
+            min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Licensed under MIT or GPLv3. (c) Ubiquitous Entertainment Inc. */'
         },
         lint: {
             files: ['dev/header.js', 'dev/classes/*.js']
         },
         qunit: {
-            files: ['dev/header.js', 'dev/classes/*.js']
+            files: ['tests/*/index.html']
         },
         concat: {
             dist: {
@@ -75,7 +76,7 @@ module.exports = function(grunt) {
         },
         min: {
             dist: {
-                src: ['<banner:meta.banner>', 'dev/enchant.js'],
+                src: ['<banner:meta.min_banner>', 'dev/enchant.js'],
                 dest: 'enchant.min.js'
             }
         },
@@ -105,5 +106,5 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', 'concat min lint');
+    grunt.registerTask('default', 'qunit concat min lint');
 };
