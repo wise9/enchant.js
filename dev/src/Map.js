@@ -32,7 +32,7 @@
             enchant.Entity.call(this);
 
             var canvas = document.createElement('canvas');
-            if (enchant.ENV.RETINA_DISPLAY && game.scale == 2) {
+            if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
                 canvas.width = game.width * 2;
                 canvas.height = game.height * 2;
                 this._style.webkitTransformOrigin = '0 0';
@@ -74,8 +74,8 @@
                 if (this._dirty || this._previousOffsetX == null) {
                     this._dirty = false;
                     this.redraw(0, 0, game.width, game.height);
-                } else if (this._offsetX != this._previousOffsetX ||
-                    this._offsetY != this._previousOffsetY) {
+                } else if (this._offsetX !== this._previousOffsetX ||
+                    this._offsetY !== this._previousOffsetY) {
                     if (this._tight) {
                         var x = -this._offsetX;
                         var y = -this._offsetY;
@@ -131,12 +131,12 @@
                                     0, 0, sw, sh, dx, dy, sw, sh);
                             }
 
-                            if (dx == 0) {
+                            if (dx === 0) {
                                 this.redraw(sw, 0, game.width - sw, game.height);
                             } else {
                                 this.redraw(0, 0, game.width - sw, game.height);
                             }
-                            if (dy == 0) {
+                            if (dy === 0) {
                                 this.redraw(0, sh, game.width, game.height - sh);
                             } else {
                                 this.redraw(0, 0, game.width, game.height - sh);
@@ -173,10 +173,12 @@
             this._tight = false;
             for (var i = 0, len = this._data.length; i < len; i++) {
                 var c = 0;
-                var data = this._data[i];
+                data = this._data[i];
                 for (var y = 0, l = data.length; y < l; y++) {
                     for (var x = 0, ll = data[y].length; x < ll; x++) {
-                        if (data[y][x] >= 0) c++;
+                        if (data[y][x] >= 0){
+                            c++;
+                        }
                     }
                 }
                 if (c / (data.length * data[0].length) > 0.2) {
@@ -263,8 +265,10 @@
                 return this._image;
             },
             set: function(image) {
+                var game = enchant.Game.instance;
+
                 this._image = image;
-                if (enchant.ENV.RETINA_DISPLAY && game.scale == 2) {
+                if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
                     var img = new enchant.Surface(image.width * 2, image.height * 2);
                     var tileWidth = this._tileWidth || image.width;
                     var tileHeight = this._tileHeight || image.height;
@@ -329,7 +333,7 @@
          */
         width: {
             get: function() {
-                return this._tileWidth * this._data[0][0].length
+                return this._tileWidth * this._data[0][0].length;
             }
         },
         /**
@@ -342,7 +346,7 @@
          */
         height: {
             get: function() {
-                return this._tileHeight * this._data[0].length
+                return this._tileHeight * this._data[0].length;
             }
         },
         /**

@@ -35,8 +35,6 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      */
     initialize: function() {
         enchant.EventTarget.call(this);
-        throw new Error("Illegal Constructor");
-
         /**
          [lang:ja]
          * Soundの再生時間 (秒).
@@ -48,6 +46,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
          [/lang]
          */
         this.duration = 0;
+        throw new Error("Illegal Constructor");
     },
     /**
      [lang:ja]
@@ -58,7 +57,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     play: function() {
-        if (this._element) this._element.play();
+        if (this._element){
+            this._element.play();
+        }
     },
     /**
      [lang:ja]
@@ -69,7 +70,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     pause: function() {
-        if (this._element) this._element.pause();
+        if (this._element){
+            this._element.pause();
+        }
     },
     /**
      [lang:ja]
@@ -123,7 +126,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
             return this._element ? this._element.currentTime : 0;
         },
         set: function(time) {
-            if (this._element) this._element.currentTime = time;
+            if (this._element){
+                this._element.currentTime = time;
+            }
         }
     },
     /**
@@ -141,7 +146,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
             return this._element ? this._element.volume : 1;
         },
         set: function(volume) {
-            if (this._element) this._element.volume = volume;
+            if (this._element){
+                this._element.volume = volume;
+            }
         }
     }
 });
@@ -177,7 +184,7 @@ enchant.Sound.load = function(src, type) {
     enchant.EventTarget.call(sound);
     var audio = new Audio();
     if (!enchant.Sound.enabledInMobileSafari &&
-        enchant.ENV.VENDOR_PREFIX == 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+        enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
         window.setTimeout(function() {
             sound.dispatchEvent(new enchant.Event('load'));
         }, 0);
@@ -194,7 +201,7 @@ enchant.Sound.load = function(src, type) {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, false);
             sound._element = audio;
-        } else if (type == 'audio/mpeg') {
+        } else if (type === 'audio/mpeg') {
             var embed = document.createElement('embed');
             var id = 'enchant-audio' + enchant.Game.instance._soundID++;
             embed.width = embed.height = 1;
@@ -207,18 +214,18 @@ enchant.Sound.load = function(src, type) {
                 Object.defineProperties(embed, {
                     currentTime: {
                         get: function() {
-                            return embed.getCurrentTime()
+                            return embed.getCurrentTime();
                         },
                         set: function(time) {
-                            embed.setCurrentTime(time)
+                            embed.setCurrentTime(time);
                         }
                     },
                     volume: {
                         get: function() {
-                            return embed.getVolume()
+                            return embed.getVolume();
                         },
                         set: function(volume) {
-                            embed.setVolume(volume)
+                            embed.setVolume(volume);
                         }
                     }
                 });

@@ -101,7 +101,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     }
                 }
             }
-            if (!fragment.childNodes.length) return;
+            if (!fragment.childNodes.length){
+                return;
+            }
 
             var nextSibling, thisNode = this;
             while (thisNode.parentNode) {
@@ -139,7 +141,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      */
     insertBefore: function(node, reference) {
         var i = this.childNodes.indexOf(reference);
-        if (i != -1) {
+        if (i !== -1) {
             this.childNodes.splice(i, 0, node);
             node.parentNode = this;
             node.dispatchEvent(new enchant.Event('added'));
@@ -167,10 +169,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                         }
                     }
                 }
-                if (!fragment.childNodes.length) return;
+                if (!fragment.childNodes.length){
+                    return;
+                }
 
                 var nextSibling, thisNode = reference;
-                while (thisNode != this) {
+                while (thisNode !== this) {
                     if (i != null) {
                         nodes = this.childNodes.slice(i + 1).reverse();
                         i = null;
@@ -211,7 +215,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      */
     removeChild: function(node) {
         var i = this.childNodes.indexOf(node);
-        if (i != -1) {
+        if (i !== -1) {
             this.childNodes.splice(i, 1);
         } else {
             return;

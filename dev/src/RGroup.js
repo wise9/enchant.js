@@ -17,13 +17,15 @@ enchant.RGroup = enchant.Class.create(enchant.Group, {
     initialize: function(width, height) {
         enchant.Group.call(this);
 
-        if (arguments.length < 2) throw("Width and height of RGroup must be specified");
+        if (arguments.length < 2){
+            throw("Width and height of RGroup must be specified");
+        }
         this.width = width;
         this.height = height;
         this.rotationOrigin = {
             x: width / 2,
             y: height / 2
-        }
+        };
         this._rotation = 0;
     },
     addChild: function(node) {
@@ -37,14 +39,16 @@ enchant.RGroup = enchant.Class.create(enchant.Group, {
         set: function(rotation) {
             var diff_rotation = (rotation - this._rotation);
 
-            if (diff_rotation == 0)return;
+            if (diff_rotation === 0){
+                return;
+            }
             var rad = diff_rotation / 180 * Math.PI;
             var sin = Math.sin(rad);
             var cos = Math.cos(rad);
             var origin = {
                 x: this.width / 2,
                 y: this.height / 2
-            }
+            };
 
             for (var i = 0, len = this.childNodes.length; i < len; i++) {
                 var node = this.childNodes[i];
@@ -151,7 +155,9 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 that._mousedown = true;
             }, false);
             game._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown) return;
+                if (!that._mousedown){
+                    return;
+                }
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchmove');
@@ -160,7 +166,9 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 that.dispatchEvent(e);
             }, false);
             game._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown) return;
+                if (!that._mousedown){
+                    return;
+                }
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchend');

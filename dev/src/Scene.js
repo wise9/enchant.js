@@ -67,7 +67,9 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 that._mousedown = true;
             }, false);
             enchant.Game.instance._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown) return;
+                if (!that._mousedown) {
+                    return;
+                }
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchmove');
@@ -76,7 +78,9 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 that.dispatchEvent(e);
             }, false);
             enchant.Game.instance._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown) return;
+                if (!that._mousedown) {
+                    return;
+                }
                 var x = e.pageX;
                 var y = e.pageY;
                 e = new enchant.Event('touchend');

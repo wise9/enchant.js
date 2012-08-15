@@ -107,8 +107,8 @@
                 this._pageY = 0;
             } else {
                 var style = window.getComputedStyle(stage);
-                width = parseInt(style.width);
-                height = parseInt(style.height);
+                width = parseInt(style.width, 10);
+                height = parseInt(style.height, 10);
                 if (width && height) {
                     this.scale = Math.min(
                         width / this.width,
@@ -126,7 +126,9 @@
                 this._pageX = Math.round(window.scrollX + bounding.left);
                 this._pageY = Math.round(window.scrollY + bounding.top);
             }
-            if (!this.scale) this.scale = 1;
+            if (!this.scale) {
+                this.scale = 1;
+            }
             stage.style.fontSize = '12px';
             stage.style.webkitTextSizeAdjust = 'none';
             this._element = stage;
@@ -191,9 +193,11 @@
                 if (module.assets instanceof Array) {
                     [].push.apply(assets, module.assets);
                 }
-                for (var prop in module) if (module.hasOwnProperty(prop)) {
-                    if (typeof module[prop] == 'object' && Object.getPrototypeOf(module[prop]) == Object.prototype) {
-                        detectAssets(module[prop]);
+                for (var prop in module) {
+                    if (module.hasOwnProperty(prop)) {
+                        if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                            detectAssets(module[prop]);
+                        }
                     }
                 }
             })(enchant);
@@ -293,8 +297,9 @@
                         this.dispatchEvent(inputEvent);
                     }
                     this.currentScene.dispatchEvent(e);
-                    if (inputEvent)
+                    if (inputEvent) {
                         this.currentScene.dispatchEvent(inputEvent);
+                    }
                 });
                 this.addEventListener(type + 'buttonup', function(e) {
                     var inputEvent;
@@ -304,33 +309,39 @@
                         this.dispatchEvent(inputEvent);
                     }
                     this.currentScene.dispatchEvent(e);
-                    if (inputEvent)
+                    if (inputEvent) {
                         this.currentScene.dispatchEvent(inputEvent);
+                    }
                 });
             }, this);
 
             if (initial) {
-                var stage = enchant.Game.instance._element;
+                stage = enchant.Game.instance._element;
+                var evt;
                 document.addEventListener('keydown', function(e) {
                     game.dispatchEvent(new enchant.Event('keydown'));
-                    if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode == 32) {
+                    if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode === 32) {
                         e.preventDefault();
                         e.stopPropagation();
                     }
 
-                    if (!game.running) return;
+                    if (!game.running) {
+                        return;
+                    }
                     var button = game._keybind[e.keyCode];
                     if (button) {
-                        var e = new enchant.Event(button + 'buttondown');
-                        game.dispatchEvent(e);
+                        evt = new enchant.Event(button + 'buttondown');
+                        game.dispatchEvent(evt);
                     }
                 }, true);
                 document.addEventListener('keyup', function(e) {
-                    if (!game.running) return;
+                    if (!game.running) {
+                        return;
+                    }
                     var button = game._keybind[e.keyCode];
                     if (button) {
-                        var e = new enchant.Event(button + 'buttonup');
-                        game.dispatchEvent(e);
+                        evt = new enchant.Event(button + 'buttonup');
+                        game.dispatchEvent(evt);
                     }
                 }, true);
 
@@ -339,21 +350,27 @@
                         var tagName = (e.target.tagName).toLowerCase();
                         if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
                             e.preventDefault();
-                            if (!game.running)e.stopPropagation();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
                     }, true);
                     stage.addEventListener('touchmove', function(e) {
                         var tagName = (e.target.tagName).toLowerCase();
                         if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
                             e.preventDefault();
-                            if (!game.running)e.stopPropagation();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
                     }, true);
                     stage.addEventListener('touchend', function(e) {
                         var tagName = (e.target.tagName).toLowerCase();
                         if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
                             e.preventDefault();
-                            if (!game.running)e.stopPropagation();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
                     }, true);
                 } else {
@@ -362,14 +379,18 @@
                         if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
                             e.preventDefault();
                             game._mousedownID++;
-                            if (!game.running)e.stopPropagation();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
                     }, true);
                     stage.addEventListener('mousemove', function(e) {
                         var tagName = (e.target.tagName).toLowerCase();
                         if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
                             e.preventDefault();
-                            if (!game.running)e.stopPropagation();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
                     }, true);
                     stage.addEventListener('mouseup', function(e) {
@@ -377,7 +398,9 @@
                         if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
                             // フォームじゃない
                             e.preventDefault();
-                            if (!game.running)e.stopPropagation();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
                     }, true);
                 }
@@ -452,8 +475,10 @@
          [/lang]
          */
         load: function(src, callback) {
-            if (callback == null) callback = function() {
-            };
+            if (callback == null) {
+                callback = function() {
+                };
+            }
 
             var ext = enchant.Game.findExt(src);
 
@@ -464,8 +489,8 @@
                 var req = new XMLHttpRequest();
                 req.open('GET', src, true);
                 req.onreadystatechange = function(e) {
-                    if (req.readyState == 4) {
-                        if (req.status != 200 && req.status != 0) {
+                    if (req.readyState === 4) {
+                        if (req.status !== 200 && req.status !== 0) {
                             throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
                         }
 
@@ -506,7 +531,7 @@
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
                 if (enchant.Sound.enabledInMobileSafari && !game._touched &&
-                    enchant.ENV.VENDOR_PREFIX == 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(game.width / 10);
@@ -538,7 +563,7 @@
                         e.loaded = ++loaded;
                         e.total = len;
                         game.dispatchEvent(e);
-                        if (loaded == len) {
+                        if (loaded === len) {
                             game.removeScene(game.loadingScene);
                             game.dispatchEvent(new enchant.Event('load'));
                         }
@@ -550,7 +575,7 @@
             }
             this.currentTime = Date.now();
             this._intervalID = window.setInterval(function() {
-                game._tick()
+                game._tick();
             }, 1000 / this.fps);
             this.running = true;
         },
@@ -652,9 +677,12 @@
          [/lang]
          */
         resume: function() {
+            if(this.running){
+                return;
+            }
             this.currentTime = Date.now();
             this._intervalID = window.setInterval(function() {
-                game._tick()
+                game._tick();
             }, 1000 / this.fps);
             this.running = true;
         },

@@ -72,14 +72,11 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                     this._frameSequence.push(nextFrame);
                 }
             }
-        })
+        });
 
         if (enchant.Game.instance._debug) {
             this._style.border = "1px solid red";
             this._style.margin = "-1px";
-            this.addEventListener("touchstart", function() {
-                if (!enchant.Game.instance.running) console.log("touchstart", this);
-            });
         }
     },
     /**
@@ -97,7 +94,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._image;
         },
         set: function(image) {
-            if (image == this._image) return;
+            if (image === this._image){
+                return;
+            }
 
             if (this._image != null) {
                 if (this._image.css) {
@@ -183,7 +182,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     _setFrame: function(frame) {
         if (this._image != null) {
-            this._frame = frame
+            this._frame = frame;
             var row = this._image.width / this._width | 0;
             if (this._image._css) {
                 this._style.backgroundPosition = [
