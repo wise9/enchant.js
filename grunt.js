@@ -48,12 +48,12 @@ module.exports = function(grunt) {
             files: ['dev/header.js', 'dev/src/*.js']
         },
         qunit: {
-            files: ['tests/*/index.html']
+            files: ['qunit/*/index.html']
         },
         concat: {
             dist: {
                 src: ['<banner:meta.banner>',
-                    'dev/header.js',
+                    'dev/src/_header.js',
                     'dev/src/Class.js',
                     'dev/src/Env.js',
                     'dev/src/Event.js',
