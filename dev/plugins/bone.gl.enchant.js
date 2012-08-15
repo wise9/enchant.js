@@ -350,14 +350,11 @@
                 child.setPoses(poses);
             }
         },
-        _applyPose: function() {
+        _applyPose: function(){
             var parent = this.parentNode;
-            var local = vec3.create();
-            vec3.subtract(this._origin, parent._origin, local);
-            vec3.add(local, this._position);
             quat4.multiply(parent._globalrot, this._rotation, this._globalrot);
-            quat4.multiplyVec3(parent._globalrot, local, this._globalpos);
-            vec3.add(this._globalpos, parent._globalpos);
+            quat4.multiplyVec3(parent._globalrot, this._position, this._globalpos);
+            vec3.add(parent._globalpos, this._globalpos, this._globalpos);
         },
         _solveFK: function() {
             var child;
