@@ -1,5 +1,7 @@
 /*global module:false*/
+
 module.exports = function(grunt) {
+    grunt.loadNpmTasks('grunt-exec');
 
     // Project configuration.
     grunt.initConfig({
@@ -103,9 +105,16 @@ module.exports = function(grunt) {
                 enchant: true
             }
         },
-        uglify: {}
+        exec: {
+            lang: {
+                command: 'rake lang'
+            },
+            doc: {
+                command: 'rake doc'
+            }
+        }
     });
 
     // Default task.
-    grunt.registerTask('default', 'qunit concat min lint');
+    grunt.registerTask('default', 'lint qunit concat min exec:lang');
 };
