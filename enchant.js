@@ -1913,6 +1913,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }
         }
     },
+    /**
+     * @param frame
+     * @private
+     */
     _setFrame: function(frame) {
         if (this._image != null) {
             this._frame = frame;
@@ -2751,6 +2755,8 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @scope enchant.CanvasGroup
      */
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
+        /**
+         */
         initialize: function() {
             var game = enchant.Game.instance;
             var that = this;

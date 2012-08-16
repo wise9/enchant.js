@@ -38,36 +38,43 @@ enchant.tl = {};
 
 /**
  * アクションがタイムラインに追加された時に発行されるイベント
+ * @type {String}
  */
 enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
 
 /**
  * アクションがタイムラインから削除された時に発行されるイベント
  * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * @type {String}
  */
 enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
 
 /**
  * アクションが開始された時に発行されるイベント
+ * @type {String}
  */
 enchant.Event.ACTION_START = "actionstart";
 
 /**
  * アクションが終了するときに発行されるイベント
+ * @type {String}
  */
 enchant.Event.ACTION_END = "actionend";
 
 /**
  * アクションが1フレーム経過するときに発行されるイベント
+ * @type {String}
  */
 enchant.Event.ACTION_TICK = "actiontick";
 
 /**
  * アクションが追加された時に、タイムラインに対して発行されるイベント
+ * @type {String}
  */
 enchant.Event.ACTION_ADDED = "actionadded";
 /**
  * アクションが削除された時に、タイムラインに対して発行されるイベント
+ * @type {String}
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";
 
