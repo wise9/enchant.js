@@ -186,6 +186,7 @@ window.addEventListener("message", function(msg, origin) {
  * @param {*} definition クラス定義.
  * @constructor
  */
+
 enchant.Class = function(superclass, definition) {
     return enchant.Class.create(superclass, definition);
 };
@@ -222,10 +223,10 @@ enchant.Class.create = function(superclass, definition) {
         return enchant.Class.create(Object, arguments[0]);
     }
 
-    for (var prop in definition){
+    for (var prop in definition) {
         if (definition.hasOwnProperty(prop)) {
             if (typeof definition[prop] === 'object' && Object.getPrototypeOf(definition[prop]) === Object.prototype) {
-                if (!('enumerable' in definition[prop])){
+                if (!('enumerable' in definition[prop])) {
                     definition[prop].enumerable = true;
                 }
             } else {
