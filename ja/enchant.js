@@ -1183,7 +1183,7 @@ enchant.EventTarget = enchant.Class.create({
          * ゲームを再開する。
          */
         resume: function() {
-            if (this.running) {
+            if (this._intervalID) {
                 return;
             }
             this.currentTime = Date.now();

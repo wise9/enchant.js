@@ -680,7 +680,7 @@
          [/lang]
          */
         resume: function() {
-            if (this.running) {
+            if (this._intervalID) {
                 return;
             }
             this.currentTime = Date.now();
