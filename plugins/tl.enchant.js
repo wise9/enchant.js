@@ -613,7 +613,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         var timeline = this;
         this.add(new enchant.tl.Action({
             onactionstart: func,
-            onactiontick: function(func) {
+            onactiontick: function(evt) {
                 if (func.call(this)) {
                     timeline.next();
                 }
