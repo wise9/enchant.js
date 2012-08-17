@@ -9,7 +9,8 @@
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
-     * 画像表示機能を持ったクラス.
+     * 画像表示機能を持ったクラス。
+     * Entity を継承している。
      *
      * @example
      *   var bear = new Sprite(32, 32);

@@ -273,9 +273,9 @@ if (enchant.gl != undefined) {
                     loadVisualScenes(xml);
                     var model = _this.convert();
                     _this.onload(model);
-                }
+                };
                 req.send(null);
-            }
+            };
 
             function loadGeometries(xml) {
                 var geometries = xml.getElementsByTagName("library_geometries")[0].getElementsByTagName("geometry");
