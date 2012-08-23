@@ -55,6 +55,7 @@ Usage
         }
     </script>
 
+More examples and references: [enchantjs.com](http://enchantjs.com)
 
 How to build
 ------------
