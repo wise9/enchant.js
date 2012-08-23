@@ -172,7 +172,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
             action.frame++;
-            if (action.time != null && action.frame > action.time) {
+            if (action.time != null && action.frame >= action.time) {
                 evt.timeline.next();
             }
         });
@@ -306,10 +306,11 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(tween.frame+1, 0, 1, tween.time+1) - tween.easing(tween.frame, 0, 1, tween.time+1);
+            var ratio = tween.easing(tween.frame + 1, 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
             for (var prop in target) if (target.hasOwnProperty(prop)) {
                 if (typeof this[prop] === "undefined")continue;
                 tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                if (Math.abs(tween.node[prop]) < 10e-8) tween.node[prop] = 0;
             }
         });
     }
