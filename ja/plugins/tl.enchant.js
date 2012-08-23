@@ -313,11 +313,10 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(tween.frame, 0, 1, tween.time);
+            var ratio = tween.easing(tween.frame+1, 0, 1, tween.time+1) - tween.easing(tween.frame, 0, 1, tween.time+1);
             for (var prop in target) if (target.hasOwnProperty(prop)) {
                 if (typeof this[prop] === "undefined")continue;
-                var val = target[prop] * ratio + origin[prop] * (1 - ratio);
-                tween.node[prop] = val;
+                tween.node[prop] += (target[prop] - origin[prop]) * ratio;
             }
         });
     }
