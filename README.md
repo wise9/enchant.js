@@ -40,10 +40,26 @@ License
 
 Dual licensed under the MIT or GPL Version 3 licenses
 
-How to build?
+Usage
+-----
+    <script src='./enchant.js'></script>
+    <script>
+        enchant();
+        window.onload = function(){
+            var game = new Game(320, 320); 
+
+            var label = new Label('Hello, enchant.js!');
+            game.rootScene.addChild(label);
+            
+            game.start();
+        }
+    </script>
+
+
+How to build
 ------------
 
-Source code is divided into class files (dev/src/*.js). They include multi-language comments. You can build enchant.js with 'grunt' command from these files.
+Source code is divided into class files (dev/src/*.js). These files include multi-language comments. You can build enchant.js with 'grunt' command from these files.
 If you want to send a pull request or join development enchant.js, please edit files under dev/src, use this build tool and commit the built work tree.
 
 To setup grunt.js (build tool for node.js) as npm package, type:
