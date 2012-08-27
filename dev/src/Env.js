@@ -69,5 +69,12 @@ enchant.ENV = {
     CANVAS_DRAWING_METHODS: [
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
-    ]
+    ],
+    KEY_BIND_TABLE: {
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
+    },
+    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32]
 };
