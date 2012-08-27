@@ -317,7 +317,14 @@ enchant.ENV = {
     CANVAS_DRAWING_METHODS: [
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
-    ]
+    ],
+    KEY_BIND_TABLE: {
+        37: 'left',
+        38: 'up',
+        39: 'right',
+        40: 'down'
+    },
+    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32]
 };
 /**
  * @scope enchant.Event.prototype
@@ -854,11 +861,7 @@ enchant.EventTarget = enchant.Class.create({
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
-            this._keybind = {};
-            this.keybind(37, 'left');  // Left Arrow
-            this.keybind(38, 'up');    // Up Arrow
-            this.keybind(39, 'right'); // Right Arrow
-            this.keybind(40, 'down');  // Down Arrow
+            this._keybind = enchant.ENV.KEY_BIND_TABLE || {};
 
             var c = 0;
             ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
@@ -893,7 +896,7 @@ enchant.EventTarget = enchant.Class.create({
                 var evt;
                 document.addEventListener('keydown', function(e) {
                     game.dispatchEvent(new enchant.Event('keydown'));
-                    if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode === 32) {
+                    if (enchant.ENV.PREVENT_DEFAULT_KEY_CODES.indexOf(e.keyCode) !== -1) {
                         e.preventDefault();
                         e.stopPropagation();
                     }
