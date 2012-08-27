@@ -50,7 +50,7 @@ module.exports = function(grunt) {
             files: ['dev/header.js', 'dev/src/*.js']
         },
         qunit: {
-            files: ['qunit/*/index.html']
+            files: ['qunit/*/*.html']
         },
         concat: {
             dist: {

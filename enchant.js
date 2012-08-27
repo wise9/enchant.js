@@ -1178,7 +1178,7 @@ enchant.EventTarget = enchant.Class.create({
          * Resumes game.
          */
         resume: function() {
-            if (this.running) {
+            if (this._intervalID) {
                 return;
             }
             this.currentTime = Date.now();
