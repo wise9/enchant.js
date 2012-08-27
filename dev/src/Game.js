@@ -281,11 +281,7 @@
              [/lang]
              */
             this.input = {};
-            this._keybind = {};
-            this.keybind(37, 'left');  // Left Arrow
-            this.keybind(38, 'up');    // Up Arrow
-            this.keybind(39, 'right'); // Right Arrow
-            this.keybind(40, 'down');  // Down Arrow
+            this._keybind = enchant.ENV.KEY_BIND_TABLE || {};
 
             var c = 0;
             ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
@@ -320,7 +316,7 @@
                 var evt;
                 document.addEventListener('keydown', function(e) {
                     game.dispatchEvent(new enchant.Event('keydown'));
-                    if ((37 <= e.keyCode && e.keyCode <= 40) || e.keyCode === 32) {
+                    if (enchant.ENV.PREVENT_DEFAULT_KEY_CODES.indexOf(e.keyCode) !== -1) {
                         e.preventDefault();
                         e.stopPropagation();
                     }

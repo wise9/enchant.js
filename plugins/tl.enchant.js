@@ -1,6 +1,6 @@
 /**
  * tl.enchant.js
- * @version 0.4
+ * @version 0.5
  * @require enchant.js v0.5.0 or later
  * @author sidestepism
  *
