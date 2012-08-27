@@ -49,9 +49,10 @@ test('tl.tween', function() {
 });
 
 
-test('tl.tween (and)', function() {
+
+test('tl.tween', function() {
     var sprite = enchant.Game.instance.rootScene.childNodes[0];
-    sprite.tl.moveTo(320, 0, 30).and().moveTo(0, 320, 30);
+    sprite.tl.moveTo(320, 320, 30);
     equal(sprite.x, 0);
     equal(sprite.y, 0);
     for (var i = 0; i < 30 - 1; i++) {
@@ -64,6 +65,22 @@ test('tl.tween (and)', function() {
     sprite.dispatchEvent(enterframe);
     equal(Math.round(sprite.x, 5), 320);
     equal(Math.round(sprite.y, 5), 320);
+});
+
+
+
+test('tl.tween (minus)', function() {
+    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    
+    sprite.moveTo(200, 0);
+    sprite.tl.moveBy(-200, 0, 8);
+    equal(sprite.x, 200);
+
+    for (var i = 0; i < 8; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    equal(sprite.x, 0);
 });
 
 
