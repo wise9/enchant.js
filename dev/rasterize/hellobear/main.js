@@ -76,7 +76,6 @@ window.onload = function() {
         var child_bear = new Bear();
         var group = new enchant.Group(32, 32);
         group.moveTo(64*8, 64);
-        group.rotation = 90;
         group.addChild(child_bear);
         game.rootScene.addChild(group);
 

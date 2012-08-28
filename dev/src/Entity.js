@@ -30,6 +30,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._visible = true;
         this._buttonMode = null;
 
+        this._style = {};
+
         /**
          [lang:ja]
          * Entityにボタンの機能を設定する.
@@ -379,7 +381,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         get: function() {
             return this._originX;
         },
-        set: function(originY) {
+        set: function(originX) {
             this._originX = originX;
         }
     },

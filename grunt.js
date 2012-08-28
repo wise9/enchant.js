@@ -116,5 +116,5 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', 'lint concat min qunit exec:lang');
+    grunt.registerTask('default', 'lint concat min qunit exec:lang exec:img');
 };

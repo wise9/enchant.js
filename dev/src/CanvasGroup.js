@@ -142,6 +142,7 @@
                 game._listeners['exitframe'] = [];
             }
             game._listeners['exitframe'].push(this._onexitframe);
+
         },
         _stopRendering: function() {
             var game = enchant.Game.instance;
