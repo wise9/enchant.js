@@ -124,6 +124,7 @@ window.onload = function(){
              * この無名関数 function(){ ... } は enterframe イベントのリスナなので、毎フレーム実行される。
              */
             this.x += 1;
+            this.rotation += 1;
 
             /**
              * this.age (Node.age) は、クマのオブジェクトが今までに何回描画されたか
