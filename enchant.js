@@ -2338,7 +2338,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 }());
 
 
-/**
+ /**
  * @scope enchant.Group.prototype
  */
 enchant.Group = enchant.Class.create(enchant.Node, {

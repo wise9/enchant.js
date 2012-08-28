@@ -3256,7 +3256,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 }());
 
 
-/**
+ /**
  [lang:ja]
  * @scope enchant.Group.prototype
  [/lang]

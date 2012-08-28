@@ -1,0 +1,5 @@
+How to run hellobear test
+=========================
+
+1. install phantomjs command (http://code.google.com/p/phantomjs/)
+2. run "phantomjs rasterize.js hellobear/index.html hellobear.png"

@@ -1,4 +1,4 @@
-/**
+ /**
  [lang:ja]
  * @scope enchant.Group.prototype
  [/lang]
