@@ -14,24 +14,24 @@
             enchant.Group.call(this);
             this._dirty = false;
             this._rotation = 0;
-            this._cvsCache = {};
-            this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0];
-            this._cvsCache.detectColor = '#000000';
+
+            this._cvsCache = {
+                matrix: [1, 0, 0, 1, 0, 0],
+                detectColor: '#0000000'
+            };
+
             this.width = game.width;
             this.height = game.height;
 
-            var sceneEvents = [
-                enchant.Event.ADDED_TO_SCENE,
-                enchant.Event.REMOVED_FROM_SCENE
-            ];
-            sceneEvents.forEach(function(event) {
-                this.addEventListener(event, function(e) {
-                    this.childNodes.forEach(function(child) {
-                        child.scene = this.scene;
-                        child.dispatchEvent(e);
-                    }, this);
-                });
-            }, this);
+            [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
+                .forEach(function(event) {
+                    this.addEventListener(event, function(e) {
+                        this.childNodes.forEach(function(child) {
+                            child.scene = this.scene;
+                            child.dispatchEvent(e);
+                        }, this);
+                    });
+                }, this);
 
             this._element = document.createElement('canvas');
             this._element.width = game.width;
