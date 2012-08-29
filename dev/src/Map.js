@@ -46,7 +46,7 @@
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
 
-            var surface = new Surface();
+            var surface = new enchant.Surface();
             surface.context = canvas;
             this._image = surface;
             this._data = [
@@ -390,7 +390,6 @@
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
             var source = image;
-            console.log(image);
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);

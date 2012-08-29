@@ -2772,7 +2772,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
 
-            var surface = new Surface();
+            var surface = new enchant.Surface();
             surface.context = canvas;
             this._image = surface;
             this._data = [
@@ -3116,7 +3116,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
             var source = image;
-            console.log(image);
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);
@@ -3533,6 +3532,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
             this._colorManager = new DetectColorManager(16, 256);
 
+            /**
+             * canvas タグに対して、DOM のイベントリスナを貼る
+             */
             if (enchant.ENV.TOUCH_ENABLED) {
                 this._element.addEventListener('touchstart', function(e) {
                     var touches = e.touches;
@@ -3595,6 +3597,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     that._mousedown = false;
                 }, false);
             }
+
             var start = [
                 enchant.Event.ENTER,
                 enchant.Event.ADDED_TO_SCENE
@@ -3626,6 +3629,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 rendering.call(that, ctx);
             };
         },
+        /**
+         * レンダリング用のイベントリスナを Game オブジェクトに登録
+         * @private
+         */
         _startRendering: function() {
             var game = enchant.Game.instance;
             if (!game._listeners['exitframe']) {
@@ -3634,6 +3641,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             game._listeners['exitframe'].push(this._onexitframe);
 
         },
+        /**
+         * _startRendering で登録したレンダリング用のイベントリスナを削除
+         * @private
+         */
         _stopRendering: function() {
             var game = enchant.Game.instance;
             game.removeEventListener('exitframe', this._onexitframe);
@@ -3663,7 +3674,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         },
         _touchendPropagation: function(e) {
             if (this._touching != null) {
-                console.log('_touchendPropagation', this._touching);
                 propagationUp.call(this._touching, e, this.parentNode);
                 this._touching = null;
             }
@@ -3742,7 +3752,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     var _touchstartFromDom = function(e) {
         var game = enchant.Game.instance;
         var group;
-        console.log('hogehoge', canvasGroupInstances);
         for (var i = canvasGroupInstances.length - 1; i >= 0; i--) {
             group = canvasGroupInstances[i];
             if (group.scene !== game.currentScene) {
@@ -4038,7 +4047,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     );
 
     var propagationUp = function(e, end) {
-        console.log('  propagationUp');
         this.dispatchEvent(e);
     };
 }());

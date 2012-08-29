@@ -54,6 +54,9 @@
 
             this._colorManager = new DetectColorManager(16, 256);
 
+            /**
+             * canvas タグに対して、DOM のイベントリスナを貼る
+             */
             if (enchant.ENV.TOUCH_ENABLED) {
                 this._element.addEventListener('touchstart', function(e) {
                     var touches = e.touches;
@@ -116,6 +119,7 @@
                     that._mousedown = false;
                 }, false);
             }
+
             var start = [
                 enchant.Event.ENTER,
                 enchant.Event.ADDED_TO_SCENE
@@ -147,6 +151,10 @@
                 rendering.call(that, ctx);
             };
         },
+        /**
+         * レンダリング用のイベントリスナを Game オブジェクトに登録
+         * @private
+         */
         _startRendering: function() {
             var game = enchant.Game.instance;
             if (!game._listeners['exitframe']) {
@@ -155,6 +163,10 @@
             game._listeners['exitframe'].push(this._onexitframe);
 
         },
+        /**
+         * _startRendering で登録したレンダリング用のイベントリスナを削除
+         * @private
+         */
         _stopRendering: function() {
             var game = enchant.Game.instance;
             game.removeEventListener('exitframe', this._onexitframe);
@@ -184,7 +196,6 @@
         },
         _touchendPropagation: function(e) {
             if (this._touching != null) {
-                console.log('_touchendPropagation', this._touching);
                 propagationUp.call(this._touching, e, this.parentNode);
                 this._touching = null;
             }
@@ -263,7 +274,6 @@
     var _touchstartFromDom = function(e) {
         var game = enchant.Game.instance;
         var group;
-        console.log('hogehoge', canvasGroupInstances);
         for (var i = canvasGroupInstances.length - 1; i >= 0; i--) {
             group = canvasGroupInstances[i];
             if (group.scene !== game.currentScene) {
@@ -559,7 +569,6 @@
     );
 
     var propagationUp = function(e, end) {
-        console.log('  propagationUp');
         this.dispatchEvent(e);
     };
 }());
