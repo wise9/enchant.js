@@ -61,7 +61,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          */
         this.buttonPressed = false;
         this.addEventListener('touchstart', function() {
-            if (!this.buttonMode){
+            if (!this.buttonMode) {
                 return;
             }
             this.buttonPressed = true;
@@ -70,7 +70,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             game.dispatchEvent(e);
         });
         this.addEventListener('touchend', function() {
-            if (!this.buttonMode){
+            if (!this.buttonMode) {
                 return;
             }
             this.buttonPressed = false;
@@ -143,7 +143,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._width;
         },
         set: function(width) {
-            this._style.width = (this._width = width) + 'px';
+            this._width = width;
         }
     },
     /**
@@ -161,7 +161,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._height;
         },
         set: function(height) {
-            this._style.height = (this._height = height) + 'px';
+            this._height = height;
         }
     },
     /**
@@ -219,11 +219,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._visible;
         },
         set: function(visible) {
-            if (this._visible = visible) {
-                this._style.display = 'block';
-            } else {
-                this._style.display = 'none';
-            }
+            this._visible = visible;
         }
     },
     /**
@@ -298,7 +294,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     scale: function(x, y) {
-        if (y == null){
+        if (y == null) {
             y = x;
         }
         this._scaleX *= x;
@@ -376,7 +372,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._dirty = true;
         }
     },
-
     originX: {
         get: function() {
             return this._originX;

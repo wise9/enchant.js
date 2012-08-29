@@ -118,13 +118,14 @@ window.onload = function(){
          * ここでは、右に向かって走っていくアニメーションを表現するために、
          * 新しいフレームが描画される前に、毎回クマの画像を切り替え、x座標を1増やすという処理をリスナとして追加する。
          */
+        bear.originX = 0;
+        bear.originY = 0;
         bear.addEventListener("enterframe", function(){
             /**
              * クマを走らせるために、x座標をインクリメントしている。
              * この無名関数 function(){ ... } は enterframe イベントのリスナなので、毎フレーム実行される。
              */
             this.x += 1;
-            this.rotation += 1;
 
             /**
              * this.age (Node.age) は、クマのオブジェクトが今までに何回描画されたか
@@ -153,5 +154,5 @@ window.onload = function(){
      * 代わりに Game#debug を使うことで、デバッグモードで起動することができる。
      * Game#pause(); で一時停止し、 Game#resume(); で再開することができる。
      */
-    game.start();
+    game.debug();
 };

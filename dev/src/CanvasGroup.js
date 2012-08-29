@@ -3,6 +3,16 @@
      * @scope enchant.CanvasGroup
      */
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
+        /**
+         [lang:ja]
+         * 子を Canvas を用いた描画に切り替えるクラス
+         * @constructor
+         [/lang]
+         [lang:en]
+         *
+         * @constructor
+         [/lang]
+         */
         initialize: function() {
             var game = enchant.Game.instance;
             var that = this;
@@ -494,11 +504,7 @@
     );
 
     var is__dirty = function() {
-        if (this._dirty) {
-            this.__dirty = true;
-        } else {
-            this.__dirty = false;
-        }
+        this.__dirty = !!(this._dirty);
     };
 
     var attachCache = function(colorManager) {
