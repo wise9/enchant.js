@@ -535,6 +535,7 @@ enchant.EventTarget = enchant.Class.create({
         e.localY = e.y - this._offsetY;
         if (this['on' + e.type] != null) this['on' + e.type]();
         var listeners = this._listeners[e.type];
+
         if (listeners != null) {
             listeners = listeners.slice();
             for (var i = 0, len = listeners.length; i < len; i++) {

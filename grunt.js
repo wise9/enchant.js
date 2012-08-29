@@ -83,7 +83,7 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            files: '<config:concat.dist.src>',
+            files: 'dev/src/*.js',
             tasks: 'concat min'
         },
         jshint: {

@@ -55,17 +55,17 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this.scene = null;
 
         this.addEventListener('touchstart', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchmove', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchend', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });

@@ -16,6 +16,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
      */
     initialize: function() {
         enchant.CanvasGroup.call(this);
+        this.scene = this;
     },
     /**
      * Scene background color.

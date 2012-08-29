@@ -729,6 +729,8 @@ enchant.EventTarget = enchant.Class.create({
                 stage.style.width = window.innerWidth + 'px';
                 stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
+
+
                 if (document.body.firstChild) {
                     document.body.insertBefore(stage, document.body.firstChild);
                 } else {
@@ -740,6 +742,9 @@ enchant.EventTarget = enchant.Class.create({
                 );
                 this._pageX = 0;
                 this._pageY = 0;
+
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
             } else {
                 var style = window.getComputedStyle(stage);
                 width = parseInt(style.width, 10);
@@ -757,6 +762,10 @@ enchant.EventTarget = enchant.Class.create({
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
+
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
                 this._pageY = Math.round(window.scrollY + bounding.top);
@@ -1366,17 +1375,17 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this.scene = null;
 
         this.addEventListener('touchstart', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchmove', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchend', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
@@ -1919,12 +1928,14 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 canvas.width = game.width;
                 canvas.height = game.height;
             }
-            this._element.appendChild(canvas);
             this._context = canvas.getContext('2d');
 
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
-            this._image = null;
+
+            var surface = new enchant.Surface();
+            surface.context = canvas;
+            this._image = surface;
             this._data = [
                 [
                     []
@@ -2205,7 +2216,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             var right = Math.ceil((x + dx + width) / tileWidth);
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
-            var source = image._element;
+            var source = image;
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);
@@ -2516,6 +2527,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         initialize: function() {
             var game = enchant.Game.instance;
             var that = this;
+
             enchant.Group.call(this);
             this._dirty = false;
             this._rotation = 0;
@@ -2553,6 +2565,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
             this._colorManager = new DetectColorManager(16, 256);
 
+            /**
+             * canvas タグに対して、DOM のイベントリスナを貼る
+             */
             if (enchant.ENV.TOUCH_ENABLED) {
                 this._element.addEventListener('touchstart', function(e) {
                     var touches = e.touches;
@@ -2615,6 +2630,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     that._mousedown = false;
                 }, false);
             }
+
             var start = [
                 enchant.Event.ENTER,
                 enchant.Event.ADDED_TO_SCENE
@@ -2646,6 +2662,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 rendering.call(that, ctx);
             };
         },
+        /**
+         * レンダリング用のイベントリスナを Game オブジェクトに登録
+         * @private
+         */
         _startRendering: function() {
             var game = enchant.Game.instance;
             if (!game._listeners['exitframe']) {
@@ -2654,6 +2674,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             game._listeners['exitframe'].push(this._onexitframe);
 
         },
+        /**
+         * _startRendering で登録したレンダリング用のイベントリスナを削除
+         * @private
+         */
         _stopRendering: function() {
             var game = enchant.Game.instance;
             game.removeEventListener('exitframe', this._onexitframe);
@@ -2671,9 +2695,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 this._touching = sp;
                 propagationUp.call(this._touching, e, this.parentNode);
             } else {
-                sp = null;
+                this._touching = enchant.Game.instance.currentScene;
+                propagationUp.call(this._touching, e, this._touching);
             }
-            return sp;
+            return this._touching;
         },
         _touchmovePropagation: function(e) {
             if (this._touching != null) {
@@ -2756,6 +2781,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     var canvasGroupInstances = [];
     var touchingEntity = null;
     var touchingGroup = null;
+
     var _touchstartFromDom = function(e) {
         var game = enchant.Game.instance;
         var group;
@@ -2772,6 +2798,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             }
         }
     };
+
     var _touchmoveFromDom = function(e) {
         if (touchingGroup != null) {
             touchingGroup._touchmovePropagation(e);
@@ -3054,9 +3081,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
     var propagationUp = function(e, end) {
         this.dispatchEvent(e);
-        if (this.parentNode && this.parentNode !== end) {
-            propagationUp.call(this.parentNode, e, end);
-        }
     };
 }());
 
@@ -3078,6 +3102,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
      */
     initialize: function() {
         enchant.CanvasGroup.call(this);
+        this.scene = this;
     },
     /**
      * Scene background color.
