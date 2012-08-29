@@ -94,6 +94,8 @@
                 stage.style.width = window.innerWidth + 'px';
                 stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
+
+
                 if (document.body.firstChild) {
                     document.body.insertBefore(stage, document.body.firstChild);
                 } else {
@@ -105,6 +107,9 @@
                 );
                 this._pageX = 0;
                 this._pageY = 0;
+
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
             } else {
                 var style = window.getComputedStyle(stage);
                 width = parseInt(style.width, 10);
@@ -122,6 +127,10 @@
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
+
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
                 this._pageY = Math.round(window.scrollY + bounding.top);

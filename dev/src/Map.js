@@ -41,12 +41,14 @@
                 canvas.width = game.width;
                 canvas.height = game.height;
             }
-            this._element.appendChild(canvas);
             this._context = canvas.getContext('2d');
 
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
-            this._image = null;
+
+            var surface = new Surface();
+            surface.context = canvas;
+            this._image = surface;
             this._data = [
                 [
                     []
@@ -387,7 +389,8 @@
             var right = Math.ceil((x + dx + width) / tileWidth);
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
-            var source = image._element;
+            var source = image;
+            console.log(image);
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);

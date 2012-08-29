@@ -16,6 +16,7 @@
         initialize: function() {
             var game = enchant.Game.instance;
             var that = this;
+
             enchant.Group.call(this);
             this._dirty = false;
             this._rotation = 0;
@@ -171,9 +172,10 @@
                 this._touching = sp;
                 propagationUp.call(this._touching, e, this.parentNode);
             } else {
-                sp = null;
+                this._touching = enchant.Game.instance.currentScene;
+                propagationUp.call(this._touching, e, this._touching);
             }
-            return sp;
+            return this._touching;
         },
         _touchmovePropagation: function(e) {
             if (this._touching != null) {
@@ -182,6 +184,7 @@
         },
         _touchendPropagation: function(e) {
             if (this._touching != null) {
+                console.log('_touchendPropagation', this._touching);
                 propagationUp.call(this._touching, e, this.parentNode);
                 this._touching = null;
             }
@@ -256,9 +259,11 @@
     var canvasGroupInstances = [];
     var touchingEntity = null;
     var touchingGroup = null;
+
     var _touchstartFromDom = function(e) {
         var game = enchant.Game.instance;
         var group;
+        console.log('hogehoge', canvasGroupInstances);
         for (var i = canvasGroupInstances.length - 1; i >= 0; i--) {
             group = canvasGroupInstances[i];
             if (group.scene !== game.currentScene) {
@@ -272,6 +277,7 @@
             }
         }
     };
+
     var _touchmoveFromDom = function(e) {
         if (touchingGroup != null) {
             touchingGroup._touchmovePropagation(e);
@@ -553,9 +559,7 @@
     );
 
     var propagationUp = function(e, end) {
+        console.log('  propagationUp');
         this.dispatchEvent(e);
-        if (this.parentNode && this.parentNode !== end) {
-            propagationUp.call(this.parentNode, e, end);
-        }
     };
 }());
