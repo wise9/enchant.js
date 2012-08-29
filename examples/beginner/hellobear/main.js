@@ -154,5 +154,5 @@ window.onload = function(){
      * 代わりに Game#debug を使うことで、デバッグモードで起動することができる。
      * Game#pause(); で一時停止し、 Game#resume(); で再開することができる。
      */
-    game.debug();
+    game.start();
 };
