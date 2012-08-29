@@ -1174,7 +1174,7 @@ enchant.widget.EntityGroup = enchant.Class.create(enchant.Entity, {
             return this._background;
         },
         set: function(surface) {
-            if (surface instanceof Surface) {
+            if (surface instanceof enchant.Surface) {
                 this._background = surface;
                 this._style.backgroundImage = surface._css;
             }
