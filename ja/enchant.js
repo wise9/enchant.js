@@ -1361,6 +1361,11 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetX = 0;
         this._offsetY = 0;
 
+        /**
+         *         * Node が ENTER_FRAME イベントを受け取る前にインクリメントされる数値。
+         * ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。
+         *         *         * @type {Number}
+         */
         this.age = 0;
 
         /**

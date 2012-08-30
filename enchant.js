@@ -1356,6 +1356,10 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetX = 0;
         this._offsetY = 0;
 
+        /**
+         *         *         * age (frames) of this node which will be increased before this node receives ENTER_FRAME event.
+         *         * @type {Number}
+         */
         this.age = 0;
 
         /**
