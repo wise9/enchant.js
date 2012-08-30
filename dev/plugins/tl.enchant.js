@@ -385,6 +385,9 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * (キューの先頭にあるアクションに対して、actionstart/actiontickイベントを発行する)
      */
     tick: function() {
+        if (this.paused) {
+            return;
+        }
         if (this.queue.length > 0) {
             var action = this.queue[0];
             if (action.frame == 0) {
@@ -461,14 +464,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * タイムラインの実行を一時停止する
      */
     pause: function() {
-        this.paused = false;
+        this.paused = true;
         return this;
     },
     /**
      * タイムラインの実行を再開する
      */
     resume: function() {
-        this.paused = true;
+        this.paused = false;
         return this;
     },
     /**
