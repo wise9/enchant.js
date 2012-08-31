@@ -819,10 +819,11 @@ enchant.EventTarget = enchant.Class.create({
              */
             this.loadingScene = new enchant.Scene();
             this.loadingScene.backgroundColor = '#000';
-            var barWidth = this.width * 0.9 | 0;
-            var barHeight = this.width * 0.3 | 0;
-            var border = barWidth * 0.05 | 0;
+            var barWidth = this.width * 0.4 | 0;
+            var barHeight = this.width * 0.05 | 0;
+            var border = barWidth * 0.03 | 0;
             var bar = new enchant.Sprite(barWidth, barHeight);
+
             bar.x = (this.width - barWidth) / 2;
             bar.y = (this.height - barHeight) / 2;
             var image = new enchant.Surface(barWidth, barHeight);
@@ -1138,14 +1139,14 @@ enchant.EventTarget = enchant.Class.create({
             var push = Array.prototype.push;
             while (nodes.length) {
                 var node = nodes.pop();
-                node.dispatchEvent(e);
                 node.age++;
+                node.dispatchEvent(e);
                 if (node.childNodes) {
                     push.apply(nodes, node.childNodes);
                 }
             }
-            this.currentScene.age++;
 
+            this.currentScene.age++;
             this.currentScene.dispatchEvent(e);
             this.dispatchEvent(e);
 
@@ -1281,7 +1282,7 @@ enchant.EventTarget = enchant.Class.create({
             return this.frame / this.fps;
         }
     });
-// img
+
     enchant.Game._loadFuncs = {};
     enchant.Game._loadFuncs['jpg'] =
         enchant.Game._loadFuncs['jpeg'] =
@@ -1291,7 +1292,6 @@ enchant.EventTarget = enchant.Class.create({
                         this.assets[src] = enchant.Surface.load(src);
                         this.assets[src].addEventListener('load', callback);
                     };
-// sound
     enchant.Game._loadFuncs['mp3'] =
         enchant.Game._loadFuncs['aac'] =
             enchant.Game._loadFuncs['m4a'] =
@@ -1810,10 +1810,15 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 
         this.addEventListener('render', function() {
             if (this._dirty) {
-                this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = [
+                var transform = [
                     'rotate(', this._rotation, 'deg)',
                     'scale(', this._scaleX, ',', this._scaleY, ')'
-                ].join('');
+                ];
+                // Issues #80
+                if (navigator.userAgent.indexOf('iPhone') !== -1) {
+                  transform.push('translate3d(0,0,0)');
+                }
+                this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = transform.join('');
                 this._dirty = false;
             }
         });
@@ -1916,6 +1921,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }
         }
     },
+    /**
+     * @param frame
+     * @private
+     */
     _setFrame: function(frame) {
         if (this._image != null) {
             this._frame = frame;
@@ -2754,30 +2763,32 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @scope enchant.CanvasGroup
      */
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
+        /**
+         */
         initialize: function() {
             var game = enchant.Game.instance;
             var that = this;
             enchant.Group.call(this);
             this._dirty = false;
             this._rotation = 0;
-            this._cvsCache = {};
-            this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0];
-            this._cvsCache.detectColor = '#000000';
+
+            this._cvsCache = {
+                matrix: [1, 0, 0, 1, 0, 0],
+                detectColor: '#0000000'
+            };
+
             this.width = game.width;
             this.height = game.height;
 
-            var sceneEvents = [
-                enchant.Event.ADDED_TO_SCENE,
-                enchant.Event.REMOVED_FROM_SCENE
-            ];
-            sceneEvents.forEach(function(event) {
-                this.addEventListener(event, function(e) {
-                    this.childNodes.forEach(function(child) {
-                        child.scene = this.scene;
-                        child.dispatchEvent(e);
-                    }, this);
-                });
-            }, this);
+            [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
+                .forEach(function(event) {
+                    this.addEventListener(event, function(e) {
+                        this.childNodes.forEach(function(child) {
+                            child.scene = this.scene;
+                            child.dispatchEvent(e);
+                        }, this);
+                    });
+                }, this);
 
             this._element = document.createElement('canvas');
             this._element.width = game.width;

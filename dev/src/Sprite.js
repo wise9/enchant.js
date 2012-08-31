@@ -51,10 +51,15 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 
         this.addEventListener('render', function() {
             if (this._dirty) {
-                this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = [
+                var transform = [
                     'rotate(', this._rotation, 'deg)',
                     'scale(', this._scaleX, ',', this._scaleY, ')'
-                ].join('');
+                ];
+                // Issues #80
+                if (navigator.userAgent.indexOf('iPhone') !== -1) {
+                  transform.push('translate3d(0,0,0)');
+                }
+                this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = transform.join('');
                 this._dirty = false;
             }
         });
@@ -181,6 +186,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }
         }
     },
+    /**
+     * @param frame
+     * @private
+     */
     _setFrame: function(frame) {
         if (this._image != null) {
             this._frame = frame;
