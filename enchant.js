@@ -1775,6 +1775,33 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._rotation = rotation;
             this._dirty = true;
         }
+<<<<<<< HEAD
+=======
+    },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+        }
+    },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
+        }
+>>>>>>> dae5869... rename doc/ja, doc/en, and divide them into core/plugins
     }
 });
 /**
@@ -2608,6 +2635,10 @@ enchant.RGroup = enchant.Class.create(enchant.Group, {
         enchant.Group.prototype.addChild.apply(this, arguments);
         node.transformOrigin = "0 0";
     },
+    /**
+     * rotation of group
+     * @type {Number}
+     */
     rotation: {
         get: function() {
             return this._rotation;
@@ -2737,11 +2768,18 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
     },
     /**
+<<<<<<< HEAD
      * Scene background color.
      * Can indicate same format as CSS 'color' property.
      * @type {String}
      */
     backgroundColor: {
+=======
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originX: {
+>>>>>>> dae5869... rename doc/ja, doc/en, and divide them into core/plugins
         get: function() {
             return this._backgroundColor;
         },
@@ -2749,21 +2787,38 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._element.style.backgroundColor = this._backgroundColor = color;
         }
     },
+<<<<<<< HEAD
     _updateCoordinate: function() {
         this._offsetX = this._x;
         this._offsetY = this._y;
         for (var i = 0, len = this.childNodes.length; i < len; i++) {
             this.childNodes[i]._updateCoordinate();
+=======
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
+>>>>>>> dae5869... rename doc/ja, doc/en, and divide them into core/plugins
         }
     }
 });
 
 (function() {
     /**
-     * @scope enchant.CanvasGroup
+     * @scope enchant.CanvasGroup.prototype
      */
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
         /**
+<<<<<<< HEAD
+=======
+         * @constructs
+>>>>>>> dae5869... rename doc/ja, doc/en, and divide them into core/plugins
          */
         initialize: function() {
             var game = enchant.Game.instance;
@@ -2937,6 +2992,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 this._touching = null;
             }
         },
+        /**
+         * rotation of group
+         * @see enchant.CanvasGroup.originX
+         * @see enchant.CanvasGroup.originY
+         * @type {Number}
+         */
         rotation: {
             get: function() {
                 return this._rotation;
@@ -2946,6 +3007,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 this._dirty = true;
             }
         },
+        /**
+         * scaling of group in the direction of x axis
+         * @see enchant.CanvasGroup.originX
+         * @see enchant.CanvasGroup.originY
+         * @type {Number}
+         */
         scaleX: {
             get: function() {
                 return this._scaleX;
@@ -2955,6 +3022,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 this._dirty = true;
             }
         },
+        /**
+         * scaling of group in the direction of y axis
+         * @see enchant.CanvasGroup.originX
+         * @see enchant.CanvasGroup.originY
+         * @type {Number}
+         */
         scaleY: {
             get: function() {
                 return this._scaleY;
