@@ -36,10 +36,7 @@
  * game.start();
  */
 
-/**
- * avatar namespace object
- * @type {Object}
- */
+
 enchant.avatar = {};
 
 /**
@@ -50,7 +47,6 @@ enchant.avatar = {};
 enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
     /**
      * Constructor of AvatarCharacter
-     * @constructs
      * @param width
      * @param height
      */
@@ -112,13 +108,12 @@ enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
 /**
  * AvatarMonster
  * subclass of enchant.AvatarCharacter
- * @scope enchant.avatar.AvatarMonster.prototype
+ * @scope enchant.AvatarMonster.prototype
  */
 enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
     /**
      * AvatarMonster
      * Manage a monter animations
-     * @constructs
      * @param {image} Image of monster
      * @extends enchant.AvatarCharacter
      */
@@ -145,8 +140,7 @@ enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
 enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
     /**
      * A class of infinite scrolling background.
-     * @param mode {Number} 0 to 3
-     * @constructs
+     * @param {mode} 0 to 3
      * @extends enchant.Group
      */
     initialize: function(mode) {
@@ -202,7 +196,6 @@ enchant.avatar.Avatar = enchant.Class.create(enchant.AvatarCharacter, {
     /**
      * @param {int}code  Avatar code
      * @extends enchant.AvatarCharacter
-     * @constructs
      */
     initialize: function(code) {
         enchant.AvatarCharacter.call(this, 64, 64);

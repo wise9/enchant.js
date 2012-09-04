@@ -54,7 +54,7 @@
          * アニメーションの状態を表すための基底クラス.
          * @param {Number[]} position
          * @param {Number[]} rotation
-         * @constructs
+         * @cpnstructs
          */
         initialize: function(position, rotation) {
             this._position = vec3.create();

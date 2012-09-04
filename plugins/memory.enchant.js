@@ -98,12 +98,7 @@
      * @scope enchant.nineleap.memory.Game.prototype
      */
     enchant.nineleap.memory.Game = enchant.Class.create(parentModule.Game, {
-        /**
-         * メモリを扱うためのゲームオブジェクト
-         * @constructs
-         * @param width
-         * @param height
-         */
+
         initialize: function(width, height) {
             parentModule.Game.call(this, width, height);
             this._memoryRequests = [];
@@ -162,10 +157,6 @@
             parentModule.Game.prototype.start.call(this);
         },
 
-        /**
-         * 格納しているデータ
-         * @type {*}
-         */
         memory: {
             get: function() {
                 return this._memory;
@@ -395,7 +386,7 @@
                 }
                 return request;
             }
-        }
+        },
     });
 
 
@@ -403,11 +394,6 @@
      * @scope enchant.nineleap.memory.HttpRequest.prototype
      */
     enchant.nineleap.memory.HttpRequest = enchant.Class.create(enchant.EventTarget, {
-        /**
-         * @constructs
-         * @private
-         * @extends enchant.EventTarget
-         */
         initialize: function() {
             if (LocalStorage.DEBUG) return;
             enchant.EventTarget.call(this);
@@ -498,15 +484,6 @@
      * @scope enchant.nineleap.memory.MemoryRequest.prototype
      */
     enchant.nineleap.memory.MemoryRequest = enchant.Class.create({
-        /**
-         * メモリAPI に送るリクエスト
-         * @private
-         * @constructs
-         * @param id
-         * @param requestType
-         * @param option
-         * @param checkError
-         */
         initialize: function(id, requestType, option, checkError) {
             if (LocalStorage.DEBUG) return;
             this.id = id;
@@ -538,16 +515,6 @@
      * @scope enchant.nineleap.memory.MemoryWrite.prototype
      */
     enchant.nineleap.memory.MemoryWrite = enchant.Class.create(enchant.nineleap.memory.HttpRequest, {
-        /**
-         * メモリAPI に対して書き込みのリクエストを送るためのオブジェクト
-         * @private
-         * @constructs
-         * @param id
-         * @param requestType
-         * @param callback
-         * @param checkError
-         * @param data
-         */
         initialize: function(id, requestType, callback, checkError, data) {
             if (LocalStorage.DEBUG) return;
             enchant.nineleap.memory.HttpRequest.call(this);

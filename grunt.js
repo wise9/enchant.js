@@ -47,7 +47,7 @@ module.exports = function(grunt) {
             min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Licensed under MIT or GPLv3. (c) Ubiquitous Entertainment Inc. */'
         },
         lint: {
-            files: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js']
+            files: ['dev/header.js', 'dev/src/*.js']
         },
         qunit: {
             files: ['qunit/*/*.html']

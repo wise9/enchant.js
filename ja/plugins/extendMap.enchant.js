@@ -9,21 +9,8 @@
  * http://github.com/wise9/enchantMapEditor
  */
 
-/**
- * plugin namespace object
- * @type {Object}
- */
 enchant.extendMap = {};
-
-/**
- * scope enchant.extendMap.ExMap.prototype
- * @type {*}
- */
 enchant.extendMap.ExMap = enchant.Class.create(enchant.Map, {
-    /**
-     * @extends enchant.Map
-     */
-
     type2data: function() {
         var len = this._typeData.length;
         var xlen = this._typeData[0][0].length;

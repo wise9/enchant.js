@@ -1455,6 +1455,7 @@ enchant.gl = {};
          *   var sprite = new Sprite3D();
          *   //Sprite3Dをシーンに追加
          *   scene.addChild(sprite);
+         *
          * @constructs
          * @extends enchant.EventTarget
          */
