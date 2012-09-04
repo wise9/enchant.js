@@ -12,8 +12,8 @@ enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
 // 背景専用スプライト
 enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継承したクラスを作成する
     initialize: function(backgroundimaget) { // コンストラクタを上書きする
-        Sprite.call(this, enchant.Game.instance.width, enchant.Game.instance.height); // 継承元のコンストラクタを適用する
-        if (arguments.length == 1) {
+        enchant.Sprite.call(this, enchant.Game.instance.width, enchant.Game.instance.height); // 継承元のコンストラクタを適用する
+        if (arguments.length === 1) {
             this.image = arguments[0];
         } else {
             this.image = enchant.Game.instance.assets["back.png"];
@@ -44,7 +44,7 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
             this.width = Math.min(this.returnLength * this.fontSize, enchant.Game.instance.width);
         }
         this.height = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
-        this.image = new Surface(this.width, this.height);
+        this.image = new enchant.Surface(this.width, this.height);
         this.image.context.clearRect(0, 0, this.width, this.height);
         for (i = 0; i < txt.length; i++) {
             charCode = txt.charCodeAt(i);
@@ -82,10 +82,12 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
 // スコアラベル
 enchant.util.ScoreLabel = enchant.Class.create(enchant.util.MutableText, {
     initialize: function(x, y) {
-        MutableText.call(this, 0, 0);
+        enchant.util.MutableText.call(this, 0, 0);
         switch (arguments.length) {
             case 2:
                 this.y = y;
+                this.x = x;
+                break;
             case 1:
                 this.x = x;
                 break;
@@ -97,7 +99,7 @@ enchant.util.ScoreLabel = enchant.Class.create(enchant.util.MutableText, {
         this.easing = 2.5;
         this.text = this.label = 'SCORE:';
         this.addEventListener('enterframe', function() {
-            if (this.easing == 0) {
+            if (this.easing === 0) {
                 this.text = this.label + (this._current = this._score);
             } else {
                 this._current += Math.ceil((this._score - this._current) / this.easing);
@@ -115,14 +117,26 @@ enchant.util.ScoreLabel = enchant.Class.create(enchant.util.MutableText, {
     }
 });
 
-// タイムラベル
+/**
+ * 残り時間などのタイムを表示するラベル
+ * @type {*}
+ * @scope enchant.util.TimeLabel.prototype
+ */
 enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
+    /**
+     * @constructs
+     * @param x
+     * @param y
+     * @param counttype
+     */
     initialize: function(x, y, counttype) {
-        MutableText.call(this, 0, 0);
+        enchant.util.MutableText.call(this, 0, 0);
         switch (arguments.length) {
             case 3:
             case 2:
                 this.y = y;
+                this.x = x;
+                break;
             case 1:
                 this.x = x;
                 break;
@@ -131,7 +145,9 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
         }
         this._time = 0;
         this._count = 1;// この数を毎フレーム每に足して上げ下げを制御する
-        if (counttype == 'countdown')this._count = -1;
+        if (counttype === 'countdown') {
+            this._count = -1;
+        }
         this.text = this.label = 'TIME:';
         this.addEventListener('enterframe', function() {
             this._time += this._count;
@@ -148,19 +164,29 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
     }
 });
 
-// ライフラベル
+/**
+ * ライフを表示するラベル
+ * @type {*}
+ * @scope enchant.util.LifeLabel.prototype
+ */
 enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
+    /**
+     * @constructs
+     * @param x
+     * @param y
+     * @param maxlife
+     */
     initialize: function(x, y, maxlife) {
-        Group.call(this);
+        enchant.Group.call(this);
         this.x = x || 0;
         this.y = y || 0;
         this._maxlife = maxlife || 9;
         this._life = 0;
-        this.label = new MutableText(0, 0, 80, 'LIFE:')
+        this.label = new enchant.MutableText(0, 0, 80, 'LIFE:');
         this.addChild(this.label);
         this.heart = [];
         for (var i = 0; i < this._maxlife; i++) {
-            this.heart[i] = new Sprite(16, 16);
+            this.heart[i] = new enchant.Sprite(16, 16);
             this.heart[i].image = enchant.Game.instance.assets['icon0.gif'];
             this.heart[i].x = this.label.width + i * 16;
             this.heart[i].y = -3;
@@ -178,21 +204,26 @@ enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
                 this._life = this._maxlife;
             }
             for (var i = 0; i < this._maxlife; i++) {
-                if (i <= newlife - 1) {
-                    this.heart[i].visible = true;
-                } else {
-                    this.heart[i].visible = false;
-                }
+                this.heart[i].visible = (i <= newlife - 1);
             }
         }
     }
 });
 
-// イージング付きのバー (左右方向のみ) 
-enchant.Bar = enchant.Class.create(enchant.Sprite, {
+/**
+ * @scope enchant.util.Bar
+ * @type {*}
+ */
+enchant.util.Bar = enchant.Class.create(enchant.Sprite, {
+    /**
+     * イージング付きのバー
+     * @constructs
+     * @param x
+     * @param y
+     */
     initialize: function(x, y) {
-        Sprite.call(this, 1, 16);
-        this.image = new Surface(1, 16);// Null用
+        enchant.Sprite.call(this, 1, 16);
+        this.image = new enchant.Surface(1, 16);// Null用
         this.image.context.fillColor = 'RGB(0, 0, 256)';
         this.image.context.fillRect(0, 0, 1, 16);
         this._direction = 'right';
@@ -204,19 +235,29 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
         switch (arguments.length) {
             case 2:
                 this.y = y;
+                this.x = x;
+                this._origin = x;
+                break;
             case 1:
                 this.x = x;
                 this._origin = x;
+                break;
             default:
                 break;
         }
         this.addEventListener('enterframe', function() {
-            if (this.value < 0)this.value = 0;
+            if (this.value < 0){
+                this.value = 0;
+            }
             this._lastvalue += (this.value - this._lastvalue) / this.easing;
-            if (Math.abs(this._lastvalue - this.value) < 1.3)this._lastvalue = this.value;
+            if (Math.abs(this._lastvalue - this.value) < 1.3){
+                this._lastvalue = this.value;
+            }
             this.width = (this._lastvalue) | 0;
-            if (this.width > this._maxvalue)this.width = this._maxvalue;
-            if (this._direction == 'left') {
+            if (this.width > this._maxvalue){
+                this.width = this._maxvalue;
+            }
+            if (this._direction === 'left') {
                 this._x = this._origin - this.width;
             } else {
                 this._x = this._origin;
@@ -229,8 +270,8 @@ enchant.Bar = enchant.Class.create(enchant.Sprite, {
             return this._direction;
         },
         set: function(newdirection) {
-            if (newdirection != 'right' && newdirection != 'left') {
-                console.warn(newdirection + ' は未定義の向きです。rightかleftを指定してください.');
+            if (newdirection !== 'right' && newdirection !== 'left') {
+                // ignore
             } else {
                 this._direction = newdirection;
             }

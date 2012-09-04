@@ -1351,6 +1351,12 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetX = 0;
         this._offsetY = 0;
 
+        /**
+         *         * Node が画面に表示されてから経過したフレーム数。
+         * ENTER_FRAME イベントを受け取る前にインクリメントされる。
+         * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
+         *         *         * @type {Number}
+         */
         this.age = 0;
 
         /**
@@ -1779,6 +1785,30 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         set: function(rotation) {
             this._rotation = rotation;
             this._dirty = true;
+        }
+    },
+    /**
+     * 回転・拡大縮小の基準点のX座標
+     * @type {Number}
+     */
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+        }
+    },
+    /**
+     * 回転・拡大縮小の基準点のY座標
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
         }
     }
 });
@@ -2591,6 +2621,59 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         for (var i = 0, len = this.childNodes.length; i < len; i++) {
             this.childNodes[i]._updateCoordinate();
         }
+    },
+    /**
+     * rotation of group
+     * @type {Number}
+     */
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            var diff_rotation = (rotation - this._rotation);
+
+            if (diff_rotation === 0){
+                return;
+            }
+            var rad = diff_rotation / 180 * Math.PI;
+            var sin = Math.sin(rad);
+            var cos = Math.cos(rad);
+
+            for (var i = 0, len = this.childNodes.length; i < len; i++) {
+                var node = this.childNodes[i];
+                var rx = (node.x - node.originX | 0);
+                var ry = (node.y - node.originY | 0);
+                node.x += +cos * rx + sin * ry + node.originX | 0;
+                node.y += -sin * rx + cos * ry + node.originY | 0;
+            }
+
+            this._rotation = rotation;
+        }
+    },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+        }
+    },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
+        }
     }
 });
 /**
@@ -2779,11 +2862,13 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 
 (function() {
     /**
-     * @scope enchant.CanvasGroup
+     * @scope enchant.CanvasGroup.prototype
      */
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
         /**
          * Canvas を用いた描画を行うクラス。
+         * 子を Canvas を用いた描画に切り替えるクラス
+         * @constructs
          */
         initialize: function() {
             var game = enchant.Game.instance;
@@ -2957,6 +3042,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 this._touching = null;
             }
         },
+        /**
+         * rotation of group
+         * @see enchant.CanvasGroup.originX
+         * @see enchant.CanvasGroup.originY
+         * @type {Number}
+         */
         rotation: {
             get: function() {
                 return this._rotation;
@@ -2966,6 +3057,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 this._dirty = true;
             }
         },
+        /**
+         * scaling of group in the direction of x axis
+         * @see enchant.CanvasGroup.originX
+         * @see enchant.CanvasGroup.originY
+         * @type {Number}
+         */
         scaleX: {
             get: function() {
                 return this._scaleX;
@@ -2975,6 +3072,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 this._dirty = true;
             }
         },
+        /**
+         * scaling of group in the direction of y axis
+         * @see enchant.CanvasGroup.originX
+         * @see enchant.CanvasGroup.originY
+         * @type {Number}
+         */
         scaleY: {
             get: function() {
                 return this._scaleY;

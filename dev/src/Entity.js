@@ -10,14 +10,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * DOM上で表示する実体を持ったクラス.直接使用することはない.
-     * @constructs
-     * @extends enchant.Node
      [/lang]
      [lang:en]
      * A class with objects displayed on DOM. Not used directly.
+     [/lang]
      * @constructs
      * @extends enchant.Node
-     [/lang]
      */
     initialize: function() {
         var game = enchant.Game.instance;
@@ -442,12 +440,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Spriteの回転角 (度数法).
-     * @type {Number}
      [/lang]
      [lang:en]
      * Sprite rotation angle (frequency).
-     * @type {Number}
      [/lang]
+     * @type {Number}
      */
     rotation: {
         get: function() {
@@ -456,6 +453,40 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         set: function(rotation) {
             this._rotation = rotation;
             this._dirty = true;
+        }
+    },
+    /**
+     [lang:ja]
+     * 回転・拡大縮小の基準点のX座標
+     [/lang]
+     [lang:en]
+     * origin point of rotation, scaling
+     [/lang]
+     * @type {Number}
+     */
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+        }
+    },
+    /**
+     [lang:ja]
+     * 回転・拡大縮小の基準点のY座標
+     [/lang]
+     [lang:en]
+     * origin point of rotation, scaling
+     [/lang]
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
         }
     }
 });
