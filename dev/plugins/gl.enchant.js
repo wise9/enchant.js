@@ -715,7 +715,6 @@ enchant.gl = {};
             n = gl.getProgramParameter(this._program, gl.ACTIVE_UNIFORMS);
             for (var i = 0; i < n; i++) {
                 var info = gl.getActiveUniform(this._program, i);
-                this._uniforms[info.name];
                 addUniformsProperty(this, info);
             }
         },
@@ -753,7 +752,7 @@ enchant.gl = {};
     };
 
     var addUniformsProperty = function(program, info) {
-        var name = info.name;
+        var name = (info.name.slice(-3) == '[0]') ? info.name.slice(0, -3) : info.name;
         var loc = gl.getUniformLocation(program._program, info.name);
         var suffix;
         var sampler = false;
