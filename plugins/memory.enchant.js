@@ -25,12 +25,13 @@
     /**
      * 依存ライブラリcheck
      */
-    if (enchant.nineleap.twitter != undefined &&
-        Object.getPrototypeOf(enchant.nineleap.twitter) == Object.prototype) {
-        var parentModule = enchant.nineleap.twitter;
-    } else if (enchant.nineleap != undefined &&
-        Object.getPrototypeOf(enchant.nineleap) == Object.prototype) {
-        var parentModule = enchant.nineleap;
+    var parentModule;
+    if (enchant.nineleap.twitter !== undefined &&
+        Object.getPrototypeOf(enchant.nineleap.twitter) === Object.prototype) {
+        parentModule = enchant.nineleap.twitter;
+    } else if (enchant.nineleap === undefined &&
+        Object.getPrototypeOf(enchant.nineleap) === Object.prototype) {
+        parentModule = enchant.nineleap;
     } else {
         throw new Error('Cannot load nineleap.enchant.js.');
     }

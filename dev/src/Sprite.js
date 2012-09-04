@@ -133,6 +133,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }
         }
     },
+    /**
+     * @param frame
+     * @private
+     */
     _setFrame: function(frame) {
         if (this._image != null) {
             this._frame = frame;

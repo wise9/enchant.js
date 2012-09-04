@@ -5,12 +5,12 @@
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
         /**
          [lang:ja]
+         * Canvas を用いた描画を行うクラス。
          * 子を Canvas を用いた描画に切り替えるクラス
-         * @constructs
          [/lang]
          [lang:en]
-         * @constructs
          [/lang]
+         * @constructs
          */
         initialize: function() {
             var game = enchant.Game.instance;

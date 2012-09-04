@@ -40,19 +40,27 @@ License
 
 Dual licensed under the MIT or GPL Version 3 licenses
 
-How to build?
+Usage
+-----
+    <script src='./enchant.js'></script>
+    <script>
+        enchant();
+        window.onload = function(){
+            var game = new Game(320, 320); 
+
+            var label = new Label('Hello, enchant.js!');
+            game.rootScene.addChild(label);
+            
+            game.start();
+        }
+    </script>
+
+More examples and references: [enchantjs.com](http://enchantjs.com)
+
+How to build
 ------------
 
-[ここからのセクションは、enchant.js の開発に参加する人向けのものです。]
-
-ソースコードは、クラスファイルに分割されています (deb/src/*.js) 。この中には多言語対応のコメントが含まれており、このファイル群から `grunt` コマンドを使って enchant.js をビルドすることができます。
-enchant.js の開発に参加したり、pull request を送る場合は、dev/src 以下のファイルを編集し、ビルドした状態のワークツリーををコミットしてください。
-
-node.js で書かれたビルドツリー grunt.js は、以下のコマンドでインストールできます (npm が必要です)。また、qunit テストを grunt.js で実行するためには、 [phantomjs](http://code.google.com/p/phantomjs/) が必要です。
-
-    npm install grunt grunt-exec -g
-
-Source code is divided into class files (dev/src/*.js). They include multi-language comments. You can build enchant.js with 'grunt' command from these files.
+Source code is divided into class files (dev/src/*.js). These files include multi-language comments. You can build enchant.js with 'grunt' command from these files.
 If you want to send a pull request or join development enchant.js, please edit files under dev/src, use this build tool and commit the built work tree.
 
 To setup grunt.js (build tool for node.js) as npm package, type:
