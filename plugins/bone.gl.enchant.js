@@ -54,7 +54,7 @@
          * Base class for expressing animation condition.
          * @param {Number[]} position
          * @param {Number[]} rotation
-         * @cpnstructs
+         * @constructs
          */
         initialize: function(position, rotation) {
             this._position = vec3.create();

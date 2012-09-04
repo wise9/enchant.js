@@ -203,6 +203,15 @@
      * @scope enchant.nineleap.SplashScene.prototype
      */
     enchant.nineleap.SplashScene = enchant.Class.create(enchant.Scene, {
+        /**
+         * @extends enchant.Scene
+         * スプラッシュ画像を表示するシーン。
+         */
+
+        /**
+         * 中央に表示する画像
+         * @type {enchant.Surface}
+         */
         image: {
             get: function() {
                 return this._image;
@@ -210,9 +219,12 @@
             set: function(image) {
                 this._image = image;
 
+                // discard all child nodes
                 while (this.firstChild) {
                     this.removeChild(this.firstChild);
                 }
+
+                // generate an Sprite object and put it on center
                 var sprite = new Sprite(image.width, image.height);
                 sprite.image = image;
                 sprite.x = (this.width - image.width) / 2;
