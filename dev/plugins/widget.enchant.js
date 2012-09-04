@@ -61,13 +61,12 @@ enchant.widget = {
      */
     parseContent: function(content, font, color) {
         var en;
-        if (typeof content == 'undefined') {
+        if (typeof content === 'undefined') {
             content = '';
         }
-        if (typeof content == 'number') {
+        if (typeof content === 'number') {
             content = arguments.callee('' + content, font);
         } else if (content instanceof enchant.Entity) {
-            //
         } else if (content instanceof enchant.Surface) {
             en = new enchant.Sprite(content.width, content.height);
             en.image = content;
@@ -277,9 +276,9 @@ var getElementMetrics = function(string, font) {
 
     if (document.body) {
         document.body.appendChild(e);
-        height = parseInt(getComputedStyle(e).height);
+        height = parseInt(getComputedStyle(e).height, 10);
         e.style.position = 'absolute';
-        width = parseInt(getComputedStyle(e).width);
+        width = parseInt(getComputedStyle(e).width, 10);
         document.body.removeChild(e);
     } else {
         height = 14 * arr.length;

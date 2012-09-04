@@ -291,6 +291,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this.childNodes[i]._updateCoordinate();
         }
     },
+    /**
+     * rotation of group
+     * @type {Number}
+     */
     rotation: {
         get: function() {
             return this._rotation;
@@ -317,6 +321,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this._rotation = rotation;
         }
     },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
     originX: {
         get: function() {
             return this._originX;
@@ -325,6 +333,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this._originX = originX;
         }
     },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
     originY: {
         get: function() {
             return this._originY;
