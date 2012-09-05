@@ -1480,6 +1480,17 @@ enchant.widget.EntityGroup = enchant.Class.create(enchant.Entity, {
         }
     }
 });
+enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
+    if (this.background &&
+        this.background._element.width > 0 &&
+        this.background._element.height > 0) {
+        ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
+    }
+    ctx.beginPath();
+    ctx.rect(0, 0, this.width, this.height);
+    // TODO clip if style.overflow == 'hidden'
+    //ctx.clip();
+};
 
 /**
  * @scope enchant.widget.Modal

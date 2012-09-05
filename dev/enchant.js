@@ -4162,19 +4162,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
     };
 
-    if (enchant.widget) {
-        enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
-            if (this.background &&
-                this.background._element.width > 0 &&
-                this.background._element.height > 0) {
-                ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
-            }
-            ctx.beginPath();
-            ctx.rect(0, 0, this.width, this.height);
-            ctx.clip();
-        };
-    }
-
     enchant.Map.prototype.cvsRender = function(ctx) {
         var game = enchant.Game.instance;
         ctx.save();
