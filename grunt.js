@@ -100,10 +100,21 @@ module.exports = function(grunt) {
                     boss: true,
                     eqnull: true,
                     browser: true,
-                    proto: true
+                    proto: true,
+                    multistr: true
                 },
                 globals: {
-                    enchant: true
+                    enchant: true,
+                    WebGLBuffer: true,
+                    gl: true,
+                    Ammo: true,
+                    vec2: true,
+                    vec3: true,
+                    vec4: true,
+                    mat2: true,
+                    mat3: true,
+                    mat4: true,
+                    quat4: true
                 }
             },
             exec: {
