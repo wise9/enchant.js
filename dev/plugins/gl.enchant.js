@@ -52,18 +52,18 @@ enchant.gl = {};
     var parentModule = null;
     (function() {
         enchant();
-        if (enchant.nineleap != undefined) {
-            if (enchant.nineleap.memory != undefined &&
-                Object.getPrototypeOf(enchant.nineleap.memory) == Object.prototype) {
+        if (enchant.nineleap !== undefined) {
+            if (enchant.nineleap.memory !== undefined &&
+                Object.getPrototypeOf(enchant.nineleap.memory) === Object.prototype) {
                 parentModule = enchant.nineleap.memory;
-            } else if (enchant.nineleap != undefined &&
-                Object.getPrototypeOf(enchant.nineleap) == Object.prototype) {
+            } else if (enchant.nineleap !== undefined &&
+                Object.getPrototypeOf(enchant.nineleap) === Object.prototype) {
                 parentModule = enchant.nineleap;
             }
         } else {
             parentModule = enchant;
         }
-    })();
+    }());
 
     enchant.gl.Game = enchant.Class.create(parentModule.Game, {
         initialize: function(width, height) {
@@ -99,17 +99,14 @@ enchant.gl = {};
     var GLUtil = enchant.Class.create({
         initialize: function() {
             var game = enchant.Game.instance;
-            if (typeof game.GL != 'undefined') {
+            if (typeof game.GL !== 'undefined') {
                 return game.GL;
             }
-            this._canvas;
-            this._gl;
             this._createStage(game.width, game.height, game.scale);
             this._prepare();
             this.textureManager = new TextureManager();
             this.detectColorManager = new DetectColorManager();
             this.detectFrameBuffer = new enchant.gl.FrameBuffer(game.width, game.height);
-            this.currentProgram;
             this.defaultProgram = new enchant.gl.Shader(DEFAULT_VERTEX_SHADER_SOURCE, DEFAULT_FRAGMENT_SHADER_SOURCE);
             this.setDefaultProgram();
         },
@@ -142,8 +139,8 @@ enchant.gl = {};
                 var sprite;
                 detect.addEventListener('touchstart', function(e) {
                     var scene = game.currentScene3D;
-                    var x = parseInt(e.x);
-                    var y = parseInt(this.height - e.y);
+                    var x = parseInt(e.x, 10);
+                    var y = parseInt(this.height - e.y, 10);
                     that.detectFrameBuffer.bind();
                     scene._draw('detect');
                     gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
@@ -155,17 +152,17 @@ enchant.gl = {};
                     that.detectFrameBuffer.unbind();
                 });
                 detect.addEventListener('touchmove', function(e) {
-                    if (touching != null) {
+                    if (touching !== null) {
                         touching.dispatchEvent(e);
                     }
                 });
                 detect.addEventListener('touchend', function(e) {
-                    if (touching != null) {
+                    if (touching !== null) {
                         touching.dispatchEvent(e);
                     }
                     touching = null;
                 });
-            })();
+            }());
             window['gl'] = this._gl = this._getContext(cvs);
             div.appendChild(cvs);
             stage.insertBefore(div, game.rootScene._element);
@@ -174,7 +171,7 @@ enchant.gl = {};
         _getContext: function(canvas, debug) {
             var ctx = canvas.getContext(CONTEXT_NAME);
             if (!ctx) {
-                alert('could not initialized WebGL');
+                window['alert']('could not initialized WebGL');
                 throw new Error('could not initialized WebGL');
             }
             if (debug) {
@@ -203,7 +200,7 @@ enchant.gl = {};
 
     var parseColor = function(string) {
         var color = [];
-        if (typeof string == 'string') {
+        if (typeof string === 'string') {
             if (string.match(/#/)) {
                 string.match(/[0-9a-fA-F]{2}/g).forEach(function(n) {
                     color[color.length] = ('0x' + n - 0) / 255;
@@ -231,23 +228,24 @@ enchant.gl = {};
         var names = {};
         var type = '';
         var val;
-        for (var prop in context) if(context.hasOwnProperty(prop)) {
+        var makeFakedMethod = function(context, prop) {
+            return function() {
+                var value, error;
+                value = context[prop].apply(context, arguments);
+                error = context.getError();
+                if (error) {
+                    window['console'].log(names[error] + '(' + error + ')' + ': ' + prop);
+                    window['console'].log(arguments);
+                }
+                return value;
+            };
+        };
+        for (var prop in context) {
             type = typeof context[prop];
             val = context[prop];
-            if (type == 'function') {
-                ctx[prop] = (function(context, prop) {
-                    return function() {
-                        var value, error;
-                        value = context[prop].apply(context, arguments);
-                        error = context.getError();
-                        if (error) {
-                            console.log(names[error] + '(' + error + ')' + ': ' + prop);
-                            console.log(arguments);
-                        }
-                        return value;
-                    }
-                })(context, prop);
-            } else if (type == 'number') {
+            if (type === 'function') {
+                ctx[prop] = makeFakedMethod(context, prop);
+            } else if (type === 'number') {
                 names[val] = prop;
                 ctx[prop] = val;
             } else {
@@ -296,7 +294,7 @@ enchant.gl = {};
             return ret;
         },
         isPowerOfTwo: function(n) {
-            return (n > 0) && ((n & (n - 1)) == 0);
+            return (n > 0) && ((n & (n - 1)) === 0);
         },
         setTextureParameter: function(power, target, wrap, mipmap) {
             var filter;
@@ -318,10 +316,10 @@ enchant.gl = {};
         },
         _writeWebGLTexture: function(image, target, wrap, mipmap) {
             var power = this.isPowerOfTwo(image.width) && this.isPowerOfTwo(image.height);
-            if (typeof target == 'undefined') {
+            if (typeof target === 'undefined') {
                 target = gl.TEXTURE_2D;
             }
-            if (typeof wrap == 'undefined') {
+            if (typeof wrap === 'undefined') {
                 wrap = gl.REPEAT;
             }
             this.setTextureParameter(power, target, wrap, mipmap);
@@ -367,7 +365,7 @@ enchant.gl = {};
 
     var DetectColorManager = enchant.Class.create({
         initialize: function() {
-            this.reference = new Array();
+            this.reference = [];
             this.detectColorNum = 0;
         },
         attachDetectColor: function(sprite) {
@@ -378,15 +376,15 @@ enchant.gl = {};
         _createNewColor: function() {
             var n = this.detectColorNum;
             return [
-                parseInt(n / 65536) / 255,
-                parseInt(n / 256) / 255,
-                parseInt(n % 256) / 255, 1.0
+                parseInt(n / 65536, 10) / 255,
+                parseInt(n / 256, 10) / 255,
+                parseInt(n % 256, 10) / 255, 1.0
             ];
         },
         _decodeDetectColor: function(color) {
-            return ~~(color[0] * 65536)
-                + ~~(color[1] * 256)
-                + ~~(color[2]);
+            return Math.floor(color[0] * 65536) +
+                Math.floor(color[1] * 256) +
+                Math.floor(color[2]);
         },
         getSpriteByColor: function(color) {
             return this.reference[this._decodeDetectColor(color)];
@@ -418,10 +416,10 @@ enchant.gl = {};
          */
         initialize: function(width, height) {
             var game = enchant.Game.instance;
-            if (typeof width == 'undefined') {
+            if (typeof width === 'undefined') {
                 width = game.width;
             }
-            if (typeof height == 'undefined') {
+            if (typeof height === 'undefined') {
                 height = game.height;
             }
             this.framebuffer = gl.createFramebuffer();
@@ -475,7 +473,6 @@ enchant.gl = {};
             gl.deleteFramebuffer(this.framebuffer);
             gl.deleteFramebuffer(this.colorbuffer);
             gl.deleteFramebuffer(this.depthbuffer);
-            delete this;
         }
     });
 
@@ -517,10 +514,10 @@ enchant.gl = {};
             this._attribLocs = {};
             this._samplersNum = 0;
 
-            if (typeof vshader == 'string') {
+            if (typeof vshader === 'string') {
                 this.vShaderSource = vshader;
             }
-            if (typeof fshader == 'string') {
+            if (typeof fshader === 'string') {
                 this.fShaderSource = fshader;
             }
             if (this._updatedVShaderSource && this._updatedFShaderSource) {
@@ -596,7 +593,7 @@ enchant.gl = {};
             if (this._updatedFShaderSource) {
                 this._prepareFShader();
             }
-            if (this._program == null) {
+            if (this._program === null) {
                 this._program = gl.createProgram();
             } else {
                 gl.detachShader(this._program, this._vShaderProgram);
@@ -648,8 +645,10 @@ enchant.gl = {};
          [/lang]
          */
         setAttributes: function(params) {
-            for (var prop in params) if(params.hasOwnProperty(prop)) {
-                this._attributes[prop] = params[prop];
+            for (var prop in params) {
+                if (params.hasOwnProperty(prop)) {
+                    this._attributes[prop] = params[prop];
+                }
             }
         },
         /**
@@ -677,12 +676,14 @@ enchant.gl = {};
          [/lang]
          */
         setUniforms: function(params) {
-            for (prop in params) if(params.hasOwnProperty(prop)) {
-                this._uniforms[prop] = params[prop];
+            for (var prop in params) {
+                if (params.hasOwnProperty(prop)) {
+                    this._uniforms[prop] = params[prop];
+                }
             }
         },
         _prepareVShader: function() {
-            if (this._vShaderProgram == null) {
+            if (this._vShaderProgram === null) {
                 this._vShaderProgram = gl.createShader(gl.VERTEX_SHADER);
             }
             gl.shaderSource(this._vShaderProgram, this._vShaderSource);
@@ -690,7 +691,7 @@ enchant.gl = {};
             this._updatedVShaderSource = false;
         },
         _prepareFShader: function() {
-            if (this._fShaderProgram == null) {
+            if (this._fShaderProgram === null) {
                 this._fShaderProgram = gl.createShader(gl.FRAGMENT_SHADER);
             }
             gl.shaderSource(this._fShaderProgram, this._fShaderSource);
@@ -698,8 +699,8 @@ enchant.gl = {};
             this._updatedFShaderSource = false;
         },
         _logShadersInfo: function() {
-            console.log(gl.getShaderInfoLog(this._vShaderProgram));
-            console.log(gl.getShaderInfoLog(this._fShaderProgram));
+            window['console'].log(gl.getShaderInfoLog(this._vShaderProgram));
+            window['console'].log(gl.getShaderInfoLog(this._fShaderProgram));
         },
         _getAttributesProperties: function() {
             var n;
@@ -730,7 +731,6 @@ enchant.gl = {};
             gl.deleteProgram(this._vShaderProgram);
             gl.deleteProgram(this._fShaderProgram);
             gl.deleteProgram(this._program);
-            delete this;
         }
     });
 
@@ -746,13 +746,13 @@ enchant.gl = {};
                     gl.enableVertexAttribArray(loc);
                     buf._setToAttrib(loc);
                 };
-            })(loc)
+            }(loc))
         };
         Object.defineProperty(program._attributes, name, desc);
     };
 
     var addUniformsProperty = function(program, info) {
-        var name = (info.name.slice(-3) == '[0]') ? info.name.slice(0, -3) : info.name;
+        var name = (info.name.slice(-3) === '[0]') ? info.name.slice(0, -3) : info.name;
         var loc = gl.getUniformLocation(program._program, info.name);
         var suffix;
         var sampler = false;
@@ -769,18 +769,21 @@ enchant.gl = {};
 
             case gl.FLOAT_MAT2:
                 matrix = true;
+                /* falls through */
             case gl.FLOAT_VEC2:
                 suffix = '2fv';
                 break;
 
             case gl.FLOAT_MAT3:
                 matrix = true;
+                /* falls through */
             case gl.FLOAT_VEC3:
                 suffix = '3fv';
                 break;
 
             case gl.FLOAT_MAT4:
                 matrix = true;
+                /* falls through */
             case gl.FLOAT_VEC4:
                 suffix = '4fv';
                 break;
@@ -788,6 +791,7 @@ enchant.gl = {};
             case gl.SAMPLER_2D:
             case gl.SAMPLER_CUBE:
                 sampler = true;
+                /* falls through */
             case gl.INT:
             case gl.BOOL:
                 suffix = '1i';
@@ -815,7 +819,7 @@ enchant.gl = {};
                 return function(value) {
                     gl['uniformMatrix' + suffix](loc, false, value);
                 };
-            })(loc, suffix);
+            }(loc, suffix));
         } else if (sampler) {
             desc.set = (function(loc, suffix, samplersNum) {
                 return function(texture) {
@@ -823,14 +827,14 @@ enchant.gl = {};
                     gl.bindTexture(gl.TEXTURE_2D, texture._glTexture);
                     gl['uniform' + suffix](loc, samplersNum);
                 };
-            })(loc, suffix, program._samplersNum);
+            }(loc, suffix, program._samplersNum));
             program._samplersNum++;
         } else {
             desc.set = (function(loc, suffix) {
                 return function(value) {
                     gl['uniform' + suffix](loc, value);
                 };
-            })(loc, suffix);
+            }(loc, suffix));
         }
         Object.defineProperty(program._uniforms, name, desc);
     };
@@ -895,7 +899,7 @@ enchant.gl = {};
          [/lang]
          */
         slerp: function(another, ratio) {
-            var q = new Quat(0, 0, 0, 0);
+            var q = new enchant.gl.Quat(0, 0, 0, 0);
             quat4.slerp(this._quat, another._quat, ratio, q);
             return q;
         },
@@ -1310,9 +1314,11 @@ enchant.gl = {};
             this._flipY = true;
             if (opt) {
                 var valid = ['flipY', 'wrap', 'mipmap'];
-                for (var prop in opt) if(opt.hasOwnProperty(prop)) {
-                    if (valid.indexOf(prop) != -1) {
-                        this['_' + prop] = opt[prop];
+                for (var prop in opt) {
+                    if (opt.hasOwnProperty(prop)) {
+                        if (valid.indexOf(prop) !== -1) {
+                            this['_' + prop] = opt[prop];
+                        }
                     }
                 }
             }
@@ -1346,8 +1352,8 @@ enchant.gl = {};
                 return this._src;
             },
             set: function(source) {
-                if (typeof source == 'undefined'
-                    || source == null) {
+                if (typeof source === 'undefined' ||
+                    source === null) {
                     return;
                 }
                 var that = this;
@@ -1356,14 +1362,14 @@ enchant.gl = {};
                     return function() {
                         that._glTexture = game.GL.textureManager.getWebGLTexture(that._image, that._flipY, that._wrap, that._mipmap);
                     };
-                })(that);
+                }(that));
                 if (source instanceof Image) {
                     this._image = source;
                     onload();
-                } else if (source instanceof Surface) {
+                } else if (source instanceof enchant.Surface) {
                     this._image = source._element;
                     onload();
-                } else if (typeof source == 'string') {
+                } else if (typeof source === 'string') {
                     this._image = new Image();
                     this._image.onload = onload;
                     this._image.src = source;
@@ -1413,10 +1419,10 @@ enchant.gl = {};
          */
         initialize: function(params, array) {
             this._setParams(params);
-            if (typeof array != 'undefined') {
+            if (typeof array !== 'undefined') {
                 this._array = array;
             } else {
-                this._array = new Array();
+                this._array = [];
             }
             this._buffer = null;
         },
@@ -1443,8 +1449,10 @@ enchant.gl = {};
             gl.bindBuffer(this.btype, null);
         },
         _setParams: function(params) {
-            for (prop in params) if(params.hasOwnProperty(prop)) {
-                this[prop] = params[prop];
+            for (var prop in params) {
+                if (params.hasOwnProperty(prop)) {
+                    this[prop] = params[prop];
+                }
             }
         },
         _create: function() {
@@ -1478,7 +1486,6 @@ enchant.gl = {};
          */
         destroy: function() {
             this._delete();
-            delete this;
         }
     });
 
@@ -1549,7 +1556,7 @@ enchant.gl = {};
             this._colors = new enchant.gl.Buffer(enchant.gl.Buffer.COLORS);
             this._texCoords = new enchant.gl.Buffer(enchant.gl.Buffer.TEXCOORDS);
             this._indices = new enchant.gl.Buffer(enchant.gl.Buffer.INDICES);
-            this.texture = new Texture();
+            this.texture = new enchant.gl.Texture();
         },
         /**
          [lang:ja]
@@ -1609,17 +1616,21 @@ enchant.gl = {};
             this._indices._bufferData();
         },
         _createBuffer: function() {
-            for (var prop in this) if(this.hasOwnProperty(prop)) {
-                if (this[prop] instanceof enchant.gl.Buffer) {
-                    this[prop]._create();
-                    this[prop]._bufferData();
+            for (var prop in this) {
+                if (this.hasOwnProperty(prop)) {
+                    if (this[prop] instanceof enchant.gl.Buffer) {
+                        this[prop]._create();
+                        this[prop]._bufferData();
+                    }
                 }
             }
         },
         _deleteBuffer: function() {
-            for (var prop in this) if(this.hasOwnProperty(prop)) {
-                if (this[prop] instanceof enchant.gl.Buffer) {
-                    this[prop]._delete();
+            for (var prop in this) {
+                if (this.hasOwnProperty(prop)) {
+                    if (this[prop] instanceof enchant.gl.Buffer) {
+                        this[prop]._delete();
+                    }
                 }
             }
         },
@@ -1674,7 +1685,6 @@ enchant.gl = {};
          */
         destroy: function() {
             this._deleteBuffer();
-            delete this;
         }
     });
 
@@ -1718,7 +1728,7 @@ enchant.gl = {};
      * @see enchant.gl.Mesh#texCoords
      [/lang]
      */
-    enchant.gl.Mesh.prototype.vertices;
+    enchant.gl.Mesh.prototype.vertices = [];
 
     /**
      [lang:ja]
@@ -1780,7 +1790,7 @@ enchant.gl = {};
      * @see enchant.gl.Mesh#texCoords
      [/lang]
      */
-    enchant.gl.Mesh.prototype.normals;
+    enchant.gl.Mesh.prototype.normals = [];
 
     /**
      [lang:ja]
@@ -1852,7 +1862,7 @@ enchant.gl = {};
      * @see enchant.gl.Mesh#texture#
      [/lang]
      */
-    enchant.gl.Mesh.prototype.texCoords;
+    enchant.gl.Mesh.prototype.texCoords = [];
 
     /**
      [lang:ja]
@@ -1916,7 +1926,7 @@ enchant.gl = {};
      * @see enchant.gl.Mesh#texCoords
      [/lang]
      */
-    enchant.gl.Mesh.prototype.indices;
+    enchant.gl.Mesh.prototype.indices = [];
 
     /**
      [lang:ja]
@@ -1976,7 +1986,7 @@ enchant.gl = {};
      * @see enchant.gl.Mesh#setBaseColor
      [/lang]
      */
-    enchant.gl.Mesh.prototype.colors;
+    enchant.gl.Mesh.prototype.colors = [];
 
     'vertices normals colors texCoords indices'.split(' ').forEach(function(prop) {
         Object.defineProperty(enchant.gl.Mesh.prototype, prop, {
@@ -2110,7 +2120,7 @@ enchant.gl = {};
 
             this.program = null;
 
-            this.bounding = new BS();
+            this.bounding = new enchant.gl.collision.BS();
             this.bounding.parent = this;
 
             this.age = 0;
@@ -2141,16 +2151,16 @@ enchant.gl = {};
             this.detectColor = game.GL.detectColorManager.attachDetectColor(this);
 
             var parentEvent = function(e) {
-                if (this.parentNode instanceof Sprite3D) {
+                if (this.parentNode instanceof enchant.gl.Sprite3D) {
                     this.parentNode.dispatchEvent(e);
                 }
-            }
+            };
             this.addEventListener('touchstart', parentEvent);
             this.addEventListener('touchmove', parentEvent);
             this.addEventListener('touchend', parentEvent);
 
             var added = function(e) {
-                if (this.mesh != null) {
+                if (this.mesh !== null) {
                     this.mesh._count++;
                 }
                 if (this.childNodes.length) {
@@ -2163,7 +2173,7 @@ enchant.gl = {};
             this.addEventListener('addedtoscene', added);
 
             var removed = function(e) {
-                if (this.mesh != null) {
+                if (this.mesh !== null) {
                     this.mesh._count--;
                 }
                 if (this.childNodes.length) {
@@ -2200,22 +2210,22 @@ enchant.gl = {};
          [/lang]
          */
         clone: function() {
-            var clone = new Sprite3D();
-            for (prop in this) {
-                if (typeof this[prop] == 'number' ||
-                    typeof this[prop] == 'string') {
+            var clone = new enchant.gl.Sprite3D();
+            for (var prop in this) {
+                if (typeof this[prop] === 'number' ||
+                    typeof this[prop] === 'string') {
                     clone[prop] = this[prop];
                 } else if (this[prop] instanceof WebGLBuffer) {
                     clone[prop] = this[prop];
                 } else if (this[prop] instanceof Float32Array) {
                     clone[prop] = new Float32Array(this[prop]);
-                } else if (this[prop] instanceof Array
-                    && prop != 'childNodes'
-                    && prop != 'detectColor') {
+                } else if (this[prop] instanceof Array &&
+                    prop !== 'childNodes' &&
+                    prop !== 'detectColor') {
                     clone[prop] = this[prop].slice(0);
                 }
             }
-            if (this.mesh != null) {
+            if (this.mesh !== null) {
                 clone.mesh = this.mesh;
             }
             if (this.childNodes) {
@@ -2247,23 +2257,21 @@ enchant.gl = {};
          [/lang]
          */
         set: function(sprite) {
-            for (prop in sprite) {
-                if (typeof sprite[prop] == 'number' ||
-                    typeof sprite[prop] == 'string') {
+            for (var prop in sprite) {
+                if (typeof sprite[prop] === 'number' ||
+                    typeof sprite[prop] === 'string') {
                     this[prop] = sprite[prop];
                 } else if (sprite[prop] instanceof WebGLBuffer) {
                     this[prop] = sprite[prop];
                 } else if (sprite[prop] instanceof Float32Array) {
                     this[prop] = new Float32Array(sprite[prop]);
-                } else if (sprite[prop] instanceof Array
-                    && prop != 'childNodes'
-                    && prop != 'detectColor') {
-                    this[prop] = sprite[prop].filter(function() {
-                        return true;
-                    });
+                } else if (sprite[prop] instanceof Array &&
+                    prop !== 'childNodes' &&
+                    prop !== 'detectColor') {
+                    this[prop] = sprite[prop].slice(0);
                 }
             }
-            if (sprite.mesh != null) {
+            if (sprite.mesh !== null) {
                 this.mesh = sprite.mesh;
             }
             if (sprite.childNodes) {
@@ -2347,7 +2355,7 @@ enchant.gl = {};
          */
         removeChild: function(sprite) {
             var i;
-            if ((i = this.childNodes.indexOf(sprite)) != -1) {
+            if ((i = this.childNodes.indexOf(sprite)) !== -1) {
                 this.childNodes.splice(i, 1);
             }
             sprite.parentNode = null;
@@ -2609,7 +2617,7 @@ enchant.gl = {};
          [/lang]
          */
         rotateRoll: function(rad) {
-            this.rotationApply(new Quat(0, 0, 1, rad));
+            this.rotationApply(new enchant.gl.Quat(0, 0, 1, rad));
             this._changedRotation = true;
         },
 
@@ -2624,7 +2632,7 @@ enchant.gl = {};
          [/lang]
          */
         rotatePitch: function(rad) {
-            this.rotationApply(new Quat(1, 0, 0, rad));
+            this.rotationApply(new enchant.gl.Quat(1, 0, 0, rad));
             this._changedRotation = true;
         },
 
@@ -2639,7 +2647,7 @@ enchant.gl = {};
          [/lang]
          */
         rotateYaw: function(rad) {
-            this.rotationApply(new Quat(0, 1, 0, rad));
+            this.rotationApply(new enchant.gl.Quat(0, 1, 0, rad));
             this._changedRotation = true;
         },
 
@@ -2648,7 +2656,7 @@ enchant.gl = {};
                 return this._mesh;
             },
             set: function(mesh) {
-                if (this.scene != null) {
+                if (this.scene !== null) {
                     this._mesh._count -= 1;
                     mesh._count += 1;
                 }
@@ -2729,7 +2737,7 @@ enchant.gl = {};
                 this._changedScale) {
                 mat4.identity(this.modelMat);
                 mat4.translate(this.modelMat, [this._x, this._y, this._z]);
-                mat4.multiply(this.modelMat, this._rotation, this.modelMat)
+                mat4.multiply(this.modelMat, this._rotation, this.modelMat);
                 mat4.scale(this.modelMat, [this._scaleX, this._scaleY, this._scaleZ]);
                 mat4.multiply(this.modelMat, this._matrix, this.modelMat);
                 this._changedTranslation = false;
@@ -2790,8 +2798,8 @@ enchant.gl = {};
 
             this.dispatchEvent(new enchant.Event('prerender'));
 
-            if (this.mesh != null) {
-                if (this.program != null) {
+            if (this.mesh !== null) {
+                if (this.program !== null) {
                     enchant.Game.instance.GL.setProgram(this.program);
                     this._render();
                     enchant.Game.instance.GL.setDefaultProgram();
@@ -3024,9 +3032,6 @@ enchant.gl = {};
             this._upVectorX = 0;
             this._upVectorY = 1;
             this._upVectorZ = 0;
-            this._focus;
-            this._focusing = function() {
-            };
         },
         projMat: {
             get: function() {
@@ -3048,7 +3053,7 @@ enchant.gl = {};
          [/lang]
          */
         lookAt: function(sprite) {
-            if (sprite instanceof Sprite3D) {
+            if (sprite instanceof enchant.gl.Sprite3D) {
                 this._centerX = sprite.x;
                 this._centerY = sprite.y;
                 this._centerZ = sprite.z;
@@ -3086,7 +3091,7 @@ enchant.gl = {};
          [/lang]
          */
         chase: function(sprite, position, speed) {
-            if (sprite instanceof Sprite3D) {
+            if (sprite instanceof enchant.gl.Sprite3D) {
                 var vx = sprite.x + sprite.rotation[8] * position;
                 var vy = sprite.y + sprite.rotation[9] * position;
                 var vz = sprite.z + sprite.rotation[10] * position;
@@ -3182,7 +3187,7 @@ enchant.gl = {};
             var x = f[0];
             var y = f[1];
             var z = f[2];
-            var quat = new Quat(x, y, z, -rad);
+            var quat = new enchant.gl.Quat(x, y, z, -rad);
             var vec = quat.multiplyVec3(u);
             this._upVectorX = vec[0];
             this._upVectorY = vec[1];
@@ -3206,7 +3211,7 @@ enchant.gl = {};
             var sx = s[0];
             var sy = s[1];
             var sz = s[2];
-            var quat = new Quat(sx, sy, sz, -rad);
+            var quat = new enchant.gl.Quat(sx, sy, sz, -rad);
             var vec = quat.multiplyVec3(f);
             this._centerX = this._x + vec[0];
             this._centerY = this._y + vec[1];
@@ -3233,8 +3238,8 @@ enchant.gl = {};
             var ux = u[0];
             var uy = u[1];
             var uz = u[2];
-            var f = this._getForwardVec()
-            var quat = new Quat(ux, uy, uz, -rad);
+            var f = this._getForwardVec();
+            var quat = new enchant.gl.Quat(ux, uy, uz, -rad);
             var vec = quat.multiplyVec3(f);
             this._centerX = this._x + vec[0];
             this._centerY = this._y + vec[1];
@@ -3242,9 +3247,6 @@ enchant.gl = {};
             this._changedCenter = true;
         },
         _updateMatrix: function() {
-            this.mat;
-            this.invMat;
-            this.invMatY;
             mat4.lookAt(
                 [this._x, this._y, this._z],
                 [this._centerX, this._centerY, this._centerZ],
@@ -3518,12 +3520,12 @@ enchant.gl = {};
             gl.activeTexture(gl.TEXTURE0);
             game.GL.defaultProgram.setUniforms(uniforms);
 
-            if (game.currentScene3D == null) {
+            if (game.currentScene3D === null) {
                 game.currentScene3D = this;
             }
 
-            this.setDirectionalLight(new DirectionalLight());
-            this.setCamera(new Camera3D());
+            this.setDirectionalLight(new enchant.gl.DirectionalLight());
+            this.setCamera(new enchant.gl.Camera3D());
         },
 
         /**
@@ -3598,7 +3600,7 @@ enchant.gl = {};
          */
         removeChild: function(sprite) {
             var i;
-            if ((i = this.childNodes.indexOf(sprite)) != -1) {
+            if ((i = this.childNodes.indexOf(sprite)) !== -1) {
                 this.childNodes.splice(i, 1);
             }
             sprite.parentNode = sprite.scene = null;
@@ -3714,7 +3716,7 @@ enchant.gl = {};
          */
         removeLight: function(light) {
             var i;
-            if ((i = this.lights.indexOf(light)) != -1) {
+            if ((i = this.lights.indexOf(light)) !== -1) {
                 this.lights.splice(i, 1);
             }
         },
@@ -3725,7 +3727,7 @@ enchant.gl = {};
 
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            var detect = (detectTouch == 'detect') ? 1.0 : 0.0;
+            var detect = (detectTouch === 'detect') ? 1.0 : 0.0;
 
             var uniforms = { uDetectTouch: detect };
 
@@ -3843,9 +3845,9 @@ enchant.gl = {};
         var nx2 = aabb2.parent.x + (aabb2.x - aabb2.scale);
         var ny2 = aabb2.parent.y + (aabb2.y - aabb2.scale);
         var nz2 = aabb2.parent.z + (aabb2.z - aabb2.scale);
-        return ((nx2 <= px1) && (nx1 <= px2)
-            && (ny2 <= py1) && (ny1 <= py2)
-            && (nz2 <= pz1) && (nz1 <= pz2)) ? 0.0 : 1.0;
+        return ((nx2 <= px1) && (nx1 <= px2) &&
+            (ny2 <= py1) && (ny1 <= py2) &&
+            (nz2 <= pz1) && (nz1 <= pz2)) ? 0.0 : 1.0;
     };
 
     var AABB2OBB = function(aabb, obb) {
@@ -4189,4 +4191,4 @@ enchant.gl = {};
         }\n\
     }';
 
-})();
+}());
