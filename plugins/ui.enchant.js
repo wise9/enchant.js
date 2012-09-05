@@ -90,10 +90,10 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
         var game = enchant.Game.instance;
         ['left', 'right', 'up', 'down'].forEach(function(type) {
             if (this.input[type] && !input[type]) {
-                game.dispatchEvent(new Event(type + 'buttonup'));
+                game.dispatchEvent(new enchant.Event(type + 'buttonup'));
             }
             if (!this.input[type] && input[type]) {
-                game.dispatchEvent(new Event(type + 'buttondown'));
+                game.dispatchEvent(new enchant.Event(type + 'buttondown'));
             }
         }, this);
         this.input = input;
@@ -120,15 +120,15 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
         var h = this.height = image.height;
         enchant.Group.call(this);
 
-        this.outside = new Sprite(w, h);
-        var outsideImage = new Surface(w, h);
+        this.outside = new enchant.Sprite(w, h);
+        var outsideImage = new enchant.Surface(w, h);
         outsideImage.draw(image, 0, 0, w, h / 4, 0, 0, w, h / 4);
         outsideImage.draw(image, 0, h / 4 * 3, w, h / 4, 0, h / 4 * 3, w, h / 4);
         outsideImage.draw(image, 0, h / 4, w / 4, h / 2, 0, h / 4, w / 4, h / 2);
         outsideImage.draw(image, w / 4 * 3, h / 4, w / 4, h / 2, w / 4 * 3, h / 4, w / 4, h / 2);
         this.outside.image = outsideImage;
-        this.inside = new Sprite(w / 2, h / 2);
-        var insideImage = new Surface(w / 2, h / 2);
+        this.inside = new enchant.Sprite(w / 2, h / 2);
+        var insideImage = new enchant.Surface(w / 2, h / 2);
         insideImage.draw(image, w / 4, h / 4, w / 2, h / 2, 0, 0, w / 2, h / 2);
         this.inside.image = insideImage;
         this.r = w / 2;
@@ -187,7 +187,7 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
         });
     },
     _dispatchPadEvent: function(type) {
-        var e = new Event(type);
+        var e = new enchant.Event(type);
         e.vx = this.vx;
         e.vy = this.vy;
         e.rad = this.rad;
@@ -207,19 +207,19 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
         var tan = y / x;
         var rad = Math.atan(tan);
         var dir = x / Math.abs(x);
-        if (distance == 0) {
+        if (distance === 0) {
             this.vx = 0;
             this.vy = 0;
-        } else if (x == 0) {
+        } else if (x === 0) {
             this.vx = 0;
-            if (this.mode == 'direct') {
+            if (this.mode === 'direct') {
                 this.vy = (y / this.r);
             } else {
                 dir = y / Math.abs(y);
                 this.vy = Math.pow((y / this.r), 2) * dir;
             }
         } else if (distance < this.r) {
-            if (this.mode == 'direct') {
+            if (this.mode === 'direct') {
                 this.vx = (x / this.r);
                 this.vy = (y / this.r);
             } else {
@@ -241,7 +241,7 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
             dist = this.r;
         }
         dist /= this.r;
-        if (this.mode == 'normal') {
+        if (this.mode === 'normal') {
             dist *= dist;
         }
         if (x >= 0 && y < 0) {
@@ -257,7 +257,7 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
             add = 0;
             rad = y / x;
         }
-        if (x == 0 || y == 0) {
+        if (x === 0 || y === 0) {
             rad = 0;
         }
         this.rad = Math.abs(Math.atan(rad)) + add;
@@ -281,18 +281,18 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         // ベンタプレフィクスを判定
         this.VENDOR_PREFIX = (function() {
             var ua = navigator.userAgent;
-            if (ua.indexOf('Opera') != -1) {
+            if (ua.indexOf('Opera') !== -1) {
                 return '-O-';
-            } else if (ua.indexOf('MSIE') != -1) {
+            } else if (ua.indexOf('MSIE') !== -1) {
                 return '-ms-';
-            } else if (ua.indexOf('WebKit') != -1) {
+            } else if (ua.indexOf('WebKit') !== -1) {
                 return '-webkit-';
-            } else if (navigator.product == 'Gecko') {
+            } else if (navigator.product === 'Gecko') {
                 return '-Moz-';
             } else {
                 return '';
             }
-        })();
+        }());
 
         this.width = width || null;
         this.height = height || null;
@@ -341,9 +341,11 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
     },
     _applyTheme: function(theme) {
         var style = this._element.style;
-        for (var i in theme) if (theme.hasOwnProperty(i)) {
-            var prop = i.replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
-            style[prop] = (theme[i]+'').replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
+        for (var i in theme) {
+            if (theme.hasOwnProperty(i)) {
+                var prop = i.replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
+                style[prop] = (theme[i] + '').replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
+            }
         }
     },
     /**
@@ -383,7 +385,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Text color settings.
-     * CSS��'color' Can be set to same format as properties.
+     * CSS 'color' can be set to same format as properties.
      * @type {String}
      */
     color: {

@@ -5,9 +5,9 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        meta: {
-            version: 'v0.5.1',
-            banner: '/**\n\
+            meta: {
+                version: 'v0.5.1',
+                banner: '/**\n\
  * enchant.js <%= meta.version %>\n\
  *\n\
  * Copyright (c) Ubiquitous Entertainment Inc.\n\
@@ -44,77 +44,81 @@ module.exports = function(grunt) {
  * You should have received a copy of the GNU General Public License\n\
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\
  */',
-            min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Licensed under MIT or GPLv3. (c) Ubiquitous Entertainment Inc. */'
-        },
-        lint: {
-            files: ['dev/header.js', 'dev/src/*.js']
-        },
-        qunit: {
-            files: ['qunit/*/*.html']
-        },
-        concat: {
-            dist: {
-                src: ['<banner:meta.banner>',
-                    'dev/src/_header.js',
-                    'dev/src/Class.js',
-                    'dev/src/Env.js',
-                    'dev/src/Event.js',
-                    'dev/src/EventTarget.js',
-                    'dev/src/Game.js',
-                    'dev/src/Node.js',
-                    'dev/src/Entity.js',
-                    'dev/src/Sprite.js',
-                    'dev/src/Label.js',
-                    'dev/src/Map.js',
-                    'dev/src/Group.js',
-                    'dev/src/RGroup.js',
-                    'dev/src/CanvasGroup.js',
-                    'dev/src/Scene.js',
-                    'dev/src/Surface.js',
-                    'dev/src/Sound.js'
-                ],
-                dest: 'dev/enchant.js'
-            }
-        },
-        min: {
-            dist: {
-                src: ['<banner:meta.min_banner>', 'dev/enchant.js'],
-                dest: 'enchant.min.js'
-            }
-        },
-        watch: {
-            files: '<config:concat.dist.src>',
-            tasks: 'concat min'
-        },
-        jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                boss: true,
-                eqnull: true,
-                browser: true,
-                proto: true
+                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Licensed under MIT or GPLv3. (c) Ubiquitous Entertainment Inc. */'
             },
-            globals: {
-                enchant: true
-            }
-        },
-        exec: {
-            lang: {
-                command: 'rake lang'
+            lint: {
+                core: ['dev/header.js', 'dev/src/*.js'],
+                plugins: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js']
             },
-            doc: {
-                command: 'rake doc'
+            qunit: {
+                files: ['tests/qunit/*/*.html']
+            },
+            concat: {
+                dist: {
+                    src: ['<banner:meta.banner>',
+                        'dev/src/_header.js',
+                        'dev/src/Class.js',
+                        'dev/src/Env.js',
+                        'dev/src/Event.js',
+                        'dev/src/EventTarget.js',
+                        'dev/src/Game.js',
+                        'dev/src/Node.js',
+                        'dev/src/Entity.js',
+                        'dev/src/Sprite.js',
+                        'dev/src/Label.js',
+                        'dev/src/Map.js',
+                        'dev/src/Group.js',
+                        'dev/src/CanvasGroup.js',
+                        'dev/src/CanvasScene.js',
+                        'dev/src/Scene.js',
+                        'dev/src/Surface.js',
+                        'dev/src/Sound.js'
+                    ],
+                    dest: 'dev/enchant.js'
+                }
+            },
+            min: {
+                dist: {
+                    src: ['<banner:meta.min_banner>', 'dev/enchant.js'],
+                    dest: 'enchant.min.js'
+                }
+            },
+            watch: {
+                files: 'dev/src/*.js',
+                tasks: 'concat min'
+            },
+            jshint: {
+                options: {
+                    curly: true,
+                    eqeqeq: true,
+                    immed: true,
+                    latedef: true,
+                    newcap: true,
+                    noarg: true,
+                    sub: true,
+                    undef: true,
+                    boss: true,
+                    eqnull: true,
+                    browser: true,
+                    proto: true
+                },
+                globals: {
+                    enchant: true
+                }
+            },
+            exec: {
+                lang: {
+                    command: 'rake lang'
+                },
+                doc: {
+                    command: 'rake doc'
+                }
             }
         }
-    });
+    )
+    ;
 
-    // Default task.
-    grunt.registerTask('default', 'lint concat min qunit exec:lang');
-};
+// Default task.
+    grunt.registerTask('default', 'lint:core concat min qunit exec:lang');
+}
+;

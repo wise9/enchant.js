@@ -2016,9 +2016,6 @@ enchant.gl = {};
          *   var sprite = new Sprite3D();
          *   //Sprite3Dをシーンに追加
          *   scene.addChild(sprite);
-         *
-         * @constructs
-         * @extends enchant.EventTarget
          [/lang]
          [lang:en]
          * Class with Sprite3D display function.
@@ -2034,10 +2031,9 @@ enchant.gl = {};
          *   var sprite = new Sprite3D();
          *   //Add Sprite3D to scene
          *   scene.addChild(sprite);
-         *
+         [/lang]
          * @constructs
          * @extends enchant.EventTarget
-         [/lang]
          */
         initialize: function() {
             enchant.EventTarget.call(this);

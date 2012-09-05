@@ -24,18 +24,17 @@
  * }
  */
 (function() {
-
     enchant();
-
     /**
      * 依存ライブラリcheck
      */
-    if (enchant.nineleap.memory != undefined &&
-        Object.getPrototypeOf(enchant.nineleap.memory) == Object.prototype) {
-        var parentModule = enchant.nineleap.memory;
-    } else if (enchant.nineleap != undefined &&
-        Object.getPrototypeOf(enchant.nineleap) == Object.prototype) {
-        var parentModule = enchant.nineleap;
+    var parentModule;
+    if (enchant.nineleap.memory !== undefined &&
+        Object.getPrototypeOf(enchant.nineleap.memory) === Object.prototype) {
+        parentModule = enchant.nineleap.memory;
+    } else if (enchant.nineleap !== undefined &&
+        Object.getPrototypeOf(enchant.nineleap) === Object.prototype) {
+        parentModule = enchant.nineleap;
     } else {
         throw new Error('Cannot load nineleap.enchant.js.');
     }
@@ -56,13 +55,16 @@
             this.twitterQueue = 0;
         },
         start: function() {
-            if (this.twitterQueue != 0) {
+            var i, l;
+            if (this.twitterQueue !== 0) {
                 if (this._twitterRequests.length) {
                     this.twitterAssets = {};
-                    for (var i in this._twitterRequests) {
-                        this.twitterAssets[this._twitterRequests[i].path] = new Array();
+                    for (i in this._twitterRequests) {
+                        if (this._twitterRequests.hasOwnProperty(i)) {
+                            this.twitterAssets[this._twitterRequests[i].path] = [];
+                        }
                     }
-                    for (var i = 0, l = this._twitterRequests.length; i < l; i++) {
+                    for (i = 0, l = this._twitterRequests.length; i < l; i++) {
                         this._twitterRequests[i]._sendRequest();
                     }
                 }
@@ -79,11 +81,11 @@
          * @param checkError {Boolean} エラーで応答がない場合 (optional)
          */
         twitterRequest: function(path, option, checkError) {
-            if (checkError == undefined) {
+            if (checkError == null) {
                 checkError = true;
             }
-            if (arguments.length == 2) {
-                if (typeof arguments[1] == 'boolean') {
+            if (arguments.length === 2) {
+                if (typeof arguments[1] === 'boolean') {
                     checkError = arguments[1];
                     option = {};
                 } else {
@@ -105,16 +107,15 @@
                 });
             }
             this.twitterQueue--;
-            if (resBody[0] == undefined) {
+            if (resBody[0] == null) {
                 this.twitterAssets[path] = [];
             } else if ('code' in resBody[0]) {
-                if (resBody[0].code == 401 && this.requireAuth) {
+                if (resBody[0].code === 401 && this.requireAuth) {
                     window.location.replace('http://9leap.net/api/login?after_login=' + window.location.href);
                     return;
-                } else if (resBody[0].code == 401 && !this.requireAuth) {
+                } else if (resBody[0].code === 401 && !this.requireAuth) {
                     this.authorized = false;
                 } else if (checkError) {
-                    alert(resBody[0].code + ' Error' + '\n Please try reload');
                     throw new Error(resBody[0].code + ': ' + resBody[0].error);
                 } else {
                     this.twitterAssets[path] = [];
@@ -134,7 +135,7 @@
                     }
                 }
             }
-            if (this.twitterQueue == 0) {
+            if (this.twitterQueue === 0) {
                 this.start();
             }
         }
@@ -166,16 +167,18 @@
     enchant.nineleap.twitter.TwitterUserData = enchant.Class.create({
         initialize: function(obj) {
             for (var prop in obj) {
-                this[prop] = obj[prop];
+                if (obj.hasOwnProperty(prop)) {
+                    this[prop] = obj[prop];
+                }
             }
         },
         toSprite: function(width, height) {
             if (arguments.length < 2) {
-                var width = 48;
-                var height = 48;
+                width = 48;
+                height = 48;
             }
             var g = enchant.Game.instance;
-            var sp = new Sprite(width, height);
+            var sp = new enchant.Sprite(width, height);
             sp.image = g.assets[this['profile_image_url']];
             return sp;
         }
@@ -184,9 +187,11 @@
     enchant.nineleap.twitter.TwitterStatusData = enchant.Class.create({
         initialize: function(obj) {
             for (var prop in obj) {
-                this[prop] = obj[prop];
+                if (obj.hasOwnProperty(prop)) {
+                    this[prop] = obj[prop];
+                }
             }
         }
     });
 
-})();
+}());
