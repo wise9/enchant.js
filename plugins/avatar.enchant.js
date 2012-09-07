@@ -114,7 +114,7 @@ enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
  * subclass of enchant.AvatarCharacter
  * @scope enchant.avatar.AvatarMonster.prototype
  */
-enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
+enchant.avatar.AvatarMonster = enchant.Class.create(enchant.avatar.AvatarCharacter, {
     /**
      * AvatarMonster
      * Manage a monter animations
@@ -125,7 +125,7 @@ enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
     initialize: function(image) {
         var w = ~~(image.width / 4);
         var h = w;
-        enchant.AvatarCharacter.call(this, w, h);
+        enchant.avatar.AvatarCharacter.call(this, w, h);
         this.image = image;
         this.animPattern = { "stop": [ 4, 4, 4, 3, 3, 3],
             "walk": [ 2, 3, 4, 3],
@@ -198,14 +198,14 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
  * Avatar
  * @scope enchant.Avatar.prototype
  */
-enchant.avatar.Avatar = enchant.Class.create(enchant.AvatarCharacter, {
+enchant.avatar.Avatar = enchant.Class.create(enchant.avatar.AvatarCharacter, {
     /**
      * @param {int}code  Avatar code
      * @extends enchant.AvatarCharacter
      * @constructs
      */
     initialize: function(code) {
-        enchant.AvatarCharacter.call(this, 64, 64);
+        enchant.avatar.AvatarCharacter.call(this, 64, 64);
         if (code) {
             this.setCode(code);
         } else {
