@@ -726,10 +726,9 @@ enchant.EventTarget = enchant.Class.create({
             if (!stage) {
                 stage = document.createElement('div');
                 stage.id = 'enchant-stage';
-                stage.style.width = window.innerWidth + 'px';
-                stage.style.height = window.innerHeight + 'px';
+//                stage.style.width = window.innerWidth + 'px';
+//                stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
-
 
                 if (document.body.firstChild) {
                     document.body.insertBefore(stage, document.body.firstChild);
