@@ -3156,8 +3156,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                         if (0 <= n && n < row * col) {
                             var sx = (n % row) * tileWidth;
                             var sy = (n / row | 0) * tileHeight;
-                            console.log(source, sx, sy, tileWidth, tileHeight,
-                                x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                             context.drawImage(source, sx, sy, tileWidth, tileHeight,
                                 x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                         }
@@ -3855,7 +3853,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         var game = enchant.Game.instance;
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._context.canvas.firstChild;L
+        var cvs = this._context.canvas;
         ctx.drawImage(cvs, 0, 0, game.width, game.height);
         ctx.restore();
     };
@@ -4241,7 +4239,19 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         this.context = null;
 
         var id = 'enchant-surface' + game._surfaceID++;
-        {
+        if (document.getCSSCanvasContext) {
+            this.context = document.getCSSCanvasContext('2d', id, width, height);
+            this._element = this.context.canvas;
+            this._css = '-webkit-canvas(' + id + ')';
+            var context = this.context;
+        } else if (document.mozSetImageElement) {
+            this._element = document.createElement('canvas');
+            this._element.width = width;
+            this._element.height = height;
+            this._css = '-moz-element(#' + id + ')';
+            this.context = this._element.getContext('2d');
+            document.mozSetImageElement(id, this._element);
+        } else {
             this._element = document.createElement('canvas');
             this._element.width = width;
             this._element.height = height;
@@ -4444,6 +4454,7 @@ enchant.Surface.load = function(src) {
     };
     return surface;
 };
+
 /**
  [lang:ja]
  * @scope enchant.Sound.prototype

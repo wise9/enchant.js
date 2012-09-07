@@ -401,8 +401,6 @@
                         if (0 <= n && n < row * col) {
                             var sx = (n % row) * tileWidth;
                             var sy = (n / row | 0) * tileHeight;
-                            console.log(source, sx, sy, tileWidth, tileHeight,
-                                x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                             context.drawImage(source, sx, sy, tileWidth, tileHeight,
                                 x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                         }

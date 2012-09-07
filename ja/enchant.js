@@ -1936,6 +1936,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             enchant.Entity.call(this);
 
             var canvas = document.createElement('canvas');
+            canvas.style.position = 'absolute';
             if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
                 canvas.width = game.width * 2;
                 canvas.height = game.height * 2;
@@ -1949,10 +1950,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
-
-            var surface = new enchant.Surface();
-            surface.context = canvas;
-            this._image = surface;
+            this._image = null;
             this._data = [
                 [
                     []
@@ -2068,7 +2066,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 data = this._data[i];
                 for (var y = 0, l = data.length; y < l; y++) {
                     for (var x = 0, ll = data[y].length; x < ll; x++) {
-                        if (data[y][x] >= 0){
+                        if (data[y][x] >= 0) {
                             c++;
                         }
                     }
@@ -2233,7 +2231,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             var right = Math.ceil((x + dx + width) / tileWidth);
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
-            var source = image;
+            var source = image._element;
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);
@@ -2254,6 +2252,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 }
             }
         }
+
     });
 }());
 
@@ -2877,7 +2876,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         var game = enchant.Game.instance;
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._element.firstChild;
+        var cvs = this._context.canvas;
         ctx.drawImage(cvs, 0, 0, game.width, game.height);
         ctx.restore();
     };
@@ -3364,6 +3363,7 @@ enchant.Surface.load = function(src) {
     };
     return surface;
 };
+
 /**
  * @scope enchant.Sound.prototype
  */
