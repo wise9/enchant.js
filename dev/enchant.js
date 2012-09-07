@@ -2797,7 +2797,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 canvas.width = game.width;
                 canvas.height = game.height;
             }
-            enchant.Game.instance._element.appendChild(canvas);
             this._context = canvas.getContext('2d');
 
             this._tileWidth = tileWidth || 0;
@@ -2932,7 +2931,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 data = this._data[i];
                 for (var y = 0, l = data.length; y < l; y++) {
                     for (var x = 0, ll = data[y].length; x < ll; x++) {
-                        if (data[y][x] >= 0){
+                        if (data[y][x] >= 0) {
                             c++;
                         }
                     }
@@ -3157,6 +3156,8 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                         if (0 <= n && n < row * col) {
                             var sx = (n % row) * tileWidth;
                             var sy = (n / row | 0) * tileHeight;
+                            console.log(source, sx, sy, tileWidth, tileHeight,
+                                x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                             context.drawImage(source, sx, sy, tileWidth, tileHeight,
                                 x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                         }
@@ -3164,6 +3165,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 }
             }
         }
+
     });
 }());
 
@@ -3849,6 +3851,14 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         };
     }
 
+    enchant.Map.prototype.cvsRender = function(ctx) {
+        var game = enchant.Game.instance;
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        var cvs = this._context.canvas.firstChild;L
+        ctx.drawImage(cvs, 0, 0, game.width, game.height);
+        ctx.restore();
+    };
 
     enchant.Sprite.prototype.cvsRender = function(ctx) {
         var img, imgdata, row, frame;
