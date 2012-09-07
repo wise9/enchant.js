@@ -118,8 +118,6 @@ window.onload = function(){
          * ここでは、右に向かって走っていくアニメーションを表現するために、
          * 新しいフレームが描画される前に、毎回クマの画像を切り替え、x座標を1増やすという処理をリスナとして追加する。
          */
-        bear.originX = 0;
-        bear.originY = 0;
         bear.addEventListener("enterframe", function(){
             /**
              * クマを走らせるために、x座標をインクリメントしている。
