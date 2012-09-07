@@ -2787,6 +2787,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             enchant.Entity.call(this);
 
             var canvas = document.createElement('canvas');
+            canvas.style.position = 'absolute';
             if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
                 canvas.width = game.width * 2;
                 canvas.height = game.height * 2;
@@ -2796,14 +2797,12 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 canvas.width = game.width;
                 canvas.height = game.height;
             }
+            enchant.Game.instance._element.appendChild(canvas);
             this._context = canvas.getContext('2d');
 
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
-
-            var surface = new enchant.Surface();
-            surface.context = canvas;
-            this._image = surface;
+            this._image = null;
             this._data = [
                 [
                     []
@@ -3144,7 +3143,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             var right = Math.ceil((x + dx + width) / tileWidth);
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
-            var source = image;
+            var source = image._element;
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);
@@ -3850,14 +3849,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         };
     }
 
-    enchant.Map.prototype.cvsRender = function(ctx) {
-        var game = enchant.Game.instance;
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._element.firstChild;
-        ctx.drawImage(cvs, 0, 0, game.width, game.height);
-        ctx.restore();
-    };
 
     enchant.Sprite.prototype.cvsRender = function(ctx) {
         var img, imgdata, row, frame;
@@ -4240,19 +4231,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         this.context = null;
 
         var id = 'enchant-surface' + game._surfaceID++;
-        if (document.getCSSCanvasContext) {
-            this.context = document.getCSSCanvasContext('2d', id, width, height);
-            this._element = this.context.canvas;
-            this._css = '-webkit-canvas(' + id + ')';
-            var context = this.context;
-        } else if (document.mozSetImageElement) {
-            this._element = document.createElement('canvas');
-            this._element.width = width;
-            this._element.height = height;
-            this._css = '-moz-element(#' + id + ')';
-            this.context = this._element.getContext('2d');
-            document.mozSetImageElement(id, this._element);
-        } else {
+        {
             this._element = document.createElement('canvas');
             this._element.width = width;
             this._element.height = height;

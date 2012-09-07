@@ -32,6 +32,7 @@
             enchant.Entity.call(this);
 
             var canvas = document.createElement('canvas');
+            canvas.style.position = 'absolute';
             if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
                 canvas.width = game.width * 2;
                 canvas.height = game.height * 2;
@@ -41,14 +42,12 @@
                 canvas.width = game.width;
                 canvas.height = game.height;
             }
+            enchant.Game.instance._element.appendChild(canvas);
             this._context = canvas.getContext('2d');
 
             this._tileWidth = tileWidth || 0;
             this._tileHeight = tileHeight || 0;
-
-            var surface = new enchant.Surface();
-            surface.context = canvas;
-            this._image = surface;
+            this._image = null;
             this._data = [
                 [
                     []
@@ -389,7 +388,7 @@
             var right = Math.ceil((x + dx + width) / tileWidth);
             var bottom = Math.ceil((y + dy + height) / tileHeight);
 
-            var source = image;
+            var source = image._element;
             var context = this._context;
             var canvas = context.canvas;
             context.clearRect(x, y, width, height);
