@@ -1130,9 +1130,6 @@ enchant.EventTarget = enchant.Class.create({
                 );
                 this._pageX = 0;
                 this._pageY = 0;
-
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
             } else {
                 var style = window.getComputedStyle(stage);
                 width = parseInt(style.width, 10);
@@ -1150,9 +1147,6 @@ enchant.EventTarget = enchant.Class.create({
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
-
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
 
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
@@ -1855,11 +1849,12 @@ enchant.EventTarget = enchant.Class.create({
         },
         /**
          [lang:ja]
-         * Game#start が呼ばれてから経過した時間を取得する
-         * @return {Number} 経過した時間 (秒)
+         * Game#start が呼ばれてから経過したゲーム内時間を取得する
+         * 経過した総フレーム数をfpsで割っている
+         * @return {Number} 経過したゲーム内時間 (秒)
          [/lang]
          [lang:en]
-         * get elapsed time from game.start is called
+         * get elapsed time (in game, not actual) from game.start is called
          * @return {Number} elapsed time (seconds)
          [/lang]
          */
@@ -2569,7 +2564,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 }
             }
         });
-
     },
     /**
      [lang:ja]
@@ -2681,13 +2675,14 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      * Text to display.
      * @type {String}
      [/lang]
+
      */
     text: {
         get: function() {
-            return this._element.innerHTML;
+            return this._text
         },
         set: function(text) {
-            this._element.innerHTML = text;
+            this._text = text;
         }
     },
     /**
@@ -3559,6 +3554,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this._element.width = game.width;
             this._element.height = game.height;
             this._element.style.position = 'absolute';
+
+            this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+            this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
 
             this._detect = document.createElement('canvas');
             this._detect.width = game.width;

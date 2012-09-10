@@ -106,9 +106,6 @@
                 );
                 this._pageX = 0;
                 this._pageY = 0;
-
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
             } else {
                 var style = window.getComputedStyle(stage);
                 width = parseInt(style.width, 10);
@@ -126,9 +123,6 @@
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
-
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-                stage.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
 
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
@@ -831,11 +825,12 @@
         },
         /**
          [lang:ja]
-         * Game#start が呼ばれてから経過した時間を取得する
-         * @return {Number} 経過した時間 (秒)
+         * Game#start が呼ばれてから経過したゲーム内時間を取得する
+         * 経過した総フレーム数をfpsで割っている
+         * @return {Number} 経過したゲーム内時間 (秒)
          [/lang]
          [lang:en]
-         * get elapsed time from game.start is called
+         * get elapsed time (in game, not actual) from game.start is called
          * @return {Number} elapsed time (seconds)
          [/lang]
          */

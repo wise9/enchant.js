@@ -68,7 +68,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 }
             }
         });
-
     },
     /**
      [lang:ja]
