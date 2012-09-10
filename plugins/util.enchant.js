@@ -7,7 +7,7 @@
  * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
  */
 
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
+enchant.util = { assets: ['effect0.png', 'icon0.png', 'font.png'] };
 
 // 背景専用スプライト
 enchant.util.Wallpaper = enchant.Class.create(enchant.Sprite, { // Spriteを継承したクラスを作成する
