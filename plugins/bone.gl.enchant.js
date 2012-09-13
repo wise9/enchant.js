@@ -26,9 +26,13 @@
         t = x;
         while (true) {
             v = ipfunc(t, x1, x2) - x;
-            if (v * v < 0.0000001) break;
+            if (v * v < 0.0000001) {
+                break;
+            }
             tt = ipfuncd(t, x1, x2);
-            if (tt === 0) break;
+            if (tt === 0) {
+                break;
+            }
             t -= v / tt;
         }
         return ipfunc(t, y1, y2);
@@ -96,7 +100,7 @@
             var q = quat4.create();
             var loc = vec3.lerp(this._position, another._position, ratio, v);
             var rot = quat4.slerp(this._rotation, another._rotation, ratio, q);
-            return new Pose(loc, rot);
+            return new enchant.gl.Pose(loc, rot);
         },
         _bezierp: function(x1, y1, x2, y2, x) {
             return bezierp(x1, x2, y1, y2, x);
@@ -113,8 +117,8 @@
          * @constructs
          */
         initialize: function() {
-            this._frames = new Array();
-            this._units = new Array();
+            this._frames = [];
+            this._units = [];
             this.length = -1;
             this._lastPose = null;
         },
@@ -124,7 +128,7 @@
          * @param {Number} frame Frame number.
          */
         addFrame: function(pose, frame) {
-            if (typeof frame != 'number') {
+            if (typeof frame !== 'number') {
                 this.length += 1;
                 frame = this.length;
             }
@@ -203,7 +207,7 @@
             this._globalrot = quat4.create([0, 0, 0, 1]);
 
             this.parentNode = null;
-            this.childNodes = new Array();
+            this.childNodes = [];
 
             /**
              * During each IK settlement, function for which change is applied to quaternion is set.
@@ -224,7 +228,7 @@
          */
         removeChild: function(child) {
             var i;
-            if ((i = this.childNodes.indexOf(child)) != -1) {
+            if ((i = this.childNodes.indexOf(child)) !== -1) {
                 this.childNodes.splice(i, 1);
             }
             child.parentNode = null;
@@ -243,14 +247,11 @@
                 child.setPoses(poses);
             }
         },
-        _applyPose: function() {
+        _applyPose: function(){
             var parent = this.parentNode;
-            var local = vec3.create();
-            vec3.subtract(this._origin, parent._origin, local);
-            vec3.add(local, this._position);
             quat4.multiply(parent._globalrot, this._rotation, this._globalrot);
-            quat4.multiplyVec3(parent._globalrot, local, this._globalpos);
-            vec3.add(this._globalpos, parent._globalpos);
+            quat4.multiplyVec3(parent._globalrot, this._position, this._globalpos);
+            vec3.add(parent._globalpos, this._globalpos, this._globalpos);
         },
         _solveFK: function() {
             var child;
@@ -283,7 +284,7 @@
          * @constructs
          */
         initialize: function() {
-            this.childNodes = new Array();
+            this.childNodes = [];
             this._origin = vec3.create();
             this._position = vec3.create();
             this._rotation = quat4.create([0, 0, 0, 1]);
@@ -305,7 +306,7 @@
          */
         removeChild: function(bone) {
             var i;
-            if ((i = this.childNodes.indexOf(bone)) != -1) {
+            if ((i = this.childNodes.indexOf(bone)) !== -1) {
                 this.childNodes.splice(i, 1);
             }
             bone.parentNode = null;
@@ -357,7 +358,7 @@
             }
         },
         _solveIK: function(effector, target, bones, maxangle, iteration) {
-            var len;
+            var len, origin;
             var tmp = _tmp.inv;
             vec3.subtract(target._origin, target.parentNode._origin, tmp);
             var threshold = vec3.length(tmp) * 0.1;
@@ -407,4 +408,4 @@
         }
     });
 
-})();
+}());
