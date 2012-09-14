@@ -385,6 +385,9 @@
 
     var render = function(ctx, node) {
         var game = enchant.Game.instance;
+        if (typeof node.visible !== 'undefined' && !node.visible) {
+            return;
+        }
         if (node.backgroundColor) {
             ctx.fillStyle = node.backgroundColor;
             ctx.fillRect(0, 0, node.width, node.height);
