@@ -2307,12 +2307,12 @@ enchant.gl = {};
             var i;
             if ((i = this.childNodes.indexOf(sprite)) !== -1) {
                 this.childNodes.splice(i, 1);
-            }
-            sprite.parentNode = null;
-            sprite.dispatchEvent(new enchant.Event('removed'));
-            if (this.scene) {
-                sprite.scene = null;
-                sprite.dispatchEvent(new enchant.Event('removedfromscene'));
+                sprite.parentNode = null;
+                sprite.dispatchEvent(new enchant.Event('removed'));
+                if (this.scene) {
+                    sprite.scene = null;
+                    sprite.dispatchEvent(new enchant.Event('removedfromscene'));
+                }
             }
         },
 
@@ -3542,10 +3542,10 @@ enchant.gl = {};
             var i;
             if ((i = this.childNodes.indexOf(sprite)) !== -1) {
                 this.childNodes.splice(i, 1);
+                sprite.parentNode = sprite.scene = null;
+                sprite.dispatchEvent(new enchant.Event('removed'));
+                sprite.dispatchEvent(new enchant.Event('removedfromscene'));
             }
-            sprite.parentNode = sprite.scene = null;
-            sprite.dispatchEvent(new enchant.Event('removed'));
-            sprite.dispatchEvent(new enchant.Event('removedfromscene'));
         },
 
         /**
