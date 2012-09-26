@@ -392,12 +392,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
-     * @scope enchant.gl.FrameBuffer.prototype
-     [/lang]
-     [lang:en]
      * @scope enchant.gl.Framebuffer.prototype
-     [/lang]
      */
     enchant.gl.FrameBuffer = enchant.Class.create({
         /**
@@ -477,12 +472,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Shader.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Shader.prototype
-     [/lang]
      */
     enchant.gl.Shader = enchant.Class.create({
         /**
@@ -840,12 +830,7 @@ enchant.gl = {};
     };
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Quat.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Quat.prototype
-     [/lang]
      */
     enchant.gl.Quat = enchant.Class.create({
         /**
@@ -962,12 +947,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Light3D.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Light3D.prototype
-     [/lang]
      */
     enchant.gl.Light3D = enchant.Class.create(enchant.EventTarget, {
         /**
@@ -1011,12 +991,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.DirectionalLight.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.DirectionalLight.prototype
-     [/lang]
      */
     enchant.gl.DirectionalLight = enchant.Class.create(enchant.gl.Light3D, {
         /**
@@ -1116,12 +1091,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.PointLight.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.PointLight.prototype
-     [/lang]
      */
     enchant.gl.PointLight = enchant.Class.create(enchant.gl.Light3D, {
         /**
@@ -1214,12 +1184,7 @@ enchant.gl = {};
 
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Texture.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Texture.prototype
-     [/lang]
      */
     enchant.gl.Texture = enchant.Class.create({
         /**
@@ -1383,12 +1348,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Buffer.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Buffer.prototype
-     [/lang]
      */
     enchant.gl.Buffer = enchant.Class.create({
         /**
@@ -1528,12 +1488,7 @@ enchant.gl = {};
     };
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Mesh.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Mesh.prototype
-     [/lang]
      */
     enchant.gl.Mesh = enchant.Class.create({
         /**
@@ -2003,12 +1958,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Sprite3D.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Sprite3D.prototype
-     [/lang]
      */
     enchant.gl.Sprite3D = enchant.Class.create(enchant.EventTarget, {
         /**
@@ -2980,12 +2930,7 @@ enchant.gl = {};
     enchant.gl.Sprite3D.prototype.globalZ = 0;
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Camera3D.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Camera3D.prototype
-     [/lang]
      */
     enchant.gl.Camera3D = enchant.Class.create({
         /**
@@ -3416,12 +3361,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.Scene3D.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.Scene3D.prototype
-     [/lang]
      */
     enchant.gl.Scene3D = enchant.Class.create(enchant.EventTarget, {
         /**
@@ -3859,12 +3799,7 @@ enchant.gl = {};
     };
 
     /**
-     [lang:ja]
      * @scope enchant.gl.collision.Bounding.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.collision.Bounding.prototype
-     [/lang]
      */
     enchant.gl.collision.Bounding = enchant.Class.create({
         /**
@@ -3994,12 +3929,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.collision.BS.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.collision.BS.prototype
-     [/lang]
      */
     enchant.gl.collision.BS = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
@@ -4036,12 +3966,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.collision.AABB.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.collision.AABB.prototype
-     [/lang]
      */
     enchant.gl.collision.AABB = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
@@ -4078,12 +4003,7 @@ enchant.gl = {};
     });
 
     /**
-     [lang:ja]
      * @scope enchant.gl.collision.OBB.prototype
-     [/lang]
-     [lang:en]
-     * @scope enchant.gl.collision.OBB.prototype
-     [/lang]
      */
     enchant.gl.collision.OBB = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**

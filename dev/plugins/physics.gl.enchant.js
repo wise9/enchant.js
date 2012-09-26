@@ -39,12 +39,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
     (function() {
         enchant.gl.physics = {};
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.World.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.World.prototype
-         [/lang]
          */
         enchant.gl.physics.World = enchant.Class.create({
             /**
@@ -175,12 +170,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.Rigid.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.Rigid.prototype
-         [/lang]
          */
         enchant.gl.physics.Rigid = enchant.Class.create({
             /**
@@ -555,12 +545,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         enchant.gl.physics.Rigid._refs = {};
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidBox.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidBox.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidBox = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -595,12 +580,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             }
         });
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidCube.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidCube.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidCube = enchant.Class.create(enchant.gl.physics.RigidBox, {
             /**
@@ -629,12 +609,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidSphere.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidSphere.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidSphere = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -664,12 +639,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidCylinder.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidCylinder.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidCylinder = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -703,12 +673,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidCapsule.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidCapsule.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidCapsule = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -742,12 +707,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidPlane.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidPlane.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidPlane = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -781,12 +741,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidContainer.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidContainer.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidContainer = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -833,12 +788,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyScene3D.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyScene3D.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyScene3D = enchant.Class.create(enchant.gl.Scene3D, {
             /**
@@ -984,12 +934,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhySprite3D.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhySprite3D.prototype
-         [/lang]
          */
         enchant.gl.physics.PhySprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
             /**
@@ -1264,12 +1209,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyBox.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyBox.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyBox = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1306,12 +1246,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyCube.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyCube.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyCube = enchant.Class.create(enchant.gl.physics.PhyBox, {
             /**
@@ -1344,12 +1279,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhySphere.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhySphere.prototype
-         [/lang]
          */
         enchant.gl.physics.PhySphere = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1391,12 +1321,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyCylinder.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyCylinder.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyCylinder = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1431,12 +1356,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyCapsule.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyCapsule.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyCapsule = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1475,12 +1395,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyPlane.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyPlane.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyPlane = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1536,12 +1451,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyContainer.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyContainer.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyContainer = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
