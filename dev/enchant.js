@@ -3398,7 +3398,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             if (node._element) {
                 fragment.appendChild(node._element);
             } else if (node.childNodes) {
-                nodes = node.childNodes.slice();
+                nodes = node.childNodes.slice().reverse();
                 while (nodes.length) {
                     node = nodes.pop();
                     node.scene = this.scene;
@@ -3406,7 +3406,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     if (node._element) {
                         fragment.appendChild(node._element);
                     } else if (node.childNodes) {
-                        push.apply(nodes, node.childNodes);
+                        push.apply(nodes, node.childNodes.reverse());
                     }
                 }
             }
