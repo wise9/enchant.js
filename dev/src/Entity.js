@@ -21,6 +21,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var game = enchant.Game.instance;
         enchant.Node.call(this);
 
+        this._originX = null;
+        this._originY = null;
+
         this._width = 0;
         this._height = 0;
         this._backgroundColor = null;
