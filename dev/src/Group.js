@@ -62,6 +62,16 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
         this._x = 0;
         this._y = 0;
+
+        [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
+            .forEach(function(event) {
+                this.addEventListener(event, function(e) {
+                    this.childNodes.forEach(function(child) {
+                        child.scene = this.scene;
+                        child.dispatchEvent(e);
+                    }, this);
+                });
+            }, this);
     },
     /**
      [lang:ja]

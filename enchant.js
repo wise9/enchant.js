@@ -2377,6 +2377,16 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
         this._x = 0;
         this._y = 0;
+
+        [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
+            .forEach(function(event) {
+                this.addEventListener(event, function(e) {
+                    this.childNodes.forEach(function(child) {
+                        child.scene = this.scene;
+                        child.dispatchEvent(e);
+                    }, this);
+                });
+            }, this);
     },
     /**
      * Adds Node to Group.
@@ -2773,19 +2783,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._cvsCache.detectColor = '#000000';
             this.width = game.width;
             this.height = game.height;
-
-            var sceneEvents = [
-                enchant.Event.ADDED_TO_SCENE,
-                enchant.Event.REMOVED_FROM_SCENE
-            ];
-            sceneEvents.forEach(function(event) {
-                this.addEventListener(event, function(e) {
-                    this.childNodes.forEach(function(child) {
-                        child.scene = this.scene;
-                        child.dispatchEvent(e);
-                    }, this);
-                });
-            }, this);
 
             this._element = document.createElement('canvas');
             this._element.width = game.width;
