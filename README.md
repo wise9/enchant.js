@@ -80,6 +80,8 @@ Build Tasks
 - `grunt exec:lang` generate enchant.js (English comment only) from dev/enchant.js
 - `grunt qunit` do qunit tests with phantomjs (headless browser)
 
+If you wish to send your codes to github repos, don't forget to run `grunt` command before you commit your change!
+
 How to contribute
 -----------------
 If you found issues or improved codes, please write issues or send pull request to `wise9/enchant.js:develop`.
