@@ -22,7 +22,7 @@
 
             this._cvsCache = {
                 matrix: [1, 0, 0, 1, 0, 0],
-                detectColor: '#0000000'
+                detectColor: '#000000'
             };
 
             this.width = game.width;
