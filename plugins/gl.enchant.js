@@ -814,6 +814,28 @@ enchant.gl = {};
     });
 
     /**
+     * @scope enchant.gl.AmbientLight.prototype
+     */
+    enchant.gl.AmbientLight = enchant.Class.create(enchant.gl.Light3D, {
+        /**
+         * Class for setting light source in 3D scene.
+         * Environmental Light.
+         * @example
+         *   var scene = new Scene3D();
+         *   var light = new AmbientLight();
+         *   light.color = [1.0, 1.0, 0.0];
+         *   light.directionY = 10;
+         *   scene.setAmbientLight(light);
+         *
+         * @constructs
+         * @extends enchant.gl.Light3D
+         */
+        initialize: function() {
+            enchant.gl.Light3D.call(this);
+        }
+    });
+
+    /**
      * @scope enchant.gl.DirectionalLight.prototype
      */
     enchant.gl.DirectionalLight = enchant.Class.create(enchant.gl.Light3D, {
@@ -1688,12 +1710,12 @@ enchant.gl = {};
             var i;
             if ((i = this.childNodes.indexOf(sprite)) !== -1) {
                 this.childNodes.splice(i, 1);
-            }
-            sprite.parentNode = null;
-            sprite.dispatchEvent(new enchant.Event('removed'));
-            if (this.scene) {
-                sprite.scene = null;
-                sprite.dispatchEvent(new enchant.Event('removedfromscene'));
+                sprite.parentNode = null;
+                sprite.dispatchEvent(new enchant.Event('removed'));
+                if (this.scene) {
+                    sprite.scene = null;
+                    sprite.dispatchEvent(new enchant.Event('removedfromscene'));
+                }
             }
         },
 
@@ -2482,6 +2504,7 @@ enchant.gl = {};
                 game.currentScene3D = this;
             }
 
+            this.setAmbientLight(new enchant.gl.AmbientLight());
             this.setDirectionalLight(new enchant.gl.DirectionalLight());
             this.setCamera(new enchant.gl.Camera3D());
         },
@@ -2532,10 +2555,10 @@ enchant.gl = {};
             var i;
             if ((i = this.childNodes.indexOf(sprite)) !== -1) {
                 this.childNodes.splice(i, 1);
+                sprite.parentNode = sprite.scene = null;
+                sprite.dispatchEvent(new enchant.Event('removed'));
+                sprite.dispatchEvent(new enchant.Event('removedfromscene'));
             }
-            sprite.parentNode = sprite.scene = null;
-            sprite.dispatchEvent(new enchant.Event('removed'));
-            sprite.dispatchEvent(new enchant.Event('removedfromscene'));
         },
 
         /**
@@ -2561,6 +2584,24 @@ enchant.gl = {};
          */
         getCamera: function() {
             return this._camera;
+        },
+
+        /**
+         * Sets ambient light source in scene.
+         * @param {enchant.gl.AmbientLight} light Lighting to set
+         * @see enchant.gl.AmbientLight
+         */
+        setAmbientLight: function(light) {
+            this.ambientLight = light;
+        },
+
+        /**
+         * Gets ambient light source in scene.
+         * @see enchant.gl.AmbientLight
+         * @return {enchant.gl.AmbientLight}
+         */
+        getAmbientLight: function() {
+            return this.ambientLight;
         },
 
         /**
@@ -2618,6 +2659,10 @@ enchant.gl = {};
 
             var uniforms = { uDetectTouch: detect };
 
+            if (this.ambientLight._changedColor) {
+                uniforms['uAmbientLightColor'] = this.ambientLight.color;
+                this.ambientLight._changedColor = false;
+            }
             if (this.useDirectionalLight) {
                 if (this.directionalLight._changedDirection) {
                     uniforms['uLightDirection'] = [
@@ -2646,6 +2691,10 @@ enchant.gl = {};
                         this._camera._centerY - this._camera._y,
                         this._camera._centerZ - this._camera._z
                     ];
+                    this._camera._changedPosition = false;
+                    this._camera._changedCenter = false;
+                    this._camera._changedUpVector = false;
+                    this._camera._changedProjection = false;
                 }
             }
             program.setUniforms(uniforms);
@@ -2944,6 +2993,7 @@ enchant.gl = {};
     \n\
     uniform sampler2D uSampler;\n\
     uniform float uUseDirectionalLight;\n\
+    uniform vec3 uAmbientLightColor;\n\
     uniform vec3 uLightColor;\n\
     uniform vec3 uLookVec;\n\
     uniform vec4 uAmbient;\n\
@@ -2962,6 +3012,7 @@ enchant.gl = {};
     \n\
     \n\
     void main() {\n\
+        float pi = 4.0 * atan(1.0);\n\
         vec4 texColor = texture2D(uSampler, vTextureCoord);\n\
         vec4 baseColor = vColor;\n\
         baseColor *= texColor * uUseTexture + vec4(1.0, 1.0, 1.0, 1.0) * (1.0 - uUseTexture);\n\
@@ -2970,17 +3021,17 @@ enchant.gl = {};
             discard;\n\
         }\n\
         else {\n\
-            vec4 phongColor = uAmbient;\n\
+            vec4 amb = uAmbient * vec4(uAmbientLightColor, 1.0);\n\
             vec3 N = normalize(vNormal);\n\
             vec3 L = normalize(uLightDirection);\n\
             vec3 E = normalize(uLookVec);\n\
             vec3 R = reflect(-L, N);\n\
             float lamber = max(dot(N, L) , 0.0);\n\
-            phongColor += uDiffuse * lamber;\n\
-            float s = max(dot(R,-E), 0.0);\n\
-            vec4 specularColor= uSpecular * pow(s, uShininess) * sign(lamber);\n\
-            gl_FragColor = ((uEmission * baseColor + specularColor + vec4(baseColor.rgb * phongColor.rgb * uLightColor.rgb, baseColor.a)) \
-                * uUseDirectionalLight + baseColor * (1.0 - uUseDirectionalLight)) \
+            vec4 dif = uDiffuse * lamber;\n\
+            float s = max(dot(R, -E), 0.0);\n\
+            vec4 specularColor = (uShininess + 2.0) / (2.0 * pi) * uSpecular * pow(s, uShininess) * sign(lamber);\n\
+            gl_FragColor = vec4(((amb + vec4(uLightColor, 1.0) * (dif + specularColor)) * baseColor).rgb, baseColor.a) \
+                * uUseDirectionalLight + baseColor * (1.0 - uUseDirectionalLight) \
                 * (1.0 - uDetectTouch) + uDetectColor * uDetectTouch;\n\
         }\n\
     }';

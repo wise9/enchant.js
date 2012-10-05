@@ -764,7 +764,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param [easing]
      */
     scaleTo: function(scale, time, easing) {
-        if (typeof easing === "Number") {
+        if (typeof easing === "number") {
             return this.tween({
                 scaleX: arguments[0],
                 scaleY: arguments[1],
@@ -788,7 +788,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param [easing]
      */
     scaleBy: function(scale, time, easing) {
-        if (typeof easing === "Number") {
+        if (typeof easing === "number") {
             return this.tween({
                 scaleX: function() {
                     return this.scaleX * arguments[0];
