@@ -3681,26 +3681,21 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._colorManager.getSpriteByColor(color);
         },
         _touchstartPropagation: function(e) {
-            var sp = this._getEntityByPosition(e.x, e.y);
-            if (sp) {
-                this._touching = sp;
+            this._touching = this._getEntityByPosition(e.x, e.y);
+            if (this._touching) {
                 propagationUp.call(this._touching, e, this.parentNode);
             } else {
                 this._touching = enchant.Game.instance.currentScene;
-                propagationUp.call(this._touching, e, this._touching);
+                this._touching.dispatchEvent(e);
             }
             return this._touching;
         },
         _touchmovePropagation: function(e) {
-            if (this._touching != null) {
-                propagationUp.call(this._touching, e, this.parentNode);
-            }
+            propagationUp.call(this._touching, e, this.parentNode);
         },
         _touchendPropagation: function(e) {
-            if (this._touching != null) {
-                propagationUp.call(this._touching, e, this.parentNode);
-                this._touching = null;
-            }
+            propagationUp.call(this._touching, e, this.parentNode);
+            this._touching = null;
         },
         /**
          * rotation of group
