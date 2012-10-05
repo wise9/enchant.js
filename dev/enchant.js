@@ -2111,6 +2111,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var game = enchant.Game.instance;
         enchant.Node.call(this);
 
+        this._originX = null;
+        this._originY = null;
+
         this._width = 0;
         this._height = 0;
         this._backgroundColor = null;
@@ -2494,6 +2497,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     }
 });
+
 /**
  [lang:ja]
  * @scope enchant.Sprite.prototype
@@ -3227,8 +3231,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         this._x = 0;
         this._y = 0;
 
-        this._originX = 0;
-        this._originY = 0;
+        this._originX = null;
+        this._originY = null;
 
         this._rotation = 0;
     },
@@ -3464,25 +3468,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._rotation;
         },
         set: function(rotation) {
-            var diff_rotation = (rotation - this._rotation);
-
-            if (diff_rotation === 0){
-                return;
-            }
-            var rad = diff_rotation / 180 * Math.PI;
-            var sin = Math.sin(rad);
-            var cos = Math.cos(rad);
-
-            for (var i = 0, len = this.childNodes.length; i < len; i++) {
-                var node = this.childNodes[i];
-//                node.rotation -= diff_rotation;
-                var rx = (node.x - node.originX | 0);
-                var ry = (node.y - node.originY | 0);
-                node.x += +cos * rx + sin * ry + node.originX | 0;
-                node.y += -sin * rx + cos * ry + node.originY | 0;
-            }
-
             this._rotation = rotation;
+            this._dirty = true;
         }
     },
     /**
@@ -3510,6 +3497,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     }
 });
+
 (function() {
     /**
      * @scope enchant.CanvasGroup.prototype
@@ -3534,7 +3522,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
             this._cvsCache = {
                 matrix: [1, 0, 0, 1, 0, 0],
-                detectColor: '#0000000'
+                detectColor: '#000000'
             };
 
             this.width = game.width;
