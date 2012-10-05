@@ -1278,12 +1278,8 @@ enchant.widget.EntityGroup = enchant.Class.create(enchant.Entity, {
                 this._style.left = this._x + 'px';
                 this._style.top = this._y + 'px';
             } else if (this.parentNode._renderFrag) {
-                if (this.__offsetX != this._previousOffsetX) {
-                    this._style.left = this._x + 'px';
-                }
-                if (this.__offsetY != this._previousOffsetY) {
-                    this._style.top = this._y + 'px';
-                }
+                this._style.left = this._x + 'px';
+                this._style.top = this._y + 'px';
             } else if (this.parentNode._element) {
                 if (this.__offsetX != this._previousOffsetX) {
                     this._style.left = this.parentNode._x + this._x + 'px';
@@ -1484,6 +1480,17 @@ enchant.widget.EntityGroup = enchant.Class.create(enchant.Entity, {
         }
     }
 });
+enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
+    if (this.background &&
+        this.background._element.width > 0 &&
+        this.background._element.height > 0) {
+        ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
+    }
+    ctx.beginPath();
+    ctx.rect(0, 0, this.width, this.height);
+    // TODO clip if style.overflow == 'hidden'
+    //ctx.clip();
+};
 
 /**
  * @scope enchant.widget.Modal
@@ -3097,10 +3104,14 @@ enchant.widget.ListItemVertical = enchant.Class.create(enchant.widget.ListElemen
             header.alignLeftIn(this, margin).alignTopIn(this, margin);
 
             Adjust.fillX.call(content, this, margin);
-            content.alignLeftIn(this, margin).alignBottomOf(header, margin);
+            if (content) {
+                content.alignLeftIn(this, margin).alignBottomOf(header, margin);
+            }
         } else {
             Adjust.fillX.call(content, this, margin);
-            content.alignLeftIn(this, margin).alignTopIn(this, margin);
+            if (content) {
+                content.alignLeftIn(this, margin).alignTopIn(this, margin);
+            }
         } if (footer) {
             footer.alignLeftIn(this, margin).alignBottomOf(content, margin);
         }
@@ -3116,7 +3127,10 @@ enchant.widget.ListItemVertical = enchant.Class.create(enchant.widget.ListElemen
                 height += margin * 2;
             }
         }
-        this.height = height;
+        this._style.height = (this._height = height) + 'px';
+        if (this.background instanceof enchant.widget.Ninepatch) {
+            this.background.height = this.height;
+        }
     },
     /**
     [lang:ja]
@@ -3142,6 +3156,7 @@ enchant.widget.ListItemVertical = enchant.Class.create(enchant.widget.ListElemen
             }
             this.addChild(header);
             this._header = header;
+            this.refresh();
         }
     },
     /**
@@ -3168,6 +3183,7 @@ enchant.widget.ListItemVertical = enchant.Class.create(enchant.widget.ListElemen
             }
             this.addChild(footer);
             this._footer = footer;
+            this.refresh();
         }
     }
 });

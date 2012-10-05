@@ -32,19 +32,14 @@
  * https://github.com/kripken/ammo.js
  [/lang]
  */
-if (typeof Ammo == 'undefined') {
+if (typeof Ammo === 'undefined') {
     throw new Error('physics.gl.enchant.js must be loaded after ammo.js');
 }
-if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
+if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
     (function() {
         enchant.gl.physics = {};
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.World.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.World.prototype
-         [/lang]
          */
         enchant.gl.physics.World = enchant.Class.create({
             /**
@@ -175,12 +170,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.Rigid.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.Rigid.prototype
-         [/lang]
          */
         enchant.gl.physics.Rigid = enchant.Class.create({
             /**
@@ -218,10 +208,10 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             initialize: function(shape, mass, lDamp, aDamp) {
-                if (typeof shape == 'undefined') {
+                if (typeof shape === 'undefined') {
                     shape = new Ammo.btBoxShape(1);
                 }
-                if (typeof mass == 'undefined') {
+                if (typeof mass === 'undefined') {
                     mass = 1;
                 }
 
@@ -236,10 +226,10 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 rigidBodyInfo.set_m_restitution(0.1);
                 rigidBodyInfo.set_m_friction(3.0);
 
-                if (typeof lDamp != 'undefined') {
+                if (typeof lDamp !== 'undefined') {
                     rigidBodyInfo.set_m_linearDamping(lDamp);
                 }
-                if (typeof aDamp != 'undefined') {
+                if (typeof aDamp !== 'undefined') {
                     rigidBodyInfo.set_m_angularDamping(aDamp);
                 }
 
@@ -301,16 +291,16 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 this._scaleX *= x;
                 this._scaleY *= y;
                 this._scaleZ *= z;
-                var scale = new Ammo.btVector3(this._scaleX, this._scaleY, this._scaleZ);
-                this.shape.setLocalScaling(scale);
-                Ammo.destroy(scale);
+                var sv = new Ammo.btVector3(this._scaleX, this._scaleY, this._scaleZ);
+                this.shape.setLocalScaling(sv);
+                Ammo.destroy(sv);
             },
             _scaleAxis: function(axis, scale) {
                 axis.toUpperCase();
                 this['_scale' + axis] = scale;
-                var scale = new Ammo.btVector3(this._scaleX, this._scaleY, this._scaleZ);
-                this.shape.setLocalScaling(scale);
-                Ammo.destroy(scale);
+                var sv = new Ammo.btVector3(this._scaleX, this._scaleY, this._scaleZ);
+                this.shape.setLocalScaling(sv);
+                Ammo.destroy(sv);
             },
             /**
              [lang:ja]
@@ -342,13 +332,13 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 var x = 0;
                 var y = 0;
                 var z = 0;
-                if (axis == 'x') {
+                if (axis === 'x') {
                     x = n - this._x;
                     this._x = n;
-                } else if (axis == 'y') {
+                } else if (axis === 'y') {
                     y = n - this._y;
                     this._y = n;
-                } else if (axis == 'z') {
+                } else if (axis === 'z') {
                     z = n - this._z;
                     this._z = n;
                 }
@@ -425,8 +415,8 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             contactTest: function(rigid) {
-                if (this.world && rigid.world
-                    && this.world == rigid.world) {
+                if (this.world && rigid.world &&
+                    this.world === rigid.world) {
                     return this.world.contactPairTest(this, rigid);
                 } else {
                     return false;
@@ -555,12 +545,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         enchant.gl.physics.Rigid._refs = {};
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidBox.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidBox.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidBox = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -595,12 +580,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
             }
         });
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidCube.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidCube.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidCube = enchant.Class.create(enchant.gl.physics.RigidBox, {
             /**
@@ -629,12 +609,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidSphere.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidSphere.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidSphere = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -664,12 +639,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidCylinder.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidCylinder.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidCylinder = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -703,12 +673,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidCapsule.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidCapsule.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidCapsule = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -742,12 +707,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidPlane.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidPlane.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidPlane = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -781,12 +741,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.RigidContainer.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.RigidContainer.prototype
-         [/lang]
          */
         enchant.gl.physics.RigidContainer = enchant.Class.create(enchant.gl.physics.Rigid, {
             /**
@@ -833,12 +788,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyScene3D.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyScene3D.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyScene3D = enchant.Class.create(enchant.gl.Scene3D, {
             /**
@@ -938,7 +888,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             stepSimulation: function(timeStep, maxSubSteps, fixedTimeStep) {
-                subStep = this.world.stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
+                var subStep = this.world.stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
                 var e = new enchant.Event('timestep');
                 e.timeStep = timeStep;
                 e.subStep = subStep;
@@ -984,12 +934,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhySprite3D.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhySprite3D.prototype
-         [/lang]
          */
         enchant.gl.physics.PhySprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
             /**
@@ -1264,12 +1209,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyBox.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyBox.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyBox = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1299,19 +1239,14 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             initialize: function(sx, sy, sz, mass) {
-                var rigid = new RigidBox(sx, sy, sz, mass);
+                var rigid = new enchant.gl.physics.RigidBox(sx, sy, sz, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
-                this.mesh = Mesh.createBox(sx, sy, sz);
+                this.mesh = enchant.gl.Mesh.createBox(sx, sy, sz);
             }
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyCube.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyCube.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyCube = enchant.Class.create(enchant.gl.physics.PhyBox, {
             /**
@@ -1337,19 +1272,14 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             initialize: function(s, mass) {
-                var rigid = new RigidBox(s, s, s, mass);
+                var rigid = new enchant.gl.physics.RigidBox(s, s, s, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
-                this.mesh = Mesh.createBox(s, s, s);
+                this.mesh = enchant.gl.Mesh.createBox(s, s, s);
             }
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhySphere.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhySphere.prototype
-         [/lang]
          */
         enchant.gl.physics.PhySphere = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1375,15 +1305,15 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             initialize: function(r, mass, lDamp, aDamp) {
-                if (typeof lDamp == 'undefined') {
+                if (typeof lDamp === 'undefined') {
                     lDamp = 0.05;
                 }
-                if (typeof aDamp == 'undefined') {
+                if (typeof aDamp === 'undefined') {
                     aDamp = 0.05;
                 }
-                var rigid = new RigidSphere(r, mass, lDamp, aDamp);
+                var rigid = new enchant.gl.physics.RigidSphere(r, mass, lDamp, aDamp);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
-                this.mesh = Mesh.createSphere(r);
+                this.mesh = enchant.gl.Mesh.createSphere(r);
                 this.addEventListener('timestep', function(e) {
                     this.rigid.rigidBody.applyDamping(e.timeStep);
                 });
@@ -1391,12 +1321,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyCylinder.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyCylinder.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyCylinder = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1424,19 +1349,14 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             initialize: function(r, h, mass) {
-                var rigid = new RigidCylinder(r, h, mass);
+                var rigid = new enchant.gl.physics.RigidCylinder(r, h, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
-                this.mesh = Mesh.createCylinder(r, h);
+                this.mesh = enchant.gl.Mesh.createCylinder(r, h);
             }
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyCapsule.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyCapsule.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyCapsule = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1466,21 +1386,16 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              [/lang]
              */
             initialize: function(r, h, mass) {
-                var rigid = new RigidCapsule(r, h, mass);
+                var rigid = new enchant.gl.physics.RigidCapsule(r, h, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
-                this.mesh = Mesh.createCylinder(r, h);
-                this.mesh._join(Mesh.createSphere(r), 0, h, 0);
-                this.mesh._join(Mesh.createSphere(r), 0, -h, 0);
+                this.mesh = enchant.gl.Mesh.createCylinder(r, h);
+                this.mesh._join(enchant.gl.Mesh.createSphere(r), 0, h, 0);
+                this.mesh._join(enchant.gl.Mesh.createSphere(r), 0, -h, 0);
             }
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyPlane.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyPlane.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyPlane = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1511,19 +1426,18 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
                 if (!scale) {
                     scale = 50;
                 }
-                ;
-                var rigid = new RigidPlane(nx, ny, nz, dist);
+
+                var rigid = new enchant.gl.physics.RigidPlane(nx, ny, nz, dist);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
-                this.mesh = Mesh.createPlaneXZ(scale);
+                this.mesh = enchant.gl.Mesh.createPlaneXZ(scale);
                 var up = vec3.create([0, 1, 0]);
                 var norm = vec3.create([nx, ny, nz]);
                 var axis = vec3.create();
                 vec3.cross(up, norm, axis);
                 var rad = Math.acos(vec3.dot(up, norm) / (vec3.length(up) * vec3.length(norm)));
-                console.log(axis[0], axis[1], axis[2], rad);
-                var q = new Quat(axis[0], axis[1], axis[2], rad);
-                var vertices = new Array();
-                for (i = 0, l = this.mesh.vertices.length; i < l; i += 3) {
+                var q = new enchant.gl.Quat(axis[0], axis[1], axis[2], rad);
+                var vertices = [];
+                for (var i = 0, l = this.mesh.vertices.length; i < l; i += 3) {
                     var x = this.mesh.vertices[i];
                     var y = this.mesh.vertices[i + 1];
                     var z = this.mesh.vertices[i + 2];
@@ -1537,12 +1451,7 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
         });
 
         /**
-         [lang:ja]
          * @scope enchant.gl.physics.PhyContainer.prototype
-         [/lang]
-         [lang:en]
-         * @scope enchant.gl.physics.PhyContainer.prototype
-         [/lang]
          */
         enchant.gl.physics.PhyContainer = enchant.Class.create(enchant.gl.physics.PhySprite3D, {
             /**
@@ -1569,13 +1478,12 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
              */
             initialize: function(scale, mass) {
                 var s = scale;
-                var rigid = new RigidContainer(s, mass);
+                var rigid = new enchant.gl.physics.RigidContainer(s, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
                 var that = this;
-                this.mesh = new Mesh();
-                var that = this;
+                this.mesh = new enchant.gl.Mesh();
                 var addWall = function(sx, sy, sz, px, py, pz) {
-                    that.mesh._join(Mesh.createBox(sx, sy, sz), px, py, pz);
+                    that.mesh._join(enchant.gl.Mesh.createBox(sx, sy, sz), px, py, pz);
                 };
                 addWall(s, s / 8, s, 0, s / 8 - s, 0);
                 addWall(s - s / 8, s - s / 8 - s / 8, s / 8, s / 8, 0, s / 8 - s);
@@ -1585,6 +1493,5 @@ if (enchant.gl != undefined && enchant.gl.primitive != undefined) {
             }
 
         });
-    })();
+    }());
 }
-;

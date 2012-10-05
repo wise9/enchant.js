@@ -301,19 +301,6 @@
         }
     };
 
-    if (enchant.widget) {
-        enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
-            if (this.background &&
-                this.background._element.width > 0 &&
-                this.background._element.height > 0) {
-                ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
-            }
-            ctx.beginPath();
-            ctx.rect(0, 0, this.width, this.height);
-            ctx.clip();
-        };
-    }
-
     enchant.Map.prototype.cvsRender = function(ctx) {
         var game = enchant.Game.instance;
         ctx.save();
@@ -331,7 +318,7 @@
             img = this._image;
             imgdata = img._element;
             row = img.width / this._width | 0;
-            sx = (frame % row) * this._width;
+            sx = (frame % row | 0) * this._width;
             sy = (frame / row | 0) * this._height % img.height;
             sy = Math.min(sy, img.height - this._height);
             sw = Math.min(img.width - sx, this._width);
@@ -454,7 +441,7 @@
         } else {
             ctx.globalCompositeOperation = "source-atob";
         }
-        ctx.globalAlpha = node.opacity || 1.0;
+        ctx.globalAlpha = (typeof node.opacity === 'number') ? node.opacity : 1.0;
     };
 
     var transform = function(ctx, node) {
@@ -464,6 +451,9 @@
 
     var render = function(ctx, node) {
         var game = enchant.Game.instance;
+        if (typeof node.visible !== 'undefined' && !node.visible) {
+            return;
+        }
         if (node.backgroundColor) {
             ctx.fillStyle = node.backgroundColor;
             ctx.fillRect(RENDER_OFFSET, RENDER_OFFSET, node.width + RENDER_OFFSET, node.height + RENDER_OFFSET);
