@@ -397,7 +397,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * (キューの先頭にあるアクションに対して、actionstart/actiontickイベントを発行する)
      */
     tick: function() {
-        if (this.queue.length > 0) {
+        if (this.queue.length > 0 && !this.paused) {
             var action = this.queue[0];
             if (action.frame === 0) {
                 var f;
