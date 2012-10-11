@@ -80,6 +80,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         node.parentNode = this;
         var childAdded = new enchant.Event('childadded');
         childAdded.node = node;
+        childAdded.next = null;
         this.dispatchEvent(childAdded);
         node.dispatchEvent(new enchant.Event('added'));
         if (this.scene) {
@@ -107,6 +108,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             node.parentNode = this;
             var childAdded = new enchant.Event('childadded');
             childAdded.node = node;
+            childAdded.next = reference;
             this.dispatchEvent(childAdded);
             node.dispatchEvent(new enchant.Event('added'));
             if (this.scene) {
