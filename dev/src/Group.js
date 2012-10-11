@@ -190,39 +190,15 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * rotation of group
      * @type {Number}
      */
-    rotation: {
-        get: function() {
-            return this._rotation;
-        },
-        set: function(rotation) {
-            this._rotation = rotation;
-            this._dirty = true;
-        }
-    },
+    rotation: enchant.Entity.prototype.rotation,
     /**
      * origin point of rotation, scaling
      * @type {Number}
      */
-    originX: {
-        get: function() {
-            return this._originX;
-        },
-        set: function(originX) {
-            this._originX = originX;
-            this._dirty = true;
-        }
-    },
+    originX: enchant.Entity.prototype.originX,
     /**
      * origin point of rotation, scaling
      * @type {Number}
      */
-    originY: {
-        get: function() {
-            return this._originY;
-        },
-        set: function(originY) {
-            this._originY = originY;
-            this._dirty = true;
-        }
-    }
+    originY: enchant.Entity.prototype.originY
 });

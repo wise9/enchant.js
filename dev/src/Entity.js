@@ -21,6 +21,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var game = enchant.Game.instance;
         enchant.Node.call(this);
 
+        this._rotation = 0;
+        this._scaleX = 1;
+        this._scaleY = 1;
+
         this._originX = null;
         this._originY = null;
 
@@ -109,6 +113,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(width) {
             this._width = width;
+            this._dirty = true;
         }
     },
     /**
@@ -127,6 +132,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(height) {
             this._height = height;
+            this._dirty = true;
         }
     },
     /**
@@ -354,6 +360,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(originX) {
             this._originX = originX;
+            this._dirty = true;
         }
     },
     /**
@@ -371,6 +378,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(originY) {
             this._originY = originY;
+            this._dirty = true;
         }
     }
 });
