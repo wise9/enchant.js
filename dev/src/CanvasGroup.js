@@ -17,8 +17,9 @@
             var that = this;
 
             enchant.Group.call(this);
-            this._dirty = false;
-            this._rotation = 0;
+
+            this._scaleX = 1;
+            this._scaleY = 1;
 
             this._cvsCache = {
                 matrix: [1, 0, 0, 1, 0, 0],
@@ -196,21 +197,6 @@
         _touchendPropagation: function(e) {
             propagationUp.call(this._touching, e, this.parentNode);
             this._touching = null;
-        },
-        /**
-         * rotation of group
-         * @see enchant.CanvasGroup.originX
-         * @see enchant.CanvasGroup.originY
-         * @type {Number}
-         */
-        rotation: {
-            get: function() {
-                return this._rotation;
-            },
-            set: function(rot) {
-                this._rotation = rot;
-                this._dirty = true;
-            }
         },
         /**
          * scaling of group in the direction of x axis
