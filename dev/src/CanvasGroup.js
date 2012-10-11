@@ -437,18 +437,13 @@
     };
 
     var dirtyCheck = function(node) {
-        if (node.__dirty ||
-            node._cvsCache.x !== node.x ||
-            node._cvsCache.y !== node.y ||
-            node._cvsCache.width !== node.width ||
-            node._cvsCache.height !== node.height
-            ) {
+        if (node._dirty) {
             makeTransformMatrix(node, node._cvsCache.matrix);
-            node.__dirty = false;
             node._cvsCache.x = node.x;
             node._cvsCache.y = node.y;
             node._cvsCache.width = node.width;
             node._cvsCache.height = node.height;
+            node._dirty = false;
         }
     };
 
@@ -521,15 +516,10 @@
         }
     );
 
-    var is__dirty = function() {
-        this.__dirty = !!(this._dirty);
-    };
-
     var attachCache = function(colorManager) {
         if (this._cvsCache) {
             return;
         }
-        this.addEventListener('render', is__dirty);
         this._cvsCache = {};
         this._cvsCache.matrix = [];
         this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
@@ -539,7 +529,6 @@
         if (!this._cvsCache) {
             return;
         }
-        this.removeEventListener('render', is__dirty);
         colorManager.detachDetectColor(this);
         delete this._cvsCache;
     };

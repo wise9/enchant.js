@@ -185,6 +185,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         for (var i = 0, len = this.childNodes.length; i < len; i++) {
             this.childNodes[i]._updateCoordinate();
         }
+        this._dirty = true;
     },
     /**
      * rotation of group

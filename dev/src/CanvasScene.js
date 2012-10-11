@@ -37,5 +37,6 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
         for (var i = 0, len = this.childNodes.length; i < len; i++) {
             this.childNodes[i]._updateCoordinate();
         }
+        this._dirty = true;
     }
 });

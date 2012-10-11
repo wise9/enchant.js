@@ -43,12 +43,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frame = 0;
         this._frameSequence = [];
 
-        this.addEventListener('render', function() {
-            if (this._dirty) {
-                this._dirty = false;
-            }
-        });
-
         /**
          * frame に配列が指定されたときの処理。
          * _frameSeuence に
