@@ -199,6 +199,20 @@ enchant.Event.EXIT = 'exit';
 
 /**
  [lang:ja]
+ * Nodeに子が追加されたとき発生するイベント.
+ * 発行するオブジェクト: enchant.Group, enchant.Scene
+ * @type {String}
+ [/lang]
+ [lang:en]
+ * Event occurring when Child is added to Node.
+ * Issued object: enchant.Group, enchant.Scene
+ * @type {String}
+ [/lang]
+ */
+enchant.Event.CHILD_ADDED = 'childadded';
+
+/**
+ [lang:ja]
  * NodeがGroupに追加されたとき発生するイベント.
  * 発行するオブジェクト: enchant.Node
  * @type {String}
@@ -224,6 +238,20 @@ enchant.Event.ADDED = 'added';
  [/lang]
  */
 enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
+
+/**
+ [lang:ja]
+ * Nodeから子が削除されたとき発生するイベント.
+ * 発行するオブジェクト: enchant.Group, enchant.Scene
+ * @type {String}
+ [/lang]
+ [lang:en]
+ * Event occurring when Child is removed from Node.
+ * Issued object: enchant.Group, enchant.Scene
+ * @type {String}
+ [/lang]
+ */
+enchant.Event.CHILD_REMOVED = 'childremoved';
 
 /**
  [lang:ja]
