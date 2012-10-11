@@ -311,6 +311,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         },
         set: function(originX) {
             this._originX = originX;
+            this._dirty = true;
         }
     },
     /**
@@ -323,6 +324,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         },
         set: function(originY) {
             this._originY = originY;
+            this._dirty = true;
         }
     }
 });
