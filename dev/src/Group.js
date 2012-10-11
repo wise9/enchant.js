@@ -143,7 +143,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 node.dispatchEvent(removedFromScene);
             }
         }
-    }
+    },
     /**
      [lang:ja]
      * 最初の子Node.
@@ -191,15 +191,39 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * rotation of group
      * @type {Number}
      */
-    rotation: enchant.Entity.prototype.rotation,
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            this._rotation = rotation;
+            this._dirty = true;
+        }
+    },
     /**
      * origin point of rotation, scaling
      * @type {Number}
      */
-    originX: enchant.Entity.prototype.originX,
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+            this._dirty = true;
+        }
+    },
     /**
      * origin point of rotation, scaling
      * @type {Number}
      */
-    originY: enchant.Entity.prototype.originY
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
+            this._dirty = true;
+        }
+    }
 });
