@@ -60,9 +60,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
          */
         this.childNodes = [];
 
-        this._x = 0;
-        this._y = 0;
-
         this._originX = null;
         this._originY = null;
 
