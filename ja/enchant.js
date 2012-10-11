@@ -2470,6 +2470,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this._detect.width = game.width;
             this._detect.height = game.height;
             this._detect.style.position = 'absolute';
+            this._lastDetected = 0;
 
             this.context = this._element.getContext('2d');
             this._dctx = this._detect.getContext('2d');
@@ -2596,7 +2597,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         _getEntityByPosition: function(x, y) {
             var ctx = this._dctx;
             ctx.clearRect(0, 0, this.width, this.height);
-            detectrendering.call(this, ctx);
+            if (this._lastDetected < this.age) {
+                detectrendering.call(this, ctx);
+                this._lastDetected = this.age;
+            }
             var color = ctx.getImageData(x, y, 1, 1).data;
             return this._colorManager.getSpriteByColor(color);
         },
