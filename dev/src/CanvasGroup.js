@@ -419,7 +419,7 @@
         var originY = (typeof node.originY === 'number') ? node.originY : this.height / 2;
         var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
         var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
-        var theta = Math.PI * rotation / 180;
+        var theta = rotation * Math.PI / 180;
         var tmpcos = Math.cos(theta);
         var tmpsin = Math.sin(theta);
         var w = (typeof node.originX === 'number') ? node.originX : width / 2;
@@ -428,10 +428,10 @@
         var b = scaleX * tmpsin;
         var c = scaleY * tmpsin;
         var d = scaleY * tmpcos;
-        dest[0] = scaleX * tmpcos;
-        dest[1] = scaleX * tmpsin;
-        dest[2] = -scaleY * tmpsin;
-        dest[3] = scaleY * tmpcos;
+        dest[0] = a;
+        dest[1] = b;
+        dest[2] = -c;
+        dest[3] = d;
         dest[4] = (-a * w + c * h + x + w);
         dest[5] = (-b * w - d * h + y + h);
     };
