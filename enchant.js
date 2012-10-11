@@ -2993,7 +2993,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
             return this._backgroundColor;
         },
         set: function(color) {
-            this._element.style.backgroundColor = this._backgroundColor = color;
+            this._backgroundColor = color;
         }
     },
     _updateCoordinate: function() {
