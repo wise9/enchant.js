@@ -95,42 +95,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      [lang:ja]
-     * DOMのID.
-     * @type {String}
-     [/lang]
-     [lang:en]
-     * DOM ID.
-     * @type {String}
-     [/lang]
-     */
-    id: {
-        get: function() {
-            return this._element.id;
-        },
-        set: function(id) {
-            this._element.id = id;
-        }
-    },
-    /**
-     [lang:ja]
-     * DOMのclass.
-     * @type {String}
-     [/lang]
-     [lang:en]
-     * DOM class.
-     * @type {String}
-     [/lang]
-     */
-    className: {
-        get: function() {
-            return this._element.className;
-        },
-        set: function(className) {
-            this._element.className = className;
-        }
-    },
-    /**
-     [lang:ja]
      * Entityの横幅.
      * @type {Number}
      [/lang]
@@ -238,11 +202,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._touchEnabled;
         },
         set: function(enabled) {
+            this._touchEnabled = enabled;
+            /*
             if (this._touchEnabled = enabled) {
                 this._style.pointerEvents = 'all';
             } else {
                 this._style.pointerEvents = 'none';
             }
+            */
         }
     },
     /**
