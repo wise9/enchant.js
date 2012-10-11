@@ -256,6 +256,7 @@
             var i = this.childNodes.indexOf(reference);
             if (i !== -1) {
                 this.childNodes.splice(i, 0, node);
+                node.parentNode = this;
                 node.dispatchEvent(new enchant.Event('added'));
                 if (this.scene) {
                     node.scene = this.scene;
@@ -270,13 +271,13 @@
             var i;
             if ((i = this.childNodes.indexOf(node)) !== -1) {
                 this.childNodes.splice(i, 1);
-            }
-            node.parentNode = null;
-            node.dispatchEvent(new enchant.Event('removed'));
-            if (this.scene) {
-                node.scene = null;
-                var e = new enchant.Event('removedfromscene');
-                _onremovedfromscene.call(node, e, this._colorManager);
+                node.parentNode = null;
+                node.dispatchEvent(new enchant.Event('removed'));
+                if (this.scene) {
+                    node.scene = null;
+                    var e = new enchant.Event('removedfromscene');
+                    _onremovedfromscene.call(node, e, this._colorManager);
+                }
             }
         }
     });
@@ -428,8 +429,8 @@
         var width = node.width || 0;
         var height = node.height || 0;
         var rotation = node.rotation || 0;
-        var originX = node.originX || this.width / 2;
-        var originY = node.originY || this.height / 2;
+        var originX = (typeof node.originX === 'number') ? node.originX : this.width / 2;
+        var originY = (typeof node.originY === 'number') ? node.originY : this.height / 2;
         var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
         var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
         var theta = Math.PI * rotation / 180;
