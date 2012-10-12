@@ -28,7 +28,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
             return this._backgroundColor;
         },
         set: function(color) {
-            this._element.style.backgroundColor = this._backgroundColor = color;
+            this._backgroundColor = color;
         }
     },
     _updateCoordinate: function() {
@@ -37,5 +37,6 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
         for (var i = 0, len = this.childNodes.length; i < len; i++) {
             this.childNodes[i]._updateCoordinate();
         }
+        this._dirty = true;
     }
 });

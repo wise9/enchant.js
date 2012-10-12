@@ -21,6 +21,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var game = enchant.Game.instance;
         enchant.Node.call(this);
 
+        this._rotation = 0;
+        this._scaleX = 1;
+        this._scaleY = 1;
+
+        this._originX = null;
+        this._originY = null;
+
         this._width = 0;
         this._height = 0;
         this._backgroundColor = null;
@@ -92,42 +99,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      [lang:ja]
-     * DOMのID.
-     * @type {String}
-     [/lang]
-     [lang:en]
-     * DOM ID.
-     * @type {String}
-     [/lang]
-     */
-    id: {
-        get: function() {
-            return this._element.id;
-        },
-        set: function(id) {
-            this._element.id = id;
-        }
-    },
-    /**
-     [lang:ja]
-     * DOMのclass.
-     * @type {String}
-     [/lang]
-     [lang:en]
-     * DOM class.
-     * @type {String}
-     [/lang]
-     */
-    className: {
-        get: function() {
-            return this._element.className;
-        },
-        set: function(className) {
-            this._element.className = className;
-        }
-    },
-    /**
-     [lang:ja]
      * Entityの横幅.
      * @type {Number}
      [/lang]
@@ -142,6 +113,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(width) {
             this._width = width;
+            this._dirty = true;
         }
     },
     /**
@@ -160,6 +132,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(height) {
             this._height = height;
+            this._dirty = true;
         }
     },
     /**
@@ -235,11 +208,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._touchEnabled;
         },
         set: function(enabled) {
+            this._touchEnabled = enabled;
+            /*
             if (this._touchEnabled = enabled) {
                 this._style.pointerEvents = 'all';
             } else {
                 this._style.pointerEvents = 'none';
             }
+            */
         }
     },
     /**
@@ -384,6 +360,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(originX) {
             this._originX = originX;
+            this._dirty = true;
         }
     },
     /**
@@ -401,6 +378,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(originY) {
             this._originY = originY;
+            this._dirty = true;
         }
     }
 });
