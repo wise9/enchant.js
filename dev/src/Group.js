@@ -311,7 +311,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
             for (var i = 0, len = this.childNodes.length; i < len; i++) {
                 var node = this.childNodes[i];
-//                node.rotation -= diff_rotation;
                 var rx = (node.x - node.originX | 0);
                 var ry = (node.y - node.originY | 0);
                 node.x += +cos * rx + sin * ry + node.originX | 0;

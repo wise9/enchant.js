@@ -365,6 +365,7 @@ enchant.ENV = {
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
         var vendor = navigator.vendor || "";
+        // ローカルではなく、モバイル端末向けでもなく、Safariでもない場合 (デフォルト)
         return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
     }()),
     /**
@@ -3475,7 +3476,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
             for (var i = 0, len = this.childNodes.length; i < len; i++) {
                 var node = this.childNodes[i];
-//                node.rotation -= diff_rotation;
                 var rx = (node.x - node.originX | 0);
                 var ry = (node.y - node.originY | 0);
                 node.x += +cos * rx + sin * ry + node.originX | 0;
@@ -3872,12 +3872,13 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     };
 
+
     enchant.Label.prototype.cvsRender = function(ctx) {
         if (this.text) {
             ctx.textBaseline = 'top';
             ctx.font = this.font;
             ctx.fillStyle = this.color || '#000000';
-            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET);
+            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET);
         }
     };
 
