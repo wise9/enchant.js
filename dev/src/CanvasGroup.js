@@ -409,8 +409,6 @@
         var width = node.width || 0;
         var height = node.height || 0;
         var rotation = node.rotation || 0;
-        var originX = (typeof node.originX === 'number') ? node.originX : this.width / 2;
-        var originY = (typeof node.originY === 'number') ? node.originY : this.height / 2;
         var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
         var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
         var theta = rotation * Math.PI / 180;
