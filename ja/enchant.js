@@ -2428,6 +2428,16 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
         this._x = 0;
         this._y = 0;
+
+        [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
+            .forEach(function(event) {
+                this.addEventListener(event, function(e) {
+                    this.childNodes.forEach(function(child) {
+                        child.scene = this.scene;
+                        child.dispatchEvent(e);
+                    }, this);
+                });
+            }, this);
     },
     /**
      * GroupにNodeを追加する.
@@ -2700,16 +2710,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
             this.width = game.width;
             this.height = game.height;
-
-            [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
-                .forEach(function(event) {
-                    this.addEventListener(event, function(e) {
-                        this.childNodes.forEach(function(child) {
-                            child.scene = this.scene;
-                            child.dispatchEvent(e);
-                        }, this);
-                    });
-                }, this);
 
             this._element = document.createElement('canvas');
             this._element.width = game.width;

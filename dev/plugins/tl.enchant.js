@@ -863,6 +863,9 @@ enchant.Easing = {
     LINEAR: function(t, b, c, d) {
         return c * t / d + b;
     },
+    SWING: function(t, b, c, d) {
+        return c * (0.5 - Math.cos(((t / d)*Math.PI))/2)+ b;
+    },
     // quad
     QUAD_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t + b;
