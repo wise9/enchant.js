@@ -138,10 +138,30 @@
                 });
             }, this);
 
+            var __onchildadded = function(e) {
+                var child = e.node;
+                if (child.childNodes) {
+                    child.addEventListener('childadded', __onchildadded);
+                    child.addEventListener('childremoved', __onchildremoved);
+                }
+                _attachCache.call(child, that._colorManager);
+            };
+
+            var __onchildremoved = function(e) {
+                var child = e.node;
+                if (child.childNodes) {
+                    child.removeEventListener('childadded', __onchildadded);
+                    child.removeEventListener('childremoved', __onchildremoved);
+                }
+                _detachCache.call(child, that._colorManager);
+            };
+
+            this.addEventListener('childremoved', __onchildremoved);
+            this.addEventListener('childadded', __onchildadded);
+
             this._onexitframe = function() {
                 var ctx = that.context;
                 ctx.clearRect(0, 0, game.width, game.height);
-                checkCache.call(that, that._colorManager);
                 rendering.call(that, ctx);
             };
         },
@@ -220,44 +240,6 @@
             set: function(scale) {
                 this._scaleY = scale;
                 this._dirty = true;
-            }
-        },
-        addChild: function(node) {
-            this.childNodes.push(node);
-            node.parentNode = this;
-            node.dispatchEvent(new enchant.Event('added'));
-            if (this.scene) {
-                node.scene = this.scene;
-                var e = new enchant.Event('addedtoscene');
-                _onaddedtoscene.call(node, e, this._colorManager);
-            }
-        },
-        insertBefore: function(node, reference) {
-            var i = this.childNodes.indexOf(reference);
-            if (i !== -1) {
-                this.childNodes.splice(i, 0, node);
-                node.parentNode = this;
-                node.dispatchEvent(new enchant.Event('added'));
-                if (this.scene) {
-                    node.scene = this.scene;
-                    var e = new enchant.Event('addedtoscene');
-                    _onaddedtoscene.call(node, e, this._colorManager);
-                }
-            } else {
-                this.addChild(node);
-            }
-        },
-        removeChild: function(node) {
-            var i;
-            if ((i = this.childNodes.indexOf(node)) !== -1) {
-                this.childNodes.splice(i, 1);
-                node.parentNode = null;
-                node.dispatchEvent(new enchant.Event('removed'));
-                if (this.scene) {
-                    node.scene = null;
-                    var e = new enchant.Event('removedfromscene');
-                    _onremovedfromscene.call(node, e, this._colorManager);
-                }
             }
         }
     });
@@ -525,22 +507,14 @@
         delete this._cvsCache;
     };
 
-    var checkCache = nodesWalker(
+    var _attachCache = nodesWalker(
         function(colorManager) {
             attachCache.call(this, colorManager);
         }
     );
 
-    var _onaddedtoscene = nodesWalker(
-        function(e, colorManager) {
-            this.dispatchEvent(e);
-            attachCache.call(this, colorManager);
-        }
-    );
-
-    var _onremovedfromscene = nodesWalker(
-        function(e, colorManager) {
-            this.dispatchEvent(e);
+    var _detachCache = nodesWalker(
+        function(colorManager) {
             detachCache.call(this, colorManager);
         }
     );
