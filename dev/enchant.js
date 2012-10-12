@@ -3560,6 +3560,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     }
 });
+
 /**
  * @scope enchant.RGroup.prototype
  */
@@ -4189,7 +4190,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         if (node.alphaBlending) {
             ctx.globalCompositeOperation = node.alphaBlending;
         } else {
-            ctx.globalCompositeOperation = "source-atob";
+            ctx.globalCompositeOperation = 'source-over';
         }
         ctx.globalAlpha = (typeof node.opacity === 'number') ? node.opacity : 1.0;
     };
