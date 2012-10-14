@@ -1224,6 +1224,16 @@ enchant.EventTarget = enchant.Class.create({
             if (this.currentScene === this.rootScene) {
                 return this.currentScene;
             }
+
+            // Patch to avoiding DOM element leak by this.currentScene.childNodes.
+            for (var i = 0, len = this.currentScene.childNodes.length; i < len; i++) {
+                // Q: Why do I use 0 instead of `len`?
+                // A: removeChild uses Array.splice to removing from childNodes.
+                //    Array.splice is bang method. it modifies childNodes data and length.
+                //    We remove first element childNodes.length times to removing all childNodes.
+                this.currentScene.removeChild(this.currentScene.childNodes[0]);
+            }
+
             this._element.removeChild(this.currentScene._element);
             this.currentScene.dispatchEvent(new enchant.Event('exit'));
             this.currentScene = this._scenes[this._scenes.length - 2];
@@ -2599,6 +2609,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     }
 });
+
 /**
  * @scope enchant.RGroup.prototype
  */
