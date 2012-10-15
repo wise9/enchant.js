@@ -319,12 +319,13 @@
         }
     };
 
+
     enchant.Label.prototype.cvsRender = function(ctx) {
         if (this.text) {
             ctx.textBaseline = 'top';
             ctx.font = this.font;
             ctx.fillStyle = this.color || '#000000';
-            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET);
+            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET);
         }
     };
 
