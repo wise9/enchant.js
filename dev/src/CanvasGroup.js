@@ -495,7 +495,7 @@
             return;
         }
         this._cvsCache = {};
-        this._cvsCache.matrix = [];
+        this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
         this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
     };
 
