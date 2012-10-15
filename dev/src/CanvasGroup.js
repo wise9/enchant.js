@@ -145,6 +145,7 @@
                     child.addEventListener('childremoved', __onchildremoved);
                 }
                 _attachCache.call(child, that._colorManager);
+                rendering.call(child, that.context);
             };
 
             var __onchildremoved = function(e) {
