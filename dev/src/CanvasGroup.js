@@ -386,18 +386,18 @@
     };
 
     var makeTransformMatrix = function(node, dest) {
-        var x = node.x;
-        var y = node.y;
-        var width = node.width || 0;
-        var height = node.height || 0;
-        var rotation = node.rotation || 0;
-        var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
-        var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
+        var x = node._x;
+        var y = node._y;
+        var width = node._width || 0;
+        var height = node._height || 0;
+        var rotation = node._rotation || 0;
+        var scaleX = (typeof node._scaleX === 'number') ? node._scaleX : 1;
+        var scaleY = (typeof node._scaleY === 'number') ? node._scaleY : 1;
         var theta = rotation * Math.PI / 180;
         var tmpcos = Math.cos(theta);
         var tmpsin = Math.sin(theta);
-        var w = (typeof node.originX === 'number') ? node.originX : width / 2;
-        var h = (typeof node.originY === 'number') ? node.originY : height / 2;
+        var w = (typeof node._originX === 'number') ? node._originX : width / 2;
+        var h = (typeof node._originY === 'number') ? node._originY : height / 2;
         var a = scaleX * tmpcos;
         var b = scaleX * tmpsin;
         var c = scaleY * tmpsin;
