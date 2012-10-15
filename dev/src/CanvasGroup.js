@@ -70,40 +70,40 @@
                         _touchendFromDom.call(that, e);
                     }
                 }, false);
-            } else {
-                this._element.addEventListener('mousedown', function(e) {
-                    var x = e.pageX;
-                    var y = e.pageY;
-                    e = new enchant.Event('touchstart');
-                    e.identifier = game._mousedownID;
-                    e._initPosition(x, y);
-                    _touchstartFromDom.call(that, e);
-                    that._mousedown = true;
-                }, false);
-                game._element.addEventListener('mousemove', function(e) {
-                    if (!that._mousedown) {
-                        return;
-                    }
-                    var x = e.pageX;
-                    var y = e.pageY;
-                    e = new enchant.Event('touchmove');
-                    e.identifier = game._mousedownID;
-                    e._initPosition(x, y);
-                    _touchmoveFromDom.call(that, e);
-                }, false);
-                game._element.addEventListener('mouseup', function(e) {
-                    if (!that._mousedown) {
-                        return;
-                    }
-                    var x = e.pageX;
-                    var y = e.pageY;
-                    e = new enchant.Event('touchend');
-                    e.identifier = game._mousedownID;
-                    e._initPosition(x, y);
-                    _touchendFromDom.call(that, e);
-                    that._mousedown = false;
-                }, false);
             }
+            this._element.addEventListener('mousedown', function(e) {
+                var x = e.pageX;
+                var y = e.pageY;
+                e = new enchant.Event('touchstart');
+                e.identifier = game._mousedownID;
+                e._initPosition(x, y);
+                _touchstartFromDom.call(that, e);
+                that._mousedown = true;
+            }, false);
+            game._element.addEventListener('mousemove', function(e) {
+                if (!that._mousedown) {
+                    return;
+                }
+                var x = e.pageX;
+                var y = e.pageY;
+                e = new enchant.Event('touchmove');
+                e.identifier = game._mousedownID;
+                e._initPosition(x, y);
+                _touchmoveFromDom.call(that, e);
+            }, false);
+            game._element.addEventListener('mouseup', function(e) {
+                if (!that._mousedown) {
+                    return;
+                }
+                var x = e.pageX;
+                var y = e.pageY;
+                e = new enchant.Event('touchend');
+                e.identifier = game._mousedownID;
+                e._initPosition(x, y);
+                _touchendFromDom.call(that, e);
+                that._mousedown = false;
+            }, false);
+
             var start = [
                 enchant.Event.ENTER,
                 enchant.Event.ADDED_TO_SCENE
