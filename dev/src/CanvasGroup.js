@@ -420,10 +420,41 @@
         ctx.globalAlpha = (typeof node.opacity === 'number') ? node.opacity : 1.0;
     };
 
+
+var _multiply = function(m1, m2, dest) {
+    var a11 = m1[0], a21 = m1[2], adx = m1[4],
+        a12 = m1[1], a22 = m1[3], ady = m1[5];
+    //            0,           0,           1;
+    var b11 = m2[0], b21 = m2[2], bdx = m2[4],
+        b12 = m2[1], b22 = m2[3], bdy = m2[5];
+    //            0,           0,           1;
+
+    //dest[0], dest[2], dest[4],
+    //dest[1], dest[3], dest[5];
+
+    // ダメならs/a/c/; s/b/a/; s/c/b;
+    dest[0] = a11 * b11 + a21 * b12;
+    dest[1] = a12 * b11 + a22 * b12;
+    dest[2] = a11 * b21 + a21 * b22;
+    dest[3] = a12 * b21 + a22 * b22;
+    dest[4] = a11 * bdx + a21 * bdy + adx;
+    dest[5] = a12 * bdx + a22 * bdy + ady;
+};
+
+var _stuck = [ [ 1, 0, 0, 1, 0, 0 ] ];
+var _transform = function(mat) {
+    var newmat = [];
+    _multiply(_stuck[_stuck.length - 1], mat, newmat);
+    _stuck.push(newmat);
+};
+
     var transform = function(ctx, node) {
         if (node._dirty) {
             makeTransformMatrix(node, node._cvsCache.matrix);
         }
+        _transform(node._cvsCache.matrix);
+        var mat = _stuck[_stuck.length - 1];
+        ctx.setTransform.apply(ctx, mat);
         ctx.transform.apply(ctx, node._cvsCache.matrix);
         node._dirty = false;
     };
@@ -458,6 +489,7 @@
         },
         function(ctx) {
             ctx.restore();
+            _stuck.pop();
         }
     );
 
@@ -480,6 +512,7 @@
         },
         function(ctx) {
             ctx.restore();
+            _stuck.pop();
         }
     );
 
