@@ -441,6 +441,14 @@ var _multiply = function(m1, m2, dest) {
     dest[5] = a12 * bdx + a22 * bdy + ady;
 };
 
+var _multiplyVec = function(mat, vec, dest) {
+    var x = vec[0], y = vec[1];
+    var m11 = mat[0], m21 = mat[2], mdx = mat[4],
+        m12 = mat[1], m22 = mat[3], mdy = mat[5];
+    dest[0] = m11 * x + m21 * y + mdx;
+    dest[1] = m12 * x + m22 * y + mdy;
+};
+
 var _stuck = [ [ 1, 0, 0, 1, 0, 0 ] ];
 var _transform = function(mat) {
     var newmat = [];
@@ -455,6 +463,12 @@ var _transform = function(mat) {
         _transform(node._cvsCache.matrix);
         var mat = _stuck[_stuck.length - 1];
         ctx.setTransform.apply(ctx, mat);
+        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+        var vec = [ ox, oy ];
+        _multiplyVec(mat, vec, vec);
+        node._offsetX = vec[0] - ox;
+        node._offsetY = vec[1] - oy;
         ctx.transform.apply(ctx, node._cvsCache.matrix);
         node._dirty = false;
     };
