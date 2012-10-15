@@ -411,17 +411,6 @@
         dest[5] = (-b * w - d * h + y + h);
     };
 
-    var dirtyCheck = function(node) {
-        if (node._dirty) {
-            makeTransformMatrix(node, node._cvsCache.matrix);
-            node._cvsCache.x = node.x;
-            node._cvsCache.y = node.y;
-            node._cvsCache.width = node.width;
-            node._cvsCache.height = node.height;
-            node._dirty = false;
-        }
-    };
-
     var alpha = function(ctx, node) {
         if (node.alphaBlending) {
             ctx.globalCompositeOperation = node.alphaBlending;
@@ -432,8 +421,11 @@
     };
 
     var transform = function(ctx, node) {
-        dirtyCheck(node);
+        if (node._dirty) {
+            makeTransformMatrix(node, node._cvsCache.matrix);
+        }
         ctx.transform.apply(ctx, node._cvsCache.matrix);
+        node._dirty = false;
     };
 
     var render = function(ctx, node) {
