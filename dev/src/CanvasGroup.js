@@ -246,58 +246,6 @@
         }
     };
 
-    if (enchant.widget) {
-        enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
-            var offset = enchant.ENV.RENDER_OFFSET;
-            if (this.background &&
-                this.background._element.width > 0 &&
-                this.background._element.height > 0) {
-                ctx.drawImage(this.background._element, offset, offset, this.width + offset, this.height + offset);
-            }
-            ctx.beginPath();
-            ctx.rect(0, 0, this.width, this.height);
-            ctx.clip();
-        };
-    }
-
-    enchant.Map.prototype.cvsRender = function(ctx) {
-        var game = enchant.Game.instance;
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._context.canvas;
-        ctx.drawImage(cvs, 0, 0, game.width, game.height);
-        ctx.restore();
-    };
-
-    enchant.Sprite.prototype.cvsRender = function(ctx) {
-        var img, imgdata, row, frame;
-        var sx, sy, sw, sh;
-        var offset = enchant.ENV.RENDER_OFFSET;
-        if (this._image) {
-            frame = Math.abs(this._frame) || 0;
-            img = this._image;
-            imgdata = img._element;
-            row = img.width / this._width | 0;
-            sx = (frame % row | 0) * this._width;
-            sy = (frame / row | 0) * this._height % img.height;
-            sy = Math.min(sy, img.height - this._height);
-            sw = Math.min(img.width - sx, this._width);
-            sh = Math.min(img.height - sy, this._height);
-            ctx.drawImage(imgdata, sx, sy, sw, sh, offset, offset, this._width + offset, this._height + offset);
-        }
-    };
-
-
-    enchant.Label.prototype.cvsRender = function(ctx) {
-        var offset = enchant.ENV.RENDER_OFFSET;
-        if (this.text) {
-            ctx.textBaseline = 'top';
-            ctx.font = this.font;
-            ctx.fillStyle = this.color || '#000000';
-            ctx.fillText(this.text, offset, offset);
-        }
-    };
-
     var DetectColorManager = enchant.Class.create({
         initialize: function(reso, max) {
             this.reference = [];

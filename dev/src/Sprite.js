@@ -132,3 +132,21 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     }
 });
+
+enchant.Sprite.prototype.cvsRender = function(ctx) {
+    var img, imgdata, row, frame;
+    var sx, sy, sw, sh;
+    var offset = enchant.ENV.RENDER_OFFSET;
+    if (this._image) {
+        frame = Math.abs(this._frame) || 0;
+        img = this._image;
+        imgdata = img._element;
+        row = img.width / this._width | 0;
+        sx = (frame % row | 0) * this._width;
+        sy = (frame / row | 0) * this._height % img.height;
+        sy = Math.min(sy, img.height - this._height);
+        sw = Math.min(img.width - sx, this._width);
+        sh = Math.min(img.height - sy, this._height);
+        ctx.drawImage(imgdata, sx, sy, sw, sh, offset, offset, this._width + offset, this._height + offset);
+    }
+};
