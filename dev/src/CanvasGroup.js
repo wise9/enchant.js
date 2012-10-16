@@ -310,7 +310,7 @@
             img = this._image;
             imgdata = img._element;
             row = img.width / this._width | 0;
-            sx = (frame % row) * this._width;
+            sx = (frame % row | 0) * this._width;
             sy = (frame / row | 0) * this._height % img.height;
             sy = Math.min(sy, img.height - this._height);
             sw = Math.min(img.width - sx, this._width);
