@@ -2853,7 +2853,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         _multiplyVec(mat, vec, vec);
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
-        ctx.transform.apply(ctx, node._cvsCache.matrix);
         node._dirty = false;
     };
 
