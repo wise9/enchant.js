@@ -212,7 +212,6 @@
         }
     });
 
-    var RENDER_OFFSET = 0;
     var canvasGroupInstances = [];
     var touchingEntity = null;
     var touchingGroup = null;
@@ -249,10 +248,11 @@
 
     if (enchant.widget) {
         enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
+            var offset = enchant.ENV.RENDER_OFFSET;
             if (this.background &&
                 this.background._element.width > 0 &&
                 this.background._element.height > 0) {
-                ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
+                ctx.drawImage(this.background._element, offset, offset, this.width + offset, this.height + offset);
             }
             ctx.beginPath();
             ctx.rect(0, 0, this.width, this.height);
@@ -272,6 +272,7 @@
     enchant.Sprite.prototype.cvsRender = function(ctx) {
         var img, imgdata, row, frame;
         var sx, sy, sw, sh;
+        var offset = enchant.ENV.RENDER_OFFSET;
         if (this._image) {
             frame = Math.abs(this._frame) || 0;
             img = this._image;
@@ -282,17 +283,18 @@
             sy = Math.min(sy, img.height - this._height);
             sw = Math.min(img.width - sx, this._width);
             sh = Math.min(img.height - sy, this._height);
-            ctx.drawImage(imgdata, sx, sy, sw, sh, RENDER_OFFSET, RENDER_OFFSET, this._width + RENDER_OFFSET, this._height + RENDER_OFFSET);
+            ctx.drawImage(imgdata, sx, sy, sw, sh, offset, offset, this._width + offset, this._height + offset);
         }
     };
 
 
     enchant.Label.prototype.cvsRender = function(ctx) {
+        var offset = enchant.ENV.RENDER_OFFSET;
         if (this.text) {
             ctx.textBaseline = 'top';
             ctx.font = this.font;
             ctx.fillStyle = this.color || '#000000';
-            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET);
+            ctx.fillText(this.text, offset, offset);
         }
     };
 
@@ -435,10 +437,11 @@
     };
 
     var render = function(ctx, node) {
+        var offset = enchant.ENV.RENDER_OFFSET;
         var game = enchant.Game.instance;
         if (node.backgroundColor) {
             ctx.fillStyle = node.backgroundColor;
-            ctx.fillRect(RENDER_OFFSET, RENDER_OFFSET, node.width + RENDER_OFFSET, node.height + RENDER_OFFSET);
+            ctx.fillRect(offset, offset, node.width + offset, node.height + offset);
         }
 
         if (node.cvsRender) {
@@ -451,7 +454,7 @@
             } else {
                 ctx.strokeStyle = '#0000ff';
             }
-            ctx.strokeRect(RENDER_OFFSET, RENDER_OFFSET, node.width + RENDER_OFFSET, node.height + RENDER_OFFSET);
+            ctx.strokeRect(offset, offset, node.width + offset, node.height + offset);
         }
     };
 
