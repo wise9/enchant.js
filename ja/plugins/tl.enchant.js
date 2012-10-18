@@ -89,10 +89,6 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
         orig.apply(this, arguments);
         var tl = this.tl = new enchant.tl.Timeline(this);
         this.addEventListener("enterframe", function(e) {
-<<<<<<< HEAD
-
-=======
->>>>>>> feature/timeBasedTL
             tl.dispatchEvent(e);
         });
     };
@@ -359,12 +355,9 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * tl プロパティに、タイムラインクラスのインスタンスが生成される。
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
-<<<<<<< HEAD
-     * @constructs
-=======
      * タイムラインクラスはフレームとタイムのアニメーションができる。
      *
->>>>>>> feature/timeBasedTL
+     * @constructs
      * @param node 操作の対象となるノード
      */
     initialize: function(node) {
