@@ -87,10 +87,7 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
     var orig = enchant.Node.prototype.initialize;
     enchant.Node.prototype.initialize = function() {
         orig.apply(this, arguments);
-        var tl = this.tl = new enchant.tl.Timeline(this);
-        this.addEventListener("enterframe", function(e) {
-            tl.dispatchEvent(e);
-        });
+        this.tl = new enchant.tl.Timeline(this,true);
     };
 }());
 
@@ -359,8 +356,10 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      *
      * @constructs
      * @param node 操作の対象となるノード
+     * @param [unitialized] このパラメータはtrueだったら、
+     * 最初のaddメソッド呼ぶ時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
      */
-    initialize: function(node) {
+    initialize: function(node,unitialized) {
         enchant.EventTarget.call(this);
         this.node = node;
         this.queue = [];
@@ -368,7 +367,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.looped = false;
         this.isFrameBased = true;
         this._parallel = null;
-
+        this._initialized = !unitialized;
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
     },
     /**
@@ -446,6 +445,13 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
     },
     add: function(action) {
+    	if(!this._initialized) {
+    		var tl = this;
+    		this.node.addEventListener("enterframe", function(e) {
+                tl.dispatchEvent(e);
+            });
+    		this._initialized = true;
+    	}
         if (this._parallel) {
             this._parallel.actions.push(action);
             this._parallel = null;
