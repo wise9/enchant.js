@@ -109,7 +109,7 @@ var MMD = {};
     enchant.gl.mmd.MBone = enchant.Class.create(enchant.gl.Bone, {
         initialize: function(param) {
             var pos = vec3.create();
-            var rot = quat4.create([ 0, 0, 0, 1 ]);
+            var rot = quat4.identity();
             enchant.gl.Bone.call(this, param.name, param.head_pos, pos, rot);
         },
         _applyPose: function() {
@@ -453,17 +453,33 @@ var MMD = {};
         _applySkeleton: function() {
             var sk = this.skeleton;
             var mesh = this.mesh;
-            var bi1, bi2, b1, b2;
+            var b1pos, b2pos, b1rot, b2rot;
+            var i3 = 0, i4 = 0;
             var length = this.mesh.vertices.length / 3;
             for (var i = 0; i < length; i++) {
-                bi1 = mesh.bindex1[i];
-                bi2 = mesh.bindex2[i];
-                b1 = sk.table[bi1];
-                b2 = sk.table[bi2];
-                mesh._bone1pos._array.set(b1._globalpos, i * 3);
-                mesh._quats1._array.set(b1._globalrot, i * 4);
-                mesh._bone2pos._array.set(b2._globalpos, i * 3);
-                mesh._quats2._array.set(b2._globalrot, i * 4);
+                b1pos = sk.table[mesh.bindex1[i]]._globalpos;
+                b2pos = sk.table[mesh.bindex2[i]]._globalpos;
+                b1rot = sk.table[mesh.bindex1[i]]._globalrot;
+                b2rot = sk.table[mesh.bindex2[i]]._globalrot;
+
+                mesh._bone1pos._array[i3 + 0] = b1pos[0];
+                mesh._bone1pos._array[i3 + 1] = b1pos[1];
+                mesh._bone1pos._array[i3 + 2] = b1pos[2];
+                mesh._bone2pos._array[i3 + 0] = b2pos[0];
+                mesh._bone2pos._array[i3 + 1] = b2pos[1];
+                mesh._bone2pos._array[i3 + 2] = b2pos[2];
+
+                mesh._quats1._array[i4 + 0] = b1rot[0];
+                mesh._quats1._array[i4 + 1] = b1rot[1];
+                mesh._quats1._array[i4 + 2] = b1rot[2];
+                mesh._quats1._array[i4 + 3] = b1rot[3];
+                mesh._quats2._array[i4 + 0] = b2rot[0];
+                mesh._quats2._array[i4 + 1] = b2rot[1];
+                mesh._quats2._array[i4 + 2] = b2rot[2];
+                mesh._quats2._array[i4 + 3] = b2rot[3];
+
+                i3 += 3;
+                i4 += 4;
             }
             mesh._bone1pos._bufferDataFast();
             mesh._bone2pos._bufferDataFast();

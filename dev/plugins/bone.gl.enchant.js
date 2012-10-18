@@ -72,6 +72,12 @@
         return n1 + r * (n2 - n1);
     };
 
+    var _tmpve = vec3.create();
+    var _tmpvt = vec3.create();
+    var _tmpaxis = vec3.create();
+    var _tmpquat = quat4.create();
+    var _tmpinv = quat4.create();
+
     /**
      * @scope enchant.gl.State.prototype
      */
@@ -145,11 +151,9 @@
          [/lang]
          */
         getInterpolation: function(another, ratio) {
-            var v = vec3.create();
-            var q = quat4.create();
-            var loc = vec3.lerp(this._position, another._position, ratio, v);
-            var rot = quat4.slerp(this._rotation, another._rotation, ratio, q);
-            return new enchant.gl.Pose(loc, rot);
+            vec3.lerp(this._position, another._position, ratio, _tmpve);
+            quat4.slerp(this._rotation, another._rotation, ratio, _tmpquat);
+            return new enchant.gl.Pose(_tmpve, _tmpquat);
         },
         _bezierp: function(x1, y1, x2, y2, x) {
             return bezierp(x1, x2, y1, y2, x);
@@ -286,7 +290,7 @@
             this._globalpos = vec3.create();
             vec3.set(head, this._globalpos);
 
-            this._globalrot = quat4.create([0, 0, 0, 1]);
+            this._globalrot = quat4.identity();
 
             this.parentNode = null;
             this.childNodes = [];
@@ -372,14 +376,6 @@
         }
     });
 
-    var _tmp = {
-        ve: vec3.create(),
-        vt: vec3.create(),
-        axis: vec3.create(),
-        quat: quat4.create(),
-        inv: quat4.create()
-    };
-
     /**
      * @scope enchant.gl.Skeleton.prototype
      */
@@ -398,9 +394,9 @@
             this.childNodes = [];
             this._origin = vec3.create();
             this._position = vec3.create();
-            this._rotation = quat4.create([0, 0, 0, 1]);
+            this._rotation = quat4.identity();
             this._globalpos = vec3.create();
-            this._globalrot = quat4.create([0, 0, 0, 1]);
+            this._globalrot = quat4.identity();
             this._iks = [];
         },
         /**
@@ -511,12 +507,11 @@
         },
         _solveIK: function(effector, target, bones, maxangle, iteration) {
             var len, origin;
-            var tmp = _tmp.inv;
-            vec3.subtract(target._origin, target.parentNode._origin, tmp);
-            var threshold = vec3.length(tmp) * 0.1;
+            vec3.subtract(target._origin, target.parentNode._origin, _tmpinv);
+            var threshold = vec3.length(_tmpinv) * 0.1;
             for (var i = 0; i < iteration; i++) {
-                vec3.subtract(target._globalpos, effector._globalpos, tmp);
-                len = vec3.length(tmp);
+                vec3.subtract(target._globalpos, effector._globalpos, _tmpinv);
+                len = vec3.length(_tmpinv);
                 if (len < threshold) {
                     break;
                 }
@@ -527,36 +522,33 @@
             }
         },
         _ccd: function(effector, target, origin, maxangle, threshold) {
-            var ve = _tmp.ve;
-            var vt = _tmp.vt;
-            var axis = _tmp.axis;
-            var quat = _tmp.quat;
-            var inv = _tmp.inv;
-            vec3.subtract(effector._globalpos, origin._globalpos, ve);
-            vec3.subtract(target._globalpos, origin._globalpos, vt);
-            vec3.cross(vt, ve, axis);
-            var elen = vec3.length(ve);
-            var tlen = vec3.length(vt);
-            var alen = vec3.length(axis);
-            var parent = origin.parentNode;
+            vec3.subtract(effector._globalpos, origin._globalpos, _tmpve);
+            vec3.subtract(target._globalpos, origin._globalpos, _tmpvt);
+            vec3.cross(_tmpvt, _tmpve, _tmpaxis);
+            var elen = vec3.length(_tmpve);
+            var tlen = vec3.length(_tmpvt);
+            var alen = vec3.length(_tmpaxis);
+
             if (elen < threshold || tlen < threshold || alen < threshold) {
                 return;
             }
-            var rad = Math.acos(vec3.dot(ve, vt) / elen / tlen);
+            var rad = Math.acos(vec3.dot(_tmpve, _tmpvt) / elen / tlen);
+
             if (rad > maxangle) {
                 rad = maxangle;
             }
-            vec3.scale(axis, Math.sin(rad / 2) / alen, quat);
-            quat[3] = Math.cos(rad / 2);
-            quat4.inverse(parent._globalrot, inv);
-            quat4.multiply(inv, quat, quat);
-            quat4.multiply(quat, origin._globalrot, quat);
+            vec3.scale(_tmpaxis, Math.sin(rad / 2) / alen, _tmpquat);
+            _tmpquat[3] = Math.cos(rad / 2);
+            quat4.inverse(origin.parentNode._globalrot, _tmpinv);
+            quat4.multiply(_tmpinv, _tmpquat, _tmpquat);
+            quat4.multiply(_tmpquat, origin._globalrot, _tmpquat);
+
 
             if (origin.constraint) {
-                origin.constraint(quat);
+                origin.constraint(_tmpquat);
             }
 
-            origin._solve(quat);
+            origin._solve(_tmpquat);
         }
     });
 
