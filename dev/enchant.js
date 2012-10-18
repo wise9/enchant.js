@@ -3809,7 +3809,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         if (node.alphaBlending) {
             ctx.globalCompositeOperation = node.alphaBlending;
         } else {
-            ctx.globalCompositeOperation = "source-atob";
+            ctx.globalCompositeOperation = 'source-over';
         }
         ctx.globalAlpha = (typeof node.opacity === 'number') ? node.opacity : 1.0;
     };
