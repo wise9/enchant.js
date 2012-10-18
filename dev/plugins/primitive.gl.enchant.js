@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  [lang:ja]
  * primitive.gl.enchant.js
  * @version 0.3.5

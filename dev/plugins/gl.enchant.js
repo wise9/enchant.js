@@ -1,4 +1,5 @@
-/*
+/**
+ * @fileOverview
  [lang:ja]
  * gl.enchant.js
  * @version 0.3.6
@@ -727,6 +728,10 @@ enchant.gl = {};
     var addAttributesProperty = function(program, info) {
         var name = info.name;
         var loc = program._attribLocs[name];
+        /**
+         * @type {Object}
+         * @memberOf Object.
+         */
         var desc = {
             get: function() {
                 return 'attrib';
@@ -747,6 +752,9 @@ enchant.gl = {};
         var suffix;
         var sampler = false;
         var matrix = false;
+        /**
+         * @type {Object}
+         */
         var desc = {
             get: function() {
                 return 'uniform';
@@ -1639,6 +1647,9 @@ enchant.gl = {};
                 }
             }
         },
+        /**
+         * @type {Number}
+         */
         _count: {
             get: function() {
                 return this.__count;
@@ -2638,6 +2649,9 @@ enchant.gl = {};
             this._changedRotation = true;
         },
 
+        /**
+         * @type {enchant.gl.Mesh}
+         */
         mesh: {
             get: function() {
                 return this._mesh;
@@ -3015,6 +3029,9 @@ enchant.gl = {};
             this._upVectorY = 1;
             this._upVectorZ = 0;
         },
+        /**
+         * projection matrix
+         */
         projMat: {
             get: function() {
                 return this._projMat;
@@ -3789,6 +3806,9 @@ enchant.gl = {};
         }
     });
 
+    /**
+     * @type {Object}
+     */
     enchant.gl.collision = {};
 
     var point2point = function(p1, p2) {

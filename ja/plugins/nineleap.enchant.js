@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * nineleap.enchant.js
  * @version 0.3 (2012/02/01)
  * @requires enchant.js v0.4.0 or later
@@ -25,6 +26,9 @@
 
 (function() {
 
+    /**
+     * @type {Object}
+     */
     enchant.nineleap = { assets: ['start.png', 'end.png'] };
 
     /**
@@ -32,9 +36,11 @@
      */
     enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         /**
-         *
+         * start, gameover の画像を表示し、
+         * 最後にスコアを送信するように拡張された Game クラス
          * @param width
          * @param height
+         * @constructs
          */
         initialize: function(width, height) {
             enchant.Game.call(this, width, height);
@@ -217,8 +223,12 @@
     enchant.nineleap.SplashScene = enchant.Class.create(enchant.Scene, {
         /**
          * @extends enchant.Scene
+         * @constructs
          * スプラッシュ画像を表示するシーン。
          */
+        initialize: function() {
+            enchant.Scene.call(this);
+        },
 
         /**
          * 中央に表示する画像

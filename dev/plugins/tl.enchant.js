@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * tl.enchant.js
  * @version 0.5
  * @require enchant.js v0.5.0 or later
@@ -33,6 +34,7 @@
 
 /**
  * plugin namespace object
+ * @type {Object}
  */
 enchant.tl = {};
 
@@ -86,8 +88,9 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
     enchant.Node.prototype.initialize = function() {
         orig.apply(this, arguments);
         var tl = this.tl = new enchant.tl.Timeline(this);
-        this.addEventListener("enterframe", function() {
-            tl.dispatchEvent(new enchant.Event("enterframe"));
+        this.addEventListener("enterframe", function(e) {
+
+            tl.dispatchEvent(e);
         });
     };
 }());
@@ -133,7 +136,7 @@ enchant.tl.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
- * @scope enchant.tl.Action
+ * @scope enchant.tl.Action.prototype
  */
 enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
     /**
@@ -149,6 +152,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
      * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
      * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
      *
+     * @constructs
      * @param param
      * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
      * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
@@ -195,7 +199,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
 });
 
 /**
- * @scope enchant.tl.ParallelAction
+ * @scope enchant.tl.ParallelAction.prototype
  */
 enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
     /**
@@ -271,7 +275,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
 });
 
 /**
- * @scope enchant.tl.Tween
+ * @scope enchant.tl.Tween.prototype
  */
 enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
     /**
@@ -286,6 +290,7 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
      * デフォルトでは enchant.Easing.LINEAR が指定されている。
      *
      * @param params
+     * @constructs
      * @config {time}
      * @config {easing} [function]
      */
@@ -334,6 +339,9 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
     }
 });
 
+/**
+ * @scope enchant.tl.Timeline.prototype
+ */
 enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * タイムラインクラス。
@@ -344,7 +352,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * tl プロパティに、タイムラインクラスのインスタンスが生成される。
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
-     *
+     * @constructs
      * @param node 操作の対象となるノード
      */
     initialize: function(node) {
@@ -857,7 +865,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
  * イージング関数ライブラリ
  * ActionScript で広く使われている
  * Robert Penner による Easing Equations を JavaScript に移植した。
- * @scope enchant.Easing
+ * @type {Object}
  */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {

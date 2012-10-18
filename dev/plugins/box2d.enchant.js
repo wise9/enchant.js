@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * PhySprite.enchant.js v1.30
  *
  * The MIT License
@@ -48,6 +49,10 @@ var b2Vec2 = Box2D.Common.Math.b2Vec2
     , b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
     , b2DebugDraw = Box2D.Dynamics.b2DebugDraw
     , b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef;
+
+/**
+ * @type {Object}
+ */
 enchant.box2d = {};
 
 (function() {

@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * twitter.enchant.js
  * @version 0.2 (2011/07/20)
  * @requires enchant.js v0.4.0 or later
@@ -39,13 +40,21 @@
         throw new Error('Cannot load nineleap.enchant.js.');
     }
 
+    /**
+     * @type {Object}
+     */
     enchant.nineleap.twitter = {};
 
     /**
      * @scope enchant.nineleap.twitter.Game.prototype
-     * enchant.Game or enchant.nineleap.Game クラスを拡張したクラス
      */
     enchant.nineleap.twitter.Game = enchant.Class.create(parentModule.Game, {
+        /**
+         * enchant.Game or enchant.nineleap.Game クラスを拡張したクラス
+         * @param width
+         * @param height
+         * @constructs
+         */
         initialize: function(width, height) {
             parentModule.Game.call(this, width, height);
             this._twitterRequests = [];
@@ -141,7 +150,18 @@
         }
     });
 
+    /**
+     * @scope enchant.nineleap.twitter.TwitterRequest.prototype
+     */
     enchant.nineleap.twitter.TwitterRequest = enchant.Class.create({
+        /**
+         * twitter request handle class
+         * @constructs
+         * @param id
+         * @param path
+         * @param option
+         * @param checkError
+         */
         initialize: function(id, path, option, checkError) {
             this.path = path;
             this.checkError = checkError;
@@ -164,7 +184,15 @@
         }
     });
 
+    /**
+     * @scope enchant.nineleap.twitter.TwitterUserData.prototype
+     */
     enchant.nineleap.twitter.TwitterUserData = enchant.Class.create({
+        /**
+         * twitter user data class
+         * @param obj
+         * @constructs
+         */
         initialize: function(obj) {
             for (var prop in obj) {
                 if (obj.hasOwnProperty(prop)) {
@@ -184,7 +212,15 @@
         }
     });
 
+    /**
+     * @scope enchant.nineleap.twitter.TwitterStatusData.prototype
+     */
     enchant.nineleap.twitter.TwitterStatusData = enchant.Class.create({
+        /**
+         * twitter status data class
+         * @param obj
+         * @constructs
+         */
         initialize: function(obj) {
             for (var prop in obj) {
                 if (obj.hasOwnProperty(prop)) {

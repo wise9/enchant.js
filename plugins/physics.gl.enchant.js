@@ -1,4 +1,5 @@
-/*
+/**
+ * @fileOverview
  * physics.gl.enchant.js
  * @version 0.3.6
  * @require enchant.js v0.4.5+
@@ -19,6 +20,10 @@ if (typeof Ammo === 'undefined') {
 }
 if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
     (function() {
+        /**
+         * namespace object
+         * @type {Object}
+         */
         enchant.gl.physics = {};
         /**
          * @scope enchant.gl.physics.World.prototype

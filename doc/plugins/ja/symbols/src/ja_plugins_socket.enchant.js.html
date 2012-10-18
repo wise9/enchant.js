@@ -6,20 +6,20 @@
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
 	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
-<span class='line'>  2</span>  * socket.enchant.js
-<span class='line'>  3</span>  * @version beta (2011/12/03)
-<span class='line'>  4</span>  * @require enchant.js v0.4.1+
-<span class='line'>  5</span>  * @author Ubiquitous Entertainment Inc.
-<span class='line'>  6</span>  *
-<span class='line'>  7</span>  * @description
-<span class='line'>  8</span>  * enchant.js extension for online game
-<span class='line'>  9</span>  *
-<span class='line'> 10</span>  * @usage
-<span class='line'> 11</span>  * see http://wise9.jp/archives/5659
-<span class='line'> 12</span>  */</span><span class="WHIT">
-<span class='line'> 13</span> 
-<span class='line'> 14</span> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'> 15</span> 
+<span class='line'>  2</span>  * @fileOverview
+<span class='line'>  3</span>  * socket.enchant.js
+<span class='line'>  4</span>  * @version beta (2011/12/03)
+<span class='line'>  5</span>  * @require enchant.js v0.4.1+
+<span class='line'>  6</span>  * @author Ubiquitous Entertainment Inc.
+<span class='line'>  7</span>  *
+<span class='line'>  8</span>  * @description
+<span class='line'>  9</span>  * enchant.js extension for online game
+<span class='line'> 10</span>  *
+<span class='line'> 11</span>  * @usage
+<span class='line'> 12</span>  * see http://wise9.jp/archives/5659
+<span class='line'> 13</span>  */</span><span class="WHIT">
+<span class='line'> 14</span> 
+<span class='line'> 15</span> </span><span class="PUNC">(</span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 16</span> </span><span class="WHIT">    </span><span class="NAME">enchant.socket</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 17</span> </span><span class="WHIT">    </span><span class="NAME">enchant.socket.Socket</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enchant.Class.create</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'> 18</span> </span><span class="WHIT">        </span><span class="NAME">initialize</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">gameID</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">twitterID</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -39,7 +39,7 @@
 <span class='line'> 32</span> </span><span class="WHIT">                </span><span class="NAME">this.twitterID</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">twitterID</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 33</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'> 34</span> 
-<span class='line'> 35</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'> 35</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'> 36</span>              * 変数初期化
 <span class='line'> 37</span>              */</span><span class="WHIT">
 <span class='line'> 38</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">socket</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">this</span><span class="PUNC">;</span><span class="WHIT">
@@ -47,7 +47,7 @@
 <span class='line'> 40</span> </span><span class="WHIT">            </span><span class="NAME">this.timer</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">undefined</span><span class="PUNC">;</span><span class="WHIT"> </span><span class="COMM">// timeout用タイマー</span><span class="WHIT">
 <span class='line'> 41</span> 
 <span class='line'> 42</span> 
-<span class='line'> 43</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'> 43</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'> 44</span>              * 通信系定義
 <span class='line'> 45</span>              * １番アウトプットに近いレイヤーです
 <span class='line'> 46</span>              * XHRとPusherを隠蔽します
@@ -104,7 +104,7 @@
 <span class='line'> 97</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="STRN">'551141852cce2fe668d5'</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="STRN">'http://9leap.net/'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'> 98</span> 
 <span class='line'> 99</span> 
-<span class='line'>100</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>100</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>101</span>              * Online APIのラッパー
 <span class='line'>102</span>              * サーバーで実装しているAPIを関数化しています
 <span class='line'>103</span>              * また、Pusherのbinderをpatt throughしています
@@ -145,7 +145,7 @@
 <span class='line'>138</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>139</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="NAME">connection</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>140</span> 
-<span class='line'>141</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>141</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>142</span>              * room処理のベースになるオブジェクト
 <span class='line'>143</span>              * broadcastパケットに意味付け（送り元、宛先の付与）等を行っています。
 <span class='line'>144</span>              * また、Pusherへの接続なども隠蔽しています。
@@ -176,7 +176,7 @@
 <span class='line'>169</span> </span><span class="WHIT">                        </span><span class="NAME">onquit</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>170</span> 
 <span class='line'>171</span> </span><span class="WHIT">                        </span><span class="PUNC">}</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>172</span> </span><span class="WHIT">                        </span><span class="COMM">/**
+<span class='line'>172</span> </span><span class="WHIT">                        </span><span class="COMM">/*
 <span class='line'>173</span>                          * 一般的なjoin実装
 <span class='line'>174</span>                          * channelIDが指定されれば送り、指定されなければ送らない
 <span class='line'>175</span>                          * また、pusherへのbroadcastAPIからのbindingもここで処理しています。
@@ -240,14 +240,14 @@
 <span class='line'>233</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="NAME">apiClosure</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>234</span> 
 <span class='line'>235</span> 
-<span class='line'>236</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>236</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>237</span>              * lobbyの実体
 <span class='line'>238</span>              * 1:1 でのランダムマッチの実装を行っている部分
 <span class='line'>239</span>              * onjoin等イベントリスナーになっている箇所を書き換えるとlobbyから勝手にgameRoomへ入る処理が崩れるのでご注意を
 <span class='line'>240</span>              */</span><span class="WHIT">
 <span class='line'>241</span> </span><span class="WHIT">            </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lobby</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">roomClosure</span><span class="PUNC">(</span><span class="STRN">'lobby'</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>242</span> 
-<span class='line'>243</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>243</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>244</span>              * 自分が入室したときに呼ばれる
 <span class='line'>245</span>              * マッチングできる人がいればランダムマッチング
 <span class='line'>246</span>              * いなければ、JOINイベント待機
@@ -265,7 +265,7 @@
 <span class='line'>258</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>259</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>260</span> 
-<span class='line'>261</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>261</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>262</span>              * メッセージを受信したときに呼ばれる
 <span class='line'>263</span>              * マッチング確認
 <span class='line'>264</span>              * 自分宛でなければ無視
@@ -308,7 +308,7 @@
 <span class='line'>301</span> </span><span class="WHIT">                </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>302</span> </span><span class="WHIT">            </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>303</span> 
-<span class='line'>304</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>304</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>305</span>              * デフォルトの動作ではなく、channelIDが指定されなかったらすでにchannelが存在しているかどうか確認して、あれば入るような実装。
 <span class='line'>306</span>              */</span><span class="WHIT">
 <span class='line'>307</span> </span><span class="WHIT">            </span><span class="NAME">lobby.join</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">join</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
@@ -333,7 +333,7 @@
 <span class='line'>326</span> </span><span class="WHIT">            </span><span class="NAME">this.lobby</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">lobby</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>327</span> 
 <span class='line'>328</span> 
-<span class='line'>329</span> </span><span class="WHIT">            </span><span class="COMM">/**
+<span class='line'>329</span> </span><span class="WHIT">            </span><span class="COMM">/*
 <span class='line'>330</span>              * gameRoomオブジェクト定義
 <span class='line'>331</span>              * ユーザーによるイベント管理をbroadcast上のパケットに構築
 <span class='line'>332</span>              * そのイベント管理方法等を付与した

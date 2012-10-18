@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * collada.gl.enchant.js
  * @version v0.3.5
  * @require enchant.js v0.4.5+

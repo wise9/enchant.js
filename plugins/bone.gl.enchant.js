@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * bone.gl.enchant.js
  * @version 0.2.0
  * @require enchant.js v0.4.3+

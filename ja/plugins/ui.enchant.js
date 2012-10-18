@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * ui.enchant.js v1.0
  * ui parts support
  * @require enchant.js v0.3 or later
@@ -38,6 +39,9 @@
  *
  */
 
+/**
+ * @type {Object}
+ */
 enchant.ui = { assets: ['pad.png', 'apad.png'] };
 
 /**

@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * mmd.gl.enchant.js
  * @version 0.2.1
  * @require enchant.js v0.4.5+
@@ -32,6 +33,9 @@ var MMD = {};
         return split;
     };
 
+    /**
+     * @type {Object}
+     */
     enchant.gl.mmd = {};
 
     enchant.Game._loadFuncs['pmd'] = function(src, callback) {

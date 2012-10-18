@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  [lang:ja]
  * bone.gl.enchant.js
  * @version 0.2.1
