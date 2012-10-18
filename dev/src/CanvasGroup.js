@@ -141,7 +141,7 @@
                     child.addEventListener('childadded', __onchildadded);
                     child.addEventListener('childremoved', __onchildremoved);
                 }
-                _attachCache.call(child, that._colorManager);
+                attachCache.call(child, that._colorManager);
                 rendering.call(child, that.context);
             };
 
@@ -151,7 +151,7 @@
                     child.removeEventListener('childadded', __onchildadded);
                     child.removeEventListener('childremoved', __onchildremoved);
                 }
-                _detachCache.call(child, that._colorManager);
+                detachCache.call(child, that._colorManager);
             };
 
             this.addEventListener('childremoved', __onchildremoved);
@@ -441,38 +441,23 @@
         }
     );
 
-    var attachCache = function(colorManager) {
-        if (this._cvsCache) {
-            return;
-        }
-        this._cvsCache = {};
-        this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
-        this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
-    };
-
-    var detachCache = function(colorManager) {
-        if (!this._cvsCache) {
-            return;
-        }
-        colorManager.detachDetectColor(this);
-        delete this._cvsCache;
-    };
-
-    var _attachCache = nodesWalker(
+    var attachCache = nodesWalker(
         function(colorManager) {
-            attachCache.call(this, colorManager);
+            if (!this._cvsCache) {
+                this._cvsCache = {};
+                this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
+                this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
+            }
         }
     );
 
-    var _detachCache = nodesWalker(
+    var detachCache = nodesWalker(
         function(colorManager) {
             detachCache.call(this, colorManager);
-        }
-    );
-
-    var propagationDown = nodesWalker(
-        function(e) {
-            this.dispatchEvent(e);
+            if (this._cvsCache) {
+                colorManager.detachDetectColor(this);
+                delete this._cvsCache;
+            }
         }
     );
 
