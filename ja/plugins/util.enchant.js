@@ -5,27 +5,16 @@
  * @require enchant.js v0.5.2 or later
  * @description
  * enchant.js extension plugin
-<<<<<<< HEAD
- * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
- *
- * ゲームの開発に便利なクラスを追加します。
- * このプラグインをロードする場合、同じディレクトリに affect0.png, icon0.png, font0.png を配置してください。
-=======
  * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, VirtualMap
  *
  * ゲームの開発に便利なクラスを追加します。
  * このプラグインをロードする場合、同じディレクトリに icon0.png, font0.png を配置してください。
->>>>>>> develop
  */
 
 /**
  * @type {Object}
  */
-<<<<<<< HEAD
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font0.png'] };
-=======
 enchant.util = { assets: ['icon0.png', 'font0.png'] };
->>>>>>> develop
 
 /**
  * @scope enchant.util.MutableText.prototype
@@ -446,3 +435,7 @@ enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
         obj.my = 0;
     }
 });
+
+function rand(num) {
+    return Math.floor(Math.random() * num);
+}
