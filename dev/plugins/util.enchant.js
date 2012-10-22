@@ -1,6 +1,10 @@
 /**
  * @fileOverview
+<<<<<<< HEAD
  * util.enchant.js v0.3 (2012/10/22)
+=======
+ * util.enchant.js v0.2.1 (2012/10/22)
+>>>>>>> 194a9fc... modify util.enchant.js.
  * @author Ubiquitous Entertainment Inc.
  * @require enchant.js v0.5.2 or later
  * @description
@@ -21,7 +25,11 @@
 /**
  * @type {Object}
  */
+<<<<<<< HEAD
 enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font0.png'] };
+=======
+enchant.util = { assets: ['icon0.png', 'font0.png'] };
+>>>>>>> 194a9fc... modify util.enchant.js.
 
 /**
  * @scope enchant.util.MutableText.prototype
