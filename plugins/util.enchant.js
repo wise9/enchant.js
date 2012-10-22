@@ -15,7 +15,7 @@
 /**
  * @type {Object}
  */
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font0.png'] };
+enchant.util = { assets: ['icon0.png', 'font0.png'] };
 
 /**
  * @scope enchant.util.MutableText.prototype

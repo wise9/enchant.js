@@ -9,7 +9,7 @@
  *
  [lang:ja]
  * ゲームの開発に便利なクラスを追加します。
- * このプラグインをロードする場合、同じディレクトリに affect0.png, icon0.png, font0.png を配置してください。
+ * このプラグインをロードする場合、同じディレクトリに icon0.png, font0.png を配置してください。
  [/lang]
  [lang:en]
  * This plugin is a stack of misc classes;
@@ -21,7 +21,7 @@
 /**
  * @type {Object}
  */
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font0.png'] };
+enchant.util = { assets: ['icon0.png', 'font0.png'] };
 
 /**
  * @scope enchant.util.MutableText.prototype
