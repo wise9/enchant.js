@@ -1,7 +1,17 @@
-# v0.5.0
+
+# v0.5.2
 
 - features
+    -
 - bugfix
+    -
+- plugins
+    - tl.enchant.js
+        - added time based animation
+        - added lazy event listener initialization for performance gain
+    - gl.enchant.js
+    - avatar.enchant.js
+        - bugfix about namespace (issue #90)
 
 # v0.5.1
 
@@ -20,3 +30,8 @@
     - Fix plugin namespace structure in avatar.enchant.js
     - Remove Math.round from tween method in tl.enchant.js (enables to use tl.enchant.js with 3D context)
     - Fix source code style to pass jshint
+
+# v0.5.0
+
+- features
+- bugfix

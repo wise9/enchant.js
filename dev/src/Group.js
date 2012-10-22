@@ -295,5 +295,58 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         for (var i = 0, len = this.childNodes.length; i < len; i++) {
             this.childNodes[i]._updateCoordinate();
         }
+    },
+    /**
+     * rotation of group
+     * @type {Number}
+     */
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            var diff_rotation = (rotation - this._rotation);
+
+            if (diff_rotation === 0){
+                return;
+            }
+            var rad = diff_rotation / 180 * Math.PI;
+            var sin = Math.sin(rad);
+            var cos = Math.cos(rad);
+
+            for (var i = 0, len = this.childNodes.length; i < len; i++) {
+                var node = this.childNodes[i];
+                var rx = (node.x - node.originX | 0);
+                var ry = (node.y - node.originY | 0);
+                node.x += +cos * rx + sin * ry + node.originX | 0;
+                node.y += -sin * rx + cos * ry + node.originY | 0;
+            }
+
+            this._rotation = rotation;
+        }
+    },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+        }
+    },
+    /**
+     * origin point of rotation, scaling
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
+        }
     }
 });

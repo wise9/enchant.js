@@ -1,4 +1,5 @@
-/*
+/**
+ * @fileOverview
  * avatar.enchant.js
  * @version 0.2 (2012/08/09)
  * @requires enchant.js v0.4.0 or later
@@ -36,17 +37,21 @@
  * game.start();
  */
 
-
+/**
+ * avatar namespace object
+ * @type {Object}
+ */
 enchant.avatar = {};
 
 /**
  * AvatarCharacter
  * Base class of enchant.Avatar and enchant.AvatarMonster
- * @scope enchant.AvatarCharacter.prototype
+ * @scope enchant.avatar.AvatarCharacter.prototype
  */
 enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
     /**
      * Constructor of AvatarCharacter
+     * @constructs
      * @param width
      * @param height
      */
@@ -107,20 +112,21 @@ enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
 
 /**
  * AvatarMonster
- * subclass of enchant.AvatarCharacter
- * @scope enchant.AvatarMonster.prototype
+ * subclass of enchant.avatar.AvatarCharacter
+ * @scope enchant.avatar.AvatarMonster.prototype
  */
-enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
+enchant.avatar.AvatarMonster = enchant.Class.create(enchant.avatar.AvatarCharacter, {
     /**
      * AvatarMonster
      * Manage a monter animations
+     * @constructs
      * @param {image} Image of monster
-     * @extends enchant.AvatarCharacter
+     * @extends enchant.avatar.AvatarCharacter
      */
     initialize: function(image) {
         var w = ~~(image.width / 4);
         var h = w;
-        enchant.AvatarCharacter.call(this, w, h);
+        enchant.avatar.AvatarCharacter.call(this, w, h);
         this.image = image;
         this.animPattern = { "stop": [ 4, 4, 4, 3, 3, 3],
             "walk": [ 2, 3, 4, 3],
@@ -140,7 +146,8 @@ enchant.avatar.AvatarMonster = enchant.Class.create(enchant.AvatarCharacter, {
 enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
     /**
      * A class of infinite scrolling background.
-     * @param {mode} 0 to 3
+     * @param mode {Number} 0 to 3
+     * @constructs
      * @extends enchant.Group
      */
     initialize: function(mode) {
@@ -192,13 +199,14 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
  * Avatar
  * @scope enchant.Avatar.prototype
  */
-enchant.avatar.Avatar = enchant.Class.create(enchant.AvatarCharacter, {
+enchant.avatar.Avatar = enchant.Class.create(enchant.avatar.AvatarCharacter, {
     /**
      * @param {int}code  Avatar code
-     * @extends enchant.AvatarCharacter
+     * @extends enchant.avatar.AvatarCharacter
+     * @constructs
      */
     initialize: function(code) {
-        enchant.AvatarCharacter.call(this, 64, 64);
+        enchant.avatar.AvatarCharacter.call(this, 64, 64);
         if (code) {
             this.setCode(code);
         } else {
