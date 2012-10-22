@@ -446,3 +446,7 @@ enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
         obj.my = 0;
     }
 });
+
+function rand(num) {
+    return Math.floor(Math.random() * num);
+}

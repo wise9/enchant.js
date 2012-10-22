@@ -15,11 +15,7 @@
 /**
  * @type {Object}
  */
-<<<<<<< HEAD
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font0.png'] };
-=======
 enchant.util = { assets: ['icon0.png', 'font0.png'] };
->>>>>>> develop
 
 /**
  * @scope enchant.util.MutableText.prototype
@@ -437,3 +433,7 @@ enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
         obj.my = 0;
     }
 });
+
+function rand(num) {
+    return Math.floor(Math.random() * num);
+}
