@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.5.1
+ * enchant.js v0.5.2
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
