@@ -1504,8 +1504,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         });
 
         var that = this;
+        var event = new enchant.Event('render');
         var render = function() {
-            that.dispatchEvent(new enchant.Event('render'));
+            that.dispatchEvent(event);
         };
         this.addEventListener('addedtoscene', function() {
             render();
