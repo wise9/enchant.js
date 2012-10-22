@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * socket.enchant.js
  * @version beta (2011/12/03)
  * @require enchant.js v0.4.1+
@@ -12,7 +13,6 @@
  */
 
 (function() {
-
     enchant.socket = {};
     enchant.socket.Socket = enchant.Class.create({
         initialize: function(gameID, twitterID) {
@@ -32,7 +32,7 @@
                 this.twitterID = twitterID;
             }
 
-            /**
+            /*
              * 変数初期化
              */
             var socket = this;
@@ -40,7 +40,7 @@
             this.timer = undefined; // timeout用タイマー
 
 
-            /**
+            /*
              * 通信系定義
              * １番アウトプットに近いレイヤーです
              * XHRとPusherを隠蔽します
@@ -97,7 +97,7 @@
             }('551141852cce2fe668d5', 'http://9leap.net/');
 
 
-            /**
+            /*
              * Online APIのラッパー
              * サーバーで実装しているAPIを関数化しています
              * また、Pusherのbinderをpatt throughしています
@@ -138,7 +138,7 @@
                 };
             }(connection);
 
-            /**
+            /*
              * room処理のベースになるオブジェクト
              * broadcastパケットに意味付け（送り元、宛先の付与）等を行っています。
              * また、Pusherへの接続なども隠蔽しています。
@@ -169,7 +169,7 @@
                         onquit: function() {
 
                         },
-                        /**
+                        /*
                          * 一般的なjoin実装
                          * channelIDが指定されれば送り、指定されなければ送らない
                          * また、pusherへのbroadcastAPIからのbindingもここで処理しています。
@@ -233,14 +233,14 @@
             }(apiClosure);
 
 
-            /**
+            /*
              * lobbyの実体
              * 1:1 でのランダムマッチの実装を行っている部分
              * onjoin等イベントリスナーになっている箇所を書き換えるとlobbyから勝手にgameRoomへ入る処理が崩れるのでご注意を
              */
             var lobby = roomClosure('lobby');
 
-            /**
+            /*
              * 自分が入室したときに呼ばれる
              * マッチングできる人がいればランダムマッチング
              * いなければ、JOINイベント待機
@@ -258,7 +258,7 @@
                 }
             };
 
-            /**
+            /*
              * メッセージを受信したときに呼ばれる
              * マッチング確認
              * 自分宛でなければ無視
@@ -301,7 +301,7 @@
                 }
             };
 
-            /**
+            /*
              * デフォルトの動作ではなく、channelIDが指定されなかったらすでにchannelが存在しているかどうか確認して、あれば入るような実装。
              */
             lobby.join = function(join) {
@@ -326,7 +326,7 @@
             this.lobby = lobby;
 
 
-            /**
+            /*
              * gameRoomオブジェクト定義
              * ユーザーによるイベント管理をbroadcast上のパケットに構築
              * そのイベント管理方法等を付与した

@@ -10,14 +10,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * DOM上で表示する実体を持ったクラス.直接使用することはない.
-     * @constructs
-     * @extends enchant.Node
      [/lang]
      [lang:en]
      * A class with objects displayed on DOM. Not used directly.
+     [/lang]
      * @constructs
      * @extends enchant.Node
-     [/lang]
      */
     initialize: function() {
         var game = enchant.Game.instance;
@@ -68,7 +66,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          */
         this.buttonPressed = false;
         this.addEventListener('touchstart', function() {
-            if (!this.buttonMode){
+            if (!this.buttonMode) {
                 return;
             }
             this.buttonPressed = true;
@@ -77,7 +75,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             game.dispatchEvent(e);
         });
         this.addEventListener('touchend', function() {
-            if (!this.buttonMode){
+            if (!this.buttonMode) {
                 return;
             }
             this.buttonPressed = false;
@@ -139,40 +137,40 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     that.dispatchEvent(e);
                 }
             }, false);
-        } else {
-            this._element.addEventListener('mousedown', function(e) {
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchstart');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                that.dispatchEvent(e);
-                that._mousedown = true;
-            }, false);
-            game._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown){
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchmove');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                that.dispatchEvent(e);
-            }, false);
-            game._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown){
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchend');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                that.dispatchEvent(e);
-                that._mousedown = false;
-            }, false);
         }
+        this._element.addEventListener('mousedown', function(e) {
+            var x = e.pageX;
+            var y = e.pageY;
+            e = new enchant.Event('touchstart');
+            e.identifier = game._mousedownID;
+            e._initPosition(x, y);
+            that.dispatchEvent(e);
+            that._mousedown = true;
+        }, false);
+        game._element.addEventListener('mousemove', function(e) {
+            if (!that._mousedown) {
+                return;
+            }
+            var x = e.pageX;
+            var y = e.pageY;
+            e = new enchant.Event('touchmove');
+            e.identifier = game._mousedownID;
+            e._initPosition(x, y);
+            that.dispatchEvent(e);
+        }, false);
+        game._element.addEventListener('mouseup', function(e) {
+            if (!that._mousedown) {
+                return;
+            }
+            var x = e.pageX;
+            var y = e.pageY;
+            e = new enchant.Event('touchend');
+            e.identifier = game._mousedownID;
+            e._initPosition(x, y);
+            that.dispatchEvent(e);
+            that._mousedown = false;
+        }, false);
+
     },
     /**
      [lang:ja]
@@ -380,7 +378,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     scale: function(x, y) {
-        if (y == null){
+        if (y == null) {
             y = x;
         }
         this._scaleX *= x;
@@ -442,12 +440,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Spriteの回転角 (度数法).
-     * @type {Number}
      [/lang]
      [lang:en]
      * Sprite rotation angle (frequency).
-     * @type {Number}
      [/lang]
+     * @type {Number}
      */
     rotation: {
         get: function() {
@@ -456,6 +453,40 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         set: function(rotation) {
             this._rotation = rotation;
             this._dirty = true;
+        }
+    },
+    /**
+     [lang:ja]
+     * 回転・拡大縮小の基準点のX座標
+     [/lang]
+     [lang:en]
+     * origin point of rotation, scaling
+     [/lang]
+     * @type {Number}
+     */
+    originX: {
+        get: function() {
+            return this._originX;
+        },
+        set: function(originX) {
+            this._originX = originX;
+        }
+    },
+    /**
+     [lang:ja]
+     * 回転・拡大縮小の基準点のY座標
+     [/lang]
+     [lang:en]
+     * origin point of rotation, scaling
+     [/lang]
+     * @type {Number}
+     */
+    originY: {
+        get: function() {
+            return this._originY;
+        },
+        set: function(originY) {
+            this._originY = originY;
         }
     }
 });

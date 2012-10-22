@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * nineleap.enchant.js
  * @version 0.3 (2012/02/01)
  * @requires enchant.js v0.4.0 or later
@@ -25,6 +26,9 @@
 
 (function() {
 
+    /**
+     * @type {Object}
+     */
     enchant.nineleap = { assets: ['start.png', 'end.png'] };
 
     /**
@@ -32,33 +36,43 @@
      */
     enchant.nineleap.Game = enchant.Class.create(enchant.Game, {
         /**
-         *
+         * start, gameover の画像を表示し、
+         * 最後にスコアを送信するように拡張された Game クラス
          * @param width
          * @param height
+         * @constructs
          */
         initialize: function(width, height) {
             enchant.Game.call(this, width, height);
             this.addEventListener('load', function() {
                 var game = this;
-                this.startScene = new SplashScene();
+                this.startScene = new enchant.nineleap.SplashScene();
                 this.startScene._element.style.zIndex = 10;
                 this.startScene.image = this.assets['start.png'];
                 this.startScene.addEventListener('touchend', function() {
-                    if (game.started == false) {
-                        if (game.onstart != null) game.onstart();
+                    if (game.started === false) {
+                        if (game.onstart != null) {
+                            game.onstart();
+                        }
                         game.started = true;
                         gameStart = true;   // deprecated
                     }
-                    if (game.currentScene == this) game.popScene();
+                    if (game.currentScene === this) {
+                        game.popScene();
+                    }
                     this.removeEventListener('touchend', arguments.callee);
                 });
                 this.addEventListener('keydown', function() {
-                    if (this.started == false) {
-                        if (this.onstart != null) this.onstart();
+                    if (this.started === false) {
+                        if (this.onstart != null) {
+                            this.onstart();
+                        }
                         this.started = true;
                         gameStart = true;   // deprecated
                     }
-                    if (game.currentScene == game.startScene) game.popScene();
+                    if (game.currentScene === game.startScene) {
+                        game.popScene();
+                    }
                     this.removeEventListener('keydown', arguments.callee);
                 });
                 this.pushScene(this.startScene);
@@ -72,8 +86,10 @@
         },
 
         loadImage: function(src, callback) {
-            if (callback == null) callback = function() {
-            };
+            if (callback == null) {
+                callback = function() {
+                };
+            }
             this.assets[src] = enchant.Surface.load(src);
             this.assets[src].addEventListener('load', callback);
         },
@@ -84,10 +100,10 @@
             if (this._intervalID) {
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
-		 
-		  if (enchant.Sound.enabledInMobileSafari && !game._touched &&
-                    enchant.ENV.VENDOR_PREFIX == 'webkit' && enchant.ENV.TOUCH_ENABLED) {
-										console.log("mobile_first");
+
+                if (enchant.Sound.enabledInMobileSafari && !game._touched &&
+                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+                    console.log("mobile_first");
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(game.width / 10);
@@ -117,50 +133,52 @@
                 var mAssets = (this._memoryAssets != undefined) ? this._memoryAssets : [];
                 var loaded = 0;
                 var total = assets.length + tAssets.length + nAssets.length + mAssets.length;
-                for (var i = 0, len = assets.length; i < len; i++) {
-                    this.load(assets[i], function() {
-                        var e = new enchant.Event('progress');
-                        e.loaded = ++loaded;
-                        e.total = total;
-                        game.dispatchEvent(e);
-                        if (loaded == total) {
-                            game.removeScene(game.loadingScene);
-                            game.dispatchEvent(new enchant.Event('load'));
-                        }
-                    });
+                var i, l;
+                var loadListener = function() {
+                    var e = new enchant.Event('progress');
+                    e.loaded = ++loaded;
+                    e.total = total;
+                    game.dispatchEvent(e);
+                    if (loaded === total) {
+                        game.removeScene(game.loadingScene);
+                        game.dispatchEvent(new enchant.Event('load'));
+                    }
+                };
+                for (i = 0, l = assets.length; i < l; i++) {
+                    this.load(assets[i], loadListener);
                 }
-                for (var i = 0, len = tAssets.length; i < len; i++) {
+                for (i = 0, l = tAssets.length; i < l; i++) {
                     this.loadImage(tAssets[i], function() {
                         var e = new enchant.Event('progress');
                         e.loaded = ++loaded;
                         e.total = total;
                         game.dispatchEvent(e);
-                        if (loaded == total) {
+                        if (loaded === total) {
                             game.removeScene(game.loadingScene);
                             game.dispatchEvent(new enchant.Event('load'));
                         }
                     });
                 }
-                for (var i = 0, len = mAssets.length; i < len; i++) {
+                for (i = 0, l = mAssets.length; i < l; i++) {
                     this.loadImage(mAssets[i], function() {
                         var e = new enchant.Event('progress');
                         e.loaded = ++loaded;
                         e.total = total;
                         game.dispatchEvent(e);
-                        if (loaded == total) {
+                        if (loaded === total) {
                             game.removeScene(game.loadingScene);
                             game.dispatchEvent(new enchant.Event('load'));
                         }
                     });
                 }
 
-                for (var i = 0, len = nAssets.length; i < len; i++) {
+                for (i = 0, l = nAssets.length; i < l; i++) {
                     this.loadImage(nAssets[i], function() {
                         var e = new enchant.Event('progress');
                         e.loaded = ++loaded;
                         e.total = total;
                         game.dispatchEvent(e);
-                        if (loaded == total) {
+                        if (loaded === total) {
                             game.removeScene(game.loadingScene);
                             game.dispatchEvent(new enchant.Event('load'));
                         }
@@ -172,7 +190,7 @@
             }
             this.currentTime = Date.now();
             this._intervalID = window.setInterval(function() {
-                game._tick()
+                game._tick();
             }, 1000 / this.fps);
             this.running = true;
         },
@@ -182,7 +200,7 @@
                 this.endScene.image = img;
             }
             this.pushScene(this.endScene);
-            if (location.hostname == 'r.jsgames.jp') {
+            if (location.hostname === 'r.jsgames.jp') {
                 var submit = function() {
                     var id = location.pathname.match(/^\/games\/(\d+)/)[1];
                     location.replace([
@@ -190,7 +208,7 @@
                         '?score=', encodeURIComponent(score),
                         '&result=', encodeURIComponent(result)
                     ].join(''));
-                }
+                };
                 this.endScene.addEventListener('touchend', submit);
                 window.setTimeout(submit, 3000);
             }
@@ -203,6 +221,19 @@
      * @scope enchant.nineleap.SplashScene.prototype
      */
     enchant.nineleap.SplashScene = enchant.Class.create(enchant.Scene, {
+        /**
+         * @extends enchant.Scene
+         * @constructs
+         * スプラッシュ画像を表示するシーン。
+         */
+        initialize: function() {
+            enchant.Scene.call(this);
+        },
+
+        /**
+         * 中央に表示する画像
+         * @type {enchant.Surface}
+         */
         image: {
             get: function() {
                 return this._image;
@@ -210,9 +241,12 @@
             set: function(image) {
                 this._image = image;
 
+                // discard all child nodes
                 while (this.firstChild) {
                     this.removeChild(this.firstChild);
                 }
+
+                // generate an Sprite object and put it on center
                 var sprite = new Sprite(image.width, image.height);
                 sprite.image = image;
                 sprite.x = (this.width - image.width) / 2;

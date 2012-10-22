@@ -1,4 +1,5 @@
-/*
+/**
+ * @fileOverview
  * avatar.enchant.js
  * @version 0.2 (2012/08/09)
  * @requires enchant.js v0.4.0 or later

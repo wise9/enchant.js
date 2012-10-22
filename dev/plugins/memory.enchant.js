@@ -1,4 +1,5 @@
 /**
+ * @fileOverview
  * memory.enchant.js
  * @version 0.2.2 (2011/07/31)
  * @requires enchant.js v0.3.1 or later
@@ -25,16 +26,21 @@
     /**
      * 依存ライブラリcheck
      */
-    if (enchant.nineleap.twitter != undefined &&
-        Object.getPrototypeOf(enchant.nineleap.twitter) == Object.prototype) {
-        var parentModule = enchant.nineleap.twitter;
-    } else if (enchant.nineleap != undefined &&
-        Object.getPrototypeOf(enchant.nineleap) == Object.prototype) {
-        var parentModule = enchant.nineleap;
+    var parentModule;
+    if (enchant.nineleap.twitter !== undefined &&
+        Object.getPrototypeOf(enchant.nineleap.twitter) === Object.prototype) {
+        parentModule = enchant.nineleap.twitter;
+    } else if (enchant.nineleap === undefined &&
+        Object.getPrototypeOf(enchant.nineleap) === Object.prototype) {
+        parentModule = enchant.nineleap;
     } else {
         throw new Error('Cannot load nineleap.enchant.js.');
     }
 
+    /**
+     * namespace object
+     * @type {Object}
+     */
     enchant.nineleap.memory = { assets: ['indicator.png'] };
 
     /**
@@ -98,7 +104,12 @@
      * @scope enchant.nineleap.memory.Game.prototype
      */
     enchant.nineleap.memory.Game = enchant.Class.create(parentModule.Game, {
-
+        /**
+         * メモリを扱うためのゲームオブジェクト
+         * @constructs
+         * @param width
+         * @param height
+         */
         initialize: function(width, height) {
             parentModule.Game.call(this, width, height);
             this._memoryRequests = [];
@@ -157,6 +168,10 @@
             parentModule.Game.prototype.start.call(this);
         },
 
+        /**
+         * 格納しているデータ
+         * @type {*}
+         */
         memory: {
             get: function() {
                 return this._memory;
@@ -166,6 +181,9 @@
             }
         },
 
+        /**
+         * @type {*}
+         */
         memories: {
             get: function() {
                 return this._memories;
@@ -188,7 +206,7 @@
                 checkError = true;
             }
             this.memoryQueue++;
-            if (LocalStorage.DEBUG_MODE) {
+            if (enchant.nineleap.memory.LocalStorage.DEBUG_MODE) {
                 var setmemory = (requestType.match(/user_memory/)) ? this.memory.player :
                     (requestType.match(/u\/[0-9a-zA-Z_+]/)) ? this.memory.user[requestType.replace(/u\//, '')] :
                         (requestType.match(/friends_memories/)) ? this.memories.friends :
@@ -221,7 +239,7 @@
                 }
             } else {
                 var id = this._memoryRequests.length;
-                var request = new MemoryRequest(id, requestType, option, checkError);
+                var request = new enchant.nineleap.memory.MemoryRequest(id, requestType, option, checkError);
                 this._memoryRequests.push(request);
                 return id;
             }
@@ -229,11 +247,11 @@
 
         _resend_request: function(requestType, option, checkError) {
             var id = this.preloadMemory(requestType, option, checkError);
-            if (!LocalStorage.DEBUG_MODE) this._memoryRequests[id]._sendRequest();
+            if (!enchant.nineleap.memory.LocalStorage.DEBUG_MODE) this._memoryRequests[id]._sendRequest();
         },
 
         check_ajax_running: function(requestType) {
-            if (LocalStorage.DEBUG_MODE) return false;
+            if (enchant.nineleap.memory.LocalStorage.DEBUG_MODE) return false;
             for (var i = 0, l = this._ajaxRequests.length; i < l; i++) {
                 if (this._ajaxRequests[i].requestType == requestType && this._ajaxRequests[i].running)
                     return true;
@@ -257,7 +275,7 @@
             if (resBody == undefined) {
             } else if ('code' in resBody) {
                 if (resBody.code == 401 && this.requireAuth) {
-                    window.location.replace(HttpRequest.SERVER_URL + 'login?after_login=' + window.location.href);
+                    window.location.replace(enchant.nineleap.memory.HttpRequest.SERVER_URL + 'login?after_login=' + window.location.href);
                     return;
                 } else if (resBody.code == 401 && !this.requireAuth) {
                     this.authorized = false;
@@ -303,7 +321,7 @@
             for (var prop in data) {
                 obj[prop] = data[prop];
             }
-            if (!LocalStorage.DEBUG_MODE && obj['profile_image_url'] != undefined) {
+            if (!enchant.nineleap.memory.LocalStorage.DEBUG_MODE && obj['profile_image_url'] != undefined) {
                 obj['toSprite'] = function(width, height) {
                     if (arguments.length < 2) {
                         var width = 48;
@@ -355,9 +373,9 @@
                 checkError = true;
                 option = {};
             }
-            if (LocalStorage.DEBUG_MODE) {
+            if (enchant.nineleap.memory.LocalStorage.DEBUG_MODE) {
                 game.ajaxQueue++;
-                var localstorage = new LocalStorage(LocalStorage.GAME_ID);
+                var localstorage = new enchant.nineleap.memory.LocalStorage(LocalStorage.GAME_ID);
                 localstorage.set_user_memory('mine', game.memory.player.data);
                 game.ajaxQueue--;
                 var e = new Event('complete_update');
@@ -374,11 +392,11 @@
                     enchant.Game.instance.currentScene.dispatchEvent(e);
                 }, checkError, data);
                 game._ajaxRequests.push(request);
-                if (game.ajaxQueue + game.memoryQueue < HttpRequest.MAX_REQUEST_SIZE) {
+                if (game.ajaxQueue + game.memoryQueue < enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE) {
                     request.send();
                 } else {
                     game.addEventListener('complete_xhr_request', function() {
-                        if (game.ajaxQueue + game.memoryQueue < HttpRequest.MAX_REQUEST_SIZE) {
+                        if (game.ajaxQueue + game.memoryQueue < enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE) {
                             game.removeEventListener('compleate_xhr_request', arguments.callee);
                             game._ajaxRequests[id].send();
                         }
@@ -386,7 +404,7 @@
                 }
                 return request;
             }
-        },
+        }
     });
 
 
@@ -394,8 +412,14 @@
      * @scope enchant.nineleap.memory.HttpRequest.prototype
      */
     enchant.nineleap.memory.HttpRequest = enchant.Class.create(enchant.EventTarget, {
+        /**
+         * HttpRequest クラス
+         * @constructs
+         * @extends enchant.EventTarget
+         */
         initialize: function() {
-            if (LocalStorage.DEBUG) return;
+            var xdr, xhr;
+            if (enchant.nineleap.memory.LocalStorage.DEBUG) return;
             enchant.EventTarget.call(this);
             this.gameid = enchant.nineleap.memory.LocalStorage.GAME_ID != null ?
                 enchant.nineleap.memory.LocalStorage.GAME_ID :
@@ -403,17 +427,18 @@
             this._running = false;
             if (window.XMLHttpRequest) {
                 this.httpRequest = new XMLHttpRequest();
-            } else if (window.XDomainRequest) { // truly useless XD
-                var xhr = function() {
-                    this.readyState = 0; // uninitialized
+            } else if (window.XDomainRequest) {
+                xhr = function() {
+                    this.readyState = 0;
                     this.responseText = "";
                     this.status = "";
                     this.onreadstatechange = undefined;
-                    var xdr = new XDomainRequest();
+
+                    xdr = new XDomainRequest();
 
                     xdr.onprogress = function() {
                         var f;
-                        this.xhr.readyState = 2; // loaded
+                        this.xhr.readyState = 2;
                         if (this.xhr && ( f = this.xhr.onreadystatechange )) {
                             f.apply(this.xhr);
                         }
@@ -421,12 +446,12 @@
 
                     xdr.onload = function() {
                         var f;
-                        this.xhr.readyState = 3;    // interactive
+                        this.xhr.readyState = 3;
                         if (this.xhr && ( f = this.xhr.onreadystatechange )) {
                             f.apply(this.xhr);
                         }
                         this.xhr.responseText = xdr.responseText;
-                        this.xhr.readyState = 4;    // complete
+                        this.xhr.readyState = 4;
                         this.xhr.status = "200";
                         if (f) {
                             f.apply(this.xhr);
@@ -441,12 +466,12 @@
                         if (this.xhr && ( f = this.xhr.onreadystatechange )) {
                             f.apply(this.xhr);
                         }
-                    }
+                    };
 
                     this.open = function(method, url, async) {
                         return xdr.open(method, url, async);
-                        readyState = 1; // loading
-                    }
+                    };
+
                     this.send = function(body) {
                         xdr.send(body);
                     };
@@ -477,15 +502,33 @@
         }
     });
 
+    /**
+     * サーバのURL
+     * @type {String}
+     */
     enchant.nineleap.memory.HttpRequest.SERVER_URL = 'http://9leap.net/api/';
+
+    /**
+     * 最大リクエスト数
+     * @type {Number}
+     */
     enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE = 3;
 
     /**
      * @scope enchant.nineleap.memory.MemoryRequest.prototype
      */
     enchant.nineleap.memory.MemoryRequest = enchant.Class.create({
+        /**
+         * メモリAPI に送るリクエスト
+         * @private
+         * @constructs
+         * @param id
+         * @param requestType
+         * @param option
+         * @param checkError
+         */
         initialize: function(id, requestType, option, checkError) {
-            if (LocalStorage.DEBUG) return;
+            if (enchant.nineleap.memory.LocalStorage.DEBUG) return;
             this.id = id;
             this.checkError = checkError;
             this.requestType = requestType;
@@ -515,8 +558,17 @@
      * @scope enchant.nineleap.memory.MemoryWrite.prototype
      */
     enchant.nineleap.memory.MemoryWrite = enchant.Class.create(enchant.nineleap.memory.HttpRequest, {
+        /**
+         * メモリAPI に対して書き込みのリクエストを送るためのオブジェクト
+         * @constructs
+         * @param id
+         * @param requestType
+         * @param callback
+         * @param checkError
+         * @param data
+         */
         initialize: function(id, requestType, callback, checkError, data) {
-            if (LocalStorage.DEBUG) return;
+            if (enchant.nineleap.memory.LocalStorage.DEBUG) return;
             enchant.nineleap.memory.HttpRequest.call(this);
             this.id = id;
             this.callback = callback;
@@ -601,8 +653,14 @@
      * @scope enchant.nineleap.memory.LocalStorage.prototype
      */
     enchant.nineleap.memory.LocalStorage = enchant.Class.create({
+        /**
+         * デバッグ用にローカルストレージを用いるクラス
+         * @constructs
+         * @param requestType
+         * @param callback
+         */
         initialize: function(requestType, callback) {
-            var game_id = (LocalStorage.GAME_ID == null) ? 0 : LocalStorage.GAME_ID;
+            var game_id = (enchant.nineleap.memory.LocalStorage.GAME_ID == null) ? 0 : enchant.nineleap.memory.LocalStorage.GAME_ID;
             this._user_memory_key = "game_" + game_id + "_user_";
         },
         get_user_memory: function(key) {

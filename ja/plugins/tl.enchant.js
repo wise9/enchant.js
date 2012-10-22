@@ -1,6 +1,7 @@
 /**
+ * @fileOverview
  * tl.enchant.js
- * @version 0.4
+ * @version 0.5
  * @require enchant.js v0.5.0 or later
  * @author sidestepism
  *
@@ -33,6 +34,7 @@
 
 /**
  * plugin namespace object
+ * @type {Object}
  */
 enchant.tl = {};
 
@@ -86,11 +88,12 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
     enchant.Node.prototype.initialize = function() {
         orig.apply(this, arguments);
         var tl = this.tl = new enchant.tl.Timeline(this);
-        this.addEventListener("enterframe", function() {
-            tl.dispatchEvent(new enchant.Event("enterframe"));
+        this.addEventListener("enterframe", function(e) {
+
+            tl.dispatchEvent(e);
         });
     };
-})();
+}());
 
 /**
  * @scope enchant.tl.ActionEventTarget
@@ -109,8 +112,9 @@ enchant.tl.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
      * @param {enchant.Event} e Event issued.
      */
     dispatchEvent: function(e) {
+        var target;
         if (this.node) {
-            var target = this.node;
+            target = this.node;
             e.target = target;
             e.localX = e.x - target._offsetX;
             e.localY = e.y - target._offsetY;
@@ -118,7 +122,9 @@ enchant.tl.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
             this.node = null;
         }
 
-        if (this['on' + e.type] != null) this['on' + e.type].call(target, e);
+        if (this['on' + e.type] != null) {
+            this['on' + e.type].call(target, e);
+        }
         var listeners = this._listeners[e.type];
         if (listeners != null) {
             listeners = listeners.slice();
@@ -130,7 +136,7 @@ enchant.tl.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
- * @scope enchant.tl.Action
+ * @scope enchant.tl.Action.prototype
  */
 enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
     /**
@@ -146,6 +152,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
      * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
      * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
      *
+     * @constructs
      * @param param
      * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
      * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
@@ -156,8 +163,12 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
         enchant.tl.ActionEventTarget.call(this);
         this.time = null;
         this.frame = 0;
-        for (var key in param)if (param.hasOwnProperty(key)) {
-            if (param[key] != null)this[key] = param[key];
+        for (var key in param) {
+            if (param.hasOwnProperty(key)) {
+                if (param[key] != null) {
+                    this[key] = param[key];
+                }
+            }
         }
 
         var action = this;
@@ -171,7 +182,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
             action.frame = 0;
         });
 
-        this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function(evt) {
+        this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function() {
             action.timeline = null;
             action.node = null;
             action.frame = 0;
@@ -179,7 +190,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
             action.frame++;
-            if (action.time != null && action.frame > action.time) {
+            if (action.time != null && action.frame >= action.time) {
                 evt.timeline.next();
             }
         });
@@ -188,7 +199,7 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
 });
 
 /**
- * @scope enchant.tl.ParallelAction
+ * @scope enchant.tl.ParallelAction.prototype
  */
 enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
     /**
@@ -243,7 +254,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
                 that.actions[i].dispatchEvent(e);
             }
             // 残りアクションが 0 になったら次のアクションへ
-            if (that.actions.length == 0) {
+            if (that.actions.length === 0) {
                 evt.timeline.next();
             }
         });
@@ -254,7 +265,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
             }
         });
 
-        this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function(evt) {
+        this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function() {
             // すべて戻す
             this.actions = this.endedActions;
             this.endedActions = [];
@@ -264,7 +275,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
 });
 
 /**
- * @scope enchant.tl.Tween
+ * @scope enchant.tl.Tween.prototype
  */
 enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
     /**
@@ -279,6 +290,7 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
      * デフォルトでは enchant.Easing.LINEAR が指定されている。
      *
      * @param params
+     * @constructs
      * @config {time}
      * @config {easing} [function]
      */
@@ -298,30 +310,38 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
         this.addEventListener(enchant.Event.ACTION_START, function() {
             // トゥイーンの対象とならないプロパティ
             var excepted = ["frame", "time", "callback", "onactiontick", "onactionstart", "onactionend"];
-            for (var prop in params) if (params.hasOwnProperty(prop)) {
-                // 値の代わりに関数が入っていた場合評価した結果を用いる
-                var target_val;
-                if (typeof params[prop] == "function") {
-                    target_val = params[prop].call(tween.node);
-                } else target_val = params[prop];
+            for (var prop in params) {
+                if (params.hasOwnProperty(prop)) {
+                    // 値の代わりに関数が入っていた場合評価した結果を用いる
+                    var target_val;
+                    if (typeof params[prop] === "function") {
+                        target_val = params[prop].call(tween.node);
+                    } else {
+                        target_val = params[prop];
+                    }
 
-                if (excepted.indexOf(prop) == -1) {
-                    origin[prop] = tween.node[prop];
-                    target[prop] = target_val;
+                    if (excepted.indexOf(prop) === -1) {
+                        origin[prop] = tween.node[prop];
+                        target[prop] = target_val;
+                    }
                 }
             }
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(tween.frame+1, 0, 1, tween.time+1) - tween.easing(tween.frame, 0, 1, tween.time+1);
+            var ratio = tween.easing(tween.frame + 1, 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
             for (var prop in target) if (target.hasOwnProperty(prop)) {
                 if (typeof this[prop] === "undefined")continue;
                 tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                if (Math.abs(tween.node[prop]) < 10e-8) tween.node[prop] = 0;
             }
         });
     }
 });
 
+/**
+ * @scope enchant.tl.Timeline.prototype
+ */
 enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * タイムラインクラス。
@@ -332,7 +352,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * tl プロパティに、タイムラインクラスのインスタンスが生成される。
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
-     *
+     * @constructs
      * @param node 操作の対象となるノード
      */
     initialize: function(node) {
@@ -390,10 +410,11 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
         if (this.queue.length > 0) {
             var action = this.queue[0];
-            if (action.frame == 0) {
-                e = new enchant.Event("actionstart");
-                e.timeline = this;
-                action.dispatchEvent(e);
+            if (action.frame === 0) {
+                var f;
+                f = new enchant.Event("actionstart");
+                f.timeline = this;
+                action.dispatchEvent(f);
             }
             var e = new enchant.Event("actiontick");
             e.timeline = this;
@@ -544,10 +565,12 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      */
     cue: function(cue) {
         var ptr = 0;
-        for (var frame in cue)if (cue.hasOwnProperty(frame)) {
-            this.delay(frame - ptr);
-            this.then(cue[frame]);
-            ptr = frame;
+        for (var frame in cue) {
+            if (cue.hasOwnProperty(frame)) {
+                this.delay(frame - ptr);
+                this.then(cue[frame]);
+                ptr = frame;
+            }
         }
     },
     /**
@@ -578,7 +601,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.queue.push(last);
         } else {
             var parallel = new enchant.tl.ParallelAction();
-            parallel.actions.push(last)
+            parallel.actions.push(last);
             this.queue.push(parallel);
             this._parallel = parallel;
         }
@@ -616,7 +639,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         var timeline = this;
         this.add(new enchant.tl.Action({
             onactionstart: func,
-            onactiontick: function(func) {
+            onactiontick: function(evt) {
                 if (func.call(this)) {
                     timeline.next();
                 }
@@ -708,10 +731,10 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     moveBy: function(x, y, time, easing) {
         return this.tween({
             x: function() {
-                return this.x + x
+                return this.x + x;
             },
             y: function() {
-                return this.y + y
+                return this.y + y;
             },
             time: time,
             easing: easing
@@ -752,7 +775,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param [easing]
      */
     scaleTo: function(scale, time, easing) {
-        if (typeof easing === "Number") {
+        if (typeof easing === "number") {
             return this.tween({
                 scaleX: arguments[0],
                 scaleY: arguments[1],
@@ -776,13 +799,13 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param [easing]
      */
     scaleBy: function(scale, time, easing) {
-        if (typeof easing === "Number") {
+        if (typeof easing === "number") {
             return this.tween({
                 scaleX: function() {
-                    return this.scaleX * arguments[0]
+                    return this.scaleX * arguments[0];
                 },
                 scaleY: function() {
-                    return this.scaleY * arguments[1]
+                    return this.scaleY * arguments[1];
                 },
                 time: arguments[2],
                 easing: arguments[3]
@@ -790,14 +813,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
         return this.tween({
             scaleX: function() {
-                return this.scaleX * scale
+                return this.scaleX * scale;
             },
             scaleY: function() {
-                return this.scaleY * scale
+                return this.scaleY * scale;
             },
             time: time,
             easing: easing
-        })
+        });
     },
     /**
      * Entity をなめらかに回転させるアクションを追加する。
@@ -822,11 +845,11 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     rotateBy: function(deg, time, easing) {
         return this.tween({
             rotation: function() {
-                return this.rotation + deg
+                return this.rotation + deg;
             },
             time: time,
             easing: easing
-        })
+        });
     }});
 
 /**
@@ -842,11 +865,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
  * イージング関数ライブラリ
  * ActionScript で広く使われている
  * Robert Penner による Easing Equations を JavaScript に移植した。
- * @scope enchant.Easing
+ * @type {Object}
  */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {
         return c * t / d + b;
+    },
+    SWING: function(t, b, c, d) {
+        return c * (0.5 - Math.cos(((t / d)*Math.PI))/2)+ b;
     },
     // quad
     QUAD_EASEIN: function(t, b, c, d) {
@@ -856,7 +882,9 @@ enchant.Easing = {
         return -c * (t /= d) * (t - 2) + b;
     },
     QUAD_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t + b;
+        if ((t /= d / 2) < 1) {
+            return c / 2 * t * t + b;
+        }
         return -c / 2 * ((--t) * (t - 2) - 1) + b;
     },
     // cubic
@@ -867,7 +895,9 @@ enchant.Easing = {
         return c * ((t = t / d - 1) * t * t + 1) + b;
     },
     CUBIC_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
+        if ((t /= d / 2) < 1) {
+            return c / 2 * t * t * t + b;
+        }
         return c / 2 * ((t -= 2) * t * t + 2) + b;
     },
     // quart
@@ -878,7 +908,9 @@ enchant.Easing = {
         return -c * ((t = t / d - 1) * t * t * t - 1) + b;
     },
     QUART_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
+        if ((t /= d / 2) < 1) {
+            return c / 2 * t * t * t * t + b;
+        }
         return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
     },
     // quint
@@ -889,7 +921,9 @@ enchant.Easing = {
         return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
     },
     QUINT_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;
+        if ((t /= d / 2) < 1) {
+            return c / 2 * t * t * t * t * t + b;
+        }
         return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
     },
     //sin
@@ -910,88 +944,136 @@ enchant.Easing = {
         return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
     },
     CIRC_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+        if ((t /= d / 2) < 1) {
+            return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
+        }
         return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
     },
     // elastic
     ELASTIC_EASEIN: function(t, b, c, d, a, p) {
-        if (t == 0) return b;
-        if ((t /= d) == 1) return b + c;
-        if (!p) p = d * .3;
+        if (t === 0) {
+            return b;
+        }
+        if ((t /= d) === 1) {
+            return b + c;
+        }
+
+        if (!p) {
+            p = d * 0.3;
+        }
+
+        var s;
         if (!a || a < Math.abs(c)) {
             a = c;
-            var s = p / 4;
+            s = p / 4;
+        } else {
+            s = p / (2 * Math.PI) * Math.asin(c / a);
         }
-        else var s = p / (2 * Math.PI) * Math.asin(c / a);
         return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
     },
     ELASTIC_EASEOUT: function(t, b, c, d, a, p) {
-        if (t == 0) return b;
-        if ((t /= d) == 1) return b + c;
-        if (!p) p = d * .3;
+        if (t === 0) {
+            return b;
+        }
+        if ((t /= d) === 1) {
+            return b + c;
+        }
+        if (!p) {
+            p = d * 0.3;
+        }
+        var s;
         if (!a || a < Math.abs(c)) {
             a = c;
-            var s = p / 4;
+            s = p / 4;
+        } else {
+            s = p / (2 * Math.PI) * Math.asin(c / a);
         }
-        else var s = p / (2 * Math.PI) * Math.asin(c / a);
         return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
     },
     ELASTIC_EASEINOUT: function(t, b, c, d, a, p) {
-        if (t == 0) return b;
-        if ((t /= d / 2) == 2) return b + c;
-        if (!p) p = d * (.3 * 1.5);
+        if (t === 0) {
+            return b;
+        }
+        if ((t /= d / 2) === 2) {
+            return b + c;
+        }
+        if (!p) {
+            p = d * (0.3 * 1.5);
+        }
+        var s;
         if (!a || a < Math.abs(c)) {
             a = c;
-            var s = p / 4;
+            s = p / 4;
+        } else {
+            s = p / (2 * Math.PI) * Math.asin(c / a);
         }
-        else var s = p / (2 * Math.PI) * Math.asin(c / a);
-        if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+        if (t < 1) {
+            return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
+        }
+        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
     },
     // bounce
     BOUNCE_EASEOUT: function(t, b, c, d) {
         if ((t /= d) < (1 / 2.75)) {
             return c * (7.5625 * t * t) + b;
         } else if (t < (2 / 2.75)) {
-            return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+            return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
         } else if (t < (2.5 / 2.75)) {
-            return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+            return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
         } else {
-            return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+            return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
         }
     },
     BOUNCE_EASEIN: function(t, b, c, d) {
         return c - enchant.Easing.BOUNCE_EASEOUT(d - t, 0, c, d) + b;
     },
     BOUNCE_EASEINOUT: function(t, b, c, d) {
-        if (t < d / 2) return enchant.Easing.BOUNCE_EASEIN(t * 2, 0, c, d) * .5 + b;
-        else return enchant.Easing.BOUNCE_EASEOUT(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
+        if (t < d / 2) {
+            return enchant.Easing.BOUNCE_EASEIN(t * 2, 0, c, d) * 0.5 + b;
+        } else {
+            return enchant.Easing.BOUNCE_EASEOUT(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
+        }
+
     },
     // back
     BACK_EASEIN: function(t, b, c, d, s) {
-        if (s == undefined) s = 1.70158;
+        if (s === undefined) {
+            s = 1.70158;
+        }
         return c * (t /= d) * t * ((s + 1) * t - s) + b;
     },
     BACK_EASEOUT: function(t, b, c, d, s) {
-        if (s == undefined) s = 1.70158;
+        if (s === undefined) {
+            s = 1.70158;
+        }
         return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
     },
     BACK_EASEINOUT: function(t, b, c, d, s) {
-        if (s == undefined) s = 1.70158;
-        if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+        if (s === undefined) {
+            s = 1.70158;
+        }
+        if ((t /= d / 2) < 1) {
+            return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+        }
         return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
     },
     // expo
     EXPO_EASEIN: function(t, b, c, d) {
-        return (t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
+        return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
     },
     EXPO_EASEOUT: function(t, b, c, d) {
-        return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
+        return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
     },
     EXPO_EASEINOUT: function(t, b, c, d) {
-        if (t == 0) return b;
-        if (t == d) return b + c;
-        if ((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+        if (t === 0) {
+            return b;
+        }
+        if (t === d) {
+            return b + c;
+        }
+        if ((t /= d / 2) < 1) {
+            return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
+        }
         return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
     }
 };
