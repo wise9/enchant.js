@@ -1,21 +1,21 @@
 /**
  * @fileOverview
- * util.enchant.js v0.2 (2011/10/06)
+ * util.enchant.js v0.3 (2012/10/22)
  * @author Ubiquitous Entertainment Inc.
- * @require enchant.js v0.4.0 or later
+ * @require enchant.js v0.5.2 or later
  * @description
  * enchant.js extension plugin
  * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
  *
  * This plugin is a stack of misc classes;
  * Code is not refined, but it might be useful for making game in short time.
- *
+ * You MUST locate affect0.png, icon0.png, font.png in /images directory on the same directory as enchant.js.
  */
 
 /**
  * @type {Object}
  */
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
+enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font0.png'] };
 
 /**
  * @scope enchant.util.MutableText.prototype
@@ -23,18 +23,23 @@ enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
  */
 enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
     /**
-
+     *
+     * @usage
+     *     var text = new MutableText(0, 0);
+     *     game.text = 'Hello, world!';
+     *     game.rootScene.addChild(text);
+     *
      * @constructs
      * @param posX
      * @param posY
      * @param width
      */
-    initialize: function(posX, posY, width) {
+    initialize: function(x, y, width) {
         enchant.Sprite.call(this, 0, 0);
         this.fontSize = 16;
         this.widthItemNum = 16;
-        this.x = posX;
-        this.y = posY;
+        this.x = x;
+        this.y = y;
         this.text = '';
         if (arguments[2]) {
             this.row = Math.floor(arguments[2] / this.fontSize);
@@ -64,7 +69,7 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
             }
             x = charPos % this.widthItemNum;
             y = (charPos / this.widthItemNum) | 0;
-            this.image.draw(enchant.Game.instance.assets['font.png'],
+            this.image.draw(enchant.Game.instance.assets['font0.png'],
                 x * this.fontSize, y * this.fontSize, this.fontSize, this.fontSize,
                 (i % this.row) * this.fontSize, ((i / this.row) | 0) * this.fontSize, this.fontSize, this.fontSize);
         }
