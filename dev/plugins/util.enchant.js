@@ -1,11 +1,11 @@
 /**
  * @fileOverview
- * util.enchant.js v0.2 (2011/10/06)
+ * util.enchant.js v0.2.1 (2012/10/22)
  * @author Ubiquitous Entertainment Inc.
  * @require enchant.js v0.4.0 or later
  * @description
  * enchant.js extension plugin
- * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, Material, ExSprite
+ * includes: MutableText, ScoreLabel, TimeLabel, LifeLabel, Bar, VirtualMap
  *
  * This plugin is a stack of misc classes;
  * Code is not refined, but it might be useful for making game in short time.
@@ -15,7 +15,7 @@
 /**
  * @type {Object}
  */
-enchant.util = { assets: ['effect0.gif', 'icon0.gif', 'font.png'] };
+enchant.util = { assets: ['icon0.png', 'font0.png'] };
 
 /**
  * @scope enchant.util.MutableText.prototype
@@ -71,7 +71,7 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
             }
             x = charPos % this.widthItemNum;
             y = (charPos / this.widthItemNum) | 0;
-            this.image.draw(enchant.Game.instance.assets['font.png'],
+            this.image.draw(enchant.Game.instance.assets['font0.png'],
                 x * this.fontSize, y * this.fontSize, this.fontSize, this.fontSize,
                 (i % this.row) * this.fontSize, ((i / this.row) | 0) * this.fontSize, this.fontSize, this.fontSize);
         }
@@ -212,7 +212,7 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
 enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
     /**
      * ライフを表示する専用のラベル
-     * icon0.gif 内のハートの画像を用いる
+     * icon0.png 内のハートの画像を用いる
      * @constructs
      * @param x
      * @param y
@@ -224,15 +224,16 @@ enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
         this.y = y || 0;
         this._maxlife = maxlife || 9;
         this._life = 0;
-        this.label = new enchant.MutableText(0, 0, 80, 'LIFE:');
+        this.label = new enchant.util.MutableText(0, 0, 80);
+        this.label.text = 'LIFE:';
         this.addChild(this.label);
         this.heart = [];
         for (var i = 0; i < this._maxlife; i++) {
             this.heart[i] = new enchant.Sprite(16, 16);
-            this.heart[i].image = enchant.Game.instance.assets['icon0.gif'];
+            this.heart[i].image = enchant.Game.instance.assets['icon0.png'];
             this.heart[i].x = this.label.width + i * 16;
             this.heart[i].y = -3;
-            this.heart[i].frame = 11;
+            this.heart[i].frame = 10;
             this.addChild(this.heart[i]);
         }
     },
