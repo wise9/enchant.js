@@ -10,7 +10,7 @@ function findElementWithId(id) {
 module('Entity', {
 	setup: function () {
 		enchant();
-		var game = new Game();
+		var game = new Game(320, 320);
 	},
 	teardown: function () {
 		// Gameインスタンスを破棄したいのだがそんな処理は無い様子
@@ -18,31 +18,12 @@ module('Entity', {
 });
 
 
-test('Entity.className', function () {
-	var label = new Label();
-	label.className = 'myClassName';
-	equal(label.className, 'myClassName');
-
-	ok(findElementsWithClass('myClassName').length === 0);
-	enchant.Game.instance.rootScene.addChild(label);
-	ok(findElementsWithClass('myClassName').length === 1);
-});
-
-test('Entity.id', function () {
-	var label = new Label();
-	label.id = 'myId';
-	equal(label.id, 'myId');
-
-	ok(findElementWithId('myId') === null);
-	enchant.Game.instance.rootScene.addChild(label);
-	ok(findElementWithId('myId') !== null);
-});
 
 /**
  * @see https://github.com/wise9/enchant.js/issues/14
  */
 test('Entity.frame issue 14', function() {
-	var sprite = new Sprite(32, 32);
+	var sprite = new enchant.Sprite(32, 32);
 	var error;
 
     try{

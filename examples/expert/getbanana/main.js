@@ -35,12 +35,6 @@ window.onload = function() {
             bear.x = e.localX
         });
         
-        // スコアの表示 (初期位置 8,8)
-        scoreLabel = new Label("");
-        scoreLabel.x = scoreLabel.y = 8;
-        scoreLabel.addEventListener('enterframe', function(){
-            this.text = "SCORE: " + game.score + " TIME: " + (20 - game.rootScene.age/game.fps).toFixed(2);
-        });
         game.score = 0;
 
         game.rootScene.addEventListener('enterframe',function(){

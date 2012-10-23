@@ -91,9 +91,10 @@
             if (!stage) {
                 stage = document.createElement('div');
                 stage.id = 'enchant-stage';
-                stage.style.width = window.innerWidth + 'px';
-                stage.style.height = window.innerHeight + 'px';
+//                stage.style.width = window.innerWidth + 'px';
+//                stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
+
                 if (document.body.firstChild) {
                     document.body.insertBefore(stage, document.body.firstChild);
                 } else {
@@ -122,6 +123,7 @@
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
+
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
                 this._pageY = Math.round(window.scrollY + bounding.top);
@@ -822,11 +824,12 @@
         },
         /**
          [lang:ja]
-         * Game#start が呼ばれてから経過した時間を取得する
-         * @return {Number} 経過した時間 (秒)
+         * Game#start が呼ばれてから経過したゲーム内時間を取得する
+         * 経過した総フレーム数をfpsで割っている
+         * @return {Number} 経過したゲーム内時間 (秒)
          [/lang]
          [lang:en]
-         * get elapsed time from game.start is called
+         * get elapsed time (in game, not actual) from game.start is called
          * @return {Number} elapsed time (seconds)
          [/lang]
          */

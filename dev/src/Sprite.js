@@ -39,30 +39,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 
         this.width = width;
         this.height = height;
-        this._scaleX = 1;
-        this._scaleY = 1;
-        this._rotation = 0;
-        this._dirty = false;
         this._image = null;
         this._frame = 0;
         this._frameSequence = [];
-
-        this._style.overflow = 'hidden';
-
-        this.addEventListener('render', function() {
-            if (this._dirty) {
-                var transform = [
-                    'rotate(', this._rotation, 'deg)',
-                    'scale(', this._scaleX, ',', this._scaleY, ')'
-                ];
-                // Issues #80
-                if (navigator.userAgent.indexOf('iPhone') !== -1) {
-                  transform.push('translate3d(0,0,0)');
-                }
-                this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = transform.join('');
-                this._dirty = false;
-            }
-        });
 
         /**
          * frame に配列が指定されたときの処理。
@@ -79,11 +58,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 }
             }
         });
-
-        if (enchant.Game.instance._debug) {
-            this._style.border = "1px solid red";
-            this._style.margin = "-1px";
-        }
     },
     /**
      [lang:ja]
@@ -100,48 +74,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._image;
         },
         set: function(image) {
-            if (image === this._image){
+            if (image === this._image) {
                 return;
             }
-
-            if (this._image != null) {
-                if (this._image.css) {
-                    this._style.backgroundImage = '';
-                } else if (this._element.firstChild) {
-                    this._element.removeChild(this._element.firstChild);
-                    if (this._dirtyListener) {
-                        this.removeEventListener('render', this._dirtyListener);
-                        this._dirtyListener = null;
-                    } else {
-                        this._image._parent = null;
-                    }
-                }
-            }
-
-            if (image != null) {
-                if (image._css) {
-                    this._style.backgroundImage = image._css;
-                } else if (image._parent) {
-                    var canvas = document.createElement('canvas');
-                    var context = canvas.getContext('2d');
-                    canvas.width = image.width;
-                    canvas.height = image.height;
-                    context.drawImage(image._element, 0, 0);
-                    this._dirtyListener = function() {
-                        if (image._dirty) {
-                            context.drawImage(image._element);
-                            image._dirty = false;
-                        }
-                    };
-                    this.addEventListener('render', this._dirtyListener);
-                    this._element.appendChild(canvas);
-                } else {
-                    image._parent = this;
-                    this._element.appendChild(image._element);
-                }
-            }
             this._image = image;
-            this.frame = this.frame;
         }
     },
     /**
@@ -193,17 +129,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     _setFrame: function(frame) {
         if (this._image != null) {
             this._frame = frame;
-            var row = this._image.width / this._width | 0;
-            if (this._image._css) {
-                this._style.backgroundPosition = [
-                    -(frame % row | 0) * this._width, 'px ',
-                    -(frame / row | 0) * this._height, 'px'
-                ].join('');
-            } else if (this._element.firstChild) {
-                var style = this._element.firstChild.style;
-                style.left = -(frame % row | 0) * this._width + 'px';
-                style.top = -(frame / row | 0) * this._height + 'px';
-            }
         }
     }
 });

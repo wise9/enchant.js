@@ -271,6 +271,8 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
 
 /**
  * ボタンオブジェクトのクラス: Button
+ * available in only DOMGroup
+ *
  * @scope enchant.ui.Button.prototype
  */
 enchant.ui.Button = enchant.Class.create(enchant.Entity, {

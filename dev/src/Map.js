@@ -32,6 +32,7 @@
             enchant.Entity.call(this);
 
             var canvas = document.createElement('canvas');
+            canvas.style.position = 'absolute';
             if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
                 canvas.width = game.width * 2;
                 canvas.height = game.height * 2;
@@ -41,7 +42,6 @@
                 canvas.width = game.width;
                 canvas.height = game.height;
             }
-            this._element.appendChild(canvas);
             this._context = canvas.getContext('2d');
 
             this._tileWidth = tileWidth || 0;
@@ -176,7 +176,7 @@
                 data = this._data[i];
                 for (var y = 0, l = data.length; y < l; y++) {
                     for (var x = 0, ll = data[y].length; x < ll; x++) {
-                        if (data[y][x] >= 0){
+                        if (data[y][x] >= 0) {
                             c++;
                         }
                     }
@@ -408,6 +408,7 @@
                 }
             }
         }
+
     });
 }());
 

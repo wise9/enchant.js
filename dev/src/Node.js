@@ -24,6 +24,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     initialize: function() {
         enchant.EventTarget.call(this);
 
+        this._dirty = false;
+
         this._x = 0;
         this._y = 0;
         this._offsetX = 0;
@@ -66,17 +68,17 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this.scene = null;
 
         this.addEventListener('touchstart', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchmove', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
         this.addEventListener('touchend', function(e) {
-            if (this.parentNode && !this.parentNode._element) {
+            if (this.parentNode) {
                 this.parentNode.dispatchEvent(e);
             }
         });
@@ -161,6 +163,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this._offsetX = this._x;
             this._offsetY = this._y;
         }
+        this._dirty = true;
     },
     remove: function() {
         if (this._listener) {

@@ -35,13 +35,14 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      * Text to display.
      * @type {String}
      [/lang]
+
      */
     text: {
         get: function() {
-            return this._element.innerHTML;
+            return this._text;
         },
         set: function(text) {
-            this._element.innerHTML = text;
+            this._text = text;
         }
     },
     /**

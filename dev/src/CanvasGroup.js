@@ -15,13 +15,15 @@
         initialize: function() {
             var game = enchant.Game.instance;
             var that = this;
+
             enchant.Group.call(this);
-            this._dirty = false;
-            this._rotation = 0;
+
+            this._scaleX = 1;
+            this._scaleY = 1;
 
             this._cvsCache = {
                 matrix: [1, 0, 0, 1, 0, 0],
-                detectColor: '#0000000'
+                detectColor: '#000000'
             };
 
             this.width = game.width;
@@ -32,16 +34,23 @@
             this._element.height = game.height;
             this._element.style.position = 'absolute';
 
+            this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+            this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+
             this._detect = document.createElement('canvas');
             this._detect.width = game.width;
             this._detect.height = game.height;
             this._detect.style.position = 'absolute';
+            this._lastDetected = 0;
 
             this.context = this._element.getContext('2d');
             this._dctx = this._detect.getContext('2d');
 
             this._colorManager = new DetectColorManager(16, 256);
 
+            /**
+             * canvas タグに対して、DOM のイベントリスナを貼る
+             */
             if (enchant.ENV.TOUCH_ENABLED) {
                 this._element.addEventListener('touchstart', function(e) {
                     var touches = e.touches;
@@ -71,38 +80,6 @@
                     }
                 }, false);
             }
-            this._element.addEventListener('mousedown', function(e) {
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchstart');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                _touchstartFromDom.call(that, e);
-                that._mousedown = true;
-            }, false);
-            game._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown) {
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchmove');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                _touchmoveFromDom.call(that, e);
-            }, false);
-            game._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown) {
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchend');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                _touchendFromDom.call(that, e);
-                that._mousedown = false;
-            }, false);
 
             var start = [
                 enchant.Event.ENTER,
@@ -135,13 +112,22 @@
                 rendering.call(that, ctx);
             };
         },
+        /**
+         * レンダリング用のイベントリスナを Game オブジェクトに登録
+         * @private
+         */
         _startRendering: function() {
             var game = enchant.Game.instance;
             if (!game._listeners['exitframe']) {
                 game._listeners['exitframe'] = [];
             }
             game._listeners['exitframe'].push(this._onexitframe);
+
         },
+        /**
+         * _startRendering で登録したレンダリング用のイベントリスナを削除
+         * @private
+         */
         _stopRendering: function() {
             var game = enchant.Game.instance;
             game.removeEventListener('exitframe', this._onexitframe);
@@ -149,45 +135,29 @@
         _getEntityByPosition: function(x, y) {
             var ctx = this._dctx;
             ctx.clearRect(0, 0, this.width, this.height);
-            detectrendering.call(this, ctx);
+            if (this._lastDetected < this.age) {
+                detectrendering.call(this, ctx);
+                this._lastDetected = this.age;
+            }
             var color = ctx.getImageData(x, y, 1, 1).data;
             return this._colorManager.getSpriteByColor(color);
         },
         _touchstartPropagation: function(e) {
-            var sp = this._getEntityByPosition(e.x, e.y);
-            if (sp) {
-                this._touching = sp;
+            this._touching = this._getEntityByPosition(e.x, e.y);
+            if (this._touching) {
                 propagationUp.call(this._touching, e, this.parentNode);
             } else {
-                sp = null;
+                this._touching = enchant.Game.instance.currentScene;
+                this._touching.dispatchEvent(e);
             }
-            return sp;
+            return this._touching;
         },
         _touchmovePropagation: function(e) {
-            if (this._touching != null) {
-                propagationUp.call(this._touching, e, this.parentNode);
-            }
+            propagationUp.call(this._touching, e, this.parentNode);
         },
         _touchendPropagation: function(e) {
-            if (this._touching != null) {
-                propagationUp.call(this._touching, e, this.parentNode);
-                this._touching = null;
-            }
-        },
-        /**
-         * rotation of group
-         * @see enchant.CanvasGroup.originX
-         * @see enchant.CanvasGroup.originY
-         * @type {Number}
-         */
-        rotation: {
-            get: function() {
-                return this._rotation;
-            },
-            set: function(rot) {
-                this._rotation = rot;
-                this._dirty = true;
-            }
+            propagationUp.call(this._touching, e, this.parentNode);
+            this._touching = null;
         },
         /**
          * scaling of group in the direction of x axis
@@ -233,6 +203,7 @@
             var i = this.childNodes.indexOf(reference);
             if (i !== -1) {
                 this.childNodes.splice(i, 0, node);
+                node.parentNode = this;
                 node.dispatchEvent(new enchant.Event('added'));
                 if (this.scene) {
                     node.scene = this.scene;
@@ -247,13 +218,13 @@
             var i;
             if ((i = this.childNodes.indexOf(node)) !== -1) {
                 this.childNodes.splice(i, 1);
-            }
-            node.parentNode = null;
-            node.dispatchEvent(new enchant.Event('removed'));
-            if (this.scene) {
-                node.scene = null;
-                var e = new enchant.Event('removedfromscene');
-                _onremovedfromscene.call(node, e, this._colorManager);
+                node.parentNode = null;
+                node.dispatchEvent(new enchant.Event('removed'));
+                if (this.scene) {
+                    node.scene = null;
+                    var e = new enchant.Event('removedfromscene');
+                    _onremovedfromscene.call(node, e, this._colorManager);
+                }
             }
         }
     });
@@ -262,6 +233,7 @@
     var canvasGroupInstances = [];
     var touchingEntity = null;
     var touchingGroup = null;
+
     var _touchstartFromDom = function(e) {
         var game = enchant.Game.instance;
         var group;
@@ -278,6 +250,7 @@
             }
         }
     };
+
     var _touchmoveFromDom = function(e) {
         if (touchingGroup != null) {
             touchingGroup._touchmovePropagation(e);
@@ -295,7 +268,7 @@
         var game = enchant.Game.instance;
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._element.firstChild;
+        var cvs = this._context.canvas;
         ctx.drawImage(cvs, 0, 0, game.width, game.height);
         ctx.restore();
     };
@@ -317,12 +290,13 @@
         }
     };
 
+
     enchant.Label.prototype.cvsRender = function(ctx) {
         if (this.text) {
             ctx.textBaseline = 'top';
             ctx.font = this.font;
             ctx.fillStyle = this.color || '#000000';
-            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET);
+            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET);
         }
     };
 
@@ -390,9 +364,11 @@
         var width = node.width || 0;
         var height = node.height || 0;
         var rotation = node.rotation || 0;
+        var originX = (typeof node.originX === 'number') ? node.originX : this.width / 2;
+        var originY = (typeof node.originY === 'number') ? node.originY : this.height / 2;
         var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
         var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
-        var theta = Math.PI * rotation / 180;
+        var theta = rotation * Math.PI / 180;
         var tmpcos = Math.cos(theta);
         var tmpsin = Math.sin(theta);
         var w = (typeof node.originX === 'number') ? node.originX : width / 2;
@@ -401,27 +377,22 @@
         var b = scaleX * tmpsin;
         var c = scaleY * tmpsin;
         var d = scaleY * tmpcos;
-        dest[0] = scaleX * tmpcos;
-        dest[1] = scaleX * tmpsin;
-        dest[2] = -scaleY * tmpsin;
-        dest[3] = scaleY * tmpcos;
+        dest[0] = a;
+        dest[1] = b;
+        dest[2] = -c;
+        dest[3] = d;
         dest[4] = (-a * w + c * h + x + w);
         dest[5] = (-b * w - d * h + y + h);
     };
 
     var dirtyCheck = function(node) {
-        if (node.__dirty ||
-            node._cvsCache.x !== node.x ||
-            node._cvsCache.y !== node.y ||
-            node._cvsCache.width !== node.width ||
-            node._cvsCache.height !== node.height
-            ) {
+        if (node._dirty) {
             makeTransformMatrix(node, node._cvsCache.matrix);
-            node.__dirty = false;
             node._cvsCache.x = node.x;
             node._cvsCache.y = node.y;
             node._cvsCache.width = node.width;
             node._cvsCache.height = node.height;
+            node._dirty = false;
         }
     };
 
@@ -497,19 +468,10 @@
         }
     );
 
-    var is__dirty = function() {
-        if (this._dirty) {
-            this.__dirty = true;
-        } else {
-            this.__dirty = false;
-        }
-    };
-
     var attachCache = function(colorManager) {
         if (this._cvsCache) {
             return;
         }
-        this.addEventListener('render', is__dirty);
         this._cvsCache = {};
         this._cvsCache.matrix = [];
         this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
@@ -519,7 +481,6 @@
         if (!this._cvsCache) {
             return;
         }
-        this.removeEventListener('render', is__dirty);
         colorManager.detachDetectColor(this);
         delete this._cvsCache;
     };
@@ -552,8 +513,5 @@
 
     var propagationUp = function(e, end) {
         this.dispatchEvent(e);
-        if (this.parentNode && this.parentNode !== end) {
-            propagationUp.call(this.parentNode, e, end);
-        }
     };
 }());

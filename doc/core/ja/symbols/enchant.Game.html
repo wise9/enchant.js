@@ -73,7 +73,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-18 22:02
+		Generated on: 2012-9-23 21:42
 	</div>
 </div>
 
@@ -337,7 +337,8 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#getElapsedTime">getElapsedTime</a></b>()
 										</div>
-										<div class="description">Game#start が呼ばれてから経過した時間を取得する</div>
+										<div class="description">Game#start が呼ばれてから経過したゲーム内時間を取得する
+経過した総フレーム数をfpsで割っている</div>
 									</td>
 								</tr>
 							
@@ -945,7 +946,8 @@ enchant.Game.instance._debug フラグを true にすることでもデバッグ
 								</div>
 								
 								<div class="description">
-									Game#start が呼ばれてから経過した時間を取得する
+									Game#start が呼ばれてから経過したゲーム内時間を取得する
+経過した総フレーム数をfpsで割っている
 									
 									
 									
@@ -968,7 +970,7 @@ enchant.Game.instance._debug フラグを true にすることでもデバッグ
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{Number}</span> 経過した時間 (秒)</dd>
+												<dd><span class="light fixedFont">{Number}</span> 経過したゲーム内時間 (秒)</dd>
 											
 										
 										
