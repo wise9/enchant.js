@@ -376,7 +376,6 @@ enchant.ENV = {
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
     ],
-    RENDER_OFFSET: 0,
     KEY_BIND_TABLE: {
         37: 'left',
         38: 'up',
@@ -2550,6 +2549,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this.width = width;
         this.height = height;
         this._image = null;
+        this._frameLeft = 0;
+        this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
 
@@ -2588,6 +2589,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 return;
             }
             this._image = image;
+            this._setFrame(this._frame);
         }
     },
     /**
@@ -2633,12 +2635,19 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     * 0 <= frame
+     * 0以下の動作は未定義.
      * @param frame
      * @private
      */
     _setFrame: function(frame) {
-        if (this._image != null) {
+        var image = this._image;
+        var row, col;
+        if (image != null) {
             this._frame = frame;
+            row = image.width / this._width | 0;
+            this._frameLeft = (frame % row | 0) * this._width;
+            this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     }
 });
@@ -2646,18 +2655,15 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 enchant.Sprite.prototype.cvsRender = function(ctx) {
     var img, imgdata, row, frame;
     var sx, sy, sw, sh;
-    var offset = enchant.ENV.RENDER_OFFSET;
     if (this._image) {
         frame = Math.abs(this._frame) || 0;
         img = this._image;
         imgdata = img._element;
-        row = img.width / this._width | 0;
-        sx = (frame % row | 0) * this._width;
-        sy = (frame / row | 0) * this._height % img.height;
-        sy = Math.min(sy, img.height - this._height);
+        sx = this._frameLeft;
+        sy = Math.min(this._frameTop, img.height - this._height);
         sw = Math.min(img.width - sx, this._width);
         sh = Math.min(img.height - sy, this._height);
-        ctx.drawImage(imgdata, sx, sy, sw, sh, offset, offset, this._width + offset, this._height + offset);
+        ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
     }
 };
 
@@ -2771,12 +2777,11 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 });
 
 enchant.Label.prototype.cvsRender = function(ctx) {
-    var offset = enchant.ENV.RENDER_OFFSET;
     if (this.text) {
         ctx.textBaseline = 'top';
         ctx.font = this.font;
         ctx.fillStyle = this.color || '#000000';
-        ctx.fillText(this.text, offset, offset);
+        ctx.fillText(this.text, 0, 0);
     }
 };
 
@@ -3860,11 +3865,13 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     };
 
     var render = function(ctx, node) {
-        var offset = enchant.ENV.RENDER_OFFSET;
         var game = enchant.Game.instance;
+        if (typeof node.visible !== 'undefined' && !node.visible) {
+            return;
+        }
         if (node.backgroundColor) {
             ctx.fillStyle = node.backgroundColor;
-            ctx.fillRect(offset, offset, node.width + offset, node.height + offset);
+            ctx.fillRect(0, 0, node.width, node.height);
         }
 
         if (node.cvsRender) {
@@ -3877,7 +3884,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             } else {
                 ctx.strokeStyle = '#0000ff';
             }
-            ctx.strokeRect(offset, offset, node.width + offset, node.height + offset);
+            ctx.strokeRect(0, 0, node.width, node.height);
         }
     };
 
