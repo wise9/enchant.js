@@ -384,6 +384,7 @@ enchant.ENV = {
     },
     PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32]
 };
+
 /**
  * @scope enchant.Event.prototype
  */
@@ -2547,6 +2548,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this.width = width;
         this.height = height;
         this._image = null;
+        this._frameLeft = 0;
+        this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
 
@@ -2585,6 +2588,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 return;
             }
             this._image = image;
+            this._setFrame(this._frame);
         }
     },
     /**
@@ -2630,15 +2634,37 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     * 0 <= frame
+     * 0以下の動作は未定義.
      * @param frame
      * @private
      */
     _setFrame: function(frame) {
-        if (this._image != null) {
+        var image = this._image;
+        var row, col;
+        if (image != null) {
             this._frame = frame;
+            row = image.width / this._width | 0;
+            this._frameLeft = (frame % row | 0) * this._width;
+            this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     }
 });
+
+enchant.Sprite.prototype.cvsRender = function(ctx) {
+    var img, imgdata, row, frame;
+    var sx, sy, sw, sh;
+    if (this._image) {
+        frame = Math.abs(this._frame) || 0;
+        img = this._image;
+        imgdata = img._element;
+        sx = this._frameLeft;
+        sy = Math.min(this._frameTop, img.height - this._height);
+        sw = Math.min(img.width - sx, this._width);
+        sh = Math.min(img.height - sy, this._height);
+        ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
+    }
+};
 
 /**
  [lang:ja]
@@ -2749,420 +2775,434 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     }
 });
 
-(function() {
+enchant.Label.prototype.cvsRender = function(ctx) {
+    if (this.text) {
+        ctx.textBaseline = 'top';
+        ctx.font = this.font;
+        ctx.fillStyle = this.color || '#000000';
+        ctx.fillText(this.text, 0, 0);
+    }
+};
+
+/**
+ [lang:ja]
+ * @scope enchant.Map.prototype
+ [/lang]
+ [lang:en]
+ * @scope enchant.Map.prototype
+ [/lang]
+ */
+enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
-     * @scope enchant.Map.prototype
+     * タイルセットからマップを生成して表示するクラス.
+     *
+     * @param {Number} tileWidth タイルの横幅.
+     * @param {Number} tileHeight タイルの高さ.
+     * @constructs
+     * @extends enchant.Entity
      [/lang]
      [lang:en]
-     * @scope enchant.Map.prototype
+     * A class to create and display maps from a tile set.
+     *
+     * @param {Number} tileWidth Tile width.
+     * @param {Number} tileHeight Tile height.
+     * @constructs
+     * @extends enchant.Entity
      [/lang]
      */
-    enchant.Map = enchant.Class.create(enchant.Entity, {
+    initialize: function(tileWidth, tileHeight) {
+        var game = enchant.Game.instance;
+
+        enchant.Entity.call(this);
+
+        var canvas = document.createElement('canvas');
+        canvas.style.position = 'absolute';
+        if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
+            canvas.width = game.width * 2;
+            canvas.height = game.height * 2;
+            this._style.webkitTransformOrigin = '0 0';
+            this._style.webkitTransform = 'scale(0.5)';
+        } else {
+            canvas.width = game.width;
+            canvas.height = game.height;
+        }
+        this._context = canvas.getContext('2d');
+
+        this._tileWidth = tileWidth || 0;
+        this._tileHeight = tileHeight || 0;
+        this._image = null;
+        this._data = [
+            [
+                []
+            ]
+        ];
+        this._dirty = false;
+        this._tight = false;
+
+        this.touchEnabled = false;
+
         /**
          [lang:ja]
-         * タイルセットからマップを生成して表示するクラス.
-         *
-         * @param {Number} tileWidth タイルの横幅.
-         * @param {Number} tileHeight タイルの高さ.
-         * @constructs
-         * @extends enchant.Entity
+         * タイルが衝突判定を持つかを表す値の二元配列.
+         * @type {Array.<Array.<Number>>}
          [/lang]
          [lang:en]
-         * A class to create and display maps from a tile set.
-         *
-         * @param {Number} tileWidth Tile width.
-         * @param {Number} tileHeight Tile height.
-         * @constructs
-         * @extends enchant.Entity
+         * Two dimensional array to show level of tiles with collision detection.
+         * @type {Array.<Array.<Number>>}
          [/lang]
          */
-        initialize: function(tileWidth, tileHeight) {
-            var game = enchant.Game.instance;
+        this.collisionData = null;
 
-            enchant.Entity.call(this);
-
-            var canvas = document.createElement('canvas');
-            canvas.style.position = 'absolute';
-            if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
-                canvas.width = game.width * 2;
-                canvas.height = game.height * 2;
-                this._style.webkitTransformOrigin = '0 0';
-                this._style.webkitTransform = 'scale(0.5)';
-            } else {
-                canvas.width = game.width;
-                canvas.height = game.height;
-            }
-            this._context = canvas.getContext('2d');
-
-            this._tileWidth = tileWidth || 0;
-            this._tileHeight = tileHeight || 0;
-            this._image = null;
-            this._data = [
-                [
-                    []
-                ]
-            ];
-            this._dirty = false;
-            this._tight = false;
-
-            this.touchEnabled = false;
-
-            /**
-             [lang:ja]
-             * タイルが衝突判定を持つかを表す値の二元配列.
-             * @type {Array.<Array.<Number>>}
-             [/lang]
-             [lang:en]
-             * Two dimensional array to show level of tiles with collision detection.
-             * @type {Array.<Array.<Number>>}
-             [/lang]
-             */
-            this.collisionData = null;
-
-            this._listeners['render'] = null;
-            this.addEventListener('render', function() {
-                if (this._dirty || this._previousOffsetX == null) {
-                    this._dirty = false;
-                    this.redraw(0, 0, game.width, game.height);
-                } else if (this._offsetX !== this._previousOffsetX ||
-                    this._offsetY !== this._previousOffsetY) {
-                    if (this._tight) {
-                        var x = -this._offsetX;
-                        var y = -this._offsetY;
-                        var px = -this._previousOffsetX;
-                        var py = -this._previousOffsetY;
-                        var w1 = x - px + game.width;
-                        var w2 = px - x + game.width;
-                        var h1 = y - py + game.height;
-                        var h2 = py - y + game.height;
-                        if (w1 > this._tileWidth && w2 > this._tileWidth &&
-                            h1 > this._tileHeight && h2 > this._tileHeight) {
-                            var sx, sy, dx, dy, sw, sh;
-                            if (w1 < w2) {
-                                sx = 0;
-                                dx = px - x;
-                                sw = w1;
-                            } else {
-                                sx = x - px;
-                                dx = 0;
-                                sw = w2;
-                            }
-                            if (h1 < h2) {
-                                sy = 0;
-                                dy = py - y;
-                                sh = h1;
-                            } else {
-                                sy = y - py;
-                                dy = 0;
-                                sh = h2;
-                            }
-
-                            if (game._buffer == null) {
-                                game._buffer = document.createElement('canvas');
-                                game._buffer.width = this._context.canvas.width;
-                                game._buffer.height = this._context.canvas.height;
-                            }
-                            var context = game._buffer.getContext('2d');
-                            if (this._doubledImage) {
-                                context.clearRect(0, 0, sw * 2, sh * 2);
-                                context.drawImage(this._context.canvas,
-                                    sx * 2, sy * 2, sw * 2, sh * 2, 0, 0, sw * 2, sh * 2);
-                                context = this._context;
-                                context.clearRect(dx * 2, dy * 2, sw * 2, sh * 2);
-                                context.drawImage(game._buffer,
-                                    0, 0, sw * 2, sh * 2, dx * 2, dy * 2, sw * 2, sh * 2);
-                            } else {
-                                context.clearRect(0, 0, sw, sh);
-                                context.drawImage(this._context.canvas,
-                                    sx, sy, sw, sh, 0, 0, sw, sh);
-                                context = this._context;
-                                context.clearRect(dx, dy, sw, sh);
-                                context.drawImage(game._buffer,
-                                    0, 0, sw, sh, dx, dy, sw, sh);
-                            }
-
-                            if (dx === 0) {
-                                this.redraw(sw, 0, game.width - sw, game.height);
-                            } else {
-                                this.redraw(0, 0, game.width - sw, game.height);
-                            }
-                            if (dy === 0) {
-                                this.redraw(0, sh, game.width, game.height - sh);
-                            } else {
-                                this.redraw(0, 0, game.width, game.height - sh);
-                            }
+        this._listeners['render'] = null;
+        this.addEventListener('render', function() {
+            if (this._dirty || this._previousOffsetX == null) {
+                this._dirty = false;
+                this.redraw(0, 0, game.width, game.height);
+            } else if (this._offsetX !== this._previousOffsetX ||
+                this._offsetY !== this._previousOffsetY) {
+                if (this._tight) {
+                    var x = -this._offsetX;
+                    var y = -this._offsetY;
+                    var px = -this._previousOffsetX;
+                    var py = -this._previousOffsetY;
+                    var w1 = x - px + game.width;
+                    var w2 = px - x + game.width;
+                    var h1 = y - py + game.height;
+                    var h2 = py - y + game.height;
+                    if (w1 > this._tileWidth && w2 > this._tileWidth &&
+                        h1 > this._tileHeight && h2 > this._tileHeight) {
+                        var sx, sy, dx, dy, sw, sh;
+                        if (w1 < w2) {
+                            sx = 0;
+                            dx = px - x;
+                            sw = w1;
                         } else {
-                            this.redraw(0, 0, game.width, game.height);
+                            sx = x - px;
+                            dx = 0;
+                            sw = w2;
+                        }
+                        if (h1 < h2) {
+                            sy = 0;
+                            dy = py - y;
+                            sh = h1;
+                        } else {
+                            sy = y - py;
+                            dy = 0;
+                            sh = h2;
+                        }
+
+                        if (game._buffer == null) {
+                            game._buffer = document.createElement('canvas');
+                            game._buffer.width = this._context.canvas.width;
+                            game._buffer.height = this._context.canvas.height;
+                        }
+                        var context = game._buffer.getContext('2d');
+                        if (this._doubledImage) {
+                            context.clearRect(0, 0, sw * 2, sh * 2);
+                            context.drawImage(this._context.canvas,
+                                sx * 2, sy * 2, sw * 2, sh * 2, 0, 0, sw * 2, sh * 2);
+                            context = this._context;
+                            context.clearRect(dx * 2, dy * 2, sw * 2, sh * 2);
+                            context.drawImage(game._buffer,
+                                0, 0, sw * 2, sh * 2, dx * 2, dy * 2, sw * 2, sh * 2);
+                        } else {
+                            context.clearRect(0, 0, sw, sh);
+                            context.drawImage(this._context.canvas,
+                                sx, sy, sw, sh, 0, 0, sw, sh);
+                            context = this._context;
+                            context.clearRect(dx, dy, sw, sh);
+                            context.drawImage(game._buffer,
+                                0, 0, sw, sh, dx, dy, sw, sh);
+                        }
+
+                        if (dx === 0) {
+                            this.redraw(sw, 0, game.width - sw, game.height);
+                        } else {
+                            this.redraw(0, 0, game.width - sw, game.height);
+                        }
+                        if (dy === 0) {
+                            this.redraw(0, sh, game.width, game.height - sh);
+                        } else {
+                            this.redraw(0, 0, game.width, game.height - sh);
                         }
                     } else {
                         this.redraw(0, 0, game.width, game.height);
                     }
+                } else {
+                    this.redraw(0, 0, game.width, game.height);
                 }
-                this._previousOffsetX = this._offsetX;
-                this._previousOffsetY = this._offsetY;
-            });
-        },
-        /**
-         [lang:ja]
-         * データを設定する.
-         * タイルががimageプロパティの画像に左上から順に配列されていると見て, 0から始まる
-         * インデックスの二元配列を設定する.複数指定された場合は後のものから順に表示される.
-         * @param {...Array<Array.<Number>>} data タイルのインデックスの二元配列. 複数指定できる.
-         [/lang]
-         [lang:en]
-         * Set data.
-         * Sees that tiles are set in order in array from the upper left of image properties image,
-         * and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
-         * @param {...Array<Array.<Number>>} data Two-dimensional display of tile index. Multiple designations possible.
-         [/lang]
-         */
-        loadData: function(data) {
-            this._data = Array.prototype.slice.apply(arguments);
-            this._dirty = true;
+            }
+            this._previousOffsetX = this._offsetX;
+            this._previousOffsetY = this._offsetY;
+        });
+    },
+    /**
+     [lang:ja]
+     * データを設定する.
+     * タイルががimageプロパティの画像に左上から順に配列されていると見て, 0から始まる
+     * インデックスの二元配列を設定する.複数指定された場合は後のものから順に表示される.
+     * @param {...Array<Array.<Number>>} data タイルのインデックスの二元配列. 複数指定できる.
+     [/lang]
+     [lang:en]
+     * Set data.
+     * Sees that tiles are set in order in array from the upper left of image properties image,
+     * and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
+     * @param {...Array<Array.<Number>>} data Two-dimensional display of tile index. Multiple designations possible.
+     [/lang]
+     */
+    loadData: function(data) {
+        this._data = Array.prototype.slice.apply(arguments);
+        this._dirty = true;
 
-            this._tight = false;
-            for (var i = 0, len = this._data.length; i < len; i++) {
-                var c = 0;
-                data = this._data[i];
-                for (var y = 0, l = data.length; y < l; y++) {
-                    for (var x = 0, ll = data[y].length; x < ll; x++) {
-                        if (data[y][x] >= 0) {
-                            c++;
-                        }
+        this._tight = false;
+        for (var i = 0, len = this._data.length; i < len; i++) {
+            var c = 0;
+            data = this._data[i];
+            for (var y = 0, l = data.length; y < l; y++) {
+                for (var x = 0, ll = data[y].length; x < ll; x++) {
+                    if (data[y][x] >= 0) {
+                        c++;
                     }
                 }
-                if (c / (data.length * data[0].length) > 0.2) {
-                    this._tight = true;
-                    break;
-                }
             }
-        },
-        /**
-         [lang:ja]
-         * ある座標のタイルが何か調べる
-         * @param x
-         * @param y
-         * @return {*}
-         [/lang]
-         [lang:en]
-         * Check what tile it is on designated position
-         [/lang]
-         */
-        checkTile: function(x, y) {
-            if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
-                return false;
+            if (c / (data.length * data[0].length) > 0.2) {
+                this._tight = true;
+                break;
             }
-            var width = this._image.width;
-            var height = this._image.height;
-            var tileWidth = this._tileWidth || width;
-            var tileHeight = this._tileHeight || height;
-            x = x / tileWidth | 0;
-            y = y / tileHeight | 0;
-            //		return this._data[y][x];
-            var data = this._data[0];
-            return data[y][x];
-        },
-        /**
-         [lang:ja]
-         * Map上に障害物があるかどうかを判定する.
-         * @param {Number} x 判定を行うマップ上の点のx座標.
-         * @param {Number} y 判定を行うマップ上の点のy座標.
-         * @return {Boolean} 障害物があるかどうか.
-         [/lang]
-         [lang:en]
-         * Judges whether or not obstacles are on top of Map.
-         * @param {Number} x x coordinates of detection spot on map.
-         * @param {Number} y y coordinates of detection spot on map.
-         * @return {Boolean} Checks for obstacles.
-         [/lang]
-         */
-        hitTest: function(x, y) {
-            if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
-                return false;
-            }
-            var width = this._image.width;
-            var height = this._image.height;
-            var tileWidth = this._tileWidth || width;
-            var tileHeight = this._tileHeight || height;
-            x = x / tileWidth | 0;
-            y = y / tileHeight | 0;
-            if (this.collisionData != null) {
-                return this.collisionData[y] && !!this.collisionData[y][x];
-            } else {
-                for (var i = 0, len = this._data.length; i < len; i++) {
-                    var data = this._data[i];
-                    var n;
-                    if (data[y] != null && (n = data[y][x]) != null &&
-                        0 <= n && n < (width / tileWidth | 0) * (height / tileHeight | 0)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        },
-        /**
-         [lang:ja]
-         * Mapで表示するタイルセット画像.
-         * @type {enchant.Surface}
-         [/lang]
-         [lang:en]
-         * Tile set image displayed on Map.
-         * @type {enchant.Surface}
-         [/lang]
-         */
-        image: {
-            get: function() {
-                return this._image;
-            },
-            set: function(image) {
-                var game = enchant.Game.instance;
-
-                this._image = image;
-                if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
-                    var img = new enchant.Surface(image.width * 2, image.height * 2);
-                    var tileWidth = this._tileWidth || image.width;
-                    var tileHeight = this._tileHeight || image.height;
-                    var row = image.width / tileWidth | 0;
-                    var col = image.height / tileHeight | 0;
-                    for (var y = 0; y < col; y++) {
-                        for (var x = 0; x < row; x++) {
-                            img.draw(image, x * tileWidth, y * tileHeight, tileWidth, tileHeight,
-                                x * tileWidth * 2, y * tileHeight * 2, tileWidth * 2, tileHeight * 2);
-                        }
-                    }
-                    this._doubledImage = img;
-                }
-                this._dirty = true;
-            }
-        },
-        /**
-         [lang:ja]
-         * Mapのタイルの横幅.
-         * @type {Number}
-         [/lang]
-         [lang:en]
-         * Map tile width.
-         * @type {Number}
-         [/lang]
-         */
-        tileWidth: {
-            get: function() {
-                return this._tileWidth;
-            },
-            set: function(tileWidth) {
-                this._tileWidth = tileWidth;
-                this._dirty = true;
-            }
-        },
-        /**
-         [lang:ja]
-         * Mapのタイルの高さ.
-         * @type {Number}
-         [/lang]
-         [lang:en]
-         * Map tile height.
-         * @type {Number}
-         [/lang]
-         */
-        tileHeight: {
-            get: function() {
-                return this._tileHeight;
-            },
-            set: function(tileHeight) {
-                this._tileHeight = tileHeight;
-                this._dirty = true;
-            }
-        },
-        /**
-         [lang:ja]
-         * @private
-         [/lang]
-         [lang:en]
-         * @private
-         [/lang]
-         */
-        width: {
-            get: function() {
-                return this._tileWidth * this._data[0][0].length;
-            }
-        },
-        /**
-         [lang:ja]
-         * @private
-         [/lang]
-         [lang:en]
-         * @private
-         [/lang]
-         */
-        height: {
-            get: function() {
-                return this._tileHeight * this._data[0].length;
-            }
-        },
-        /**
-         [lang:ja]
-         * @private
-         [/lang]
-         [lang:en]
-         * @private
-         [/lang]
-         */
-        redraw: function(x, y, width, height) {
-            if (this._image == null) {
-                return;
-            }
-
-            var image, tileWidth, tileHeight, dx, dy;
-            if (this._doubledImage) {
-                image = this._doubledImage;
-                tileWidth = this._tileWidth * 2;
-                tileHeight = this._tileHeight * 2;
-                dx = -this._offsetX * 2;
-                dy = -this._offsetY * 2;
-                x *= 2;
-                y *= 2;
-                width *= 2;
-                height *= 2;
-            } else {
-                image = this._image;
-                tileWidth = this._tileWidth;
-                tileHeight = this._tileHeight;
-                dx = -this._offsetX;
-                dy = -this._offsetY;
-            }
-            var row = image.width / tileWidth | 0;
-            var col = image.height / tileHeight | 0;
-            var left = Math.max((x + dx) / tileWidth | 0, 0);
-            var top = Math.max((y + dy) / tileHeight | 0, 0);
-            var right = Math.ceil((x + dx + width) / tileWidth);
-            var bottom = Math.ceil((y + dy + height) / tileHeight);
-
-            var source = image._element;
-            var context = this._context;
-            var canvas = context.canvas;
-            context.clearRect(x, y, width, height);
+        }
+    },
+    /**
+     [lang:ja]
+     * ある座標のタイルが何か調べる
+     * @param x
+     * @param y
+     * @return {*}
+     [/lang]
+     [lang:en]
+     * Check what tile it is on designated position
+     [/lang]
+     */
+    checkTile: function(x, y) {
+        if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
+            return false;
+        }
+        var width = this._image.width;
+        var height = this._image.height;
+        var tileWidth = this._tileWidth || width;
+        var tileHeight = this._tileHeight || height;
+        x = x / tileWidth | 0;
+        y = y / tileHeight | 0;
+        //		return this._data[y][x];
+        var data = this._data[0];
+        return data[y][x];
+    },
+    /**
+     [lang:ja]
+     * Map上に障害物があるかどうかを判定する.
+     * @param {Number} x 判定を行うマップ上の点のx座標.
+     * @param {Number} y 判定を行うマップ上の点のy座標.
+     * @return {Boolean} 障害物があるかどうか.
+     [/lang]
+     [lang:en]
+     * Judges whether or not obstacles are on top of Map.
+     * @param {Number} x x coordinates of detection spot on map.
+     * @param {Number} y y coordinates of detection spot on map.
+     * @return {Boolean} Checks for obstacles.
+     [/lang]
+     */
+    hitTest: function(x, y) {
+        if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
+            return false;
+        }
+        var width = this._image.width;
+        var height = this._image.height;
+        var tileWidth = this._tileWidth || width;
+        var tileHeight = this._tileHeight || height;
+        x = x / tileWidth | 0;
+        y = y / tileHeight | 0;
+        if (this.collisionData != null) {
+            return this.collisionData[y] && !!this.collisionData[y][x];
+        } else {
             for (var i = 0, len = this._data.length; i < len; i++) {
                 var data = this._data[i];
-                var r = Math.min(right, data[0].length);
-                var b = Math.min(bottom, data.length);
-                for (y = top; y < b; y++) {
-                    for (x = left; x < r; x++) {
-                        var n = data[y][x];
-                        if (0 <= n && n < row * col) {
-                            var sx = (n % row) * tileWidth;
-                            var sy = (n / row | 0) * tileHeight;
-                            context.drawImage(source, sx, sy, tileWidth, tileHeight,
-                                x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
-                        }
+                var n;
+                if (data[y] != null && (n = data[y][x]) != null &&
+                    0 <= n && n < (width / tileWidth | 0) * (height / tileHeight | 0)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    },
+    /**
+     [lang:ja]
+     * Mapで表示するタイルセット画像.
+     * @type {enchant.Surface}
+     [/lang]
+     [lang:en]
+     * Tile set image displayed on Map.
+     * @type {enchant.Surface}
+     [/lang]
+     */
+    image: {
+        get: function() {
+            return this._image;
+        },
+        set: function(image) {
+            var game = enchant.Game.instance;
+
+            this._image = image;
+            if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
+                var img = new enchant.Surface(image.width * 2, image.height * 2);
+                var tileWidth = this._tileWidth || image.width;
+                var tileHeight = this._tileHeight || image.height;
+                var row = image.width / tileWidth | 0;
+                var col = image.height / tileHeight | 0;
+                for (var y = 0; y < col; y++) {
+                    for (var x = 0; x < row; x++) {
+                        img.draw(image, x * tileWidth, y * tileHeight, tileWidth, tileHeight,
+                            x * tileWidth * 2, y * tileHeight * 2, tileWidth * 2, tileHeight * 2);
+                    }
+                }
+                this._doubledImage = img;
+            }
+            this._dirty = true;
+        }
+    },
+    /**
+     [lang:ja]
+     * Mapのタイルの横幅.
+     * @type {Number}
+     [/lang]
+     [lang:en]
+     * Map tile width.
+     * @type {Number}
+     [/lang]
+     */
+    tileWidth: {
+        get: function() {
+            return this._tileWidth;
+        },
+        set: function(tileWidth) {
+            this._tileWidth = tileWidth;
+            this._dirty = true;
+        }
+    },
+    /**
+     [lang:ja]
+     * Mapのタイルの高さ.
+     * @type {Number}
+     [/lang]
+     [lang:en]
+     * Map tile height.
+     * @type {Number}
+     [/lang]
+     */
+    tileHeight: {
+        get: function() {
+            return this._tileHeight;
+        },
+        set: function(tileHeight) {
+            this._tileHeight = tileHeight;
+            this._dirty = true;
+        }
+    },
+    /**
+     [lang:ja]
+     * @private
+     [/lang]
+     [lang:en]
+     * @private
+     [/lang]
+     */
+    width: {
+        get: function() {
+            return this._tileWidth * this._data[0][0].length;
+        }
+    },
+    /**
+     [lang:ja]
+     * @private
+     [/lang]
+     [lang:en]
+     * @private
+     [/lang]
+     */
+    height: {
+        get: function() {
+            return this._tileHeight * this._data[0].length;
+        }
+    },
+    /**
+     [lang:ja]
+     * @private
+     [/lang]
+     [lang:en]
+     * @private
+     [/lang]
+     */
+    redraw: function(x, y, width, height) {
+        if (this._image == null) {
+            return;
+        }
+
+        var image, tileWidth, tileHeight, dx, dy;
+        if (this._doubledImage) {
+            image = this._doubledImage;
+            tileWidth = this._tileWidth * 2;
+            tileHeight = this._tileHeight * 2;
+            dx = -this._offsetX * 2;
+            dy = -this._offsetY * 2;
+            x *= 2;
+            y *= 2;
+            width *= 2;
+            height *= 2;
+        } else {
+            image = this._image;
+            tileWidth = this._tileWidth;
+            tileHeight = this._tileHeight;
+            dx = -this._offsetX;
+            dy = -this._offsetY;
+        }
+        var row = image.width / tileWidth | 0;
+        var col = image.height / tileHeight | 0;
+        var left = Math.max((x + dx) / tileWidth | 0, 0);
+        var top = Math.max((y + dy) / tileHeight | 0, 0);
+        var right = Math.ceil((x + dx + width) / tileWidth);
+        var bottom = Math.ceil((y + dy + height) / tileHeight);
+
+        var source = image._element;
+        var context = this._context;
+        var canvas = context.canvas;
+        context.clearRect(x, y, width, height);
+        for (var i = 0, len = this._data.length; i < len; i++) {
+            var data = this._data[i];
+            var r = Math.min(right, data[0].length);
+            var b = Math.min(bottom, data.length);
+            for (y = top; y < b; y++) {
+                for (x = left; x < r; x++) {
+                    var n = data[y][x];
+                    if (0 <= n && n < row * col) {
+                        var sx = (n % row) * tileWidth;
+                        var sy = (n / row | 0) * tileHeight;
+                        context.drawImage(source, sx, sy, tileWidth, tileHeight,
+                            x * tileWidth - dx, y * tileHeight - dy, tileWidth, tileHeight);
                     }
                 }
             }
         }
+    }
+});
 
-    });
-}());
-
+enchant.Map.prototype.cvsRender = function(ctx) {
+    var game = enchant.Game.instance;
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    var cvs = this._context.canvas;
+    ctx.drawImage(cvs, 0, 0, game.width, game.height);
+    ctx.restore();
+};
 
 /**
  [lang:ja]
@@ -3226,10 +3266,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
          */
         this.childNodes = [];
 
+        this._rotation = 0;
+        this._scaleX = 1;
+        this._scaleY = 1;
+
         this._originX = null;
         this._originY = null;
-
-        this._rotation = 0;
 
         [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
             .forEach(function(event) {
@@ -3379,6 +3421,36 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
+     * scaling of group in the direction of x axis
+     * @see enchant.CanvasGroup.originX
+     * @see enchant.CanvasGroup.originY
+     * @type {Number}
+     */
+    scaleX: {
+        get: function() {
+            return this._scaleX;
+        },
+        set: function(scale) {
+            this._scaleX = scale;
+            this._dirty = true;
+        }
+    },
+    /**
+     * scaling of group in the direction of y axis
+     * @see enchant.CanvasGroup.originX
+     * @see enchant.CanvasGroup.originY
+     * @type {Number}
+     */
+    scaleY: {
+        get: function() {
+            return this._scaleY;
+        },
+        set: function(scale) {
+            this._scaleY = scale;
+            this._dirty = true;
+        }
+    },
+    /**
      * origin point of rotation, scaling
      * @type {Number}
      */
@@ -3425,9 +3497,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             var that = this;
 
             enchant.Group.call(this);
-
-            this._scaleX = 1;
-            this._scaleY = 1;
 
             this._cvsCache = {
                 matrix: [1, 0, 0, 1, 0, 0],
@@ -3488,6 +3557,38 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                     }
                 }, false);
             }
+                this._element.addEventListener('mousedown', function(e) {
+                    var x = e.pageX;
+                    var y = e.pageY;
+                    e = new enchant.Event('touchstart');
+                    e.identifier = game._mousedownID;
+                    e._initPosition(x, y);
+                    _touchstartFromDom.call(that, e);
+                    that._mousedown = true;
+                }, false);
+                game._element.addEventListener('mousemove', function(e) {
+                    if (!that._mousedown) {
+                        return;
+                    }
+                    var x = e.pageX;
+                    var y = e.pageY;
+                    e = new enchant.Event('touchmove');
+                    e.identifier = game._mousedownID;
+                    e._initPosition(x, y);
+                    _touchmoveFromDom.call(that, e);
+                }, false);
+                game._element.addEventListener('mouseup', function(e) {
+                    if (!that._mousedown) {
+                        return;
+                    }
+                    var x = e.pageX;
+                    var y = e.pageY;
+                    e = new enchant.Event('touchend');
+                    e.identifier = game._mousedownID;
+                    e._initPosition(x, y);
+                    _touchendFromDom.call(that, e);
+                    that._mousedown = false;
+                }, false);
 
             var start = [
                 enchant.Event.ENTER,
@@ -3513,10 +3614,31 @@ enchant.Group = enchant.Class.create(enchant.Node, {
                 });
             }, this);
 
+            var __onchildadded = function(e) {
+                var child = e.node;
+                if (child.childNodes) {
+                    child.addEventListener('childadded', __onchildadded);
+                    child.addEventListener('childremoved', __onchildremoved);
+                }
+                attachCache.call(child, that._colorManager);
+                rendering.call(child, that.context);
+            };
+
+            var __onchildremoved = function(e) {
+                var child = e.node;
+                if (child.childNodes) {
+                    child.removeEventListener('childadded', __onchildadded);
+                    child.removeEventListener('childremoved', __onchildremoved);
+                }
+                detachCache.call(child, that._colorManager);
+            };
+
+            this.addEventListener('childremoved', __onchildremoved);
+            this.addEventListener('childadded', __onchildadded);
+
             this._onexitframe = function() {
                 var ctx = that.context;
                 ctx.clearRect(0, 0, game.width, game.height);
-                checkCache.call(that, that._colorManager);
                 rendering.call(that, ctx);
             };
         },
@@ -3566,78 +3688,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         _touchendPropagation: function(e) {
             propagationUp.call(this._touching, e, this.parentNode);
             this._touching = null;
-        },
-        /**
-         * scaling of group in the direction of x axis
-         * @see enchant.CanvasGroup.originX
-         * @see enchant.CanvasGroup.originY
-         * @type {Number}
-         */
-        scaleX: {
-            get: function() {
-                return this._scaleX;
-            },
-            set: function(scale) {
-                this._scaleX = scale;
-                this._dirty = true;
-            }
-        },
-        /**
-         * scaling of group in the direction of y axis
-         * @see enchant.CanvasGroup.originX
-         * @see enchant.CanvasGroup.originY
-         * @type {Number}
-         */
-        scaleY: {
-            get: function() {
-                return this._scaleY;
-            },
-            set: function(scale) {
-                this._scaleY = scale;
-                this._dirty = true;
-            }
-        },
-        addChild: function(node) {
-            this.childNodes.push(node);
-            node.parentNode = this;
-            node.dispatchEvent(new enchant.Event('added'));
-            if (this.scene) {
-                node.scene = this.scene;
-                var e = new enchant.Event('addedtoscene');
-                _onaddedtoscene.call(node, e, this._colorManager);
-            }
-        },
-        insertBefore: function(node, reference) {
-            var i = this.childNodes.indexOf(reference);
-            if (i !== -1) {
-                this.childNodes.splice(i, 0, node);
-                node.parentNode = this;
-                node.dispatchEvent(new enchant.Event('added'));
-                if (this.scene) {
-                    node.scene = this.scene;
-                    var e = new enchant.Event('addedtoscene');
-                    _onaddedtoscene.call(node, e, this._colorManager);
-                }
-            } else {
-                this.addChild(node);
-            }
-        },
-        removeChild: function(node) {
-            var i;
-            if ((i = this.childNodes.indexOf(node)) !== -1) {
-                this.childNodes.splice(i, 1);
-                node.parentNode = null;
-                node.dispatchEvent(new enchant.Event('removed'));
-                if (this.scene) {
-                    node.scene = null;
-                    var e = new enchant.Event('removedfromscene');
-                    _onremovedfromscene.call(node, e, this._colorManager);
-                }
-            }
         }
     });
 
-    var RENDER_OFFSET = 0;
     var canvasGroupInstances = [];
     var touchingEntity = null;
     var touchingGroup = null;
@@ -3669,42 +3722,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             touchingGroup._touchendPropagation(e);
             touchingEntity = null;
             touchingGroup = null;
-        }
-    };
-
-    enchant.Map.prototype.cvsRender = function(ctx) {
-        var game = enchant.Game.instance;
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._context.canvas;
-        ctx.drawImage(cvs, 0, 0, game.width, game.height);
-        ctx.restore();
-    };
-
-    enchant.Sprite.prototype.cvsRender = function(ctx) {
-        var img, imgdata, row, frame;
-        var sx, sy, sw, sh;
-        if (this._image) {
-            frame = Math.abs(this._frame) || 0;
-            img = this._image;
-            imgdata = img._element;
-            row = img.width / this._width | 0;
-            sx = (frame % row | 0) * this._width;
-            sy = (frame / row | 0) * this._height % img.height;
-            sy = Math.min(sy, img.height - this._height);
-            sw = Math.min(img.width - sx, this._width);
-            sh = Math.min(img.height - sy, this._height);
-            ctx.drawImage(imgdata, sx, sy, sw, sh, RENDER_OFFSET, RENDER_OFFSET, this._width + RENDER_OFFSET, this._height + RENDER_OFFSET);
-        }
-    };
-
-
-    enchant.Label.prototype.cvsRender = function(ctx) {
-        if (this.text) {
-            ctx.textBaseline = 'top';
-            ctx.font = this.font;
-            ctx.fillStyle = this.color || '#000000';
-            ctx.fillText(this.text, RENDER_OFFSET, RENDER_OFFSET);
         }
     };
 
@@ -3767,20 +3784,18 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     };
 
     var makeTransformMatrix = function(node, dest) {
-        var x = node.x;
-        var y = node.y;
-        var width = node.width || 0;
-        var height = node.height || 0;
-        var rotation = node.rotation || 0;
-        var originX = (typeof node.originX === 'number') ? node.originX : this.width / 2;
-        var originY = (typeof node.originY === 'number') ? node.originY : this.height / 2;
-        var scaleX = (typeof node.scaleX === 'number') ? node.scaleX : 1;
-        var scaleY = (typeof node.scaleY === 'number') ? node.scaleY : 1;
+        var x = node._x;
+        var y = node._y;
+        var width = node._width || 0;
+        var height = node._height || 0;
+        var rotation = node._rotation || 0;
+        var scaleX = (typeof node._scaleX === 'number') ? node._scaleX : 1;
+        var scaleY = (typeof node._scaleY === 'number') ? node._scaleY : 1;
         var theta = rotation * Math.PI / 180;
         var tmpcos = Math.cos(theta);
         var tmpsin = Math.sin(theta);
-        var w = (typeof node.originX === 'number') ? node.originX : width / 2;
-        var h = (typeof node.originY === 'number') ? node.originY : height / 2;
+        var w = (typeof node._originX === 'number') ? node._originX : width / 2;
+        var h = (typeof node._originY === 'number') ? node._originY : height / 2;
         var a = scaleX * tmpcos;
         var b = scaleX * tmpsin;
         var c = scaleY * tmpsin;
@@ -3793,17 +3808,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         dest[5] = (-b * w - d * h + y + h);
     };
 
-    var dirtyCheck = function(node) {
-        if (node._dirty) {
-            makeTransformMatrix(node, node._cvsCache.matrix);
-            node._cvsCache.x = node.x;
-            node._cvsCache.y = node.y;
-            node._cvsCache.width = node.width;
-            node._cvsCache.height = node.height;
-            node._dirty = false;
-        }
-    };
-
     var alpha = function(ctx, node) {
         if (node.alphaBlending) {
             ctx.globalCompositeOperation = node.alphaBlending;
@@ -3813,9 +3817,49 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         ctx.globalAlpha = (typeof node.opacity === 'number') ? node.opacity : 1.0;
     };
 
+    var _multiply = function(m1, m2, dest) {
+        var a11 = m1[0], a21 = m1[2], adx = m1[4],
+            a12 = m1[1], a22 = m1[3], ady = m1[5];
+        var b11 = m2[0], b21 = m2[2], bdx = m2[4],
+            b12 = m2[1], b22 = m2[3], bdy = m2[5];
+
+        dest[0] = a11 * b11 + a21 * b12;
+        dest[1] = a12 * b11 + a22 * b12;
+        dest[2] = a11 * b21 + a21 * b22;
+        dest[3] = a12 * b21 + a22 * b22;
+        dest[4] = a11 * bdx + a21 * bdy + adx;
+        dest[5] = a12 * bdx + a22 * bdy + ady;
+    };
+
+    var _multiplyVec = function(mat, vec, dest) {
+        var x = vec[0], y = vec[1];
+        var m11 = mat[0], m21 = mat[2], mdx = mat[4],
+            m12 = mat[1], m22 = mat[3], mdy = mat[5];
+        dest[0] = m11 * x + m21 * y + mdx;
+        dest[1] = m12 * x + m22 * y + mdy;
+    };
+
+    var _stuck = [ [ 1, 0, 0, 1, 0, 0 ] ];
+    var _transform = function(mat) {
+        var newmat = [];
+        _multiply(_stuck[_stuck.length - 1], mat, newmat);
+        _stuck.push(newmat);
+    };
+
     var transform = function(ctx, node) {
-        dirtyCheck(node);
-        ctx.transform.apply(ctx, node._cvsCache.matrix);
+        if (node._dirty) {
+            makeTransformMatrix(node, node._cvsCache.matrix);
+        }
+        _transform(node._cvsCache.matrix);
+        var mat = _stuck[_stuck.length - 1];
+        ctx.setTransform.apply(ctx, mat);
+        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+        var vec = [ ox, oy ];
+        _multiplyVec(mat, vec, vec);
+        node._offsetX = vec[0] - ox;
+        node._offsetY = vec[1] - oy;
+        node._dirty = false;
     };
 
     var render = function(ctx, node) {
@@ -3825,7 +3869,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
         if (node.backgroundColor) {
             ctx.fillStyle = node.backgroundColor;
-            ctx.fillRect(RENDER_OFFSET, RENDER_OFFSET, node.width + RENDER_OFFSET, node.height + RENDER_OFFSET);
+            ctx.fillRect(0, 0, node.width, node.height);
         }
 
         if (node.cvsRender) {
@@ -3838,7 +3882,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             } else {
                 ctx.strokeStyle = '#0000ff';
             }
-            ctx.strokeRect(RENDER_OFFSET, RENDER_OFFSET, node.width + RENDER_OFFSET, node.height + RENDER_OFFSET);
+            ctx.strokeRect(0, 0, node.width, node.height);
         }
     };
 
@@ -3851,6 +3895,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         },
         function(ctx) {
             ctx.restore();
+            _stuck.pop();
         }
     );
 
@@ -3873,49 +3918,27 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         },
         function(ctx) {
             ctx.restore();
+            _stuck.pop();
         }
     );
 
-    var attachCache = function(colorManager) {
-        if (this._cvsCache) {
-            return;
-        }
-        this._cvsCache = {};
-        this._cvsCache.matrix = [];
-        this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
-    };
-
-    var detachCache = function(colorManager) {
-        if (!this._cvsCache) {
-            return;
-        }
-        colorManager.detachDetectColor(this);
-        delete this._cvsCache;
-    };
-
-    var checkCache = nodesWalker(
+    var attachCache = nodesWalker(
         function(colorManager) {
-            attachCache.call(this, colorManager);
+            if (!this._cvsCache) {
+                this._cvsCache = {};
+                this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
+                this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
+            }
         }
     );
 
-    var _onaddedtoscene = nodesWalker(
-        function(e, colorManager) {
-            this.dispatchEvent(e);
-            attachCache.call(this, colorManager);
-        }
-    );
-
-    var _onremovedfromscene = nodesWalker(
-        function(e, colorManager) {
-            this.dispatchEvent(e);
+    var detachCache = nodesWalker(
+        function(colorManager) {
             detachCache.call(this, colorManager);
-        }
-    );
-
-    var propagationDown = nodesWalker(
-        function(e) {
-            this.dispatchEvent(e);
+            if (this._cvsCache) {
+                colorManager.detachDetectColor(this);
+                delete this._cvsCache;
+            }
         }
     );
 
