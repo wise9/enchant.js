@@ -2,14 +2,22 @@
 # v0.5.2
 
 - features
-    -
+    - add enchant.ENV.KEY_BIND_TABLE and PREVENT_DEFAULT_KEY_CODES (#74, #88)
 - bugfix
-    -
+    - Handle mouse event even if touch event is exists (#102)
+    - Sprite.opacity in CanvasGroup (#99)
+    - Sprite.visible in CanvasGroup (#96)
+    - Group.scale in CanvasGroup (#98)
+    - drawing in CanvasGroup (#94)
+    - and many other bug fixes
 - plugins
     - tl.enchant.js
         - added time based animation
         - added lazy event listener initialization for performance gain
-    - gl.enchant.js
+        - added enchant.Easing.SWING
+        - bugfix about Timeline#pause, resume (#87)
+    - mmd.gl.enchant.js
+        - performance improved
     - avatar.enchant.js
         - bugfix about namespace (issue #90)
 

@@ -1,5 +1,4 @@
 /**
- * @fileOverview
  * tl.enchant.js
  * @version 0.5
  * @require enchant.js v0.5.0 or later
@@ -34,7 +33,6 @@
 
 /**
  * plugin namespace object
- * @type {Object}
  */
 enchant.tl = {};
 
@@ -88,9 +86,8 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
     enchant.Node.prototype.initialize = function() {
         orig.apply(this, arguments);
         var tl = this.tl = new enchant.tl.Timeline(this);
-        this.addEventListener("enterframe", function(e) {
-
-            tl.dispatchEvent(e);
+        this.addEventListener("enterframe", function() {
+            tl.dispatchEvent(new enchant.Event("enterframe"));
         });
     };
 }());
@@ -136,7 +133,7 @@ enchant.tl.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
- * @scope enchant.tl.Action.prototype
+ * @scope enchant.tl.Action
  */
 enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
     /**
@@ -152,7 +149,6 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
      * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
      * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
      *
-     * @constructs
      * @param param
      * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
      * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
@@ -189,20 +185,17 @@ enchant.tl.Action = enchant.Class.create(enchant.tl.ActionEventTarget, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-        	var remaining = action.time - (action.frame+evt.elapsed);
-        	if(action.time != null && remaining <= 0) {
-        		action.frame = action.time;
-        		evt.timeline.next(-remaining);
-        	} else {
-        		action.frame += evt.elapsed;
-        	}
+            action.frame++;
+            if (action.time != null && action.frame >= action.time) {
+                evt.timeline.next();
+            }
         });
 
     }
 });
 
 /**
- * @scope enchant.tl.ParallelAction.prototype
+ * @scope enchant.tl.ParallelAction
  */
 enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
     /**
@@ -234,7 +227,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
             var i, len, timeline = {
-                next: function(remaining) {
+                next: function() {
                     var action = that.actions[i];
                     that.actions.splice(i--, 1);
                     len = that.actions.length;
@@ -253,7 +246,6 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
 
             var e = new enchant.Event("actiontick");
             e.timeline = timeline;
-            e.elapsed = evt.elapsed;
             for (i = 0, len = that.actions.length; i < len; i++) {
                 that.actions[i].dispatchEvent(e);
             }
@@ -279,7 +271,7 @@ enchant.tl.ParallelAction = enchant.Class.create(enchant.tl.Action, {
 });
 
 /**
- * @scope enchant.tl.Tween.prototype
+ * @scope enchant.tl.Tween
  */
 enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
     /**
@@ -294,7 +286,6 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
      * デフォルトでは enchant.Easing.LINEAR が指定されている。
      *
      * @param params
-     * @constructs
      * @config {time}
      * @config {easing} [function]
      */
@@ -333,19 +324,19 @@ enchant.tl.Tween = enchant.Class.create(enchant.tl.Action, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
-            for (var prop in target) if (target.hasOwnProperty(prop)) {
-                if (typeof this[prop] === "undefined")continue;
-                tween.node[prop] += (target[prop] - origin[prop]) * ratio;
-                if (Math.abs(tween.node[prop]) < 10e-8) tween.node[prop] = 0;
+            var ratio = tween.easing(tween.frame, 0, 1, tween.time) - tween.easing(tween.frame - 1, 0, 1, tween.time);
+            for (var prop in target) {
+                if (target.hasOwnProperty(prop)) {
+                    if (typeof this[prop] === "undefined") {
+                        continue;
+                    }
+                    tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                }
             }
         });
     }
 });
 
-/**
- * @scope enchant.tl.Timeline.prototype
- */
 enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * タイムラインクラス。
@@ -356,35 +347,19 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * tl プロパティに、タイムラインクラスのインスタンスが生成される。
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
-     * タイムラインクラスはフレームとタイムのアニメーションができる。
      *
-     * @constructs
      * @param node 操作の対象となるノード
-     * @param [unitialized] このパラメータはtrueだったら、
-     * 最初のaddメソッド呼ぶ時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
      */
-    initialize: function(node,unitialized) {
+    initialize: function(node) {
         enchant.EventTarget.call(this);
         this.node = node;
         this.queue = [];
         this.paused = false;
         this.looped = false;
-        this.isFrameBased = true;
+
         this._parallel = null;
-        this._initialized = !unitialized;
+
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
-    },
-    /**
-     * 一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる。 （デフォルト）
-     */
-    setFrameBased : function() {
-    	this.isFrameBased = true;
-    },
-    /**
-     * 一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに前のフレームから経過した時間になる。
-     */
-    setTimeBased : function() {
-    	this.isFrameBased = false;
     },
     /**
      * キューの先頭にあるアクションを終了し、次のアクションへ移行する。
@@ -397,7 +372,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * と記述した場合、最初のフレームで A・B の関数どちらも実行される
      *
      */
-    next: function(remainingTime) {
+    next: function() {
         var e, action = this.queue.shift();
         e = new enchant.Event("actionend");
         e.timeline = this;
@@ -417,19 +392,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
             e.timeline = this;
             action.dispatchEvent(e);
         }
-        var event = new enchant.Event("enterframe");
-        event.elapsed = Math.max(remainingTime,1);
-        this.dispatchEvent(event);
+        this.dispatchEvent(new enchant.Event("enterframe"));
     },
     /**
      * ターゲットの enterframe イベントのリスナとして登録される関数
      * 1フレーム経過する際に実行する処理が書かれている。
      * (キューの先頭にあるアクションに対して、actionstart/actiontickイベントを発行する)
      */
-    tick: function(enterFrameEvent) {
-        if (this.paused){
-            return;
-        }
+    tick: function() {
         if (this.queue.length > 0) {
             var action = this.queue[0];
             if (action.frame === 0) {
@@ -440,22 +410,10 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
             }
             var e = new enchant.Event("actiontick");
             e.timeline = this;
-            if(this.isFrameBased) {
-            	e.elapsed = 1;
-            } else {
-            	e.elapsed = enterFrameEvent.elapsed;
-            }
             action.dispatchEvent(e);
         }
     },
     add: function(action) {
-    	if(!this._initialized) {
-    		var tl = this;
-    		this.node.addEventListener("enterframe", function(e) {
-                tl.dispatchEvent(e);
-            });
-    		this._initialized = true;
-    	}
         if (this._parallel) {
             this._parallel.actions.push(action);
             this._parallel = null;
@@ -510,15 +468,8 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param frames
      */
     skip: function(frames) {
-    	var event = new enchant.Event("enterframe");
-    	if(this.isFrameBased) {
-    		event.elapsed = 1;
-    	} else {
-    		event.elapsed = frames;
-    		frames = 1;
-    	}
         while (frames--) {
-        	this.dispatchEvent(event);
+            this.dispatchEvent(new enchant.Event("enterframe"));
         }
         return this;
     },
@@ -526,14 +477,14 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * タイムラインの実行を一時停止する
      */
     pause: function() {
-        this.paused = true;
+        this.paused = false;
         return this;
     },
     /**
      * タイムラインの実行を再開する
      */
     resume: function() {
-        this.paused = false;
+        this.paused = true;
         return this;
     },
     /**
@@ -579,7 +530,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.add(new enchant.tl.Action({
             onactiontick: function(evt) {
                 func.call(timeline.node);
-                timeline.next(evt.elapsed);
+                timeline.next();
             }
         }));
         return this;
@@ -816,7 +767,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param [easing]
      */
     scaleTo: function(scale, time, easing) {
-        if (typeof easing === "number") {
+        if (typeof easing === "Number") {
             return this.tween({
                 scaleX: arguments[0],
                 scaleY: arguments[1],
@@ -840,7 +791,7 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @param [easing]
      */
     scaleBy: function(scale, time, easing) {
-        if (typeof easing === "number") {
+        if (typeof easing === "Number") {
             return this.tween({
                 scaleX: function() {
                     return this.scaleX * arguments[0];
@@ -906,14 +857,11 @@ enchant.tl.Timeline = enchant.Class.create(enchant.EventTarget, {
  * イージング関数ライブラリ
  * ActionScript で広く使われている
  * Robert Penner による Easing Equations を JavaScript に移植した。
- * @type {Object}
+ * @scope enchant.Easing
  */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {
         return c * t / d + b;
-    },
-    SWING: function(t, b, c, d) {
-        return c * (0.5 - Math.cos(((t / d)*Math.PI))/2)+ b;
     },
     // quad
     QUAD_EASEIN: function(t, b, c, d) {
