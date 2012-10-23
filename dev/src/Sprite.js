@@ -136,7 +136,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 enchant.Sprite.prototype.cvsRender = function(ctx) {
     var img, imgdata, row, frame;
     var sx, sy, sw, sh;
-    var offset = enchant.ENV.RENDER_OFFSET;
     if (this._image) {
         frame = Math.abs(this._frame) || 0;
         img = this._image;
@@ -147,6 +146,6 @@ enchant.Sprite.prototype.cvsRender = function(ctx) {
         sy = Math.min(sy, img.height - this._height);
         sw = Math.min(img.width - sx, this._width);
         sh = Math.min(img.height - sy, this._height);
-        ctx.drawImage(imgdata, sx, sy, sw, sh, offset, offset, this._width + offset, this._height + offset);
+        ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
     }
 };

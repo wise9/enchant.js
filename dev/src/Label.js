@@ -108,11 +108,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 });
 
 enchant.Label.prototype.cvsRender = function(ctx) {
-    var offset = enchant.ENV.RENDER_OFFSET;
     if (this.text) {
         ctx.textBaseline = 'top';
         ctx.font = this.font;
         ctx.fillStyle = this.color || '#000000';
-        ctx.fillText(this.text, offset, offset);
+        ctx.fillText(this.text, 0, 0);
     }
 };

@@ -71,7 +71,6 @@ enchant.ENV = {
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
     ],
-    RENDER_OFFSET: 0,
     KEY_BIND_TABLE: {
         37: 'left',
         38: 'up',

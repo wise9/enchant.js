@@ -384,11 +384,10 @@
     };
 
     var render = function(ctx, node) {
-        var offset = enchant.ENV.RENDER_OFFSET;
         var game = enchant.Game.instance;
         if (node.backgroundColor) {
             ctx.fillStyle = node.backgroundColor;
-            ctx.fillRect(offset, offset, node.width + offset, node.height + offset);
+            ctx.fillRect(0, 0, node.width, node.height);
         }
 
         if (node.cvsRender) {
@@ -401,7 +400,7 @@
             } else {
                 ctx.strokeStyle = '#0000ff';
             }
-            ctx.strokeRect(offset, offset, node.width + offset, node.height + offset);
+            ctx.strokeRect(0, 0, node.width, node.height);
         }
     };
 
