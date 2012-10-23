@@ -40,6 +40,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this.width = width;
         this.height = height;
         this._image = null;
+        this._frameLeft = 0;
+        this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
 
@@ -78,6 +80,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 return;
             }
             this._image = image;
+            this._setFrame(this._frame);
         }
     },
     /**
@@ -123,12 +126,19 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     * 0 <= frame
+     * 0以下の動作は未定義.
      * @param frame
      * @private
      */
     _setFrame: function(frame) {
-        if (this._image != null) {
+        var image = this._image;
+        var row, col;
+        if (image != null) {
             this._frame = frame;
+            row = image.width / this._width | 0;
+            this._frameLeft = (frame % row | 0) * this._width;
+            this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     }
 });
@@ -140,10 +150,8 @@ enchant.Sprite.prototype.cvsRender = function(ctx) {
         frame = Math.abs(this._frame) || 0;
         img = this._image;
         imgdata = img._element;
-        row = img.width / this._width | 0;
-        sx = (frame % row | 0) * this._width;
-        sy = (frame / row | 0) * this._height % img.height;
-        sy = Math.min(sy, img.height - this._height);
+        sx = this._frameLeft;
+        sy = Math.min(this._frameTop, img.height - this._height);
         sw = Math.min(img.width - sx, this._width);
         sh = Math.min(img.height - sy, this._height);
         ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
