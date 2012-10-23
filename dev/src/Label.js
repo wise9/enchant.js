@@ -106,3 +106,12 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         }
     }
 });
+
+enchant.Label.prototype.cvsRender = function(ctx) {
+    if (this.text) {
+        ctx.textBaseline = 'top';
+        ctx.font = this.font;
+        ctx.fillStyle = this.color || '#000000';
+        ctx.fillText(this.text, 0, 0);
+    }
+};

@@ -60,10 +60,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
          */
         this.childNodes = [];
 
+        this._rotation = 0;
+        this._scaleX = 1;
+        this._scaleY = 1;
+
         this._originX = null;
         this._originY = null;
-
-        this._rotation = 0;
 
         [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
             .forEach(function(event) {
@@ -209,6 +211,36 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         },
         set: function(rotation) {
             this._rotation = rotation;
+            this._dirty = true;
+        }
+    },
+    /**
+     * scaling of group in the direction of x axis
+     * @see enchant.CanvasGroup.originX
+     * @see enchant.CanvasGroup.originY
+     * @type {Number}
+     */
+    scaleX: {
+        get: function() {
+            return this._scaleX;
+        },
+        set: function(scale) {
+            this._scaleX = scale;
+            this._dirty = true;
+        }
+    },
+    /**
+     * scaling of group in the direction of y axis
+     * @see enchant.CanvasGroup.originX
+     * @see enchant.CanvasGroup.originY
+     * @type {Number}
+     */
+    scaleY: {
+        get: function() {
+            return this._scaleY;
+        },
+        set: function(scale) {
+            this._scaleY = scale;
             this._dirty = true;
         }
     },
