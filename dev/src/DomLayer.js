@@ -9,17 +9,13 @@
             this.width = this._width = game.width;
             this.height = this._height = game.height;
 
-            this._touchEventTarget = null;
-
             this._frameBuffer = new enchant.DomView(this.width, this.height);
             this._domManager = new enchant.DomManager(this, 'div');
-            this._domManager.layer = this;
             this._frameBuffer.element.appendChild(this._domManager.element);
 
             this._frameBuffer.element.style.position = 'absolute';
-
-            // TODO
-            this._element = this._frameBuffer.element;
+            this._frameBuffer.element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+            this._frameBuffer.element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
 
             var start = [
                 enchant.Event.ENTER,
@@ -48,7 +44,6 @@
                 var nextManager = next ? next._domManager : null;
                 attachDomManager.call(child);
                 self._domManager.addManager(child._domManager, nextManager);
-                child._domManager.layer = self;
                 rendering.call(child);
             };
 
@@ -75,14 +70,6 @@
         },
         _stopRendering: function() {
             enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
-        },
-        _determineEventTarget: function() {
-            if (this._touchEventTarget) {
-                if (this._touchEventTarget !== this) {
-                    return this._touchEventTarget;
-                }
-            }
-            return null;
         }
     });
 

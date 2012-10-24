@@ -9,25 +9,14 @@ var rotate = function(rad, x, y) {
 
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementType) {
-        var game = enchant.Game.instance;
         this.element = document.createElement(elementType);
         this.style = this.element.style;
         this.style.position = 'absolute';
-        if (game._debug) {
-            this.style.border = '1px solid blue';
-            this.style.margin = '-1px';
-        }
         this.targetNode = node;
-        this.layer = null;
-
         var manager = this;
-        var setDomTarget = function() {
-            manager.layer._touchEventTarget = manager.targetNode;
-        };
-        if (enchant.ENV.TOUCH_ENABLED) {
-            this.element.addEventListener('touchstart', setDomTarget, true);
-        }
-        this.element.addEventListener('mousedown', setDomTarget, true);
+        this.element.addEventListener('mousedown', function(e) {
+            manager.targetNode.scene.mouseTarget = manager.targetNode;
+        }, true);
     },
     getDomElement: function() {
         return this.element;
@@ -74,10 +63,9 @@ enchant.DomManager = enchant.Class.create({
         }
         var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 | 0;
         var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 | 0;
+        var parentManager = node.parentNode._domManager;
         var x, y;
-        var parentManager;
-        if (node.parentNode && node.parentNode._domManager instanceof enchant.DomlessManager) {
-            parentManager = node.parentNode._domManager;
+        if (parentManager instanceof enchant.DomlessManager) {
             var rad = -parentManager._rotation * Math.PI / 180;
             var rx = node._x + ox;
             var ry = node._y + oy;
