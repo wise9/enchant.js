@@ -1,7 +1,7 @@
 /**
  * @scope enchant.Scene.prototype
  */
-enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
+enchant.CanvasScene = enchant.Class.create(enchant.CanvasLayer, {
     /**
      [lang:ja]
      * 表示オブジェクトツリーのルートになるクラス.
@@ -23,7 +23,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
      * @extends enchant.CanvasGroup
      */
     initialize: function() {
-        enchant.CanvasGroup.call(this);
+        enchant.CanvasLayer.call(this);
         this.scene = this;
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
