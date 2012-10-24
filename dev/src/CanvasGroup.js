@@ -31,9 +31,6 @@
             this._element.height = game.height;
             this._element.style.position = 'absolute';
 
-            this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-            this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
-
             this._detect = document.createElement('canvas');
             this._detect.width = game.width;
             this._detect.height = game.height;

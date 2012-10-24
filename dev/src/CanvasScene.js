@@ -17,6 +17,8 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     initialize: function() {
         enchant.CanvasGroup.call(this);
         this.scene = this;
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
     },
     /**
      * Scene background color.
