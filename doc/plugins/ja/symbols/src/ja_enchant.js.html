@@ -6,7 +6,7 @@
 	.REGX {color: #339;}
 	.line {border-right: 1px dotted #666; color: #666; font-style: normal;}
 	</style></head><body><pre><span class='line'>  1</span> <span class="COMM">/**
-<span class='line'>  2</span>  * enchant.js v0.5.1
+<span class='line'>  2</span>  * enchant.js v0.5.2
 <span class='line'>  3</span>  *
 <span class='line'>  4</span>  * Copyright (c) Ubiquitous Entertainment Inc.
 <span class='line'>  5</span>  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -3120,7 +3120,7 @@
 <span class='line'>3113</span> </span><span class="WHIT">        </span><span class="KEYW">if</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">node.alphaBlending</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
 <span class='line'>3114</span> </span><span class="WHIT">            </span><span class="NAME">ctx.globalCompositeOperation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">node.alphaBlending</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>3115</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT"> </span><span class="KEYW">else</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>3116</span> </span><span class="WHIT">            </span><span class="NAME">ctx.globalCompositeOperation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">"source-atob"</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>3116</span> </span><span class="WHIT">            </span><span class="NAME">ctx.globalCompositeOperation</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'source-over'</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>3117</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="WHIT">
 <span class='line'>3118</span> </span><span class="WHIT">        </span><span class="NAME">ctx.globalAlpha</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="KEYW">typeof</span><span class="WHIT"> </span><span class="NAME">node.opacity</span><span class="WHIT"> </span><span class="PUNC">===</span><span class="WHIT"> </span><span class="STRN">'number'</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">?</span><span class="WHIT"> </span><span class="NAME">node.opacity</span><span class="WHIT"> </span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1.0</span><span class="PUNC">;</span><span class="WHIT">
 <span class='line'>3119</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
