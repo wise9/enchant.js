@@ -13,15 +13,15 @@
  *
  * enchant();
  * window.onload = function() {
- *    var game = new Game(320, 320);
- *    game.twitterRequest('account/verify_credentials');
- *    game.onload = function() {
- *         var player = game.twitterAssets['account/verify_credentials'][0].toSprite(48, 48);
+ *    var core = new Core(320, 320);
+ *    core.twitterRequest('account/verify_credentials');
+ *    core.onload = function() {
+ *         var player = core.twitterAssets['account/verify_credentials'][0].toSprite(48, 48);
  *         player.x = 0;
  *         player.y = 0;
- *         game.rootScene.addChild(player);
+ *         core.rootScene.addChild(player);
  *     };
- *     game.start();
+ *     core.start();
  * }
  */
 (function() {
@@ -46,17 +46,17 @@
     enchant.nineleap.twitter = {};
 
     /**
-     * @scope enchant.nineleap.twitter.Game.prototype
+     * @scope enchant.nineleap.twitter.Core.prototype
      */
-    enchant.nineleap.twitter.Game = enchant.Class.create(parentModule.Game, {
+    enchant.nineleap.twitter.Core = enchant.Class.create(parentModule.Core, {
         /**
-         * enchant.Game or enchant.nineleap.Game クラスを拡張したクラス
+         * enchant.Core or enchant.nineleap.Core クラスを拡張したクラス
          * @param width
          * @param height
          * @constructs
          */
         initialize: function(width, height) {
-            parentModule.Game.call(this, width, height);
+            parentModule.Core.call(this, width, height);
             this._twitterRequests = [];
             this._twitterAssets = [];
             this.requireAuth = true;
@@ -79,7 +79,7 @@
                 }
                 return;
             }
-            parentModule.Game.prototype.start.call(this);
+            parentModule.Core.prototype.start.call(this);
         },
 
         /**
@@ -108,7 +108,7 @@
         },
 
         _setTwitterAssets: function(resBody, path, checkError) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             if (!(resBody instanceof Array)) {
                 resBody = Array.prototype.slice.call(arguments);
                 resBody = resBody.filter(function(arg) {
@@ -165,7 +165,7 @@
         initialize: function(id, path, option, checkError) {
             this.path = path;
             this.checkError = checkError;
-            var callback = '?callback=enchant.Game.instance._twitterRequests[' + id + ']._callback';
+            var callback = '?callback=enchant.Core.instance._twitterRequests[' + id + ']._callback';
             var src = 'http://9leap.net/api/twitter/' + path + '.json' + callback;
             if (option) {
                 for (var key in option) {
@@ -177,7 +177,7 @@
             this.script.src = src;
         },
         _callback: function(resBody) {
-            enchant.Game.instance._setTwitterAssets(resBody, this.path, this.checkError);
+            enchant.Core.instance._setTwitterAssets(resBody, this.path, this.checkError);
         },
         _sendRequest: function() {
             document.head.appendChild(this.script);
@@ -205,7 +205,7 @@
                 width = 48;
                 height = 48;
             }
-            var g = enchant.Game.instance;
+            var g = enchant.Core.instance;
             var sp = new enchant.Sprite(width, height);
             sp.image = g.assets[this['profile_image_url']];
             return sp;

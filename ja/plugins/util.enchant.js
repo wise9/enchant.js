@@ -28,8 +28,8 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
      *
      * @usage
      *     var text = new MutableText(0, 0);
-     *     game.text = 'Hello, world!';
-     *     game.rootScene.addChild(text);
+     *     core.text = 'Hello, world!';
+     *     core.rootScene.addChild(text);
      *
      * @constructs
      * @param posX
@@ -55,9 +55,9 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
         var i, x, y, wNum, charCode, charPos;
         this._text = txt;
         if (!this.returnLength) {
-            this.width = Math.min(this.fontSize * this._text.length, enchant.Game.instance.width);
+            this.width = Math.min(this.fontSize * this._text.length, enchant.Core.instance.width);
         } else {
-            this.width = Math.min(this.returnLength * this.fontSize, enchant.Game.instance.width);
+            this.width = Math.min(this.returnLength * this.fontSize, enchant.Core.instance.width);
         }
         this.height = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
         this.image = new enchant.Surface(this.width, this.height);
@@ -71,7 +71,7 @@ enchant.util.MutableText = enchant.Class.create(enchant.Sprite, {
             }
             x = charPos % this.widthItemNum;
             y = (charPos / this.widthItemNum) | 0;
-            this.image.draw(enchant.Game.instance.assets['font0.png'],
+            this.image.draw(enchant.Core.instance.assets['font0.png'],
                 x * this.fontSize, y * this.fontSize, this.fontSize, this.fontSize,
                 (i % this.row) * this.fontSize, ((i / this.row) | 0) * this.fontSize, this.fontSize, this.fontSize);
         }
@@ -188,7 +188,7 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
         this.text = this.label = 'TIME:';
         this.addEventListener('enterframe', function() {
             this._time += this._count;
-            this.text = this.label + (this._time / enchant.Game.instance.fps).toFixed(2);
+            this.text = this.label + (this._time / enchant.Core.instance.fps).toFixed(2);
         });
     },
     /**
@@ -197,10 +197,10 @@ enchant.util.TimeLabel = enchant.Class.create(enchant.util.MutableText, {
      */
     time: {
         get: function() {
-            return Math.floor(this._time / enchant.Game.instance.fps);
+            return Math.floor(this._time / enchant.Core.instance.fps);
         },
         set: function(newtime) {
-            this._time = newtime * enchant.Game.instance.fps;
+            this._time = newtime * enchant.Core.instance.fps;
         }
     }
 });
@@ -230,7 +230,7 @@ enchant.util.LifeLabel = enchant.Class.create(enchant.Group, {
         this.heart = [];
         for (var i = 0; i < this._maxlife; i++) {
             this.heart[i] = new enchant.Sprite(16, 16);
-            this.heart[i].image = enchant.Game.instance.assets['icon0.png'];
+            this.heart[i].image = enchant.Core.instance.assets['icon0.png'];
             this.heart[i].x = this.label.width + i * 16;
             this.heart[i].y = -3;
             this.heart[i].frame = 10;
@@ -275,7 +275,7 @@ enchant.util.Bar = enchant.Class.create(enchant.Sprite, {
         this.image.context.fillRect(0, 0, 1, 16);
         this._direction = 'right';
         this._origin = 0;
-        this._maxvalue = enchant.Game.instance.width;
+        this._maxvalue = enchant.Core.instance.width;
         this._lastvalue = 0;
         this.value = 0;
         this.easing = 5;
@@ -372,12 +372,12 @@ enchant.util.VirtualMap = enchant.Class.create(enchant.Group, {
      * board.height = 320;
      * for(var i=0; i<8; i++){
      *     var piece = new Sprite(16, 16);
-     *     piece.image = game.assets['icon0.gif'];
+     *     piece.image = core.assets['icon0.gif'];
      *     board.addChild(piece);
      *     piece.mx = i + 3;
      *     piece.my = 16;
      * }
-     * game.rootScene.addChild(board);
+     * core.rootScene.addChild(board);
      *
      * @param meshWidth
      * @param meshHeight

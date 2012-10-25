@@ -61,6 +61,7 @@ module.exports = function(grunt) {
                         'dev/src/Env.js',
                         'dev/src/Event.js',
                         'dev/src/EventTarget.js',
+                        'dev/src/Core.js',
                         'dev/src/Game.js',
                         'dev/src/Node.js',
                         'dev/src/Entity.js',

@@ -18,7 +18,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @extends enchant.Node
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         enchant.Node.call(this);
 
         this._rotation = 0;
@@ -72,7 +72,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.buttonPressed = true;
             var e = new enchant.Event(this.buttonMode + 'buttondown');
             this.dispatchEvent(e);
-            game.dispatchEvent(e);
+            core.dispatchEvent(e);
         });
         this.addEventListener('touchend', function() {
             if (!this.buttonMode) {
@@ -81,7 +81,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.buttonPressed = false;
             var e = new enchant.Event(this.buttonMode + 'buttonup');
             this.dispatchEvent(e);
-            game.dispatchEvent(e);
+            core.dispatchEvent(e);
         });
 
         var that = this;
@@ -91,10 +91,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         };
         this.addEventListener('addedtoscene', function() {
             render();
-            game.addEventListener('exitframe', render);
+            core.addEventListener('exitframe', render);
         });
         this.addEventListener('removedfromscene', function() {
-            game.removeEventListener('exitframe', render);
+            core.removeEventListener('exitframe', render);
         });
 
     },

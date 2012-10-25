@@ -220,7 +220,7 @@ enchant.extendMap.ExMap = enchant.Class.create(enchant.Map, {
         },
         set: function(image) {
             var img = image.clone();
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var surface = new Surface(272, 512);
             var Type = function(image, left, top, tileWidth, tileHeight) {
                 this.baseType = [];
@@ -345,7 +345,7 @@ enchant.extendMap.ExMap = enchant.Class.create(enchant.Map, {
             }
 
             /*
-             if (RETINA_DISPLAY && game.scale == 2) {
+             if (RETINA_DISPLAY && core.scale == 2) {
              var img = new Surface(image.width * 2, image.height * 2);
              var tileWidth = this._tileWidth || image.width;
              var tileHeight = this._tileHeight || image.height;

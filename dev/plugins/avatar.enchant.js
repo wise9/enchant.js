@@ -11,30 +11,30 @@
  *
  * @example
  *
- *  var game = new Game(320, 320);
- * game.preload('avatarBg1.png','avatarBg2.png','avatarBg3.png','bigmonster1.gif');
- * game.onload = function(){
- * 		game.rootScene.backgroundColor="#000000";
+ *  var core = new Core(320, 320);
+ * core.preload('avatarBg1.png','avatarBg2.png','avatarBg3.png','bigmonster1.gif');
+ * core.onload = function(){
+ * 		core.rootScene.backgroundColor="#000000";
  * 		// show infinite scrolling background
  * 		bg =new AvatarBG(0); 
  * 		bg.y=50;
- * 		game.rootScene.addChild(bg);
+ * 		core.rootScene.addChild(bg);
  * 		
  * 		//show monster
- * 		monster = new AvatarMonster(game.assets['bigmonster1.gif']);
+ * 		monster = new AvatarMonster(core.assets['bigmonster1.gif']);
  * 		monster.x=200;
  * 		monster.y=100;
- * 		game.rootScene.addChild(monster);
+ * 		core.rootScene.addChild(monster);
  * 		
  * 		//show avatar
  * 		chara = new Avatar("2:2:1:2004:21230:22480");
- * 		game.rootScene.addChild(chara);
+ * 		core.rootScene.addChild(chara);
  * 		chara.scaleX=-1;
  * 		chara.scaleY=1;
  * 		chara.x=50;
  * 		chara.y=100;
  *  };
- * game.start();
+ * core.start();
  */
 
 /**
@@ -155,13 +155,13 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
 
         this.veryfarbg = new Sprite(320, 51);
         this.veryfarbg.y = 0;
-        this.veryfarbg.image = game.assets["avatarBg2.png"];
+        this.veryfarbg.image = core.assets["avatarBg2.png"];
         this.veryfarbg.frame = mode;
         this.addChild(this.veryfarbg);
         this.farbgs = [];
         for (i = 0; i < 3; i++) {
             var bg = new Sprite(320, 32);
-            bg.image = game.assets["avatarBg3.png"];
+            bg.image = core.assets["avatarBg3.png"];
             bg.frame = mode;
             bg.x = i * 320 - 320;
             bg.y = 20;
@@ -172,7 +172,7 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
         this.tiles = [];
         for (i = 0; i < 14; i++) {
             var tile = new Sprite(32, 128);
-            tile.image = game.assets["avatarBg1.png"];
+            tile.image = core.assets["avatarBg1.png"];
             tile.frame = mode;
             tile.x = i * 31 - 48;
             tile.y = 48;
@@ -238,9 +238,9 @@ enchant.avatar.Avatar = enchant.Class.create(enchant.avatar.AvatarCharacter, {
         this.opt = "gender=" + this.gender + "&job=0&hairstyle=" + this.hairstyle + "&haircolor=" + this.haircolor + "&weapon=" + this.weapon + "&armor=" + this.armor + "&headpiece=" + this.headpiece + "&invisible=0&x=0&y=0&w=4&h=4&dummy=.gif";
         this.src = ___EnchantAvatarServerURL + "?" + this.opt;
         (function(that) {
-            var game = enchant.Game.instance;
-            game.load(that.src, function() {
-                that.image = game.assets[that.src];
+            var core = enchant.Core.instance;
+            core.load(that.src, function() {
+                that.image = core.assets[that.src];
             });
         })(this);
     },

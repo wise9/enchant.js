@@ -13,7 +13,7 @@
          * @constructs
          */
         initialize: function() {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var that = this;
 
             enchant.Group.call(this);
@@ -23,17 +23,17 @@
                 detectColor: '#000000'
             };
 
-            this.width = game.width;
-            this.height = game.height;
+            this.width = core.width;
+            this.height = core.height;
 
             this._element = document.createElement('canvas');
-            this._element.width = game.width;
-            this._element.height = game.height;
+            this._element.width = core.width;
+            this._element.height = core.height;
             this._element.style.position = 'absolute';
 
             this._detect = document.createElement('canvas');
-            this._detect.width = game.width;
-            this._detect.height = game.height;
+            this._detect.width = core.width;
+            this._detect.height = core.height;
             this._detect.style.position = 'absolute';
             this._lastDetected = 0;
 
@@ -78,30 +78,30 @@
                     var x = e.pageX;
                     var y = e.pageY;
                     e = new enchant.Event('touchstart');
-                    e.identifier = game._mousedownID;
+                    e.identifier = core._mousedownID;
                     e._initPosition(x, y);
                     _touchstartFromDom.call(that, e);
                     that._mousedown = true;
                 }, false);
-                game._element.addEventListener('mousemove', function(e) {
+                core._element.addEventListener('mousemove', function(e) {
                     if (!that._mousedown) {
                         return;
                     }
                     var x = e.pageX;
                     var y = e.pageY;
                     e = new enchant.Event('touchmove');
-                    e.identifier = game._mousedownID;
+                    e.identifier = core._mousedownID;
                     e._initPosition(x, y);
                     _touchmoveFromDom.call(that, e);
                 }, false);
-                game._element.addEventListener('mouseup', function(e) {
+                core._element.addEventListener('mouseup', function(e) {
                     if (!that._mousedown) {
                         return;
                     }
                     var x = e.pageX;
                     var y = e.pageY;
                     e = new enchant.Event('touchend');
-                    e.identifier = game._mousedownID;
+                    e.identifier = core._mousedownID;
                     e._initPosition(x, y);
                     _touchendFromDom.call(that, e);
                     that._mousedown = false;
@@ -155,20 +155,20 @@
 
             this._onexitframe = function() {
                 var ctx = that.context;
-                ctx.clearRect(0, 0, game.width, game.height);
+                ctx.clearRect(0, 0, core.width, core.height);
                 rendering.call(that, ctx);
             };
         },
         /**
-         * レンダリング用のイベントリスナを Game オブジェクトに登録
+         * レンダリング用のイベントリスナを Core オブジェクトに登録
          * @private
          */
         _startRendering: function() {
-            var game = enchant.Game.instance;
-            if (!game._listeners['exitframe']) {
-                game._listeners['exitframe'] = [];
+            var core = enchant.Core.instance;
+            if (!core._listeners['exitframe']) {
+                core._listeners['exitframe'] = [];
             }
-            game._listeners['exitframe'].push(this._onexitframe);
+            core._listeners['exitframe'].push(this._onexitframe);
 
         },
         /**
@@ -176,8 +176,8 @@
          * @private
          */
         _stopRendering: function() {
-            var game = enchant.Game.instance;
-            game.removeEventListener('exitframe', this._onexitframe);
+            var core = enchant.Core.instance;
+            core.removeEventListener('exitframe', this._onexitframe);
         },
         _getEntityByPosition: function(x, y) {
             var game = enchant.Game.instance;
@@ -195,7 +195,7 @@
             if (this._touching) {
                 propagationUp.call(this._touching, e, this.parentNode);
             } else {
-                this._touching = enchant.Game.instance.currentScene;
+                this._touching = enchant.Core.instance.currentScene;
                 this._touching.dispatchEvent(e);
             }
             return this._touching;
@@ -214,11 +214,11 @@
     var touchingGroup = null;
 
     var _touchstartFromDom = function(e) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var group;
         for (var i = canvasGroupInstances.length - 1; i >= 0; i--) {
             group = canvasGroupInstances[i];
-            if (group.scene !== game.currentScene) {
+            if (group.scene !== core.currentScene) {
                 continue;
             }
             var sp = group._touchstartPropagation(e);
@@ -381,7 +381,7 @@
     };
 
     var render = function(ctx, node) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (typeof node.visible !== 'undefined' && !node.visible) {
             return;
         }
@@ -394,7 +394,7 @@
             node.cvsRender(ctx);
         }
 
-        if (game._debug) {
+        if (core._debug) {
             if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
                 ctx.strokeStyle = '#ff0000';
             } else {

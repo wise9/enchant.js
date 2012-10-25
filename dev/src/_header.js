@@ -133,20 +133,20 @@ window.addEventListener("message", function(msg, origin) {
     try {
         var data = JSON.parse(msg.data);
         if (data.type === "event") {
-            enchant.Game.instance.dispatchEvent(new enchant.Event(data.value));
+            enchant.Core.instance.dispatchEvent(new enchant.Event(data.value));
         } else if (data.type === "debug") {
             switch (data.value) {
                 case "start":
-                    enchant.Game.instance.start();
+                    enchant.Core.instance.start();
                     break;
                 case "pause":
-                    enchant.Game.instance.pause();
+                    enchant.Core.instance.pause();
                     break;
                 case "resume":
-                    enchant.Game.instance.resume();
+                    enchant.Core.instance.resume();
                     break;
                 case "tick":
-                    enchant.Game.instance._tick();
+                    enchant.Core.instance._tick();
                     break;
                 default:
                     break;

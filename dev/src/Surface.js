@@ -50,7 +50,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     initialize: function(width, height) {
         enchant.EventTarget.call(this);
 
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         /**
          [lang:ja]
@@ -86,7 +86,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
          */
         this.context = null;
 
-        var id = 'enchant-surface' + game._surfaceID++;
+        var id = 'enchant-surface' + core._surfaceID++;
         if (document.getCSSCanvasContext) {
             this.context = document.getCSSCanvasContext('2d', id, width, height);
             this._element = this.context.canvas;
@@ -178,7 +178,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * Canvas APIのdrawImageをラップしており, 描画する矩形を同様の形式で指定できる.
      *
      * @example
-     *   var src = game.assets['src.gif'];
+     *   var src = core.assets['src.gif'];
      *   var dst = new Surface(100, 100);
      *   dst.draw(src);         // ソースを(0, 0)に描画
      *   dst.draw(src, 50, 50); // ソースを(50, 50)に描画
@@ -195,7 +195,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * Wraps Canvas API drawImage, and sets drawing rectangle to same format.
      *
      * @example
-     *   var src = game.assets['src.gif'];
+     *   var src = core.assets['src.gif'];
      *   var dst = new Surface(100, 100);
      *   dst.draw(src);         // Draws source at (0, 0)
      *   dst.draw(src, 50, 50); // Draws source at (50, 50)

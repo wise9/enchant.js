@@ -26,20 +26,20 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      [/lang]
      */
     initialize: function(tileWidth, tileHeight) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         enchant.Entity.call(this);
 
         var canvas = document.createElement('canvas');
         canvas.style.position = 'absolute';
-        if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
-            canvas.width = game.width * 2;
-            canvas.height = game.height * 2;
+        if (enchant.ENV.RETINA_DISPLAY && core.scale === 2) {
+            canvas.width = core.width * 2;
+            canvas.height = core.height * 2;
             this._style.webkitTransformOrigin = '0 0';
             this._style.webkitTransform = 'scale(0.5)';
         } else {
-            canvas.width = game.width;
-            canvas.height = game.height;
+            canvas.width = core.width;
+            canvas.height = core.height;
         }
         this._context = canvas.getContext('2d');
 
@@ -72,7 +72,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         this.addEventListener('render', function() {
             if (this._dirty || this._previousOffsetX == null) {
                 this._dirty = false;
-                this.redraw(0, 0, game.width, game.height);
+                this.redraw(0, 0, core.width, core.height);
             } else if (this._offsetX !== this._previousOffsetX ||
                 this._offsetY !== this._previousOffsetY) {
                 if (this._tight) {
@@ -80,10 +80,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
                     var y = -this._offsetY;
                     var px = -this._previousOffsetX;
                     var py = -this._previousOffsetY;
-                    var w1 = x - px + game.width;
-                    var w2 = px - x + game.width;
-                    var h1 = y - py + game.height;
-                    var h2 = py - y + game.height;
+                    var w1 = x - px + core.width;
+                    var w2 = px - x + core.width;
+                    var h1 = y - py + core.height;
+                    var h2 = py - y + core.height;
                     if (w1 > this._tileWidth && w2 > this._tileWidth &&
                         h1 > this._tileHeight && h2 > this._tileHeight) {
                         var sx, sy, dx, dy, sw, sh;
@@ -106,19 +106,19 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
                             sh = h2;
                         }
 
-                        if (game._buffer == null) {
-                            game._buffer = document.createElement('canvas');
-                            game._buffer.width = this._context.canvas.width;
-                            game._buffer.height = this._context.canvas.height;
+                        if (core._buffer == null) {
+                            core._buffer = document.createElement('canvas');
+                            core._buffer.width = this._context.canvas.width;
+                            core._buffer.height = this._context.canvas.height;
                         }
-                        var context = game._buffer.getContext('2d');
+                        var context = core._buffer.getContext('2d');
                         if (this._doubledImage) {
                             context.clearRect(0, 0, sw * 2, sh * 2);
                             context.drawImage(this._context.canvas,
                                 sx * 2, sy * 2, sw * 2, sh * 2, 0, 0, sw * 2, sh * 2);
                             context = this._context;
                             context.clearRect(dx * 2, dy * 2, sw * 2, sh * 2);
-                            context.drawImage(game._buffer,
+                            context.drawImage(core._buffer,
                                 0, 0, sw * 2, sh * 2, dx * 2, dy * 2, sw * 2, sh * 2);
                         } else {
                             context.clearRect(0, 0, sw, sh);
@@ -126,25 +126,25 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
                                 sx, sy, sw, sh, 0, 0, sw, sh);
                             context = this._context;
                             context.clearRect(dx, dy, sw, sh);
-                            context.drawImage(game._buffer,
+                            context.drawImage(core._buffer,
                                 0, 0, sw, sh, dx, dy, sw, sh);
                         }
 
                         if (dx === 0) {
-                            this.redraw(sw, 0, game.width - sw, game.height);
+                            this.redraw(sw, 0, core.width - sw, core.height);
                         } else {
-                            this.redraw(0, 0, game.width - sw, game.height);
+                            this.redraw(0, 0, core.width - sw, core.height);
                         }
                         if (dy === 0) {
-                            this.redraw(0, sh, game.width, game.height - sh);
+                            this.redraw(0, sh, core.width, core.height - sh);
                         } else {
-                            this.redraw(0, 0, game.width, game.height - sh);
+                            this.redraw(0, 0, core.width, core.height - sh);
                         }
                     } else {
-                        this.redraw(0, 0, game.width, game.height);
+                        this.redraw(0, 0, core.width, core.height);
                     }
                 } else {
-                    this.redraw(0, 0, game.width, game.height);
+                    this.redraw(0, 0, core.width, core.height);
                 }
             }
             this._previousOffsetX = this._offsetX;
@@ -264,10 +264,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._image;
         },
         set: function(image) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
 
             this._image = image;
-            if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
+            if (enchant.ENV.RETINA_DISPLAY && core.scale === 2) {
                 var img = new enchant.Surface(image.width * 2, image.height * 2);
                 var tileWidth = this._tileWidth || image.width;
                 var tileHeight = this._tileHeight || image.height;
@@ -410,10 +410,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 });
 
 enchant.Map.prototype.cvsRender = function(ctx) {
-    var game = enchant.Game.instance;
+    var core = enchant.Core.instance;
     ctx.save();
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     var cvs = this._context.canvas;
-    ctx.drawImage(cvs, 0, 0, game.width, game.height);
+    ctx.drawImage(cvs, 0, 0, core.width, core.height);
     ctx.restore();
 };

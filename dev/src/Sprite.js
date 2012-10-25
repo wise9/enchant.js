@@ -14,7 +14,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      *
      * @example
      *   var bear = new Sprite(32, 32);
-     *   bear.image = game.assets['chara1.gif'];
+     *   bear.image = core.assets['chara1.gif'];
      *
      * @param {Number} [width] Spriteの横幅.
      * @param {Number} [height] Spriteの高さ.
@@ -26,7 +26,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      *
      * @example
      *   var bear = new Sprite(32, 32);
-     *   bear.image = game.assets['chara1.gif'];
+     *   bear.image = core.assets['chara1.gif'];
      *
      * @param {Number} [width] Sprite width.g
      * @param {Number} [height] Sprite height.

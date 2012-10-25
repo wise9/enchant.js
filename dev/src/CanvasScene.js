@@ -9,7 +9,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
      *   var scene = new Scene();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
-     *   game.pushScene(scene);
+     *   core.pushScene(scene);
      *
      * @constructs
      * @extends enchant.Group
@@ -18,7 +18,7 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
         enchant.CanvasGroup.call(this);
         this.scene = this;
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Core.instance.scale + ')';
     },
     /**
      * Scene background color.

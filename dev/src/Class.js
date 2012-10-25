@@ -37,7 +37,7 @@ enchant.Class = function(superclass, definition) {
  *   var Ball = Class.create(Sprite, { // Spriteを継承したクラスを作成する
  *       initialize: function(radius) { // コンストラクタを上書きする
  *          Sprite.call(this, radius*2, radius*2); // 継承元のコンストラクタを適用する
- *          this.image = game.assets['ball.gif'];
+ *          this.image = core.assets['ball.gif'];
  *       }
  *   });
  *
@@ -62,7 +62,7 @@ enchant.Class = function(superclass, definition) {
  *   var Ball = Class.create(Sprite, { // Creates a class succeeding "Sprite"
  *       initialize: function(radius) { // Overwrites constructor
  *          Sprite.call(this, radius*2, radius*2); // Applies previous constructor.
- *          this.image = game.assets['ball.gif'];
+ *          this.image = core.assets['ball.gif'];
  *       }
  *   });
  *

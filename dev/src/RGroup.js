@@ -9,7 +9,7 @@ enchant.RGroup = enchant.Class.create(enchant.Group, {
      *   var scene = new RotateGroup();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
-     *   game.pushScene(scene);
+     *   core.pushScene(scene);
      *
      * @constructs
      * @extends enchant.Group
@@ -82,7 +82,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      *   var scene = new Scene();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
-     *   game.pushScene(scene);
+     *   core.pushScene(scene);
      *
      * @constructs
      * @extends enchant.Group
@@ -94,24 +94,24 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      *   var scene = new Scene();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
-     *   game.pushScene(scene);
+     *   core.pushScene(scene);
      *
      * @constructs
      * @extends enchant.Group
      [/lang]
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         enchant.Group.call(this);
 
         this._element = document.createElement('div');
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
-        this._element.style.width = (this.width = game.width) + 'px';
-        this._element.style.height = (this.height = game.height) + 'px';
+        this._element.style.width = (this.width = core.width) + 'px';
+        this._element.style.height = (this.height = core.height) + 'px';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + game.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + core.scale + ')';
 
         this.scene = this;
 
@@ -149,30 +149,30 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             var x = e.pageX;
             var y = e.pageY;
             e = new enchant.Event('touchstart');
-            e.identifier = game._mousedownID;
+            e.identifier = core._mousedownID;
             e._initPosition(x, y);
             that.dispatchEvent(e);
             that._mousedown = true;
         }, false);
-        game._element.addEventListener('mousemove', function(e) {
+        core._element.addEventListener('mousemove', function(e) {
             if (!that._mousedown) {
                 return;
             }
             var x = e.pageX;
             var y = e.pageY;
             e = new enchant.Event('touchmove');
-            e.identifier = game._mousedownID;
+            e.identifier = core._mousedownID;
             e._initPosition(x, y);
             that.dispatchEvent(e);
         }, false);
-        game._element.addEventListener('mouseup', function(e) {
+        core._element.addEventListener('mouseup', function(e) {
             if (!that._mousedown) {
                 return;
             }
             var x = e.pageX;
             var y = e.pageY;
             e = new enchant.Event('touchend');
-            e.identifier = game._mousedownID;
+            e.identifier = core._mousedownID;
             e._initPosition(x, y);
             that.dispatchEvent(e);
             that._mousedown = false;

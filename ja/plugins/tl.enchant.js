@@ -9,7 +9,7 @@
  * var bear = new Sprite(32, 32);
  * bear.image = game.assets['icon0.gif'];
  * bear.tl.moveTo(64, 64, 30).fadeOut(30);
- * game.rootScene.addChild(bear);
+ * core.rootScene.addChild(bear);
  *
  * @example
  * var bear = new Sprite(32, 32);
@@ -19,7 +19,7 @@
  *     scaleY: 3,
  *     time: 30
  * });
- * game.rootScene.addChild(bear);
+ * core.rootScene.addChild(bear);
  *
  * @example
  * var bear = new Sprite(32, 32);

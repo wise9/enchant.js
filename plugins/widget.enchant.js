@@ -84,14 +84,14 @@
 
     /**
      * Events occurring during Scene beginning.
-     * Issued when ended {@link enchant.Game#transitionPush} animation.
+     * Issued when ended {@link enchant.Core#transitionPush} animation.
      * @type {String}
      */
     enchant.Event.TRANSITIONENTER = 'transitionenter';
 
     /**
      * Events occurring during Scene end.
-     * Issued when ended {@link enchant.Game#transitionPop} animation.
+     * Issued when ended {@link enchant.Core#transitionPop} animation.
      * @type {String}
      */
     enchant.Event.TRANSITIONEXIT = 'transitionexit';
@@ -326,9 +326,9 @@
 
     var Effect = {
         transitForwardIn: function(time) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var child;
-            this.x = game.width;
+            this.x = core.width;
             var e = new enchant.Event(enchant.Event.RENDER);
             for (var i = 0, l = this.childNodes.length; i < l; i++) {
                 child = this.childNodes[i];
@@ -338,22 +338,22 @@
                 .moveTo(0, 0, time, enchant.Easing.QUAD_EASEINOUT);
         },
         transitForwardOut: function(time) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             this.x = 0;
             this.tl
-                .moveTo(-game.width, 0, time, enchant.Easing.QUAD_EASEINOUT);
+                .moveTo(-core.width, 0, time, enchant.Easing.QUAD_EASEINOUT);
         },
         transitBackIn: function(time) {
-            var game = enchant.Game.instance;
-            this.x = -game.width;
+            var core = enchant.Core.instance;
+            this.x = -core.width;
             this.tl
                 .moveTo(0, 0, time, enchant.Easing.QUAD_EASEINOUT);
         },
         transitBackOut: function(time) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             this.x = 0;
             this.tl
-                .moveTo(game.width, 0, time, enchant.Easing.QUAD_EASEINOUT);
+                .moveTo(core.width, 0, time, enchant.Easing.QUAD_EASEINOUT);
         },
         popup: function() {
             this.scaleX = 0.1;
@@ -511,7 +511,7 @@
     var _transitionLock = false;
 
     /**
-     * @scope enchant.Game
+     * @scope enchant.Core
      */
 
     /**
@@ -520,7 +520,7 @@
      * @return {enchant.Scene} New scene
      * @requires widget.enchant.js
      */
-    enchant.Game.prototype.transitionPush = function(inScene) {
+    enchant.Core.prototype.transitionPush = function(inScene) {
         if (_transitionLock) return null;
         _transitionLock = true;
         var time = 15;
@@ -546,7 +546,7 @@
      * @return {enchant.Scene} Finished scene.
      * @requires widget.enchant.js
      */
-    enchant.Game.prototype.transitionPop = function() {
+    enchant.Core.prototype.transitionPop = function() {
         if (_transitionLock) return null;
         if (this.currentScene == this.rootScene) return null;
         _transitionLock = true;
@@ -582,7 +582,7 @@
          * @extends enchant.EventTarget
          */
         initialize: function(target) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             enchant.EventTarget.call(this);
             this._target;
             this._startX = 0;
@@ -592,7 +592,7 @@
             this._touchElapsed = 0;
             this._releaseElapsed = 0;
             this._state = NOTOUCH;
-            this._velobase = (game.width > game.height) ? game.height : game.width;
+            this._velobase = (core.width > core.height) ? core.height : core.width;
 
             var detector = this;
             this._handler = function(e) {
@@ -623,8 +623,8 @@
             this._target = null;
         },
         ontouchstart: function(e) {
-            var game = enchant.Game.instance;
-            this._startFrame = game.frame;
+            var core = enchant.Core.instance;
+            this._startFrame = core.frame;
             this._startX = this._lastX = e.x;
             this._startY = this._lastY = e.y;
             if (this._state == WAITDBL) {
@@ -663,7 +663,7 @@
             }
         },
         ontouchend: function(e) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             switch (this._state) {
                 case MOVED:
                     velocityX = (this._lastX - this._startX) / this._velobase / this._touchElapsed * 1000;
@@ -1299,8 +1299,8 @@
          */
         initialize: function() {
             enchant.Scene.call(this);
-            var game = enchant.Game.instance;
-            var shade = new enchant.Sprite(game.width, game.height);
+            var core = enchant.Core.instance;
+            var shade = new enchant.Sprite(core.width, core.height);
             var sf = new enchant.Surface(1, 1);
             sf.context.fillRect(0, 0, 1, 1);
             shade.image = sf;
@@ -1324,7 +1324,7 @@
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(content) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             content = content || '';
             var minwidth = enchant.widget._env.buttonWidth;
             var minheight = enchant.widget._env.buttonHeight;
@@ -1334,11 +1334,11 @@
             this._content;
             this._rawContent;
             var bg1 = new enchant.widget.Ninepatch(minwidth, minheight);
-            bg1.src = game.assets['button.png'];
+            bg1.src = core.assets['button.png'];
             this.image = bg1;
 
             var bg2 = new enchant.widget.Ninepatch(minwidth, minheight);
-            bg2.src = game.assets['buttonPushed.png'];
+            bg2.src = core.assets['buttonPushed.png'];
             this.pushedimage = bg2;
 
             this.content = content;
@@ -1471,7 +1471,7 @@
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(content, ac) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var dialogwidth = enchant.widget._env.dialogWidth;
             var dialogheight = enchant.widget._env.dialogHeight;
             enchant.widget.EntityGroup.call(this, dialogwidth, dialogheight);
@@ -1489,7 +1489,7 @@
             });
 
             var np = new enchant.widget.Ninepatch(this.width, this.height);
-            np.src = game.assets['dialog.png'];
+            np.src = core.assets['dialog.png'];
             this.background = np;
 
             this._content = content;
@@ -1521,7 +1521,7 @@
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(content, ac, ig) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var dialogwidth = enchant.widget._env.dialogWidth;
             var dialogheight = enchant.widget._env.dialogHeight;
             enchant.widget.EntityGroup.call(this, dialogwidth, dialogheight);
@@ -1545,7 +1545,7 @@
             });
 
             var np = new enchant.widget.Ninepatch(this.width, this.height);
-            np.src = game.assets['dialog.png'];
+            np.src = core.assets['dialog.png'];
             this.background = np;
 
             this._content = content;
@@ -2033,7 +2033,7 @@
          * @extends enchant.widget.Modal
          */
         initialize: function(content, acceptName) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             enchant.widget.Modal.call(this);
             this._onaccept = function() {
             };
@@ -2048,7 +2048,7 @@
             var scene = this;
 
             alert.onaccept = function() {
-                game.popScene();
+                core.popScene();
                 scene._onaccept.apply(this, arguments);
             };
             alert.addEventListener(enchant.Event.ACCEPT, function() {
@@ -2095,7 +2095,7 @@
          * @extends enchant.widget.Modal
          */
         initialize: function(content, acceptName, cancelName) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             enchant.widget.Modal.call(this);
             this._oncancel = function() {
             };
@@ -2112,11 +2112,11 @@
             var scene = this;
 
             confirm.oncancel = function() {
-                game.popScene();
+                core.popScene();
                 scene._oncancel.apply(this, arguments);
             };
             confirm.onaccept = function() {
-                game.popScene();
+                core.popScene();
                 scene._onaccept.apply(this, arguments);
             };
             confirm.addEventListener(enchant.Event.CANCEL, function() {
@@ -2181,7 +2181,7 @@
          * @extends enchant.widget.Modal
          */
         initialize: function(content, acceptName, cancelName, placeholder) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var margin = enchant.widget._env.dialogMargin;
             enchant.widget.Modal.call(this);
             cancelName = cancelName || enchant.widget._env.cancelName;
@@ -2200,11 +2200,11 @@
             var scene = this;
 
             prompt.oncancel = function() {
-                game.popScene();
+                core.popScene();
                 scene._oncancel.apply(this, arguments);
             };
             prompt.onaccept = function() {
-                game.popScene();
+                core.popScene();
                 scene._onaccept.apply(this, arguments);
             };
             prompt.addEventListener(enchant.Event.CANCEL, function() {
@@ -2303,7 +2303,7 @@
          * @extends enchant.widget.Modal
          */
         initialize: function(text, acceptName, cancelName, placeholder) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var minheight = enchant.widget._env.inputMinHeight;
             var maxheight = enchant.widget._env.inputMaxHeight;
             var dh = maxheight - minheight;
@@ -2327,28 +2327,28 @@
             this.addChild(bar);
             var textarea = this._textarea = new enchant.widget.InputTextArea();
             textarea.y += bar.height;
-            textarea.width = game.width;
+            textarea.width = core.width;
             textarea.height = maxheight;
             textarea.placeholder = placeholder;
             textarea.oncancel = function() {
-                game.popScene();
+                core.popScene();
                 scene._oncancel.apply(this, arguments);
             };
             textarea.onaccept = function() {
-                game.popScene();
+                core.popScene();
                 scene._onaccept.apply(this, arguments);
             };
             this.addChild(textarea);
 
             var _area = textarea._textarea;
             _area.onfocus = function() {
-                Effect.resizeTo.call(textarea, game.width, minheight, 5, enchant.Easing.QUAD_EASEOUT);
+                Effect.resizeTo.call(textarea, core.width, minheight, 5, enchant.Easing.QUAD_EASEOUT);
                 if (scene._menu != null) {
                     scene._menu.tl.moveBy(0, -dh, 5, enchant.Easing.QUAD_EASEOUT);
                 }
             };
             _area.onblur = function() {
-                Effect.resizeTo.call(textarea, game.width, maxheight, 5, enchant.Easing.QUAD_EASEOUT);
+                Effect.resizeTo.call(textarea, core.width, maxheight, 5, enchant.Easing.QUAD_EASEOUT);
                 if (scene._menu != null) {
                     scene._menu.tl.moveBy(0, dh, 5, enchant.Easing.QUAD_EASEOUT);
                 }
@@ -2555,8 +2555,8 @@
          * @extends enchant.widget.ListElement
          */
         initialize: function(width, height, content, icon, rightIcon) {
-            var game = enchant.Game.instance;
-            width = width || game.width;
+            var core = enchant.Core.instance;
+            width = width || core.width;
             height = height || enchant.widget._env.itemHeight;
             content = content || '';
             enchant.widget.ListElement.call(this, width, height);
@@ -2572,7 +2572,7 @@
                 this.rightIcon = rightIcon;
             }
             var np = new enchant.widget.Ninepatch(this.width, this.height);
-            np.src = game.assets['listItemBg.png'];
+            np.src = core.assets['listItemBg.png'];
             this.background = np;
         },
         /**
@@ -2655,7 +2655,7 @@
          * @extends enchant.widget.ListElement
          */
         initialize: function(width, height, content, header, footer) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             enchant.widget.ListElement.call(this, width, height);
             this._header;
             this._rawHeader;
@@ -2672,7 +2672,7 @@
             }
             this.refresh();
             var np = new enchant.widget.Ninepatch(this.width, this.height);
-            np.src = game.assets['listItemBg.png'];
+            np.src = core.assets['listItemBg.png'];
             this.background = np;
         },
         /**
@@ -3005,10 +3005,10 @@
 
     var List = enchant.Class.create(enchant.widget.EntityGroup, {
         initialize: function(array) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             enchant.widget.EntityGroup.call(this);
-            this.width = game.width;
-            this.height = game.height;
+            this.width = core.width;
+            this.height = core.height;
             this._itemHeight = 0;
             var element;
             for (var i = 0, l = array.length; i < l; i++) {
@@ -3082,8 +3082,8 @@
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(center, left, right) {
-            var game = enchant.Game.instance;
-            enchant.widget.EntityGroup.call(this, game.width, enchant.widget._env.itemHeight);
+            var core = enchant.Core.instance;
+            enchant.widget.EntityGroup.call(this, core.width, enchant.widget._env.itemHeight);
             this._center;
             this._rawCenter;
             this._left;
@@ -3100,7 +3100,7 @@
             this.refresh();
 
             var np = new enchant.widget.Ninepatch(this.width, this.height);
-            np.src = game.assets['navigationBar.png'];
+            np.src = core.assets['navigationBar.png'];
             this.background = np;
         },
         /**
@@ -3208,11 +3208,11 @@
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(buttons) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             if (!(buttons instanceof Array)) {
                 buttons = Array.prototype.slice.call(arguments);
             }
-            enchant.widget.EntityGroup.call(this, game.width, enchant.widget._env.itemHeight);
+            enchant.widget.EntityGroup.call(this, core.width, enchant.widget._env.itemHeight);
             this._bgs = [];
             this._icons = [];
             this.content = buttons;
@@ -3221,7 +3221,7 @@
                 var width = bg.width;
                 var height = bg.height;
                 var np = new enchant.widget.Ninepatch(width, height);
-                np.src = game.assets['iconMenuBg.png'];
+                np.src = core.assets['iconMenuBg.png'];
                 bg.image = np;
             });
         },
@@ -3281,7 +3281,7 @@
             }
         },
         addChild: function(child) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var addChild = enchant.widget.EntityGroup.prototype.addChild;
             var size = enchant.widget._env.itemHeight;
             var sp = new enchant.Sprite(size, size);
@@ -3290,12 +3290,12 @@
             addChild.call(this, child);
             this._icons.push(child);
             var np = new enchant.widget.Ninepatch(sp.width, sp.height);
-            np.src = game.assets['iconMenuBg.png'];
+            np.src = core.assets['iconMenuBg.png'];
             sp.image = np;
             this.refresh();
         },
         insertBefore: function(child, target) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             var insertBefore = enchant.widget.EntityGroup.prototype.insertBefore;
             var i = this._icons.indexOf(target);
             var size = enchant.widget._env.itemHeight;
@@ -3308,7 +3308,7 @@
                 insertBefore.call(this, child, target);
                 this._icons.splice(i, 0, child);
                 np = new enchant.widget.Ninepatch(sp.width, sp.height);
-                np.src = game.assets['iconMenuBg.png'];
+                np.src = core.assets['iconMenuBg.png'];
                 sp.image = np;
                 this.refresh();
             }
