@@ -451,7 +451,6 @@
 
     var detachCache = nodesWalker(
         function(colorManager) {
-            detachCache.call(this, colorManager);
             if (this._cvsCache) {
                 colorManager.detachDetectColor(this);
                 delete this._cvsCache;
