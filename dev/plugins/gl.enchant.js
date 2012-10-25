@@ -4205,8 +4205,8 @@ enchant.gl = {};
             vec4 dif = uDiffuse * lamber;\n\
             float s = max(dot(R, -E), 0.0);\n\
             vec4 specularColor = (uShininess + 2.0) / (2.0 * pi) * uSpecular * pow(s, uShininess) * sign(lamber);\n\
-            gl_FragColor = vec4(((amb + vec4(uLightColor, 1.0) * (dif + specularColor)) * baseColor).rgb, baseColor.a) \
-                * uUseDirectionalLight + baseColor * (1.0 - uUseDirectionalLight) \
+            gl_FragColor = (vec4(((amb + vec4(uLightColor, 1.0) * (dif + specularColor)) * baseColor).rgb, baseColor.a) \
+                * uUseDirectionalLight + baseColor * (1.0 - uUseDirectionalLight)) \
                 * (1.0 - uDetectTouch) + uDetectColor * uDetectTouch;\n\
         }\n\
     }';
