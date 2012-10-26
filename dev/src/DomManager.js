@@ -9,9 +9,14 @@ var rotate = function(rad, x, y) {
 
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementType) {
+        var game = enchant.Game.instance;
         this.element = document.createElement(elementType);
         this.style = this.element.style;
         this.style.position = 'absolute';
+        if (game._debug) {
+            this.style.border = '1px solid blue';
+            this.style.margin = '-1px';
+        }
         this.targetNode = node;
         this.layer = null;
 
