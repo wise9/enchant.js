@@ -355,7 +355,7 @@ if (enchant.gl !== undefined) {
                 this.skeletonChildNodeIds = [];
                 this.translate = [0, 0, 0];
                 this.rotate = [];
-                this.nMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
+                this.nMatrix = [];
                 Unit.call(this, xml);
                 if (xml) {
                     if (xml.getAttribute('sid')) {
@@ -374,8 +374,8 @@ if (enchant.gl !== undefined) {
                     for (var ri = 0, rl = this._datas['rotate'].length; ri < rl; ri++) {
                         this.rotate[this._datas['rotate'][ri].getAttribute('sid')] = this.parseFloatArray(this._datas['rotate'][ri]);
                     }
-                    if (this._datas['matrix'].length > 0){
-                        this.nMatrix = mat4.transpose(this.parseFloatArray(this._datas['matrix'][0]));
+                    for (var mi = 0, ml = this._datas['matrix'].length; mi < ml; mi++) {
+                        this.nMatrix[this._datas['matrix'][mi].getAttribute('sid')] = mat4.transpose(this.parseFloatArray(this._datas['matrix'][0]));
                     }
                     var materialNode = null;
                     if (this._datas['instance_geometry'].length > 0) {
@@ -496,11 +496,19 @@ if (enchant.gl !== undefined) {
                 mat4.translate(translation, [position[0], position[1], position[2]]);
                 return translation;
             },
+            getnMatrix: function() {
+                var matrix = mat4.create();
+                mat4.identity(matrix);
+                for (var matrixSid in this.nMatrix) {
+                    mat4.multiply(matrix, this.nMatrix[matrixSid]);
+                }
+                return matrix;
+            },
             getAnimationMatrixesLocal: function(libAnimations) {
                 var game = enchant.Game.instance;
                 var rotation = this.getRotationMatrix();
                 var translation = this.getTranslationMatrix();
-                var matrix = this.nMatrix;
+                var matrix = this.getnMatrix();
                 var animationMatrixes = [];
                 animationMatrixes[this.sid] = [];
                 animationMatrixes[this.sid][0] = mat4.multiply(translation, rotation, mat4.create());
@@ -510,10 +518,12 @@ if (enchant.gl !== undefined) {
                 var length = 0;
                 for (var key in libAnimations) {
                     for(var ci = 0,cl = libAnimations[key].channels.length;ci<cl;ci++){
-                        if(this.id === libAnimations[key].channels[ci].target.split('/')[0]){
+                        if (this.id === libAnimations[key].channels[ci].target.split('/')[0]) {
                             var currentLength = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input.length;
-                            length = currentLength;
-                            input = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input;
+                            length = Math.max(currentLength,length);
+                            if(libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input.length === length){
+                                input = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input;
+                            }
                             output[libAnimations[key].channels[ci].target.split('/')[1].split('.')[0]] = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].output;
                         }
                     }
@@ -550,16 +560,33 @@ if (enchant.gl !== undefined) {
                         } else if (okey2 === 'matrix') {
                             var tmpMat = [];
                             for(var j = 0;j < 16; j++){
-                                tmpMat.push(output[okey2][i*16+j]);
+                                tmpMat.push(output[okey2][i * 16 + j]);
                             }
                             mat4.transpose(tmpMat);
                             mat4.multiply(nMat,tmpMat);
-                        } else if(okey2 === 'transform(0)(0)'){
-                            nMat=matrix;
+                        } else {
+                            for (var mkey in this.nMatrix){
+                                if(okey2.indexOf('(')!=-1){
+                                    if (mkey == okey2.split('(')[0]) {
+                                        if (!isNaN(output[okey2][i])) {
+                                            nMat[parseInt(okey2.split('(')[1].split(')')[0], 10) * 4 + parseInt(okey2.split(')(')[1].split(')')[0], 10)] = output[okey2][i];
+                                        } else {
+                                            nMat[parseInt(okey2.split('(')[1].split(')')[0], 10) * 4 + parseInt(okey2.split(')(')[1].split(')')[0], 10)] = output[okey2][0];
+                                        }
+                                    }
+                                } else {
+                                    var tmpMat = [];
+                                    for (var j = 0; j < 16; j++) {
+                                        tmpMat.push(output[okey2][i * 16 + j]);
+                                    }
+                                    mat4.transpose(tmpMat);
+                                    mat4.multiply(nMat, tmpMat); 
+                                }
+                            }
                         }
                     }
                     animationMatrixes[this.sid][Math.round(game.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
-                    mat4.multiply(animationMatrixes[this.sid][Math.round(game.fps * input[i])],nMat);
+                    mat4.multiply(animationMatrixes[this.sid][Math.round(game.fps * input[i])], nMat);
                 }
                 for (var k in this.nodes) {
                     var child = this.nodes[k].getAnimationMatrixesLocal(libAnimations);
