@@ -713,7 +713,7 @@ var MMD = {};
         Atype: Uint16Array
     };
 
-    enchant.gl.Game.prototype._original_start = enchant.gl.Game.prototype.start;
+    var _original_start = enchant.gl.Game.prototype.start;
     enchant.gl.Game.prototype.start = function() {
         enchant.gl.mmd.MMD_SHADER_PROGRAM = new enchant.gl.Shader(MMD_VERTEX_SHADER_SOURCE, MMD_FRAGMENT_SHADER_SOURCE);
         this.GL.setProgram(enchant.gl.mmd.MMD_SHADER_PROGRAM);
@@ -736,7 +736,7 @@ var MMD = {};
             uEdgeThickness: 0.004
         });
         this.GL.setDefaultProgram();
-        this._original_start();
+        _original_start.call(this);
     };
 
     var lerp = function(n1, n2, r) {
