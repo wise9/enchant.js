@@ -1039,6 +1039,51 @@ enchant.EventTarget = enchant.Class.create({
                         }
                     }
                 }, true);
+                game._touchEventTarget = null;
+                var _ontouchstart = function(e) {
+                    var game = enchant.Game.instance;
+                    var currentScene = game.currentScene;
+                    var layer, target;
+                    for (var i = currentScene._layerPriority.length - 1; i >= 0; i--) {
+                        layer = currentScene._layers[currentScene._layerPriority[i]];
+                        target = layer._determineEventTarget(e);
+                        if (target) {
+                            break;
+                        }
+                    }
+                    if (!target) {
+                        target = currentScene;
+                    }
+                    game._touchEventTarget = target;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                    evt._initPosition(e.x, e.y);
+                    target.dispatchEvent(evt);
+                };
+                var _ontouchmove = function(e) {
+                    var evt;
+                    if (game._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        evt._initPosition(e.x, e.y);
+                        game._touchEventTarget.dispatchEvent(evt);
+                    }
+                };
+                var _ontouchend = function(e) {
+                    var evt;
+                    if (game._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        evt._initPosition(e.x, e.y);
+                        game._touchEventTarget.dispatchEvent(evt);
+                        game._touchEventTarget = null;
+                    }
+                };
+                if (enchant.ENV.TOUCH_ENABLED) {
+                    stage.addEventListener('touchdown', _ontouchstart, false);
+                    stage.addEventListener('touchmove', _ontouchmove, false);
+                    stage.addEventListener('touchup', _ontouchend, false);
+                }
+                stage.addEventListener('mousedown', _ontouchstart, false);
+                stage.addEventListener('mousemove', _ontouchmove, false);
+                stage.addEventListener('mouseup', _ontouchend, false);
             }
         },
         /**
@@ -2565,11 +2610,422 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     }
 });
 
+enchant.CanvasView = enchant.Class.create(enchant.EventTarget, {
+    initialize: function(width, height, contextType) {
+        enchant.EventTarget.call(this, width, height);
+        this.width = width;
+        this.height = height;
+
+        this.element = document.createElement('canvas');
+        this.element.width = this.width;
+        this.element.height = this.height;
+        contextType = contextType || '2d';
+        this.context = this.element.getContext(contextType);
+    }
+});
+
+enchant.DomView = enchant.Class.create(enchant.EventTarget, {
+    initialize: function(width, height) {
+        enchant.EventTarget.call(this);
+        this.width = width;
+        this.height = height;
+
+        this.element = document.createElement('div');
+        this.element.style.width = this.width + 'px';
+        this.element.style.height = this.height + 'px';
+    }
+});
+
+var rotate = function(rad, x, y) {
+    var sinT = Math.sin(rad);
+    var cosT = Math.cos(rad);
+    return [
+        cosT * x + sinT * y,
+        -sinT * x + cosT * y
+    ];
+};
+
+enchant.DomManager = enchant.Class.create({
+    initialize: function(node, elementType) {
+        var game = enchant.Game.instance;
+        this.element = document.createElement(elementType);
+        this.style = this.element.style;
+        this.style.position = 'absolute';
+        if (game._debug) {
+            this.style.border = '1px solid blue';
+            this.style.margin = '-1px';
+        }
+        this.targetNode = node;
+        this.layer = null;
+
+        var manager = this;
+        var setDomTarget = function() {
+            manager.layer._touchEventTarget = manager.targetNode;
+        };
+        if (enchant.ENV.TOUCH_ENABLED) {
+            this.element.addEventListener('touchstart', setDomTarget, true);
+        }
+        this.element.addEventListener('mousedown', setDomTarget, true);
+    },
+    getDomElement: function() {
+        return this.element;
+    },
+    getDomElementAsNext: function() {
+        return this.element;
+    },
+    getNextManager: function(manager) {
+        var i = this.targetNode.parentNode.childNodes.indexOf(manager.targetNode);
+        if (i !== this.targetNode.parentNode.childNodes.length - 1) {
+            return this.targetNode.parentNode.childNodes[i + 1]._domManager;
+        } else {
+            return null;
+        }
+    },
+    addManager: function(childManager, nextManager) {
+        var nextElement;
+        if (nextManager) {
+            nextElement = nextManager.getDomElementAsNext();
+        } else if (this.targetNode.parentNode) {
+            //nextElement = this.getNextManager(this);
+        }
+        this.element.insertBefore(childManager.getDomElement(), nextElement);
+    },
+    removeManager: function(childManager) {
+        if (childManager instanceof enchant.DomlessManager) {
+            childManager._domRef.forEach(function(element) {
+                this.element.removeChild(element);
+            }, this);
+        } else {
+            this.element.removeChild(childManager.element);
+        }
+    },
+    render: function() {
+        this.cssUpdate();
+    },
+    cssUpdate: function() {
+        var node = this.targetNode;
+        this.style.width = node._width + 'px';
+        this.style.height = node._height + 'px';
+        this.style.opacity = node._opacity;
+        if (typeof node._visible !== 'undefined') {
+            this.style.display = node._visible ? 'block' : 'none';
+        }
+        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 | 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 | 0;
+        var x, y;
+        var parentManager;
+        if (node.parentNode && node.parentNode._domManager instanceof enchant.DomlessManager) {
+            parentManager = node.parentNode._domManager;
+            var rad = -parentManager._rotation * Math.PI / 180;
+            var rx = node._x + ox;
+            var ry = node._y + oy;
+            var rot = rotate(rad, rx, ry);
+            var X = rot[0] * parentManager._scaleX - ox;
+            var Y = rot[1] * parentManager._scaleY - oy;
+            x = parentManager._x + X;
+            y = parentManager._y + Y;
+            var cssTransform =
+                'translate(' + x + 'px, ' + y + 'px) ' +
+                'rotate(' + (parentManager._rotation + node._rotation) + 'deg) ' +
+                'scale(' + (parentManager._scaleX * node._scaleX) + ', ' + (parentManager._scaleY * node._scaleY) + ') ';
+            this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = cssTransform;
+            this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = ox + ' ' + oy;
+            this.style.backgroundColor = node._backgroundColor;
+
+        } else {
+
+        x = node._x;
+        y = node._y;
+        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] =
+            'translate(' + x + 'px, ' + y + 'px) ' +
+            'rotate(' + node._rotation + 'deg) ' +
+            'scale(' + node._scaleX + ', ' + node._scaleY + ') ';
+        this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = ox + ' ' + oy;
+        this.style.backgroundColor = node._backgroundColor;
+
+        }
+
+        node._offsetX = x;
+        node._offsetY = y;
+    },
+    remove: function() {
+        this.element = this.style = this.targetNode = null;
+    }
+});
+
+enchant.DomlessManager = enchant.Class.create({
+    initialize: function(node) {
+        this._domRef = [];
+        this.targetNode = node;
+    },
+    _register: function(element, nextElement) {
+        var i = this._domRef.indexOf(nextElement);
+        if (element instanceof DocumentFragment) {
+            if (i === -1) {
+                Array.prototype.push.apply(this._domRef, element.childNodes);
+            } else {
+                this._domRef.splice(i, 0, element);
+                Array.prototype.splice.apply(this._dom, [i, 0].join(element.childNodes));
+            }
+        } else {
+            if (i === -1) {
+                this._domRef.push(element);
+            } else {
+                this._domRef.splice(i, 0, element);
+            }
+        }
+    },
+    getNextManager: function(manager) {
+        var i = this.targetNode.parentNode.childNodes.indexOf(manager.targetNode);
+        if (i !== this.targetNode.parentNode.childNodes.length - 1) {
+            return this.targetNode.parentNode.childNodes[i + 1]._domManager;
+        } else {
+            return null;
+        }
+    },
+    getDomElement: function() {
+        var frag = document.createDocumentFragment();
+        var children = this.targetNode.childNodes;
+        children.forEach(function(child) {
+            var element = child._domManager.getDomElement();
+            this._domRef.push(element);
+            frag.appendChild(element);
+        }, this);
+        return frag;
+    },
+    getDomElementAsNext: function() {
+        if (this._domRef.length) {
+            return this._domRef[0];
+        } else {
+            var nextManager = this.getNextManager(this);
+            if (nextManager) {
+                return nextManager.element;
+            } else {
+                return null;
+            }
+        }
+    },
+    addManager: function(childManager, nextManager) {
+        if (this.targetNode.parentNode) {
+            if (nextManager === null) {
+                nextManager = this.getNextManager(this);
+            }
+            this.targetNode.parentNode._domManager.addManager(childManager, nextManager);
+        }
+        var nextElement = nextManager ? nextManager.getDomElementAsNext() : null;
+        this._register(childManager.getDomElement(), nextElement);
+    },
+    removeManager: function(childManager) {
+        var dom;
+        var i = this._domRef.indexOf(childManager.element);
+        if (i !== -1) {
+            dom = this._domRef[i];
+            dom.parentNode.removeChild(dom);
+            this._domRef.splice(i, 1);
+        }
+    },
+    render: function() {
+        var node = this.targetNode;
+        var parentManager = node.parentNode._domManager;
+        if (parentManager instanceof enchant.DomlessManager) {
+            var parentX = parentManager._x;
+            var parentY = parentManager._y;
+            var parentSX = parentManager._scaleX;
+            var parentSY = parentManager._scaleY;
+            var parentRot = parentManager._rotation;
+
+            var rad = -parentRot * Math.PI / 180;
+
+            var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 | 0;
+            var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 | 0;
+
+            var rx = node._x + ox;
+            var ry = node._y + oy;
+            var rot = rotate(rad, rx, ry);
+            var X = rot[0] * parentSX - ox;
+            var Y = rot[1] * parentSY - oy;
+
+            // subete childNode ga tsukau
+            this._x = parentX + X;
+            this._y = parentY + Y;
+            this._scaleX = parentSX * node._scaleX;
+            this._scaleY = parentSY * node._scaleY;
+            this._rotation = parentRot + node._rotation;
+        } else {
+            this._x = node._x;
+            this._y = node._y;
+            this._scaleX = node._scaleX;
+            this._scaleY = node._scaleY;
+            this._rotation = node._rotation;
+        }
+        node._offsetX = this._x;
+        node._offsetY = this._y;
+    },
+    remove: function() {
+        this._domRef = [];
+        this.targetNode = null;
+    }
+});
+
+(function() {
+
+    enchant.DomLayer = enchant.Class.create(enchant.Group, {
+        initialize: function() {
+            var game = enchant.Game.instance;
+            var that = this;
+            enchant.Group.call(this);
+
+            this.width = this._width = game.width;
+            this.height = this._height = game.height;
+
+            this._touchEventTarget = null;
+
+            this._frameBuffer = new enchant.DomView(this.width, this.height);
+            this._domManager = new enchant.DomManager(this, 'div');
+            this._domManager.layer = this;
+            this._frameBuffer.element.appendChild(this._domManager.element);
+
+            this._frameBuffer.element.style.position = 'absolute';
+
+            // TODO
+            this._element = this._frameBuffer.element;
+
+            var start = [
+                enchant.Event.ENTER,
+                enchant.Event.ADDED_TO_SCENE
+            ];
+            var end = [
+                enchant.Event.EXIT,
+                enchant.Event.REMOVED_FROM_SCENE
+            ];
+            start.forEach(function(type) {
+                this.addEventListener(type, this._startRendering);
+            }, this);
+            end.forEach(function(type) {
+                this.addEventListener(type, this._stopRendering);
+            }, this);
+
+            var __onchildadded = function(e) {
+                var child = e.node;
+                var next = e.next;
+                var self = e.target;
+                if (child.childNodes) {
+                    child.addEventListener('childadded', __onchildadded);
+                    child.addEventListener('childremoved', __onchildremoved);
+                }
+                child._updateCoordinate();
+                var nextManager = next ? next._domManager : null;
+                attachDomManager.call(child);
+                self._domManager.addManager(child._domManager, nextManager);
+                child._domManager.layer = self;
+                rendering.call(child);
+            };
+
+            var __onchildremoved = function(e) {
+                var child = e.node;
+                var self = e.target;
+                if (child.childNodes) {
+                    child.removeEventListener('childadded', __onchildadded);
+                    child.removeEventListener('childremoved', __onchildremoved);
+                }
+                self._domManager.removeManager(child._domManager);
+                detachDomManager.call(child, that._colorManager);
+            };
+
+            this.addEventListener('childremoved', __onchildremoved);
+            this.addEventListener('childadded', __onchildadded);
+
+            this._onexitframe = function() {
+                rendering.call(that);
+            };
+        },
+        _startRendering: function() {
+            enchant.Game.instance.addEventListener('exitframe', this._onexitframe);
+        },
+        _stopRendering: function() {
+            enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
+        },
+        _determineEventTarget: function() {
+            if (this._touchEventTarget) {
+                if (this._touchEventTarget !== this) {
+                    return this._touchEventTarget;
+                }
+            }
+            return null;
+        }
+    });
+
+    var nodesWalker = function(pre, post) {
+        pre = pre || function() {
+        };
+        post = post || function() {
+        };
+        var walker = function() {
+            pre.apply(this, arguments);
+            var child;
+            if (this.childNodes) {
+                for (var i = 0, l = this.childNodes.length; i < l; i++) {
+                    child = this.childNodes[i];
+                    walker.apply(child, arguments);
+                }
+            }
+            post.apply(this, arguments);
+        };
+        return walker;
+    };
+
+    var attachDomManager = nodesWalker(function() {
+        if (!this._domManager) {
+            if (this instanceof enchant.Group) {
+                this._domManager = new enchant.DomlessManager(this);
+            } else {
+                this._domManager = new enchant.DomManager(this, 'div');
+            }
+        }
+    });
+
+    var detachDomManager = nodesWalker(function() {
+        delete this._domManager;
+    });
+
+    var rendering = nodesWalker(function() {
+        if (this._dirty) {
+            this._domManager.render();
+            if (typeof this.cssUpdate === 'function') {
+                this.cssUpdate();
+            }
+            this._dirty = false;
+        }
+    });
+
+enchant.Label.prototype.cssUpdate = function() {
+    this._domManager.element.innerHTML = this._text;
+    this._domManager.element.style.font = this._font;
+    this._domManager.element.style.color = this._color;
+    this._domManager.element.style.textAlign = this._textAlign;
+};
+
+enchant.Sprite.prototype.cssUpdate = function() {
+    var element = this._domManager.element;
+    if (this._image) {
+        if (this._image._css) {
+            element.style.backgroundImage = this._image._css;
+            element.style.backgroundPosition =
+                -this._frameLeft + 'px ' +
+                -this._frameTop + 'px';
+        } else if (element.firstChild) {
+            // TODO new Surface
+        }
+    }
+};
+
+}());
+
 (function() {
     /**
      * @scope enchant.CanvasGroup.prototype
      */
-    enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
+    enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         /**
          * A class which is using HTML Canvas for the rendering.
          * The rendering of children will be replaced by the Canvas rendering.
@@ -2741,6 +3197,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         _stopRendering: function() {
             var game = enchant.Game.instance;
             game.removeEventListener('exitframe', this._onexitframe);
+        },
+        _determineEventTarget: function(e) {
+            // TODO calc position offset
+            return this._getEntityByPosition(e.x, e.y);
         },
         _getEntityByPosition: function(x, y) {
             var game = enchant.Game.instance;
@@ -3029,52 +3489,132 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     };
 }());
 
-/**
- * @scope enchant.Scene.prototype
- */
-enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
-    /**
-     * Class that becomes the root of the display object tree.
-     *
-     * @example
-     *   var scene = new CanvasScene();
-     *   scene.addChild(player);
-     *   scene.addChild(enemy);
-     *   game.pushScene(scene);
-     *
-     * @constructs
-     * @extends enchant.CanvasGroup
-     */
+enchant.Scene = enchant.Class.create(enchant.Group, {
     initialize: function() {
-        enchant.CanvasGroup.call(this);
+        var game = enchant.Game.instance;
+        enchant.Group.call(this);
+
+        this.width = game.width;
+        this.height = game.height;
+
         this.scene = this;
+
+        this._element = document.createElement('div');
+        this._element.style.width = this.width + 'px';
+        this._element.style.height = this.height + 'px';
+        this._element.style.position = 'absolute';
+        this._element.style.overflow = 'hidden';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+
+        this._layers = {};
+        this._layerPriority = [];
+        this.addLayer('Canvas');
+        this.addLayer('Dom');
+        this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
+        this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
+        this.addEventListener(enchant.Event.ENTER, this._onenter);
+        this.addEventListener(enchant.Event.EXIT, this._onexit);
     },
-    /**
-     * The CanvasScene background color.
-     * Must be provided in the same format as the CSS 'color' property.
-     * @type {String}
-     */
-    backgroundColor: {
+    x: {
         get: function() {
-            return this._backgroundColor;
+            return this._x;
         },
-        set: function(color) {
-            this._backgroundColor = color;
+        set: function(x) {
+            this._x = x;
+            for (var type in this._layers) {
+                this._layers[type].x = x;
+            }
         }
     },
-    _updateCoordinate: function() {
-        this._offsetX = this._x;
-        this._offsetY = this._y;
-        for (var i = 0, len = this.childNodes.length; i < len; i++) {
-            this.childNodes[i]._updateCoordinate();
+    y: {
+        get: function() {
+            return this._y;
+        },
+        set: function(y) {
+            this._y = y;
+            for (var type in this._layers) {
+                this._layers[type].y = y;
+            }
         }
-        this._dirty = true;
+    },
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            this._rotation = rotation;
+            for (var type in this._layers) {
+                this._layers[type].rotation = rotation;
+            }
+        }
+    },
+    scaleX: {
+        get: function() {
+            return this._scaleX;
+        },
+        set: function(scaleX) {
+            this._scaleX = scaleX;
+            for (var type in this._layers) {
+                this._layers[type].scaleX = scaleX;
+            }
+        }
+    },
+    scaleY: {
+        get: function() {
+            return this._scaleY;
+        },
+        set: function(scaleY) {
+            this._scaleY = scaleY;
+            for (var type in this._layers) {
+                this._layers[type].scaleY = scaleY;
+            }
+        }
+    },
+    addLayer: function(type, i) {
+        var game = enchant.Game.instance;
+        if (this._layers[type]) {
+            return;
+        }
+        var layer = new enchant[type + 'Layer']();
+        // TODO controll with enter, exit
+        if (game.currentScene === this) {
+            layer._startRendering();
+        }
+        this._layers[type] = layer;
+        var element = layer._element;
+        if (typeof i === 'number') {
+            var nextSibling = this._element.childNodes.indexOf(i);
+            this._element.insertBefore(element, nextSibling);
+            this._layerPriority.splice(i, 0, type);
+        } else {
+            this._element.appendChild(element);
+            this._layerPriority.push(type);
+        }
+        layer.scene = this;
+    },
+    _onchildadded: function(e) {
+        var child = e.node;
+        var next = e.next;
+        if (next) {
+        } else {
+        }
+    },
+    _onchildremoved: function(e) {
+        var child = e.node;
+    },
+    _onenter: function() {
+        for (var type in this._layers) {
+            this._layers[type]._startRendering();
+        }
+    },
+    _onexit: function() {
+        for (var type in this._layers) {
+            this._layers[type]._stopRendering();
+        }
     }
 });
 
-enchant.Scene = enchant.CanvasScene;
 /**
  * @scope enchant.Surface.prototype
  */
