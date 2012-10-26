@@ -17,8 +17,9 @@
             this._frameBuffer.element.appendChild(this._domManager.element);
 
             this._frameBuffer.element.style.position = 'absolute';
-            this._frameBuffer.element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-            this._frameBuffer.element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+
+            // TODO
+            this._element = this._frameBuffer.element;
 
             var start = [
                 enchant.Event.ENTER,
