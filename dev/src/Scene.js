@@ -17,6 +17,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
 
         this._layers = {};
+        this._layerPriority = [];
         this.addLayer('Canvas');
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
@@ -38,22 +39,22 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         if (typeof i === 'number') {
             var nextSibling = this._element.childNodes.indexOf(i);
             this._element.insertBefore(element, nextSibling);
+            this._layerPriority.splice(i, 0, type);
         } else {
             this._element.appendChild(element);
+            this._layerPriority.push(type);
         }
+        layer.scene = this;
     },
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
         if (next) {
-            this._layers.Canvas.insertBefore(child, next);
         } else {
-            this._layers.Canvas.addChild(child);
         }
     },
     _onchildremoved: function(e) {
         var child = e.node;
-        this._layers.Canvas.removeChild(child);
     },
     _onenter: function() {
         for (var type in this._layers) {
