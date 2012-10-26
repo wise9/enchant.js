@@ -63,9 +63,10 @@ enchant.DomManager = enchant.Class.create({
         }
         var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 | 0;
         var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 | 0;
-        var parentManager = node.parentNode._domManager;
         var x, y;
-        if (parentManager instanceof enchant.DomlessManager) {
+        var parentManager;
+        if (node.parentNode && node.parentNode._domManager instanceof enchant.DomlessManager) {
+            parentManager = node.parentNode._domManager;
             var rad = -parentManager._rotation * Math.PI / 180;
             var rx = node._x + ox;
             var ry = node._y + oy;
