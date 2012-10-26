@@ -13,10 +13,16 @@ enchant.DomManager = enchant.Class.create({
         this.style = this.element.style;
         this.style.position = 'absolute';
         this.targetNode = node;
+        this.layer = null;
+
         var manager = this;
-        this.element.addEventListener('mousedown', function(e) {
-            manager.targetNode.scene.mouseTarget = manager.targetNode;
-        }, true);
+        var setDomTarget = function() {
+            manager.layer._touchEventTarget = manager.targetNode;
+        };
+        if (enchant.ENV.TOUCH_ENABLED) {
+            this.element.addEventListener('touchstart', setDomTarget, true);
+        }
+        this.element.addEventListener('mousedown', setDomTarget, true);
     },
     getDomElement: function() {
         return this.element;
