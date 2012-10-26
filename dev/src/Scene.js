@@ -25,6 +25,61 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this.addEventListener(enchant.Event.ENTER, this._onenter);
         this.addEventListener(enchant.Event.EXIT, this._onexit);
     },
+    x: {
+        get: function() {
+            return this._x;
+        },
+        set: function(x) {
+            this._x = x;
+            for (var type in this._layers) {
+                this._layers[type].x = x;
+            }
+        }
+    },
+    y: {
+        get: function() {
+            return this._y;
+        },
+        set: function(y) {
+            this._y = y;
+            for (var type in this._layers) {
+                this._layers[type].y = y;
+            }
+        }
+    },
+    rotation: {
+        get: function() {
+            return this._rotation;
+        },
+        set: function(rotation) {
+            this._rotation = rotation;
+            for (var type in this._layers) {
+                this._layers[type].rotation = rotation;
+            }
+        }
+    },
+    scaleX: {
+        get: function() {
+            return this._scaleX;
+        },
+        set: function(scaleX) {
+            this._scaleX = scaleX;
+            for (var type in this._layers) {
+                this._layers[type].scaleX = scaleX;
+            }
+        }
+    },
+    scaleY: {
+        get: function() {
+            return this._scaleY;
+        },
+        set: function(scaleY) {
+            this._scaleY = scaleY;
+            for (var type in this._layers) {
+                this._layers[type].scaleY = scaleY;
+            }
+        }
+    },
     addLayer: function(type, i) {
         var game = enchant.Game.instance;
         if (this._layers[type]) {
