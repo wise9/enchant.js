@@ -3057,8 +3057,8 @@
 <span class='line'>3050</span>             vec4 dif = uDiffuse * lamber;\n\
 <span class='line'>3051</span>             float s = max(dot(R, -E), 0.0);\n\
 <span class='line'>3052</span>             vec4 specularColor = (uShininess + 2.0) / (2.0 * pi) * uSpecular * pow(s, uShininess) * sign(lamber);\n\
-<span class='line'>3053</span>             gl_FragColor = vec4(((amb + vec4(uLightColor, 1.0) * (dif + specularColor)) * baseColor).rgb, baseColor.a) \
-<span class='line'>3054</span>                 * uUseDirectionalLight + baseColor * (1.0 - uUseDirectionalLight) \
+<span class='line'>3053</span>             gl_FragColor = (vec4(((amb + vec4(uLightColor, 1.0) * (dif + specularColor)) * baseColor).rgb, baseColor.a) \
+<span class='line'>3054</span>                 * uUseDirectionalLight + baseColor * (1.0 - uUseDirectionalLight)) \
 <span class='line'>3055</span>                 * (1.0 - uDetectTouch) + uDetectColor * uDetectTouch;\n\
 <span class='line'>3056</span>         }\n\
 <span class='line'>3057</span>     }'</span><span class="PUNC">;</span><span class="WHIT">
