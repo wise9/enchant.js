@@ -1,10 +1,5 @@
 /**
- [lang:ja]
  * @scope enchant.Sprite.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Sprite.prototype
- [/lang]
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
@@ -12,27 +7,27 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * 画像表示機能を持ったクラス。
      * Entity を継承している。
      *
-     * @example
-     *   var bear = new Sprite(32, 32);
-     *   bear.image = game.assets['chara1.gif'];
-     *
      * @param {Number} [width] Spriteの横幅.
      * @param {Number} [height] Spriteの高さ.
-     * @constructs
-     * @extends enchant.Entity
      [/lang]
      [lang:en]
-     * Class for image display function.
-     *
+     * Class which can display images.
+     * 
+     * @param {Number} [width] Sprite width.
+     * @param {Number} [height] Sprite height.
+     [/lang]
+     [lang:de]
+     * Eine Klasse die Grafiken darstellen kann.
+     * 
+     * @param {Number} [width] Die Breite des Sprites.
+     * @param {Number} [height] Die Höhe des Sprites.
+     [/lang]
      * @example
      *   var bear = new Sprite(32, 32);
      *   bear.image = game.assets['chara1.gif'];
-     *
-     * @param {Number} [width] Sprite width.g
-     * @param {Number} [height] Sprite height.
+     *   
      * @constructs
      * @extends enchant.Entity
-     [/lang]
      */
     initialize: function(width, height) {
         enchant.Entity.call(this);
@@ -64,12 +59,14 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * Spriteで表示する画像.
-     * @type {enchant.Surface}
      [/lang]
      [lang:en]
-     * Image displayed in Sprite.
-     * @type {enchant.Surface}
+     * Image displayed in the Sprite.
      [/lang]
+     [lang:de]
+     * Die Grafik die im Sprite dargestellt wird.
+     [/lang]
+     * @type {enchant.Surface}
      */
     image: {
         get: function() {
@@ -86,11 +83,26 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * 表示するフレームのインデックス.
-     * Spriteと同じ横幅と高さを持ったフレームがimageプロパティの画像に左上から順に
+     * Spriteと同じ横幅と高さを持ったフレームが{@link enchant.Sprite#image}プロパティの画像に左上から順に
      * 配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
      *
      * 数値の配列が指定された場合、それらを毎フレーム順に切り替える。
      * ループするが、null値が含まれているとそこでループをストップする。
+     [/lang]
+     [lang:en]
+     * Indizes of the frames to be displayed.
+     * Frames with same width and height as Sprite will be arrayed from upper left corner of the 
+     * {@link enchant.Sprite#image} image. When a sequence of numbers is provided, the displayed frame 
+     * will switch automatically. At the end of the array the sequence will restart. By setting 
+     * a value within the sequence to null, the frame switching is stopped.
+     [/lang]
+     [lang:de]
+     * Die Indizes der darzustellenden Frames.
+     * Die Frames mit der selben Größe wie das Sprite werden aus der {@link enchant.Sprite#image} image Variable,
+     * beginnend an der oberen linken Ecke, angeordnet. Wenn eine Nummbersequenz übergeben wird, wird
+     * der dargestellte Frame automatisch gewechselt. Am ende des Arrays der Sequenz wird diese neugestartet.
+     * Wenn ein Wert in der Sequenz auf null gesetzt wird, wird das automatische Framewechseln gestoppt.
+     [/lang]
      * @example
      * var sprite = new Sprite(32, 32);
      * sprite.frame = [0, 1, 0, 2]
@@ -99,13 +111,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * //-> 0, 1, 0, 2, (2, 2,.. :stop)
      *
      * @type {Number|Array}
-     [/lang]
-     [lang:en]
-     * Frame index display.
-     * Frames with same width and height as Sprite will be arrayed in order from upper left of image properties image.
-     * By setting the index to start with 0, frames are switched.
-     * @type {Number|Array}
-     [/lang]
      */
     frame: {
         get: function() {

@@ -283,7 +283,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:43
+		Generated on: 2012-9-26 18:36
 	</div>
 </div>
 
@@ -330,7 +330,8 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.EventTarget.html#constructor">enchant.EventTarget</a></b>()
 								</div>
-								<div class="description">A class for independent event implementation like DOM Events.</div>
+								<div class="description">A class for an independent implementation of events
+similar to DOM Events.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -367,7 +368,8 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></b>(type, listener)
 										</div>
-										<div class="description">Add EventListener.</div>
+										<div class="description">Add a new event listener which will be executed when the event
+is being dispatched.</div>
 									</td>
 								</tr>
 							
@@ -376,9 +378,9 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></b>(type)
+										<div class="fixedFont"><b><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></b>(String)
 										</div>
-										<div class="description">Clear EventListener.</div>
+										<div class="description">Clear all EventListener for a type.</div>
 									</td>
 								</tr>
 							
@@ -389,7 +391,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></b>(e)
 										</div>
-										<div class="description">Issue event.</div>
+										<div class="description">Issue an event.</div>
 									</td>
 								</tr>
 							
@@ -411,7 +413,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></b>(type, listener)
 										</div>
-										<div class="description">Delete EventListener.</div>
+										<div class="description">Delete an EventListener.</div>
 									</td>
 								</tr>
 							
@@ -442,7 +444,8 @@
 					</div>
 					
 					<div class="description">
-						A class for independent event implementation like DOM Events.
+						A class for an independent implementation of events
+similar to DOM Events.
 However, does not include phase concept.
 						
 					</div>
@@ -486,7 +489,8 @@ However, does not include phase concept.
 								</div>
 								
 								<div class="description">
-									Add EventListener.
+									Add a new event listener which will be executed when the event
+is being dispatched.
 									
 									
 									
@@ -509,7 +513,7 @@ However, does not include phase concept.
 												<span class="light fixedFont">{function(e:enchant.Event)}</span> <b>listener</b>
 												
 											</dt>
-											<dd>EventListener added.</dd>
+											<dd>EventListener to be added.</dd>
 										
 									</dl>
 								
@@ -528,11 +532,12 @@ However, does not include phase concept.
 									
 									
 									
-									<b>clearEventListener</b>(type)
+									<b>clearEventListener</b>(String)
 								</div>
 								
 								<div class="description">
-									Clear EventListener.
+									Clear all EventListener for a type.
+If no type is given all listener will be removed.
 									
 									
 									
@@ -546,10 +551,10 @@ However, does not include phase concept.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{String}</span> <b>type</b>
-												
+												<b>String</b>
+												<i>Optional</i>
 											</dt>
-											<dd>Event type.</dd>
+											<dd>type Event type.</dd>
 										
 									</dl>
 								
@@ -572,7 +577,7 @@ However, does not include phase concept.
 								</div>
 								
 								<div class="description">
-									Issue event.
+									Issue an event.
 									
 									
 									
@@ -589,7 +594,7 @@ However, does not include phase concept.
 												<span class="light fixedFont">{<a href="../symbols/enchant.Event.html">enchant.Event</a>}</span> <b>e</b>
 												
 											</dt>
-											<dd>Event issued.</dd>
+											<dd>Event to be issued.</dd>
 										
 									</dl>
 								
@@ -635,11 +640,32 @@ However, does not include phase concept.
 												<span class="light fixedFont">{function(e:enchant.Event)}</span> <b>listener</b>
 												
 											</dt>
-											<dd>EventListener added.</dd>
+											<dd>EventListener to be added.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">See:</dt>
+											
+												<dd></dd>
+											
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -658,7 +684,7 @@ However, does not include phase concept.
 								</div>
 								
 								<div class="description">
-									Delete EventListener.
+									Delete an EventListener.
 									
 									
 									
@@ -681,7 +707,7 @@ However, does not include phase concept.
 												<span class="light fixedFont">{function(e:enchant.Event)}</span> <b>listener</b>
 												
 											</dt>
-											<dd>EventListener deleted.</dd>
+											<dd>EventListener to be deleted.</dd>
 										
 									</dl>
 								

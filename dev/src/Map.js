@@ -1,10 +1,5 @@
 /**
- [lang:ja]
  * @scope enchant.Map.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Map.prototype
- [/lang]
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
@@ -13,17 +8,22 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      *
      * @param {Number} tileWidth タイルの横幅.
      * @param {Number} tileHeight タイルの高さ.
-     * @constructs
-     * @extends enchant.Entity
      [/lang]
      [lang:en]
      * A class to create and display maps from a tile set.
      *
      * @param {Number} tileWidth Tile width.
      * @param {Number} tileHeight Tile height.
+     [/lang]
+     [lang:de]
+     * Eine Klasse mit der Karten aus Kacheln (Tiles)
+     * erstellt und angezeigt werden können.
+     *
+     * @param {Number} tileWidth Kachelbreite.
+     * @param {Number} tileHeight Kachelhöhe.
+     [/lang]
      * @constructs
      * @extends enchant.Entity
-     [/lang]
      */
     initialize: function(tileWidth, tileHeight) {
         var game = enchant.Game.instance;
@@ -59,12 +59,15 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         /**
          [lang:ja]
          * タイルが衝突判定を持つかを表す値の二元配列.
-         * @type {Array.<Array.<Number>>}
          [/lang]
          [lang:en]
-         * Two dimensional array to show level of tiles with collision detection.
-         * @type {Array.<Array.<Number>>}
+         * Two dimensional array to store if collision detection should be performed for a tile.
          [/lang]
+         [lang:de]
+         * Ein 2-Dimensionales Array um zu speichern, ob für eine Kachel
+         * Kollesionsdetektion durchgeführt werden soll.
+         [/lang]
+         * @type {Array.<Array.<Number>>}
          */
         this.collisionData = null;
 
@@ -159,10 +162,18 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      * @param {...Array<Array.<Number>>} data タイルのインデックスの二元配列. 複数指定できる.
      [/lang]
      [lang:en]
-     * Set data.
-     * Sees that tiles are set in order in array from the upper left of image properties image,
-     * and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
-     * @param {...Array<Array.<Number>>} data Two-dimensional display of tile index. Multiple designations possible.
+     * Set map data.
+     * Sets the tile data, whereas the data (two-dimensional array with indizes starting from 0) 
+     * is mapped on the image starting from the upper left corner.
+     * When more than one map data array is set, they are displayed in reverse order.
+     * @param {...Array<Array.<Number>>} data Two-dimensional array of tile indizes. Multiple designations possible.
+     [/lang]
+     [lang:de]
+     * Setzt die Kartendaten.
+     * Setzt die Kartendaten, wobei die Daten (ein 2-Dimensionales Array bei dem die Indizes bei 0 beginnen) 
+     * auf das Bild, beginned bei der linken oberen Ecke) projeziert werden.
+     * Sollte mehr als ein Array übergeben worden sein, werden die Karten in invertierter Reihenfolge dargestellt. 
+     * @param {...Array<Array.<Number>>} data 2-Dimensionales Array mit Kachel Indizes. Mehrfachangaben möglich.
      [/lang]
      */
     loadData: function(data) {
@@ -188,13 +199,22 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     /**
      [lang:ja]
-     * ある座標のタイルが何か調べる
-     * @param x
-     * @param y
-     * @return {*}
+     * ある座標のタイルが何か調べる.
+     * @param {Number} x マップ上の点のx座標.
+     * @param {Number} y マップ上の点のy座標.
+     * @return {*} ある座標のタイルのデータ.
      [/lang]
      [lang:en]
-     * Check what tile it is on designated position
+     * Checks what tile is present at the given position.
+     * @param {Number} x x coordinates of the point on the map.
+     * @param {Number} y y coordinates of the point on the map.
+     * @return {*} The tile data for the given position.
+     [/lang]
+     [lang:de]
+     * Überprüft welche Kachel an der gegeben Position vorhanden ist.
+     * @param {Number} x Die x Koordinataten des Punktes auf der Karte.
+     * @param {Number} y Die y Koordinataten des Punktes auf der Karte.
+     * @return {*} Die Kachel für die angegebene Position.
      [/lang]
      */
     checkTile: function(x, y) {
@@ -222,7 +242,13 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      * Judges whether or not obstacles are on top of Map.
      * @param {Number} x x coordinates of detection spot on map.
      * @param {Number} y y coordinates of detection spot on map.
-     * @return {Boolean} Checks for obstacles.
+     * @return {Boolean} True, if there are obstacles.
+     [/lang]
+     [lang:de]
+     * Überprüft ob auf der Karte Hindernisse vorhanden sind.
+     * @param {Number} x Die x Koordinataten des Punktes auf der Karte, der überprüft werden soll.
+     * @param {Number} y Die y Koordinataten des Punktes auf der Karte, der überprüft werden soll.
+     * @return {Boolean} True, falls Hindernisse vorhanden sind.
      [/lang]
      */
     hitTest: function(x, y) {
@@ -252,12 +278,14 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * Mapで表示するタイルセット画像.
-     * @type {enchant.Surface}
      [/lang]
      [lang:en]
-     * Tile set image displayed on Map.
-     * @type {enchant.Surface}
+     * Image with which the tile set is displayed on the map.
      [/lang]
+     [lang:de]
+     * Das Bild mit dem die Kacheln auf der Karte dargestellt werden.
+     [/lang]
+     * @type {enchant.Surface}
      */
     image: {
         get: function() {
@@ -287,12 +315,14 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * Mapのタイルの横幅.
-     * @type {Number}
      [/lang]
      [lang:en]
      * Map tile width.
-     * @type {Number}
      [/lang]
+     [lang:de]
+     * Kachelbreite
+     [/lang]
+     * @type {Number}
      */
     tileWidth: {
         get: function() {
@@ -306,12 +336,14 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * Mapのタイルの高さ.
-     * @type {Number}
      [/lang]
      [lang:en]
      * Map tile height.
-     * @type {Number}
      [/lang]
+     [lang:de]
+     * Kachelhöhe.
+     [/lang]
+     * @type {Number}
      */
     tileHeight: {
         get: function() {
@@ -323,12 +355,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     [lang:ja]
      * @private
-     [/lang]
-     [lang:en]
-     * @private
-     [/lang]
      */
     width: {
         get: function() {
@@ -336,12 +363,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     [lang:ja]
      * @private
-     [/lang]
-     [lang:en]
-     * @private
-     [/lang]
      */
     height: {
         get: function() {
@@ -349,12 +371,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     [lang:ja]
      * @private
-     [/lang]
-     [lang:en]
-     * @private
-     [/lang]
      */
     redraw: function(x, y, width, height) {
         if (this._image == null) {

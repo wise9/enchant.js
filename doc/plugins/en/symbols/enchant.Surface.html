@@ -283,7 +283,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:43
+		Generated on: 2012-9-26 18:36
 	</div>
 </div>
 
@@ -419,7 +419,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#clear">clear</a></b>()
 										</div>
-										<div class="description">Clears all Surface pixels and sets transparency level 0 to black.</div>
+										<div class="description">Clears all Surface pixels and makes the pixels transparent.</div>
 									</td>
 								</tr>
 							
@@ -441,7 +441,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#draw">draw</a></b>(image)
 										</div>
-										<div class="description">Draws indicated Surface in argument corresponding to Surface.</div>
+										<div class="description">Draws the content of the given Surface onto this surface.</div>
 									</td>
 								</tr>
 							
@@ -452,7 +452,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#getPixel">getPixel</a></b>(x, y)
 										</div>
-										<div class="description">Acquires 1 pixel from Surface.</div>
+										<div class="description">Returns 1 pixel from the Surface.</div>
 									</td>
 								</tr>
 							
@@ -463,7 +463,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont">enchant.Surface.<b><a href="../symbols/enchant.Surface.html#.load">load</a></b>(src)
 										</div>
-										<div class="description">Loads image and creates Surface object.</div>
+										<div class="description">Loads an image and creates a Surface object out of it.</div>
 									</td>
 								</tr>
 							
@@ -474,7 +474,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#setPixel">setPixel</a></b>(x, y, r, g, b, a)
 										</div>
-										<div class="description">Surfaceに1ピクセル設定する.</div>
+										<div class="description">Sets one pixel within the surface.</div>
 									</td>
 								</tr>
 							
@@ -485,7 +485,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#toDataURL">toDataURL</a></b>()
 										</div>
-										<div class="description">Creates data scheme URL from Surface.</div>
+										<div class="description">Creates a data URI scheme from this Surface.</div>
 									</td>
 								</tr>
 							
@@ -518,8 +518,8 @@
 					<div class="description">
 						Class that wraps canvas elements.
 
-Can set Sprite and Map's image properties and display.
-Uses context properties when you wish to access Canvas API.
+Can be used to set the <a href="../symbols/enchant.Sprite.html">enchant.Sprite</a> and <a href="../symbols/enchant.Map.html">enchant.Map</a>'s image properties to be displayed.
+If you wish to access Canvas API use the <a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a> property.
 						
 					</div>
 					
@@ -665,7 +665,7 @@ Uses context properties when you wish to access Canvas API.
 								</div>
 								
 								<div class="description">
-									Clears all Surface pixels and sets transparency level 0 to black.
+									Clears all Surface pixels and makes the pixels transparent.
 									
 									
 									
@@ -717,7 +717,7 @@ Uses context properties when you wish to access Canvas API.
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span> Copied Surface.</dd>
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span> The copied Surface.</dd>
 											
 										
 										
@@ -744,9 +744,10 @@ Uses context properties when you wish to access Canvas API.
 								</div>
 								
 								<div class="description">
-									Draws indicated Surface in argument corresponding to Surface.
+									Draws the content of the given Surface onto this surface.
 
-Wraps Canvas API drawImage, and sets drawing rectangle to same format.
+Wraps Canvas API drawImage and if multiple arguments are given,
+these are getting applied to the Canvas drawImage method.
 									
 									
 									
@@ -761,7 +762,8 @@ Wraps Canvas API drawImage, and sets drawing rectangle to same format.
   dst.draw(src, 50, 50); // Draws source at (50, 50)
   // Draws just 30 horizontal and vertical pixels of source at (50, 50)
   dst.draw(src, 50, 50, 30, 30);
-  // Reduces the horizontal and vertical 40 pixel image at source (10, 10) to a horizontal and vertical 30 pixel image at (50, 50)
+  // Takes the image content in src starting at (10,10) with a (Width, Height) of (40,40),
+  // scales it and draws it in this surface at (50, 50) with a (Width, Height) of (30,30).
   dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);</pre>
 									
 								
@@ -797,7 +799,7 @@ Wraps Canvas API drawImage, and sets drawing rectangle to same format.
 								</div>
 								
 								<div class="description">
-									Acquires 1 pixel from Surface.
+									Returns 1 pixel from the Surface.
 									
 									
 									
@@ -814,13 +816,13 @@ Wraps Canvas API drawImage, and sets drawing rectangle to same format.
 												<span class="light fixedFont">{Number}</span> <b>x</b>
 												
 											</dt>
-											<dd>Acquired pixel's x coordinates.</dd>
+											<dd>The pixel's x coordinates.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Number}</span> <b>y</b>
 												
 											</dt>
-											<dd>Acquired pixel's y coordinates.</dd>
+											<dd>The pixel's y coordinates.</dd>
 										
 									</dl>
 								
@@ -864,12 +866,14 @@ Wraps Canvas API drawImage, and sets drawing rectangle to same format.
 								</div>
 								
 								<div class="description">
-									Loads image and creates Surface object.
+									Loads an image and creates a Surface object out of it.
 
-Surface created with this method does not allow access to wrap img elements context properties,
-or image operation via Canvas API called up by draw,clear, getPixel, setPixel and other methods.
-However it is possible to make draw method arguments, and you can operate images drawn on other surfaces
-(when loading in cross domain, pixel acquisition and other image manipulation is limited).
+It is not possible to access properties or methods of the <a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a>, or to call methods using the Canvas API - 
+like <a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>, <a href="../symbols/enchant.Surface.html#clear">enchant.Surface#clear</a>, <a href="../symbols/enchant.Surface.html#getPixel">enchant.Surface#getPixel</a>, <a href="../symbols/enchant.Surface.html#setPixel">enchant.Surface#setPixel</a>.. - 
+of the wrapped image created with this method.
+However, it is possible to use this surface to draw it to another surface using the <a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a> method.
+The resulting surface can then be manipulated. (when loading images in a cross-origin resource sharing environment, 
+pixel acquisition and other image manipulation might be limited).
 									
 									
 									
@@ -886,7 +890,7 @@ However it is possible to make draw method arguments, and you can operate images
 												<span class="light fixedFont">{String}</span> <b>src</b>
 												
 											</dt>
-											<dd>Loaded image file path.</dd>
+											<dd>The file path of the image to be loaded.</dd>
 										
 									</dl>
 								
@@ -909,7 +913,7 @@ However it is possible to make draw method arguments, and you can operate images
 								</div>
 								
 								<div class="description">
-									Surfaceに1ピクセル設定する.
+									Sets one pixel within the surface.
 									
 									
 									
@@ -926,37 +930,37 @@ However it is possible to make draw method arguments, and you can operate images
 												<span class="light fixedFont">{Number}</span> <b>x</b>
 												
 											</dt>
-											<dd>Set pixel's x coordinates.</dd>
+											<dd>The pixel's x coordinates.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Number}</span> <b>y</b>
 												
 											</dt>
-											<dd>Set pixel's y coordinates.</dd>
+											<dd>The pixel's y coordinates.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Number}</span> <b>r</b>
 												
 											</dt>
-											<dd>Set pixel's r level.</dd>
+											<dd>The pixel's red level.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Number}</span> <b>g</b>
 												
 											</dt>
-											<dd>Set pixel's g level.</dd>
+											<dd>The pixel's green level.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Number}</span> <b>b</b>
 												
 											</dt>
-											<dd>Set pixel's b level.</dd>
+											<dd>The pixel's blue level.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Number}</span> <b>a</b>
 												
 											</dt>
-											<dd>Set pixel's transparency.</dd>
+											<dd>The pixel's transparency.</dd>
 										
 									</dl>
 								
@@ -979,7 +983,7 @@ However it is possible to make draw method arguments, and you can operate images
 								</div>
 								
 								<div class="description">
-									Creates data scheme URL from Surface.
+									Creates a data URI scheme from this Surface.
 									
 									
 									
@@ -1002,7 +1006,8 @@ However it is possible to make draw method arguments, and you can operate images
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{String}</span> Data scheme URL that shows Surface.</dd>
+												<dd><span class="light fixedFont">{String}</span> The data URI scheme that identifies this Surface and 
+can be used to include this Surface into a dom tree.</dd>
 											
 										
 										

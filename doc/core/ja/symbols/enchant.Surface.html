@@ -73,7 +73,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:42
+		Generated on: 2012-9-26 18:35
 	</div>
 </div>
 
@@ -308,8 +308,8 @@
 					<div class="description">
 						canvas要素をラップしたクラス.
 
-SpriteやMapのimageプロパティに設定して表示させることができる.
-Canvas APIにアクセスしたいときはcontextプロパティを用いる.
+<a href="../symbols/enchant.Sprite.html">enchant.Sprite</a>や<a href="../symbols/enchant.Map.html">enchant.Map</a>のimageプロパティに設定して表示させることができる.
+Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a>プロパティを用いる.
 						
 					</div>
 					
@@ -656,9 +656,10 @@ Canvas APIのdrawImageをラップしており, 描画する矩形を同様の�
 								<div class="description">
 									画像ファイルを読み込んでSurfaceオブジェクトを作成する.
 
-このメソッドによって作成されたSurfaceはimg要素のラップしておりcontextプロパティに
-アクセスしたりdraw, clear, getPixel, setPixelメソッドなどの呼び出しでCanvas API
-を使った画像操作を行うことはできない. ただしdrawメソッドの引数とすることはでき,
+このメソッドによって作成されたSurfaceはimg要素のラップしており<a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a>プロパティに
+アクセスしたり<a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>, <a href="../symbols/enchant.Surface.html#clear">enchant.Surface#clear</a>, <a href="../symbols/enchant.Surface.html#getPixel">enchant.Surface#getPixel</a>, 
+<a href="../symbols/enchant.Surface.html#setPixel">enchant.Surface#setPixel</a>メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない. 
+ただし<a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>メソッドの引数とすることはでき,
 ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
 場合はピクセルを取得するなど画像操作の一部が制限される).
 									

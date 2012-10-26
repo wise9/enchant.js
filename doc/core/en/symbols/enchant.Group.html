@@ -73,7 +73,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:42
+		Generated on: 2012-9-26 18:35
 	</div>
 </div>
 
@@ -122,7 +122,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Group.html#constructor">enchant.Group</a></b>()
 								</div>
-								<div class="description">A class that can hold multiple Nodes.</div>
+								<div class="description">A class that can hold multiple <a href="../symbols/enchant.Node.html">enchant.Node</a>.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -152,7 +152,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Group.html#childNodes">childNodes</a></b>
 										</div>
-										<div class="description">Child Node.</div>
+										<div class="description">Child Nodes.</div>
 									</td>
 								</tr>
 							
@@ -162,7 +162,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Group.html#firstChild">firstChild</a></b>
 										</div>
-										<div class="description">First child Node.</div>
+										<div class="description">The Node which is the first child.</div>
 									</td>
 								</tr>
 							
@@ -172,7 +172,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Group.html#lastChild">lastChild</a></b>
 										</div>
-										<div class="description">Last child Node.</div>
+										<div class="description">The Node which is the last child.</div>
 									</td>
 								</tr>
 							
@@ -202,7 +202,27 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Group.html#rotation">rotation</a></b>
 										</div>
-										<div class="description">rotation of group</div>
+										<div class="description">Group rotation angle (degree).</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Group.html#scaleX">scaleX</a></b>
+										</div>
+										<div class="description">Scaling factor on the x axis of the Group.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Group.html#scaleY">scaleY</a></b>
+										</div>
+										<div class="description">Scaling factor on the y axis of the Group.</div>
 									</td>
 								</tr>
 							
@@ -245,7 +265,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Group.html#addChild">addChild</a></b>(node)
 										</div>
-										<div class="description">Adds Node to Group.</div>
+										<div class="description">Adds a Node to the Group.</div>
 									</td>
 								</tr>
 							
@@ -267,7 +287,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Group.html#removeChild">removeChild</a></b>(node)
 										</div>
-										<div class="description">Delete Node from Group.</div>
+										<div class="description">Remove a Node from the Group.</div>
 									</td>
 								</tr>
 							
@@ -302,7 +322,7 @@
 					</div>
 					
 					<div class="description">
-						A class that can hold multiple Nodes.
+						A class that can hold multiple <a href="../symbols/enchant.Node.html">enchant.Node</a>.
 						
 					</div>
 					
@@ -313,7 +333,7 @@
   stage.addChild(enemy);
   stage.addChild(map);
   stage.addEventListener('enterframe', function() {
-     // Scrolls entire frame in response to player's coordinates.
+     // Moves the entire frame in according to the player's coordinates.
      if (this.x > 64 - player.x) {
          this.x = 64 - player.x;
      }
@@ -349,7 +369,7 @@
 						</div>
 						
 						<div class="description">
-							Child Node.
+							Child Nodes.
 							
 							
 							
@@ -371,7 +391,7 @@
 						</div>
 						
 						<div class="description">
-							First child Node.
+							The Node which is the first child.
 							
 							
 							
@@ -393,7 +413,7 @@
 						</div>
 						
 						<div class="description">
-							Last child Node.
+							The Node which is the last child.
 							
 							
 							
@@ -459,7 +479,7 @@
 						</div>
 						
 						<div class="description">
-							rotation of group
+							Group rotation angle (degree).
 							
 							
 							
@@ -467,6 +487,80 @@
 						
 						
 							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="scaleX">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>scaleX</b>							
+						</div>
+						
+						<div class="description">
+							Scaling factor on the x axis of the Group.
+							
+							
+							
+						</div>
+						
+						
+							
+							<dl class="detailList nomargin">
+							
+								
+								
+								
+									<dt class="heading">See:</dt>
+									
+										<dd>enchant.CanvasGroup.originX</dd>
+									
+										<dd>enchant.CanvasGroup.originY</dd>
+									
+								
+								
+							</dl>
+						
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="scaleY">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>scaleY</b>							
+						</div>
+						
+						<div class="description">
+							Scaling factor on the y axis of the Group.
+							
+							
+							
+						</div>
+						
+						
+							
+							<dl class="detailList nomargin">
+							
+								
+								
+								
+									<dt class="heading">See:</dt>
+									
+										<dd>enchant.CanvasGroup.originX</dd>
+									
+										<dd>enchant.CanvasGroup.originY</dd>
+									
+								
+								
+							</dl>
+						
 						
 						
 					
@@ -500,7 +594,7 @@
 								</div>
 								
 								<div class="description">
-									Adds Node to Group.
+									Adds a Node to the Group.
 									
 									
 									
@@ -517,7 +611,7 @@
 												<span class="light fixedFont">{<a href="../symbols/enchant.Node.html">enchant.Node</a>}</span> <b>node</b>
 												
 											</dt>
-											<dd>Added Node.</dd>
+											<dd>Node to be added.</dd>
 										
 									</dl>
 								
@@ -557,13 +651,13 @@
 												<span class="light fixedFont">{<a href="../symbols/enchant.Node.html">enchant.Node</a>}</span> <b>node</b>
 												
 											</dt>
-											<dd>Incorporated Node.</dd>
+											<dd>Node to be incorporated.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{<a href="../symbols/enchant.Node.html">enchant.Node</a>}</span> <b>reference</b>
 												
 											</dt>
-											<dd>Node in position before incorporation.</dd>
+											<dd>Node in position before insertion.</dd>
 										
 									</dl>
 								
@@ -586,7 +680,7 @@
 								</div>
 								
 								<div class="description">
-									Delete Node from Group.
+									Remove a Node from the Group.
 									
 									
 									
@@ -603,7 +697,7 @@
 												<span class="light fixedFont">{<a href="../symbols/enchant.Node.html">enchant.Node</a>}</span> <b>node</b>
 												
 											</dt>
-											<dd>Deleted Node.</dd>
+											<dd>Node to be deleted.</dd>
 										
 									</dl>
 								

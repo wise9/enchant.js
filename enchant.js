@@ -179,9 +179,10 @@ window.addEventListener("message", function(msg, origin) {
 }, false);
 
 /**
- * Class of class
+ * Class for a class which supports inheritance.
  *
- * @param {Function} [superclass] Successor class.
+ * @param {Function} [superclass] The class from which the
+ * new class will inherit the class definition.
  * @param {*} definition Class definition.
  * @constructor
  */
@@ -193,9 +194,9 @@ enchant.Class = function(superclass, definition) {
 /**
  * Create class.
  *
- * When making classes that succeed other classes, the previous class is used as a base with
- * constructor as default. In order to override the constructor, it is necessary to explicitly
- * call up the previous constructor to use it.
+ * When defining classes that inherit from other classes, the previous class is used as a base with
+ * the superclass's constructor as default. When overriding the default constructor, it is necessary
+ * to explicitly call the previous constructor to ensure a correct class initialization.
  *
  * @example
  *   var Ball = Class.create({ // Creates independent class.
@@ -203,15 +204,16 @@ enchant.Class = function(superclass, definition) {
  *       fall: function() { ... }
  *   });
  *
- *   var Ball = Class.create(Sprite);  // Creates a class succeeding "Sprite"
- *   var Ball = Class.create(Sprite, { // Creates a class succeeding "Sprite"
+ *   var Ball = Class.create(Sprite);  // Creates a class inheriting from "Sprite"
+ *   var Ball = Class.create(Sprite, { // Creates a class inheriting "Sprite"
  *       initialize: function(radius) { // Overwrites constructor
  *          Sprite.call(this, radius*2, radius*2); // Applies previous constructor.
  *          this.image = game.assets['ball.gif'];
  *       }
  *   });
  *
- * @param {Function} [superclass] Preceding class.
+ * @param {Function} [superclass] The class from which the
+ * new class will inherit the class definition.
  * @param {*} [definition] Class definition.
  * @static
  */
@@ -251,6 +253,8 @@ enchant.Class.create = function(superclass, definition) {
     return Constructor;
 };
 /**
+ * Environment variable
+ * @type {Object}
  */
 enchant.ENV = {
     /**
@@ -329,7 +333,8 @@ enchant.ENV = {
  */
 enchant.Event = enchant.Class.create({
     /**
-     * A class for independent event implementation like DOM Events.
+     * A class for an independent implementation of events
+     * similar to DOM Events.
      * However, does not include phase concept.
      * @param {String} type Event type.
      * @constructs
@@ -356,12 +361,12 @@ enchant.Event = enchant.Class.create({
          */
         this.y = 0;
         /**
-         * X coordinates for event occurrence standard event-issuing object.
+         * Event occurrence's local coordinate system's x coordinates.
          * @type {Number}
          */
         this.localX = 0;
         /**
-         * Y coordinates for event occurrence standard event-issuing object.
+         * Event occurrence's local coordinate system's y coordinates.
          * @type {Number}
          */
         this.localY = 0;
@@ -374,10 +379,10 @@ enchant.Event = enchant.Class.create({
 });
 
 /**
- * Event activated upon completion of game loading.
+ * Event dispatched upon completion of game loading.
  *
  * It is necessary to wait for loading to finish and to do initial processing when preloading images.
- * Issued object: enchant.Game
+ * Issued object: {@link enchant.Game}
  *
  * @example
  *   var game = new Game(320, 320);
@@ -393,91 +398,92 @@ enchant.Event.LOAD = 'load';
 
 /**
  * Events occurring during game loading.
- * Activated each time a preloaded image is loaded. Issued object: enchant.Game
+ * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.Game}
  * @type {String}
  */
 enchant.Event.PROGRESS = 'progress';
 
 /**
- * Events occurring during frame start.
- * Issued object: enchant.Game, enchant.Node
+ * Events occurring when a new frame is beeing processed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
 
 /**
  * Events occurring during frame end.
- * Issued object: enchant.Game
+ * Issued object: {@link enchant.Game}
  * @type {String}
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
 
 /**
  * Events occurring during Scene beginning.
- * Issued object: enchant.Scene
+ * Issued object: {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.ENTER = 'enter';
 
 /**
  * Events occurring during Scene end.
- * Issued object: enchant.Scene
+ * Issued object: {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.EXIT = 'exit';
 
 /**
  * Event occurring when Child is added to Node.
- * Issued object: enchant.Group, enchant.Scene
+ * Issued object: {@link enchant.Group}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.CHILD_ADDED = 'childadded';
 
 /**
- * Event occurring when Node is added to Group.
- * Issued object: enchant.Node
+ * Event occurring when the Node is added to Group.
+ * Issued object: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ADDED = 'added';
 
 /**
- * Event occurring when Node is added to Scene.
- * Issued object: enchant.Node
+ * Event occurring when the Node is added to Scene.
+ * Issued object: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
 
 /**
  * Event occurring when Child is removed from Node.
- * Issued object: enchant.Group, enchant.Scene
+ * Issued object: {@link enchant.Group}, {@link enchant.Scene}
+ * @type {String}
  * @type {String}
  */
 enchant.Event.CHILD_REMOVED = 'childremoved';
 
 /**
- * Event occurring when Node is deleted from Group.
- * Issued object: enchant.Node
+ * Event occurring when the Node is deleted from Group.
+ * Issued object: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.REMOVED = 'removed';
 
 /**
  * Event occurring when Node is deleted from Scene.
- * Issued object: enchant.Node
+ * Issued object: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
 
 /**
  * Event occurring when touch corresponding to Node has begun.
- * Click is also treated as touch. Issued object: enchant.Node
+ * Click is also treated as touch. Issued object: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.TOUCH_START = 'touchstart';
 
 /**
  * Event occurring when touch corresponding to Node has been moved.
- * Click is also treated as touch. Issued object: enchant.Node
+ * Click is also treated as touch. Issued object: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.TOUCH_MOVE = 'touchmove';
@@ -490,113 +496,113 @@ enchant.Event.TOUCH_MOVE = 'touchmove';
 enchant.Event.TOUCH_END = 'touchend';
 
 /**
- * Event occurring when Entity is rendered.
- * Issued object: enchant.Entity
+ * Event occurring when an Entity is rendered.
+ * Issued object: {@link enchant.Entity}
  * @type {String}
  */
 enchant.Event.RENDER = 'render';
 
 /**
- * Event occurring when button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when a button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_START = 'inputstart';
 
 /**
- * Event occurring when button input changes.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when a button input changes.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
- * Event occurring when button input ends.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when a button input ends.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_END = 'inputend';
 
 /**
- * Event occurring when left button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the left button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
 
 /**
- * Event occurring when left button is released.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the left button is released.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
 
 /**
- * Event occurring when right button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the right button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
 
 /**
- * Event occurring when right button is released.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the right button is released.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
 
 /**
- * Even occurring when up button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Even occurring when the up button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
 
 /**
- * Event occurring when up button is released.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the up button is released.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.UP_BUTTON_UP = 'upbuttonup';
 
 /**
- * Event occurring when down button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the down button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 
 /**
- * Event occurring when down button is released.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the down button is released.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 /**
- * Event occurring when a button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the a button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
- * Event occurring when a button is released.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the a button is released.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
 /**
- * Event occurring when b button is pushed.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the b button is pushed.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
 /**
- * Event occurring when b button is released.
- * Issued object: enchant.Game, enchant.Scene
+ * Event occurring when the b button is released.
+ * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
@@ -606,7 +612,8 @@ enchant.Event.B_BUTTON_UP = 'bbuttonup';
  */
 enchant.EventTarget = enchant.Class.create({
     /**
-     * A class for independent event implementation like DOM Events.
+     * A class for an independent implementation of events
+     * similar to DOM Events.
      * However, does not include phase concept.
      * @constructs
      */
@@ -614,9 +621,10 @@ enchant.EventTarget = enchant.Class.create({
         this._listeners = {};
     },
     /**
-     * Add EventListener.
+     * Add a new event listener which will be executed when the event
+     * is being dispatched.
      * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener added.
+     * @param {function(e:enchant.Event)} listener EventListener to be added.
      */
     addEventListener: function(type, listener) {
         var listeners = this._listeners[type];
@@ -629,16 +637,17 @@ enchant.EventTarget = enchant.Class.create({
     },
     /**
      * Synonym for addEventListener
+     * @see {enchant.EventTarget#addEventListener}
      * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener added.
+     * @param {function(e:enchant.Event)} listener EventListener to be added.
      */
     on: function() {
         this.addEventListener.apply(this, arguments);
     },
     /**
-     * Delete EventListener.
+     * Delete an EventListener.
      * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener deleted.
+     * @param {function(e:enchant.Event)} listener EventListener to be deleted.
      */
     removeEventListener: function(type, listener) {
         var listeners = this._listeners[type];
@@ -650,8 +659,9 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
-     * Clear EventListener.
-     * @param {String} type Event type.
+     * Clear all EventListener for a type.
+     * If no type is given all listener will be removed.
+     * @param [String] type Event type.
      */
     clearEventListener: function(type) {
         if (type != null) {
@@ -661,8 +671,8 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
-     * Issue event.
-     * @param {enchant.Event} e Event issued.
+     * Issue an event.
+     * @param {enchant.Event} e Event to be issued.
      */
     dispatchEvent: function(e) {
         e.target = this;
@@ -684,7 +694,6 @@ enchant.EventTarget = enchant.Class.create({
 /**
  * @scope enchant.Game.prototype
  */
-
 (function() {
     var game;
 
@@ -697,8 +706,8 @@ enchant.EventTarget = enchant.Class.create({
          *
          * There can be only one instance, and when the constructor is executed
          * with an instance present, the existing item will be overwritten. The existing instance
-         * can be accessed from enchant.Game.instance.
-         *
+         * can be accessed from {@link enchant.Game.instance}.
+         * 
          * @param {Number} width Game screen width.
          * @param {Number} height Game screen height.
          * @constructs
@@ -787,22 +796,22 @@ enchant.EventTarget = enchant.Class.create({
              */
             this.fps = 30;
             /**
-             * Number of frames from game start.
+             * Number of frames since the game start.
              * @type {Number}
              */
             this.frame = 0;
             /**
-             * Game executability (valid or not).
+             * Indicates if the game can be executed.
              * @type {Boolean}
              */
             this.ready = null;
             /**
-             * Game execution state (valid or not).
+             * Indicates if the game is currently executed.
              * @type {Boolean}
              */
             this.running = false;
             /**
-             * Object saved as loaded image path key.
+             * Loaded Objects are stored with the path as key in this Objekt.
              * @type {Object.<String, Surface>}
              */
             this.assets = {};
@@ -822,18 +831,18 @@ enchant.EventTarget = enchant.Class.create({
 
             this._scenes = [];
             /**
-             * Current Scene. Scene at top of Scene stack.
+             * The current Scene displayed. Scene at top of Scene stack.
              * @type {enchant.Scene}
              */
             this.currentScene = null;
             /**
-             * Route Scene. Scene at bottom of Scene stack.
+             * The Route Scene. The Scene at bottom of Scene stack.
              * @type {enchant.Scene}
              */
             this.rootScene = new enchant.Scene();
             this.pushScene(this.rootScene);
             /**
-             * Scene displayed during loading.
+             * The Scene displayed during loading.
              * @type {enchant.Scene}
              */
             this.loadingScene = new enchant.Scene();
@@ -872,7 +881,7 @@ enchant.EventTarget = enchant.Class.create({
             this._offsetY = 0;
 
             /**
-             * Object that saves input conditions for game.
+             * Object that saves the current input state for the game.
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
@@ -998,15 +1007,16 @@ enchant.EventTarget = enchant.Class.create({
         },
         /**
          * Performs file preload.
+         * 
+         * Sets files which are to be preloaded. When {@link enchant.Game#start} is called the 
+         * actual loading takes place. When all files are loaded, a {@link enchant.Event.LOAD} event
+         * is dispatched from the Game object. Depending on the type of the file different objects will be 
+         * created and stored in {@link enchant.Game#assets} Variable. 
+         * When an image file is loaded, an {@link enchant.Surface} is created. If a sound file is loaded, an
+         * {@link enchant.Sound} object is created. Otherwise it will be accessible as a string.
          *
-         * enchant is a file set to execute preload. It is loaded when
-         * Game#start is activated. When all files are loaded, load events are activated
-         * from Game objects. When an image file is from Game object assets properties,
-         * it will as a Surface object, or a Sound object for sound files,
-         * and in other cases it will be accessible as string.
-         *
-         * In addition, because this Surface object used made with enchant.Surface.load,
-         * direct object manipulation is not possible. Refer to the items of enchant.Surface.load
+         * In addition, because this Surface object used made with {@link enchant.Surface.load},
+         * direct object manipulation is not possible. Refer to the items of {@link enchant.Surface.load}
          *
          * @example
          *   game.preload('player.gif');
@@ -1017,7 +1027,7 @@ enchant.EventTarget = enchant.Class.create({
          *   };
          *   game.start();
          *
-         * @param {...String} assets Preload image path. Multiple settings possible.
+         * @param {...String} assets Path of images to be preloaded. Multiple settings possible.
          */
         preload: function(assets) {
             if (!(assets instanceof Array)) {
@@ -1028,7 +1038,7 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * File loading.
          *
-         * @param {String} asset Load file path.
+         * @param {String} asset File path of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
          */
         load: function(src, callback) {
@@ -1068,10 +1078,10 @@ enchant.EventTarget = enchant.Class.create({
             }
         },
         /**
-         * Begin game.
+         * Start the game.
          *
-         * Obeying the frame rate set in enchant.Game#fps, the frame in
-         * enchant.Game#currentScene will be updated. When a preloaded image is present,
+         * Obeying the frame rate set in {@link enchant.Game#fps}, the frame in
+         * {@link enchant.Game#currentScene} will be updated. When images to preload are present,
          * loading will begin and the loading screen will be displayed.
          */
         start: function() {
@@ -1133,7 +1143,8 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * Begin game debug mode.
          *
-         * Game debug mode can be set to on even if enchant.Game.instance._debug flag is set to true.
+         * Game debug mode can be set to on even if enchant.Game.instance._debug
+         * flag is already set to true.
          */
         debug: function() {
             this._debug = true;
@@ -1172,10 +1183,10 @@ enchant.EventTarget = enchant.Class.create({
             this.frame++;
         },
         /**
-         * Stops game.
+         * Stops the game.
          *
-         * The frame will not be updated, and player input will not be accepted.
-         * Game can be reopened in enchant.Game#start.
+         * The frame will not be updated, and player input will not be accepted anymore.
+         * Game can be restarted using {@link enchant.Game#start}.
          */
         stop: function() {
             if (this._intervalID) {
@@ -1185,10 +1196,10 @@ enchant.EventTarget = enchant.Class.create({
             this.running = false;
         },
         /**
-         * Stops game.
+         * Stops the game.
          *
-         * The frame will not be updated, and player input will not be accepted.
-         * Game can be reopened in enchant.Game#start.
+         * The frame will not be updated, and player input will not be accepted anymore.
+         * Game can be started again using {@link enchant.Game#start}.
          */
         pause: function() {
             if (this._intervalID) {
@@ -1197,7 +1208,7 @@ enchant.EventTarget = enchant.Class.create({
             }
         },
         /**
-         * Resumes game.
+         * Resumes the game.
          */
         resume: function() {
             if (this._intervalID) {
@@ -1211,14 +1222,14 @@ enchant.EventTarget = enchant.Class.create({
         },
 
         /**
-         * Switch to new Scene.
+         * Switch to a new Scene.
          *
-         * Scene is controlled in stack, and the display order also obeys stack order.
-         * When enchant.Game#pushScene is executed, Scene can be brought to the top of stack.
-         * Frame will be updated to reflect Scene at the top of stack.
+         * Scenes are controlled using a stack, and the display order also obeys that stack order.
+         * When {@link enchant.Game#pushScene} is executed, the Scene can be brought to the top of stack.
+         * Frames will be updated in the Scene which is on the top of the stack.
          *
-         * @param {enchant.Scene} scene Switch to new Scene.
-         * @return {enchant.Scene} New Scene.
+         * @param {enchant.Scene} scene The new scene to be switched to.
+         * @return {enchant.Scene} The new Scene.
          */
         pushScene: function(scene) {
             this._element.appendChild(scene._element);
@@ -1230,10 +1241,11 @@ enchant.EventTarget = enchant.Class.create({
             return this._scenes.push(scene);
         },
         /**
-         * End current Scene, return to previous Scene.
+         * Ends the current Scene, return to the previous Scene.
          *
-         * Scene is controlled in stack, with display order obeying stack order.
-         * When enchant.Game#popScene is activated, the Scene at the top of the stack can be pulled out.
+         * Scenes are controlled using a stack, and the display order also obeys that stack order.
+         * When {@link enchant.Game#popScene} is executed, the Scene at the top of the stack
+         * will be removed and returned.
          *
          * @return {enchant.Scene} Ended Scene.
          */
@@ -1248,24 +1260,25 @@ enchant.EventTarget = enchant.Class.create({
             return this._scenes.pop();
         },
         /**
-         * Overwrite current Scene with separate Scene.
+         * Overwrites the current Scene with a new Scene.
          *
-         * enchant.Game#popScene, enchant.Game#pushScene are enacted simultaneously.
+         * {@link enchant.Game#popScene}, {@link enchant.Game#pushScene} are executed after
+         * each other to replace to current scene with the new scene.
          *
-         * @param {enchant.Scene} scene Replace Scene.
-         * @return {enchant.Scene} New Scene.
+         * @param {enchant.Scene} scene The new scene which will replace the previous scene.
+         * @return {enchant.Scene} The new Scene.
          */
         replaceScene: function(scene) {
             this.popScene();
             return this.pushScene(scene);
         },
         /**
-         * Delete Scene.
+         * Removes a Scene.
          *
-         * Deletes Scene from Scene stack.
+         * Removes a Scene from the Scene stack.
          *
-         * @param {enchant.Scene} scene Delete Scene.
-         * @return {enchant.Scene} Deleted Scene.
+         * @param {enchant.Scene} scene Scene to be removed.
+         * @return {enchant.Scene} The deleted Scene.
          */
         removeScene: function(scene) {
             if (this.currentScene === scene) {
@@ -1282,19 +1295,19 @@ enchant.EventTarget = enchant.Class.create({
             }
         },
         /**
-         * Set key binding.
+         * Set a key binding.
          *
-         * Assigns key input to left, right, up, down, a, b button input.
+         * Maps an input key to an enchant.js left, right, up, down, a, b button.
          *
-         * @param {Number} key Key code that sets key bind.
-         * @param {String} button Assign button.
+         * @param {Number} key Key code for the button which will be bound.
+         * @param {String} button The enchant.js button (left, right, up, down, a, b).
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
         },
         /**
-         * get elapsed time (in game, not actual) from game.start is called
-         * @return {Number} elapsed time (seconds)
+         * Get the elapsed game time (not actual) from when game.start was called.
+         * @return {Number} The elapsed time (seconds)
          */
         getElapsedTime: function() {
             return this.frame / this.fps;
@@ -1321,7 +1334,7 @@ enchant.EventTarget = enchant.Class.create({
 
 
     /**
-     * find extension from path
+     * Get the file extension from a path
      * @param path
      * @return {*}
      */
@@ -1339,7 +1352,7 @@ enchant.EventTarget = enchant.Class.create({
     };
 
     /**
-     * Current Game instance.
+     * The Current Game instance.
      * @type {enchant.Game}
      * @static
      */
@@ -1351,8 +1364,8 @@ enchant.EventTarget = enchant.Class.create({
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
-     * Base class for objects in displayed object tree routed to Scene.
-     * Not directly used.
+     * Base class for objects in the display tree which is rooted at a Scene.
+     * Not to be used directly.
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -1367,13 +1380,13 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetY = 0;
 
         /**
-         *         *         * age (frames) of this node which will be increased before this node receives ENTER_FRAME event.
-         *         * @type {Number}
+         *         *         * age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
+         *         *         * @type {Number}
          */
         this.age = 0;
 
         /**
-         * Parent Node for Node.
+         * Parent Node of this Node.
          * @type {enchant.Group}
          */
         this.parentNode = null;
@@ -1400,7 +1413,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Move Node.
+     * Move the Node to the given target location.
      * @param {Number} x Target x coordinates.
      * @param {Number} y Target y coordinates.
      */
@@ -1410,7 +1423,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._updateCoordinate();
     },
     /**
-     * Move Node.
+     * Move the Node relative to its current position.
      * @param {Number} x x axis movement distance.
      * @param {Number} y y axis movement distance.
      */
@@ -1420,7 +1433,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._updateCoordinate();
     },
     /**
-     * x coordinates of Node.
+     * x coordinates of the Node.
      * @type {Number}
      */
     x: {
@@ -1433,7 +1446,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * y coordinates of Node.
+     * y coordinates of the Node.
      * @type {Number}
      */
     y: {
@@ -1500,7 +1513,7 @@ var getInheritanceRelation = function(Constructor) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
-     * A class with objects displayed on DOM. Not used directly.
+     * A class with objects displayed as DOM elements. Not used directly.
      * @constructs
      * @extends enchant.Node
      */
@@ -1525,14 +1538,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._style = {};
 
         /**
-         * Set button function to Entity.
-         * Apply touch, click to left, right, up, down, a, b
-         * for button input for Entity.
+         * Defines this Entity as a button.
+         * When touched or clicked the corresponding button event is dispatched.
+         * Valid buttonModes are: left, right, up, down, a, b. 
          * @type {String}
          */
         this.buttonMode = null;
         /**
-         * Checks if Entity is being pushed.
+         * Indicates if Entity is being clicked.
          * Only functions when buttonMode is set.
          * @type {Boolean}
          */
@@ -1600,7 +1613,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      * Entity background color.
-     * Designates as same format as CSS 'color' properties.
+     * Must be provided in the same format as the CSS 'color' property.
      * @type {String}
      */
     backgroundColor: {
@@ -1613,7 +1626,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      * Entity transparency.
-     * Sets level from 0 to 1 (0 is completely transparent, 1 is completely opaque).
+     * Defines the transparancy level from 0 to 1
+     * (0 is completely transparent, 1 is completely opaque).
      * @type {Number}
      */
     opacity: {
@@ -1637,7 +1651,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Designates whether or not to make Entity touch valid.
+     * Designates whether or not the Entity can be touched.
      * @type {Boolean}
      */
     touchEnabled: {
@@ -1656,9 +1670,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Operates collision detection based on whether or not rectangle angles are intersecting.
-     * @param {*} other Object with properties of x, y, width, height that operate Entity collision detection.
-     * @return {Boolean} Collision detection results.
+     * Operates collision detection based on whether or not the bounding rectangles are intersecting.
+     * @param {*} other An object like Entity, with properties of x, y, width, height, with which the 
+     * collision detection will be performed.
+     * @return {Boolean} True, if a collision was detected.
      */
     intersect: function(other) {
         if (other instanceof enchant.Entity) {
@@ -1671,9 +1686,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      * Operates collision detection based on distance from Entity's central point.
-     * @param {*} other Object with properties of x, y, width, height that operate Entity collision detection.
-     * @param {Number} [distance] Greatest distance considered in collision. Default level is average of Entity width and height.
-     * @return {Boolean} Collision detection result.
+     * @param {*} other An object like Entity, with properties of x, y, width, height, with which the 
+     * collision detection will be performed.
+     * @param {Number} [distance] Greatest distance considered in collision.
+     * Default distance is average of both objects width and height.
+     * @return {Boolean} True, if a collision was detected.
      */
     within: function(other, distance) {
         if (distance == null) {
@@ -1683,9 +1700,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         return (_ = this._offsetX - other._offsetX + (this.width - other.width) / 2) * _ +
             (_ = this._offsetY - other._offsetY + (this.height - other.height) / 2) * _ < distance * distance;
     }, /**
-     * Expand or contract Sprite.
-     * @param {Number} x Scaling for x axis to be expanded.
-     * @param {Number} [y] Scaling for y axis to be expanded.
+     * Enlarges or shrinks Sprite.
+     * @param {Number} x Scaling factor on the x axis.
+     * @param {Number} [y] Scaling on the y axis.
      */
     scale: function(x, y) {
         if (y == null) {
@@ -1697,14 +1714,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      * Rotate Sprite.
-     * @param {Number} deg Rotation angle (frequency).
+     * @param {Number} deg Rotation angle (degree).
      */
     rotate: function(deg) {
         this._rotation += deg;
         this._dirty = true;
     },
     /**
-     * Scaling for Sprite's x axis direction.
+     * Scaling factor on the x axis of a Sprite.
      * @type {Number}
      */
     scaleX: {
@@ -1717,7 +1734,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Scaling for Sprite's y axis direction.
+     * Scaling factor on the y axis of a Sprite.
      * @type {Number}
      */
     scaleY: {
@@ -1730,7 +1747,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Sprite rotation angle (frequency).
+     * Sprite rotation angle (degree).
      * @type {Number}
      */
     rotation: {
@@ -1838,14 +1855,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
-     * Class for image display function.
-     *
+     * Class which can display images.
+     * 
+     * @param {Number} [width] Sprite width.
+     * @param {Number} [height] Sprite height.
      * @example
      *   var bear = new Sprite(32, 32);
      *   bear.image = game.assets['chara1.gif'];
-     *
-     * @param {Number} [width] Sprite width.g
-     * @param {Number} [height] Sprite height.
+     *   
      * @constructs
      * @extends enchant.Entity
      */
@@ -1877,7 +1894,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         });
     },
     /**
-     * Image displayed in Sprite.
+     * Image displayed in the Sprite.
      * @type {enchant.Surface}
      */
     image: {
@@ -1893,9 +1910,18 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     * Frame index display.
-     * Frames with same width and height as Sprite will be arrayed in order from upper left of image properties image.
-     * By setting the index to start with 0, frames are switched.
+     * Indizes of the frames to be displayed.
+     * Frames with same width and height as Sprite will be arrayed from upper left corner of the 
+     * {@link enchant.Sprite#image} image. When a sequence of numbers is provided, the displayed frame 
+     * will switch automatically. At the end of the array the sequence will restart. By setting 
+     * a value within the sequence to null, the frame switching is stopped.
+     * @example
+     * var sprite = new Sprite(32, 32);
+     * sprite.frame = [0, 1, 0, 2]
+     * //-> 0, 1, 0, 2, 0, 1, 0, 2,..
+     * sprite.frame = [0, 1, 0, 2, null]
+     * //-> 0, 1, 0, 2, (2, 2,.. :stop)
+     *
      * @type {Number|Array}
      */
     frame: {
@@ -1966,9 +1992,8 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         this.textAlign = 'left';
     },
     /**
-     * Text to display.
+     * Text to be displayed.
      * @type {String}
-
      */
     text: {
         get: function() {
@@ -1980,7 +2005,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Specifies horizontal alignment of text.
-     * Can be set to same format as CSS 'text-align' property.
+     * Can be set according to the format of the CSS 'text-align' property.
      * @type {String}
      */
     textAlign: {
@@ -1993,7 +2018,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Font settings.
-     * CSSの'font' Can be set to same format as properties.
+     * Can be set according to the format of the CSS 'font' property.
      * @type {String}
      */
     font: {
@@ -2006,7 +2031,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     /**
      * Text color settings.
-     * CSSの'color' Can be set to same format as properties.
+     * Can be set according to the format of the CSS 'color' property.
      * @type {String}
      */
     color: {
@@ -2072,7 +2097,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         this.touchEnabled = false;
 
         /**
-         * Two dimensional array to show level of tiles with collision detection.
+         * Two dimensional array to store if collision detection should be performed for a tile.
          * @type {Array.<Array.<Number>>}
          */
         this.collisionData = null;
@@ -2161,10 +2186,11 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         });
     },
     /**
-     * Set data.
-     * Sees that tiles are set in order in array from the upper left of image properties image,
-     * and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
-     * @param {...Array<Array.<Number>>} data Two-dimensional display of tile index. Multiple designations possible.
+     * Set map data.
+     * Sets the tile data, whereas the data (two-dimensional array with indizes starting from 0) 
+     * is mapped on the image starting from the upper left corner.
+     * When more than one map data array is set, they are displayed in reverse order.
+     * @param {...Array<Array.<Number>>} data Two-dimensional array of tile indizes. Multiple designations possible.
      */
     loadData: function(data) {
         this._data = Array.prototype.slice.apply(arguments);
@@ -2188,7 +2214,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     * Check what tile it is on designated position
+     * Checks what tile is present at the given position.
+     * @param {Number} x x coordinates of the point on the map.
+     * @param {Number} y y coordinates of the point on the map.
+     * @return {*} The tile data for the given position.
      */
     checkTile: function(x, y) {
         if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
@@ -2208,7 +2237,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      * Judges whether or not obstacles are on top of Map.
      * @param {Number} x x coordinates of detection spot on map.
      * @param {Number} y y coordinates of detection spot on map.
-     * @return {Boolean} Checks for obstacles.
+     * @return {Boolean} True, if there are obstacles.
      */
     hitTest: function(x, y) {
         if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
@@ -2235,7 +2264,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     * Tile set image displayed on Map.
+     * Image with which the tile set is displayed on the map.
      * @type {enchant.Surface}
      */
     image: {
@@ -2375,7 +2404,7 @@ enchant.Map.prototype.cvsRender = function(ctx) {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
-     * A class that can hold multiple Nodes.
+     * A class that can hold multiple {@link enchant.Node}.
      *
      * @example
      *   var stage = new Group();
@@ -2383,7 +2412,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      *   stage.addChild(enemy);
      *   stage.addChild(map);
      *   stage.addEventListener('enterframe', function() {
-     *      // Scrolls entire frame in response to player's coordinates.
+     *      // Moves the entire frame in according to the player's coordinates.
      *      if (this.x > 64 - player.x) {
      *          this.x = 64 - player.x;
      *      }
@@ -2396,7 +2425,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         enchant.Node.call(this);
 
         /**
-         * Child Node.
+         * Child Nodes.
          * @type {Array.<enchant.Node>}
          */
         this.childNodes = [];
@@ -2419,8 +2448,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             }, this);
     },
     /**
-     * Adds Node to Group.
-     * @param {enchant.Node} node Added Node.
+     * Adds a Node to the Group.
+     * @param {enchant.Node} node Node to be added.
      */
     addChild: function(node) {
         this.childNodes.push(node);
@@ -2438,8 +2467,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     },
     /**
      * Incorporates Node into Group.
-     * @param {enchant.Node} node Incorporated Node.
-     * @param {enchant.Node} reference Node in position before incorporation.
+     * @param {enchant.Node} node Node to be incorporated.
+     * @param {enchant.Node} reference Node in position before insertion.
      */
     insertBefore: function(node, reference) {
         var i = this.childNodes.indexOf(reference);
@@ -2461,8 +2490,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Delete Node from Group.
-     * @param {enchant.Node} node Deleted Node.
+     * Remove a Node from the Group.
+     * @param {enchant.Node} node Node to be deleted.
      */
     removeChild: function(node) {
         var i;
@@ -2481,7 +2510,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * First child Node.
+     * The Node which is the first child.
      * @type {enchant.Node}
      */
     firstChild: {
@@ -2490,7 +2519,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * Last child Node.
+     * The Node which is the last child.
      * @type {enchant.Node}
      */
     lastChild: {
@@ -2512,9 +2541,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         this._dirty = true;
     },
     /**
-     * rotation of group
-     * @type {Number}
-     */
+    * Group rotation angle (degree).
+    * @type {Number}
+    */
     rotation: {
         get: function() {
             return this._rotation;
@@ -2525,11 +2554,11 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * scaling of group in the direction of x axis
-     * @see enchant.CanvasGroup.originX
-     * @see enchant.CanvasGroup.originY
-     * @type {Number}
-     */
+    * Scaling factor on the x axis of the Group.
+    * @type {Number}
+    * @see enchant.CanvasGroup.originX
+    * @see enchant.CanvasGroup.originY
+    */
     scaleX: {
         get: function() {
             return this._scaleX;
@@ -2540,11 +2569,11 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * scaling of group in the direction of y axis
-     * @see enchant.CanvasGroup.originX
-     * @see enchant.CanvasGroup.originY
-     * @type {Number}
-     */
+    * Scaling factor on the y axis of the Group.
+    * @type {Number}
+    * @see enchant.CanvasGroup.originX
+    * @see enchant.CanvasGroup.originY
+    */
     scaleY: {
         get: function() {
             return this._scaleY;
@@ -2555,9 +2584,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * origin point of rotation, scaling
-     * @type {Number}
-     */
+    * origin point of rotation, scaling
+    * @type {Number}
+    */
     originX: {
         get: function() {
             return this._originX;
@@ -2568,9 +2597,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * origin point of rotation, scaling
-     * @type {Number}
-     */
+    * origin point of rotation, scaling
+    * @type {Number}
+    */
     originY: {
         get: function() {
             return this._originY;
@@ -2588,6 +2617,8 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      */
     enchant.CanvasGroup = enchant.Class.create(enchant.Group, {
         /**
+         * A class which is using HTML Canvas for the rendering.
+         * The rendering of children will be replaced by the Canvas rendering.
          * @constructs
          */
         initialize: function() {
@@ -3047,16 +3078,16 @@ enchant.Group = enchant.Class.create(enchant.Node, {
  */
 enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     /**
-     * Class that becomes route for display object tree.
+     * Class that becomes the root of an object tree which can be displayed.
      *
      * @example
-     *   var scene = new Scene();
+     *   var scene = new CanvasScene();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
      *   game.pushScene(scene);
      *
      * @constructs
-     * @extends enchant.Group
+     * @extends enchant.CanvasGroup
      */
     initialize: function() {
         enchant.CanvasGroup.call(this);
@@ -3065,10 +3096,10 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
     },
     /**
-     * Scene background color.
-     * Can indicate same format as CSS 'color' property.
-     * @type {String}
-     */
+    * CanvasScene background color.
+    * Must be provided in the same format as the CSS 'color' property.
+    * @type {String}
+    */
     backgroundColor: {
         get: function() {
             return this._backgroundColor;
@@ -3095,8 +3126,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
      * Class that wraps canvas elements.
      *
-     * Can set Sprite and Map's image properties and display.
-     * Uses context properties when you wish to access Canvas API.
+     * Can be used to set the {@link enchant.Sprite} and {@link enchant.Map}'s image properties to be displayed.
+     * If you wish to access Canvas API use the {@link enchant.Surface#context} property.
      *
      * @example
      *   // Creates Sprite that displays a circle.
@@ -3162,22 +3193,22 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * Acquires 1 pixel from Surface.
-     * @param {Number} x Acquired pixel's x coordinates.
-     * @param {Number} y Acquired pixel's y coordinates.
+     * Returns 1 pixel from the Surface.
+     * @param {Number} x The pixel's x coordinates.
+     * @param {Number} y The pixel's y coordinates.
      * @return {Array.<Number>} An array that holds pixel information in [r, g, b, a] format.
      */
     getPixel: function(x, y) {
         return this.context.getImageData(x, y, 1, 1).data;
     },
     /**
-     * Surfaceに1ピクセル設定する.
-     * @param {Number} x Set pixel's x coordinates.
-     * @param {Number} y Set pixel's y coordinates.
-     * @param {Number} r Set pixel's r level.
-     * @param {Number} g Set pixel's g level.
-     * @param {Number} b Set pixel's b level.
-     * @param {Number} a Set pixel's transparency.
+     * Sets one pixel within the surface.
+     * @param {Number} x The pixel's x coordinates.
+     * @param {Number} y The pixel's y coordinates.
+     * @param {Number} r The pixel's red level.
+     * @param {Number} g The pixel's green level.
+     * @param {Number} b The pixel's blue level.
+     * @param {Number} a The pixel's transparency.
      */
     setPixel: function(x, y, r, g, b, a) {
         var pixel = this.context.createImageData(1, 1);
@@ -3188,15 +3219,16 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         this.context.putImageData(pixel, x, y);
     },
     /**
-     * Clears all Surface pixels and sets transparency level 0 to black.
+     * Clears all Surface pixels and makes the pixels transparent.
      */
     clear: function() {
         this.context.clearRect(0, 0, this.width, this.height);
     },
     /**
-     * Draws indicated Surface in argument corresponding to Surface.
+     * Draws the content of the given Surface onto this surface.
      *
-     * Wraps Canvas API drawImage, and sets drawing rectangle to same format.
+     * Wraps Canvas API drawImage and if multiple arguments are given,
+     * these are getting applied to the Canvas drawImage method.
      *
      * @example
      *   var src = game.assets['src.gif'];
@@ -3205,7 +3237,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      *   dst.draw(src, 50, 50); // Draws source at (50, 50)
      *   // Draws just 30 horizontal and vertical pixels of source at (50, 50)
      *   dst.draw(src, 50, 50, 30, 30);
-     *   // Reduces the horizontal and vertical 40 pixel image at source (10, 10) to a horizontal and vertical 30 pixel image at (50, 50)
+     *   // Takes the image content in src starting at (10,10) with a (Width, Height) of (40,40),
+     *   // scales it and draws it in this surface at (50, 50) with a (Width, Height) of (30,30).
      *   dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
      *
      * @param {enchant.Surface} image Surface used in drawing.
@@ -3222,7 +3255,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      * Copies Surface.
-     * @return {enchant.Surface} Copied Surface.
+     * @return {enchant.Surface} The copied Surface.
      */
     clone: function() {
         var clone = new enchant.Surface(this.width, this.height);
@@ -3230,8 +3263,9 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
         return clone;
     },
     /**
-     * Creates data scheme URL from Surface.
-     * @return {String} Data scheme URL that shows Surface.
+     * Creates a data URI scheme from this Surface.
+     * @return {String} The data URI scheme that identifies this Surface and 
+     * can be used to include this Surface into a dom tree.
      */
     toDataURL: function() {
         var src = this._element.src;
@@ -3248,16 +3282,16 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
- * Loads image and creates Surface object.
+ * Loads an image and creates a Surface object out of it.
  *
- * Surface created with this method does not allow access to wrap img elements context properties,
- * or image operation via Canvas API called up by draw,clear, getPixel, setPixel and other methods.
- * However it is possible to make draw method arguments, and you can operate images drawn on other surfaces
- * (when loading in cross domain, pixel acquisition and other image manipulation is limited).
+ * It is not possible to access properties or methods of the {@link enchant.Surface#context}, or to call methods using the Canvas API - 
+ * like {@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel}, {@link enchant.Surface#setPixel}.. - 
+ * of the wrapped image created with this method.
+ * However, it is possible to use this surface to draw it to another surface using the {@link enchant.Surface#draw} method.
+ * The resulting surface can then be manipulated. (when loading images in a cross-origin resource sharing environment, 
+ * pixel acquisition and other image manipulation might be limited).
  *
- *
- *
- * @param {String} src Loaded image file path.
+ * @param {String} src The file path of the image to be loaded.
  * @static
  */
 enchant.Surface.load = function(src) {
@@ -3290,16 +3324,15 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * Safari, Chrome, Firefox, Opera, and IE all play MP3 files
      * (Firefox and Opera play via Flash). WAVE files can be played on
      * Safari, Chrome, Firefox, and Opera. When the browser is not compatible with
-     * the codec the file will not fully play.
+     * the used codec the file will not play.
      *
-     * Instances are created not via constructor but via enchant.Sound.load.
-     *
+     * Instances are created not via constructor but via {@link enchant.Sound.load}.
      * @constructs
      */
     initialize: function() {
         enchant.EventTarget.call(this);
         /**
-         * Sound play time (seconds).
+         * Sound file duration (seconds).
          * @type {Number}
          */
         this.duration = 0;
@@ -3314,7 +3347,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * Interrupt playing.
+     * Pause playback.
      */
     pause: function() {
         if (this._element){
@@ -3329,7 +3362,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         this.currentTime = 0;
     },
     /**
-     * Copy Sound.
+     * Create a copy of this Sound object.
      * @return {enchant.Sound} Copied Sound.
      */
     clone: function() {
@@ -3348,7 +3381,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         return clone;
     },
     /**
-     * Current play point (seconds).
+     * Current playback position (seconds).
      * @type {Number}
      */
     currentTime: {
@@ -3362,7 +3395,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * Volume. 0 (mute) ～ 1 (full volume).
+     * Volume. 0 (muted) ～ 1 (full volume).
      * @type {Number}
      */
     volume: {
@@ -3378,10 +3411,10 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
- * Load audio file, create Surface object.
+ * Loads an audio file and creates Sound object.
  *
- * @param {String} src Path of loaded audio file.
- * @param {String} [type] MIME Type of audio file.
+ * @param {String} src Path of the audio file to be loaded.
+ * @param {String} [type] MIME Type of the audio file.
  * @static
  */
 enchant.Sound.load = function(src, type) {

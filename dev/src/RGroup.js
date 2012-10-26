@@ -66,40 +66,29 @@ enchant.RGroup = enchant.Class.create(enchant.Group, {
 
 
 /**
- [lang:ja]
  * @scope enchant.Scene.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Scene.prototype
- [/lang]
  */
 enchant.Scene = enchant.Class.create(enchant.Group, {
-    /**
-     [lang:ja]
-     * 表示オブジェクトツリーのルートになるクラス.
-     *
-     * @example
-     *   var scene = new Scene();
-     *   scene.addChild(player);
-     *   scene.addChild(enemy);
-     *   game.pushScene(scene);
-     *
-     * @constructs
-     * @extends enchant.Group
-     [/lang]
-     [lang:en]
-     * Class that becomes route for display object tree.
-     *
-     * @example
-     *   var scene = new Scene();
-     *   scene.addChild(player);
-     *   scene.addChild(enemy);
-     *   game.pushScene(scene);
-     *
-     * @constructs
-     * @extends enchant.Group
-     [/lang]
-     */
+	/**
+    [lang:ja]
+    * 表示オブジェクトツリーのルートになるクラス.
+    [/lang]
+    [lang:en]
+    * Class that becomes the root of an object tree which can be displayed.
+    [/lang]
+    [lang:de]
+    * Eine Klasse die zur Wurzel in Objektbaum wird, welcher dargestellt werden kann.
+    [/lang]
+    *
+    * @example
+    *   var scene = new DOMScene();
+    *   scene.addChild(player);
+    *   scene.addChild(enemy);
+    *   game.pushScene(scene);
+    *
+    * @constructs
+    * @extends enchant.Group
+    */
     initialize: function() {
         var game = enchant.Game.instance;
 
@@ -180,17 +169,22 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 
     },
     /**
-     [lang:ja]
-     * Sceneの背景色.
-     * CSSの'color'プロパティと同様の形式で指定できる.
-     * @type {String}
-     [/lang]
-     [lang:en]
-     * Scene background color.
-     * Can indicate same format as CSS 'color' property.
-     * @type {String}
-     [/lang]
-     */
+    [lang:ja]
+    * Sceneの背景色.
+    * CSSの'color'プロパティと同様の形式で指定できる.
+    * @type {String}
+    [/lang]
+    [lang:en]
+    * Scene background color.
+    * Must be provided in the same format as the CSS 'color' property.
+    * @type {String}
+    [/lang]
+    [lang:de]
+    * Die Hintergrundfarbe der Szene.
+    * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
+    * @type {String}
+    [/lang]
+    */
     backgroundColor: {
         get: function() {
             return this._backgroundColor;

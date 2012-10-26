@@ -88,6 +88,21 @@ if (typeof Function.prototype.bind !== 'function') {
  *
  * @param {...String} [modules] Export module. Multiple designations possible.
  [/lang]
+ [lang:de]
+ * Globaler Export der Programmbibliotheken.
+ *
+ * Wenn keine Argument übergeben werden, werden alle Klassen die in enchant.js und in den Plugins
+ * definiert sind exportiert. Falls mehr als ein Argument übergeben wurde, werden standardmäßig nur Klassen
+ * die in enchant.js selbst definiert sind exporitert. Wenn auch Plugin Klassen exportiert werden sollen,
+ * müssen die Plugin Bezeichner explizit als Argumente übergeben werden.
+ *
+ * @example
+ *   enchant();     // alle Klassen werden exportiert.
+ *   enchant('');   // nur Klassen die in enchant.js definiert sind werden exportiert.
+ *   enchant('ui'); // enchant.js Klassen und ui.enchant.js Klassen werden exportiert.
+ *
+ * @param {...String} [modules] Module die exportiert werden sollen.
+ [/lang]
  */
 var enchant = function(modules) {
     if (modules != null) {

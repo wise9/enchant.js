@@ -1,19 +1,27 @@
 /**
- * @scope enchant.Scene.prototype
+ * @scope enchant.DOMScene.prototype
  */
 enchant.DOMScene = enchant.Class.create(enchant.Group, {
-    /**
-     * Class that becomes route for display object tree.
-     *
-     * @example
-     *   var scene = new Scene();
-     *   scene.addChild(player);
-     *   scene.addChild(enemy);
-     *   game.pushScene(scene);
-     *
-     * @constructs
-     * @extends enchant.Group
-     */
+	/**
+    [lang:ja]
+    * 表示オブジェクトツリーのルートになるクラス.
+    [/lang]
+    [lang:en]
+    * Class that becomes the root of an object tree which can be displayed.
+    [/lang]
+    [lang:de]
+    * Eine Klasse die zur Wurzel in Objektbaum wird, welcher dargestellt werden kann.
+    [/lang]
+    *
+    * @example
+    *   var scene = new DOMScene();
+    *   scene.addChild(player);
+    *   scene.addChild(enemy);
+    *   game.pushScene(scene);
+    *
+    * @constructs
+    * @extends enchant.Group
+    */
     initialize: function() {
         enchant.Group.call(this);
 
@@ -92,10 +100,22 @@ enchant.DOMScene = enchant.Class.create(enchant.Group, {
         }
     },
     /**
-     * Scene background color.
-     * Can indicate same format as CSS 'color' property.
-     * @type {String}
-     */
+    [lang:ja]
+    * DOMSceneの背景色.
+    * CSSの'color'プロパティと同様の形式で指定できる.
+    * @type {String}
+    [/lang]
+    [lang:en]
+    * DOMScene background color.
+    * Must be provided in the same format as the CSS 'color' property.
+    * @type {String}
+    [/lang]
+    [lang:de]
+    * Die Hintergrundfarbe der DOM Szene.
+    * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
+    * @type {String}
+    [/lang]
+    */
     backgroundColor: {
         get: function() {
             return this._backgroundColor;
