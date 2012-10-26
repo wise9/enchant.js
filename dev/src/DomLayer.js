@@ -74,6 +74,14 @@
         },
         _stopRendering: function() {
             enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
+        },
+        _determineEventTarget: function() {
+            if (this._touchEventTarget) {
+                if (this._touchEventTarget !== this) {
+                    return this._touchEventTarget;
+                }
+            }
+            return null;
         }
     });
 
