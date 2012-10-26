@@ -430,6 +430,51 @@
                         }
                     }
                 }, true);
+                game._touchEventTarget = null;
+                var _ontouchstart = function(e) {
+                    var game = enchant.Game.instance;
+                    var currentScene = game.currentScene;
+                    var layer, target;
+                    for (var i = currentScene._layerPriority.length - 1; i >= 0; i--) {
+                        layer = currentScene._layers[currentScene._layerPriority[i]];
+                        target = layer._determineEventTarget(e);
+                        if (target) {
+                            break;
+                        }
+                    }
+                    if (!target) {
+                        target = currentScene;
+                    }
+                    game._touchEventTarget = target;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                    evt._initPosition(e.x, e.y);
+                    target.dispatchEvent(evt);
+                };
+                var _ontouchmove = function(e) {
+                    var evt;
+                    if (game._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        evt._initPosition(e.x, e.y);
+                        game._touchEventTarget.dispatchEvent(evt);
+                    }
+                };
+                var _ontouchend = function(e) {
+                    var evt;
+                    if (game._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        evt._initPosition(e.x, e.y);
+                        game._touchEventTarget.dispatchEvent(evt);
+                        game._touchEventTarget = null;
+                    }
+                };
+                if (enchant.ENV.TOUCH_ENABLED) {
+                    stage.addEventListener('touchdown', _ontouchstart, false);
+                    stage.addEventListener('touchmove', _ontouchmove, false);
+                    stage.addEventListener('touchup', _ontouchend, false);
+                }
+                stage.addEventListener('mousedown', _ontouchstart, false);
+                stage.addEventListener('mousemove', _ontouchmove, false);
+                stage.addEventListener('mouseup', _ontouchend, false);
             }
         },
         /**
