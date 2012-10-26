@@ -73,7 +73,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:42
+		Generated on: 2012-9-26 18:35
 	</div>
 </div>
 
@@ -152,7 +152,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#assets">assets</a></b>
 										</div>
-										<div class="description">Object saved as loaded image path key.</div>
+										<div class="description">Loaded Objects are stored with the path as key in this Objekt.</div>
 									</td>
 								</tr>
 							
@@ -162,7 +162,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#currentScene">currentScene</a></b>
 										</div>
-										<div class="description">Current Scene.</div>
+										<div class="description">The current Scene displayed.</div>
 									</td>
 								</tr>
 							
@@ -182,7 +182,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#frame">frame</a></b>
 										</div>
-										<div class="description">Number of frames from game start.</div>
+										<div class="description">Number of frames since the game start.</div>
 									</td>
 								</tr>
 							
@@ -202,7 +202,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#input">input</a></b>
 										</div>
-										<div class="description">Object that saves input conditions for game.</div>
+										<div class="description">Object that saves the current input state for the game.</div>
 									</td>
 								</tr>
 							
@@ -212,7 +212,7 @@
 										<div class="fixedFont">
 										enchant.Game.<b><a href="../symbols/enchant.Game.html#.instance">instance</a></b>
 										</div>
-										<div class="description">Current Game instance.</div>
+										<div class="description">The Current Game instance.</div>
 									</td>
 								</tr>
 							
@@ -222,7 +222,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#loadingScene">loadingScene</a></b>
 										</div>
-										<div class="description">Scene displayed during loading.</div>
+										<div class="description">The Scene displayed during loading.</div>
 									</td>
 								</tr>
 							
@@ -232,7 +232,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#ready">ready</a></b>
 										</div>
-										<div class="description">Game executability (valid or not).</div>
+										<div class="description">Indicates if the game can be executed.</div>
 									</td>
 								</tr>
 							
@@ -242,7 +242,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#rootScene">rootScene</a></b>
 										</div>
-										<div class="description">Route Scene.</div>
+										<div class="description">The Route Scene.</div>
 									</td>
 								</tr>
 							
@@ -252,7 +252,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Game.html#running">running</a></b>
 										</div>
-										<div class="description">Game execution state (valid or not).</div>
+										<div class="description">Indicates if the game is currently executed.</div>
 									</td>
 								</tr>
 							
@@ -326,7 +326,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont">enchant.Game.<b><a href="../symbols/enchant.Game.html#.findExt">findExt</a></b>(path)
 										</div>
-										<div class="description">find extension from path</div>
+										<div class="description">Get the file extension from a path</div>
 									</td>
 								</tr>
 							
@@ -337,7 +337,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#getElapsedTime">getElapsedTime</a></b>()
 										</div>
-										<div class="description">get elapsed time (in game, not actual) from game.start is called</div>
+										<div class="description">Get the elapsed game time (not actual) from when game.start was called.</div>
 									</td>
 								</tr>
 							
@@ -348,7 +348,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#keybind">keybind</a></b>(key, button)
 										</div>
-										<div class="description">Set key binding.</div>
+										<div class="description">Set a key binding.</div>
 									</td>
 								</tr>
 							
@@ -370,7 +370,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#pause">pause</a></b>()
 										</div>
-										<div class="description">Stops game.</div>
+										<div class="description">Stops the game.</div>
 									</td>
 								</tr>
 							
@@ -381,7 +381,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#popScene">popScene</a></b>()
 										</div>
-										<div class="description">End current Scene, return to previous Scene.</div>
+										<div class="description">Ends the current Scene, return to the previous Scene.</div>
 									</td>
 								</tr>
 							
@@ -403,7 +403,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#pushScene">pushScene</a></b>(scene)
 										</div>
-										<div class="description">Switch to new Scene.</div>
+										<div class="description">Switch to a new Scene.</div>
 									</td>
 								</tr>
 							
@@ -414,7 +414,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#removeScene">removeScene</a></b>(scene)
 										</div>
-										<div class="description">Delete Scene.</div>
+										<div class="description">Removes a Scene.</div>
 									</td>
 								</tr>
 							
@@ -425,7 +425,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#replaceScene">replaceScene</a></b>(scene)
 										</div>
-										<div class="description">Overwrite current Scene with separate Scene.</div>
+										<div class="description">Overwrites the current Scene with a new Scene.</div>
 									</td>
 								</tr>
 							
@@ -436,7 +436,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#resume">resume</a></b>()
 										</div>
-										<div class="description">Resumes game.</div>
+										<div class="description">Resumes the game.</div>
 									</td>
 								</tr>
 							
@@ -447,7 +447,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#start">start</a></b>()
 										</div>
-										<div class="description">Begin game.</div>
+										<div class="description">Start the game.</div>
 									</td>
 								</tr>
 							
@@ -458,7 +458,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Game.html#stop">stop</a></b>()
 										</div>
-										<div class="description">Stops game.</div>
+										<div class="description">Stops the game.</div>
 									</td>
 								</tr>
 							
@@ -497,7 +497,7 @@
 
 There can be only one instance, and when the constructor is executed
 with an instance present, the existing item will be overwritten. The existing instance
-can be accessed from enchant.Game.instance.
+can be accessed from <a href="../symbols/enchant.Game.html#.instance">enchant.Game.instance</a>.
 						
 					</div>
 					
@@ -548,7 +548,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Object saved as loaded image path key.
+							Loaded Objects are stored with the path as key in this Objekt.
 							
 							
 							
@@ -570,7 +570,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Current Scene. Scene at top of Scene stack.
+							The current Scene displayed. Scene at top of Scene stack.
 							
 							
 							
@@ -614,7 +614,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Number of frames from game start.
+							Number of frames since the game start.
 							
 							
 							
@@ -658,7 +658,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Object that saves input conditions for game.
+							Object that saves the current input state for the game.
 							
 							
 							
@@ -680,7 +680,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Current Game instance.
+							The Current Game instance.
 							
 							
 							
@@ -702,7 +702,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Scene displayed during loading.
+							The Scene displayed during loading.
 							
 							
 							
@@ -724,7 +724,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Game executability (valid or not).
+							Indicates if the game can be executed.
 							
 							
 							
@@ -746,7 +746,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Route Scene. Scene at bottom of Scene stack.
+							The Route Scene. The Scene at bottom of Scene stack.
 							
 							
 							
@@ -768,7 +768,7 @@ can be accessed from enchant.Game.instance.
 						</div>
 						
 						<div class="description">
-							Game execution state (valid or not).
+							Indicates if the game is currently executed.
 							
 							
 							
@@ -855,7 +855,8 @@ can be accessed from enchant.Game.instance.
 								<div class="description">
 									Begin game debug mode.
 
-Game debug mode can be set to on even if enchant.Game.instance._debug flag is set to true.
+Game debug mode can be set to on even if enchant.Game.instance._debug
+flag is already set to true.
 									
 									
 									
@@ -884,7 +885,7 @@ Game debug mode can be set to on even if enchant.Game.instance._debug flag is se
 								</div>
 								
 								<div class="description">
-									find extension from path
+									Get the file extension from a path
 									
 									
 									
@@ -945,7 +946,7 @@ Game debug mode can be set to on even if enchant.Game.instance._debug flag is se
 								</div>
 								
 								<div class="description">
-									get elapsed time (in game, not actual) from game.start is called
+									Get the elapsed game time (not actual) from when game.start was called.
 									
 									
 									
@@ -968,7 +969,7 @@ Game debug mode can be set to on even if enchant.Game.instance._debug flag is se
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{Number}</span> elapsed time (seconds)</dd>
+												<dd><span class="light fixedFont">{Number}</span> The elapsed time (seconds)</dd>
 											
 										
 										
@@ -995,9 +996,9 @@ Game debug mode can be set to on even if enchant.Game.instance._debug flag is se
 								</div>
 								
 								<div class="description">
-									Set key binding.
+									Set a key binding.
 
-Assigns key input to left, right, up, down, a, b button input.
+Maps an input key to an enchant.js left, right, up, down, a, b button.
 									
 									
 									
@@ -1014,13 +1015,13 @@ Assigns key input to left, right, up, down, a, b button input.
 												<span class="light fixedFont">{Number}</span> <b>key</b>
 												
 											</dt>
-											<dd>Key code that sets key bind.</dd>
+											<dd>Key code for the button which will be bound.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{String}</span> <b>button</b>
 												
 											</dt>
-											<dd>Assign button.</dd>
+											<dd>The enchant.js button (left, right, up, down, a, b).</dd>
 										
 									</dl>
 								
@@ -1060,7 +1061,7 @@ Assigns key input to left, right, up, down, a, b button input.
 												<span class="light fixedFont">{String}</span> <b>asset</b>
 												
 											</dt>
-											<dd>Load file path.</dd>
+											<dd>File path of the resource to be loaded.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Function}</span> <b>callback</b>
@@ -1089,10 +1090,10 @@ Assigns key input to left, right, up, down, a, b button input.
 								</div>
 								
 								<div class="description">
-									Stops game.
+									Stops the game.
 
-The frame will not be updated, and player input will not be accepted.
-Game can be reopened in enchant.Game#start.
+The frame will not be updated, and player input will not be accepted anymore.
+Game can be started again using <a href="../symbols/enchant.Game.html#start">enchant.Game#start</a>.
 									
 									
 									
@@ -1121,10 +1122,11 @@ Game can be reopened in enchant.Game#start.
 								</div>
 								
 								<div class="description">
-									End current Scene, return to previous Scene.
+									Ends the current Scene, return to the previous Scene.
 
-Scene is controlled in stack, with display order obeying stack order.
-When enchant.Game#popScene is activated, the Scene at the top of the stack can be pulled out.
+Scenes are controlled using a stack, and the display order also obeys that stack order.
+When <a href="../symbols/enchant.Game.html#popScene">enchant.Game#popScene</a> is executed, the Scene at the top of the stack
+will be removed and returned.
 									
 									
 									
@@ -1176,14 +1178,15 @@ When enchant.Game#popScene is activated, the Scene at the top of the stack can b
 								<div class="description">
 									Performs file preload.
 
-enchant is a file set to execute preload. It is loaded when
-Game#start is activated. When all files are loaded, load events are activated
-from Game objects. When an image file is from Game object assets properties,
-it will as a Surface object, or a Sound object for sound files,
-and in other cases it will be accessible as string.
+Sets files which are to be preloaded. When <a href="../symbols/enchant.Game.html#start">enchant.Game#start</a> is called the 
+actual loading takes place. When all files are loaded, a <a href="../symbols/enchant.Event.html#.LOAD">enchant.Event.LOAD</a> event
+is dispatched from the Game object. Depending on the type of the file different objects will be 
+created and stored in <a href="../symbols/enchant.Game.html#assets">enchant.Game#assets</a> Variable. 
+When an image file is loaded, an <a href="../symbols/enchant.Surface.html">enchant.Surface</a> is created. If a sound file is loaded, an
+<a href="../symbols/enchant.Sound.html">enchant.Sound</a> object is created. Otherwise it will be accessible as a string.
 
-In addition, because this Surface object used made with enchant.Surface.load,
-direct object manipulation is not possible. Refer to the items of enchant.Surface.load
+In addition, because this Surface object used made with <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>,
+direct object manipulation is not possible. Refer to the items of <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>
 									
 									
 									
@@ -1210,7 +1213,7 @@ direct object manipulation is not possible. Refer to the items of enchant.Surfac
 												<span class="light fixedFont">{...String}</span> <b>assets</b>
 												
 											</dt>
-											<dd>Preload image path. Multiple settings possible.</dd>
+											<dd>Path of images to be preloaded. Multiple settings possible.</dd>
 										
 									</dl>
 								
@@ -1233,11 +1236,11 @@ direct object manipulation is not possible. Refer to the items of enchant.Surfac
 								</div>
 								
 								<div class="description">
-									Switch to new Scene.
+									Switch to a new Scene.
 
-Scene is controlled in stack, and the display order also obeys stack order.
-When enchant.Game#pushScene is executed, Scene can be brought to the top of stack.
-Frame will be updated to reflect Scene at the top of stack.
+Scenes are controlled using a stack, and the display order also obeys that stack order.
+When <a href="../symbols/enchant.Game.html#pushScene">enchant.Game#pushScene</a> is executed, the Scene can be brought to the top of stack.
+Frames will be updated in the Scene which is on the top of the stack.
 									
 									
 									
@@ -1254,7 +1257,7 @@ Frame will be updated to reflect Scene at the top of stack.
 												<span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> <b>scene</b>
 												
 											</dt>
-											<dd>Switch to new Scene.</dd>
+											<dd>The new scene to be switched to.</dd>
 										
 									</dl>
 								
@@ -1271,7 +1274,7 @@ Frame will be updated to reflect Scene at the top of stack.
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> New Scene.</dd>
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> The new Scene.</dd>
 											
 										
 										
@@ -1298,9 +1301,9 @@ Frame will be updated to reflect Scene at the top of stack.
 								</div>
 								
 								<div class="description">
-									Delete Scene.
+									Removes a Scene.
 
-Deletes Scene from Scene stack.
+Removes a Scene from the Scene stack.
 									
 									
 									
@@ -1317,7 +1320,7 @@ Deletes Scene from Scene stack.
 												<span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> <b>scene</b>
 												
 											</dt>
-											<dd>Delete Scene.</dd>
+											<dd>Scene to be removed.</dd>
 										
 									</dl>
 								
@@ -1334,7 +1337,7 @@ Deletes Scene from Scene stack.
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> Deleted Scene.</dd>
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> The deleted Scene.</dd>
 											
 										
 										
@@ -1361,9 +1364,10 @@ Deletes Scene from Scene stack.
 								</div>
 								
 								<div class="description">
-									Overwrite current Scene with separate Scene.
+									Overwrites the current Scene with a new Scene.
 
-enchant.Game#popScene, enchant.Game#pushScene are enacted simultaneously.
+<a href="../symbols/enchant.Game.html#popScene">enchant.Game#popScene</a>, <a href="../symbols/enchant.Game.html#pushScene">enchant.Game#pushScene</a> are executed after
+each other to replace to current scene with the new scene.
 									
 									
 									
@@ -1380,7 +1384,7 @@ enchant.Game#popScene, enchant.Game#pushScene are enacted simultaneously.
 												<span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> <b>scene</b>
 												
 											</dt>
-											<dd>Replace Scene.</dd>
+											<dd>The new scene which will replace the previous scene.</dd>
 										
 									</dl>
 								
@@ -1397,7 +1401,7 @@ enchant.Game#popScene, enchant.Game#pushScene are enacted simultaneously.
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> New Scene.</dd>
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> The new Scene.</dd>
 											
 										
 										
@@ -1424,7 +1428,7 @@ enchant.Game#popScene, enchant.Game#pushScene are enacted simultaneously.
 								</div>
 								
 								<div class="description">
-									Resumes game.
+									Resumes the game.
 									
 									
 									
@@ -1453,10 +1457,10 @@ enchant.Game#popScene, enchant.Game#pushScene are enacted simultaneously.
 								</div>
 								
 								<div class="description">
-									Begin game.
+									Start the game.
 
-Obeying the frame rate set in enchant.Game#fps, the frame in
-enchant.Game#currentScene will be updated. When a preloaded image is present,
+Obeying the frame rate set in <a href="../symbols/enchant.Game.html#fps">enchant.Game#fps</a>, the frame in
+<a href="../symbols/enchant.Game.html#currentScene">enchant.Game#currentScene</a> will be updated. When images to preload are present,
 loading will begin and the loading screen will be displayed.
 									
 									
@@ -1486,10 +1490,10 @@ loading will begin and the loading screen will be displayed.
 								</div>
 								
 								<div class="description">
-									Stops game.
+									Stops the game.
 
-The frame will not be updated, and player input will not be accepted.
-Game can be reopened in enchant.Game#start.
+The frame will not be updated, and player input will not be accepted anymore.
+Game can be restarted using <a href="../symbols/enchant.Game.html#start">enchant.Game#start</a>.
 									
 									
 									

@@ -1,15 +1,10 @@
 /**
- [lang:ja]
  * @scope enchant.Group.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Group.prototype
- [/lang]
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
-     * 複数のNodeを子に持つことができるクラス.
+     * 複数の{@link enchant.Node}を子に持つことができるクラス.
      *
      * @example
      *   var stage = new Group();
@@ -23,11 +18,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      *      }
      *   });
      *
-     * @constructs
      * @extends enchant.Node
      [/lang]
      [lang:en]
-     * A class that can hold multiple Nodes.
+     * A class that can hold multiple {@link enchant.Node}.
      *
      * @example
      *   var stage = new Group();
@@ -35,15 +29,31 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      *   stage.addChild(enemy);
      *   stage.addChild(map);
      *   stage.addEventListener('enterframe', function() {
-     *      // Scrolls entire frame in response to player's coordinates.
+     *      // Moves the entire frame in according to the player's coordinates.
      *      if (this.x > 64 - player.x) {
      *          this.x = 64 - player.x;
      *      }
      *   });
      *
+     [/lang]
+     [lang:de]
+     * Eine Klasse die mehrere {@link enchant.Node} beinhalten kann.
+     *
+     * @example
+     *   var stage = new Group();
+     *   stage.addChild(player);
+     *   stage.addChild(enemy);
+     *   stage.addChild(map);
+     *   stage.addEventListener('enterframe', function() {
+     *      // Bewegt den gesamten Frame je nach der aktuelle Spielerposition.
+     *      if (this.x > 64 - player.x) {
+     *          this.x = 64 - player.x;
+     *      }
+     *   });
+     *
+     [/lang]
      * @constructs
      * @extends enchant.Node
-     [/lang]
      */
     initialize: function() {
         enchant.Node.call(this);
@@ -51,12 +61,14 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         /**
          [lang:ja]
          * 子のNode.
-         * @type {Array.<enchant.Node>}
          [/lang]
          [lang:en]
-         * Child Node.
-         * @type {Array.<enchant.Node>}
+         * Child Nodes.
          [/lang]
+         [lang:de]
+         * Kind-Nodes.
+         [/lang]
+         * @type {Array.<enchant.Node>}
          */
         this.childNodes = [];
 
@@ -83,8 +95,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * @param {enchant.Node} node 追加するNode.
      [/lang]
      [lang:en]
-     * Adds Node to Group.
-     * @param {enchant.Node} node Added Node.
+     * Adds a Node to the Group.
+     * @param {enchant.Node} node Node to be added.
+     [/lang]
+     [lang:de]
+     * Fügt einen Node zu der Gruppe hinzu.
+     * @param {enchant.Node} node Node der hinzugeügt werden soll.
      [/lang]
      */
     addChild: function(node) {
@@ -109,8 +125,13 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * Incorporates Node into Group.
-     * @param {enchant.Node} node Incorporated Node.
-     * @param {enchant.Node} reference Node in position before incorporation.
+     * @param {enchant.Node} node Node to be incorporated.
+     * @param {enchant.Node} reference Node in position before insertion.
+     [/lang]
+     [lang:de]
+     * Fügt einen Node vor einen anderen Node zu dieser Gruppe hinzu.
+     * @param {enchant.Node} node Der Node der hinzugefügt werden soll.
+     * @param {enchant.Node} reference Der Node der sich vor dem einzufügendem Node befindet.
      [/lang]
      */
     insertBefore: function(node, reference) {
@@ -138,8 +159,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * @param {enchant.Node} node 削除するNode.
      [/lang]
      [lang:en]
-     * Delete Node from Group.
-     * @param {enchant.Node} node Deleted Node.
+     * Remove a Node from the Group.
+     * @param {enchant.Node} node Node to be deleted.
+     [/lang]
+     [lang:de]
+     * Entfernt einen Node aus der Gruppe.
+     * @param {enchant.Node} node Der Node der entfernt werden soll.
      [/lang]
      */
     removeChild: function(node) {
@@ -161,12 +186,14 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * 最初の子Node.
-     * @type {enchant.Node}
      [/lang]
      [lang:en]
-     * First child Node.
-     * @type {enchant.Node}
+     * The Node which is the first child.
      [/lang]
+     [lang:de]
+     * Der Node, welcher das erste Kind der Gruppe darstellt.
+     [/lang]
+     * @type {enchant.Node}
      */
     firstChild: {
         get: function() {
@@ -176,12 +203,14 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * 最後の子Node.
-     * @type {enchant.Node}
      [/lang]
      [lang:en]
-     * Last child Node.
-     * @type {enchant.Node}
+     * The Node which is the last child.
      [/lang]
+     [lang:de]
+     * Der Node, welcher das letzte Kind der Gruppe darstellt.
+     [/lang]
+     * @type {enchant.Node}
      */
     lastChild: {
         get: function() {
@@ -202,9 +231,17 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         this._dirty = true;
     },
     /**
-     * rotation of group
-     * @type {Number}
-     */
+    [lang:ja]
+    * Groupの回転角 (度数法).
+    [/lang]
+    [lang:en]
+    * Group rotation angle (degree).
+    [/lang]
+    [lang:de]
+    * Rotationswinkel der Gruppe (Grad).
+    [/lang]
+    * @type {Number}
+    */
     rotation: {
         get: function() {
             return this._rotation;
@@ -215,11 +252,19 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * scaling of group in the direction of x axis
-     * @see enchant.CanvasGroup.originX
-     * @see enchant.CanvasGroup.originY
-     * @type {Number}
-     */
+    [lang:ja]
+    * Groupのx軸方向の倍率.
+    [/lang]
+    [lang:en]
+    * Scaling factor on the x axis of the Group.
+    [/lang]
+    [lang:de]
+    * Skalierungsfaktor auf der x-Achse der Gruppe.
+    [/lang]
+    * @type {Number}
+    * @see enchant.CanvasGroup.originX
+    * @see enchant.CanvasGroup.originY
+    */
     scaleX: {
         get: function() {
             return this._scaleX;
@@ -230,11 +275,19 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * scaling of group in the direction of y axis
-     * @see enchant.CanvasGroup.originX
-     * @see enchant.CanvasGroup.originY
-     * @type {Number}
-     */
+    [lang:ja]
+    * Groupのy軸方向の倍率.
+    [/lang]
+    [lang:en]
+    * Scaling factor on the y axis of the Group.
+    [/lang]
+    [lang:de]
+    * Skalierungsfaktor auf der y-Achse der Gruppe.
+    [/lang]
+    * @type {Number}
+    * @see enchant.CanvasGroup.originX
+    * @see enchant.CanvasGroup.originY
+    */
     scaleY: {
         get: function() {
             return this._scaleY;
@@ -245,9 +298,17 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * origin point of rotation, scaling
-     * @type {Number}
-     */
+    [lang:ja]
+    * 回転・拡大縮小の基準点のX座標
+    [/lang]
+    [lang:en]
+    * origin point of rotation, scaling
+    [/lang]
+    [lang:de]
+    * Ausgangspunkt für Rotation und Skalierung.
+    [/lang]
+    * @type {Number}
+    */
     originX: {
         get: function() {
             return this._originX;
@@ -258,9 +319,17 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * origin point of rotation, scaling
-     * @type {Number}
-     */
+    [lang:ja]
+    * 回転・拡大縮小の基準点のX座標
+    [/lang]
+    [lang:en]
+    * origin point of rotation, scaling
+    [/lang]
+    [lang:de]
+    * Ausgangspunkt für Rotation und Skalierung.
+    [/lang]
+    * @type {Number}
+    */
     originY: {
         get: function() {
             return this._originY;

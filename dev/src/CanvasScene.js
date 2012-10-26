@@ -3,26 +3,46 @@
  */
 enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     /**
-     * Class that becomes route for display object tree.
+     [lang:ja]
+     * 表示オブジェクトツリーのルートになるクラス.
+     [/lang]
+     [lang:en]
+     * Class that becomes the root of an object tree which can be displayed.
+     [/lang]
+     [lang:de]
+     * Eine Klasse die zur Wurzel in Objektbaum wird, welcher dargestellt werden kann.
+     [/lang]
      *
      * @example
-     *   var scene = new Scene();
+     *   var scene = new CanvasScene();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
      *   game.pushScene(scene);
      *
      * @constructs
-     * @extends enchant.Group
+     * @extends enchant.CanvasGroup
      */
     initialize: function() {
         enchant.CanvasGroup.call(this);
         this.scene = this;
     },
     /**
-     * Scene background color.
-     * Can indicate same format as CSS 'color' property.
-     * @type {String}
-     */
+    [lang:ja]
+    * CanvasSceneの背景色.
+    * CSSの'color'プロパティと同様の形式で指定できる.
+    * @type {String}
+    [/lang]
+    [lang:en]
+    * CanvasScene background color.
+    * Must be provided in the same format as the CSS 'color' property.
+    * @type {String}
+    [/lang]
+    [lang:de]
+    * Die Hintergrundfarbe der Canvas Szene.
+    * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
+    * @type {String}
+    [/lang]
+    */
     backgroundColor: {
         get: function() {
             return this._backgroundColor;

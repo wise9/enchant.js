@@ -254,8 +254,6 @@ enchant.Class.create = function(superclass, definition) {
 /**
  * 環境変数
  * @type {Object}
- * Environment variable
- * @type {Object}
  */
 enchant.ENV = {
     /**
@@ -382,7 +380,7 @@ enchant.Event = enchant.Class.create({
  * Gameのロード完了時に発生するイベント.
  *
  * 画像のプリロードを行う場合ロードが完了するのを待ってゲーム開始時の処理を行う必要がある.
- * 発行するオブジェクト: enchant.Game
+ * 発行するオブジェクト: {@link enchant.Game}
  *
  * @example
  *   var game = new Game(320, 320);
@@ -398,91 +396,92 @@ enchant.Event.LOAD = 'load';
 
 /**
  * Gameのロード進行中に発生するイベント.
- * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: enchant.Game
+ * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.Game}
  * @type {String}
  */
 enchant.Event.PROGRESS = 'progress';
 
 /**
  * フレーム開始時に発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Node
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
 
 /**
  * フレーム終了時に発生するイベント.
- * 発行するオブジェクト: enchant.Game
+ * 発行するオブジェクト: {@link enchant.Game}
  * @type {String}
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
 
 /**
  * Sceneが開始したとき発生するイベント.
- * 発行するオブジェクト: enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.ENTER = 'enter';
 
 /**
  * Sceneが終了したとき発生するイベント.
- * 発行するオブジェクト: enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.EXIT = 'exit';
 
 /**
  * Nodeに子が追加されたとき発生するイベント.
- * 発行するオブジェクト: enchant.Group, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Group}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.CHILD_ADDED = 'childadded';
 
 /**
  * NodeがGroupに追加されたとき発生するイベント.
- * 発行するオブジェクト: enchant.Node
+ * 発行するオブジェクト: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ADDED = 'added';
 
 /**
  * NodeがSceneに追加されたとき発生するイベント.
- * 発行するオブジェクト: enchant.Node
+ * 発行するオブジェクト: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
 
 /**
  * Nodeから子が削除されたとき発生するイベント.
- * 発行するオブジェクト: enchant.Group, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Group}, {@link enchant.Scene}
+ * @type {String}
  * @type {String}
  */
 enchant.Event.CHILD_REMOVED = 'childremoved';
 
 /**
  * NodeがGroupから削除されたとき発生するイベント.
- * 発行するオブジェクト: enchant.Node
+ * 発行するオブジェクト: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.REMOVED = 'removed';
 
 /**
  * NodeがSceneから削除されたとき発生するイベント.
- * 発行するオブジェクト: enchant.Node
+ * 発行するオブジェクト: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
 
 /**
  * Nodeに対するタッチが始まったとき発生するイベント.
- * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
+ * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.TOUCH_START = 'touchstart';
 
 /**
  * Nodeに対するタッチが移動したとき発生するイベント.
- * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
+ * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.TOUCH_MOVE = 'touchmove';
@@ -496,112 +495,112 @@ enchant.Event.TOUCH_END = 'touchend';
 
 /**
  * Entityがレンダリングされるときに発生するイベント.
- * 発行するオブジェクト: enchant.Entity
+ * 発行するオブジェクト: {@link enchant.Entity}
  * @type {String}
  */
 enchant.Event.RENDER = 'render';
 
 /**
  * ボタン入力が始まったとき発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_START = 'inputstart';
 
 /**
  * ボタン入力が変化したとき発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
  * ボタン入力が終了したとき発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_END = 'inputend';
 
 /**
  * leftボタンが押された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
 
 /**
  * leftボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
 
 /**
  * rightボタンが押された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
 
 /**
  * rightボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
 
 /**
  * upボタンが押された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
 
 /**
  * upボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.UP_BUTTON_UP = 'upbuttonup';
 
 /**
  * downボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 
 /**
  * downボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 /**
  * aボタンが押された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
  * aボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
 /**
  * bボタンが押された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
 /**
  * bボタンが離された発生するイベント.
- * 発行するオブジェクト: enchant.Game, enchant.Scene
+ * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
@@ -634,8 +633,9 @@ enchant.EventTarget = enchant.Class.create({
     },
     /**
      * Synonym for addEventListener
+     * @see {enchant.EventTarget#addEventListener}
      * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener added.
+     * @param {function(e:enchant.Event)} listener EventListener to be added.
      */
     on: function() {
         this.addEventListener.apply(this, arguments);
@@ -656,7 +656,7 @@ enchant.EventTarget = enchant.Class.create({
     },
     /**
      * すべてのイベントリスナを削除する.
-     * @param {String} type イベントのタイプ.
+     * @param [String] type イベントのタイプ.
      */
     clearEventListener: function(type) {
         if (type != null) {
@@ -689,7 +689,6 @@ enchant.EventTarget = enchant.Class.create({
 /**
  * @scope enchant.Game.prototype
  */
-
 (function() {
     var game;
 
@@ -702,7 +701,7 @@ enchant.EventTarget = enchant.Class.create({
          *
          * インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
          * コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
-         * enchant.Game.instanceからアクセスできる.
+         * {@link enchant.Game.instance}からアクセスできる.
          *
          * @param {Number} width ゲーム画面の横幅.
          * @param {Number} height ゲーム画面の高さ.
@@ -1004,14 +1003,14 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * ファイルのプリロードを行う.
          *
-         * プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
-         * ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
-         * イベントが発行され, Gameオブジェクトのassetsプロパティから画像ファイルの場合は
-         * Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジェクトとして,
+         * プリロードを行うよう設定されたファイルは{@link enchant.Game#start}が実行されるとき
+         * ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトから{@link enchant.Event.LOAD}
+         * イベントが発行され, Gameオブジェクトの{@link enchant.Game#assets}プロパティから画像ファイルの場合は
+         * {@link enchant.Surface}オブジェクトとして, 音声ファイルの場合は{@link enchant.Sound}オブジェクトとして,
          * その他の場合は文字列としてアクセスできるようになる.
          *
-         * なおこのSurfaceオブジェクトはenchant.Surface.loadを使って作成されたものである
-         * ため直接画像操作を行うことはできない. enchant.Surface.loadの項を参照.
+         * なおこのSurfaceオブジェクトは{@link enchant.Surface.load}を使って作成されたものである
+         * ため直接画像操作を行うことはできない. {@link enchant.Surface.load}の項を参照.
          *
          * @example
          *   game.preload('player.gif');
@@ -1180,7 +1179,7 @@ enchant.EventTarget = enchant.Class.create({
          * ゲームを停止する.
          *
          * フレームは更新されず, プレイヤーの入力も受け付けなくなる.
-         * enchant.Game#startで再開できる.
+         * {@link enchant.Game#start}で再開できる.
          */
         stop: function() {
             if (this._intervalID) {
@@ -1193,7 +1192,7 @@ enchant.EventTarget = enchant.Class.create({
          * ゲームを一時停止する.
          *
          * フレームは更新されず, プレイヤーの入力は受け付ける.
-         * enchant.Game#startで再開できる.
+         * {@link enchant.Game#start}で再開できる.
          */
         pause: function() {
             if (this._intervalID) {
@@ -1219,7 +1218,7 @@ enchant.EventTarget = enchant.Class.create({
          * 新しいSceneに移行する.
          *
          * Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
-         * enchant.Game#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
+         * {@link enchant.Game#pushScene}を行うとSceneをスタックの一番上に積むことができる. スタックの
          * 一番上のSceneに対してはフレームの更新が行われる.
          *
          * @param {enchant.Scene} scene 移行する新しいScene.
@@ -1238,7 +1237,7 @@ enchant.EventTarget = enchant.Class.create({
          * 現在のSceneを終了させ前のSceneに戻る.
          *
          * Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
-         * enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出すことができる.
+         * {@link enchant.Game#popScene}を行うとスタックの一番上のSceneを取り出すことができる.
          *
          * @return {enchant.Scene} 終了させたScene.
          */
@@ -1255,7 +1254,7 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * 現在のSceneを別のSceneにおきかえる.
          *
-         * enchant.Game#popScene, enchant.Game#pushSceneを同時に行う.
+         * {@link enchant.Game#popScene}, {@link enchant.Game#pushScene}を同時に行う.
          *
          * @param {enchant.Scene} scene おきかえるScene.
          * @return {enchant.Scene} 新しいScene.
@@ -1292,7 +1291,7 @@ enchant.EventTarget = enchant.Class.create({
          * キー入力をleft, right, up, down, a, bいずれかのボタン入力として割り当てる.
          *
          * @param {Number} key キーバインドを設定するキーコード.
-         * @param {String} button 割り当てるボタン.
+         * @param {String} button 割り当てるボタン (left, right, up, down, a, b).
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
@@ -1327,7 +1326,7 @@ enchant.EventTarget = enchant.Class.create({
 
 
     /**
-     * find extension from path
+     * Get the file extension from a path
      * @param path
      * @return {*}
      */
@@ -1374,9 +1373,9 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
 
         /**
          *         * Node が画面に表示されてから経過したフレーム数。
-         * ENTER_FRAME イベントを受け取る前にインクリメントされる。
+         * {@link enchant.Event.ENTER_FRAME} イベントを受け取る前にインクリメントされる。
          * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
-         *         *         * @type {Number}
+         *         *         *         * @type {Number}
          */
         this.age = 0;
 
@@ -1749,12 +1748,12 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * 画像表示機能を持ったクラス。
      * Entity を継承している。
      *
+     * @param {Number} [width] Spriteの横幅.
+     * @param {Number} [height] Spriteの高さ.
      * @example
      *   var bear = new Sprite(32, 32);
      *   bear.image = game.assets['chara1.gif'];
-     *
-     * @param {Number} [width] Spriteの横幅.
-     * @param {Number} [height] Spriteの高さ.
+     *   
      * @constructs
      * @extends enchant.Entity
      */
@@ -1803,7 +1802,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 表示するフレームのインデックス.
-     * Spriteと同じ横幅と高さを持ったフレームがimageプロパティの画像に左上から順に
+     * Spriteと同じ横幅と高さを持ったフレームが{@link enchant.Sprite#image}プロパティの画像に左上から順に
      * 配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
      *
      * 数値の配列が指定された場合、それらを毎フレーム順に切り替える。
@@ -1887,7 +1886,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
      * 表示するテキスト.
      * @type {String}
-
      */
     text: {
         get: function() {
@@ -2107,10 +2105,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
-     * ある座標のタイルが何か調べる
-     * @param x
-     * @param y
-     * @return {*}
+     * ある座標のタイルが何か調べる.
+     * @param {Number} x マップ上の点のx座標.
+     * @param {Number} y マップ上の点のy座標.
+     * @return {*} ある座標のタイルのデータ.
      */
     checkTile: function(x, y) {
         if (x < 0 || this.width <= x || y < 0 || this.height <= y) {
@@ -2297,7 +2295,7 @@ enchant.Map.prototype.cvsRender = function(ctx) {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
-     * 複数のNodeを子に持つことができるクラス.
+     * 複数の{@link enchant.Node}を子に持つことができるクラス.
      *
      * @example
      *   var stage = new Group();
@@ -2311,6 +2309,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      *      }
      *   });
      *
+     * @extends enchant.Node
      * @constructs
      * @extends enchant.Node
      */
@@ -2434,9 +2433,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         this._dirty = true;
     },
     /**
-     * rotation of group
-     * @type {Number}
-     */
+    * Groupの回転角 (度数法).
+    * @type {Number}
+    */
     rotation: {
         get: function() {
             return this._rotation;
@@ -2447,11 +2446,11 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * scaling of group in the direction of x axis
-     * @see enchant.CanvasGroup.originX
-     * @see enchant.CanvasGroup.originY
-     * @type {Number}
-     */
+    * Groupのx軸方向の倍率.
+    * @type {Number}
+    * @see enchant.CanvasGroup.originX
+    * @see enchant.CanvasGroup.originY
+    */
     scaleX: {
         get: function() {
             return this._scaleX;
@@ -2462,11 +2461,11 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * scaling of group in the direction of y axis
-     * @see enchant.CanvasGroup.originX
-     * @see enchant.CanvasGroup.originY
-     * @type {Number}
-     */
+    * Groupのy軸方向の倍率.
+    * @type {Number}
+    * @see enchant.CanvasGroup.originX
+    * @see enchant.CanvasGroup.originY
+    */
     scaleY: {
         get: function() {
             return this._scaleY;
@@ -2477,9 +2476,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * origin point of rotation, scaling
-     * @type {Number}
-     */
+    * 回転・拡大縮小の基準点のX座標
+    * @type {Number}
+    */
     originX: {
         get: function() {
             return this._originX;
@@ -2490,9 +2489,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         }
     },
     /**
-     * origin point of rotation, scaling
-     * @type {Number}
-     */
+    * 回転・拡大縮小の基準点のX座標
+    * @type {Number}
+    */
     originY: {
         get: function() {
             return this._originY;
@@ -2974,26 +2973,26 @@ enchant.Group = enchant.Class.create(enchant.Node, {
  */
 enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     /**
-     * Class that becomes route for display object tree.
+     * 表示オブジェクトツリーのルートになるクラス.
      *
      * @example
-     *   var scene = new Scene();
+     *   var scene = new CanvasScene();
      *   scene.addChild(player);
      *   scene.addChild(enemy);
      *   game.pushScene(scene);
      *
      * @constructs
-     * @extends enchant.Group
+     * @extends enchant.CanvasGroup
      */
     initialize: function() {
         enchant.CanvasGroup.call(this);
         this.scene = this;
     },
     /**
-     * Scene background color.
-     * Can indicate same format as CSS 'color' property.
-     * @type {String}
-     */
+    * CanvasSceneの背景色.
+    * CSSの'color'プロパティと同様の形式で指定できる.
+    * @type {String}
+    */
     backgroundColor: {
         get: function() {
             return this._backgroundColor;
@@ -3020,8 +3019,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
      * canvas要素をラップしたクラス.
      *
-     * SpriteやMapのimageプロパティに設定して表示させることができる.
-     * Canvas APIにアクセスしたいときはcontextプロパティを用いる.
+     * {@link enchant.Sprite}や{@link enchant.Map}のimageプロパティに設定して表示させることができる.
+     * Canvas APIにアクセスしたいときは{@link enchant.Surface#context}プロパティを用いる.
      *
      * @example
      *   // 円を表示するSpriteを作成する
@@ -3175,9 +3174,10 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
 /**
  * 画像ファイルを読み込んでSurfaceオブジェクトを作成する.
  *
- * このメソッドによって作成されたSurfaceはimg要素のラップしておりcontextプロパティに
- * アクセスしたりdraw, clear, getPixel, setPixelメソッドなどの呼び出しでCanvas API
- * を使った画像操作を行うことはできない. ただしdrawメソッドの引数とすることはでき,
+ * このメソッドによって作成されたSurfaceはimg要素のラップしており{@link enchant.Surface#context}プロパティに
+ * アクセスしたり{@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel}, 
+ * {@link enchant.Surface#setPixel}メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない. 
+ * ただし{@link enchant.Surface#draw}メソッドの引数とすることはでき,
  * ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
  * 場合はピクセルを取得するなど画像操作の一部が制限される).
  *
@@ -3216,8 +3216,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * Safari, Chrome, Firefox, Operaが対応している. ブラウザが音声ファイル
      * のコーデックに対応していない場合は再生されない.
      *
-     * コンストラクタではなくenchant.Sound.loadを通じてインスタンスを作成する.
-     *
+     * コンストラクタではなく{@link enchant.Sound.load}を通じてインスタンスを作成する.
      * @constructs
      */
     initialize: function() {
@@ -3302,7 +3301,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
 });
 
 /**
- * 音声ファイルを読み込んでSurfaceオブジェクトを作成する.
+ * 音声ファイルを読み込んでSoundオブジェクトを作成する.
  *
  * @param {String} src ロードする音声ファイルのパス.
  * @param {String} [type] 音声ファイルのMIME Type.

@@ -3,8 +3,12 @@
  * 環境変数
  * @type {Object}
  [/lang]
- [lang:ja]
+ [lang:en]
  * Environment variable
+ * @type {Object}
+ [/lang]
+ [lang:de]
+ * Umgebungsvariable
  * @type {Object}
  [/lang]
  */

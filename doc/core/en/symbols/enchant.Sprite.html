@@ -73,7 +73,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:42
+		Generated on: 2012-9-26 18:35
 	</div>
 </div>
 
@@ -122,7 +122,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Sprite.html#constructor">enchant.Sprite</a></b>(width, height)
 								</div>
-								<div class="description">Class for image display function.</div>
+								<div class="description">Class which can display images.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -152,7 +152,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Sprite.html#frame">frame</a></b>
 										</div>
-										<div class="description">Frame index display.</div>
+										<div class="description">Indizes of the frames to be displayed.</div>
 									</td>
 								</tr>
 							
@@ -162,7 +162,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Sprite.html#image">image</a></b>
 										</div>
-										<div class="description">Image displayed in Sprite.</div>
+										<div class="description">Image displayed in the Sprite.</div>
 									</td>
 								</tr>
 							
@@ -215,7 +215,7 @@
 					</div>
 					
 					<div class="description">
-						Class for image display function.
+						Class which can display images.
 						
 					</div>
 					
@@ -234,7 +234,7 @@
 									<span class="light fixedFont">{Number}</span>  <b>width</b>
 									<i>Optional</i>
 								</dt>
-								<dd>Sprite width.g</dd>
+								<dd>Sprite width.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span>  <b>height</b>
@@ -271,14 +271,24 @@
 						</div>
 						
 						<div class="description">
-							Frame index display.
-Frames with same width and height as Sprite will be arrayed in order from upper left of image properties image.
-By setting the index to start with 0, frames are switched.
+							Indizes of the frames to be displayed.
+Frames with same width and height as Sprite will be arrayed from upper left corner of the 
+<a href="../symbols/enchant.Sprite.html#image">enchant.Sprite#image</a> image. When a sequence of numbers is provided, the displayed frame 
+will switch automatically. At the end of the array the sequence will restart. By setting 
+a value within the sequence to null, the frame switching is stopped.
 							
 							
 							
 						</div>
 						
+						
+							
+								<pre class="code">var sprite = new Sprite(32, 32);
+sprite.frame = [0, 1, 0, 2]
+//-> 0, 1, 0, 2, 0, 1, 0, 2,..
+sprite.frame = [0, 1, 0, 2, null]
+//-> 0, 1, 0, 2, (2, 2,.. :stop)</pre>
+							
 						
 							
 						
@@ -295,7 +305,7 @@ By setting the index to start with 0, frames are switched.
 						</div>
 						
 						<div class="description">
-							Image displayed in Sprite.
+							Image displayed in the Sprite.
 							
 							
 							

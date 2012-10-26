@@ -1,10 +1,5 @@
 /**
- [lang:ja]
  * @scope enchant.Entity.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Entity.prototype
- [/lang]
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
@@ -12,7 +7,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * DOM上で表示する実体を持ったクラス.直接使用することはない.
      [/lang]
      [lang:en]
-     * A class with objects displayed on DOM. Not used directly.
+     * A class with objects displayed as DOM elements. Not used directly.
+     [/lang]
+     [lang:de]
+     * Eine Klasse die Objekte mit Hilfe von DOM Elementen darstellt.
+     * Sollte nicht direkt verwendet werden.
      [/lang]
      * @constructs
      * @extends enchant.Node
@@ -45,9 +44,16 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          * @type {String}
          [/lang]
          [lang:en]
-         * Set button function to Entity.
-         * Apply touch, click to left, right, up, down, a, b
-         * for button input for Entity.
+         * Defines this Entity as a button.
+         * When touched or clicked the corresponding button event is dispatched.
+         * Valid buttonModes are: left, right, up, down, a, b. 
+         * @type {String}
+         [/lang]
+         [lang:de]
+         * Definiert diese Entity als Schaltfläche (Button).
+         * Bei einem Klick oder Touch wird das entsprechende
+         * Button Ereignis (Event) ausgelöst.
+         * Mögliche buttonModes sind: left, right, up, down, a, b. 
          * @type {String}
          [/lang]
          */
@@ -59,8 +65,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          * @type {Boolean}
          [/lang]
          [lang:en]
-         * Checks if Entity is being pushed.
+         * Indicates if Entity is being clicked.
          * Only functions when buttonMode is set.
+         * @type {Boolean}
+         [/lang]
+         [lang:de]
+         * Zeigt an, ob auf die Entity geklickt wurde.
+         * Funktioniert nur wenn buttonMode gesetzt ist.
          * @type {Boolean}
          [/lang]
          */
@@ -107,6 +118,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Entity width.
      * @type {Number}
      [/lang]
+     [lang:de]
+     * Die Breite der Entity.
+     * @type {Number}
+     [/lang]
      */
     width: {
         get: function() {
@@ -124,6 +139,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * Entity height.
+     * @type {Number}
+     [/lang]
+     [lang:de]
+     * Die Höhe der Entity.
      * @type {Number}
      [/lang]
      */
@@ -144,7 +163,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * Entity background color.
-     * Designates as same format as CSS 'color' properties.
+     * Must be provided in the same format as the CSS 'color' property.
+     * @type {String}
+     [/lang]
+     [lang:de]
+     * Die Hintergrundfarbe der Entity.
+     * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
      * @type {String}
      [/lang]
      */
@@ -164,7 +188,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * Entity transparency.
-     * Sets level from 0 to 1 (0 is completely transparent, 1 is completely opaque).
+     * Defines the transparancy level from 0 to 1
+     * (0 is completely transparent, 1 is completely opaque).
+     * @type {Number}
+     [/lang]
+     [lang:de]
+     * Transparenz der Entity.
+     * Definiert den Level der Transparenz von 0 bis 1
+     * (0 ist komplett transparent, 1 ist vollständig deckend).
      * @type {Number}
      [/lang]
      */
@@ -185,6 +216,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Indicates whether or not to display Entity.
      * @type {Boolean}
      [/lang]
+     [lang:de]
+     * Zeigt an, ob die Entity dargestellt werden soll oder nicht.
+     * @type {Boolean}
+     [/lang]
      */
     visible: {
         get: function() {
@@ -200,7 +235,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @type {Boolean}
      [/lang]
      [lang:en]
-     * Designates whether or not to make Entity touch valid.
+     * Designates whether or not the Entity can be touched.
+     * @type {Boolean}
+     [/lang]
+     [lang:de]
+     * Definiert ob auf die Entity geklickt werden kann. 
      * @type {Boolean}
      [/lang]
      */
@@ -226,9 +265,17 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @return {Boolean} 衝突判定の結果.
      [/lang]
      [lang:en]
-     * Operates collision detection based on whether or not rectangle angles are intersecting.
-     * @param {*} other Object with properties of x, y, width, height that operate Entity collision detection.
-     * @return {Boolean} Collision detection results.
+     * Operates collision detection based on whether or not the bounding rectangles are intersecting.
+     * @param {*} other An object like Entity, with properties of x, y, width, height, with which the 
+     * collision detection will be performed.
+     * @return {Boolean} True, if a collision was detected.
+     [/lang]
+     [lang:de]
+     * Führt eine Kollisionsdetektion durch, die überprüft ob eine Überschneidung zwischen den
+     * begrenzenden Rechtecken existiert. 
+     * @param {*} other Ein Objekt wie Entity, welches x, y, width und height Variablen besitzt,
+     * mit dem die Kollisionsdetektion durchgeführt wird.
+     * @return {Boolean} True, falls eine Kollision festgestellt wurde.
      [/lang]
      */
     intersect: function(other) {
@@ -244,9 +291,20 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * Operates collision detection based on distance from Entity's central point.
-     * @param {*} other Object with properties of x, y, width, height that operate Entity collision detection.
-     * @param {Number} [distance] Greatest distance considered in collision. Default level is average of Entity width and height.
-     * @return {Boolean} Collision detection result.
+     * @param {*} other An object like Entity, with properties of x, y, width, height, with which the 
+     * collision detection will be performed.
+     * @param {Number} [distance] Greatest distance considered in collision.
+     * Default distance is average of both objects width and height.
+     * @return {Boolean} True, if a collision was detected.
+     [/lang]
+     [lang:de]
+     * Führt eine Kollisionsdetektion durch, die anhand der Distanz zwischen den Objekten feststellt,
+     * ob eine Kollision aufgetreten ist.
+     * @param {*} other Ein Objekt wie Entity, welches x, y, width und height Variablen besitzt,
+     * mit dem die Kollisionsdetektion durchgeführt wird.
+     * @param {Number} [distance] Die größte Distanz die für die Kollision in betracht gezogen wird.
+     * Der Standardwert ist der Durchschnitt der Breite und Höhe beider Objekte.
+     * @return {Boolean} True, falls eine Kollision festgestellt wurde.
      [/lang]
      */
     within: function(other, distance) {
@@ -263,9 +321,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @param {Number} [y] 拡大するy軸方向の倍率.
      [/lang]
      [lang:en]
-     * Expand or contract Sprite.
-     * @param {Number} x Scaling for x axis to be expanded.
-     * @param {Number} [y] Scaling for y axis to be expanded.
+     * Enlarges or shrinks Sprite.
+     * @param {Number} x Scaling factor on the x axis.
+     * @param {Number} [y] Scaling on the y axis.
+     [/lang]
+     [lang:de]
+     * Vergrößert oder verkleinert ein Sprite.
+     * @param {Number} x Skalierungsfaktor auf der x-Achse.
+     * @param {Number} [y] Skalierungsfaktor auf der y-Achse.
      [/lang]
      */
     scale: function(x, y) {
@@ -283,7 +346,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * Rotate Sprite.
-     * @param {Number} deg Rotation angle (frequency).
+     * @param {Number} deg Rotation angle (degree).
+     [/lang]
+     [lang:de]
+     * Rotiert ein Sprite.
+     * @param {Number} deg Rotationswinkel (Grad).
      [/lang]
      */
     rotate: function(deg) {
@@ -293,12 +360,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Spriteのx軸方向の倍率.
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Scaling for Sprite's x axis direction.
-     * @type {Number}
+     * Scaling factor on the x axis of a Sprite.
      [/lang]
+     [lang:de]
+     * Skalierungsfaktor auf der x-Achse eines Sprites.
+     [/lang]
+     * @type {Number}
      */
     scaleX: {
         get: function() {
@@ -312,12 +381,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Spriteのy軸方向の倍率.
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Scaling for Sprite's y axis direction.
-     * @type {Number}
+     * Scaling factor on the y axis of a Sprite.
      [/lang]
+     [lang:de]
+     * Skalierungsfaktor auf der y-Achse eines Sprites.
+     [/lang]
+     * @type {Number}
      */
     scaleY: {
         get: function() {
@@ -333,7 +404,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Spriteの回転角 (度数法).
      [/lang]
      [lang:en]
-     * Sprite rotation angle (frequency).
+     * Sprite rotation angle (degree).
+     [/lang]
+     [lang:de]
+     * Rotationswinkel des Sprites (Grad).
      [/lang]
      * @type {Number}
      */
@@ -353,6 +427,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:en]
      * origin point of rotation, scaling
      [/lang]
+     [lang:de]
+     * Ausgangspunkt für Rotation und Skalierung.
+     [/lang]
      * @type {Number}
      */
     originX: {
@@ -370,6 +447,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      [lang:en]
      * origin point of rotation, scaling
+     [/lang]
+     [lang:de]
+     * Ausgangspunkt für Rotation und Skalierung.
      [/lang]
      * @type {Number}
      */

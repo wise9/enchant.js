@@ -283,7 +283,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:43
+		Generated on: 2012-9-26 18:35
 	</div>
 </div>
 
@@ -536,7 +536,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont">enchant.Game.<b><a href="../symbols/enchant.Game.html#.findExt">findExt</a></b>(path)
 										</div>
-										<div class="description">find extension from path</div>
+										<div class="description">Get the file extension from a path</div>
 									</td>
 								</tr>
 							
@@ -752,7 +752,7 @@
 
 インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
 コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
-enchant.Game.instanceからアクセスできる.
+<a href="../symbols/enchant.Game.html#.instance">enchant.Game.instance</a>からアクセスできる.
 						
 					</div>
 					
@@ -1139,7 +1139,7 @@ enchant.Game.instance._debug フラグを true にすることでもデバッグ
 								</div>
 								
 								<div class="description">
-									find extension from path
+									Get the file extension from a path
 									
 									
 									
@@ -1319,7 +1319,7 @@ enchant.Game.instance._debug フラグを true にすることでもデバッグ
 												<span class="light fixedFont">{String}</span> <b>button</b>
 												
 											</dt>
-											<dd>割り当てるボタン.</dd>
+											<dd>割り当てるボタン (left, right, up, down, a, b).</dd>
 										
 									</dl>
 								
@@ -1391,7 +1391,7 @@ enchant.Game.instance._debug フラグを true にすることでもデバッグ
 									ゲームを一時停止する.
 
 フレームは更新されず, プレイヤーの入力は受け付ける.
-enchant.Game#startで再開できる.
+<a href="../symbols/enchant.Game.html#start">enchant.Game#start</a>で再開できる.
 									
 									
 									
@@ -1423,7 +1423,7 @@ enchant.Game#startで再開できる.
 									現在のSceneを終了させ前のSceneに戻る.
 
 Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
-enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出すことができる.
+<a href="../symbols/enchant.Game.html#popScene">enchant.Game#popScene</a>を行うとスタックの一番上のSceneを取り出すことができる.
 									
 									
 									
@@ -1475,14 +1475,14 @@ enchant.Game#popSceneを行うとスタックの一番上のSceneを取り出す
 								<div class="description">
 									ファイルのプリロードを行う.
 
-プリロードを行うよう設定されたファイルはenchant.Game#startが実行されるとき
-ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトからload
-イベントが発行され, Gameオブジェクトのassetsプロパティから画像ファイルの場合は
-Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジェクトとして,
+プリロードを行うよう設定されたファイルは<a href="../symbols/enchant.Game.html#start">enchant.Game#start</a>が実行されるとき
+ロードが行われる. 全てのファイルのロードが完了したときはGameオブジェクトから<a href="../symbols/enchant.Event.html#.LOAD">enchant.Event.LOAD</a>
+イベントが発行され, Gameオブジェクトの<a href="../symbols/enchant.Game.html#assets">enchant.Game#assets</a>プロパティから画像ファイルの場合は
+<a href="../symbols/enchant.Surface.html">enchant.Surface</a>オブジェクトとして, 音声ファイルの場合は<a href="../symbols/enchant.Sound.html">enchant.Sound</a>オブジェクトとして,
 その他の場合は文字列としてアクセスできるようになる.
 
-なおこのSurfaceオブジェクトはenchant.Surface.loadを使って作成されたものである
-ため直接画像操作を行うことはできない. enchant.Surface.loadの項を参照.
+なおこのSurfaceオブジェクトは<a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>を使って作成されたものである
+ため直接画像操作を行うことはできない. <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>の項を参照.
 									
 									
 									
@@ -1535,7 +1535,7 @@ Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジ
 									新しいSceneに移行する.
 
 Sceneはスタック状に管理されており, 表示順序もスタックに積み上げられた順に従う.
-enchant.Game#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
+<a href="../symbols/enchant.Game.html#pushScene">enchant.Game#pushScene</a>を行うとSceneをスタックの一番上に積むことができる. スタックの
 一番上のSceneに対してはフレームの更新が行われる.
 									
 									
@@ -1662,7 +1662,7 @@ Sceneスタック中からSceneを削除する.
 								<div class="description">
 									現在のSceneを別のSceneにおきかえる.
 
-enchant.Game#popScene, enchant.Game#pushSceneを同時に行う.
+<a href="../symbols/enchant.Game.html#popScene">enchant.Game#popScene</a>, <a href="../symbols/enchant.Game.html#pushScene">enchant.Game#pushScene</a>を同時に行う.
 									
 									
 									
@@ -1788,7 +1788,7 @@ enchant.Game#fpsで設定されたフレームレートに従ってenchant.Game#
 									ゲームを停止する.
 
 フレームは更新されず, プレイヤーの入力も受け付けなくなる.
-enchant.Game#startで再開できる.
+<a href="../symbols/enchant.Game.html#start">enchant.Game#start</a>で再開できる.
 									
 									
 									

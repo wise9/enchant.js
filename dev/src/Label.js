@@ -1,23 +1,19 @@
 /**
- [lang:ja]
  * @scope enchant.Label.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Label.prototype
- [/lang]
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * Labelオブジェクトを作成する.
-     * @constructs
-     * @extends enchant.Entity
      [/lang]
      [lang:en]
      * Create Label object.
+     [/lang]
+     [lang:de]
+     * Erstellt ein Label Objekt.
+     [/lang]
      * @constructs
      * @extends enchant.Entity
-     [/lang]
      */
     initialize: function(text) {
         enchant.Entity.call(this);
@@ -29,13 +25,14 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * 表示するテキスト.
-     * @type {String}
      [/lang]
      [lang:en]
-     * Text to display.
-     * @type {String}
+     * Text to be displayed.
      [/lang]
-
+     [lang:de]
+     * Darzustellender Text.
+     [/lang]
+     * @type {String}
      */
     text: {
         get: function() {
@@ -49,13 +46,16 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      [lang:ja]
      * テキストの水平位置の指定.
      * CSSの'text-align'プロパティと同様の形式で指定できる.
-     * @type {String}
      [/lang]
      [lang:en]
      * Specifies horizontal alignment of text.
-     * Can be set to same format as CSS 'text-align' property.
-     * @type {String}
+     * Can be set according to the format of the CSS 'text-align' property.
      [/lang]
+     [lang:de]
+     * Spezifiziert die horizontale Ausrichtung des Textes.
+     * Kann im gleichen Format wie die CSS 'text-align' Eigenschaft angegeben werden.
+     [/lang]
+     * @type {String}
      */
     textAlign: {
         get: function() {
@@ -69,13 +69,16 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      [lang:ja]
      * フォントの指定.
      * CSSの'font'プロパティと同様の形式で指定できる.
-     * @type {String}
      [/lang]
      [lang:en]
      * Font settings.
-     * CSSの'font' Can be set to same format as properties.
-     * @type {String}
+     * Can be set according to the format of the CSS 'font' property.
      [/lang]
+     [lang:de]
+     * Text Eigenschaften.
+     * Kann im gleichen Format wie die CSS 'font' Eigenschaft angegeben werden.
+     [/lang]
+     * @type {String}
      */
     font: {
         get: function() {
@@ -89,13 +92,16 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      [lang:ja]
      * 文字色の指定.
      * CSSの'color'プロパティと同様の形式で指定できる.
-     * @type {String}
      [/lang]
      [lang:en]
      * Text color settings.
-     * CSSの'color' Can be set to same format as properties.
-     * @type {String}
+     * Can be set according to the format of the CSS 'color' property.
      [/lang]
+     [lang:de]
+     * Text Farbe.
+     * Kann im gleichen Format wie die CSS 'color' Eigenschaft angegeben werden.
+     [/lang]
+     * @type {String}
      */
     color: {
         get: function() {

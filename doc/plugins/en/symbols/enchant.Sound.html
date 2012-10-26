@@ -283,7 +283,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:43
+		Generated on: 2012-9-26 18:36
 	</div>
 </div>
 
@@ -360,7 +360,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Sound.html#currentTime">currentTime</a></b>
 										</div>
-										<div class="description">Current play point (seconds).</div>
+										<div class="description">Current playback position (seconds).</div>
 									</td>
 								</tr>
 							
@@ -370,7 +370,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Sound.html#duration">duration</a></b>
 										</div>
-										<div class="description">Sound play time (seconds).</div>
+										<div class="description">Sound file duration (seconds).</div>
 									</td>
 								</tr>
 							
@@ -419,7 +419,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Sound.html#clone">clone</a></b>()
 										</div>
-										<div class="description">Copy Sound.</div>
+										<div class="description">Create a copy of this Sound object.</div>
 									</td>
 								</tr>
 							
@@ -430,7 +430,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont">enchant.Sound.<b><a href="../symbols/enchant.Sound.html#.load">load</a></b>(src, type)
 										</div>
-										<div class="description">Load audio file, create Surface object.</div>
+										<div class="description">Loads an audio file and creates Sound object.</div>
 									</td>
 								</tr>
 							
@@ -441,7 +441,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Sound.html#pause">pause</a></b>()
 										</div>
-										<div class="description">Interrupt playing.</div>
+										<div class="description">Pause playback.</div>
 									</td>
 								</tr>
 							
@@ -499,9 +499,9 @@
 Safari, Chrome, Firefox, Opera, and IE all play MP3 files
 (Firefox and Opera play via Flash). WAVE files can be played on
 Safari, Chrome, Firefox, and Opera. When the browser is not compatible with
-the codec the file will not fully play.
+the used codec the file will not play.
 
-Instances are created not via constructor but via enchant.Sound.load.
+Instances are created not via constructor but via <a href="../symbols/enchant.Sound.html#.load">enchant.Sound.load</a>.
 						
 					</div>
 					
@@ -535,7 +535,7 @@ Instances are created not via constructor but via enchant.Sound.load.
 						</div>
 						
 						<div class="description">
-							Current play point (seconds).
+							Current playback position (seconds).
 							
 							
 							
@@ -557,7 +557,7 @@ Instances are created not via constructor but via enchant.Sound.load.
 						</div>
 						
 						<div class="description">
-							Sound play time (seconds).
+							Sound file duration (seconds).
 							
 							
 							
@@ -579,7 +579,7 @@ Instances are created not via constructor but via enchant.Sound.load.
 						</div>
 						
 						<div class="description">
-							Volume. 0 (mute) ～ 1 (full volume).
+							Volume. 0 (muted) ～ 1 (full volume).
 							
 							
 							
@@ -620,7 +620,7 @@ Instances are created not via constructor but via enchant.Sound.load.
 								</div>
 								
 								<div class="description">
-									Copy Sound.
+									Create a copy of this Sound object.
 									
 									
 									
@@ -670,7 +670,7 @@ Instances are created not via constructor but via enchant.Sound.load.
 								</div>
 								
 								<div class="description">
-									Load audio file, create Surface object.
+									Loads an audio file and creates Sound object.
 									
 									
 									
@@ -687,13 +687,13 @@ Instances are created not via constructor but via enchant.Sound.load.
 												<span class="light fixedFont">{String}</span> <b>src</b>
 												
 											</dt>
-											<dd>Path of loaded audio file.</dd>
+											<dd>Path of the audio file to be loaded.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{String}</span> <b>type</b>
 												<i>Optional</i>
 											</dt>
-											<dd>MIME Type of audio file.</dd>
+											<dd>MIME Type of the audio file.</dd>
 										
 									</dl>
 								
@@ -716,7 +716,7 @@ Instances are created not via constructor but via enchant.Sound.load.
 								</div>
 								
 								<div class="description">
-									Interrupt playing.
+									Pause playback.
 									
 									
 									

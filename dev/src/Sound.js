@@ -1,10 +1,5 @@
 /**
- [lang:ja]
  * @scope enchant.Sound.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Sound.prototype
- [/lang]
  */
 enchant.Sound = enchant.Class.create(enchant.EventTarget, {
     /**
@@ -16,9 +11,7 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * Safari, Chrome, Firefox, Operaが対応している. ブラウザが音声ファイル
      * のコーデックに対応していない場合は再生されない.
      *
-     * コンストラクタではなくenchant.Sound.loadを通じてインスタンスを作成する.
-     *
-     * @constructs
+     * コンストラクタではなく{@link enchant.Sound.load}を通じてインスタンスを作成する.
      [/lang]
      [lang:en]
      * Class to wrap audio elements.
@@ -26,24 +19,36 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * Safari, Chrome, Firefox, Opera, and IE all play MP3 files
      * (Firefox and Opera play via Flash). WAVE files can be played on
      * Safari, Chrome, Firefox, and Opera. When the browser is not compatible with
-     * the codec the file will not fully play.
+     * the used codec the file will not play.
      *
-     * Instances are created not via constructor but via enchant.Sound.load.
-     *
-     * @constructs
+     * Instances are created not via constructor but via {@link enchant.Sound.load}.
      [/lang]
+     [lang:de]
+     * Klasse die eine Hüllenklasse (Wrapper) für Audio Elemente darstellt. 
+     *
+     * Safari, Chrome, Firefox, Opera, und IE können alle MP3 Dateien abspielen
+     * (Firefox und Opera spielen diese mit Hilfe von Flash ab). WAVE Dateien können 
+     * Safari, Chrome, Firefox, and Opera abspielen. Sollte der Browser nicht mit
+     * dem genutzten Codec kompatibel sein, wird die Datei nicht abgespielt. 
+     *
+     * Instanzen dieser Klasse werden nicht mit Hilfe des Konstruktors, sondern mit 
+     * {@link enchant.Sound.load} erstellt.
+     [/lang]
+     * @constructs
      */
     initialize: function() {
         enchant.EventTarget.call(this);
         /**
          [lang:ja]
          * Soundの再生時間 (秒).
-         * @type {Number}
          [/lang]
          [lang:en]
-         * Sound play time (seconds).
-         * @type {Number}
+         * Sound file duration (seconds).
          [/lang]
+         [lang:de]
+         * Die länge der Sounddatei in Sekunden.
+         [/lang]
+         * @type {Number}
          */
         this.duration = 0;
         throw new Error("Illegal Constructor");
@@ -54,6 +59,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      [lang:en]
      * Begin playing.
+     [/lang]
+     [lang:de]
+     * Startet die Wiedergabe.
      [/lang]
      */
     play: function() {
@@ -66,7 +74,10 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * 再生を中断する.
      [/lang]
      [lang:en]
-     * Interrupt playing.
+     * Pause playback.
+     [/lang]
+     [lang:de]
+     * Pausiert die Wiedergabe.
      [/lang]
      */
     pause: function() {
@@ -81,6 +92,9 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      [lang:en]
      * Stop playing.
      [/lang]
+     [lang:de]
+     * Stoppt die Wiedergabe.
+     [/lang]
      */
     stop: function() {
         this.pause();
@@ -92,8 +106,12 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
      * @return {enchant.Sound} 複製されたSound.
      [/lang]
      [lang:en]
-     * Copy Sound.
+     * Create a copy of this Sound object.
      * @return {enchant.Sound} Copied Sound.
+     [/lang]
+     [lang:de]
+     * Erstellt eine Kopie dieses Soundobjektes.
+     * @return {enchant.Sound} Kopiertes Sound Objekt.
      [/lang]
      */
     clone: function() {
@@ -114,12 +132,14 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
     /**
      [lang:ja]
      * 現在の再生位置 (秒).
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Current play point (seconds).
-     * @type {Number}
+     * Current playback position (seconds).
      [/lang]
+     [lang:de]
+     * Aktuelle Wiedergabeposition (seconds).
+     [/lang]
+     * @type {Number}
      */
     currentTime: {
         get: function() {
@@ -134,12 +154,14 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
     /**
      [lang:ja]
      * ボリューム. 0 (無音) ～ 1 (フルボリューム).
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Volume. 0 (mute) ～ 1 (full volume).
-     * @type {Number}
+     * Volume. 0 (muted) ～ 1 (full volume).
      [/lang]
+     [lang:de]
+     * Lautstärke. 0 (stumm) ～ 1 (volle Lautstärke).
+     [/lang]
+     * @type {Number}
      */
     volume: {
         get: function() {
@@ -155,19 +177,24 @@ enchant.Sound = enchant.Class.create(enchant.EventTarget, {
 
 /**
  [lang:ja]
- * 音声ファイルを読み込んでSurfaceオブジェクトを作成する.
+ * 音声ファイルを読み込んでSoundオブジェクトを作成する.
  *
  * @param {String} src ロードする音声ファイルのパス.
  * @param {String} [type] 音声ファイルのMIME Type.
- * @static
  [/lang]
  [lang:en]
- * Load audio file, create Surface object.
+ * Loads an audio file and creates Sound object.
  *
- * @param {String} src Path of loaded audio file.
- * @param {String} [type] MIME Type of audio file.
- * @static
+ * @param {String} src Path of the audio file to be loaded.
+ * @param {String} [type] MIME Type of the audio file.
  [/lang]
+[lang:de]
+ * Läd eine Audio Datei und erstellt ein Sound objekt.
+ *
+ * @param {String} src Pfad zu der zu ladenden Audiodatei.
+ * @param {String} [type] MIME Type der Audtiodatei.
+ [/lang]
+ * @static
  */
 enchant.Sound.load = function(src, type) {
     if (type == null) {

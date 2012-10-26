@@ -1,25 +1,23 @@
 /**
- [lang:ja]
  * @scope enchant.Node.prototype
- [/lang]
- [lang:en]
- * @scope enchant.Node.prototype
- [/lang]
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
      [lang:ja]
      * Sceneをルートとした表示オブジェクトツリーに属するオブジェクトの基底クラス.
      * 直接使用することはない.
-     * @constructs
-     * @extends enchant.EventTarget
      [/lang]
      [lang:en]
-     * Base class for objects in displayed object tree routed to Scene.
-     * Not directly used.
+     * Base class for objects in the display tree which is rooted at a Scene.
+     * Not to be used directly.
+     [/lang]
+     [lang:de]
+     * Basisklasse für Objekte die im Darstellungsbaum, 
+     * dessen Wurzel eine Szene ist, enthalten sind.
+     * Sollte nicht direkt verwendet werden.
+     [/lang]
      * @constructs
      * @extends enchant.EventTarget
-     [/lang]
      */
     initialize: function() {
         enchant.EventTarget.call(this);
@@ -34,11 +32,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         /**
          * [lang:ja]
          * Node が画面に表示されてから経過したフレーム数。
-         * ENTER_FRAME イベントを受け取る前にインクリメントされる。
+         * {@link enchant.Event.ENTER_FRAME} イベントを受け取る前にインクリメントされる。
          * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
          * [/lang]
          * [lang:en]
-         * age (frames) of this node which will be increased before this node receives ENTER_FRAME event.
+         * age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
+         * [/lang]
+         * [lang:de]
+         * Das Alter (Frames) dieses Nodes welches vor dem {@link enchant.Event.ENTER_FRAME} Ereignis erhöht wird.
          * [/lang]
          * @type {Number}
          */
@@ -47,23 +48,27 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         /**
          [lang:ja]
          * Nodeの親Node.
-         * @type {enchant.Group}
          [/lang]
          [lang:en]
-         * Parent Node for Node.
-         * @type {enchant.Group}
+         * Parent Node of this Node.
          [/lang]
+         [lang:de]
+         * Der Eltern-Node dieses Node.
+         [/lang]
+         * @type {enchant.Group}
          */
         this.parentNode = null;
         /**
          [lang:ja]
          * Nodeが属しているScene.
-         * @type {enchant.Scene}
          [/lang]
          [lang:en]
          * Scene to which Node belongs.
-         * @type {enchant.Scene}
          [/lang]
+         [lang:de]
+         * Die Szene, zu welcher dieser Node gehört.
+         [/lang]
+         * @type {enchant.Scene}
          */
         this.scene = null;
 
@@ -90,9 +95,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
      * @param {Number} y 移動先のy座標.
      [/lang]
      [lang:en]
-     * Move Node.
+     * Move the Node to the given target location.
      * @param {Number} x Target x coordinates.
      * @param {Number} y Target y coordinates.
+     [/lang]
+     [lang:de]
+     * Bewegt diesen Node zu den gegebenen Ziel Koordinaten.
+     * @param {Number} x Ziel x Koordinaten.
+     * @param {Number} y Ziel y Koordinaten.
      [/lang]
      */
     moveTo: function(x, y) {
@@ -107,9 +117,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
      * @param {Number} y 移動するy軸方向の距離.
      [/lang]
      [lang:en]
-     * Move Node.
+     * Move the Node relative to its current position.
      * @param {Number} x x axis movement distance.
      * @param {Number} y y axis movement distance.
+     [/lang]
+     [lang:de]
+     * Bewegt diesen Node relativ zur aktuellen Position.
+     * @param {Number} x Distanz auf der x Achse.
+     * @param {Number} y Distanz auf der y Achse.
      [/lang]
      */
     moveBy: function(x, y) {
@@ -120,12 +135,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
      [lang:ja]
      * Nodeのx座標.
-     * @type {Number}
      [/lang]
      [lang:en]
-     * x coordinates of Node.
-     * @type {Number}
+     * x coordinates of the Node.
      [/lang]
+     [lang:de]
+     * Die x Koordinaten des Nodes.
+     [/lang]
+     * @type {Number}
      */
     x: {
         get: function() {
@@ -139,12 +156,14 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
      [lang:ja]
      * Nodeのy座標.
-     * @type {Number}
      [/lang]
      [lang:en]
-     * y coordinates of Node.
-     * @type {Number}
+     * y coordinates of the Node.
      [/lang]
+     [lang:de]
+     * Die y Koordinaten des Nodes.
+     [/lang]
+     * @type {Number}
      */
     y: {
         get: function() {

@@ -283,7 +283,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:43
+		Generated on: 2012-9-26 18:36
 	</div>
 </div>
 
@@ -330,7 +330,7 @@
 								<div class="fixedFont">
 									<b><a href="../symbols/enchant.Class.html#constructor">enchant.Class</a></b>(superclass, definition)
 								</div>
-								<div class="description">Class of class</div>
+								<div class="description">Class for a class which supports inheritance.</div>
 							</td>
 						</tr>
 					</tbody>
@@ -398,7 +398,7 @@
 					</div>
 					
 					<div class="description">
-						Class of class
+						Class for a class which supports inheritance.
 						
 					</div>
 					
@@ -412,7 +412,8 @@
 									<span class="light fixedFont">{Function}</span>  <b>superclass</b>
 									<i>Optional</i>
 								</dt>
-								<dd>Successor class.</dd>
+								<dd>The class from which the
+new class will inherit the class definition.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{*}</span>  <b>definition</b>
@@ -460,9 +461,9 @@
 								<div class="description">
 									Create class.
 
-When making classes that succeed other classes, the previous class is used as a base with
-constructor as default. In order to override the constructor, it is necessary to explicitly
-call up the previous constructor to use it.
+When defining classes that inherit from other classes, the previous class is used as a base with
+the superclass's constructor as default. When overriding the default constructor, it is necessary
+to explicitly call the previous constructor to ensure a correct class initialization.
 									
 									
 									
@@ -476,8 +477,8 @@ call up the previous constructor to use it.
       fall: function() { ... }
   });
 
-  var Ball = Class.create(Sprite);  // Creates a class succeeding "Sprite"
-  var Ball = Class.create(Sprite, { // Creates a class succeeding "Sprite"
+  var Ball = Class.create(Sprite);  // Creates a class inheriting from "Sprite"
+  var Ball = Class.create(Sprite, { // Creates a class inheriting "Sprite"
       initialize: function(radius) { // Overwrites constructor
          Sprite.call(this, radius*2, radius*2); // Applies previous constructor.
          this.image = game.assets['ball.gif'];
@@ -494,7 +495,8 @@ call up the previous constructor to use it.
 												<span class="light fixedFont">{Function}</span> <b>superclass</b>
 												<i>Optional</i>
 											</dt>
-											<dd>Preceding class.</dd>
+											<dd>The class from which the
+new class will inherit the class definition.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{*}</span> <b>definition</b>

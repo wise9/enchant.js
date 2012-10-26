@@ -73,7 +73,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-9-23 21:42
+		Generated on: 2012-9-26 18:35
 	</div>
 </div>
 
@@ -152,7 +152,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Map.html#collisionData">collisionData</a></b>
 										</div>
-										<div class="description">Two dimensional array to show level of tiles with collision detection.</div>
+										<div class="description">Two dimensional array to store if collision detection should be performed for a tile.</div>
 									</td>
 								</tr>
 							
@@ -162,7 +162,7 @@
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Map.html#image">image</a></b>
 										</div>
-										<div class="description">Tile set image displayed on Map.</div>
+										<div class="description">Image with which the tile set is displayed on the map.</div>
 									</td>
 								</tr>
 							
@@ -225,7 +225,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Map.html#checkTile">checkTile</a></b>(x, y)
 										</div>
-										<div class="description">Check what tile it is on designated position</div>
+										<div class="description">Checks what tile is present at the given position.</div>
 									</td>
 								</tr>
 							
@@ -247,7 +247,7 @@
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Map.html#loadData">loadData</a></b>(data)
 										</div>
-										<div class="description">Set data.</div>
+										<div class="description">Set map data.</div>
 									</td>
 								</tr>
 							
@@ -333,7 +333,7 @@
 						</div>
 						
 						<div class="description">
-							Two dimensional array to show level of tiles with collision detection.
+							Two dimensional array to store if collision detection should be performed for a tile.
 							
 							
 							
@@ -355,7 +355,7 @@
 						</div>
 						
 						<div class="description">
-							Tile set image displayed on Map.
+							Image with which the tile set is displayed on the map.
 							
 							
 							
@@ -434,13 +434,13 @@
 									
 									</span>
 									
-									
+									<span class="light">{*}</span>
 									
 									<b>checkTile</b>(x, y)
 								</div>
 								
 								<div class="description">
-									Check what tile it is on designated position
+									Checks what tile is present at the given position.
 									
 									
 									
@@ -454,20 +454,41 @@
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>x</b>
+												<span class="light fixedFont">{Number}</span> <b>x</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>x coordinates of the point on the map.</dd>
 										
 											<dt>
-												<b>y</b>
+												<span class="light fixedFont">{Number}</span> <b>y</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>y coordinates of the point on the map.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{*}</span> The tile data for the given position.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -526,7 +547,7 @@
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{Boolean}</span> Checks for obstacles.</dd>
+												<dd><span class="light fixedFont">{Boolean}</span> True, if there are obstacles.</dd>
 											
 										
 										
@@ -553,9 +574,10 @@
 								</div>
 								
 								<div class="description">
-									Set data.
-Sees that tiles are set in order in array from the upper left of image properties image,
-and sets a two-dimensional index array starting from 0. When more than one is set, they are displayed in reverse order.
+									Set map data.
+Sets the tile data, whereas the data (two-dimensional array with indizes starting from 0) 
+is mapped on the image starting from the upper left corner.
+When more than one map data array is set, they are displayed in reverse order.
 									
 									
 									
@@ -572,7 +594,7 @@ and sets a two-dimensional index array starting from 0. When more than one is se
 												<span class="light fixedFont">{...Array&lt;Array.&lt;Number&gt;&gt;}</span> <b>data</b>
 												
 											</dt>
-											<dd>Two-dimensional display of tile index. Multiple designations possible.</dd>
+											<dd>Two-dimensional array of tile indizes. Multiple designations possible.</dd>
 										
 									</dl>
 								
