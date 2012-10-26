@@ -19,6 +19,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._layers = {};
         this._layerPriority = [];
         this.addLayer('Canvas');
+        this.addLayer('Dom');
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
         this.addEventListener(enchant.Event.ENTER, this._onenter);
