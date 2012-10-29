@@ -2682,11 +2682,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             game.removeEventListener('exitframe', this._onexitframe);
         },
         _getEntityByPosition: function(x, y) {
+            var game = enchant.Game.instance;
             var ctx = this._dctx;
-            ctx.clearRect(0, 0, this.width, this.height);
-            if (this._lastDetected < this.age) {
+            if (this._lastDetected < game.frame) {
+                ctx.clearRect(0, 0, this.width, this.height);
                 detectrendering.call(this, ctx);
-                this._lastDetected = this.age;
+                this._lastDetected = game.frame;
             }
             var color = ctx.getImageData(x, y, 1, 1).data;
             return this._colorManager.getSpriteByColor(color);
