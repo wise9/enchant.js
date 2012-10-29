@@ -3018,7 +3018,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
  */
 enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     /**
-     * Eine Klasse die zur Wurzel in Objektbaum wird, welcher dargestellt werden kann.
+     * Eine Klasse die zur Wurzel im Darstellungsobjektbaum wird.
      *
      * @example
      *   var scene = new CanvasScene();

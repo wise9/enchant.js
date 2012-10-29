@@ -1513,7 +1513,7 @@ var getInheritanceRelation = function(Constructor) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
-     * A class with objects displayed as DOM elements. Not used directly.
+     * A class with objects displayed as DOM elements. Not to be used directly.
      * @constructs
      * @extends enchant.Node
      */
@@ -3078,7 +3078,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
  */
 enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     /**
-     * Class that becomes the root of an object tree which can be displayed.
+     * Class that becomes the root of the display object tree.
      *
      * @example
      *   var scene = new CanvasScene();

@@ -7,10 +7,10 @@ enchant.DOMScene = enchant.Class.create(enchant.Group, {
     * 表示オブジェクトツリーのルートになるクラス.
     [/lang]
     [lang:en]
-    * Class that becomes the root of an object tree which can be displayed.
+    * Class that becomes the root of the display object tree.
     [/lang]
     [lang:de]
-    * Eine Klasse die zur Wurzel in Objektbaum wird, welcher dargestellt werden kann.
+    * Eine Klasse die zur Wurzel im Darstellungsobjektbaum wird.
     [/lang]
     *
     * @example
