@@ -7,7 +7,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * DOM上で表示する実体を持ったクラス.直接使用することはない.
      [/lang]
      [lang:en]
-     * A class with objects displayed as DOM elements. Not used directly.
+     * A class with objects displayed as DOM elements. Not to be used directly.
      [/lang]
      [lang:de]
      * Eine Klasse die Objekte mit Hilfe von DOM Elementen darstellt.
