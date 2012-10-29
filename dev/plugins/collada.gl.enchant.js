@@ -577,7 +577,7 @@ if (enchant.gl !== undefined) {
                                 } else {
                                     var tmpMat = [];
                                     for (var j = 0; j < 16; j++) {
-                                       tmpMat.push(output[okey2][i * 16 + j]);
+                                        tmpMat.push(output[okey2][i * 16 + j]);
                                     }
                                     mat4.transpose(tmpMat);
                                     mat4.multiply(nMat, tmpMat); 
