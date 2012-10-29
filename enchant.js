@@ -1044,9 +1044,11 @@ enchant.EventTarget = enchant.Class.create({
                     var game = enchant.Game.instance;
                     var currentScene = game.currentScene;
                     var layer, target;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                    evt._initPosition(e.x, e.y);
                     for (var i = currentScene._layerPriority.length - 1; i >= 0; i--) {
                         layer = currentScene._layers[currentScene._layerPriority[i]];
-                        target = layer._determineEventTarget(e);
+                        target = layer._determineEventTarget(evt);
                         if (target) {
                             break;
                         }
@@ -1055,8 +1057,6 @@ enchant.EventTarget = enchant.Class.create({
                         target = currentScene;
                     }
                     game._touchEventTarget = target;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
-                    evt._initPosition(e.x, e.y);
                     target.dispatchEvent(evt);
                 };
                 var _ontouchmove = function(e) {
@@ -1074,6 +1074,7 @@ enchant.EventTarget = enchant.Class.create({
                         evt._initPosition(e.x, e.y);
                         game._touchEventTarget.dispatchEvent(evt);
                         game._touchEventTarget = null;
+                        game.currentScene._layers.Dom._touchEventTarget = null;
                     }
                 };
                 if (enchant.ENV.TOUCH_ENABLED) {
@@ -3596,12 +3597,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
-        if (next) {
-        } else {
-        }
+        this._layers.Canvas.insertBefore(child, next);
+        // TODO Dom case
     },
     _onchildremoved: function(e) {
         var child = e.node;
+        this._layers.Canvas.removeChild(child);
     },
     _onenter: function() {
         for (var type in this._layers) {
