@@ -610,7 +610,7 @@ var MMD = {};
         morphing: function(data, target) {
             var weight, index;
             for (var prop in data) {
-                weight = data[prop];
+                weight = data[prop]._weight;
                 if (weight && this._morphs[prop]) {
                     this._morphing(prop, target, weight);
                 }
@@ -633,7 +633,7 @@ var MMD = {};
             this._weight = weight;
         },
         getInterpolation: function(another, ratio) {
-            return lerp(this._weight, another._weight, ratio);
+            return new enchant.gl.mmd.MMorphPoint(lerp(this._weight, another._weight, ratio));
         }
     });
 
