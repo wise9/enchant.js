@@ -81,6 +81,10 @@ if (enchant.gl !== undefined) {
                         right, top,
                         left, top,
                         left, bottom,
+                        right, bottom,
+                        right, top,
+                        left, top,
+                        left, bottom,
                         right, bottom
                     ];
                 }
