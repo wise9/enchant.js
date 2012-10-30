@@ -546,7 +546,7 @@ var MMD = {};
         morphing: function(data, target) {
             var weight, index;
             for (var prop in data) {
-                weight = data[prop];
+                weight = data[prop]._weight;
                 if (weight && this._morphs[prop]) {
                     this._morphing(prop, target, weight);
                 }
@@ -569,7 +569,7 @@ var MMD = {};
             this._weight = weight;
         },
         getInterpolation: function(another, ratio) {
-            return lerp(this._weight, another._weight, ratio);
+            return new enchant.gl.mmd.MMorphPoint(lerp(this._weight, another._weight, ratio));
         }
     });
 
@@ -620,6 +620,21 @@ var MMD = {};
                 that._calcLength();
                 callback(that);
             });
+        },
+        bake: function() {
+            var prop, manager;
+            for (prop in this.morphs) {
+                manager = this.morphs[prop];
+                if (manager instanceof enchant.gl.mmd.MKeyFrameManager) {
+                    manager.bake();
+                }
+            }
+            for (prop in this.motions) {
+                manager = this.motions[prop];
+                if (manager instanceof enchant.gl.mmd.MKeyFrameManager) {
+                    manager.bake();
+                }
+            }
         },
         _tick: function(frame) {
             var poses = this._getFrame(this.motions, frame);

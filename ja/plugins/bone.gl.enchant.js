@@ -154,7 +154,10 @@
             var prev, next, index, pidx, nidx;
             var ratio = 0;
             if (frame >= this.length) {
-                prev = next = this._lastPose;
+                return this._lastPose;
+            }
+            if (this._units[frame]) {
+                return this._units[frame];
             } else {
                 index = this._getPrevFrameIndex(frame);
                 pidx = this._frames[index];
@@ -162,8 +165,19 @@
                 prev = this._units[pidx];
                 next = this._units[nidx];
                 ratio = this._frac(pidx, nidx, frame);
+                return this._interpole(prev, next, ratio);
             }
-            return this._interpole(prev, next, ratio);
+        },
+        bake: function() {
+            var state;
+            for (var i = 0, l = this.length; i < l; i++) {
+                if (this._units[i]) {
+                    continue;
+                }
+                state = this.getFrame(i);
+                this.addFrame(state, i);
+            }
+            this._sort();
         },
         _frac: function(p, n, t) {
             return frac(p, n, t);
