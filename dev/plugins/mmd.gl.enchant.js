@@ -710,6 +710,21 @@ var MMD = {};
                 callback(that);
             });
         },
+        bake: function() {
+            var prop, manager;
+            for (prop in this.morphs) {
+                manager = this.morphs[prop];
+                if (manager instanceof enchant.gl.mmd.MKeyFrameManager) {
+                    manager.bake();
+                }
+            }
+            for (prop in this.motions) {
+                manager = this.motions[prop];
+                if (manager instanceof enchant.gl.mmd.MKeyFrameManager) {
+                    manager.bake();
+                }
+            }
+        },
         _tick: function(frame) {
             var poses = this._getFrame(this.motions, frame);
             var morphs = this._getFrame(this.morphs, frame);
