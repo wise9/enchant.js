@@ -893,7 +893,7 @@ enchant.gl = {};
          */
         slerp: function(another, ratio) {
             var q = new enchant.gl.Quat(0, 0, 0, 0);
-            quat4.slerp(this._quat, another._quat, ratio, q);
+            quat4.slerp(this._quat, another._quat, ratio, q._quat);
             return q;
         },
         /**
