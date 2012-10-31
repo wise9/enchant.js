@@ -252,12 +252,12 @@ enchant.Class.create = function(superclass, definition) {
     return Constructor;
 };
 /**
- * 環境変数
+ * 環境変数.
  * @type {Object}
  */
 enchant.ENV = {
     /**
-     * css vendor prefix in current browser
+     * The CSS vendor prefix of the current browser.
      * @type {String}
      */
     VENDOR_PREFIX: (function() {
@@ -275,8 +275,8 @@ enchant.ENV = {
         }
     }()),
     /**
-     * CSS vendor prefix in current browser
-     * @type {String}
+     * Determines if the current browser supports touch.
+     * @return {Boolean} True, if touch is enabled.
      */
     TOUCH_ENABLED: (function() {
         var div = document.createElement('div');
@@ -284,8 +284,8 @@ enchant.ENV = {
         return typeof div.ontouchstart === 'function';
     }()),
     /**
-     * Is this browser iPhone with Retina display?
-     * @type {String}
+     * Determines if the current browser is an iPhone with a retina display.
+     * @return {Boolean} True, if this display is a retina display
      */
     RETINA_DISPLAY: (function() {
         if (navigator.userAgent.indexOf('iPhone') !== -1 && window.devicePixelRatio === 2) {
@@ -301,8 +301,9 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Use Flash instead of native Audio class?
-     * @type {String}
+     * Determines if for current browser Flash should be used to play 
+     * sound instead of the native audio class.
+     * @return {Boolean} True, if flash should be used.
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
@@ -311,7 +312,7 @@ enchant.ENV = {
         return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
     }()),
     /**
-     * On click/touch event in these tags, setPreventDefault() will not be called
+     * If click/touch event occure for these tags the setPreventDefault() method will not be called.
      */
     USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select', 'area'],
     CANVAS_DRAWING_METHODS: [
@@ -634,8 +635,8 @@ enchant.EventTarget = enchant.Class.create({
     /**
      * Synonym for addEventListener
      * @see {enchant.EventTarget#addEventListener}
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be added.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be added.
      */
     on: function() {
         this.addEventListener.apply(this, arguments);
@@ -1510,7 +1511,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this.buttonMode = null;
         /**
          * Entityが押されているかどうか.
-         * buttonModeが設定されているときだけ機能する.
+         * {@link enchant.Entity.buttonMode}が設定されているときだけ機能する.
          * @type {Boolean}
          */
         this.buttonPressed = false;

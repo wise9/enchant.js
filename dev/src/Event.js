@@ -11,7 +11,7 @@ enchant.Event = enchant.Class.create({
      [lang:en]
      * A class for an independent implementation of events
      * similar to DOM Events.
-     * However, does not include phase concept.
+     * However, it does not include phase concept.
      * @param {String} type Event type.
      [/lang]
      [lang:de]
@@ -28,7 +28,7 @@ enchant.Event = enchant.Class.create({
          * イベントのタイプ.
          [/lang]
          [lang:en]
-         * Event type.
+         * The type of the event.
          [/lang]
          [lang:de]
          * Typ des Ereignis.
@@ -41,7 +41,7 @@ enchant.Event = enchant.Class.create({
          * イベントのターゲット.
          [/lang]
          [lang:en]
-         * Event target.
+         * The target of the event.
          [/lang]
          [lang:de]
          * Ziel des Ereignis.
@@ -54,7 +54,7 @@ enchant.Event = enchant.Class.create({
          * イベント発生位置のx座標.
          [/lang]
          [lang:en]
-         * Event occurrence's x coordinates.
+         * The x coordinate of the events occurrence.
          [/lang]
          [lang:de]
          * X Koordinate des Auftretens des Ereignis.
@@ -67,7 +67,7 @@ enchant.Event = enchant.Class.create({
          * イベント発生位置のy座標.
          [/lang]
          [lang:en]
-         * Event occurrence's y coordinates.
+         * The y coordinate of the events occurrence.
          [/lang]
          [lang:de]
          * Y Koordinate des Auftretens des Ereignis.
@@ -80,7 +80,7 @@ enchant.Event = enchant.Class.create({
          * イベントを発行したオブジェクトを基準とするイベント発生位置のx座標.
          [/lang]
          [lang:en]
-         * Event occurrence's local coordinate system's x coordinates.
+         * The event occurrences local coordinate systems x coordinates.
          [/lang]
          [lang:de]
          * X Koordinate des lokalen Koordinatensystems des Auftretens des Ereignis.
@@ -93,7 +93,7 @@ enchant.Event = enchant.Class.create({
          * イベントを発行したオブジェクトを基準とするイベント発生位置のy座標.
          [/lang]
          [lang:en]
-         * Event occurrence's local coordinate system's y coordinates.
+         * The event occurrences local coordinate systems y coordinates.
          [/lang]
          [lang:de]
          * Y Koordinate des lokalen Koordinatensystems des Auftretens des Ereignis.
@@ -126,7 +126,7 @@ enchant.Event = enchant.Class.create({
  *
  [/lang]
  [lang:en]
- * Event dispatched upon completion of game loading.
+ * An event dispatched upon completion of game loading.
  *
  * It is necessary to wait for loading to finish and to do initial processing when preloading images.
  * Issued object: {@link enchant.Game}
@@ -166,7 +166,7 @@ enchant.Event.LOAD = 'load';
  * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.Game}
  [/lang]
  [lang:en]
- * Events occurring during game loading.
+ * Events which are occurring during game loading.
  * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.Game}
  [/lang]
  [lang:de]
@@ -184,7 +184,7 @@ enchant.Event.PROGRESS = 'progress';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Node}
  [/lang]
  [lang:en]
- * Events occurring when a new frame is beeing processed.
+ * An event which is occurring when a new frame is beeing processed.
  * Issued object: {@link enchant.Game}, {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -201,7 +201,7 @@ enchant.Event.ENTER_FRAME = 'enterframe';
  * 発行するオブジェクト: {@link enchant.Game}
  [/lang]
  [lang:en]
- * Events occurring during frame end.
+ * An event which is occurring when the frame processing is about to end.
  * Issued object: {@link enchant.Game}
  [/lang]
  [lang:de]
@@ -254,7 +254,7 @@ enchant.Event.EXIT = 'exit';
  * 発行するオブジェクト: {@link enchant.Group}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when Child is added to Node.
+ * An event which is occurring when a Child is getting added to a Node.
  * Issued object: {@link enchant.Group}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -272,7 +272,7 @@ enchant.Event.CHILD_ADDED = 'childadded';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when the Node is added to Group.
+ * An event which is occurring when the Node is added to a Group.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -290,7 +290,7 @@ enchant.Event.ADDED = 'added';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when the Node is added to Scene.
+ * An event which is occurring when the Node is added to a Scene.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -309,7 +309,7 @@ enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
  * @type {String}
  [/lang]
  [lang:en]
- * Event occurring when Child is removed from Node.
+ * An event which is occurring when a Child is removed from a Node.
  * Issued object: {@link enchant.Group}, {@link enchant.Scene}
  * @type {String}
  [/lang]
@@ -328,7 +328,7 @@ enchant.Event.CHILD_REMOVED = 'childremoved';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when the Node is deleted from Group.
+ * An event which is occurring when the Node is deleted from a Group.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -346,7 +346,7 @@ enchant.Event.REMOVED = 'removed';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when Node is deleted from Scene.
+ * An event which is occurring when the Node is deleted from a Scene.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -364,8 +364,8 @@ enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
  * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when touch corresponding to Node has begun.
- * Click is also treated as touch. Issued object: {@link enchant.Node}
+ * An event occurring when a touch related to the Node has begun.
+ * A click is also treated as touch. Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Touch auf einen Node
@@ -382,8 +382,8 @@ enchant.Event.TOUCH_START = 'touchstart';
  * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when touch corresponding to Node has been moved.
- * Click is also treated as touch. Issued object: {@link enchant.Node}
+ * An event occurring when a touch related to the Node has been moved.
+ * A click is also treated as touch. Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Touch auf einen Node
@@ -400,8 +400,8 @@ enchant.Event.TOUCH_MOVE = 'touchmove';
  * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
  [/lang]
  [lang:en]
- * Event occurring when touch corresponding to touch has ended.
- * Click is also treated as touch. Issued object: enchant.Node
+ * An event which is occurring when a touch related to the Node has ended.
+ * A Click is also treated as touch. Issued object: enchant.Node
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Touch auf einen Node
@@ -418,7 +418,7 @@ enchant.Event.TOUCH_END = 'touchend';
  * 発行するオブジェクト: {@link enchant.Entity}
  [/lang]
  [lang:en]
- * Event occurring when an Entity is rendered.
+ * An event which is occurring when an Entity is rendered.
  * Issued object: {@link enchant.Entity}
  [/lang]
  [lang:de]
@@ -436,7 +436,7 @@ enchant.Event.RENDER = 'render';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when a button is pushed.
+ * An event which is occurring when a button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -453,7 +453,7 @@ enchant.Event.INPUT_START = 'inputstart';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when a button input changes.
+ * An event which is occurring when a button input changes.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -470,7 +470,7 @@ enchant.Event.INPUT_CHANGE = 'inputchange';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when a button input ends.
+ * An event which is occurring when a button input ends.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -487,7 +487,7 @@ enchant.Event.INPUT_END = 'inputend';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the left button is pushed.
+ * An event which is occurring when the left button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -504,7 +504,7 @@ enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the left button is released.
+ * An event which is occurring when the left button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -521,7 +521,7 @@ enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the right button is pushed.
+ * An event which is occurring when the right button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -538,7 +538,7 @@ enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the right button is released.
+ * An event which is occurring when the right button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -555,7 +555,7 @@ enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Even occurring when the up button is pushed.
+ * An event which is occurring when the up button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -572,7 +572,7 @@ enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the up button is released.
+ * An event which is occurring when the up button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -589,7 +589,7 @@ enchant.Event.UP_BUTTON_UP = 'upbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the down button is pushed.
+ * An event which is occurring when the down button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -606,7 +606,7 @@ enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the down button is released.
+ * An event which is occurring when the down button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -623,7 +623,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the a button is pushed.
+ * An event which is occurring when the a button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -640,7 +640,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the a button is released.
+ * An event which is occurring when the a button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -657,7 +657,7 @@ enchant.Event.A_BUTTON_UP = 'abuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the b button is pushed.
+ * An event which is occurring when the b button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -674,7 +674,7 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the b button is released.
+ * An event which is occurring when the b button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]

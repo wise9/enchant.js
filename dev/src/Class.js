@@ -4,15 +4,13 @@
  *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} definition クラス定義.
- * @constructor
  [/lang]
  [lang:en]
- * Class for a class which supports inheritance.
+ * A Class representing a class which supports inheritance.
  *
  * @param {Function} [superclass] The class from which the
  * new class will inherit the class definition.
  * @param {*} definition Class definition.
- * @constructor
  [/lang]
  [lang:de]
  * Eine Klasse für Klassen, die Vererbung unterstützen.
@@ -20,8 +18,8 @@
  * @param {Function} [superclass] Die Klasse, deren Klassendefinition
  * die neue Klasse erben wird.
  * @param {*} definition Klassendefinition.
- * @constructor
  [/lang]
+ * @constructor
  */
 
 enchant.Class = function(superclass, definition) {
@@ -54,7 +52,7 @@ enchant.Class = function(superclass, definition) {
  * @param {*} [definition] クラス定義.
  [/lang]
  [lang:en]
- * Create class.
+ * Create a class.
  *
  * When defining classes that inherit from other classes, the previous class is used as a base with
  * the superclass's constructor as default. When overriding the default constructor, it is necessary
