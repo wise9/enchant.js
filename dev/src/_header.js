@@ -75,11 +75,12 @@ if (typeof Function.prototype.bind !== 'function') {
  * @param {...String} [modules] エクスポートするモジュール. 複数指定できる.
  [/lang]
  [lang:en]
- * Export library classes globally.
+ * Export the library classes globally.
  *
- * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in
- * plugins will be exported. When more than one argument is delivered, by default only classes defined
- * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
+ * When no arguments are given, all classes defined in enchant.js as well as all classes defined in
+ * plugins will be exported. When more than one argument is given, by default only classes defined
+ * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver 
+ * the plugin identifiers as arguments.
  *
  * @example
  *   enchant();     // All classes will be exported.

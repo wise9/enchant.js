@@ -113,11 +113,12 @@ if (typeof Function.prototype.bind !== 'function') {
  * @param {...String} [modules] エクスポートするモジュール. 複数指定できる.
  [/lang]
  [lang:en]
- * Export library classes globally.
+ * Export the library classes globally.
  *
- * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in
- * plugins will be exported. When more than one argument is delivered, by default only classes defined
- * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
+ * When no arguments are given, all classes defined in enchant.js as well as all classes defined in
+ * plugins will be exported. When more than one argument is given, by default only classes defined
+ * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver 
+ * the plugin identifiers as arguments.
  *
  * @example
  *   enchant();     // All classes will be exported.
@@ -216,15 +217,13 @@ window.addEventListener("message", function(msg, origin) {
  *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} definition クラス定義.
- * @constructor
  [/lang]
  [lang:en]
- * Class for a class which supports inheritance.
+ * A Class representing a class which supports inheritance.
  *
  * @param {Function} [superclass] The class from which the
  * new class will inherit the class definition.
  * @param {*} definition Class definition.
- * @constructor
  [/lang]
  [lang:de]
  * Eine Klasse für Klassen, die Vererbung unterstützen.
@@ -232,8 +231,8 @@ window.addEventListener("message", function(msg, origin) {
  * @param {Function} [superclass] Die Klasse, deren Klassendefinition
  * die neue Klasse erben wird.
  * @param {*} definition Klassendefinition.
- * @constructor
  [/lang]
+ * @constructor
  */
 
 enchant.Class = function(superclass, definition) {
@@ -266,7 +265,7 @@ enchant.Class = function(superclass, definition) {
  * @param {*} [definition] クラス定義.
  [/lang]
  [lang:en]
- * Create class.
+ * Create a class.
  *
  * When defining classes that inherit from other classes, the previous class is used as a base with
  * the superclass's constructor as default. When overriding the default constructor, it is necessary
@@ -355,21 +354,19 @@ enchant.Class.create = function(superclass, definition) {
 };
 /**
  [lang:ja]
- * 環境変数
- * @type {Object}
+ * 環境変数.
  [/lang]
  [lang:en]
- * Environment variable
- * @type {Object}
+ * Environment variable.
  [/lang]
  [lang:de]
- * Umgebungsvariable
- * @type {Object}
+ * Umgebungsvariable.
  [/lang]
+ * @type {Object}
  */
 enchant.ENV = {
     /**
-     * css vendor prefix in current browser
+     * The CSS vendor prefix of the current browser.
      * @type {String}
      */
     VENDOR_PREFIX: (function() {
@@ -387,8 +384,8 @@ enchant.ENV = {
         }
     }()),
     /**
-     * CSS vendor prefix in current browser
-     * @type {String}
+     * Determines if the current browser supports touch.
+     * @return {Boolean} True, if touch is enabled.
      */
     TOUCH_ENABLED: (function() {
         var div = document.createElement('div');
@@ -396,8 +393,8 @@ enchant.ENV = {
         return typeof div.ontouchstart === 'function';
     }()),
     /**
-     * Is this browser iPhone with Retina display?
-     * @type {String}
+     * Determines if the current browser is an iPhone with a retina display.
+     * @return {Boolean} True, if this display is a retina display
      */
     RETINA_DISPLAY: (function() {
         if (navigator.userAgent.indexOf('iPhone') !== -1 && window.devicePixelRatio === 2) {
@@ -413,8 +410,9 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Use Flash instead of native Audio class?
-     * @type {String}
+     * Determines if for current browser Flash should be used to play 
+     * sound instead of the native audio class.
+     * @return {Boolean} True, if flash should be used.
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
@@ -423,7 +421,7 @@ enchant.ENV = {
         return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
     }()),
     /**
-     * On click/touch event in these tags, setPreventDefault() will not be called
+     * If click/touch event occure for these tags the setPreventDefault() method will not be called.
      */
     USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select', 'area'],
     CANVAS_DRAWING_METHODS: [
@@ -452,7 +450,7 @@ enchant.Event = enchant.Class.create({
      [lang:en]
      * A class for an independent implementation of events
      * similar to DOM Events.
-     * However, does not include phase concept.
+     * However, it does not include phase concept.
      * @param {String} type Event type.
      [/lang]
      [lang:de]
@@ -469,7 +467,7 @@ enchant.Event = enchant.Class.create({
          * イベントのタイプ.
          [/lang]
          [lang:en]
-         * Event type.
+         * The type of the event.
          [/lang]
          [lang:de]
          * Typ des Ereignis.
@@ -482,7 +480,7 @@ enchant.Event = enchant.Class.create({
          * イベントのターゲット.
          [/lang]
          [lang:en]
-         * Event target.
+         * The target of the event.
          [/lang]
          [lang:de]
          * Ziel des Ereignis.
@@ -495,7 +493,7 @@ enchant.Event = enchant.Class.create({
          * イベント発生位置のx座標.
          [/lang]
          [lang:en]
-         * Event occurrence's x coordinates.
+         * The x coordinate of the events occurrence.
          [/lang]
          [lang:de]
          * X Koordinate des Auftretens des Ereignis.
@@ -508,7 +506,7 @@ enchant.Event = enchant.Class.create({
          * イベント発生位置のy座標.
          [/lang]
          [lang:en]
-         * Event occurrence's y coordinates.
+         * The y coordinate of the events occurrence.
          [/lang]
          [lang:de]
          * Y Koordinate des Auftretens des Ereignis.
@@ -521,7 +519,7 @@ enchant.Event = enchant.Class.create({
          * イベントを発行したオブジェクトを基準とするイベント発生位置のx座標.
          [/lang]
          [lang:en]
-         * Event occurrence's local coordinate system's x coordinates.
+         * The event occurrences local coordinate systems x coordinates.
          [/lang]
          [lang:de]
          * X Koordinate des lokalen Koordinatensystems des Auftretens des Ereignis.
@@ -534,7 +532,7 @@ enchant.Event = enchant.Class.create({
          * イベントを発行したオブジェクトを基準とするイベント発生位置のy座標.
          [/lang]
          [lang:en]
-         * Event occurrence's local coordinate system's y coordinates.
+         * The event occurrences local coordinate systems y coordinates.
          [/lang]
          [lang:de]
          * Y Koordinate des lokalen Koordinatensystems des Auftretens des Ereignis.
@@ -567,7 +565,7 @@ enchant.Event = enchant.Class.create({
  *
  [/lang]
  [lang:en]
- * Event dispatched upon completion of game loading.
+ * An event dispatched upon completion of game loading.
  *
  * It is necessary to wait for loading to finish and to do initial processing when preloading images.
  * Issued object: {@link enchant.Game}
@@ -607,7 +605,7 @@ enchant.Event.LOAD = 'load';
  * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.Game}
  [/lang]
  [lang:en]
- * Events occurring during game loading.
+ * Events which are occurring during game loading.
  * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.Game}
  [/lang]
  [lang:de]
@@ -625,7 +623,7 @@ enchant.Event.PROGRESS = 'progress';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Node}
  [/lang]
  [lang:en]
- * Events occurring when a new frame is beeing processed.
+ * An event which is occurring when a new frame is beeing processed.
  * Issued object: {@link enchant.Game}, {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -642,7 +640,7 @@ enchant.Event.ENTER_FRAME = 'enterframe';
  * 発行するオブジェクト: {@link enchant.Game}
  [/lang]
  [lang:en]
- * Events occurring during frame end.
+ * An event which is occurring when the frame processing is about to end.
  * Issued object: {@link enchant.Game}
  [/lang]
  [lang:de]
@@ -695,7 +693,7 @@ enchant.Event.EXIT = 'exit';
  * 発行するオブジェクト: {@link enchant.Group}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when Child is added to Node.
+ * An event which is occurring when a Child is getting added to a Node.
  * Issued object: {@link enchant.Group}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -713,7 +711,7 @@ enchant.Event.CHILD_ADDED = 'childadded';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when the Node is added to Group.
+ * An event which is occurring when the Node is added to a Group.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -731,7 +729,7 @@ enchant.Event.ADDED = 'added';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when the Node is added to Scene.
+ * An event which is occurring when the Node is added to a Scene.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -750,7 +748,7 @@ enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
  * @type {String}
  [/lang]
  [lang:en]
- * Event occurring when Child is removed from Node.
+ * An event which is occurring when a Child is removed from a Node.
  * Issued object: {@link enchant.Group}, {@link enchant.Scene}
  * @type {String}
  [/lang]
@@ -769,7 +767,7 @@ enchant.Event.CHILD_REMOVED = 'childremoved';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when the Node is deleted from Group.
+ * An event which is occurring when the Node is deleted from a Group.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -787,7 +785,7 @@ enchant.Event.REMOVED = 'removed';
  * 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when Node is deleted from Scene.
+ * An event which is occurring when the Node is deleted from a Scene.
  * Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
@@ -805,8 +803,8 @@ enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
  * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when touch corresponding to Node has begun.
- * Click is also treated as touch. Issued object: {@link enchant.Node}
+ * An event occurring when a touch related to the Node has begun.
+ * A click is also treated as touch. Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Touch auf einen Node
@@ -823,8 +821,8 @@ enchant.Event.TOUCH_START = 'touchstart';
  * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
- * Event occurring when touch corresponding to Node has been moved.
- * Click is also treated as touch. Issued object: {@link enchant.Node}
+ * An event occurring when a touch related to the Node has been moved.
+ * A click is also treated as touch. Issued object: {@link enchant.Node}
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Touch auf einen Node
@@ -841,8 +839,8 @@ enchant.Event.TOUCH_MOVE = 'touchmove';
  * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
  [/lang]
  [lang:en]
- * Event occurring when touch corresponding to touch has ended.
- * Click is also treated as touch. Issued object: enchant.Node
+ * An event which is occurring when a touch related to the Node has ended.
+ * A Click is also treated as touch. Issued object: enchant.Node
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Touch auf einen Node
@@ -859,7 +857,7 @@ enchant.Event.TOUCH_END = 'touchend';
  * 発行するオブジェクト: {@link enchant.Entity}
  [/lang]
  [lang:en]
- * Event occurring when an Entity is rendered.
+ * An event which is occurring when an Entity is rendered.
  * Issued object: {@link enchant.Entity}
  [/lang]
  [lang:de]
@@ -877,7 +875,7 @@ enchant.Event.RENDER = 'render';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when a button is pushed.
+ * An event which is occurring when a button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -894,7 +892,7 @@ enchant.Event.INPUT_START = 'inputstart';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when a button input changes.
+ * An event which is occurring when a button input changes.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -911,7 +909,7 @@ enchant.Event.INPUT_CHANGE = 'inputchange';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when a button input ends.
+ * An event which is occurring when a button input ends.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -928,7 +926,7 @@ enchant.Event.INPUT_END = 'inputend';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the left button is pushed.
+ * An event which is occurring when the left button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -945,7 +943,7 @@ enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the left button is released.
+ * An event which is occurring when the left button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -962,7 +960,7 @@ enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the right button is pushed.
+ * An event which is occurring when the right button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -979,7 +977,7 @@ enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the right button is released.
+ * An event which is occurring when the right button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -996,7 +994,7 @@ enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Even occurring when the up button is pushed.
+ * An event which is occurring when the up button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1013,7 +1011,7 @@ enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the up button is released.
+ * An event which is occurring when the up button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1030,7 +1028,7 @@ enchant.Event.UP_BUTTON_UP = 'upbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the down button is pushed.
+ * An event which is occurring when the down button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1047,7 +1045,7 @@ enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the down button is released.
+ * An event which is occurring when the down button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1064,7 +1062,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the a button is pushed.
+ * An event which is occurring when the a button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1081,7 +1079,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the a button is released.
+ * An event which is occurring when the a button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1098,7 +1096,7 @@ enchant.Event.A_BUTTON_UP = 'abuttonup';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the b button is pushed.
+ * An event which is occurring when the b button is pressed.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1115,7 +1113,7 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
  * 発行するオブジェクト: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:en]
- * Event occurring when the b button is released.
+ * An event which is occurring when the b button is released.
  * Issued object: {@link enchant.Game}, {@link enchant.Scene}
  [/lang]
  [lang:de]
@@ -1138,7 +1136,7 @@ enchant.EventTarget = enchant.Class.create({
      [lang:en]
      * A class for an independent implementation of events
      * similar to DOM Events.
-     * However, does not include phase concept.
+     * However, it does not include the phase concept.
      [/lang]
      [lang:de]
      * Eine Klasse für eine unabhängige Implementierung von Ereignissen 
@@ -1159,8 +1157,8 @@ enchant.EventTarget = enchant.Class.create({
      [lang:en]
      * Add a new event listener which will be executed when the event
      * is being dispatched.
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be added.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be added.
      [/lang]
      [lang:de]
      * Fügt einen neuen Ereignisbeobachter hinzu, welcher beim Auftreten des
@@ -1182,8 +1180,8 @@ enchant.EventTarget = enchant.Class.create({
     /**
      * Synonym for addEventListener
      * @see {enchant.EventTarget#addEventListener}
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be added.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be added.
      */
     on: function() {
         this.addEventListener.apply(this, arguments);
@@ -1195,9 +1193,9 @@ enchant.EventTarget = enchant.Class.create({
      * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
      [/lang]
      [lang:en]
-     * Delete an EventListener.
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be deleted.
+     * Delete an event listener.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be deleted.
      [/lang]
      [lang:de]
      * Entfernt einen Ereignisbeobachter.
@@ -1221,9 +1219,9 @@ enchant.EventTarget = enchant.Class.create({
      * @param [String] type イベントのタイプ.
      [/lang]
      [lang:en]
-     * Clear all EventListener for a type.
-     * If no type is given all listener will be removed.
-     * @param [String] type Event type.
+     * Clear all defined event listener for a given type.
+     * If no type is given, all listener will be removed.
+     * @param [String] type Type of the events.
      [/lang]
      [lang:de]
      * Entfernt alle Ereignisbeobachter für einen Typ.
@@ -1292,14 +1290,14 @@ enchant.EventTarget = enchant.Class.create({
          * @param {Number} height ゲーム画面の高さ.
          [/lang]
          [lang:en]
-         * Class controlling game main loop, scene.
+         * A class which is controlling the games main loop and scenes.
          *
-         * There can be only one instance, and when the constructor is executed
-         * with an instance present, the existing item will be overwritten. The existing instance
+         * There can be only one instance at a time, when the constructor is executed
+         * with an instance present, the existing instance will be overwritten. The existing instance
          * can be accessed from {@link enchant.Game.instance}.
          * 
-         * @param {Number} width Game screen width.
-         * @param {Number} height Game screen height.
+         * @param {Number} width The width of the game screen.
+         * @param {Number} height The height of the game screen.
          [/lang]
          [lang:de]
          * Klasse, welche die Spielschleife und Szenen kontrolliert.
@@ -1333,7 +1331,7 @@ enchant.EventTarget = enchant.Class.create({
              * ゲーム画面の横幅.
              [/lang]
              [lang:en]
-             * Game screen width.
+             * The width of the game screen.
              [/lang]
              [lang:de]
              * Breite des Spieles.
@@ -1346,7 +1344,7 @@ enchant.EventTarget = enchant.Class.create({
              * ゲーム画面の高さ.
              [/lang]
              [lang:en]
-             * Game screen height.
+             * The height of the game screen.
              [/lang]
              [lang:de]
              * Höhe des Spieles.
@@ -1359,7 +1357,7 @@ enchant.EventTarget = enchant.Class.create({
              * ゲームの表示倍率.
              [/lang]
              [lang:en]
-             * Game display scaling.
+             * The scaling of the game rendering.
              [/lang]
              [lang:de]
              * Skalierung der Spieldarstellung.
@@ -1421,7 +1419,7 @@ enchant.EventTarget = enchant.Class.create({
              * ゲームのフレームレート.
              [/lang]
              [lang:en]
-             * Game frame rate.
+             * The frame rate of the game.
              [/lang]
              [lang:de]
              * Frame Rate des Spieles.
@@ -1434,7 +1432,7 @@ enchant.EventTarget = enchant.Class.create({
              * ゲーム開始からのフレーム数.
              [/lang]
              [lang:en]
-             * Number of frames since the game start.
+             * The amount of frames since the game was started.
              [/lang]
              [lang:de]
              * Anzahl der Frames seit dem Spielestart.
@@ -1473,7 +1471,7 @@ enchant.EventTarget = enchant.Class.create({
              * ロードされた画像をパスをキーとして保存するオブジェクト.
              [/lang]
              [lang:en]
-             * Loaded Objects are stored with the path as key in this Objekt.
+             * Object which stores loaded objects with the path as key.
              [/lang]
              [lang:de]
              * Geladene Objekte werden unter dem Pfad als Schlüssel in diesem Objekt abgelegt.
@@ -1501,7 +1499,7 @@ enchant.EventTarget = enchant.Class.create({
              * 現在のScene. Sceneスタック中の一番上のScene.
              [/lang]
              [lang:en]
-             * The current Scene displayed. Scene at top of Scene stack.
+             * The Scene which is currently displayed. This Scene is on top of Scene stack.
              [/lang]
              [lang:de]
              * Die aktuell dargestellte Szene. 
@@ -1515,7 +1513,7 @@ enchant.EventTarget = enchant.Class.create({
              * ルートScene. Sceneスタック中の一番下のScene.
              [/lang]
              [lang:en]
-             * The Route Scene. The Scene at bottom of Scene stack.
+             * The root Scene. The Scene at bottom of Scene stack.
              [/lang]
              [lang:de]
              * Die Ursprungsszene. 
@@ -1530,7 +1528,7 @@ enchant.EventTarget = enchant.Class.create({
              * ローディング時に表示されるScene.
              [/lang]
              [lang:en]
-             * The Scene displayed during loading.
+             * The Scene which is getting displayed during loading.
              [/lang]
              [lang:de]
              * Die Szene, welche während des Ladevorgangs dargestellt wird. 
@@ -1730,7 +1728,7 @@ enchant.EventTarget = enchant.Class.create({
          * @param {...String} assets プリロードする画像のパス. 複数指定できる.
          [/lang]
          [lang:en]
-         * Performs file preload.
+         * Performs a file preload.
          * 
          * Sets files which are to be preloaded. When {@link enchant.Game#start} is called the 
          * actual loading takes place. When all files are loaded, a {@link enchant.Event.LOAD} event
@@ -1795,7 +1793,7 @@ enchant.EventTarget = enchant.Class.create({
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
          [/lang]
          [lang:en]
-         * File loading.
+         * Loads a file.
          *
          * @param {String} asset File path of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
@@ -1855,7 +1853,7 @@ enchant.EventTarget = enchant.Class.create({
          * Start the game.
          *
          * Obeying the frame rate set in {@link enchant.Game#fps}, the frame in
-         * {@link enchant.Game#currentScene} will be updated. When images to preload are present,
+         * {@link enchant.Game#currentScene} will be updated. If images to preload are present,
          * loading will begin and the loading screen will be displayed.
          [/lang]
          [lang:de]
@@ -2349,7 +2347,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
          * [/lang]
          * [lang:en]
-         * age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
+         * The age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
          * [/lang]
          * [lang:de]
          * Das Alter (Frames) dieses Nodes welches vor dem {@link enchant.Event.ENTER_FRAME} Ereignis erhöht wird.
@@ -2580,39 +2578,35 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          * Entityにボタンの機能を設定する.
          * Entityに対するタッチ, クリックをleft, right, up, down, a, bいずれかの
          * ボタン入力として割り当てる.
-         * @type {String}
          [/lang]
          [lang:en]
          * Defines this Entity as a button.
          * When touched or clicked the corresponding button event is dispatched.
          * Valid buttonModes are: left, right, up, down, a, b. 
-         * @type {String}
          [/lang]
          [lang:de]
          * Definiert diese Entity als Schaltfläche (Button).
          * Bei einem Klick oder Touch wird das entsprechende
          * Button Ereignis (Event) ausgelöst.
          * Mögliche buttonModes sind: left, right, up, down, a, b. 
-         * @type {String}
          [/lang]
+         * @type {String}
          */
         this.buttonMode = null;
         /**
          [lang:ja]
          * Entityが押されているかどうか.
-         * buttonModeが設定されているときだけ機能する.
-         * @type {Boolean}
+         * {@link enchant.Entity.buttonMode}が設定されているときだけ機能する.
          [/lang]
          [lang:en]
-         * Indicates if Entity is being clicked.
-         * Only functions when buttonMode is set.
-         * @type {Boolean}
+         * Indicates if this Entity is being clicked.
+         * Only works when {@link enchant.Entity.buttonMode} is set.
          [/lang]
          [lang:de]
          * Zeigt an, ob auf die Entity geklickt wurde.
-         * Funktioniert nur wenn buttonMode gesetzt ist.
-         * @type {Boolean}
+         * Funktioniert nur wenn {@link enchant.Entity.buttonMode} gesetzt ist.
          [/lang]
+         * @type {Boolean}
          */
         this.buttonPressed = false;
         this.addEventListener('touchstart', function() {
@@ -2653,16 +2647,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Entityの横幅.
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Entity width.
-     * @type {Number}
+     * The width of the Entity.
      [/lang]
      [lang:de]
      * Die Breite der Entity.
-     * @type {Number}
      [/lang]
+     * @type {Number}
      */
     width: {
         get: function() {
@@ -2676,16 +2668,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Entityの高さ.
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Entity height.
-     * @type {Number}
+     * The height of the Entity.
      [/lang]
      [lang:de]
      * Die Höhe der Entity.
-     * @type {Number}
      [/lang]
+     * @type {Number}
      */
     height: {
         get: function() {
@@ -2700,18 +2690,16 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:ja]
      * Entityの背景色.
      * CSSの'color'プロパティと同様の形式で指定できる.
-     * @type {String}
      [/lang]
      [lang:en]
-     * Entity background color.
+     * The Entity background color.
      * Must be provided in the same format as the CSS 'color' property.
-     * @type {String}
      [/lang]
      [lang:de]
      * Die Hintergrundfarbe der Entity.
      * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
-     * @type {String}
      [/lang]
+     * @type {String}
      */
     backgroundColor: {
         get: function() {
@@ -2725,20 +2713,18 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:ja]
      * Entityの透明度.
      * 0から1までの値を設定する(0が完全な透明, 1が完全な不透明).
-     * @type {Number}
      [/lang]
      [lang:en]
-     * Entity transparency.
-     * Defines the transparancy level from 0 to 1
+     * The transparency of this entity.
+     * Defines the transparency level from 0 to 1
      * (0 is completely transparent, 1 is completely opaque).
-     * @type {Number}
      [/lang]
      [lang:de]
      * Transparenz der Entity.
      * Definiert den Level der Transparenz von 0 bis 1
      * (0 ist komplett transparent, 1 ist vollständig deckend).
-     * @type {Number}
      [/lang]
+     * @type {Number}
      */
     opacity: {
         get: function() {
@@ -2751,16 +2737,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Entityを表示するかどうかを指定する.
-     * @type {Boolean}
      [/lang]
      [lang:en]
-     * Indicates whether or not to display Entity.
-     * @type {Boolean}
+     * Indicates whether or not to display this Entity.
      [/lang]
      [lang:de]
      * Zeigt an, ob die Entity dargestellt werden soll oder nicht.
-     * @type {Boolean}
      [/lang]
+     * @type {Boolean}
      */
     visible: {
         get: function() {
@@ -2773,16 +2757,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
      [lang:ja]
      * Entityのタッチを有効にするかどうかを指定する.
-     * @type {Boolean}
      [/lang]
      [lang:en]
-     * Designates whether or not the Entity can be touched.
-     * @type {Boolean}
+     * Indicates whether or not this Entity can be touched.
      [/lang]
      [lang:de]
      * Definiert ob auf die Entity geklickt werden kann. 
-     * @type {Boolean}
      [/lang]
+     * @type {Boolean}
      */
     touchEnabled: {
         get: function() {
@@ -2806,9 +2788,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @return {Boolean} 衝突判定の結果.
      [/lang]
      [lang:en]
-     * Operates collision detection based on whether or not the bounding rectangles are intersecting.
-     * @param {*} other An object like Entity, with properties of x, y, width, height, with which the 
-     * collision detection will be performed.
+     * Performs a collision detection based on whether or not the bounding rectangles are intersecting.
+     * @param {*} other An object like Entity, with the properties x, y, width, height, which are used for the 
+     * collision detection.
      * @return {Boolean} True, if a collision was detected.
      [/lang]
      [lang:de]
@@ -2836,11 +2818,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @return {Boolean} 衝突判定の結果.
      [/lang]
      [lang:en]
-     * Operates collision detection based on distance from Entity's central point.
-     * @param {*} other An object like Entity, with properties of x, y, width, height, with which the 
-     * collision detection will be performed.
-     * @param {Number} [distance] Greatest distance considered in collision.
-     * Default distance is average of both objects width and height.
+     * Performs a collision detection based on distance from the Entity's central point.
+     * @param {*} other An object like Entity, with properties x, y, width, height, which are used for the 
+     * collision detection.
+     * @param {Number} [distance] The greatest distance to be considered for a collision.
+     * The default distance is the average of both objects width and height.
      * @return {Boolean} True, if a collision was detected.
      [/lang]
      [lang:de]
@@ -2867,12 +2849,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @param {Number} [y] 拡大するy軸方向の倍率.
      [/lang]
      [lang:en]
-     * Enlarges or shrinks Sprite.
+     * Enlarges or shrinks this Sprite.
      * @param {Number} x Scaling factor on the x axis.
-     * @param {Number} [y] Scaling on the y axis.
+     * @param {Number} [y] Scaling factor on the y axis.
      [/lang]
      [lang:de]
-     * Vergrößert oder verkleinert ein Sprite.
+     * Vergrößert oder verkleinert dieses Sprite.
      * @param {Number} x Skalierungsfaktor auf der x-Achse.
      * @param {Number} [y] Skalierungsfaktor auf der y-Achse.
      [/lang]
@@ -2891,11 +2873,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @param {Number} deg 回転する角度 (度数法).
      [/lang]
      [lang:en]
-     * Rotate Sprite.
+     * Rotate this Sprite.
      * @param {Number} deg Rotation angle (degree).
      [/lang]
      [lang:de]
-     * Rotiert ein Sprite.
+     * Rotiert dieses Sprite.
      * @param {Number} deg Rotationswinkel (Grad).
      [/lang]
      */
@@ -2908,10 +2890,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Spriteのx軸方向の倍率.
      [/lang]
      [lang:en]
-     * Scaling factor on the x axis of a Sprite.
+     * Scaling factor on the x axis of this Sprite.
      [/lang]
      [lang:de]
-     * Skalierungsfaktor auf der x-Achse eines Sprites.
+     * Skalierungsfaktor auf der x-Achse dieses Sprites.
      [/lang]
      * @type {Number}
      */
@@ -2929,10 +2911,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Spriteのy軸方向の倍率.
      [/lang]
      [lang:en]
-     * Scaling factor on the y axis of a Sprite.
+     * Scaling factor on the y axis of this Sprite.
      [/lang]
      [lang:de]
-     * Skalierungsfaktor auf der y-Achse eines Sprites.
+     * Skalierungsfaktor auf der y-Achse dieses Sprites.
      [/lang]
      * @type {Number}
      */
@@ -2971,7 +2953,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * 回転・拡大縮小の基準点のX座標
      [/lang]
      [lang:en]
-     * origin point of rotation, scaling
+     * The point of origin used for rotation and scaling.
      [/lang]
      [lang:de]
      * Ausgangspunkt für Rotation und Skalierung.
@@ -2992,7 +2974,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * 回転・拡大縮小の基準点のY座標
      [/lang]
      [lang:en]
-     * origin point of rotation, scaling
+     * The point of origin used for rotation and scaling.
      [/lang]
      [lang:de]
      * Ausgangspunkt für Rotation und Skalierung.
@@ -4648,18 +4630,16 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     [lang:ja]
     * CanvasSceneの背景色.
     * CSSの'color'プロパティと同様の形式で指定できる.
-    * @type {String}
     [/lang]
     [lang:en]
-    * CanvasScene background color.
+    * The CanvasScene background color.
     * Must be provided in the same format as the CSS 'color' property.
-    * @type {String}
     [/lang]
     [lang:de]
     * Die Hintergrundfarbe der Canvas Szene.
     * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
-    * @type {String}
     [/lang]
+    * @type {String}
     */
     backgroundColor: {
         get: function() {

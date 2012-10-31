@@ -32,18 +32,16 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     [lang:ja]
     * CanvasSceneの背景色.
     * CSSの'color'プロパティと同様の形式で指定できる.
-    * @type {String}
     [/lang]
     [lang:en]
-    * CanvasScene background color.
+    * The CanvasScene background color.
     * Must be provided in the same format as the CSS 'color' property.
-    * @type {String}
     [/lang]
     [lang:de]
     * Die Hintergrundfarbe der Canvas Szene.
     * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
-    * @type {String}
     [/lang]
+    * @type {String}
     */
     backgroundColor: {
         get: function() {

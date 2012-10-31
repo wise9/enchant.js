@@ -7,7 +7,7 @@ enchant.DOMScene = enchant.Class.create(enchant.Group, {
     * 表示オブジェクトツリーのルートになるクラス.
     [/lang]
     [lang:en]
-    * Class that becomes the root of the display object tree.
+    * A Class that becomes the root of the display object tree.
     [/lang]
     [lang:de]
     * Eine Klasse die zur Wurzel im Darstellungsobjektbaum wird.
@@ -103,18 +103,16 @@ enchant.DOMScene = enchant.Class.create(enchant.Group, {
     [lang:ja]
     * DOMSceneの背景色.
     * CSSの'color'プロパティと同様の形式で指定できる.
-    * @type {String}
     [/lang]
     [lang:en]
-    * DOMScene background color.
+    * The DOMScene background color.
     * Must be provided in the same format as the CSS 'color' property.
-    * @type {String}
     [/lang]
     [lang:de]
     * Die Hintergrundfarbe der DOM Szene.
     * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
-    * @type {String}
     [/lang]
+    * @type {String}
     */
     backgroundColor: {
         get: function() {

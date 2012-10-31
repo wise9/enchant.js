@@ -10,7 +10,7 @@ enchant.EventTarget = enchant.Class.create({
      [lang:en]
      * A class for an independent implementation of events
      * similar to DOM Events.
-     * However, does not include phase concept.
+     * However, it does not include the phase concept.
      [/lang]
      [lang:de]
      * Eine Klasse für eine unabhängige Implementierung von Ereignissen 
@@ -31,8 +31,8 @@ enchant.EventTarget = enchant.Class.create({
      [lang:en]
      * Add a new event listener which will be executed when the event
      * is being dispatched.
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be added.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be added.
      [/lang]
      [lang:de]
      * Fügt einen neuen Ereignisbeobachter hinzu, welcher beim Auftreten des
@@ -54,8 +54,8 @@ enchant.EventTarget = enchant.Class.create({
     /**
      * Synonym for addEventListener
      * @see {enchant.EventTarget#addEventListener}
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be added.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be added.
      */
     on: function() {
         this.addEventListener.apply(this, arguments);
@@ -67,9 +67,9 @@ enchant.EventTarget = enchant.Class.create({
      * @param {function(e:enchant.Event)} listener 削除するイベントリスナ.
      [/lang]
      [lang:en]
-     * Delete an EventListener.
-     * @param {String} type Event type.
-     * @param {function(e:enchant.Event)} listener EventListener to be deleted.
+     * Delete an event listener.
+     * @param {String} type Type of the events.
+     * @param {function(e:enchant.Event)} listener Event listener to be deleted.
      [/lang]
      [lang:de]
      * Entfernt einen Ereignisbeobachter.
@@ -93,9 +93,9 @@ enchant.EventTarget = enchant.Class.create({
      * @param [String] type イベントのタイプ.
      [/lang]
      [lang:en]
-     * Clear all EventListener for a type.
-     * If no type is given all listener will be removed.
-     * @param [String] type Event type.
+     * Clear all defined event listener for a given type.
+     * If no type is given, all listener will be removed.
+     * @param [String] type Type of the events.
      [/lang]
      [lang:de]
      * Entfernt alle Ereignisbeobachter für einen Typ.

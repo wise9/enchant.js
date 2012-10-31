@@ -20,14 +20,14 @@
          * @param {Number} height ゲーム画面の高さ.
          [/lang]
          [lang:en]
-         * Class controlling game main loop, scene.
+         * A class which is controlling the games main loop and scenes.
          *
-         * There can be only one instance, and when the constructor is executed
-         * with an instance present, the existing item will be overwritten. The existing instance
+         * There can be only one instance at a time, when the constructor is executed
+         * with an instance present, the existing instance will be overwritten. The existing instance
          * can be accessed from {@link enchant.Game.instance}.
          * 
-         * @param {Number} width Game screen width.
-         * @param {Number} height Game screen height.
+         * @param {Number} width The width of the game screen.
+         * @param {Number} height The height of the game screen.
          [/lang]
          [lang:de]
          * Klasse, welche die Spielschleife und Szenen kontrolliert.
@@ -61,7 +61,7 @@
              * ゲーム画面の横幅.
              [/lang]
              [lang:en]
-             * Game screen width.
+             * The width of the game screen.
              [/lang]
              [lang:de]
              * Breite des Spieles.
@@ -74,7 +74,7 @@
              * ゲーム画面の高さ.
              [/lang]
              [lang:en]
-             * Game screen height.
+             * The height of the game screen.
              [/lang]
              [lang:de]
              * Höhe des Spieles.
@@ -87,7 +87,7 @@
              * ゲームの表示倍率.
              [/lang]
              [lang:en]
-             * Game display scaling.
+             * The scaling of the game rendering.
              [/lang]
              [lang:de]
              * Skalierung der Spieldarstellung.
@@ -149,7 +149,7 @@
              * ゲームのフレームレート.
              [/lang]
              [lang:en]
-             * Game frame rate.
+             * The frame rate of the game.
              [/lang]
              [lang:de]
              * Frame Rate des Spieles.
@@ -162,7 +162,7 @@
              * ゲーム開始からのフレーム数.
              [/lang]
              [lang:en]
-             * Number of frames since the game start.
+             * The amount of frames since the game was started.
              [/lang]
              [lang:de]
              * Anzahl der Frames seit dem Spielestart.
@@ -201,7 +201,7 @@
              * ロードされた画像をパスをキーとして保存するオブジェクト.
              [/lang]
              [lang:en]
-             * Loaded Objects are stored with the path as key in this Objekt.
+             * Object which stores loaded objects with the path as key.
              [/lang]
              [lang:de]
              * Geladene Objekte werden unter dem Pfad als Schlüssel in diesem Objekt abgelegt.
@@ -229,7 +229,7 @@
              * 現在のScene. Sceneスタック中の一番上のScene.
              [/lang]
              [lang:en]
-             * The current Scene displayed. Scene at top of Scene stack.
+             * The Scene which is currently displayed. This Scene is on top of Scene stack.
              [/lang]
              [lang:de]
              * Die aktuell dargestellte Szene. 
@@ -243,7 +243,7 @@
              * ルートScene. Sceneスタック中の一番下のScene.
              [/lang]
              [lang:en]
-             * The Route Scene. The Scene at bottom of Scene stack.
+             * The root Scene. The Scene at bottom of Scene stack.
              [/lang]
              [lang:de]
              * Die Ursprungsszene. 
@@ -258,7 +258,7 @@
              * ローディング時に表示されるScene.
              [/lang]
              [lang:en]
-             * The Scene displayed during loading.
+             * The Scene which is getting displayed during loading.
              [/lang]
              [lang:de]
              * Die Szene, welche während des Ladevorgangs dargestellt wird. 
@@ -458,7 +458,7 @@
          * @param {...String} assets プリロードする画像のパス. 複数指定できる.
          [/lang]
          [lang:en]
-         * Performs file preload.
+         * Performs a file preload.
          * 
          * Sets files which are to be preloaded. When {@link enchant.Game#start} is called the 
          * actual loading takes place. When all files are loaded, a {@link enchant.Event.LOAD} event
@@ -523,7 +523,7 @@
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
          [/lang]
          [lang:en]
-         * File loading.
+         * Loads a file.
          *
          * @param {String} asset File path of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
@@ -583,7 +583,7 @@
          * Start the game.
          *
          * Obeying the frame rate set in {@link enchant.Game#fps}, the frame in
-         * {@link enchant.Game#currentScene} will be updated. When images to preload are present,
+         * {@link enchant.Game#currentScene} will be updated. If images to preload are present,
          * loading will begin and the loading screen will be displayed.
          [/lang]
          [lang:de]
