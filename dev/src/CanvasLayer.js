@@ -414,6 +414,9 @@
             }
             ctx.strokeRect(0, 0, node.width, node.height);
         }
+        if (node._clipping) {
+            ctx.clip();
+        }
     };
 
     var rendering = nodesWalker(
@@ -438,6 +441,9 @@
     var detectrender = function(ctx, node) {
         ctx.fillStyle = node._cvsCache.detectColor;
         ctx.fillRect(0, 0, node.width, node.height);
+        if (node._clipping) {
+            ctx.clip();
+        }
     };
 
     var detectrendering = nodesWalker(

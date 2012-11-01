@@ -24,6 +24,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._scaleX = 1;
         this._scaleY = 1;
 
+        this._clipping = false;
+
         this._originX = null;
         this._originY = null;
 
