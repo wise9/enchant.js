@@ -233,6 +233,7 @@
             var i = this.childNodes.indexOf(reference);
             if (i !== -1) {
                 this.childNodes.splice(i, 0, node);
+                node.parentNode = this;
                 node.dispatchEvent(new enchant.Event('added'));
                 if (this.scene) {
                     node.scene = this.scene;

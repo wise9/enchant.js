@@ -302,7 +302,7 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Use Flash instead of native Audio class?
+     * Will Use Flash instead of native Audio class?
      * @type {String}
      */
     USE_FLASH_SOUND: (function() {
@@ -324,7 +324,12 @@ enchant.ENV = {
         39: 'right',
         40: 'down'
     },
-    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32]
+    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
+    /**
+     *
+      * @type {Boolean}
+     */
+    SOUND_ENABLED_IN_MOBILE_SAFARI: false
 };
 /**
  * @scope enchant.Event.prototype
@@ -2917,6 +2922,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             var i = this.childNodes.indexOf(reference);
             if (i !== -1) {
                 this.childNodes.splice(i, 0, node);
+                node.parentNode = this;
                 node.dispatchEvent(new enchant.Event('added'));
                 if (this.scene) {
                     node.scene = this.scene;
@@ -3722,5 +3728,3 @@ enchant.Sound.load = function(src, type) {
     }
     return sound;
 };
-
-enchant.Sound.enabledInMobileSafari = false;
