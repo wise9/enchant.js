@@ -1473,6 +1473,36 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     }
 });
 
+var _intersectBetweenClassAndInstance = function(Class, instance) {
+    return Class.collection.filter(function(classInstance) {
+        return enchant.Entity.prototype.intersect.call(instance, classInstance);
+    });
+};
+
+var _intersectBetweenClassAndClass = function(Class1, Class2) {
+    var ret = [];
+    Class1.collection.forEach(function(instance1) {
+        Class2.collection.forEach(function(instance2) {
+            if (enchant.Entity.prototype.intersect.call(instance1, instance2)) {
+                 ret.push([ instance1, instance2 ]);
+            }
+        });
+    });
+    return ret;
+};
+
+var getInheritanceRelation = function(Constructor) {
+    var ret = [];
+    var C = Constructor;
+    var proto = C.prototype;
+    while (C !== Object) {
+        ret.push(C);
+        proto = Object.getPrototypeOf(proto);
+        C = proto.constructor;
+    }
+    return ret;
+};
+
 /**
  * @scope enchant.Entity.prototype
  */
@@ -1547,6 +1577,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             game.removeEventListener('exitframe', render);
         });
 
+        this._collectizeConstructor();
+        this.enableCollection();
     },
     /**
      * Entityの横幅.
@@ -1637,8 +1669,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @return {Boolean} 衝突判定の結果.
      */
     intersect: function(other) {
-        return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
-            this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
+        if (other instanceof enchant.Entity) {
+            return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
+                this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
+        } else if (typeof other === 'function' && other.collection) {
+            return _intersectBetweenClassAndInstance(other, this);
+        }
+        return false;
     },
     /**
      * Entityの中心点どうしの距離により衝突判定を行う.
@@ -1738,6 +1775,69 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._originY = originY;
             this._dirty = true;
         }
+    },
+    /**
+     * インスタンスをコレクションの対象にする.
+     * デフォルトで呼び出される.
+     */
+    enableCollection: function() {
+        this.addEventListener('addedtoscene', this._addSelfToCollection);
+        this.addEventListener('removedfromscene', this._removeSelfFromCollection);
+        if (this.scene) {
+            this._addSelfToCollection();
+        }
+    },
+    /**
+     * インスタンスをコレクションの対象から除外する.
+     */
+    disableCollection: function() {
+        this.removeEventListener('addedtoscene', this._addSelfToCollection);
+        this.removeEventListener('removedfromscene', this._removeSelfFromCollection);
+        if (this.scene) {
+            this._removeSelfFromCollection();
+        }
+    },
+    _collectizeConstructor: function() {
+        var Constructor = this.getConstructor();
+        if (this.getConstructor._collective) {
+            return;
+        }
+        // class method instance
+        Constructor.intersect = function(other) {
+            if (other instanceof enchant.Entity) {
+                return _intersectBetweenClassAndInstance(this, other);
+            } else if (typeof other === 'function' && other.collection) {
+                return _intersectBetweenClassAndClass(this, other);
+            }
+            return false;
+        };
+        var rel = getInheritanceRelation(Constructor);
+        var i = rel.indexOf(enchant.Entity);
+        if (i !== -1) {
+            Constructor._collectionTarget = rel.splice(0, i);
+        } else {
+            Constructor._collectionTarget = [];
+        }
+        Constructor.collection = [];
+        Constructor._collective = true;
+    },
+    _addSelfToCollection: function() {
+        var Constructor = this.getConstructor();
+        Constructor._collectionTarget.forEach(function(C) {
+            C.collection.push(this);
+        }, this);
+    },
+    _removeSelfFromCollection: function() {
+        var Constructor = this.getConstructor();
+        Constructor._collectionTarget.forEach(function(C) {
+            var i = C.collection.indexOf(this);
+            if (i !== -1) {
+                C.collection.splice(i, 1);
+            }
+        }, this);
+    },
+    getConstructor: function() {
+        return Object.getPrototypeOf(this).constructor;
     }
 });
 

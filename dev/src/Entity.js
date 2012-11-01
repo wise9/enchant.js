@@ -1,3 +1,33 @@
+var _intersectBetweenClassAndInstance = function(Class, instance) {
+    return Class.collection.filter(function(classInstance) {
+        return enchant.Entity.prototype.intersect.call(instance, classInstance);
+    });
+};
+
+var _intersectBetweenClassAndClass = function(Class1, Class2) {
+    var ret = [];
+    Class1.collection.forEach(function(instance1) {
+        Class2.collection.forEach(function(instance2) {
+            if (enchant.Entity.prototype.intersect.call(instance1, instance2)) {
+                 ret.push([ instance1, instance2 ]);
+            }
+        });
+    });
+    return ret;
+};
+
+var getInheritanceRelation = function(Constructor) {
+    var ret = [];
+    var C = Constructor;
+    var proto = C.prototype;
+    while (C !== Object) {
+        ret.push(C);
+        proto = Object.getPrototypeOf(proto);
+        C = proto.constructor;
+    }
+    return ret;
+};
+
 /**
  [lang:ja]
  * @scope enchant.Entity.prototype
@@ -234,8 +264,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     intersect: function(other) {
-        return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
-            this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
+        if (other instanceof enchant.Entity) {
+            return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
+                this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
+        } else if (typeof other === 'function' && other.collection) {
+            return _intersectBetweenClassAndInstance(other, this);
+        }
+        return false;
     },
     /**
      [lang:ja]
@@ -405,30 +440,22 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._removeSelfFromCollection();
         }
     },
-    intersect: function(another) {
-        if (another instanceof enchant.Entity) {
-            return enchant.Entity.prototype.intersect.call(this, another);
-        } else if (typeof another === 'function' && another.collection) {
-            return _intersectBetweenClassAndInstance(another, this);
-        }
-        return false;
-    },
     _collectizeConstructor: function() {
         var Constructor = this.getConstructor();
         if (this.getConstructor._collective) {
             return;
         }
         // class method instance
-        Constructor.intersect = function(another) {
-            if (another instanceof enchant.Entity) {
-                return _intersectBetweenClassAndInstance(this, another);
-            } else if (typeof another === 'function' && another.collection) {
-                return _intersectBetweenClassAndClass(this, another);
+        Constructor.intersect = function(other) {
+            if (other instanceof enchant.Entity) {
+                return _intersectBetweenClassAndInstance(this, other);
+            } else if (typeof other === 'function' && other.collection) {
+                return _intersectBetweenClassAndClass(this, other);
             }
             return false;
         };
         var rel = getInheritanceRelation(Constructor);
-        var i = rel.indexOf(Collective);
+        var i = rel.indexOf(enchant.Entity);
         if (i !== -1) {
             Constructor._collectionTarget = rel.splice(0, i);
         } else {
@@ -456,33 +483,3 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         return Object.getPrototypeOf(this).constructor;
     }
 });
-
-var _intersectBetweenClassAndInstance = function(Class, instance) {
-    return Class.collection.filter(function(classInstance) {
-        return enchant.Entity.prototype.intersect.call(instance, classInstance);
-    });
-};
-
-var _intersectBetweenClassAndClass = function(Class1, Class2) {
-    var ret = [];
-    Class1.collection.forEach(function(instance1) {
-        Class2.collection.forEach(function(instance2) {
-            if (enchant.Entity.prototype.intersect.call(instance1, instance2)) {
-                 ret.push([ instance1, instance2 ]);
-            }
-        });
-    });
-    return ret;
-};
-
-var getInheritanceRelation = function(Constructor) {
-    var ret = [];
-    var C = Constructor;
-    var proto = C.prototype;
-    while (C !== Object) {
-        ret.push(C);
-        proto = Object.getPrototypeOf(proto);
-        C = proto.constructor;
-    }
-    return ret;
-};
