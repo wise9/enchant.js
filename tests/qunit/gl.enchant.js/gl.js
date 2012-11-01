@@ -1,7 +1,7 @@
 module('gl.enchant.js', {
     setup : function() {
         enchant();
-        var game = new Game();
+        // var game = new Game();
     },
     teardown : function() {
 
@@ -14,6 +14,7 @@ module('gl.enchant.js', {
  * Quat#slerp
  */
 test('Quat#slerp', function() {
+
     function nearlyEqual(numA, numB, message) {
         console.log(numA, numB);
         var a = Math.floor(numA * 1000);
