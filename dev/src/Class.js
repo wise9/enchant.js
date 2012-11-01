@@ -4,15 +4,22 @@
  *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} definition クラス定義.
- * @constructor
  [/lang]
  [lang:en]
- * Class of class
+ * A Class representing a class which supports inheritance.
  *
- * @param {Function} [superclass] Successor class.
+ * @param {Function} [superclass] The class from which the
+ * new class will inherit the class definition.
  * @param {*} definition Class definition.
- * @constructor
  [/lang]
+ [lang:de]
+ * Eine Klasse für Klassen, die Vererbung unterstützen.
+ *
+ * @param {Function} [superclass] Die Klasse, deren Klassendefinition
+ * die neue Klasse erben wird.
+ * @param {*} definition Klassendefinition.
+ [/lang]
+ * @constructor
  */
 
 enchant.Class = function(superclass, definition) {
@@ -43,14 +50,13 @@ enchant.Class = function(superclass, definition) {
  *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} [definition] クラス定義.
- * @static
  [/lang]
  [lang:en]
- * Create class.
+ * Create a class.
  *
- * When making classes that succeed other classes, the previous class is used as a base with
- * constructor as default. In order to override the constructor, it is necessary to explicitly
- * call up the previous constructor to use it.
+ * When defining classes that inherit from other classes, the previous class is used as a base with
+ * the superclass's constructor as default. When overriding the default constructor, it is necessary
+ * to explicitly call the previous constructor to ensure a correct class initialization.
  *
  * @example
  *   var Ball = Class.create({ // Creates independent class.
@@ -58,18 +64,45 @@ enchant.Class = function(superclass, definition) {
  *       fall: function() { ... }
  *   });
  *
- *   var Ball = Class.create(Sprite);  // Creates a class succeeding "Sprite"
- *   var Ball = Class.create(Sprite, { // Creates a class succeeding "Sprite"
+ *   var Ball = Class.create(Sprite);  // Creates a class inheriting from "Sprite"
+ *   var Ball = Class.create(Sprite, { // Creates a class inheriting "Sprite"
  *       initialize: function(radius) { // Overwrites constructor
  *          Sprite.call(this, radius*2, radius*2); // Applies previous constructor.
  *          this.image = game.assets['ball.gif'];
  *       }
  *   });
  *
- * @param {Function} [superclass] Preceding class.
+ * @param {Function} [superclass] The class from which the
+ * new class will inherit the class definition.
  * @param {*} [definition] Class definition.
- * @static
  [/lang]
+ [lang:de]
+ * Erstellt eine neue Klasse
+ *
+ * Wenn eine Klasse definiert wird, die von einer anderen Klasse erbt, wird der Konstruktor der
+ * Basisklasse als Standard definiert. Sollte dieser Konstruktor in der neuen Klasse überschrieben
+ * werden, sollte der vorherige Konstruktor explizit aufgerufen werden, um eine korrekte
+ * Klasseninitialisierung sicherzustellen.
+ * 
+ * @example
+ *   var Ball = Class.create({ // definiert eine unabhängige Klasse.
+ *       initialize: function(radius) { ... }, // Methodendefinitionen
+ *       fall: function() { ... }
+ *   });
+ *
+ *   var Ball = Class.create(Sprite);  // definiert eine Klasse die von "Sprite" erbt.
+ *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
+ *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
+ *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
+ *          this.image = game.assets['ball.gif'];
+ *       }
+ *   });
+ *
+ * @param {Function} [superclass] Die Klasse, deren Klassendefinition
+ * die neue Klasse erben wird.
+ * @param {*} definition Klassendefinition.
+ [/lang]
+ * @static
  */
 enchant.Class.create = function(superclass, definition) {
     if (arguments.length === 0) {

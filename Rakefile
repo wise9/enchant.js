@@ -39,15 +39,20 @@ task :lang do |t|
         source = File.read(file)
         dest_en = file.gsub(/\/dev\//, '/')
         dest_ja = file.gsub(/\/dev\//, '/ja/')
+        dest_de = file.gsub(/\/dev\//, '/de/')
         File.open(dest_en, 'w'){ |f|
-            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "")
+            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:de\]\n(.*?)[\t ]*\[\/lang\]\n/m, "")
         }
         File.open(dest_ja, 'w'){ |f|
-            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1")
+            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1").gsub(/[\t ]*\[lang\:de\]\n(.*?)[\t ]*\[\/lang\]\n/m, "")
+        }
+        File.open(dest_de, 'w'){ |f|
+            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:de\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1")
         }
         print "source: #{file}\n"
         print "generated: #{dest_en}\n"
         print "generated: #{dest_ja}\n"
+        print "generated: #{dest_de}\n"
     }
 end
 
@@ -79,8 +84,10 @@ end
 task :doc do |t|
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js -t=doc/template -d=doc/core/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js -t=doc/template -d=doc/core/en'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js -t=doc/template -d=doc/core/de'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/plugins/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/plugins/en'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js de/plugins/*.js -t=doc/template -d=doc/plugins/de'
 #    sh 'jsduck ja/enchant.js ja/plugins/*.enchant.js --output duck/ja';
 #    sh 'jsduck enchant.js plugins/*.enchant.js --output duck/en';
 end

@@ -75,11 +75,12 @@ if (typeof Function.prototype.bind !== 'function') {
  * @param {...String} [modules] エクスポートするモジュール. 複数指定できる.
  [/lang]
  [lang:en]
- * Export library classes globally.
+ * Export the library classes globally.
  *
- * When no arguments are delivered, all classes defined in enchant.js as well as all classes defined in
- * plugins will be exported. When more than one argument is delivered, by default only classes defined
- * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver  *  * plugin identifiers as arguments.
+ * When no arguments are given, all classes defined in enchant.js as well as all classes defined in
+ * plugins will be exported. When more than one argument is given, by default only classes defined
+ * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver 
+ * the plugin identifiers as arguments.
  *
  * @example
  *   enchant();     // All classes will be exported.
@@ -87,6 +88,21 @@ if (typeof Function.prototype.bind !== 'function') {
  *   enchant('ui'); // enchant.js classes and ui.enchant.js classes will be exported.
  *
  * @param {...String} [modules] Export module. Multiple designations possible.
+ [/lang]
+ [lang:de]
+ * Globaler Export der Programmbibliotheken.
+ *
+ * Wenn keine Argument übergeben werden, werden alle Klassen die in enchant.js und in den Plugins
+ * definiert sind exportiert. Falls mehr als ein Argument übergeben wurde, werden standardmäßig nur Klassen
+ * die in enchant.js selbst definiert sind exporitert. Wenn auch Plugin Klassen exportiert werden sollen,
+ * müssen die Plugin Bezeichner explizit als Argumente übergeben werden.
+ *
+ * @example
+ *   enchant();     // alle Klassen werden exportiert.
+ *   enchant('');   // nur Klassen die in enchant.js definiert sind werden exportiert.
+ *   enchant('ui'); // enchant.js Klassen und ui.enchant.js Klassen werden exportiert.
+ *
+ * @param {...String} [modules] Module die exportiert werden sollen.
  [/lang]
  */
 var enchant = function(modules) {

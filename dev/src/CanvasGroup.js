@@ -9,6 +9,12 @@
          * 子を Canvas を用いた描画に切り替えるクラス
          [/lang]
          [lang:en]
+         * A class which is using HTML Canvas for the rendering.
+         * The rendering of children will be replaced by the Canvas rendering.
+         [/lang]
+         [lang:de]
+         * Eine Klasse die HTML Canvas für das Rendern nutzt.
+         * Das Rendern der Kinder wird durch das Canvas Rendering ersetzt.
          [/lang]
          * @constructs
          */
