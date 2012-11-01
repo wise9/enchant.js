@@ -269,5 +269,3 @@ enchant.Sound.load = function(src, type) {
     }
     return sound;
 };
-
-enchant.Sound.enabledInMobileSafari = false;

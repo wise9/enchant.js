@@ -327,9 +327,8 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Determines if for current browser Flash should be used to play 
-     * sound instead of the native audio class.
-     * @type {Boolean} True, if flash should be used.
+     * Will Use Flash instead of native Audio class?
+     * @type {String}
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
@@ -353,11 +352,15 @@ enchant.ENV = {
     },
     PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
     /**
+     *
+     * @type {Boolean}
+     */
+    SOUND_ENABLED_IN_MOBILE_SAFARI: false,
+    /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
      */
     USE_ANIMATION: true
 };
-
 /**
  * @scope enchant.Event.prototype
  */
@@ -3433,8 +3436,6 @@ enchant.Sound.load = function(src, type) {
     }
     return sound;
 };
-
-enchant.Sound.enabledInMobileSafari = false;
 
 
 /**
