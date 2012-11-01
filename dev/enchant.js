@@ -358,7 +358,7 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Use Flash instead of native Audio class?
+     * Will Use Flash instead of native Audio class?
      * @type {String}
      */
     USE_FLASH_SOUND: (function() {
@@ -380,7 +380,12 @@ enchant.ENV = {
         39: 'right',
         40: 'down'
     },
-    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32]
+    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
+    /**
+     *
+      * @type {Boolean}
+     */
+    SOUND_ENABLED_IN_MOBILE_SAFARI: false
 };
 /**
  * @scope enchant.Event.prototype
@@ -4880,5 +4885,3 @@ enchant.Sound.load = function(src, type) {
     }
     return sound;
 };
-
-enchant.Sound.enabledInMobileSafari = false;
