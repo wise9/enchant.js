@@ -1375,10 +1375,11 @@ if (enchant.gl !== undefined) {
                 arraysForShader.keys = keys;
                 return arraysForShader;
             },
-            _render: function() {
+            _render: function(detectTouch) {
                 var game = enchant.Game.instance;
                 var scene = game.currentScene3D;
                 var l = scene.directionalLight;
+                var detect = (detectTouch === 'detect') ? 1.0 : 0.0;
                 mat4.multiply(scene._camera.mat, this.tmpMat, this.uMVMatrix);
                 mat4.toInverseMat3(this.tmpMat, this.uNMatrix);
                 mat3.transpose(this.uNMatrix);
@@ -1396,6 +1397,7 @@ if (enchant.gl !== undefined) {
                 game.GL.currentProgram.setUniforms({
                     uUseDirectionalLight: scene.useDirectionalLight,
                     uLightColor: l.color,
+                    uDetectTouch: detect,
                     uAmbientLightColor: scene.ambientLight.color,
                     uPMatrix: scene._camera.projMat,
                     uMVMatrix: this.uMVMatrix,
