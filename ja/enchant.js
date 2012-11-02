@@ -251,6 +251,24 @@ enchant.Class.create = function(superclass, definition) {
 
     return Constructor;
 };
+
+/**
+ * クラスの継承関係を取得する.
+ * @param {ConstructorFunction}
+ * @param {...ConstructorFunction}
+ */
+enchant.Class.getInheritanceTree = function(Constructor) {
+    var ret = [];
+    var C = Constructor;
+    var proto = C.prototype;
+    while (C !== Object) {
+        ret.push(C);
+        proto = Object.getPrototypeOf(proto);
+        C = proto.constructor;
+    }
+    return ret;
+};
+
 /**
  * 環境変数.
  * @type {Object}
