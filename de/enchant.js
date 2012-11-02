@@ -254,6 +254,23 @@ enchant.Class.create = function(superclass, definition) {
 
     return Constructor;
 };
+
+/**
+ * @param {ConstructorFunction}
+ * @param {...ConstructorFunction}
+ */
+enchant.Class.getInheritanceTree = function(Constructor) {
+    var ret = [];
+    var C = Constructor;
+    var proto = C.prototype;
+    while (C !== Object) {
+        ret.push(C);
+        proto = Object.getPrototypeOf(proto);
+        C = proto.constructor;
+    }
+    return ret;
+};
+
 /**
  * Umgebungsvariable.
  * @type {Object}
@@ -2578,9 +2595,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this._element.height = game.height;
             this._element.style.position = 'absolute';
 
-            this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-            this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
-
             this._detect = document.createElement('canvas');
             this._detect.width = game.width;
             this._detect.height = game.height;
@@ -2730,11 +2744,12 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             game.removeEventListener('exitframe', this._onexitframe);
         },
         _getEntityByPosition: function(x, y) {
+            var game = enchant.Game.instance;
             var ctx = this._dctx;
-            ctx.clearRect(0, 0, this.width, this.height);
-            if (this._lastDetected < this.age) {
+            if (this._lastDetected < game.frame) {
+                ctx.clearRect(0, 0, this.width, this.height);
                 detectrendering.call(this, ctx);
-                this._lastDetected = this.age;
+                this._lastDetected = game.frame;
             }
             var color = ctx.getImageData(x, y, 1, 1).data;
             return this._colorManager.getSpriteByColor(color);
@@ -3001,7 +3016,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
 
     var detachCache = nodesWalker(
         function(colorManager) {
-            detachCache.call(this, colorManager);
             if (this._cvsCache) {
                 colorManager.detachDetectColor(this);
                 delete this._cvsCache;
@@ -3033,6 +3047,8 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
     initialize: function() {
         enchant.CanvasGroup.call(this);
         this.scene = this;
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
     },
     /**
     * Die Hintergrundfarbe der Canvas Szene.
