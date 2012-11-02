@@ -278,7 +278,8 @@ enchant.Class.getInheritanceTree = function(Constructor) {
 };
 
 /**
- * 環境変数.
+ * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
+ * @type {Object}
  * @type {Object}
  */
 enchant.ENV = {
@@ -352,7 +353,6 @@ enchant.ENV = {
     },
     PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
     /**
-     *
      * @type {Boolean}
      */
     SOUND_ENABLED_IN_MOBILE_SAFARI: false,
@@ -3377,7 +3377,7 @@ enchant.Sound.load = function(src, type) {
     var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);
     var audio = new Audio();
-    if (!enchant.Sound.enabledInMobileSafari &&
+    if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
         window.setTimeout(function() {
             sound.dispatchEvent(new enchant.Event('load'));

@@ -210,7 +210,7 @@ enchant.Sound.load = function(src, type) {
     var sound = Object.create(enchant.Sound.prototype);
     enchant.EventTarget.call(sound);
     var audio = new Audio();
-    if (!enchant.Sound.enabledInMobileSafari &&
+    if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
         window.setTimeout(function() {
             sound.dispatchEvent(new enchant.Event('load'));

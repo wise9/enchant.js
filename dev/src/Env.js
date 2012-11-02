@@ -1,6 +1,7 @@
 /**
  [lang:ja]
- * 環境変数.
+ * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
+ * @type {Object}
  [/lang]
  [lang:en]
  * Environment variable.
@@ -81,7 +82,6 @@ enchant.ENV = {
     },
     PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
     /**
-     *
      * @type {Boolean}
      */
     SOUND_ENABLED_IN_MOBILE_SAFARI: false,
