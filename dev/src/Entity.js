@@ -16,18 +16,6 @@ var _intersectBetweenClassAndClass = function(Class1, Class2) {
     return ret;
 };
 
-var getInheritanceRelation = function(Constructor) {
-    var ret = [];
-    var C = Constructor;
-    var proto = C.prototype;
-    while (C !== Object) {
-        ret.push(C);
-        proto = Object.getPrototypeOf(proto);
-        C = proto.constructor;
-    }
-    return ret;
-};
-
 /**
  * @scope enchant.Entity.prototype
  */
@@ -518,7 +506,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             }
             return false;
         };
-        var rel = getInheritanceRelation(Constructor);
+        var rel = enchant.Class.getInheritanceTree(Constructor);
         var i = rel.indexOf(enchant.Entity);
         if (i !== -1) {
             Constructor._collectionTarget = rel.splice(0, i);
