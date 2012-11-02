@@ -1816,7 +1816,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     _collectizeConstructor: function() {
         var Constructor = this.getConstructor();
-        if (this.getConstructor._collective) {
+        if (this.getConstructor()._collective) {
             return;
         }
         // class method instance
@@ -1831,7 +1831,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var rel = enchant.Class.getInheritanceTree(Constructor);
         var i = rel.indexOf(enchant.Entity);
         if (i !== -1) {
-            Constructor._collectionTarget = rel.splice(0, i);
+            Constructor._collectionTarget = rel.splice(0, i + 1);
         } else {
             Constructor._collectionTarget = [];
         }
@@ -1857,6 +1857,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         return Object.getPrototypeOf(this).constructor;
     }
 });
+
+new enchant.Entity();
 
 /**
  * @scope enchant.Sprite.prototype
