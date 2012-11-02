@@ -71,6 +71,9 @@ enchant.Class = function(superclass, definition) {
  [/lang]
  */
 enchant.Class.create = function(superclass, definition) {
+    if (superclass == null){
+        throw new Error("superclass is undefined");
+    }
     if (arguments.length === 0) {
         return enchant.Class.create(Object, definition);
     } else if (arguments.length === 1 && typeof arguments[0] !== 'function') {
