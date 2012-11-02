@@ -253,6 +253,24 @@ enchant.Class.create = function(superclass, definition) {
 
     return Constructor;
 };
+
+/**
+ * Get the inheritance tree of this class.
+ * @param {ConstructorFunction}
+ * @param {...ConstructorFunction}
+ */
+enchant.Class.getInheritanceTree = function(Constructor) {
+    var ret = [];
+    var C = Constructor;
+    var proto = C.prototype;
+    while (C !== Object) {
+        ret.push(C);
+        proto = Object.getPrototypeOf(proto);
+        C = proto.constructor;
+    }
+    return ret;
+};
+
 /**
  * Environment variable.
  * @type {Object}
