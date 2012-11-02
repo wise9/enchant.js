@@ -80,5 +80,5 @@ enchant.ENV = {
     /**
      * @type {Boolean}
      */
-    SOUND_ENABLED_ON_MOBILE_SAFARI: false,
+    SOUND_ENABLED_ON_MOBILE_SAFARI: false
 };
