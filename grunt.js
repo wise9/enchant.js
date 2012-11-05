@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
             meta: {
-                version: 'v0.5.2',
+                version: 'v0.6-pre',
                 banner: '/**\n\
  * enchant.js <%= meta.version %>\n\
  *\n\
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
  * You should have received a copy of the GNU General Public License\n\
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.\n\
  */',
-                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Licensed under MIT or GPLv3. (c) Ubiquitous Entertainment Inc. */'
+                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Dual licensed under the MIT or GPLv3 licenses.  */'
             },
             lint: {
                 core: ['dev/header.js', 'dev/src/*.js'],
