@@ -1598,7 +1598,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             game.removeEventListener('exitframe', render);
         });
 
-        this._collectizeConstructor();
+        //this._collectizeConstructor();
         this.enableCollection();
     },
     /**
@@ -1822,30 +1822,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._removeSelfFromCollection();
         }
     },
-    _collectizeConstructor: function() {
-        var Constructor = this.getConstructor();
-        if (this.getConstructor()._collective) {
-            return;
-        }
-        // class method instance
-        Constructor.intersect = function(other) {
-            if (other instanceof enchant.Entity) {
-                return _intersectBetweenClassAndInstance(this, other);
-            } else if (typeof other === 'function' && other.collection) {
-                return _intersectBetweenClassAndClass(this, other);
-            }
-            return false;
-        };
-        var rel = enchant.Class.getInheritanceTree(Constructor);
-        var i = rel.indexOf(enchant.Entity);
-        if (i !== -1) {
-            Constructor._collectionTarget = rel.splice(0, i + 1);
-        } else {
-            Constructor._collectionTarget = [];
-        }
-        Constructor.collection = [];
-        Constructor._collective = true;
-    },
     _addSelfToCollection: function() {
         var Constructor = this.getConstructor();
         Constructor._collectionTarget.forEach(function(C) {
@@ -1866,7 +1842,35 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     }
 });
 
-new enchant.Entity();
+var _collectizeConstructor = function(Constructor) {
+    if (Constructor._collective) {
+        return;
+    }
+    // class method instance
+    Constructor.intersect = function(other) {
+        if (other instanceof enchant.Entity) {
+            return _intersectBetweenClassAndInstance(this, other);
+        } else if (typeof other === 'function' && other.collection) {
+            return _intersectBetweenClassAndClass(this, other);
+        }
+        return false;
+    };
+    var rel = enchant.Class.getInheritanceTree(Constructor);
+    var i = rel.indexOf(enchant.Entity);
+    if (i !== -1) {
+        Constructor._collectionTarget = rel.splice(0, i + 1);
+    } else {
+        Constructor._collectionTarget = [];
+    }
+    Constructor.collection = [];
+    Constructor._collective = true;
+};
+
+_collectizeConstructor(enchant.Entity);
+
+enchant.Entity._inherited = function(subclass) {
+    _collectizeConstructor(subclass);
+};
 
 /**
  * @scope enchant.Sprite.prototype
