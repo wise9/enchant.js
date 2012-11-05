@@ -316,11 +316,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     scale: function(x, y) {
-        if (y == null) {
-            y = x;
-        }
         this._scaleX *= x;
-        this._scaleY *= y;
+        this._scaleY *= (y != null) ? y : x;
         this._dirty = true;
     },
     /**

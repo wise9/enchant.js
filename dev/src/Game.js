@@ -424,7 +424,6 @@
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        // フォームじゃない
                         e.preventDefault();
                         if (!game.running) {
                             e.stopPropagation();
