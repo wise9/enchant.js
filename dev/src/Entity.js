@@ -98,9 +98,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this.addEventListener('render', function() {
             if (this._offsetX !== this._previousOffsetX) {
                 this._style.left = this._offsetX + 'px';
-                /**
-                 * @TODO transform-left で移動するやつをためす
-                 */
             }
             if (this._offsetY !== this._previousOffsetY) {
                 this._style.top = this._offsetY + 'px';
@@ -378,11 +375,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     scale: function(x, y) {
-        if (y == null) {
-            y = x;
-        }
         this._scaleX *= x;
-        this._scaleY *= y;
+        this._scaleY *= (y != null) ? y : x;
         this._dirty = true;
     },
     /**
