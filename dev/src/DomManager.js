@@ -8,11 +8,17 @@ var rotate = function(rad, x, y) {
 };
 
 enchant.DomManager = enchant.Class.create({
-    initialize: function(node, elementType) {
+    initialize: function(node, elementDefinition) {
         var game = enchant.Game.instance;
         this.layer = null;
         this.targetNode = node;
-        this.element = document.createElement(elementType);
+        if (typeof elementDefinition === 'string') {
+            this.element = document.createElement(elementDefinition);
+        } else if (elementDefinition instanceof HTMLElement) {
+            this.element = elementDefinition;
+        } else {
+            // TODO error
+        }
         this.style = this.element.style;
         this.style.position = 'absolute';
         if (game._debug) {
@@ -136,8 +142,8 @@ enchant.DomlessManager = enchant.Class.create({
             if (i === -1) {
                 Array.prototype.push.apply(this._domRef, element.childNodes);
             } else {
-                this._domRef.splice(i, 0, element);
-                Array.prototype.splice.apply(this._dom, [i, 0].join(element.childNodes));
+                //this._domRef.splice(i, 0, element);
+                Array.prototype.splice.apply(this._domRef, [i, 0].join(element.childNodes));
             }
         } else {
             if (i === -1) {

@@ -110,7 +110,11 @@
             if (this instanceof enchant.Group) {
                 this._domManager = new enchant.DomlessManager(this);
             } else {
-                this._domManager = new enchant.DomManager(this, 'div');
+                if (this._element) {
+                    this._domManager = new enchant.DomManager(this, this._element);
+                } else {
+                    this._domManager = new enchant.DomManager(this, 'div');
+                }
             }
         }
     });
