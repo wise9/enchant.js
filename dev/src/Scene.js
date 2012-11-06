@@ -102,6 +102,20 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
         layer.scene = this;
     },
+    _determineEventTarget: function(e) {
+        var layer, target;
+        for (var i = this._layerPriority.length - 1; i >= 0; i--) {
+            layer = this._layers[this._layerPriority[i]];
+            target = layer._determineEventTarget(e);
+            if (target) {
+                break;
+            }
+        }
+        if (!target) {
+            target = this;
+        }
+        return target;
+    },
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
