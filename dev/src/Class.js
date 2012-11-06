@@ -113,7 +113,7 @@ enchant.Class.create = function(superclass, definition) {
 
     for (var prop in definition) {
         if (definition.hasOwnProperty(prop)) {
-            if (typeof definition[prop] === 'object' && Object.getPrototypeOf(definition[prop]) === Object.prototype) {
+            if (typeof definition[prop] === 'object' && definition[prop] !== null && Object.getPrototypeOf(definition[prop]) === Object.prototype) {
                 if (!('enumerable' in definition[prop])) {
                     definition[prop].enumerable = true;
                 }
