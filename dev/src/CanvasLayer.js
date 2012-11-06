@@ -48,71 +48,6 @@
 
             this._colorManager = new DetectColorManager(16, 256);
 
-            /**
-             * canvas タグに対して、DOM のイベントリスナを貼る
-             */
-            if (enchant.ENV.TOUCH_ENABLED) {
-                this._element.addEventListener('touchstart', function(e) {
-                    var touches = e.touches;
-                    for (var i = 0, len = touches.length; i < len; i++) {
-                        e = new enchant.Event('touchstart');
-                        e.identifier = touches[i].identifier;
-                        e._initPosition(touches[i].pageX, touches[i].pageY);
-                        _touchstartFromDom.call(that, e);
-                    }
-                }, false);
-                this._element.addEventListener('touchmove', function(e) {
-                    var touches = e.touches;
-                    for (var i = 0, len = touches.length; i < len; i++) {
-                        e = new enchant.Event('touchmove');
-                        e.identifier = touches[i].identifier;
-                        e._initPosition(touches[i].pageX, touches[i].pageY);
-                        _touchmoveFromDom.call(that, e);
-                    }
-                }, false);
-                this._element.addEventListener('touchend', function(e) {
-                    var touches = e.changedTouches;
-                    for (var i = 0, len = touches.length; i < len; i++) {
-                        e = new enchant.Event('touchend');
-                        e.identifier = touches[i].identifier;
-                        e._initPosition(touches[i].pageX, touches[i].pageY);
-                        _touchendFromDom.call(that, e);
-                    }
-                }, false);
-            }
-            this._element.addEventListener('mousedown', function(e) {
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchstart');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                _touchstartFromDom.call(that, e);
-                that._mousedown = true;
-            }, false);
-            game._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown) {
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchmove');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                _touchmoveFromDom.call(that, e);
-            }, false);
-            game._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown) {
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchend');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                _touchendFromDom.call(that, e);
-                that._mousedown = false;
-            }, false);
-
             var start = [
                 enchant.Event.ENTER,
                 enchant.Event.ADDED_TO_SCENE
@@ -123,18 +58,9 @@
             ];
             start.forEach(function(type) {
                 this.addEventListener(type, this._startRendering);
-                this.addEventListener(type, function() {
-                    canvasGroupInstances.push(this);
-                });
             }, this);
             end.forEach(function(type) {
                 this.addEventListener(type, this._stopRendering);
-                this.addEventListener(type, function() {
-                    var i = canvasGroupInstances.indexOf(this);
-                    if (i !== -1) {
-                        canvasGroupInstances.splice(i, 1);
-                    }
-                });
             }, this);
 
             var __onchildadded = function(e) {
@@ -199,59 +125,8 @@
             }
             var color = ctx.getImageData(x, y, 1, 1).data;
             return this._colorManager.getSpriteByColor(color);
-        },
-        _touchstartPropagation: function(e) {
-            this._touching = this._getEntityByPosition(e.x, e.y);
-            if (this._touching) {
-                propagationUp.call(this._touching, e, this.parentNode);
-            } else {
-                this._touching = enchant.Game.instance.currentScene;
-                this._touching.dispatchEvent(e);
-            }
-            return this._touching;
-        },
-        _touchmovePropagation: function(e) {
-            propagationUp.call(this._touching, e, this.parentNode);
-        },
-        _touchendPropagation: function(e) {
-            propagationUp.call(this._touching, e, this.parentNode);
-            this._touching = null;
         }
     });
-
-    var canvasGroupInstances = [];
-    var touchingEntity = null;
-    var touchingGroup = null;
-
-    var _touchstartFromDom = function(e) {
-        var game = enchant.Game.instance;
-        var group;
-        for (var i = canvasGroupInstances.length - 1; i >= 0; i--) {
-            group = canvasGroupInstances[i];
-            if (group.scene !== game.currentScene) {
-                continue;
-            }
-            var sp = group._touchstartPropagation(e);
-            if (sp) {
-                touchingEntity = sp;
-                touchingGroup = group;
-                return;
-            }
-        }
-    };
-
-    var _touchmoveFromDom = function(e) {
-        if (touchingGroup != null) {
-            touchingGroup._touchmovePropagation(e);
-        }
-    };
-    var _touchendFromDom = function(e) {
-        if (touchingGroup != null) {
-            touchingGroup._touchendPropagation(e);
-            touchingEntity = null;
-            touchingGroup = null;
-        }
-    };
 
     var DetectColorManager = enchant.Class.create({
         initialize: function(reso, max) {
@@ -476,8 +351,4 @@
             }
         }
     );
-
-    var propagationUp = function(e, end) {
-        this.dispatchEvent(e);
-    };
 }());
