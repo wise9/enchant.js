@@ -38,6 +38,16 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
 
         this._style = {};
 
+
+        /**
+         [lang:ja]
+         * Entityを描画する際の合成処理を設定する.
+         * Canvas上に描画する際のみ有効.
+         * CanvasのコンテキストのglobalCompositeOperationにセットされる.
+         [/lang]
+         */
+        this.compositeOperation = null;
+
         /**
          [lang:ja]
          * Entityにボタンの機能を設定する.

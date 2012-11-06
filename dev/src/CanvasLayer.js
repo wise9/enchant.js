@@ -337,8 +337,8 @@
     };
 
     var alpha = function(ctx, node) {
-        if (node.alphaBlending) {
-            ctx.globalCompositeOperation = node.alphaBlending;
+        if (node.compositeOperation) {
+            ctx.globalCompositeOperation = node.compositeOperation;
         } else {
             ctx.globalCompositeOperation = 'source-over';
         }
