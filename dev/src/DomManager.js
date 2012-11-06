@@ -10,6 +10,8 @@ var rotate = function(rad, x, y) {
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementType) {
         var game = enchant.Game.instance;
+        this.layer = null;
+        this.targetNode = node;
         this.element = document.createElement(elementType);
         this.style = this.element.style;
         this.style.position = 'absolute';
@@ -17,17 +19,12 @@ enchant.DomManager = enchant.Class.create({
             this.style.border = '1px solid blue';
             this.style.margin = '-1px';
         }
-        this.targetNode = node;
-        this.layer = null;
 
         var manager = this;
-        var setDomTarget = function() {
+        this._setDomTarget = function() {
             manager.layer._touchEventTarget = manager.targetNode;
         };
-        if (enchant.ENV.TOUCH_ENABLED) {
-            this.element.addEventListener('touchstart', setDomTarget, true);
-        }
-        this.element.addEventListener('mousedown', setDomTarget, true);
+        this._attachEvent();
     },
     getDomElement: function() {
         return this.element;
@@ -110,7 +107,20 @@ enchant.DomManager = enchant.Class.create({
         node._offsetX = x;
         node._offsetY = y;
     },
+    _attachEvent: function() {
+        if (enchant.ENV.TOUCH_ENABLED) {
+            this.element.addEventListener('touchstart', this._setDomTarget, true);
+        }
+        this.element.addEventListener('mousedown', this._setDomTarget, true);
+    },
+    _detachEvent: function() {
+        if (enchant.ENV.TOUCH_ENABLED) {
+            this.element.removeEventListener('touchstart', this._setDomTarget, true);
+        }
+        this.element.removeEventListener('mousedown', this._setDomTarget, true);
+    },
     remove: function() {
+        this._detachEvent();
         this.element = this.style = this.targetNode = null;
     }
 });

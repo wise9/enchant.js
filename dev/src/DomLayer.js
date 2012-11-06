@@ -116,6 +116,7 @@
     });
 
     var detachDomManager = nodesWalker(function() {
+        this._domManager.remove();
         delete this._domManager;
     });
 
