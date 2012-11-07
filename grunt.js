@@ -69,6 +69,7 @@ module.exports = function(grunt) {
                         'dev/src/Map.js',
                         'dev/src/Group.js',
                         'dev/src/View.js',
+                        'dev/src/Matrix.js',
                         'dev/src/DomManager.js',
                         'dev/src/DomLayer.js',
                         'dev/src/CanvasLayer.js',
