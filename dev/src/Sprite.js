@@ -151,7 +151,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
 enchant.Sprite.prototype.cvsRender = function(ctx) {
     var img, imgdata, row, frame;
     var sx, sy, sw, sh;
-    if (this._image) {
+    if (this._image && this._width !== 0 && this._height !== 0) {
         frame = Math.abs(this._frame) || 0;
         img = this._image;
         imgdata = img._element;
