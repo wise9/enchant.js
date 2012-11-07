@@ -44,7 +44,6 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
                 child.addEventListener('childadded', __onchildadded);
                 child.addEventListener('childremoved', __onchildremoved);
             }
-            child._updateCoordinate();
             var nextManager = next ? next._domManager : null;
             enchant.DomLayer._attachDomManager(child);
             self._domManager.addManager(child._domManager, nextManager);

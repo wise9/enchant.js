@@ -217,19 +217,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this.childNodes[this.childNodes.length - 1];
         }
     },
-    _updateCoordinate: function() {
-        if (this.parentNode) {
-            this._offsetX = this.parentNode._offsetX + this._x;
-            this._offsetY = this.parentNode._offsetY + this._y;
-        } else {
-            this._offsetX = this._x;
-            this._offsetY = this._y;
-        }
-        for (var i = 0, len = this.childNodes.length; i < len; i++) {
-            this.childNodes[i]._updateCoordinate();
-        }
-        this._dirty = true;
-    },
     /**
     [lang:ja]
     * Groupの回転角 (度数法).
