@@ -1,12 +1,3 @@
-var rotate = function(rad, x, y) {
-    var sinT = Math.sin(rad);
-    var cosT = Math.cos(rad);
-    return [
-        cosT * x + sinT * y,
-        -sinT * x + cosT * y
-    ];
-};
-
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementDefinition) {
         var game = enchant.Game.instance;
@@ -21,6 +12,7 @@ enchant.DomManager = enchant.Class.create({
         }
         this.style = this.element.style;
         this.style.position = 'absolute';
+        this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0px 0px';
         if (game._debug) {
             this.style.border = '1px solid blue';
             this.style.margin = '-1px';
@@ -65,7 +57,23 @@ enchant.DomManager = enchant.Class.create({
         }
     },
     render: function() {
+        var node = this.targetNode;
+        if (!node._dirty) {
+            return;
+        }
+        var matrix = enchant.Matrix.instance;
+        var stack = matrix.stack;
+        var dest = [];
+        matrix.makeTransformMatrix(node, dest);
+        matrix.multiply(stack[stack.length - 1], dest, dest);
+        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+        var vec = [ ox, oy ];
+        matrix.multiplyVec(dest, vec, vec);
+        node._offsetX = vec[0] - ox;
+        node._offsetY = vec[1] - oy;
         this.cssUpdate();
+        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' + dest + ')';
     },
     cssUpdate: function() {
         var node = this.targetNode;
@@ -75,43 +83,6 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node._visible !== 'undefined') {
             this.style.display = node._visible ? 'block' : 'none';
         }
-        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 | 0;
-        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 | 0;
-        var x, y;
-        var parentManager;
-        if (node.parentNode && node.parentNode._domManager instanceof enchant.DomlessManager) {
-            parentManager = node.parentNode._domManager;
-            var rad = -parentManager._rotation * Math.PI / 180;
-            var rx = node._x + ox;
-            var ry = node._y + oy;
-            var rot = rotate(rad, rx, ry);
-            var X = rot[0] * parentManager._scaleX - ox;
-            var Y = rot[1] * parentManager._scaleY - oy;
-            x = parentManager._x + X;
-            y = parentManager._y + Y;
-            var cssTransform =
-                'translate(' + x + 'px, ' + y + 'px) ' +
-                'rotate(' + (parentManager._rotation + node._rotation) + 'deg) ' +
-                'scale(' + (parentManager._scaleX * node._scaleX) + ', ' + (parentManager._scaleY * node._scaleY) + ') ';
-            this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = cssTransform;
-            this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = ox + ' ' + oy;
-            this.style.backgroundColor = node._backgroundColor;
-
-        } else {
-
-        x = node._x;
-        y = node._y;
-        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] =
-            'translate(' + x + 'px, ' + y + 'px) ' +
-            'rotate(' + node._rotation + 'deg) ' +
-            'scale(' + node._scaleX + ', ' + node._scaleY + ') ';
-        this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = ox + ' ' + oy;
-        this.style.backgroundColor = node._backgroundColor;
-
-        }
-
-        node._offsetX = x;
-        node._offsetY = y;
     },
     _attachEvent: function() {
         if (enchant.ENV.TOUCH_ENABLED) {
@@ -203,41 +174,22 @@ enchant.DomlessManager = enchant.Class.create({
         }
     },
     render: function() {
+        var matrix = enchant.Matrix.instance;
+        var stack = matrix.stack;
         var node = this.targetNode;
-        var parentManager = node.parentNode._domManager;
-        if (parentManager instanceof enchant.DomlessManager) {
-            var parentX = parentManager._x;
-            var parentY = parentManager._y;
-            var parentSX = parentManager._scaleX;
-            var parentSY = parentManager._scaleY;
-            var parentRot = parentManager._rotation;
-
-            var rad = -parentRot * Math.PI / 180;
-
-            var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 | 0;
-            var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 | 0;
-
-            var rx = node._x + ox;
-            var ry = node._y + oy;
-            var rot = rotate(rad, rx, ry);
-            var X = rot[0] * parentSX - ox;
-            var Y = rot[1] * parentSY - oy;
-
-            // subete childNode ga tsukau
-            this._x = parentX + X;
-            this._y = parentY + Y;
-            this._scaleX = parentSX * node._scaleX;
-            this._scaleY = parentSY * node._scaleY;
-            this._rotation = parentRot + node._rotation;
-        } else {
-            this._x = node._x;
-            this._y = node._y;
-            this._scaleX = node._scaleX;
-            this._scaleY = node._scaleY;
-            this._rotation = node._rotation;
+        var dest = [];
+        matrix.makeTransformMatrix(node, dest);
+        matrix.multiply(stack[stack.length - 1], dest, dest);
+        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+        var vec = [ ox, oy ];
+        matrix.multiplyVec(dest, vec, vec);
+        node._offsetX = vec[0] - ox;
+        node._offsetY = vec[1] - oy;
+        stack.push(dest);
+        for (var i = 0, l = node.childNodes.length; i < l; i++) {
+            node.childNodes[i]._dirty = true;
         }
-        node._offsetX = this._x;
-        node._offsetY = this._y;
     },
     remove: function() {
         this._domRef = [];

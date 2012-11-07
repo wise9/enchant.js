@@ -137,15 +137,20 @@
         delete this._domManager;
     });
 
-    var rendering = nodesWalker(function() {
-        if (this._dirty) {
+    var rendering = nodesWalker(
+        function() {
             this._domManager.render();
             if (typeof this.cssUpdate === 'function') {
                 this.cssUpdate();
             }
+        },
+        function() {
+            if (this._domManager instanceof enchant.DomlessManager) {
+                enchant.Matrix.instance.stack.pop();
+            }
             this._dirty = false;
         }
-    });
+    );
 
 enchant.Label.prototype.cssUpdate = function() {
     this._domManager.element.innerHTML = this._text;
