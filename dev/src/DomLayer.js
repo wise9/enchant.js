@@ -1,145 +1,137 @@
-(function() {
+enchant.DomLayer = enchant.Class.create(enchant.Group, {
+    initialize: function() {
+        var game = enchant.Game.instance;
+        var that = this;
+        enchant.Group.call(this);
 
-    enchant.DomLayer = enchant.Class.create(enchant.Group, {
-        initialize: function() {
-            var game = enchant.Game.instance;
-            var that = this;
-            enchant.Group.call(this);
+        this.width = this._width = game.width;
+        this.height = this._height = game.height;
 
-            this.width = this._width = game.width;
-            this.height = this._height = game.height;
+        this._touchEventTarget = null;
 
-            this._touchEventTarget = null;
+        this._frameBuffer = new enchant.DomView(this.width, this.height);
+        this._domManager = new enchant.DomManager(this, 'div');
+        this._domManager.layer = this;
+        this._frameBuffer.element.appendChild(this._domManager.element);
 
-            this._frameBuffer = new enchant.DomView(this.width, this.height);
-            this._domManager = new enchant.DomManager(this, 'div');
-            this._domManager.layer = this;
-            this._frameBuffer.element.appendChild(this._domManager.element);
+        this._frameBuffer.element.style.position = 'absolute';
 
-            this._frameBuffer.element.style.position = 'absolute';
+        // TODO
+        this._element = this._frameBuffer.element;
 
-            // TODO
-            this._element = this._frameBuffer.element;
+        this.addEventListener('enter', this._startRendering);
+        this.addEventListener('exit', this._stopRendering);
 
-            this.addEventListener('enter', this._startRendering);
-            this.addEventListener('exit', this._stopRendering);
+        var touch = [
+            enchant.Event.TOUCH_START,
+            enchant.Event.TOUCH_MOVE,
+            enchant.Event.TOUCH_END
+        ];
 
-            var touch = [
-                enchant.Event.TOUCH_START,
-                enchant.Event.TOUCH_MOVE,
-                enchant.Event.TOUCH_END
-            ];
-
-            touch.forEach(function(type) {
-                this.addEventListener(type, function(e) {
-                    if (this.scene) {
-                        this.scene.dispatchEvent(e);
-                    }
-                });
-            }, this);
-
-            var __onchildadded = function(e) {
-                var child = e.node;
-                var next = e.next;
-                var self = e.target;
-                if (child.childNodes) {
-                    child.addEventListener('childadded', __onchildadded);
-                    child.addEventListener('childremoved', __onchildremoved);
+        touch.forEach(function(type) {
+            this.addEventListener(type, function(e) {
+                if (this.scene) {
+                    this.scene.dispatchEvent(e);
                 }
-                child._updateCoordinate();
-                var nextManager = next ? next._domManager : null;
-                attachDomManager.call(child);
-                self._domManager.addManager(child._domManager, nextManager);
-                child._domManager.layer = self;
-                rendering.call(child);
-            };
+            });
+        }, this);
 
-            var __onchildremoved = function(e) {
-                var child = e.node;
-                var self = e.target;
-                if (child.childNodes) {
-                    child.removeEventListener('childadded', __onchildadded);
-                    child.removeEventListener('childremoved', __onchildremoved);
-                }
-                self._domManager.removeManager(child._domManager);
-                detachDomManager.call(child, that._colorManager);
-            };
-
-            this.addEventListener('childremoved', __onchildremoved);
-            this.addEventListener('childadded', __onchildadded);
-
-            this._onexitframe = function() {
-                rendering.call(that);
-            };
-        },
-        _startRendering: function() {
-            enchant.Game.instance.addEventListener('exitframe', this._onexitframe);
-        },
-        _stopRendering: function() {
-            enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
-        },
-        _determineEventTarget: function() {
-            if (this._touchEventTarget) {
-                if (this._touchEventTarget !== this) {
-                    return this._touchEventTarget;
-                }
+        var __onchildadded = function(e) {
+            var child = e.node;
+            var next = e.next;
+            var self = e.target;
+            if (child.childNodes) {
+                child.addEventListener('childadded', __onchildadded);
+                child.addEventListener('childremoved', __onchildremoved);
             }
-            return null;
+            child._updateCoordinate();
+            var nextManager = next ? next._domManager : null;
+            enchant.DomLayer._attachDomManager(child);
+            self._domManager.addManager(child._domManager, nextManager);
+            child._domManager.layer = self;
+            that._rendering(child);
+        };
+
+        var __onchildremoved = function(e) {
+            var child = e.node;
+            var self = e.target;
+            if (child.childNodes) {
+                child.removeEventListener('childadded', __onchildadded);
+                child.removeEventListener('childremoved', __onchildremoved);
+            }
+            self._domManager.removeManager(child._domManager);
+            enchant.DomLayer._detachDomManager(child);
+        };
+
+        this.addEventListener('childremoved', __onchildremoved);
+        this.addEventListener('childadded', __onchildadded);
+
+        this._onexitframe = function() {
+            that._rendering(that);
+        };
+    },
+    _startRendering: function() {
+        enchant.Game.instance.addEventListener('exitframe', this._onexitframe);
+    },
+    _stopRendering: function() {
+        enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
+    },
+    _rendering: function(node) {
+        var child;
+        node._domManager.render();
+        if (node.childNodes) {
+            for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                child = node.childNodes[i];
+                this._rendering(child);
+            }
         }
-    });
-
-    var nodesWalker = function(pre, post) {
-        pre = pre || function() {
-        };
-        post = post || function() {
-        };
-        var walker = function() {
-            pre.apply(this, arguments);
-            var child;
-            if (this.childNodes) {
-                for (var i = 0, l = this.childNodes.length; i < l; i++) {
-                    child = this.childNodes[i];
-                    walker.apply(child, arguments);
-                }
+        if (node._domManager instanceof enchant.DomlessManager) {
+            enchant.Matrix.instance.stack.pop();
+        }
+        node._dirty = false;
+    },
+    _determineEventTarget: function() {
+        if (this._touchEventTarget) {
+            if (this._touchEventTarget !== this) {
+                return this._touchEventTarget;
             }
-            post.apply(this, arguments);
-        };
-        return walker;
-    };
+        }
+        return null;
+    }
+});
 
-    var attachDomManager = nodesWalker(function() {
-        if (!this._domManager) {
-            if (this instanceof enchant.Group) {
-                this._domManager = new enchant.DomlessManager(this);
+enchant.DomLayer._attachDomManager = function(node) {
+    var child;
+    if (!node._domManager) {
+        if (node instanceof enchant.Group) {
+            node._domManager = new enchant.DomlessManager(node);
+        } else {
+            if (node._element) {
+                node._domManager = new enchant.DomManager(node, node._element);
             } else {
-                if (this._element) {
-                    this._domManager = new enchant.DomManager(this, this._element);
-                } else {
-                    this._domManager = new enchant.DomManager(this, 'div');
-                }
+                node._domManager = new enchant.DomManager(node, 'div');
             }
         }
-    });
-
-    var detachDomManager = nodesWalker(function() {
-        this._domManager.remove();
-        delete this._domManager;
-    });
-
-    var rendering = nodesWalker(
-        function() {
-            this._domManager.render();
-            if (typeof this.cssUpdate === 'function') {
-                this.cssUpdate();
-            }
-        },
-        function() {
-            if (this._domManager instanceof enchant.DomlessManager) {
-                enchant.Matrix.instance.stack.pop();
-            }
-            this._dirty = false;
+    }
+    if (node.childNodes) {
+        for (var i = 0, l = node.childNodes.length; i < l; i++) {
+            child = node.childNodes[i];
+            enchant.DomLayer._attachDomManager(child);
         }
-    );
+    }
+};
+
+enchant.DomLayer._detachDomManager = function(node) {
+    var child;
+    node._domManager.remove();
+    delete node._domManager;
+    if (node.childNodes) {
+        for (var i = 0, l = node.childNodes.length; i < l; i++) {
+            child = node.childNodes[i];
+            enchant.DomLayer._detachDomManager(child);
+        }
+    }
+};
 
 enchant.Label.prototype.cssUpdate = function() {
     this._domManager.element.innerHTML = this._text;
@@ -161,5 +153,3 @@ enchant.Sprite.prototype.cssUpdate = function() {
         }
     }
 };
-
-}());

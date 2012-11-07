@@ -83,6 +83,9 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node._visible !== 'undefined') {
             this.style.display = node._visible ? 'block' : 'none';
         }
+        if (typeof node.cssUpdate === 'function') {
+            node.cssUpdate();
+        }
     },
     _attachEvent: function() {
         if (enchant.ENV.TOUCH_ENABLED) {
