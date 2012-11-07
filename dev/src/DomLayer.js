@@ -21,26 +21,15 @@
             // TODO
             this._element = this._frameBuffer.element;
 
-            var start = [
-                enchant.Event.ENTER,
-                enchant.Event.ADDED_TO_SCENE
-            ];
-            var end = [
-                enchant.Event.EXIT,
-                enchant.Event.REMOVED_FROM_SCENE
-            ];
+            this.addEventListener('enter', this._startRendering);
+            this.addEventListener('exit', this._stopRendering);
+
             var touch = [
                 enchant.Event.TOUCH_START,
                 enchant.Event.TOUCH_MOVE,
                 enchant.Event.TOUCH_END
             ];
 
-            start.forEach(function(type) {
-                this.addEventListener(type, this._startRendering);
-            }, this);
-            end.forEach(function(type) {
-                this.addEventListener(type, this._stopRendering);
-            }, this);
             touch.forEach(function(type) {
                 this.addEventListener(type, function(e) {
                     if (this.scene) {
