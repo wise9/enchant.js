@@ -1326,6 +1326,7 @@
         initialize: function(content) {
             var game = enchant.Game.instance;
             content = content || '';
+            content = enchant.widget.parseContent(content);
             var minwidth = enchant.widget._env.buttonWidth;
             var minheight = enchant.widget._env.buttonHeight;
             enchant.widget.EntityGroup.call(this, minwidth, minheight);
@@ -1341,7 +1342,7 @@
             bg2.src = game.assets['buttonPushed.png'];
             this.pushedimage = bg2;
 
-            this.content = content;
+            this._content = content;
             this.width = Math.max(this._content.width, minwidth);
             this.height = Math.max(this._content.height, minheight);
             this.addEventListener(enchant.Event.TOUCH_START, function() {
