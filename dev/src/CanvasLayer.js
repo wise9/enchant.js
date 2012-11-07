@@ -320,12 +320,6 @@
         }
     );
 
-    var array2hexrgb = function(arr) {
-        return '#' + ("00" + Number(parseInt(arr[0], 10)).toString(16)).slice(-2) +
-            ("00" + Number(parseInt(arr[1], 10)).toString(16)).slice(-2) +
-            ("00" + Number(parseInt(arr[2], 10)).toString(16)).slice(-2);
-    };
-
     var detectrender = function(ctx, node) {
         ctx.fillStyle = node._cvsCache.detectColor;
         ctx.fillRect(0, 0, node.width, node.height);
@@ -351,7 +345,7 @@
             if (!this._cvsCache) {
                 this._cvsCache = {};
                 this._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
-                this._cvsCache.detectColor = array2hexrgb(colorManager.attachDetectColor(this));
+                this._cvsCache.detectColor = 'rgba(' + colorManager.attachDetectColor(this) + ')';
             }
         }
     );
