@@ -428,9 +428,11 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
 enchant.Map.prototype.cvsRender = function(ctx) {
     var game = enchant.Game.instance;
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    var cvs = this._context.canvas;
-    ctx.drawImage(cvs, 0, 0, game.width, game.height);
-    ctx.restore();
+    if (this.width !== 0 && this.height !== 0) {
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        var cvs = this._context.canvas;
+            ctx.drawImage(cvs, 0, 0, game.width, game.height);
+        ctx.restore();
+    }
 };
