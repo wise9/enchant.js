@@ -309,6 +309,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     within: function(other, distance) {
+        if (this._dirty) {
+            this._updateCoordinate();
+        } if (other._dirty) {
+            other._updateCoordinate();
+        }
         if (distance == null) {
             distance = (this.width + this.height + other.width + other.height) / 4;
         }
