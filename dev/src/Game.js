@@ -434,7 +434,7 @@
                 var _ontouchstart = function(e) {
                     var game = enchant.Game.instance;
                     var evt = new enchant.Event(enchant.Event.TOUCH_START);
-                    evt._initPosition(e.x, e.y);
+                    evt._initPosition(e.pageX, e.pageY);
                     game._touchEventTarget = game.currentScene._determineEventTarget(evt);
                     game._touchEventTarget.dispatchEvent(evt);
                 };
@@ -442,7 +442,7 @@
                     var evt;
                     if (game._touchEventTarget) {
                         evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
-                        evt._initPosition(e.x, e.y);
+                        evt._initPosition(e.pageX, e.pageY);
                         game._touchEventTarget.dispatchEvent(evt);
                     }
                 };
@@ -450,7 +450,7 @@
                     var evt;
                     if (game._touchEventTarget) {
                         evt = new enchant.Event(enchant.Event.TOUCH_END);
-                        evt._initPosition(e.x, e.y);
+                        evt._initPosition(e.pageX, e.pageY);
                         game._touchEventTarget.dispatchEvent(evt);
                         game._touchEventTarget = null;
                         game.currentScene._layers.Dom._touchEventTarget = null;
