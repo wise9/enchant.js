@@ -16,6 +16,15 @@ var _intersectBetweenClassAndClass = function(Class1, Class2) {
     return ret;
 };
 
+var _staticintersect = function(other) {
+    if (other instanceof enchant.Entity) {
+        return _intersectBetweenClassAndInstance(this, other);
+    } else if (typeof other === 'function' && other.collection) {
+        return _intersectBetweenClassAndClass(this, other);
+    }
+    return false;
+};
+
 /**
  * @scope enchant.Entity.prototype
  */
@@ -519,15 +528,6 @@ var _collectizeConstructor = function(Constructor) {
     if (Constructor._collective) {
         return;
     }
-    // class method instance
-    Constructor.intersect = function(other) {
-        if (other instanceof enchant.Entity) {
-            return _intersectBetweenClassAndInstance(this, other);
-        } else if (typeof other === 'function' && other.collection) {
-            return _intersectBetweenClassAndClass(this, other);
-        }
-        return false;
-    };
     var rel = enchant.Class.getInheritanceTree(Constructor);
     var i = rel.indexOf(enchant.Entity);
     if (i !== -1) {
@@ -535,6 +535,7 @@ var _collectizeConstructor = function(Constructor) {
     } else {
         Constructor._collectionTarget = [];
     }
+    Constructor.intersect = _staticintersect;
     Constructor.collection = [];
     Constructor._collective = true;
 };
