@@ -74,13 +74,16 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
     _stopRendering: function() {
         enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
     },
-    _rendering: function(node) {
+    _rendering: function(node, inheritMat) {
         var child;
-        node._domManager.render();
+        if (!inheritMat) {
+            inheritMat = [ 1, 0, 0, 1, 0, 0 ];
+        }
+        node._domManager.render(inheritMat);
         if (node.childNodes) {
             for (var i = 0, l = node.childNodes.length; i < l; i++) {
                 child = node.childNodes[i];
-                this._rendering(child);
+                this._rendering(child, inheritMat.slice());
             }
         }
         if (node._domManager instanceof enchant.DomlessManager) {

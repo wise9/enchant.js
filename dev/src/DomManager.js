@@ -69,16 +69,15 @@ enchant.DomManager = enchant.Class.create({
             }
         }
     },
-    render: function() {
+    render: function(inheritMat) {
         var node = this.targetNode;
-        if (!node._dirty) {
-            return;
-        }
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
         var dest = [];
         matrix.makeTransformMatrix(node, dest);
         matrix.multiply(stack[stack.length - 1], dest, dest);
+        matrix.multiply(inheritMat, dest, inheritMat);
+        node._matrix = inheritMat;
         var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
         var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
         var vec = [ ox, oy ];
@@ -203,13 +202,15 @@ enchant.DomlessManager = enchant.Class.create({
             }
         }
     },
-    render: function() {
+    render: function(inheritMat) {
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
         var node = this.targetNode;
         var dest = [];
         matrix.makeTransformMatrix(node, dest);
         matrix.multiply(stack[stack.length - 1], dest, dest);
+        matrix.multiply(inheritMat, dest, inheritMat);
+        node._matrix = inheritMat;
         var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
         var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
         var vec = [ ox, oy ];
@@ -217,9 +218,6 @@ enchant.DomlessManager = enchant.Class.create({
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
         stack.push(dest);
-        for (var i = 0, l = node.childNodes.length; i < l; i++) {
-            node.childNodes[i]._dirty = true;
-        }
     },
     remove: function() {
         this._domRef = [];

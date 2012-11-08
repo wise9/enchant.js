@@ -24,6 +24,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
 
         this._dirty = false;
 
+        this._matrix = [ 1, 0, 0, 1, 0, 0 ];
+
         this._x = 0;
         this._y = 0;
         this._offsetX = 0;
@@ -184,11 +186,37 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             this._dirty = true;
         }
     },
-    /**
-     * deprecated from v0.6.0
-     * @deprecated
-     */
     _updateCoordinate: function() {
+        var node = this;
+        var tree = [ node ];
+        var parent = node.parentNode;
+        var scene = this.scene;
+        while (parent && node._dirty) {
+            tree.unshift(parent);
+            node = node.parentNode;
+            parent = node.parentNode;
+        }
+        var matrix = enchant.Matrix.instance;
+        var stack = matrix.stack;
+        var mat = [];
+        var newmat, ox, oy;
+        stack.push(tree[0]._matrix);
+        for (var i = 1, l = tree.length; i < l; i++) {
+            node = tree[i];
+            newmat = [];
+            matrix.makeTransformMatrix(node, mat);
+            matrix.multiply(stack[stack.length - 1], mat, newmat);
+            node._matrix = newmat;
+            stack.push(newmat);
+            ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+            oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+            var vec = [ ox, oy ];
+            matrix.multiplyVec(newmat, vec, vec);
+            node._offsetX = vec[0] - ox;
+            node._offsetY = vec[1] - oy;
+            node._dirty = false;
+        }
+        matrix.reset();
     },
     remove: function() {
         if (this._listener) {

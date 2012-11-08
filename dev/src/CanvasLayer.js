@@ -182,11 +182,15 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     _transform: function(node, ctx) {
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
+        var newmat;
         if (node._dirty) {
             matrix.makeTransformMatrix(node, node._cvsCache.matrix);
+            newmat = [];
+            matrix.multiply(stack[stack.length - 1], node._cvsCache.matrix, newmat);
+            node._matrix = newmat;
+        } else {
+            newmat = node._matrix;
         }
-        var newmat = [];
-        matrix.multiply(stack[stack.length - 1], node._cvsCache.matrix, newmat);
         stack.push(newmat);
         ctx.setTransform.apply(ctx, newmat);
         var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
