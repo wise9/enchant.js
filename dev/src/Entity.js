@@ -1,6 +1,6 @@
 var _intersectBetweenClassAndInstance = function(Class, instance) {
     return Class.collection.filter(function(classInstance) {
-        return enchant.Entity.prototype.intersect.call(instance, classInstance);
+        return enchant.Entity.prototype._intersectone.call(instance, classInstance);
     });
 };
 
@@ -8,7 +8,7 @@ var _intersectBetweenClassAndClass = function(Class1, Class2) {
     var ret = [];
     Class1.collection.forEach(function(instance1) {
         Class2.collection.forEach(function(instance2) {
-            if (enchant.Entity.prototype.intersect.call(instance1, instance2)) {
+            if (enchant.Entity.prototype._intersectone.call(instance1, instance2)) {
                  ret.push([ instance1, instance2 ]);
             }
         });
@@ -284,12 +284,15 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      */
     intersect: function(other) {
         if (other instanceof enchant.Entity) {
-            return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
-                this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
+            return this._intersectone(other);
         } else if (typeof other === 'function' && other.collection) {
             return _intersectBetweenClassAndInstance(other, this);
         }
         return false;
+    },
+    _intersectone: function(other) {
+        return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
+            this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
     },
     /**
      [lang:ja]
