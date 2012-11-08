@@ -46,6 +46,7 @@ enchant.DomManager = enchant.Class.create({
             //nextElement = this.getNextManager(this);
         }
         this.element.insertBefore(childManager.getDomElement(), nextElement);
+        this.setLayer(this.layer);
     },
     removeManager: function(childManager) {
         if (childManager instanceof enchant.DomlessManager) {
@@ -54,6 +55,18 @@ enchant.DomManager = enchant.Class.create({
             }, this);
         } else {
             this.element.removeChild(childManager.element);
+        }
+        this.setLayer(this.layer);
+    },
+    setLayer: function(layer) {
+        this.layer = layer;
+        var node = this.targetNode;
+        var manager;
+        if (node.childNodes) {
+            for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                manager = node.childNodes[i]._domManager;
+                manager.setLayer(layer);
+            }
         }
     },
     render: function() {
@@ -166,6 +179,7 @@ enchant.DomlessManager = enchant.Class.create({
         }
         var nextElement = nextManager ? nextManager.getDomElementAsNext() : null;
         this._register(childManager.getDomElement(), nextElement);
+        this.setLayer(this.layer);
     },
     removeManager: function(childManager) {
         var dom;
@@ -174,6 +188,18 @@ enchant.DomlessManager = enchant.Class.create({
             dom = this._domRef[i];
             dom.parentNode.removeChild(dom);
             this._domRef.splice(i, 1);
+        }
+        this.setLayer(this.layer);
+    },
+    setLayer: function(layer) {
+        this.layer = layer;
+        var node = this.targetNode;
+        var manager;
+        if (node.childNodes) {
+            for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                manager = node.childNodes[i]._domManager;
+                manager.setLayer(layer);
+            }
         }
     },
     render: function() {

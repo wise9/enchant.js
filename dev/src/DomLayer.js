@@ -47,7 +47,6 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             var nextManager = next ? next._domManager : null;
             enchant.DomLayer._attachDomManager(child);
             self._domManager.addManager(child._domManager, nextManager);
-            child._domManager.layer = self;
             that._rendering(child);
         };
 
