@@ -1437,7 +1437,7 @@
          * ボタンの内容
          * @type {String}
          */
-        coitent: {
+        content: {
             get: function() {
                 return this._rawContent;
             },
