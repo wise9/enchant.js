@@ -5,6 +5,8 @@ enchant.js
 
 JavaScript Game Engine
 
+[![Build Status](https://secure.travis-ci.org/wise9/enchant.js.png)](https://travis-ci.org/wise9/enchant.js)
+
 Download
 --------
 
