@@ -1,0 +1,14 @@
+{
+  "name": "enchant.js",
+  "version": "0.5.2",
+  "engines": {
+    "node": ">=0.8"
+  },
+  "scripts": {
+    "test": "grunt default --verbose"
+  },
+  "devDependencies": {
+    "grunt": "0.3.17",
+    "grunt-exec": "0.3.0"
+  }
+}
