@@ -29,20 +29,20 @@ enchant.CanvasScene = enchant.Class.create(enchant.CanvasGroup, {
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
     },
     /**
-    [lang:ja]
-    * CanvasSceneの背景色.
-    * CSSの'color'プロパティと同様の形式で指定できる.
-    [/lang]
-    [lang:en]
-    * The CanvasScene background color.
-    * Must be provided in the same format as the CSS 'color' property.
-    [/lang]
-    [lang:de]
-    * Die Hintergrundfarbe der Canvas Szene.
-    * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
-    [/lang]
-    * @type {String}
-    */
+     [lang:ja]
+     * CanvasSceneの背景色.
+     * CSSの'color'プロパティと同様の形式で指定できる.
+     [/lang]
+     [lang:en]
+     * The CanvasScene background color.
+     * Must be provided in the same format as the CSS 'color' property.
+     [/lang]
+     [lang:de]
+     * Die Hintergrundfarbe der Canvas Szene.
+     * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
+     [/lang]
+     * @type {String}
+     */
     backgroundColor: {
         get: function() {
             return this._backgroundColor;

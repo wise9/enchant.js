@@ -67,9 +67,4 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
             }
         });
     }
-});/**
- * Tween.js
- * Author: Ryohei Fushimi <fushimi.ryohei@gmail.com>
- * Created: 2012/11/03 2:38
- * Modified: 2012/11/03 2:38
- */
+});

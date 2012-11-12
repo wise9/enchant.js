@@ -1,4 +1,3 @@
-
 /**
  * @scope enchant.Timeline.prototype
  */
@@ -547,4 +546,5 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             time: time,
             easing: easing
         });
-    }});
+    }
+});

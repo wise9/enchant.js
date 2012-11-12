@@ -31,7 +31,7 @@ enchant.ENV = {
     }()),
     /**
      * Determines if the current browser supports touch.
-     * @return {Boolean} True, if touch is enabled.
+     * @type {Boolean} True, if touch is enabled.
      */
     TOUCH_ENABLED: (function() {
         var div = document.createElement('div');
@@ -58,7 +58,7 @@ enchant.ENV = {
     /**
      * Determines if for current browser Flash should be used to play 
      * sound instead of the native audio class.
-     * @return {Boolean} True, if flash should be used.
+     * @type {Boolean} True, if flash should be used.
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
@@ -80,5 +80,9 @@ enchant.ENV = {
         39: 'right',
         40: 'down'
     },
-    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32]
+    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
+    /**
+     * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
+     */
+    USE_ANIMATION: true
 };

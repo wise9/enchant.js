@@ -83,7 +83,7 @@ enchant.Class = function(superclass, definition) {
  * Basisklasse als Standard definiert. Sollte dieser Konstruktor in der neuen Klasse überschrieben
  * werden, sollte der vorherige Konstruktor explizit aufgerufen werden, um eine korrekte
  * Klasseninitialisierung sicherzustellen.
- * 
+ *
  * @example
  *   var Ball = Class.create({ // definiert eine unabhängige Klasse.
  *       initialize: function(radius) { ... }, // Methodendefinitionen
@@ -149,15 +149,15 @@ enchant.Class.create = function(superclass, definition) {
 };
 
 /**
-[lang:ja]
+ [lang:ja]
  * クラスの継承関係を取得する.
-[/lang]
-[lang:en]
+ [/lang]
+ [lang:en]
  * Get the inheritance tree of this class.
-[/lang]
+ [/lang]
  * @param {ConstructorFunction}
- * @param {...ConstructorFunction}
- */
+    * @param {...ConstructorFunction}
+    */
 enchant.Class.getInheritanceTree = function(Constructor) {
     var ret = [];
     var C = Constructor;

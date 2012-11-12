@@ -87,6 +87,16 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
                 this.parentNode.dispatchEvent(e);
             }
         });
+
+        /**
+         * Node が生成される際に、tl プロパティに Timeline オブジェクトを追加している
+         */
+        if(enchant.ENV.USE_ANIMATION){
+            var tl = this.tl = new enchant.Timeline(this);
+            this.addEventListener("enterframe", function(e) {
+                tl.dispatchEvent(e);
+            });
+        }
     },
     /**
      [lang:ja]

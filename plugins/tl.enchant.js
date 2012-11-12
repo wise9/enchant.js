@@ -80,20 +80,6 @@ enchant.Event.ACTION_ADDED = "actionadded";
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";
 
-/**
- * Node が生成される際に、tl プロパティに Timeline オブジェクトを追加している
- */
-(function() {
-    var orig = enchant.Node.prototype.initialize;
-    enchant.Node.prototype.initialize = function() {
-        orig.apply(this, arguments);
-        var tl = this.tl = new enchant.tl.Timeline(this);
-        this.addEventListener("enterframe", function(e) {
-
-            tl.dispatchEvent(e);
-        });
-    };
-}());
 
 /**
  * @scope enchant.tl.ActionEventTarget

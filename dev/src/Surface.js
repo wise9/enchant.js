@@ -44,7 +44,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      *
      * Mit dieser Klasse können die image Felder der {@link enchant.Sprite} und {@link enchant.Map}'s
      * Klassen gesetzt werden und dadurch dargestellt werden.
-     * Falls die Canvas API genutzt werden möchte kann dies über die 
+     * Falls die Canvas API genutzt werden möchte kann dies über die
      * {@link enchant.Surface#context} Variable erfolgen.
      *
      * @example
@@ -302,12 +302,12 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      [lang:en]
      * Creates a data URI scheme from this Surface.
-     * @return {String} The data URI scheme that identifies this Surface and 
+     * @return {String} The data URI scheme that identifies this Surface and
      * can be used to include this Surface into a dom tree.
      [/lang]
      [lang:de]
      * Erstellt eine Data-URL (URI Schema) für diese Surface.
-     * @return {String} Die Data-URL, welche diese Surface identifiziert und 
+     * @return {String} Die Data-URL, welche diese Surface identifiziert und
      * welche genutzt werden kann um diese in einen DOM Baum einzubinden.
      [/lang]
      */
@@ -330,8 +330,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  * 画像ファイルを読み込んでSurfaceオブジェクトを作成する.
  *
  * このメソッドによって作成されたSurfaceはimg要素のラップしており{@link enchant.Surface#context}プロパティに
- * アクセスしたり{@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel}, 
- * {@link enchant.Surface#setPixel}メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない. 
+ * アクセスしたり{@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel},
+ * {@link enchant.Surface#setPixel}メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない.
  * ただし{@link enchant.Surface#draw}メソッドの引数とすることはでき,
  * ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
  * 場合はピクセルを取得するなど画像操作の一部が制限される).
@@ -341,11 +341,11 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  [lang:en]
  * Loads an image and creates a Surface object out of it.
  *
- * It is not possible to access properties or methods of the {@link enchant.Surface#context}, or to call methods using the Canvas API - 
- * like {@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel}, {@link enchant.Surface#setPixel}.. - 
+ * It is not possible to access properties or methods of the {@link enchant.Surface#context}, or to call methods using the Canvas API -
+ * like {@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel}, {@link enchant.Surface#setPixel}.. -
  * of the wrapped image created with this method.
  * However, it is possible to use this surface to draw it to another surface using the {@link enchant.Surface#draw} method.
- * The resulting surface can then be manipulated. (when loading images in a cross-origin resource sharing environment, 
+ * The resulting surface can then be manipulated. (when loading images in a cross-origin resource sharing environment,
  * pixel acquisition and other image manipulation might be limited).
  *
  * @param {String} src The file path of the image to be loaded.
@@ -353,8 +353,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  [lang:de]
  * Läd eine Grafik und erstellt daraus ein Surface Objekt.
  *
- * Bei Grafiken die mit dieser Methode erstellt wurden ist es nicht möglich auf Variablen oder Methoden des {@link enchant.Surface#context} 
- * zuzugreifen, oder Methoden die die Canvas API nutzen, wie {@link enchant.Surface#draw}, {@link enchant.Surface#clear}, 
+ * Bei Grafiken die mit dieser Methode erstellt wurden ist es nicht möglich auf Variablen oder Methoden des {@link enchant.Surface#context}
+ * zuzugreifen, oder Methoden die die Canvas API nutzen, wie {@link enchant.Surface#draw}, {@link enchant.Surface#clear},
  * {@link enchant.Surface#getPixel}, {@link enchant.Surface#setPixel}.., aufzurufen.
  * Jedoch ist es möglich diese Surface zu nutzen um sie in eine andere Surface mittels der {@link enchant.Surface#draw} zu zeichen.
  * Die daraus resultierende Surface kann dann manipuliert werden. (Wenn Bilder in einer Cross-Origin Resource Sharing Umgebung
