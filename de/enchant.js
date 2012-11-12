@@ -754,9 +754,9 @@ enchant.EventTarget = enchant.Class.create({
          *
          * Es kann immer nur eine Instanz geben und sollte der Konstruktor ausgeführt werden,
          * obwohl bereits eine Instanz existiert, wird die vorherige Instanz überschrieben.
-         * Auf die aktuell existierende Instanz kann über die {@link enchant.Game.instance} 
+         * Auf die aktuell existierende Instanz kann über die {@link enchant.Game.instance}
          * Variable zugegriffen werden.
-         * 
+         *
          * @param {Number} width Die Breite des Spieles.
          * @param {Number} height Die Höhe des Spieles.
          * @constructs
@@ -880,20 +880,20 @@ enchant.EventTarget = enchant.Class.create({
 
             this._scenes = [];
             /**
-             * Die aktuell dargestellte Szene. 
+             * Die aktuell dargestellte Szene.
              * Diese Szene befindet sich oben auf dem Stapelspeicher.
              * @type {enchant.Scene}
              */
             this.currentScene = null;
             /**
-             * Die Ursprungsszene. 
+             * Die Ursprungsszene.
              * Diese Szene befindet sich unten auf dem Stapelspeicher.
              * @type {enchant.Scene}
              */
             this.rootScene = new enchant.Scene();
             this.pushScene(this.rootScene);
             /**
-             * Die Szene, welche während des Ladevorgangs dargestellt wird. 
+             * Die Szene, welche während des Ladevorgangs dargestellt wird.
              * @type {enchant.Scene}
              */
             this.loadingScene = new enchant.Scene();
@@ -1058,9 +1058,9 @@ enchant.EventTarget = enchant.Class.create({
         },
         /**
          * Lässt Dateien im voraus laden.
-         * 
+         *
          * Diese Methode setzt die Dateien die im voraus geladen werden sollen. Wenn {@link enchant.Game#start}
-         * aufgerufen wird, findet das tatsächliche laden der Resource statt. Sollten alle Dateien vollständig 
+         * aufgerufen wird, findet das tatsächliche laden der Resource statt. Sollten alle Dateien vollständig
          * geladen sein, wird ein {@link enchant.Event.LOAD} Ereignis auf dem Game Objekt ausgelöst.
          * Abhängig von den Dateien die geladen werden sollen, werden unterschiedliche Objekte erstellt und in
          * dem {@link enchant.Game#assets} Feld gespeichert.
@@ -1068,7 +1068,7 @@ enchant.EventTarget = enchant.Class.create({
          * wird ein {@link enchant.Sound} Objekt erstellt. Ansonsten kann auf die Datei über einen String zugegriffen werden.
          *
          * Da die Surface Objekte mittels {@link enchant.Surface.load} erstellt werden ist zusätlich ist zu beachten, dass
-         * eine direkte Objektmanipulation nicht möglich ist. 
+         * eine direkte Objektmanipulation nicht möglich ist.
          * Für diesen Fall ist auf die {@link enchant.Surface.load} Dokumentation zu verweisen.
          *
          * @example
@@ -1081,7 +1081,7 @@ enchant.EventTarget = enchant.Class.create({
          *   game.start();
          *
          * @param {...String} assets Pfade zu den Dateien die im voraus geladen werden sollen.
-         * Mehrfachangaben möglich. 
+         * Mehrfachangaben möglich.
          */
         preload: function(assets) {
             if (!(assets instanceof Array)) {
@@ -1134,7 +1134,7 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * Starte das Spiel
          *
-         * Je nach der Frame Rate definiert in {@link enchant.Game#fps}, wird der Frame in der 
+         * Je nach der Frame Rate definiert in {@link enchant.Game#fps}, wird der Frame in der
          * {@link enchant.Game#currentScene} aktualisiert. Sollten Dateien die im voraus geladen werden
          * sollen vorhanden sein, beginnt das laden dieser Dateien und der Ladebildschirm wird dargestellt.
          */
@@ -1188,7 +1188,7 @@ enchant.EventTarget = enchant.Class.create({
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 game._tick();
             }, 1000 / this.fps);
@@ -1197,7 +1197,7 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * Startet den Debug-Modus des Spieles.
          *
-         * Auch wenn die enchant.Game.instance._debug Variable gesetzt ist,  
+         * Auch wenn die enchant.Game.instance._debug Variable gesetzt ist,
          * kann der Debug-Modus gestartet werden.
          */
         debug: function() {
@@ -1213,7 +1213,7 @@ enchant.EventTarget = enchant.Class.create({
             }
         },
         _tick: function() {
-            var now = Date.now();
+            var now = this.getTime();
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
@@ -1236,11 +1236,20 @@ enchant.EventTarget = enchant.Class.create({
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
         },
+        getTime: function() {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }else if(window.performance && window.performance.webkitNow){
+                return window.performance.webkitNow();
+            }else{
+                return Date.now();
+            }
+        },
         /**
          * Stoppt das Spiel.
          *
          * Der Frame wird nicht mehr aktualisiert und Spielereingaben werden nicht
-         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Game#start} Methode 
+         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Game#start} Methode
          * erneut gestartet werden.
          */
         stop: function() {
@@ -1254,7 +1263,7 @@ enchant.EventTarget = enchant.Class.create({
          * Stoppt das Spiel.
          *
          * Der Frame wird nicht mehr aktualisiert und Spielereingaben werden nicht
-         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Game#start} Methode 
+         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Game#start} Methode
          * erneut gestartet werden.
          */
         pause: function() {
@@ -1270,7 +1279,7 @@ enchant.EventTarget = enchant.Class.create({
             if (this._intervalID) {
                 return;
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 game._tick();
             }, 1000 / this.fps);

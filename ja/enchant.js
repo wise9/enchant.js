@@ -1159,7 +1159,7 @@ enchant.EventTarget = enchant.Class.create({
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 game._tick();
             }, 1000 / this.fps);
@@ -1183,7 +1183,7 @@ enchant.EventTarget = enchant.Class.create({
             }
         },
         _tick: function() {
-            var now = Date.now();
+            var now = this.getTime();
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
@@ -1205,6 +1205,15 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+        },
+        getTime: function() {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }else if(window.performance && window.performance.webkitNow){
+                return window.performance.webkitNow();
+            }else{
+                return Date.now();
+            }
         },
         /**
          * ゲームを停止する.
@@ -1238,7 +1247,7 @@ enchant.EventTarget = enchant.Class.create({
             if (this._intervalID) {
                 return;
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 game._tick();
             }, 1000 / this.fps);

@@ -739,7 +739,7 @@ enchant.EventTarget = enchant.Class.create({
          * There can be only one instance at a time, when the constructor is executed
          * with an instance present, the existing instance will be overwritten. The existing instance
          * can be accessed from {@link enchant.Game.instance}.
-         * 
+         *
          * @param {Number} width The width of the game screen.
          * @param {Number} height The height of the game screen.
          * @constructs
@@ -1039,11 +1039,11 @@ enchant.EventTarget = enchant.Class.create({
         },
         /**
          * Performs a file preload.
-         * 
-         * Sets files which are to be preloaded. When {@link enchant.Game#start} is called the 
+         *
+         * Sets files which are to be preloaded. When {@link enchant.Game#start} is called the
          * actual loading takes place. When all files are loaded, a {@link enchant.Event.LOAD} event
-         * is dispatched from the Game object. Depending on the type of the file different objects will be 
-         * created and stored in {@link enchant.Game#assets} Variable. 
+         * is dispatched from the Game object. Depending on the type of the file different objects will be
+         * created and stored in {@link enchant.Game#assets} Variable.
          * When an image file is loaded, an {@link enchant.Surface} is created. If a sound file is loaded, an
          * {@link enchant.Sound} object is created. Otherwise it will be accessible as a string.
          *
@@ -1166,7 +1166,7 @@ enchant.EventTarget = enchant.Class.create({
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 game._tick();
             }, 1000 / this.fps);
@@ -1191,7 +1191,7 @@ enchant.EventTarget = enchant.Class.create({
             }
         },
         _tick: function() {
-            var now = Date.now();
+            var now = this.getTime();
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
@@ -1213,6 +1213,15 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+        },
+        getTime: function() {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }else if(window.performance && window.performance.webkitNow){
+                return window.performance.webkitNow();
+            }else{
+                return Date.now();
+            }
         },
         /**
          * Stops the game.
@@ -1246,7 +1255,7 @@ enchant.EventTarget = enchant.Class.create({
             if (this._intervalID) {
                 return;
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 game._tick();
             }, 1000 / this.fps);
