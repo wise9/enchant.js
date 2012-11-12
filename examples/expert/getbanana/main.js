@@ -51,6 +51,7 @@ window.onload = function() {
         game.rootScene.addChild(background);
         game.rootScene.addChild(bear); 
         game.rootScene.addChild(scoreLabel);
+        game.rootScene.scaleX = 3;
 
     }
     game.start();

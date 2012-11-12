@@ -1735,7 +1735,6 @@ enchant.EventTarget = enchant.Class.create({
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        // フォームじゃない
                         e.preventDefault();
                         if (!game.running) {
                             e.stopPropagation();
@@ -2883,11 +2882,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     scale: function(x, y) {
-        if (y == null) {
-            y = x;
-        }
         this._scaleX *= x;
-        this._scaleY *= y;
+        this._scaleY *= (y != null) ? y : x;
         this._dirty = true;
     },
     /**

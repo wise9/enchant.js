@@ -68,6 +68,7 @@ module.exports = function(grunt) {
                         'dev/src/Label.js',
                         'dev/src/Map.js',
                         'dev/src/Group.js',
+                        'dev/src/RGroup.js',
                         'dev/src/CanvasGroup.js',
                         'dev/src/CanvasScene.js',
                         'dev/src/Scene.js',

@@ -220,6 +220,9 @@ enchant.Class = function(superclass, definition) {
  * @static
  */
 enchant.Class.create = function(superclass, definition) {
+    if (superclass == null){
+        throw new Error("superclass is undefined");
+    }
     if (arguments.length === 0) {
         return enchant.Class.create(Object, definition);
     } else if (arguments.length === 1 && typeof arguments[0] !== 'function') {
@@ -1049,7 +1052,6 @@ enchant.EventTarget = enchant.Class.create({
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        // フォームじゃない
                         e.preventDefault();
                         if (!game.running) {
                             e.stopPropagation();
@@ -1754,11 +1756,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @param {Number} [y] Skalierungsfaktor auf der y-Achse.
      */
     scale: function(x, y) {
-        if (y == null) {
-            y = x;
-        }
         this._scaleX *= x;
-        this._scaleY *= y;
+        this._scaleY *= (y != null) ? y : x;
         this._dirty = true;
     },
     /**
