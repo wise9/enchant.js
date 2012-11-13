@@ -67,9 +67,9 @@ If you want to send a pull request or join development enchant.js, please edit f
 
 To setup grunt.js (build tool for node.js) as npm package, type:
 
-    npm install grunt grunt-exec -g
+    npm install
 
-You need npm to install grunt, and [phantomjs](http://code.google.com/p/phantomjs/) to run qunit test in grunt.js.
+You additionally need [phantomjs](http://code.google.com/p/phantomjs/) to run qunit test in grunt.js.
 
 Build Tasks
 -----------
