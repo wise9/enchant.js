@@ -2127,7 +2127,6 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         this._listeners['render'] = null;
         this.addEventListener('render', function() {
             if (this._dirty || this._previousOffsetX == null) {
-                this._dirty = false;
                 this.redraw(0, 0, game.width, game.height);
             } else if (this._offsetX !== this._previousOffsetX ||
                 this._offsetY !== this._previousOffsetY) {
