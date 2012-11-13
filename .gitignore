@@ -3,4 +3,5 @@ jsdoc-toolkit
 .DS_Store
 node_modules
 .project
-doc
+doc/*
+!doc/template
