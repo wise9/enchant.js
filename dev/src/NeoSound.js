@@ -19,12 +19,12 @@ if (webkitAudioContext) {
             this._state = 0;
             this.connectTarget = enchant.NeoSound.destination;
         },
-        play: function() {
+        play: function(dup) {
             var actx = enchant.NeoSound.audioContext;
             if (this._state == 2) {
                 this.src.connect(this.connectTarget);
             } else {
-                if (this._state == 1) {
+                if (this._state == 1 && !dup) {
                     this.src.disconnect(this.connectTarget);
                 }
                 this.src = actx.createBufferSource();
