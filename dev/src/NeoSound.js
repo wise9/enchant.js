@@ -17,26 +17,27 @@ if (webkitAudioContext) {
             this._volume = 1;
             this._currentTime = 0;
             this._state = 0;
+            this.connectTarget = enchant.NeoSound.destination;
         },
         play: function() {
             var actx = enchant.NeoSound.audioContext;
             if (this._state == 2) {
-                this.src.connect(actx.destination);
+                this.src.connect(this.connectTarget);
             } else {
                 if (this._state == 1) {
-                    this.src.disconnect(actx.destination);
+                    this.src.disconnect(this.connectTarget);
                 }
                 this.src = actx.createBufferSource();
                 this.src.buffer = this.buffer;
                 this.src.gain.value = this._volume;
-                this.src.connect(actx.destination);
+                this.src.connect(this.connectTarget);
                 this.src.noteOn(0);
             }
             this._state = 1;
         },
         pause: function() {
             var actx = enchant.NeoSound.audioContext;
-            this.src.disconnect(actx.destination);
+            this.src.disconnect(this.connectTarget);
             this._state = 2;
         },
         stop: function() {
@@ -107,5 +108,6 @@ if (webkitAudioContext) {
     };
 
     enchant.NeoSound.audioContext = new webkitAudioContext();
+    enchant.NeoSound.destination = enchant.NeoSound.audioContext.destination;
 
 }
