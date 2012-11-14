@@ -96,6 +96,11 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node._visible !== 'undefined') {
             this.style.display = node._visible ? 'block' : 'none';
         }
+        if (node._style) {
+            for (var prop in node._style) {
+                this.style[prop] = node._style[prop];
+            }
+        }
         if (typeof node.cssUpdate === 'function') {
             node.cssUpdate();
         }
