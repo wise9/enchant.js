@@ -118,6 +118,7 @@ enchant.DomLayer._attachDomManager = function(node) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
             enchant.DomLayer._attachDomManager(child);
+            node._domManager.addManager(child._domManager, null);
         }
     }
 };
@@ -130,6 +131,7 @@ enchant.DomLayer._detachDomManager = function(node) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
             enchant.DomLayer._detachDomManager(child);
+            node._domManager.removeManager(child._domManager, null);
         }
     }
 };
