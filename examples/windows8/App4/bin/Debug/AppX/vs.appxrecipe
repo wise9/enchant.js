@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>TTTTWIN</Machine>
+    <WindowsUser>chephes</WindowsUser>
+    <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
+    <PackageArchitecture>neutral</PackageArchitecture>
+    <RegisteredManifestChecksum>2F181850911E2E00E6FC5208690B49DAFD1384321F11487C56E6081EFD8939E2</RegisteredManifestChecksum>
+    <RegisteredPackageMoniker>7740ddd6-765e-4387-ba64-199d1b738aa0_1.0.0.0_neutral__ea9c77kwwk694</RegisteredPackageMoniker>
+    <RegisteredUserModeAppID>7740ddd6-765e-4387-ba64-199d1b738aa0_ea9c77kwwk694!App</RegisteredUserModeAppID>
+    <RegisteredPackageID>7740ddd6-765e-4387-ba64-199d1b738aa0</RegisteredPackageID>
+    <RegisteredPackagePublisher>CN=chephes</RegisteredPackagePublisher>
+    <RegisteredVersion>1.0.0.0</RegisteredVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\bin\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2012-09-20T14:16:32.844</Modified>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\default.html">
+      <PackagePath>default.html</PackagePath>
+      <Modified>2012-09-20T13:52:02.579</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\index.html">
+      <PackagePath>enchant\index.html</PackagePath>
+      <Modified>2012-09-28T02:43:08.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\4.png">
+      <PackagePath>enchant\4.png</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\c.png">
+      <PackagePath>enchant\c.png</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\e.png">
+      <PackagePath>enchant\e.png</PackagePath>
+      <Modified>2012-09-28T02:47:35.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\end.png">
+      <PackagePath>enchant\end.png</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\i.png">
+      <PackagePath>enchant\i.png</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\start.png">
+      <PackagePath>enchant\start.png</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\images\logo.png">
+      <PackagePath>images\logo.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2012-07-26T02:30:08.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\images\smalllogo.png">
+      <PackagePath>images\smalllogo.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2012-07-26T02:30:08.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\images\splashscreen.png">
+      <PackagePath>images\splashscreen.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2012-07-26T02:30:08.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\images\storelogo.png">
+      <PackagePath>images\storelogo.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+      <Modified>2012-07-26T02:30:08.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\enchant.js">
+      <PackagePath>enchant\enchant.js</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\main.js">
+      <PackagePath>enchant\main.js</PackagePath>
+      <Modified>2012-09-20T13:53:52.783</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\enchant\nineleap.enchant.js">
+      <PackagePath>enchant\nineleap.enchant.js</PackagePath>
+      <Modified>2012-10-24T20:41:20.000</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\js\default.js">
+      <PackagePath>js\default.js</PackagePath>
+      <Modified>2012-09-20T14:16:30.335</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\css\default.css">
+      <PackagePath>css\default.css</PackagePath>
+      <Modified>2012-09-20T13:52:23.119</Modified>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\chephes\Documents\visual studio 2012\Projects\enchant.js template\App4\bin\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+      <Modified>2012-09-20T14:16:32.695</Modified>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResolvedSDKReference Include="C:\Program Files %28x86%29\Microsoft SDKs\Windows\v8.0\ExtensionSDKs\Microsoft.WinJS.1.0\1.0\">
+      <Name>Microsoft.WinJS.1.0</Name>
+      <Version>1.0.8514.0</Version>
+      <Architecture>Neutral</Architecture>
+      <FrameworkIdentity>Name=Microsoft.WinJS.1.0, MinVersion=1.0.8514.0</FrameworkIdentity>
+      <AppxLocation>C:\Program Files %28x86%29\Microsoft SDKs\Windows\v8.0\ExtensionSDKs\Microsoft.WinJS.1.0\1.0\Microsoft.WinJS.1.0.appx</AppxLocation>
+    </ResolvedSDKReference>
+  </ItemGroup>
+</Project>
