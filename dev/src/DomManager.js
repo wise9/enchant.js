@@ -65,7 +65,9 @@ enchant.DomManager = enchant.Class.create({
         if (node.childNodes) {
             for (var i = 0, l = node.childNodes.length; i < l; i++) {
                 manager = node.childNodes[i]._domManager;
-                manager.setLayer(layer);
+                if (manager) {
+                    manager.setLayer(layer);
+                }
             }
         }
     },
@@ -203,7 +205,9 @@ enchant.DomlessManager = enchant.Class.create({
         if (node.childNodes) {
             for (var i = 0, l = node.childNodes.length; i < l; i++) {
                 manager = node.childNodes[i]._domManager;
-                manager.setLayer(layer);
+                if (manager) {
+                    manager.setLayer(layer);
+                }
             }
         }
     },
