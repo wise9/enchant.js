@@ -1,7 +1,7 @@
 /**
  * @fileOverview
  * nineleap.enchant.js
- * @version 0.3 (2012/02/01)
+ * @version 0.3.1 (2012/11/15)
  * @requires enchant.js v0.4.0 or later
  *
  * @description
@@ -47,7 +47,6 @@
             this.addEventListener('load', function() {
                 var game = this;
                 this.startScene = new enchant.nineleap.SplashScene();
-                this.startScene._element.style.zIndex = 10;
                 this.startScene.image = this.assets['start.png'];
                 this.startScene.addEventListener('touchend', function() {
                     if (game.started === false) {
