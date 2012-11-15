@@ -8,6 +8,8 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 
         this.scene = this;
 
+        this._backgroundColor = null;
+
         this._element = document.createElement('div');
         this._element.style.width = this.width + 'px';
         this._element.style.height = this.height + 'px';
@@ -78,6 +80,14 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             for (var type in this._layers) {
                 this._layers[type].scaleY = scaleY;
             }
+        }
+    },
+    backgroundColor: {
+        get: function() {
+            return this._backgroundColor;
+        },
+        set: function(color) {
+            this._backgroundColor = this._element.style.backgroundColor = color;
         }
     },
     addLayer: function(type, i) {
