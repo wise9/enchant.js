@@ -13,13 +13,14 @@ module('tl.enchant.js', {
 
 test('tl.frameBased', function() {
     var sprite = enchant.Game.instance.rootScene.childNodes[0];
-    ok(sprite.tl.isFrameBased);
+
+    equal(sprite.tl.isFrameBased, true);
     sprite.tl.setFrameBased();
-    ok(sprite.tl.isFrameBased);
+    equal(sprite.tl.isFrameBased, true);
     sprite.tl.setTimeBased();
-    ok(!sprite.tl.isFrameBased);
+    equal(sprite.tl.isFrameBased, false);
     sprite.tl.setFrameBased();
-    ok(sprite.tl.isFrameBased);
+    equal(sprite.tl.isFrameBased, true);
 });
 
 test('tl.delay.then', function() {
