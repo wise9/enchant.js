@@ -808,7 +808,7 @@ enchant.ui.Bar = enchant.Class.create(enchant.Sprite, {
         set: function(x) {
             this._x = x;
             this._origin = x;
-            this._updateCoordinate();
+            this._dirty = true;
         }
     },
     /**
