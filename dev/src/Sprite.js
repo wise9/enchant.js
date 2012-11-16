@@ -160,8 +160,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
         }
     },
-    domRender: function() {
-        var element = this._domManager.element;
+    domRender: function(element) {
         if (this._image) {
             if (this._image._css) {
                 element.style.backgroundImage = this._image._css;

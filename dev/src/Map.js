@@ -435,8 +435,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             ctx.restore();
         }
     },
-    domRender: function() {
-        var element = this._domManager.element;
+    domRender: function(element) {
         if (this._image) {
             element.style.backgroundImage = this._surface._css;
             // bad performance

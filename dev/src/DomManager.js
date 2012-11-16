@@ -102,7 +102,7 @@ enchant.DomManager = enchant.Class.create({
             }
         }
         if (typeof node.domRender === 'function') {
-            node.domRender();
+            node.domRender(this.element);
         }
     },
     _attachEvent: function() {
