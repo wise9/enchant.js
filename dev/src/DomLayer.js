@@ -8,15 +8,13 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
 
         this._touchEventTarget = null;
 
-        this._frameBuffer = new enchant.DomView(this.width, this.height);
-        this._domManager = new enchant.DomManager(this, 'div');
+        this._element = document.createElement('div');
+        this._element.style.width = this.width + 'px';
+        this._element.style.height = this.height + 'px';
+        this._element.style.position = 'absolute';
+
+        this._domManager = new enchant.DomManager(this, this._element);
         this._domManager.layer = this;
-        this._frameBuffer.element.appendChild(this._domManager.element);
-
-        this._frameBuffer.element.style.position = 'absolute';
-
-        // TODO
-        this._element = this._frameBuffer.element;
 
         var touch = [
             enchant.Event.TOUCH_START,
