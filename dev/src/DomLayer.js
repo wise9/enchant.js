@@ -19,9 +19,6 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         // TODO
         this._element = this._frameBuffer.element;
 
-        this.addEventListener('enter', this._startRendering);
-        this.addEventListener('exit', this._stopRendering);
-
         var touch = [
             enchant.Event.TOUCH_START,
             enchant.Event.TOUCH_MOVE,
@@ -47,7 +44,8 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             var nextManager = next ? next._domManager : null;
             enchant.DomLayer._attachDomManager(child);
             self._domManager.addManager(child._domManager, nextManager);
-            that._rendering(child);
+            var render = new enchant.Event(enchant.Event.RENDER);
+            that._rendering(child, render);
         };
 
         var __onchildremoved = function(e) {
@@ -65,25 +63,29 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         this.addEventListener('childadded', __onchildadded);
 
         this._onexitframe = function() {
-            that._rendering(that);
+            var render = new enchant.Event(enchant.Event.RENDER);
+            that._rendering(that, render);
         };
     },
     _startRendering: function() {
-        enchant.Game.instance.addEventListener('exitframe', this._onexitframe);
+        this.addEventListener('exitframe', this._onexitframe);
+        this._onexitframe();
     },
     _stopRendering: function() {
-        enchant.Game.instance.removeEventListener('exitframe', this._onexitframe);
+        this.removeEventListener('exitframe', this._onexitframe);
+        this._onexitframe();
     },
-    _rendering: function(node, inheritMat) {
+    _rendering: function(node, e, inheritMat) {
         var child;
         if (!inheritMat) {
             inheritMat = [ 1, 0, 0, 1, 0, 0 ];
         }
+        node.dispatchEvent(e);
         node._domManager.render(inheritMat);
         if (node.childNodes) {
             for (var i = 0, l = node.childNodes.length; i < l; i++) {
                 child = node.childNodes[i];
-                this._rendering(child, inheritMat.slice());
+                this._rendering(child, e, inheritMat.slice());
             }
         }
         if (node._domManager instanceof enchant.DomlessManager) {

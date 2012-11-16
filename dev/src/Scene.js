@@ -26,6 +26,15 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
         this.addEventListener(enchant.Event.ENTER, this._onenter);
         this.addEventListener(enchant.Event.EXIT, this._onexit);
+
+        var that = this;
+        this._dispatchExitframe = function() {
+            var layer;
+            for (var prop in that._layers) {
+                layer = that._layers[prop];
+                layer.dispatchEvent(new enchant.Event(enchant.Event.EXIT_FRAME));
+            }
+        };
     },
     x: {
         get: function() {
@@ -96,7 +105,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             return;
         }
         var layer = new enchant[type + 'Layer']();
-        // TODO controll with enter, exit
         if (game.currentScene === this) {
             layer._startRendering();
         }
@@ -146,10 +154,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         for (var type in this._layers) {
             this._layers[type]._startRendering();
         }
+        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         for (var type in this._layers) {
             this._layers[type]._stopRendering();
         }
+        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });

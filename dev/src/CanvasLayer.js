@@ -47,9 +47,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
         this._colorManager = new enchant.DetectColorManager(16, 256);
 
-        this.addEventListener('enter', this._startRendering);
-        this.addEventListener('exit', this._stopRendering);
-
         var touch = [
             enchant.Event.TOUCH_START,
             enchant.Event.TOUCH_MOVE,
@@ -71,7 +68,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 child.addEventListener('childremoved', __onchildremoved);
             }
             enchant.CanvasLayer._attachCache(child, that._colorManager);
-            that._rendering(child);
+            var render = new enchant.Event(enchant.Event.RENDER);
+            that._rendering(child, render);
         };
 
         var __onchildremoved = function(e) {
@@ -89,7 +87,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._onexitframe = function() {
             var ctx = that.context;
             ctx.clearRect(0, 0, game.width, game.height);
-            that._rendering(that);
+            var render = new enchant.Event(enchant.Event.RENDER);
+            that._rendering(that, render);
         };
     },
     /**
@@ -97,29 +96,25 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * @private
      */
     _startRendering: function() {
-        var game = enchant.Game.instance;
-        if (!game._listeners['exitframe']) {
-            game._listeners['exitframe'] = [];
-        }
-        game._listeners['exitframe'].push(this._onexitframe);
-        this._onexitframe();
+        this.addEventListener('exitframe', this._onexitframe);
+        this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     /**
      * レンダリングを停止.
      * @private
      */
     _stopRendering: function() {
-        var game = enchant.Game.instance;
-        game.removeEventListener('exitframe', this._onexitframe);
-        this._onexitframe();
+        this.removeEventListener('render', this._onexitframe);
+        this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
-    _rendering:  function(node) {
+    _rendering:  function(node, e) {
         var game = enchant.Game.instance;
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
         var ctx = this.context;
         var child;
         ctx.save();
+        node.dispatchEvent(e);
         // composite
         if (node.compositeOperation) {
             ctx.globalCompositeOperation = node.compositeOperation;
@@ -155,7 +150,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         if (node.childNodes) {
             for (var i = 0, l = node.childNodes.length; i < l; i++) {
                 child = node.childNodes[i];
-                this._rendering(child);
+                this._rendering(child, e);
             }
         }
         ctx.restore();
@@ -208,7 +203,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
     },
     _determineEventTarget: function(e) {
-        // TODO calc position offset
         return this._getEntityByPosition(e.x, e.y);
     },
     _getEntityByPosition: function(x, y) {

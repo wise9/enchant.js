@@ -102,20 +102,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.dispatchEvent(e);
             game.dispatchEvent(e);
         });
-
-        var that = this;
-        var event = new enchant.Event('render');
-        var render = function() {
-            that.dispatchEvent(event);
-        };
-        this.addEventListener('addedtoscene', function() {
-            render();
-            game.addEventListener('exitframe', render);
-        });
-        this.addEventListener('removedfromscene', function() {
-            game.removeEventListener('exitframe', render);
-        });
-
     },
     /**
      [lang:ja]
