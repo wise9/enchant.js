@@ -1,8 +1,8 @@
 enchant();
 
 window.onload = function() {
-    game = new Game(320, 320); 
-    game.fps = 24;                  
+    game = new Game(320, 320);
+    game.fps = 24;
     game.preload(['chara1.gif','icon0.gif','bg.png']);
     //プリロードする画像を相対パスで指定
 
@@ -15,7 +15,7 @@ window.onload = function() {
         bear.y = 240;               // Sprite の左上のy座標を指定
         bear.width = 32;
         bear.height = 32;
-        
+
         bear.image = game.assets['chara1.gif']; // 画像を指定
         bear.frame = 0;
         // 「chara1.gif」を32x32の格子で切り取ったのち、0番目(=左上)のものを用いる
@@ -34,7 +34,7 @@ window.onload = function() {
         game.rootScene.addEventListener('touchmove', function(e){
             bear.x = e.localX
         });
-        
+
         game.score = 0;
 
         game.rootScene.addEventListener('enterframe',function(){
@@ -49,9 +49,7 @@ window.onload = function() {
         });
 
         game.rootScene.addChild(background);
-        game.rootScene.addChild(bear); 
-        game.rootScene.addChild(scoreLabel);
-        game.rootScene.scaleX = 3;
+        game.rootScene.addChild(bear);
 
     }
     game.start();
@@ -62,13 +60,13 @@ window.onload = function() {
 function addBanana(pos){
     var banana = new Sprite(16, 16);    // Spriteを生成
     banana.x = rand(320);               // 0 から 319 のあいだの乱数
-    banana.y = 0;                           
+    banana.y = 0;
     banana.image = game.assets['icon0.gif'];
-    
-    banana.frame = 16; 
+
+    banana.frame = 16;
     // icon0.gif を 16x16 サイズの格子に区切ったとき、左上を 0番目として数えて
     // 16番目にある画像 (バナナ) を指定
-    
+
     banana.addEventListener('enterframe', function(e) {
         if(this.intersect(bear)){       // bearとの当たり判定
             game.rootScene.removeChild(this); // 画面から消去

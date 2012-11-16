@@ -45,7 +45,7 @@ window.onload = function(){
      * 必要なファイルを相対パスで引数に指定する。 ファイルはすべて、ゲームが始まる前にロードされる。
      */
     game.preload("chara1.png");
-    
+
     /**
      * Game#onload
      *
