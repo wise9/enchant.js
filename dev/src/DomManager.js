@@ -78,19 +78,19 @@ enchant.DomManager = enchant.Class.create({
         matrix.multiply(stack[stack.length - 1], dest, dest);
         matrix.multiply(inheritMat, dest, inheritMat);
         node._matrix = inheritMat;
-        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
-        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+        var ox = (typeof node._originX === 'number') ? node._originX : node.width / 2 || 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node.height / 2 || 0;
         var vec = [ ox, oy ];
         matrix.multiplyVec(dest, vec, vec);
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
-        this.domRender();
         this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' + dest + ')';
+        this.domRender();
     },
     domRender: function() {
         var node = this.targetNode;
-        this.style.width = node._width + 'px';
-        this.style.height = node._height + 'px';
+        this.style.width = node.width + 'px';
+        this.style.height = node.height + 'px';
         this.style.opacity = node._opacity;
         this.style.backgroundColor = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
@@ -218,8 +218,8 @@ enchant.DomlessManager = enchant.Class.create({
         matrix.multiply(stack[stack.length - 1], dest, dest);
         matrix.multiply(inheritMat, dest, inheritMat);
         node._matrix = inheritMat;
-        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
-        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+        var ox = (typeof node._originX === 'number') ? node._originX : node.width / 2 || 0;
+        var oy = (typeof node._originY === 'number') ? node._originY : node.height / 2 || 0;
         var vec = [ ox, oy ];
         matrix.multiplyVec(dest, vec, vec);
         node._offsetX = vec[0] - ox;
