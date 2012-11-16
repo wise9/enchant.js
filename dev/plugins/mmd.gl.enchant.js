@@ -60,24 +60,24 @@ var MMD = {};
      */
     enchant.gl.mmd = {};
 
-    enchant.Game._loadFuncs['pmd'] = function(src, callback) {
+    enchant.Core._loadFuncs['pmd'] = function(src, callback) {
         if (callback == null) {
             callback = function() {
             };
         }
         var model = new enchant.gl.mmd.MSprite3D(src, function() {
-            enchant.Game.instance.assets[src] = model;
+            enchant.Core.instance.assets[src] = model;
             callback();
         });
     };
 
-    enchant.Game._loadFuncs['vmd'] = function(src, callback) {
+    enchant.Core._loadFuncs['vmd'] = function(src, callback) {
         if (callback == null) {
             callback = function() {
             };
         }
         var anim = new enchant.gl.mmd.MAnimation(src, function() {
-            enchant.Game.instance.assets[src] = anim;
+            enchant.Core.instance.assets[src] = anim;
             callback();
         });
     };
@@ -291,8 +291,8 @@ var MMD = {};
             this.mesh._morphs._bufferDataFast();
         },
         _render: function() {
-            var game = enchant.Game.instance;
-            var scene = game.currentScene3D;
+            var core = enchant.Core.instance;
+            var scene = core.currentScene3D;
             var light = scene.directionalLight;
             var lvec = [ light._directionX, light._directionY, light._directionZ ];
             var uMVMatrix = mat4.identity(this.uMVMatrix);
@@ -301,7 +301,7 @@ var MMD = {};
             mat4.transpose(mat4.inverse(uMVMatrix, uNMatrix));
             var uLightDirection = vec3.normalize(lvec);
             mat4.multiplyVec3(uNMatrix, uLightDirection);
-            game.GL.currentProgram.setAttributes({
+            core.GL.currentProgram.setAttributes({
                 aVertexPosition: this.mesh._vertices,
                 aVertexNormal: this.mesh._normals,
                 aTextureCoord: this.mesh._texCoords,
@@ -315,7 +315,7 @@ var MMD = {};
                 aBoneWeight: this.mesh._weights,
                 aVertexEdge: this.mesh._edges
             });
-            game.GL.currentProgram.setUniforms({
+            core.GL.currentProgram.setUniforms({
                 uLightDirection: uLightDirection,
                 uPMatrix: scene._camera.projMat,
                 uMVMatrix: uMVMatrix,
@@ -352,16 +352,16 @@ var MMD = {};
                     u.uTexture = 0;
                     u.uUseSphereMap = 0;
                 }
-                game.GL.currentProgram.setUniforms(u);
+                core.GL.currentProgram.setUniforms(u);
 
 
                 length = material.face_vert_count;
-                enchant.Game.instance.GL.renderElements(this.mesh._indices, offset * 2, length);
+                enchant.Core.instance.GL.renderElements(this.mesh._indices, offset * 2, length);
 
                 if (material.edge_flag) {
                     enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms({ uEdge: 1 });
                     gl.cullFace(gl.FRONT);
-                    enchant.Game.instance.GL.renderElements(this.mesh._indices, offset * 2, length);
+                    enchant.Core.instance.GL.renderElements(this.mesh._indices, offset * 2, length);
                     gl.cullFace(gl.BACK);
                     enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms({ uEdge: 0 });
                 }
@@ -817,8 +817,8 @@ var MMD = {};
         Atype: Uint16Array
     };
 
-    var _original_start = enchant.gl.Game.prototype.start;
-    enchant.gl.Game.prototype.start = function() {
+    var _original_start = enchant.gl.Core.prototype.start;
+    enchant.gl.Core.prototype.start = function() {
         enchant.gl.mmd.MMD_SHADER_PROGRAM = new enchant.gl.Shader(MMD_VERTEX_SHADER_SOURCE, MMD_FRAGMENT_SHADER_SOURCE);
         this.GL.setProgram(enchant.gl.mmd.MMD_SHADER_PROGRAM);
         enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms({

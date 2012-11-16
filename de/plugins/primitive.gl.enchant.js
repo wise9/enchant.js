@@ -30,11 +30,11 @@ if (enchant.gl !== undefined) {
         });
         enchant.gl.primitive.Billboard = enchant.Class.create(enchant.gl.primitive.Plane, {
             initialize: function(scale) {
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 enchant.gl.primitive.Plane.call(this, scale);
                 this.addEventListener('enterframe', function() {
-                    if (game.currentScene3D._camera) {
-                        this.rotation = game.currentScene3D._camera.invMat;
+                    if (core.currentScene3D._camera) {
+                        this.rotation = core.currentScene3D._camera.invMat;
                     }
                 });
             }
@@ -74,11 +74,11 @@ if (enchant.gl !== undefined) {
         });
         enchant.gl.primitive.BillboardY = enchant.Class.create(enchant.gl.primitive.Plane, {
             initialize: function(scale) {
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 enchant.gl.primitive.Plane.call(this, scale);
                 this.addEventListener('render', function() {
-                    if (game.currentScene3D._camera) {
-                        this.rotation = game.currentScene3D._camera.invMatY;
+                    if (core.currentScene3D._camera) {
+                        this.rotation = core.currentScene3D._camera.invMatY;
                     }
                 });
             }

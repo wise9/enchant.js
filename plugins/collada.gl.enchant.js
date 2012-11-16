@@ -18,9 +18,9 @@
  * http://code.google.com/p/glmatrix/wiki/Usage
  */
 if (enchant.gl !== undefined) {
-    enchant.Game._loadFuncs['dae'] = function(src, callback) {
+    enchant.Core._loadFuncs['dae'] = function(src, callback) {
         enchant.gl.Sprite3D.loadCollada(src, function(collada, src) {
-            enchant.Game.instance.assets[src] = collada;
+            enchant.Core.instance.assets[src] = collada;
             if (callback != null) {
                 callback();
             }
@@ -470,7 +470,7 @@ if (enchant.gl !== undefined) {
                 return matrix;
             },
             getAnimationMatrixesLocal: function(libAnimations) {
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 var rotation = this.getRotationMatrix();
                 var translation = this.getTranslationMatrix();
                 var matrix = this.getnMatrix();
@@ -550,8 +550,8 @@ if (enchant.gl !== undefined) {
                             }
                         }
                     }
-                    animationMatrixes[this.sid][Math.round(game.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
-                    mat4.multiply(animationMatrixes[this.sid][Math.round(game.fps * input[i])],nMat);
+                    animationMatrixes[this.sid][Math.round(core.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
+                    mat4.multiply(animationMatrixes[this.sid][Math.round(core.fps * input[i])],nMat);
                 }
                 for (var k in this.nodes) {
                     var child = this.nodes[k].getAnimationMatrixesLocal(libAnimations);
@@ -908,8 +908,8 @@ if (enchant.gl !== undefined) {
                 return null;
             },
             getPose: function(poses, length) {
-                var game = enchant.Game.instance;
-                var frame = (game.frame) % length;
+                var core = enchant.Core.instance;
+                var frame = (core.frame) % length;
                 var pose = [];
                 for (var k in poses) {
                     pose[k] = poses[k].getFrame(frame);
@@ -1258,14 +1258,14 @@ if (enchant.gl !== undefined) {
                 return arraysForShader;
             },
             _render: function(detectTouch) {
-                var game = enchant.Game.instance;
-                var scene = game.currentScene3D;
+                var core = enchant.Core.instance;
+                var scene = core.currentScene3D;
                 var l = scene.directionalLight;
                 var detect = (detectTouch === 'detect') ? 1.0 : 0.0;
                 mat4.multiply(scene._camera.mat, this.tmpMat, this.uMVMatrix);
                 mat4.toInverseMat3(this.tmpMat, this.uNMatrix);
                 mat3.transpose(this.uNMatrix);
-                game.GL.currentProgram.setAttributes({
+                core.GL.currentProgram.setAttributes({
                     aVertexPosition: this.mesh._vertices,
                     aVertexNormal: this.mesh._normals,
                     aTextureCoord: this.mesh._texCoords,
@@ -1276,7 +1276,7 @@ if (enchant.gl !== undefined) {
                     aBoneWeight1: this.mesh._weights1,
                     aBoneWeight2: this.mesh._weights2
                 });
-                game.GL.currentProgram.setUniforms({
+                core.GL.currentProgram.setUniforms({
                     uUseDirectionalLight: scene.useDirectionalLight,
                     uLightColor: l.color,
                     uDetectTouch: detect,
@@ -1309,13 +1309,13 @@ if (enchant.gl !== undefined) {
                     u.uUseTexture = 0;
                     u.uSampler = 0;
                 }
-                game.GL.currentProgram.setUniforms(u);
+                core.GL.currentProgram.setUniforms(u);
                 for (var i = 0; i < this.mesh.dividedpoints.length - 1; i++) {
-                    game.GL.currentProgram.setUniforms({
+                    core.GL.currentProgram.setUniforms({
                         uBonePos: this.mesh.udBoneInfo[i]['pos'],
                         uBoneRot: this.mesh.udBoneInfo[i]['rot']
                     });
-                    enchant.Game.instance.GL.renderElements(this.mesh._indices, this.mesh.dividedpoints[i] / 3 * 2, this.mesh.dividedpoints[i + 1] / 3 - this.mesh.dividedpoints[i] / 3);
+                    enchant.Core.instance.GL.renderElements(this.mesh._indices, this.mesh.dividedpoints[i] / 3 * 2, this.mesh.dividedpoints[i + 1] / 3 - this.mesh.dividedpoints[i] / 3);
                 }
             }
         });
@@ -1390,9 +1390,9 @@ if (enchant.gl !== undefined) {
             }\n\
             ';
 
-        enchant.gl.Game.prototype._original_start = enchant.gl.Game.prototype.start;
-        enchant.gl.Game.prototype.start = function() {
-            enchant.gl.collada.COLLADA_SHADER_PROGRAM = new enchant.gl.Shader(COLLADA_VERTEX_SHADER_SOURCE, enchant.Game.instance.GL.defaultProgram._fShaderSource);
+        enchant.gl.Core.prototype._original_start = enchant.gl.Core.prototype.start;
+        enchant.gl.Core.prototype.start = function() {
+            enchant.gl.collada.COLLADA_SHADER_PROGRAM = new enchant.gl.Shader(COLLADA_VERTEX_SHADER_SOURCE, enchant.Core.instance.GL.defaultProgram._fShaderSource);
             this._original_start();
         };
         var ColladaLibraryLoader = enchant.Class.create({

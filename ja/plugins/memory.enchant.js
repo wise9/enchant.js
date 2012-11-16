@@ -10,15 +10,15 @@
  * enchant.js extention for 9leap.net
  * @usage
  * EXAMPLE: use user memory
- * var game = new Game();
- * game.memory.player.preload();
- * game.onload = function () {
+ * var core = new Core();
+ * core.memory.player.preload();
+ * core.onload = function () {
  *    var playerSp = this.memory.player.toSprite();
  *    playerSp.x = this.width / 2 - playerSp.width / 2;
  *    playerSp.y = this.height / 2 - playerSp.height / 2;
  *    this.rootScene.addChild(playerSp);
  * };
- * game.start();
+ * core.start();
  */
 
 (function() {
@@ -45,7 +45,7 @@
 
     /**
      * ゲームメモリーリクエストが成功した時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene,
      * @type {String}
      */
     enchant.Event.COMPLETE_MEMORY_REQUEST = 'complete_memory_request';
@@ -53,57 +53,57 @@
 
     /**
      * ゲームメモリーリクエストのレスポンスがエラーの時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene,
      * @type {String}
      */
     enchant.Event.ERROR_MEMORY_REQUEST = 'error_memory_request';
 
     /**
      * ゲームメモリーのアップデートが完了したときに発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene,
      * @type {String}
      */
     enchant.Event.COMPLETE_UPDATE = 'complete_update';
 
     /**
      * XHRのreadyStateが4になった時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
      * @type {String}
      */
     enchant.Event.COMPLETE_XHR_REQUEST = 'complete_xhr_request';
 
     /**
      * XHRのreadyStateが1になった時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
      * @type {String}
      */
     enchant.Event.LOADING_XHR_REQUEST = 'loading_xhr_request';
 
     /**
      * XHRのreadyStateが2になった時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
      * @type {String}
      */
     enchant.Event.LOADED_XHR_REQUEST = 'loaded_xhr_request';
 
     /**
      * XHRのreadyDtateが3になった時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
      * @type {String}
      */
     enchant.Event.INTERACTIVE_XHR_REQUEST = 'interactive_xhr_request';
 
     /**
      * XHRのレスポンスがエラーの時に発生するイベント.
-     * 発行するオブジェクト: enchant.Game, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
+     * 発行するオブジェクト: enchant.Core, enchant.Scene, enchant.nineleap.memory.MemoryWrite,
      * @type {String}
      */
     enchant.Event.ERROR_XHR_REQUEST = 'error_xhr_request';
 
     /**
-     * @scope enchant.nineleap.memory.Game.prototype
+     * @scope enchant.nineleap.memory.Core.prototype
      */
-    enchant.nineleap.memory.Game = enchant.Class.create(parentModule.Game, {
+    enchant.nineleap.memory.Core = enchant.Class.create(parentModule.Core, {
         /**
          * メモリを扱うためのゲームオブジェクト
          * @constructs
@@ -111,7 +111,7 @@
          * @param height
          */
         initialize: function(width, height) {
-            parentModule.Game.call(this, width, height);
+            parentModule.Core.call(this, width, height);
             this._memoryRequests = [];
             this.requireAuth = true;
             this.authorized = true;
@@ -121,30 +121,30 @@
             this._memoryAssets = [];
             this._memory = {
                 user: {
-                    preload: enchant.nineleap.memory.Game.prototype.user_preload
+                    preload: enchant.nineleap.memory.Core.prototype.user_preload
                 },
                 player: {
-                    preload: enchant.nineleap.memory.Game.prototype.player_preload
+                    preload: enchant.nineleap.memory.Core.prototype.player_preload
                 },
-                update: enchant.nineleap.memory.Game.prototype.memory_update
+                update: enchant.nineleap.memory.Core.prototype.memory_update
             };
             this._memories = {
                 friends: {
-                    preload: enchant.nineleap.memory.Game.prototype.friends_preload
+                    preload: enchant.nineleap.memory.Core.prototype.friends_preload
                 },
                 ranking: {
-                    preload: enchant.nineleap.memory.Game.prototype.ranking_preload
+                    preload: enchant.nineleap.memory.Core.prototype.ranking_preload
                 },
                 recent: {
-                    preload: enchant.nineleap.memory.Game.prototype.recent_preload
+                    preload: enchant.nineleap.memory.Core.prototype.recent_preload
                 }
             };
             this.addEventListener('load', function() {
                 this.ajaxloading = new SplashScene();
                 this.ajaxloading.image = this.assets['indicator.png'];
-                var game = this;
+                var core = this;
                 this.ajaxloading.childNodes[0].addEventListener('enterframe', function() {
-                    if (game.frame % 5 == 0) this.rotate(16);
+                    if (core.frame % 5 == 0) this.rotate(16);
                 });
             });
             this.addEventListener('enterframe', function() {
@@ -165,7 +165,7 @@
                 }
                 return;
             }
-            parentModule.Game.prototype.start.call(this);
+            parentModule.Core.prototype.start.call(this);
         },
 
         /**
@@ -234,8 +234,8 @@
                         this._pushData(resBody, setmemory);
                     else setmemory.data = resBody;
                     var e = new Event('complete_memory_request');
-                    enchant.Game.instance.dispatchEvent(e);
-                    enchant.Game.instance.currentScene.dispatchEvent(e);
+                    enchant.Core.instance.dispatchEvent(e);
+                    enchant.Core.instance.currentScene.dispatchEvent(e);
                 }
             } else {
                 var id = this._memoryRequests.length;
@@ -260,7 +260,7 @@
         },
 
         _setMemoryAssets: function(resBody, requestType, checkError) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             this.memoryQueue--;
             if (requestType.match(/u\/[0-9a-zA-Z_+]/)) {
                 this.memory.user[requestType.replace(/u\//, '')] = {};
@@ -327,41 +327,41 @@
                         var width = 48;
                         var height = 48;
                     }
-                    var g = enchant.Game.instance;
+                    var g = enchant.Core.instance;
                     var sp = new Sprite(width, height);
                     sp.image = g.assets[obj['profile_image_url']];
                     return sp;
                 };
-                if (enchant.Game.instance.assets[obj['profile_image_url']] == undefined)
+                if (enchant.Core.instance.assets[obj['profile_image_url']] == undefined)
                     this._memoryAssets.push(obj['profile_image_url']);
             }
         },
         user_preload: function(user, option, checkError) {
             if (user === undefined) return false;
             var requestType = 'u/' + user;
-            return enchant.Game.instance.preloadMemory(requestType, option, checkError);
+            return enchant.Core.instance.preloadMemory(requestType, option, checkError);
         },
         player_preload: function(option, checkError) {
             var requestType = 'user_memory';
-            return enchant.Game.instance.preloadMemory(requestType, option, checkError);
+            return enchant.Core.instance.preloadMemory(requestType, option, checkError);
         },
         friends_preload: function(option, checkError) {
             var requestType = 'friends_memories';
-            return enchant.Game.instance.preloadMemory(requestType, option, checkError);
+            return enchant.Core.instance.preloadMemory(requestType, option, checkError);
         },
         recent_preload: function(option, checkError) {
             var requestType = 'recent_memories';
-            return enchant.Game.instance.preloadMemory(requestType, option, checkError);
+            return enchant.Core.instance.preloadMemory(requestType, option, checkError);
         },
         ranking_preload: function(option, checkError) {
             var requestType = 'ranking_memories';
-            return enchant.Game.instance.preloadMemory(requestType, option, checkError);
+            return enchant.Core.instance.preloadMemory(requestType, option, checkError);
         },
         memory_update: function(option, checkError) {
             var requestType = 'user_memory';
-            var game = enchant.Game.instance;
-            if (game.memory.player.data === undefined ||
-                game.check_ajax_running(requestType)) return false;
+            var core = enchant.Core.instance;
+            if (core.memory.player.data === undefined ||
+                core.check_ajax_running(requestType)) return false;
             if (arguments.length == 1) {
                 if (typeof arguments[0] == 'boolean') {
                     checkError = arguments[0];
@@ -374,31 +374,31 @@
                 option = {};
             }
             if (enchant.nineleap.memory.LocalStorage.DEBUG_MODE) {
-                game.ajaxQueue++;
+                core.ajaxQueue++;
                 var localstorage = new enchant.nineleap.memory.LocalStorage(LocalStorage.GAME_ID);
-                localstorage.set_user_memory('mine', game.memory.player.data);
-                game.ajaxQueue--;
+                localstorage.set_user_memory('mine', core.memory.player.data);
+                core.ajaxQueue--;
                 var e = new Event('complete_update');
                 setTimeout(function() {
-                    game.dispatchEvent(e);
-                    game.currentScene.dispatchEvent(e);
+                    core.dispatchEvent(e);
+                    core.currentScene.dispatchEvent(e);
                 }, 100);
             } else {
-                var id = game._ajaxRequests.length;
-                var data = game.memory.player.data;
+                var id = core._ajaxRequests.length;
+                var data = core.memory.player.data;
                 var request = new MemoryWrite(id, requestType, function() {
                     var e = new Event('complete_update');
-                    enchant.Game.instance.dispatchEvent(e);
-                    enchant.Game.instance.currentScene.dispatchEvent(e);
+                    enchant.Core.instance.dispatchEvent(e);
+                    enchant.Core.instance.currentScene.dispatchEvent(e);
                 }, checkError, data);
-                game._ajaxRequests.push(request);
-                if (game.ajaxQueue + game.memoryQueue < enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE) {
+                core._ajaxRequests.push(request);
+                if (core.ajaxQueue + core.memoryQueue < enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE) {
                     request.send();
                 } else {
-                    game.addEventListener('complete_xhr_request', function() {
-                        if (game.ajaxQueue + game.memoryQueue < enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE) {
-                            game.removeEventListener('compleate_xhr_request', arguments.callee);
-                            game._ajaxRequests[id].send();
+                    core.addEventListener('complete_xhr_request', function() {
+                        if (core.ajaxQueue + core.memoryQueue < enchant.nineleap.memory.HttpRequest.MAX_REQUEST_SIZE) {
+                            core.removeEventListener('compleate_xhr_request', arguments.callee);
+                            core._ajaxRequests[id].send();
                         }
                     });
                 }
@@ -535,7 +535,7 @@
             var gameid = enchant.nineleap.memory.LocalStorage.GAME_ID != null ?
                 enchant.nineleap.memory.LocalStorage.GAME_ID :
                 location.pathname.match(/^\/games\/(\d+)/)[1];
-            var jsonpcallback = '?callback=enchant.Game.instance._memoryRequests[' + id + ']._callback';
+            var jsonpcallback = '?callback=enchant.Core.instance._memoryRequests[' + id + ']._callback';
             var src = [HttpRequest.SERVER_URL, 'memory/', gameid, '/', requestType, '.json', jsonpcallback].join('');
             if (option) {
                 for (var key in option) {
@@ -547,7 +547,7 @@
             this.script.src = src;
         },
         _callback: function(resBody) {
-            enchant.Game.instance._setMemoryAssets(resBody, this.requestType, this.checkError);
+            enchant.Core.instance._setMemoryAssets(resBody, this.requestType, this.checkError);
         },
         _sendRequest: function() {
             document.head.appendChild(this.script);
@@ -578,7 +578,7 @@
             this._jsonstring = 'json=' + JSON.stringify(data);
         },
         send: function() {
-            enchant.Game.instance.ajaxQueue++;
+            enchant.Core.instance.ajaxQueue++;
             this._running = true;
             this.httpRequest.open('POST', this._src, true);
             this.httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
@@ -589,23 +589,23 @@
                     case 1:
                         var e = new enchant.Event('loading_xhr_request');
                         req.dispatchEvent(e);
-                        enchant.Game.instance.dispatchEvent(e);
-                        enchant.Game.instance.currentScene.dispatchEvent(e);
+                        enchant.Core.instance.dispatchEvent(e);
+                        enchant.Core.instance.currentScene.dispatchEvent(e);
                         break;
                     case 2:
                         var e = new enchant.Event('loaded_xhr_request');
                         req.dispatchEvent(e);
-                        enchant.Game.instance.dispatchEvent(e);
-                        enchant.Game.instance.currentScene.dispatchEvent(e);
+                        enchant.Core.instance.dispatchEvent(e);
+                        enchant.Core.instance.currentScene.dispatchEvent(e);
                         break;
                     case 3:
                         var e = new enchant.Event('interactive_xhr_request');
                         req.dispatchEvent(e);
-                        enchant.Game.instance.dispatchEvent(e);
-                        enchant.Game.instance.currentScene.dispatchEvent(e);
+                        enchant.Core.instance.dispatchEvent(e);
+                        enchant.Core.instance.currentScene.dispatchEvent(e);
                         break;
                     case 4:
-                        enchant.Game.instance.ajaxQueue--;
+                        enchant.Core.instance.ajaxQueue--;
                         req._running = false;
                         var status = req.httpRequest.status;
                         if (status != 201) {
@@ -615,9 +615,9 @@
                                     throw new Error('Too large memory data.');
                                 }
                             } else if (status == 401) {
-                                if (enchant.Game.instance.requireAuth)
+                                if (enchant.Core.instance.requireAuth)
                                     window.location.replace(HttpRequest.SERVER_URL + 'login?after_login=' + window.location.href);
-                                else enchant.Game.instance.authorized = false;
+                                else enchant.Core.instance.authorized = false;
                             } else if (status == 403) {
                                 if (req.checkError) {
                                     console.log(req.httpRequest.responseText);
@@ -633,14 +633,14 @@
                             }
                             var e = new enchant.Event('error_xhr_request');
                             req.dispatchEvent(e);
-                            enchant.Game.instance.dispatchEvent(e);
-                            enchant.Game.instance.currentScene.dispatchEvent(e);
+                            enchant.Core.instance.dispatchEvent(e);
+                            enchant.Core.instance.currentScene.dispatchEvent(e);
                         } else {
                             (typeof req.callback == 'function') ? req.callback() : Function('x', 'return ' + req.callback);
                             var e = new enchant.Event('complete_xhr_request');
                             req.dispatchEvent(e);
-                            enchant.Game.instance.dispatchEvent(e);
-                            enchant.Game.instance.currentScene.dispatchEvent(e);
+                            enchant.Core.instance.dispatchEvent(e);
+                            enchant.Core.instance.currentScene.dispatchEvent(e);
                         }
                         break;
                 }
@@ -671,7 +671,7 @@
                     var width = 48;
                     var height = 48;
                 }
-                var g = enchant.Game.instance;
+                var g = enchant.Core.instance;
                 var sp = new Sprite(width, height);
                 sp.backgroundColor = ret['profile_image_url'];
                 return sp;

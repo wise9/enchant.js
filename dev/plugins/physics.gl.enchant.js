@@ -814,10 +814,10 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              */
             initialize: function() {
                 enchant.gl.Scene3D.call(this);
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 this.world = new enchant.gl.physics.World();
                 this.isPlaying = false;
-                this.timeStep = 1 / game.fps;
+                this.timeStep = 1 / core.fps;
                 this.maxSubSteps = 1;
                 this.fixedTimeStep = 1 / 60;
                 var that = this;
@@ -917,10 +917,10 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              [/lang]
              */
             play: function() {
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 if (!this.isPlaying) {
                     this.isPlaying = true;
-                    game.addEventListener('enterframe', this._stepping);
+                    core.addEventListener('enterframe', this._stepping);
                 }
             },
             /**
@@ -932,9 +932,9 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              [/lang]
              */
             stop: function() {
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 this.isPlaying = false;
-                game.removeEventListener('enterframe', this._stepping);
+                core.removeEventListener('enterframe', this._stepping);
             }
         });
 

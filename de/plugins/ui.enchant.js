@@ -18,30 +18,30 @@
  *
  * @usage
  * [D-Pad]
- *     var pad = new Pad();
- *     pad.x = 0;
- *     pad.y = 220;
- *     game.rootScene.addChild(pad);
+ *      var pad = new Pad();
+ *      pad.x = 0;
+ *      pad.y = 220;
+ *      core.rootScene.addChild(pad);
  *  (input of X direction can be detected from "Xbuttonup" "Xbuttondown" events
- *   or enchant.Game.instance.input.X)
+ *   or enchant.Core.instance.input.X)
  *
  * [A-Pad]
- *     var pad = new APad();
- *     pad.x = 0;
- *     pad.y = 220;
- *     game.rootScene.addChild(pad);
+ *      var pad = new APad();
+ *      pad.x = 0;
+ *      pad.y = 220;
+ *      core.rootScene.addChild(pad);
  *  (input can be detected from pad.vx/vy and pad.touched)
  *
  * [Button]
- *     var button = new Button("Press me");
- *     button.addEventListener("touchstart", function(){ ... })
- *     game.rootScene.addEventListener(button);
+ *      var button = new Button("Press me");
+ *      button.addEventListener("touchstart", function(){ ... })
+ *      core.rootScene.addEventListener(button);
  *
- *     var button_light = new Button("Press me", "light");
- *     game.rootScene.addEventListener(button);
+ *      var button_light = new Button("Press me", "light");
+ *      core.rootScene.addEventListener(button);
  *
- *     var button_blue = new Button("Press me", "blue");
- *     game.rootScene.addEventListener(button);
+ *      var button_blue = new Button("Press me", "blue");
+ *      core.rootScene.addEventListener(button);
  */
 
 /**
@@ -60,8 +60,8 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
      * @extends enchant.Sprite
      */
     initialize: function() {
-        var game = enchant.Game.instance;
-        var image = game.assets['pad.png'];
+        var core = enchant.Core.instance;
+        var image = core.assets['pad.png'];
         enchant.Sprite.call(this, image.width / 2, image.height);
         this.image = image;
         this.input = { left: false, right: false, up: false, down: false };
@@ -96,13 +96,13 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
         return input;
     },
     _updateInput: function(input) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         ['left', 'right', 'up', 'down'].forEach(function(type) {
             if (this.input[type] && !input[type]) {
-                game.dispatchEvent(new enchant.Event(type + 'buttonup'));
+                core.dispatchEvent(new enchant.Event(type + 'buttonup'));
             }
             if (!this.input[type] && input[type]) {
-                game.dispatchEvent(new enchant.Event(type + 'buttondown'));
+                core.dispatchEvent(new enchant.Event(type + 'buttondown'));
             }
         }, this);
         this.input = input;
@@ -123,8 +123,8 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
      *   'normal': 入力ベクトルを常に正規化する (大きさは常に1となる)
      */
     initialize: function(mode) {
-        var game = enchant.Game.instance;
-        var image = game.assets['apad.png'];
+        var core = enchant.Core.instance;
+        var image = core.assets['apad.png'];
         var w = this.width = image.width;
         var h = this.height = image.height;
         enchant.Group.call(this);

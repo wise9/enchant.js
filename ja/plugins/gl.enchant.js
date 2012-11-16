@@ -42,9 +42,9 @@ enchant.gl = {};
         }
     }());
 
-    enchant.gl.Game = enchant.Class.create(parentModule.Game, {
+    enchant.gl.Core = enchant.Class.create(parentModule.Core, {
         initialize: function(width, height) {
-            parentModule.Game.call(this, width, height);
+            parentModule.Core.call(this, width, height);
             this.GL = new GLUtil();
             this.currentScene3D = null;
             this.addEventListener('enterframe', function(e) {
@@ -75,15 +75,15 @@ enchant.gl = {};
 
     var GLUtil = enchant.Class.create({
         initialize: function() {
-            var game = enchant.Game.instance;
-            if (typeof game.GL !== 'undefined') {
-                return game.GL;
+            var core = enchant.Core.instance;
+            if (typeof core.GL !== 'undefined') {
+                return core.GL;
             }
-            this._createStage(game.width, game.height, game.scale);
+            this._createStage(core.width, core.height, core.scale);
             this._prepare();
             this.textureManager = new TextureManager();
             this.detectColorManager = new DetectColorManager();
-            this.detectFrameBuffer = new enchant.gl.FrameBuffer(game.width, game.height);
+            this.detectFrameBuffer = new enchant.gl.FrameBuffer(core.width, core.height);
             this.defaultProgram = new enchant.gl.Shader(DEFAULT_VERTEX_SHADER_SOURCE, DEFAULT_FRAGMENT_SHADER_SOURCE);
             this.setDefaultProgram();
         },
@@ -109,13 +109,13 @@ enchant.gl = {};
             var stage = document.getElementById('enchant-stage');
             var cvs = this._canvas = createGLCanvas(width, height, scale);
             var detect = new enchant.Sprite(width, height);
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             (function() {
                 var color = new Uint8Array(4);
                 var touching = null;
                 var sprite;
                 detect.addEventListener('touchstart', function(e) {
-                    var scene = game.currentScene3D;
+                    var scene = core.currentScene3D;
                     var x = parseInt(e.x, 10);
                     var y = parseInt(this.height - e.y, 10);
                     that.detectFrameBuffer.bind();
@@ -142,8 +142,8 @@ enchant.gl = {};
             }());
             window['gl'] = this._gl = this._getContext(cvs);
             div.appendChild(cvs);
-            stage.insertBefore(div, game.rootScene._element);
-            game.rootScene.addChild(detect);
+            stage.insertBefore(div, core.rootScene._element);
+            core.rootScene.addChild(detect);
         },
         _getContext: function(canvas, debug) {
             var ctx = canvas.getContext(CONTEXT_NAME);
@@ -379,12 +379,12 @@ enchant.gl = {};
          * @constructs
          */
         initialize: function(width, height) {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             if (typeof width === 'undefined') {
-                width = game.width;
+                width = core.width;
             }
             if (typeof height === 'undefined') {
-                height = game.height;
+                height = core.height;
             }
             this.framebuffer = gl.createFramebuffer();
             this.colorbuffer = gl.createRenderbuffer();
@@ -1031,13 +1031,13 @@ enchant.gl = {};
 
         _write: function() {
             gl.bindTexture(gl.TEXTURE_2D, this._glTexture);
-            enchant.Game.instance.GL.textureManager._writeWebGLTexture(this._image, gl.TEXTURE_2D, this._wrap, this._mipmap);
+            enchant.Core.instance.GL.textureManager._writeWebGLTexture(this._image, gl.TEXTURE_2D, this._wrap, this._mipmap);
             gl.bindTexture(gl.TEXTURE_2D, null);
         },
 
         /**
          * テクスチャ画像のソース.
-         * URLかgame.assets内のデータを指定できる.
+         * URLかcore.assets内のデータを指定できる.
          * @type String
          * @type enchant.Surface
          */
@@ -1051,10 +1051,10 @@ enchant.gl = {};
                     return;
                 }
                 var that = this;
-                var game = enchant.Game.instance;
+                var core = enchant.Core.instance;
                 var onload = (function(that) {
                     return function() {
-                        that._glTexture = game.GL.textureManager.getWebGLTexture(that._image, that._flipY, that._wrap, that._mipmap);
+                        that._glTexture = core.GL.textureManager.getWebGLTexture(that._image, that._flipY, that._wrap, that._mipmap);
                     };
                 }(that));
                 if (source instanceof Image) {
@@ -1219,7 +1219,7 @@ enchant.gl = {};
          *   sprite.mesh.setBaseColor('rgba(255, 0, 255, 1.0');
          */
         setBaseColor: function(color) {
-            var c = enchant.Game.instance.GL.parseColor(color);
+            var c = enchant.Core.instance.GL.parseColor(color);
             var newColors = [];
             for (var i = 0, l = this.vertices.length / 3; i < l; i++) {
                 Array.prototype.push.apply(newColors, c);
@@ -1567,8 +1567,8 @@ enchant.gl = {};
             this._rotation = mat4.identity();
             this._normMat = mat3.identity();
 
-            var game = enchant.Game.instance;
-            this.detectColor = game.GL.detectColorManager.attachDetectColor(this);
+            var core = enchant.Core.instance;
+            this.detectColor = core.GL.detectColorManager.attachDetectColor(this);
 
             var parentEvent = function(e) {
                 if (this.parentNode instanceof enchant.gl.Sprite3D) {
@@ -1649,7 +1649,7 @@ enchant.gl = {};
          * Colladaファイルを読み込んだassetsに対して使用できる.
          * @example
          *   var sp = new Sprite3D();
-         *   sp.set(game.assets['sample.dae']);
+         *   sp.set(core.assets['sample.dae']);
          *   //sample.daeのモデル情報を持ったSprite3Dになる
          *
          */
@@ -2017,7 +2017,7 @@ enchant.gl = {};
             };
 
             var length = this.mesh.indices.length;
-            enchant.Game.instance.GL.renderElements(this.mesh._indices, 0, length, attributes, uniforms);
+            enchant.Core.instance.GL.renderElements(this.mesh._indices, 0, length, attributes, uniforms);
         },
 
         _draw: function(scene, detectTouch, baseMatrix) {
@@ -2034,9 +2034,9 @@ enchant.gl = {};
 
             if (this.mesh !== null) {
                 if (this.program !== null) {
-                    enchant.Game.instance.GL.setProgram(this.program);
+                    enchant.Core.instance.GL.setProgram(this.program);
                     this._render(detectTouch);
-                    enchant.Game.instance.GL.setDefaultProgram();
+                    enchant.Core.instance.GL.setDefaultProgram();
                 } else {
                     this._render(detectTouch);
                 }
@@ -2157,12 +2157,12 @@ enchant.gl = {};
          * @constructs
          */
         initialize: function() {
-            var game = enchant.Game.instance;
+            var core = enchant.Core.instance;
             this.mat = mat4.identity();
             this.invMat = mat4.identity();
             this.invMatY = mat4.identity();
             this._projMat = mat4.create();
-            mat4.perspective(20, game.width / game.height, 1.0, 1000.0, this._projMat);
+            mat4.perspective(20, core.width / core.height, 1.0, 1000.0, this._projMat);
             this._changedPosition = false;
             this._changedCenter = false;
             this._changedUpVector = false;
@@ -2467,9 +2467,9 @@ enchant.gl = {};
          * @extends enchant.EventTarget
          */
         initialize: function() {
-            var game = enchant.Game.instance;
-            if (game.currentScene3D) {
-                return game.currentScene3D;
+            var core = enchant.Core.instance;
+            if (core.currentScene3D) {
+                return core.currentScene3D;
             }
             enchant.EventTarget.call(this);
             /**
@@ -2509,16 +2509,16 @@ enchant.gl = {};
             var func = function() {
                 that._draw();
             };
-            game.addEventListener('enterframe', func);
+            core.addEventListener('enterframe', func);
 
 
             var uniforms = {};
             uniforms['uUseCamera'] = 0.0;
             gl.activeTexture(gl.TEXTURE0);
-            game.GL.defaultProgram.setUniforms(uniforms);
+            core.GL.defaultProgram.setUniforms(uniforms);
 
-            if (game.currentScene3D === null) {
-                game.currentScene3D = this;
+            if (core.currentScene3D === null) {
+                core.currentScene3D = this;
             }
 
             this.setAmbientLight(new enchant.gl.AmbientLight());
@@ -2535,7 +2535,7 @@ enchant.gl = {};
                 return this._backgroundColor;
             },
             set: function(arg) {
-                var c = enchant.Game.instance.GL.parseColor(arg);
+                var c = enchant.Core.instance.GL.parseColor(arg);
                 this._backgroundColor = c;
                 gl.clearColor(c[0], c[1], c[2], c[3]);
 
@@ -2589,7 +2589,7 @@ enchant.gl = {};
             camera._changedUpVector = true;
             camera._changedProjection = true;
             this._camera = camera;
-            enchant.Game.instance.GL.defaultProgram.setUniforms({
+            enchant.Core.instance.GL.defaultProgram.setUniforms({
                 uUseCamera: 1.0
             });
         },
@@ -2629,7 +2629,7 @@ enchant.gl = {};
         setDirectionalLight: function(light) {
             this.directionalLight = light;
             this.useDirectionalLight = true;
-            enchant.Game.instance.GL.defaultProgram.setUniforms({
+            enchant.Core.instance.GL.defaultProgram.setUniforms({
                 uUseDirectionalLight: 1.0
             });
         },
@@ -2667,8 +2667,8 @@ enchant.gl = {};
         },
 
         _draw: function(detectTouch) {
-            var game = enchant.Game.instance;
-            var program = game.GL.defaultProgram;
+            var core = enchant.Core.instance;
+            var program = core.GL.defaultProgram;
 
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
