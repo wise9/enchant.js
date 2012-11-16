@@ -30,7 +30,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
         enchant.Entity.call(this);
 
-        var canvas = document.createElement('canvas');
+        var surface = new enchant.Surface(game.width, game.height);
+        this._surface = surface;
+        var canvas = surface._element;
         canvas.style.position = 'absolute';
         if (enchant.ENV.RETINA_DISPLAY && game.scale === 2) {
             canvas.width = game.width * 2;
@@ -431,6 +433,14 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             var cvs = this._context.canvas;
                 ctx.drawImage(cvs, 0, 0, game.width, game.height);
             ctx.restore();
+        }
+    },
+    domRender: function() {
+        var element = this._domManager.element;
+        if (this._image) {
+            element.style.backgroundImage = this._surface._css;
+            // bad performance
+            element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
         }
     }
 });
