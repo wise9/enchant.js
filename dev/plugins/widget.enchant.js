@@ -1,9 +1,8 @@
 /**
  * @fileOverview
  * widget.enchant.js
- * @version 0.1.0
- * @require enchant.js v0.4.5+
- * @require tl.enchant.js v0.3+
+ * @version 0.2.0
+ * @require enchant.js v0.6.0+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -1260,68 +1259,16 @@
             this.__offsetX = 0;
             this.__offsetY = 0;
             this._renderFrag = true;
-            /*
-             this.addEventListener(enchant.Event.ENTER_FRAME, function(e) {
-             this.childNodes.forEach(function(child) {
-             child.dispatchEvent(e);
-             });
-             });
-             */
 
-            var sceneEvents = [
-                enchant.Event.ADDED_TO_SCENE,
-                enchant.Event.REMOVED_FROM_SCENE
-            ];
-            sceneEvents.forEach(function(event) {
-                this.addEventListener(event, function(e) {
-                    this.childNodes.forEach(function(child) {
-                        child.scene = this.scene;
-                        child.dispatchEvent(e);
-                    }, this);
-                });
-            }, this);
-
-            // nest entity
-            var touchEvents = [
-                enchant.Event.TOUCH_START,
-                enchant.Event.TOUCH_MOVE,
-                enchant.Event.TOUCH_END
-            ];
-            touchEvents.forEach(function(event) {
-                this.clearEventListener(event);
-                this.addEventListener(event, function(e) {
-                    if (this.parentNode && !this.parentNode._element) {
-                        this.parentNode.dispatchEvent(e);
-                    }
-                });
-            }, this);
-
-            this.clearEventListener(enchant.Event.RENDER);
-            this.addEventListener(enchant.Event.RENDER, function() {
-                if (!this.parentNode) {
-                    this._style.left = this._x + 'px';
-                    this._style.top = this._y + 'px';
-                } else if (this.parentNode._renderFrag) {
-                    this._style.left = this._x + 'px';
-                    this._style.top = this._y + 'px';
-                } else if (this.parentNode._element) {
-                    if (this.__offsetX != this._previousOffsetX) {
-                        this._style.left = this.parentNode._x + this._x + 'px';
-                    }
-                    if (this.__offsetY != this._previousOffsetY) {
-                        this._style.top = this.parentNode._y + this._y + 'px';
-                    }
-                } else {
-                    if (this.__offsetX != this._previousOffsetX) {
-                        this._style.left = this.parentNode._offsetX + this._x + 'px';
-                    }
-                    if (this.__offsetY != this._previousOffsetY) {
-                        this._style.top = this.parentNode._offsetY + this._y + 'px';
-                    }
-                }
-                this._previousOffsetX = this.__offsetX;
-                this._previousOffsetY = this.__offsetY;
-            });
+            [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
+                .forEach(function(event) {
+                    this.addEventListener(event, function(e) {
+                        this.childNodes.forEach(function(child) {
+                            child.scene = this.scene;
+                            child.dispatchEvent(e);
+                        }, this);
+                    });
+                }, this);
         },
         dispatchEvent: function(e) {
             e.target = this;
@@ -1334,32 +1281,6 @@
                 for (var i = 0, len = listeners.length; i < len; i++) {
                     listeners[i].call(this, e);
                 }
-            }
-        },
-        _updateCoordinate: function() {
-            if (this.parentNode) {
-                if (this.parentNode._renderFrag) {
-                    this._offsetX = 0;
-                    this._offsetY = 0;
-                    this.__offsetX = this.parentNode.__offsetX + this._x;
-                    this.__offsetY = this.parentNode.__offsetY + this._y;
-                } else if (this.parentNode._element) {
-                    this._offsetX = this.parentNode._x + this._x;
-                    this._offsetY = this.parentNode._y + this._y;
-                    this.__offsetX = this.parentNode._offsetX + this._x;
-                    this.__offsetY = this.parentNode._offsetY + this._y;
-                } else {
-                    this._offsetX = this.__offsetX = this.parentNode._offsetX + this._x;
-                    this._offsetY = this.__offsetY = this.parentNode._offsetY + this._y;
-                }
-            } else {
-                this._offsetX = this.__offsetX = this._x;
-                this._offsetY = this.__offsetY = this._y;
-            }
-            this._offsetX = 0;
-            this._offsetY = 0;
-            for (var i = 0, len = this.childNodes.length; i < len; i++) {
-                this.childNodes[i]._updateCoordinate();
             }
         },
         /**
@@ -1420,17 +1341,7 @@
          * @param {enchant.Node} child Node to be added.
          [/lang]
          */
-        addChild: function(child) {
-            this.childNodes.push(child);
-            this._element.appendChild(child._element);
-            child.parentNode = this;
-            child.dispatchEvent(new enchant.Event(enchant.Event.ADDED));
-            child._updateCoordinate();
-            if (this.scene) {
-                child.scene = this.scene;
-                child.dispatchEvent(new enchant.Event(enchant.Event.ADDED_TO_SCENE));
-            }
-        },
+        addChild: enchant.Group.prototype.addChild,
         /**
          [lang:ja]
          * EntityGroupにNodeを挿入する.
@@ -1443,22 +1354,7 @@
          * @param {enchant.Node} reference Node before insertion postion.
          [/lang]
          */
-        insertBefore: function(child, reference) {
-            var i = this.childNodes.indexOf(reference);
-            if (i != -1) {
-                this.childNodes.splice(i, 0, child);
-                this._element.insertBefore(child._element, reference._element);
-                child.parentNode = this;
-                child.dispatchEvent(new enchant.Event(enchant.Event.ADDED));
-                child._updateCoordinate();
-                if (this.scene) {
-                    child.scene = this.scene;
-                    child.dispatchEvent(new enchant.Event(enchant.Event.ADDED_TO_SCENE));
-                }
-            } else {
-                this.addChild(child);
-            }
-        },
+        insertBefore: enchant.Group.prototype.insertBefore,
         /**
          [lang:ja]
          * EntityGroupからNodeを削除する.
@@ -1469,18 +1365,7 @@
          * @param {enchant.Node} child Node to delete.
          [/lang]
          */
-        removeChild: function(child) {
-            var i;
-            if ((i = this.childNodes.indexOf(child)) != -1) {
-                this.childNodes.splice(i, 1);
-                this._element.removeChild(child._element);
-                child.parentNode = null;
-                child.dispatchEvent(new enchant.Event(enchant.Event.REMOVED));
-                if (this.scene) {
-                    child.dispatchEvent(new enchant.Event(enchant.Event.REMOVED_FROM_SCENE));
-                }
-            }
-        },
+        removeChild: enchant.Group.prototype.removeChild,
         /**
          [lang:ja]
          * 最初の子Node.
@@ -1490,11 +1375,7 @@
          * @type {enchant.Node}
          [/lang]
          */
-        firstChild: {
-            get: function() {
-                return this.childNodes[0];
-            }
-        },
+        firstChild: Object.getOwnPropertyDescriptor(enchant.Group.prototype, 'firstChild'),
         /**
          [lang:ja]
          * 最後の子Node.
@@ -1504,22 +1385,17 @@
          [/lang]
          * @type {enchant.Node}
          */
-        lastChild: {
-            get: function() {
-                return this.childNodes[this.childNodes.length - 1];
-            }
-        }
+        lastChild: Object.getOwnPropertyDescriptor(enchant.Group.prototype, 'lastChild'),
+        _dirty: Object.getOwnPropertyDescriptor(enchant.Group.prototype, '_dirty')
     });
     enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
         if (this.background &&
             this.background._element.width > 0 &&
             this.background._element.height > 0) {
-            ctx.drawImage(this.background._element, RENDER_OFFSET, RENDER_OFFSET, this.width + RENDER_OFFSET, this.height + RENDER_OFFSET);
+            ctx.drawImage(this.background._element, 0, 0, this.width, this.height);
         }
         ctx.beginPath();
         ctx.rect(0, 0, this.width, this.height);
-        // TODO clip if style.overflow == 'hidden'
-        //ctx.clip();
     };
 
     /**
@@ -1944,6 +1820,7 @@
                 that.dispatchEvent(new enchant.Event(enchant.Event.CHANGE));
             });
 
+            this._element = document.createElement('div');
             this._element.appendChild(this._input);
         },
         /**
@@ -2255,6 +2132,7 @@
             var textarea = this._textarea = document.createElement('textarea');
             textarea.style.resize = 'none';
             textarea.style.font = enchant.widget._env.textareaFont;
+            this._element = document.createElement('div');
             this._element.appendChild(textarea);
             var that = this;
             this._focused = false;
@@ -3109,7 +2987,6 @@
                 content.alignLeftIn(this, margin).alignVerticalCenterIn(this);
             }
             if (right) {
-                //Adjust.fitToY.call(right, this, margin, margin);
                 right.alignRightIn(this, margin).alignVerticalCenterIn(this);
             }
         },
@@ -3365,17 +3242,6 @@
                 this._content = content;
             }
         },
-        /*
-         scrollY: {
-         get: function() {
-         return this._scrollY;
-         },
-         set: function(n) {
-         this.scroll(n - this._scrollY);
-         this._scrollY = this._content.y;
-         }
-         },
-         */
         /**
          [lang:ja]
          * コンテンツのスクロールを行う.
@@ -3440,6 +3306,7 @@
             var next = null;
             var pthreshold = 0;
             var nthreshold = 0;
+            this._clipping = true;
 
             enchant.widget.GestureDetector.gestureEvents.forEach(function(type) {
                 this.addEventListener(type, function(e) {
@@ -3503,7 +3370,6 @@
                 if (dragging == null) {
                     return;
                 }
-                //dragging = this._content.childNodes[i];
                 dragging.opacity = 0.8;
                 dragging._style.zIndex = 2;
                 updateHoldStat(dragging);
