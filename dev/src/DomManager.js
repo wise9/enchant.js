@@ -7,8 +7,6 @@ enchant.DomManager = enchant.Class.create({
             this.element = document.createElement(elementDefinition);
         } else if (elementDefinition instanceof HTMLElement) {
             this.element = elementDefinition;
-        } else {
-            // TODO error
         }
         this.style = this.element.style;
         this.style.position = 'absolute';

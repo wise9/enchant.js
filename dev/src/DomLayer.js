@@ -151,8 +151,7 @@ enchant.Sprite.prototype.cssUpdate = function() {
             element.style.backgroundPosition =
                 -this._frameLeft + 'px ' +
                 -this._frameTop + 'px';
-        } else if (element.firstChild) {
-            // TODO new Surface
+        } else if (this._image._element) {
         }
     }
 };
