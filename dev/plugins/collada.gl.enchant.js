@@ -89,7 +89,7 @@ if (enchant.gl !== undefined) {
                     lib[availableLibraryFeatures[i].libraryName] = availableLibraryFeatures[i].loadLibraryFromXML(collada, url);
                 }
                 var scene = new Scene(collada.getElementsByTagName('scene')[0]);
-                var rootSprite = new enchant.gl.Sprite3D();
+                var rootSprite = new enchant.gl.collada.RootColladaSprite3D();
                 var rootColladaSprite3D = new enchant.gl.collada.ColladaSprite3D(lib);
                 var rootColladaSkeletonSprite3D = new enchant.gl.collada.ColladaSkeletonSprite3D(lib);
                 if (scene.visualSceneUrl) {
@@ -148,7 +148,7 @@ if (enchant.gl !== undefined) {
                 var floatStrings = (element.textContent).split(/\s+/);
                 for (var k = 0; k < floatStrings.length; k++) {
                     var value = parseFloat(floatStrings[k]);
-                    if (!isNaN(value)){
+                    if (!isNaN(value)) {
                         array.push(value);
                     }
                 }
@@ -261,9 +261,9 @@ if (enchant.gl !== undefined) {
                         if (srcs[sourceId]) {
                             this._addSource(srcs, sourceId, this._datas['input'][i].getAttribute('semantic'));
                             this.inputs[this._datas['input'][i].getAttribute('semantic') + 'offset'] = offset;
-                            if(!isNaN(set)){
+                            if (!isNaN(set)) {
                                 this.inputs[this._datas['input'][i].getAttribute('semantic') + 'set'] = set;
-                            }else{
+                            } else {
                                 this.inputs[this._datas['input'][i].getAttribute('semantic') + 'set'] =0;
                             }
                         } else if (vertices.id === sourceId) {
@@ -374,7 +374,7 @@ if (enchant.gl !== undefined) {
                     for (var ri = 0, rl = this._datas['rotate'].length; ri < rl; ri++) {
                         this.rotate[this._datas['rotate'][ri].getAttribute('sid')] = this.parseFloatArray(this._datas['rotate'][ri]);
                     }
-                    for (var mi = 0, ml = this._datas['matrix'].length; mi < ml; mi++){
+                    for (var mi = 0, ml = this._datas['matrix'].length; mi < ml; mi++) {
                         this.nMatrix[this._datas['matrix'][mi].getAttribute('sid')] = mat4.transpose(this.parseFloatArray(this._datas['matrix'][0]));
                     }
                     var materialNode = null;
@@ -504,7 +504,7 @@ if (enchant.gl !== undefined) {
                 }
                 return matrix;
             },
-            getAnimationMatrixesLocal: function(libAnimations) {
+            getAnimationMatrixFromOneAnimationNode: function(Animation, libAnimationClips, flag) {
                 var game = enchant.Game.instance;
                 var rotation = this.getRotationMatrix();
                 var translation = this.getTranslationMatrix();
@@ -512,19 +512,119 @@ if (enchant.gl !== undefined) {
                 var animationMatrixes = [];
                 animationMatrixes[this.sid] = [];
                 animationMatrixes[this.sid][0] = mat4.multiply(translation, rotation, mat4.create());
-                mat4.multiply(animationMatrixes[this.sid][0],matrix);
+                mat4.multiply(animationMatrixes[this.sid][0], matrix);
+                var output = [];
+                var input = [];
+                var length = 0;
+                for (var ci = 0, cl = Animation.channels.length; ci < cl; ci++) {
+                    if (this.id === Animation.channels[ci].target.split('/')[0]) {
+                        var currentLength = Animation.samplers[Animation.channels[ci].samplerId].input.length;
+                        length = Math.max(currentLength, length);
+                        if (Animation.samplers[Animation.channels[ci].samplerId].input.length === length) {
+                            input = Animation.samplers[Animation.channels[ci].samplerId].input;
+                        }
+                        output[Animation.channels[ci].target.split('/')[1].split('.')[0]] = Animation.samplers[Animation.channels[ci].samplerId].output;
+                    }
+                }
+                for (var i = 0, l = length; i < l; i++) {
+                    var rot = mat4.create();
+                    var trans = mat4.create();
+                    var nMat = mat4.create();
+                    mat4.identity(rot);
+                    mat4.identity(trans);
+                    mat4.identity(nMat);
+                    mat4.translate(trans, this.translate);
+                    for (var rkey in this.rotate) {
+                        var tmpf = false;
+                        var mat;
+                        for (var okey in output) {
+                            if (rkey === okey) {
+                                mat = new enchant.gl.Quat(this.rotate[rkey][0], this.rotate[rkey][1], this.rotate[rkey][2], output[okey][i] * Math.PI / 180);
+                                mat4.multiply(rot, mat.toMat4(mat4.create()));
+                                tmpf = true;
+                            }
+                        }
+                        if (!tmpf) {
+                            mat = new enchant.gl.Quat(this.rotate[rkey][0], this.rotate[rkey][1], this.rotate[rkey][2], this.rotate[rkey][3] * Math.PI / 180);
+                            mat4.multiply(rot, mat.toMat4(mat4.create()));
+                        }
+                    }
+                    for (var okey2 in output) {
+                        if (okey2 === 'translation') {
+                            mat4.identity(trans);
+                            mat4.translate(trans, [output[okey2][i * 3], output[okey2][i * 3 + 1], output[okey2][i * 3 + 2]]);
+                        } else if (okey2 === 'scale') {
+                            //TODO !
+                        } else if (okey2 === 'matrix') {
+                            var tmpMat = [];
+                            for (var j = 0; j < 16; j++) {
+                                tmpMat.push(output[okey2][i*16+j]);
+                            }
+                            mat4.transpose(tmpMat);
+                            mat4.multiply(nMat,tmpMat);
+                        } else {
+                            for (var mkey in this.nMatrix) {
+                                if (okey2.indexOf('(')!==-1) {
+                                    if (mkey === okey2.split('(')[0]) {
+                                        if (!isNaN(output[okey2][i])) {
+                                            nMat[parseInt(okey2.split('(')[1].split(')')[0], 10) * 4 + parseInt(okey2.split(')(')[1].split(')')[0], 10)] = output[okey2][i];
+                                        } else {
+                                            nMat[parseInt(okey2.split('(')[1].split(')')[0], 10) * 4 + parseInt(okey2.split(')(')[1].split(')')[0], 10)] = output[okey2][0];
+                                        }
+                                    }
+                                } else {
+                                    var tmpMatrix = [];
+                                    for (var oj = 0; oj < 16; oj++) {
+                                        tmpMatrix.push(output[okey2][i * 16 + oj]);
+                                    }
+                                    mat4.transpose(tmpMatrix);
+                                    mat4.multiply(nMat, tmpMatrix);
+                                }
+                            }
+                        }
+                    }
+                    animationMatrixes[this.sid][Math.round(game.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
+                    mat4.multiply(animationMatrixes[this.sid][Math.round(game.fps * input[i])],nMat);
+                }
+                if (Animation.animations.length > 0) {
+                    var child = this.getAnimationMatrixesLocal(Animation.animations, libAnimationClips, true);
+                    for (var ccl in child) {
+                        animationMatrixes[ccl] = child[ccl];
+                    }
+                }
+                return animationMatrixes;
+            },
+            getAnimationMatrixesLocal: function(libAnimations, libAnimationClips, flag) {
+                var game = enchant.Game.instance;
+                var rotation = this.getRotationMatrix();
+                var translation = this.getTranslationMatrix();
+                var matrix = this.getnMatrix();
+                var animationMatrixes = [];
+                animationMatrixes[this.sid] = [];
+                animationMatrixes[this.sid][0] = mat4.multiply(translation, rotation, mat4.create());
+                mat4.multiply(animationMatrixes[this.sid][0], matrix);
                 var output = [];
                 var input = [];
                 var length = 0;
                 for (var key in libAnimations) {
-                    for(var ci = 0,cl = libAnimations[key].channels.length;ci<cl;ci++){
-                        if(this.id === libAnimations[key].channels[ci].target.split('/')[0]){
+                    for (var ci = 0, cl = libAnimations[key].channels.length; ci < cl; ci++) {
+                        if (this.id === libAnimations[key].channels[ci].target.split('/')[0]) {
                             var currentLength = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input.length;
                             length = Math.max(currentLength, length);
                             if (libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input.length === length) {
                                 input = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input;
                             }
                             output[libAnimations[key].channels[ci].target.split('/')[1].split('.')[0]] = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].output;
+                        }
+                    }
+                    for (var ackey in libAnimationClips) {
+                        if (libAnimationClips[ackey].urls.indexOf(key) > -1 && flag) {
+                            length = 0;
+                        } else if (libAnimations[key].animations.length > 0) {
+                            var child = this.getAnimationMatrixesLocal(libAnimations[key].animations, libAnimationClips, true);
+                            for (var ckey in child) {
+                                animationMatrixes[ckey] = child[ckey];
+                            }
                         }
                     }
                 }
@@ -559,14 +659,14 @@ if (enchant.gl !== undefined) {
                             //TODO !
                         } else if (okey2 === 'matrix') {
                             var tmpMat = [];
-                            for(var j = 0;j < 16; j++){
+                            for (var j = 0; j < 16; j++) {
                                 tmpMat.push(output[okey2][i*16+j]);
                             }
                             mat4.transpose(tmpMat);
                             mat4.multiply(nMat,tmpMat);
                         } else {
-                            for (var mkey in this.nMatrix){
-                                if(okey2.indexOf('(')!==-1){
+                            for (var mkey in this.nMatrix) {
+                                if (okey2.indexOf('(')!==-1) {
                                     if (mkey === okey2.split('(')[0]) {
                                         if (!isNaN(output[okey2][i])) {
                                             nMat[parseInt(okey2.split('(')[1].split(')')[0], 10) * 4 + parseInt(okey2.split(')(')[1].split(')')[0], 10)] = output[okey2][i];
@@ -589,12 +689,26 @@ if (enchant.gl !== undefined) {
                     mat4.multiply(animationMatrixes[this.sid][Math.round(game.fps * input[i])],nMat);
                 }
                 for (var k in this.nodes) {
-                    var child = this.nodes[k].getAnimationMatrixesLocal(libAnimations);
-                    for (l in child) {
-                        animationMatrixes[l] = child[l];
+                    var childmat = this.nodes[k].getAnimationMatrixesLocal(libAnimations, libAnimationClips, true);
+                    for (l in childmat) {
+                        animationMatrixes[l] = childmat[l];
                     }
                 }
                 return animationMatrixes;
+            },
+            getAnimationMatrixesLocalFromAnimationClips: function(libAnimations, libAnimationClips) {
+                var animationMatrixClips = [];
+                for (var ackey in libAnimationClips) {
+                    var urls = libAnimationClips[ackey].urls;
+                    animationMatrixClips[ackey] = [];
+                    for (var ui = 0, ul = urls.length; ui < ul; ui++) {
+                        var child = this.getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
+                        for (var l in child) {
+                            animationMatrixClips[ackey][l] = child[l];
+                        }
+                    }
+                }
+                return animationMatrixClips;
             }
         });
         Node.prototype._childable = ['node', 'Lookat', 'matrix', 'rotate', 'scale', 'skew', 'translate', 'instance_camera', 'instance_controller', 'instance_geometry', 'instance_light', 'instance_node', 'extra'];
@@ -611,6 +725,10 @@ if (enchant.gl !== undefined) {
                 this.srcs = [];
                 this.channels = [];
                 this.samplers = [];
+                this.animations = [];
+                for (var ai = 0, al = this._datas['animation'].length; ai < al; ai++) {
+                    this.animations[ai] = new Animation(this._datas['animation'][ai]);
+                }
                 for (var ci = 0, cl = this._datas['channel'].length; ci < cl; ci++) {
                     this.channels[ci]={};
                     this.channels[ci].target = this.getReferenceAttribute(this._datas['channel'][ci], 'target');
@@ -621,7 +739,7 @@ if (enchant.gl !== undefined) {
                         this.srcs[this._datas['source'][i].getAttribute('id')] = this.parseFloatArray(this._datas['source'][i].getElementsByTagName('float_array')[0]);
                     }
                 }
-                for (var si = 0, sl = this._datas['sampler'].length; si < sl; si++){
+                for (var si = 0, sl = this._datas['sampler'].length; si < sl; si++) {
                     this.samplers[this._datas['sampler'][si].getAttribute('id')] = new Sampler(this._datas['sampler'][si], this.srcs);
                 }
                 if (this._datas['sampler'].length > 0) {
@@ -630,6 +748,16 @@ if (enchant.gl !== undefined) {
             }
         });
         Animation.prototype._childable = ['asset', 'animation', 'source', 'sampler', 'channel', 'extra'];
+        var AnimationClip = enchant.Class.create(Unit, {
+           initialize: function(xml) {
+               Unit.call(this, xml);
+               this.urls = [];
+               for (var i = 0, l = this._datas['instance_animation'].length; i < l; i++) {
+                   this.urls.push(this._datas['instance_animation'][i].getAttribute('url').replace('#', ''));
+               }
+           } 
+        });
+        AnimationClip.prototype._childable = ['asset','instance_animation','instance_formula','extra'];
         var Sampler = enchant.Class.create(Unit, {
             initialize: function(xml, srcs) {
                 Unit.call(this, xml);
@@ -993,9 +1121,12 @@ if (enchant.gl !== undefined) {
             _getMesh: function(triangles) {
                 return null;
             },
-            getPose: function(poses, length) {
+            getPose: function(poses, length, localframe) {
                 var game = enchant.Game.instance;
                 var frame = (game.frame) % length;
+                if (localframe) {
+                    frame = localframe;
+                }
                 var pose = [];
                 for (var k in poses) {
                     pose[k] = poses[k].getFrame(frame);
@@ -1003,7 +1134,7 @@ if (enchant.gl !== undefined) {
                 return pose;
             },
             createPoses: function(node, poses, lib) {
-                var matrix = node.getAnimationMatrixesLocal(lib['animations']);
+                var matrix = node.getAnimationMatrixesLocal(lib['animations'], lib['animation_clips'], false);
                 var length = 0;
                 for (var k in matrix) {
                     poses[k] = new enchant.gl.KeyFrameManager();
@@ -1015,6 +1146,36 @@ if (enchant.gl !== undefined) {
                         poses[k].addFrame(new enchant.gl.Pose(pos, quatanion), parseInt(i, 10));
                     }
                     length = Math.max(poses[k].length, length);
+                }
+                return length;
+            },
+            createPosesClips: function(node, poseclips, lib) {
+                var matrixclips = node.getAnimationMatrixesLocalFromAnimationClips(lib['animations'],lib['animation_clips']);
+                var length = [];
+                var game = enchant.Game.instance;
+                for (var pkey in matrixclips) {
+                    length[pkey] = 0;
+                    var matrix = matrixclips[pkey];
+                    poseclips[pkey] = [];
+                    for (var mkey in matrix) {
+                        poseclips[pkey][mkey] = new enchant.gl.KeyFrameManager();
+                        for (var i in matrix[mkey]) {
+                            var num = 0;
+                            if (matrix[mkey].length > parseInt(lib['animation_clips'][pkey].start * game.fps, 10)) {
+                                num = i - parseInt(lib['animation_clips'][pkey].start * game.fps, 10);
+                            } else {
+                                num = i;
+                            }
+                            var pos = vec3.create([matrix[mkey][i][12], matrix[mkey][i][13], matrix[mkey][i][14]]);
+                            var rotation3x3 = mat4.toMat3(matrix[mkey][i], mat3.create());
+                            mat3.transpose(rotation3x3);
+                            var quatanion = quat4.fromRotationMatrix(rotation3x3, quat4.create());
+                            if (num >= 0 && i <= parseInt(lib['animation_clips'][pkey].end * game.fps, 10)) {
+                                poseclips[pkey][mkey].addFrame(new enchant.gl.Pose(pos, quatanion), parseInt(num, 10));
+                            }
+                        }
+                        length[pkey] = Math.max(poseclips[pkey][mkey].length, length[pkey]);
+                    }
                 }
                 return length;
             },
@@ -1049,6 +1210,48 @@ if (enchant.gl !== undefined) {
                     return geometry.Mesh.triangles.length;
                 }
                 return 0;
+            }
+        });
+        /**
+         * @scope enchant.gl.collada.RootColladaSprite3D.prototype
+         */
+        enchant.gl.collada.RootColladaSprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
+            /**
+            [lang:ja]
+            * アニメーションクリップを追加する.
+            * アニメーションクリップは追加された順に再生されていく.
+            * @param {String} clipId
+            [/lang]
+            [lang:en]
+            * Add animation clip.
+            * Animation clip will be played in the order that it is added.
+            * @param {String} clipId
+            [/lang]
+            */
+            pushAnimationClip: function(clipId){
+                this.childNodes[1].pushAnimationClip(clipId);
+            },
+            /**
+            [lang:ja]
+            * 追加されたアニメーションクリップを削除する.
+            [/lang]
+            [lang:en]
+            * Delete added animation clip.
+            [/lang]
+            */
+            clearAnimationClip: function(){
+                this.childNodes[1].clearAnimationClip();
+            },
+            getAnimationClip: function() {
+                return this.childNodes[1].animationClips;
+            },
+            loop: {
+                set: function(flag) {
+                    this.childNodes[1].loop = flag;
+                },
+                get: function() {
+                    return this.childNodes[1].loop;
+                }
             }
         });
         /**
@@ -1187,8 +1390,43 @@ if (enchant.gl !== undefined) {
                 enchant.gl.collada.AbstractColladaSprite3D.call(this, lib, node, triangles);
                 this.program = enchant.gl.collada.COLLADA_SHADER_PROGRAM;
                 this.animation = [];
+                this.defaultAnimation = function(){
+                };
+                this.animationClips = [];
                 this.uMVMatrix = mat4.create();
                 this.uNMatrix = mat3.create();
+                this.applyAnimationChild = function() {
+                    for (var cni = 0, cnl = this.childNodes.length; cni < cnl; cni++) {
+                        this.childNodes[cni].defaultAnimation(this.childNodes[cni]);
+                        this.childNodes[cni].applyAnimationChild();
+                    }
+                };
+                this.addEventListener("enterframe", function() {
+                    this.applyAnimationChild();
+                    if (this.animation.length === 0) {
+                    } else {
+                        var first = this.animation[0];
+                        first.frame++;
+                        for(var i = 0, l = this.childNodes.length; i < l; i++) {
+                            first.animation.enterframe(this.childNodes[i], first.frame);
+                        }
+                        if (first.frame > this.animation[0].animation.length) {
+                            first = this.animation.shift();
+                            if (this.loop) {
+                                first.frame = 0;
+                                this.animation.push(first);
+                            }
+                        }
+                    }
+                });
+            },
+            pushAnimationClip: function(clipId) {
+                if(this.animationClips[clipId]){
+                    this.animation.push({animation: this.animationClips[clipId], frame: 0});
+                }
+            },
+            clearAnimationClip: function() {
+                this.animation = [];
             },
             _getMesh: function(triangles) {
                 return new enchant.gl.collada.ColladaSkeletonSpriteMesh(triangles);
@@ -1218,13 +1456,21 @@ if (enchant.gl !== undefined) {
                 var trianglesLength = this._getTrianglesLength(geometry);
                 var currentTriangle = 0;
                 var makeEnterframe = function(poses, length, skin, maxbonem) {
-                    return function() {
-                        skeleton.setPoses(this.getPose(poses, length));
+                    return function(obj) {
+                        skeleton.setPoses(obj.getPose(poses, length));
                         skeleton.solveFKs();
                         skeleton.calculateTableForIds(skin.ids);
-                        this.mesh.udBoneInfo = this.calculateSkeletonTable(this.divisioninfo.dividedIndices, skeleton.table, maxbonenum);
+                        obj.mesh.udBoneInfo = obj.calculateSkeletonTable(obj.divisioninfo.dividedIndices, skeleton.table, maxbonenum);
                     };
-                }; 
+                };
+                var makeClipEnterframe = function(poses, length, skin, maxbonem, clipId) {
+                    return function(obj, frame) {
+                        skeleton.setPoses(obj.getPose(poses, length, frame));
+                        skeleton.solveFKs();
+                        skeleton.calculateTableForIds(skin.ids);
+                        obj.mesh.udBoneInfo = obj.calculateSkeletonTable(obj.divisioninfo.dividedIndices, skeleton.table, maxbonenum);
+                    };
+                };
                 do {
                     var triangles = this._getTriangles(geometry, currentTriangle);
                     var child = new enchant.gl.collada.ColladaSkeletonSprite3D(this.lib, node, triangles);
@@ -1244,9 +1490,16 @@ if (enchant.gl !== undefined) {
                     child.mesh.udBoneInfo = child.divisioninfo.skeletontable;
                     var poses = [];
                     var length = this.createPoses(node, poses, this.lib);
+                    var posesclips = [];
+                    var cliplength = this.createPosesClips(node, posesclips, this.lib);
+                    for (var clk in cliplength) {
+                        if (cliplength[clk] > 0) {
+                            var clipenterframe = makeClipEnterframe(posesclips[clk], cliplength[clk], skin, maxbonenum, clk);
+                            this.animationClips[clk] = {enterframe: clipenterframe, length: cliplength[clk]};
+                        }
+                    }
                     if (length > 0) {
-                        var enterframe = makeEnterframe(poses,length,skin,maxbonenum);
-                        child.addEventListener('enterframe', enterframe);
+                        child.defaultAnimation = makeEnterframe(poses, length, skin, maxbonenum);
                     }
                     currentTriangle++;
                 } while (currentTriangle < trianglesLength);
@@ -1521,16 +1774,31 @@ if (enchant.gl !== undefined) {
                 this.library = {};
             },
             loadLibraryFromXML: function(colladaRootElement, url) {
-                colladaRootElement.getElementsByTagName('library_' + this.libraryName);
+                var libraries = colladaRootElement.getElementsByTagName('library_' + this.libraryName);
                 this.library = {};
-                var props = colladaRootElement.getElementsByTagName(this.libraryPropertyName);
+                var props = [];
+                if (libraries.length > 0) {
+                    for (var ci = 0, cl = libraries[0].childNodes.length; ci < cl; ci++) {
+                        if (libraries[0].childNodes[ci].nodeName === this.libraryPropertyName) {
+                            props.push(libraries[0].childNodes[ci]);
+                        }
+                    }
+                }
+                var childNodes=colladaRootElement.childNodes;
+                if (this.libraryPropertyName === "node") {
+                    props = colladaRootElement.getElementsByTagName(this.libraryPropertyName);
+                }
                 for (var i = 0, l = props.length; i < l; i++) {
                     var child = props[i];
                     this.library[child.getAttribute('id')] = new this.className(child, url);
+                    if (this.libraryPropertyName === "animation_clip") {
+                        this.library[child.getAttribute('id')].start=child.getAttribute('start');
+                        this.library[child.getAttribute('id')].end=child.getAttribute('end');
+                    }
                 }
                 return this.library;
             }
         });
-        var availableLibraryFeatures = [new ColladaLibraryLoader('images', 'image', Image), new ColladaLibraryLoader('geometries', 'geometry', Geometry), new ColladaLibraryLoader('nodes', 'node', Node), new ColladaLibraryLoader('visual_scenes', 'visual_scene', VisualScene), new ColladaLibraryLoader('materials', 'material', Material), new ColladaLibraryLoader('effects', 'effect', Effect), new ColladaLibraryLoader('controllers', 'controller', Controller), new ColladaLibraryLoader('animations', 'animation', Animation)];
+        var availableLibraryFeatures = [new ColladaLibraryLoader('images', 'image', Image), new ColladaLibraryLoader('geometries', 'geometry', Geometry), new ColladaLibraryLoader('nodes', 'node', Node), new ColladaLibraryLoader('visual_scenes', 'visual_scene', VisualScene), new ColladaLibraryLoader('materials', 'material', Material), new ColladaLibraryLoader('effects', 'effect', Effect), new ColladaLibraryLoader('controllers', 'controller', Controller), new ColladaLibraryLoader('animations', 'animation', Animation), new ColladaLibraryLoader('animation_clips', 'animation_clip', AnimationClip)];
     }());
 }
