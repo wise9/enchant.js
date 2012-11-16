@@ -1,7 +1,6 @@
 enchant.DomLayer = enchant.Class.create(enchant.Group, {
     initialize: function() {
         var game = enchant.Game.instance;
-        var that = this;
         enchant.Group.call(this);
 
         this.width = this._width = game.width;
@@ -45,7 +44,7 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             enchant.DomLayer._attachDomManager(child);
             self._domManager.addManager(child._domManager, nextManager);
             var render = new enchant.Event(enchant.Event.RENDER);
-            that._rendering(child, render);
+            self._domManager.layer._rendering(child, render);
         };
 
         var __onchildremoved = function(e) {
@@ -62,10 +61,6 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         this.addEventListener('childremoved', __onchildremoved);
         this.addEventListener('childadded', __onchildadded);
 
-        this._onexitframe = function() {
-            var render = new enchant.Event(enchant.Event.RENDER);
-            that._rendering(that, render);
-        };
     },
     _startRendering: function() {
         this.addEventListener('exitframe', this._onexitframe);
@@ -74,6 +69,9 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
     _stopRendering: function() {
         this.removeEventListener('exitframe', this._onexitframe);
         this._onexitframe();
+    },
+    _onexitframe: function() {
+        this._rendering(this, new enchant.Event(enchant.Event.RENDER));
     },
     _rendering: function(node, e, inheritMat) {
         var child;

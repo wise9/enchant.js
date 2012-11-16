@@ -19,7 +19,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      */
     initialize: function() {
         var game = enchant.Game.instance;
-        var that = this;
 
         enchant.Group.call(this);
 
@@ -27,6 +26,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             matrix: [1, 0, 0, 1, 0, 0],
             detectColor: '#000000'
         };
+        this._cvsCache.layer = this;
 
         this.width = game.width;
         this.height = game.height;
@@ -63,33 +63,31 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
         var __onchildadded = function(e) {
             var child = e.node;
+            var self = e.target;
+            var layer = self._cvsCache.layer;
             if (child.childNodes) {
                 child.addEventListener('childadded', __onchildadded);
                 child.addEventListener('childremoved', __onchildremoved);
             }
-            enchant.CanvasLayer._attachCache(child, that._colorManager);
+            enchant.CanvasLayer._attachCache(child, layer);
             var render = new enchant.Event(enchant.Event.RENDER);
-            that._rendering(child, render);
+            layer._rendering(child, render);
         };
 
         var __onchildremoved = function(e) {
             var child = e.node;
+            var self = e.target;
+            var layer = self._cvsCache.layer;
             if (child.childNodes) {
                 child.removeEventListener('childadded', __onchildadded);
                 child.removeEventListener('childremoved', __onchildremoved);
             }
-            enchant.CanvasLayer._detachCache(child, that._colorManager);
+            enchant.CanvasLayer._detachCache(child, layer);
         };
 
         this.addEventListener('childremoved', __onchildremoved);
         this.addEventListener('childadded', __onchildadded);
 
-        this._onexitframe = function() {
-            var ctx = that.context;
-            ctx.clearRect(0, 0, game.width, game.height);
-            var render = new enchant.Event(enchant.Event.RENDER);
-            that._rendering(that, render);
-        };
     },
     /**
      * レンダリングを開始.
@@ -106,6 +104,13 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     _stopRendering: function() {
         this.removeEventListener('render', this._onexitframe);
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
+    },
+    _onexitframe: function() {
+        var game = enchant.Game.instance;
+        var ctx = this.context;
+        ctx.clearRect(0, 0, game.width, game.height);
+        var render = new enchant.Event(enchant.Event.RENDER);
+        this._rendering(this, render);
     },
     _rendering:  function(node, e) {
         var game = enchant.Game.instance;
@@ -257,31 +262,31 @@ enchant.DetectColorManager = enchant.Class.create({
     }
 });
 
-enchant.CanvasLayer._attachCache = function(node, colorManager) {
+enchant.CanvasLayer._attachCache = function(node, layer) {
     var child;
     if (!node._cvsCache) {
         node._cvsCache = {};
         node._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
-        node._cvsCache.detectColor = 'rgba(' + colorManager.attachDetectColor(node) + ')';
+        node._cvsCache.detectColor = 'rgba(' + layer._colorManager.attachDetectColor(node) + ')';
     }
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.CanvasLayer._attachCache(child, colorManager);
+            enchant.CanvasLayer._attachCache(child, layer);
         }
     }
 };
 
-enchant.CanvasLayer._detachCache = function(node, colorManager) {
+enchant.CanvasLayer._detachCache = function(node, layer) {
     var child;
     if (node._cvsCache) {
-        colorManager.detachDetectColor(node);
+        layer._colorManager.detachDetectColor(node);
         delete node._cvsCache;
     }
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.CanvasLayer._detachCache(child, colorManager);
+            enchant.CanvasLayer._detachCache(child, layer);
         }
     }
 };
