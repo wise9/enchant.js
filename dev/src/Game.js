@@ -457,9 +457,9 @@
                     }
                 };
                 if (enchant.ENV.TOUCH_ENABLED) {
-                    stage.addEventListener('touchdown', _ontouchstart, false);
+                    stage.addEventListener('touchstart', _ontouchstart, false);
                     stage.addEventListener('touchmove', _ontouchmove, false);
-                    stage.addEventListener('touchup', _ontouchend, false);
+                    stage.addEventListener('touchend', _ontouchend, false);
                 }
                 stage.addEventListener('mousedown', _ontouchstart, false);
                 stage.addEventListener('mousemove', _ontouchmove, false);
