@@ -36,6 +36,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+(function(window, undefined){
+
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -146,12 +148,17 @@ var enchant = function(modules) {
         }
     }(enchant, ''));
 
-//    window.Game = window.Core;
+    window.Game = window.Core;
 
     if (modules != null && modules.length) {
         throw new Error('Cannot load module: ' + modules.join(', '));
     }
 };
+
+/**
+ * export enchant
+ */
+window.enchant = enchant;
 
 window.addEventListener("message", function(msg, origin) {
     try {
@@ -180,7 +187,6 @@ window.addEventListener("message", function(msg, origin) {
         // ignore
     }
 }, false);
-
 /**
  * クラスのクラス.
  *
@@ -4894,3 +4900,4 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
     }
 });
+}(window));

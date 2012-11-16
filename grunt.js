@@ -47,7 +47,7 @@ module.exports = function(grunt) {
                 min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Dual licensed under the MIT or GPLv3 licenses.  */'
             },
             lint: {
-                core: ['dev/header.js', 'dev/src/*.js'],
+                core: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); })],
                 plugins: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js']
             },
             qunit: {
@@ -56,7 +56,8 @@ module.exports = function(grunt) {
             concat: {
                 dist: {
                     src: ['<banner:meta.banner>',
-                        'dev/src/_header.js',
+                        'dev/src/_intro.js',
+                        'dev/src/header.js',
                         'dev/src/Class.js',
                         'dev/src/Env.js',
                         'dev/src/Event.js',
@@ -84,7 +85,8 @@ module.exports = function(grunt) {
                         'dev/src/Timeline.js',
                         'dev/src/Action.js',
                         'dev/src/ParallelAction.js',
-                        'dev/src/Tween.js'
+                        'dev/src/Tween.js',
+                        'dev/src/_outro.js'
                     ],
                     dest: 'dev/enchant.js'
                 }

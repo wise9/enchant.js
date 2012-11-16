@@ -36,6 +36,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+(function(window, undefined){
+
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -117,7 +119,7 @@ if (typeof Function.prototype.bind !== 'function') {
  *
  * When no arguments are given, all classes defined in enchant.js as well as all classes defined in
  * plugins will be exported. When more than one argument is given, by default only classes defined
- * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver 
+ * in enchant.js will be exported. When you wish to export plugin classes you must explicitly deliver
  * the plugin identifiers as arguments.
  *
  * @example
@@ -178,12 +180,17 @@ var enchant = function(modules) {
         }
     }(enchant, ''));
 
-//    window.Game = window.Core;
+    window.Game = window.Core;
 
     if (modules != null && modules.length) {
         throw new Error('Cannot load module: ' + modules.join(', '));
     }
 };
+
+/**
+ * export enchant
+ */
+window.enchant = enchant;
 
 window.addEventListener("message", function(msg, origin) {
     try {
@@ -212,7 +219,6 @@ window.addEventListener("message", function(msg, origin) {
         // ignore
     }
 }, false);
-
 /**
  [lang:ja]
  * クラスのクラス.
@@ -6636,3 +6642,4 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
     }
 });
+}(window));
