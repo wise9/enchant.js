@@ -84,10 +84,10 @@ enchant.DomManager = enchant.Class.create({
         matrix.multiplyVec(dest, vec, vec);
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
-        this.cssUpdate();
+        this.domRender();
         this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' + dest + ')';
     },
-    cssUpdate: function() {
+    domRender: function() {
         var node = this.targetNode;
         this.style.width = node._width + 'px';
         this.style.height = node._height + 'px';
@@ -101,8 +101,8 @@ enchant.DomManager = enchant.Class.create({
                 this.style[prop] = node._style[prop];
             }
         }
-        if (typeof node.cssUpdate === 'function') {
-            node.cssUpdate();
+        if (typeof node.domRender === 'function') {
+            node.domRender();
         }
     },
     _attachEvent: function() {

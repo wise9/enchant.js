@@ -136,14 +136,14 @@ enchant.DomLayer._detachDomManager = function(node) {
     }
 };
 
-enchant.Label.prototype.cssUpdate = function() {
+enchant.Label.prototype.domRender = function() {
     this._domManager.element.innerHTML = this._text;
     this._domManager.element.style.font = this._font;
     this._domManager.element.style.color = this._color;
     this._domManager.element.style.textAlign = this._textAlign;
 };
 
-enchant.Sprite.prototype.cssUpdate = function() {
+enchant.Sprite.prototype.domRender = function() {
     var element = this._domManager.element;
     if (this._image) {
         if (this._image._css) {

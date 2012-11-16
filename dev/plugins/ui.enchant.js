@@ -405,7 +405,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
     cvsRender: function() {
         // not available now
     },
-    cssUpdate: function() {
+    domRender: function() {
         var element = this._domManager.element;
         element.innerHTML = this._text;
         element.style.font = this._font;
