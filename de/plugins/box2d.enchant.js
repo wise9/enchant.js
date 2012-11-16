@@ -156,9 +156,7 @@ enchant.box2d = {};
             this.addEventListener(enchant.Event.ENTER_FRAME, function(e) {
                 this.x = this.x;
                 this.y = this.y;
-                if (time % 2) {   //なぜか移動と回転を一緒にできない。謎。
-                    this.rotation = this.angle;
-                }
+                this.rotation = this.angle;
                 time++;
                 time = time % 2;
             });
@@ -237,7 +235,7 @@ enchant.box2d = {};
                 this._x = x;
                 x += this.width / 2;
                 this.body.m_body.SetPosition(new b2Vec2(x / WORLD_SCALE, this.body.m_body.GetPosition().y));
-                this._updateCoordinate();
+                this._dirty = true;
             }
         },
         /**
@@ -252,7 +250,7 @@ enchant.box2d = {};
                 this._y = y;
                 y += this.height / 2;
                 this.body.m_body.SetPosition(new b2Vec2(this.body.m_body.GetPosition().x, y / WORLD_SCALE));
-                this._updateCoordinate();
+                this._dirty = true;
             }
         },
         /**

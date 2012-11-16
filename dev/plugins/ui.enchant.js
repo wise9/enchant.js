@@ -291,21 +291,11 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
     initialize: function(text, theme, height, width) {
         enchant.Entity.call(this);
 
-        // ベンタプレフィクスを判定
-        this.VENDOR_PREFIX = (function() {
-            var ua = navigator.userAgent;
-            if (ua.indexOf('Opera') !== -1) {
-                return '-O-';
-            } else if (ua.indexOf('MSIE') !== -1) {
-                return '-ms-';
-            } else if (ua.indexOf('WebKit') !== -1) {
-                return '-webkit-';
-            } else if (navigator.product === 'Gecko') {
-                return '-Moz-';
-            } else {
-                return '';
-            }
-        }());
+        if (enchant.CanvasLayer) {
+            this._element = 'div';
+        }
+
+        var prefix = '-' + enchant.ENV.VENDOR_PREFIX + '-';
 
         this.width = width || null;
         this.height = height || null;
@@ -313,7 +303,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         this.pressed = false;
 
         // デフォルトのスタイル (テーマで上書き可能)
-        var style = this._element.style;
+        var style = this._style;
         style["display"] = "inline-block";
         style["font-size"] = "12px";
         style["height"] = "2em";
@@ -322,7 +312,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         style["padding"] = "2px 10px";
         style["text-align"] = "center";
         style["font-weight"] = "bold";
-        style[this.VENDOR_PREFIX + "border-radius"] = "0.5em";
+        style[prefix + "border-radius"] = "0.5em";
 
         // テーマの指定がなければ "dark" を使う
         theme = theme || "dark";
@@ -353,11 +343,11 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         });
     },
     _applyTheme: function(theme) {
-        var style = this._element.style;
-        for (var i in theme) {
-            if (theme.hasOwnProperty(i)) {
-                var prop = i.replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
-                style[prop] = (theme[i] + '').replace(/\-VENDOR\-/, this.VENDOR_PREFIX);
+        var style = this._style;
+        var css = enchant.ui.Button.theme2css(theme);
+        for (var i in css) {
+            if (css.hasOwnProperty(i)) {
+                style[i] = css[i];
             }
         }
     },
@@ -367,10 +357,13 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
      */
     text: {
         get: function() {
-            return this._element.innerHTML;
+            return this._text;
         },
         set: function(text) {
-            this._element.innerHTML = text;
+                this._text = text;
+            if (!enchant.CanvasLayer) {
+                this._element.innerHTML = text;
+            }
         }
     },
     /**
@@ -378,10 +371,10 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
      */
     size: {
         get: function() {
-            return this._element.style["fontSize"];
+            return this._style.fontSize;
         },
         set: function(size) {
-            this._element.style["fontSize"] = size;
+            this._style.fontSize = size;
         }
     },
     /**
@@ -408,56 +401,81 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         set: function(color) {
             this._style.color = color;
         }
+    },
+    cvsRender: function() {
+        // not available now
+    },
+    domRender: function() {
+        var element = this._domManager.element;
+        element.innerHTML = this._text;
+        element.style.font = this._font;
+        element.style.color = this._color;
+        element.style.textAlign = this._textAlign;
     }
 });
+
+enchant.ui.Button.theme2css = function(theme) {
+    var prefix = '-' + enchant.ENV.VENDOR_PREFIX + '-';
+    var obj = {};
+    var bg = theme.background;
+    var bd = theme.border;
+    var ts = theme.textShadow;
+    var bs = theme.boxShadow;
+    obj['background-image'] = prefix + bg.type + '('+ [ bg.start, bg.end ] + ')';
+    obj['color'] = theme.color;
+    obj['border'] = bd.color + ' ' + bd.width + ' ' + bd.type;
+    obj['text-shadow'] = ts.offsetX + 'px ' + ts.offsetY + 'px ' + ts.blur + ' ' + ts.color;
+    obj['box-shadow'] = bs.offsetX + 'px ' + bs.offsetY + 'px ' + bs.blur + ' ' + bs.color;
+    return obj;
+};
 
 enchant.ui.Button.DEFAULT_THEME = {
     dark: {
         normal: {
-            "background-image": "-VENDOR-linear-gradient(#666, #333)",
-            "color": "#fff",
-            "border": "#333 1px solid",
-            "text-shadow": "0 1px 0 #666",
-            "-VENDOR-box-shadow": "0 1px 0 rgba(0,0,0,.8), 0 2px 0 rgba(255,255,255,.3)"
+            color: '#fff',
+            background: { type: 'linear-gradient', start: '#666', end: '#333' },
+            border: { color: '#333', width: 1, type: 'solid' },
+            textShadow: { offsetX: 0, offsetY: 1, blur: 0, color: '#666' },
+            boxShadow: { offsetX: 0, offsetY: 1, blur: 0, color: 'rgba(255, 255, 255, 0.3)' }
         },
         active: {
-            "background-image": "-VENDOR-linear-gradient(#333, #000)",
-            "color": "#ccc",
-            "border": "#333 1px solid",
-            "text-shadow": "0 1px 0 #000",
-            "-VENDOR-box-shadow": "0 1px 0 rgba(255,255,255,.3)"
+            color: '#ccc',
+            background: { type: 'linear-gradient', start: '#333', end: '#000' },
+            border: { color: '#333', width: 1, type: 'solid' },
+            textShadow: { offsetX: 0, offsetY: 1, blur: 0, color: '#000' },
+            boxShadow: { offsetX: 0, offsetY: 1, blur: 0, color: 'rgba(255, 255, 255, 0.3)' }
         }
     },
     light: {
         normal: {
-            "background-image": "-VENDOR-linear-gradient(#fff, #ccc)",
-            "color": "#333",
-            "border": "#999 1px solid",
-            "text-shadow": "0 1px 0 #fff",
-            "-VENDOR-box-shadow": "0 1px 0 rgba(0,0,0,1), 0 2px 0 rgba(255,255,255,.2)"
+            color: '#333',
+            background: { type: 'linear-gradient', start: '#fff', end:'#ccc' },
+            border: { color: '#999', width: 1, type: 'solid' },
+            textShadow: { offsetX: 0, offsetY: 1, blur: 0, color: '#fff' },
+            boxShadow: { offsetX: 0, offsetY: 1, blur: 0, color: 'rgba(0, 0, 0, 1)' },
         },
         active: {
-            "background-image": "-VENDOR-linear-gradient(#ccc, #999)",
-            "color": "#333",
-            "border": "#666 1px solid",
-            "text-shadow": "0 1px 0 #ccc",
-            "-VENDOR-box-shadow": "0 1px 0 rgba(255,255,255,.3)"
+            color: '#333',
+            background: { type: 'linear-gradient', start: '#ccc', end: '#999' },
+            border: { color: '#666', width: 1, type: 'solid' },
+            textShadow: { offsetX: 0, offsetY: 1, blur: 0, color: '#ccc' },
+            boxShadow: { offsetX: 0, offsetY: 1, blur: 0, color: 'rgba(255, 255, 255, 0.3)' }
         }
     },
     blue: {
         normal: {
-            "background-image": "-VENDOR-linear-gradient(#04f, #04c)",
-            "color": "#fff",
-            "border": "#026 1px solid",
-            "text-shadow": "0 1px 0 #666",
-            "-VENDOR-box-shadow": "0 1px 0 rgba(0,0,0,.5), 0 2px 0 rgba(255,255,255,0.2)"
+            color: '#fff',
+            background: { type: 'linear-gradient', start: '#04f', end: '#04c' },
+            border: { color: '#026', width: 1, type: 'solid' },
+            textShadow: { offsetX: 0, offsetY: 1, blur: 0, color: '#666' },
+            boxShadow: { offsetX: 0, offsetY: 1, blur: 0, color: 'rgba(0, 0, 0, 0.5)' }
         },
         active: {
-            "background-image": "-VENDOR-linear-gradient(#029, #026)",
-            "color": "#ccc",
-            "border": "#026 1px solid",
-            "text-shadow": "0 1px 0 #000",
-            "-VENDOR-box-shadow": "none"
+            color: '#ccc',
+            background: { type: 'linear-gradient', start: '#029', end: '#026' },
+            border: { color: '#026', width: 1, type: 'solid' },
+            textShadow: { offsetX: 0, offsetY: 1, blur: 0, color: '#000' },
+            boxShadow: 'none'
         }
     }
 };
@@ -790,7 +808,7 @@ enchant.ui.Bar = enchant.Class.create(enchant.Sprite, {
         set: function(x) {
             this._x = x;
             this._origin = x;
-            this._updateCoordinate();
+            this._dirty = true;
         }
     },
     /**

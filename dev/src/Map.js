@@ -30,7 +30,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
         enchant.Entity.call(this);
 
-        var canvas = document.createElement('canvas');
+        var surface = new enchant.Surface(core.width, core.height);
+        this._surface = surface;
+        var canvas = surface._element;
         canvas.style.position = 'absolute';
         if (enchant.ENV.RETINA_DISPLAY && core.scale === 2) {
             canvas.width = core.width * 2;
@@ -74,7 +76,6 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         this._listeners['render'] = null;
         this.addEventListener('render', function() {
             if (this._dirty || this._previousOffsetX == null) {
-                this._dirty = false;
                 this.redraw(0, 0, core.width, core.height);
             } else if (this._offsetX !== this._previousOffsetX ||
                 this._offsetY !== this._previousOffsetY) {
@@ -423,16 +424,23 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
                 }
             }
         }
+    },
+    cvsRender: function(ctx) {
+        var game = enchant.Game.instance;
+        if (this.width !== 0 && this.height !== 0) {
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            var cvs = this._context.canvas;
+                ctx.drawImage(cvs, 0, 0, game.width, game.height);
+            ctx.restore();
+        }
+    },
+    domRender: function(element) {
+        if (this._image) {
+            element.style.backgroundImage = this._surface._css;
+            // bad performance
+            element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
+        }
     }
 });
 
-enchant.Map.prototype.cvsRender = function(ctx) {
-    var core = enchant.Core.instance;
-    if (this.width !== 0 && this.height !== 0) {
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var cvs = this._context.canvas;
-        ctx.drawImage(cvs, 0, 0, core.width, core.height);
-        ctx.restore();
-	}
-};

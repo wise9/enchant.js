@@ -24,6 +24,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
 
         this._dirty = false;
 
+        this._matrix = [ 1, 0, 0, 1, 0, 0 ];
+
         this._x = 0;
         this._y = 0;
         this._offsetX = 0;
@@ -118,7 +120,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     moveTo: function(x, y) {
         this._x = x;
         this._y = y;
-        this._updateCoordinate();
+        this._dirty = true;
     },
     /**
      [lang:ja]
@@ -140,7 +142,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     moveBy: function(x, y) {
         this._x += x;
         this._y += y;
-        this._updateCoordinate();
+        this._dirty = true;
     },
     /**
      [lang:ja]
@@ -160,7 +162,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         },
         set: function(x) {
             this._x = x;
-            this._updateCoordinate();
+            this._dirty = true;
         }
     },
     /**
@@ -181,18 +183,40 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         },
         set: function(y) {
             this._y = y;
-            this._updateCoordinate();
+            this._dirty = true;
         }
     },
     _updateCoordinate: function() {
-        if (this.parentNode) {
-            this._offsetX = this.parentNode._offsetX + this._x;
-            this._offsetY = this.parentNode._offsetY + this._y;
-        } else {
-            this._offsetX = this._x;
-            this._offsetY = this._y;
+        var node = this;
+        var tree = [ node ];
+        var parent = node.parentNode;
+        var scene = this.scene;
+        while (parent && node._dirty) {
+            tree.unshift(parent);
+            node = node.parentNode;
+            parent = node.parentNode;
         }
-        this._dirty = true;
+        var matrix = enchant.Matrix.instance;
+        var stack = matrix.stack;
+        var mat = [];
+        var newmat, ox, oy;
+        stack.push(tree[0]._matrix);
+        for (var i = 1, l = tree.length; i < l; i++) {
+            node = tree[i];
+            newmat = [];
+            matrix.makeTransformMatrix(node, mat);
+            matrix.multiply(stack[stack.length - 1], mat, newmat);
+            node._matrix = newmat;
+            stack.push(newmat);
+            ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+            oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+            var vec = [ ox, oy ];
+            matrix.multiplyVec(newmat, vec, vec);
+            node._offsetX = vec[0] - ox;
+            node._offsetY = vec[1] - oy;
+            node._dirty = false;
+        }
+        matrix.reset();
     },
     remove: function() {
         if (this._listener) {

@@ -56,8 +56,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * @extends enchant.Node
      */
     initialize: function() {
-        enchant.Node.call(this);
-
         /**
          [lang:ja]
          * 子のNode.
@@ -72,12 +70,16 @@ enchant.Group = enchant.Class.create(enchant.Node, {
          */
         this.childNodes = [];
 
+        enchant.Node.call(this);
+
         this._rotation = 0;
         this._scaleX = 1;
         this._scaleY = 1;
 
         this._originX = null;
         this._originY = null;
+
+        this.__dirty = false;
 
         [enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE]
             .forEach(function(event) {
@@ -217,19 +219,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this.childNodes[this.childNodes.length - 1];
         }
     },
-    _updateCoordinate: function() {
-        if (this.parentNode) {
-            this._offsetX = this.parentNode._offsetX + this._x;
-            this._offsetY = this.parentNode._offsetY + this._y;
-        } else {
-            this._offsetX = this._x;
-            this._offsetY = this._y;
-        }
-        for (var i = 0, len = this.childNodes.length; i < len; i++) {
-            this.childNodes[i]._updateCoordinate();
-        }
-        this._dirty = true;
-    },
     /**
     [lang:ja]
     * Groupの回転角 (度数法).
@@ -337,6 +326,20 @@ enchant.Group = enchant.Class.create(enchant.Node, {
         set: function(originY) {
             this._originY = originY;
             this._dirty = true;
+        }
+    },
+    _dirty: {
+        get: function() {
+            return this.__dirty;
+        },
+        set: function(dirty) {
+            dirty = !!dirty;
+            this.__dirty = dirty;
+            if (dirty) {
+                for (var i = 0, l = this.childNodes.length; i < l; i++) {
+                    this.childNodes[i]._dirty = true;
+                }
+            }
         }
     }
 });

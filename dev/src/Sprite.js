@@ -147,20 +147,30 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._frameLeft = (frame % row | 0) * this._width;
             this._frameTop = (frame / row | 0) * this._height % image.height;
         }
+    },
+    cvsRender: function(ctx) {
+        var img, imgdata, row, frame;
+        var sx, sy, sw, sh;
+        if (this._image && this._width !== 0 && this._height !== 0) {
+            frame = Math.abs(this._frame) || 0;
+            img = this._image;
+            imgdata = img._element;
+            sx = this._frameLeft;
+            sy = Math.min(this._frameTop, img.height - this._height);
+            sw = Math.min(img.width - sx, this._width);
+            sh = Math.min(img.height - sy, this._height);
+            ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
+        }
+    },
+    domRender: function(element) {
+        if (this._image) {
+            if (this._image._css) {
+                element.style.backgroundImage = this._image._css;
+                element.style.backgroundPosition =
+                    -this._frameLeft + 'px ' +
+                    -this._frameTop + 'px';
+            } else if (this._image._element) {
+            }
+        }
     }
 });
-
-enchant.Sprite.prototype.cvsRender = function(ctx) {
-    var img, imgdata, row, frame;
-    var sx, sy, sw, sh;
-    if (this._image && this._width !== 0 && this._height !== 0) {
-        frame = Math.abs(this._frame) || 0;
-        img = this._image;
-        imgdata = img._element;
-        sx = this._frameLeft;
-        sy = Math.min(this._frameTop, img.height - this._height);
-        sw = Math.min(img.width - sx, this._width);
-        sh = Math.min(img.height - sy, this._height);
-        ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
-    }
-};

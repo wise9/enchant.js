@@ -24,6 +24,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._scaleX = 1;
         this._scaleY = 1;
 
+        this._clipping = false;
+
         this._originX = null;
         this._originY = null;
 
@@ -35,6 +37,16 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._buttonMode = null;
 
         this._style = {};
+
+
+        /**
+         [lang:ja]
+         * Entityを描画する際の合成処理を設定する.
+         * Canvas上に描画する際のみ有効.
+         * CanvasのコンテキストのglobalCompositeOperationにセットされる.
+         [/lang]
+         */
+        this.compositeOperation = null;
 
         /**
          [lang:ja]
@@ -90,20 +102,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.dispatchEvent(e);
             core.dispatchEvent(e);
         });
-
-        var that = this;
-        var event = new enchant.Event('render');
-        var render = function() {
-            that.dispatchEvent(event);
-        };
-        this.addEventListener('addedtoscene', function() {
-            render();
-            core.addEventListener('exitframe', render);
-        });
-        this.addEventListener('removedfromscene', function() {
-            core.removeEventListener('exitframe', render);
-        });
-
     },
     /**
      [lang:ja]
@@ -263,6 +261,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     intersect: function(other) {
+        if (this._dirty) {
+            this._updateCoordinate();
+        } if (other._dirty) {
+            other._updateCoordinate();
+        }
         return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
             this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
     },
@@ -292,6 +295,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     within: function(other, distance) {
+        if (this._dirty) {
+            this._updateCoordinate();
+        } if (other._dirty) {
+            other._updateCoordinate();
+        }
         if (distance == null) {
             distance = (this.width + this.height + other.width + other.height) / 4;
         }
