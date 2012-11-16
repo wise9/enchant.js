@@ -120,7 +120,9 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         }
     },
     domRender: function(element) {
-        element.innerHTML = this._text;
+        if (element.innerHTML !== this._text) {
+            element.innerHTML = this._text;
+        }
         element.style.font = this._font;
         element.style.color = this._color;
         element.style.textAlign = this._textAlign;
