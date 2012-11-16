@@ -110,14 +110,25 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         set: function(color) {
             this._style.color = color;
         }
+    },
+    cvsRender: function(ctx) {
+        if (this.text) {
+            ctx.textBaseline = 'top';
+            ctx.font = this.font;
+            ctx.fillStyle = this.color || '#000000';
+            ctx.fillText(this.text, 0, 0);
+        }
+    },
+    domRender: function() {
+        this._domManager.element.innerHTML = this._text;
+        this._domManager.element.style.font = this._font;
+        this._domManager.element.style.color = this._color;
+        this._domManager.element.style.textAlign = this._textAlign;
+    },
+    detectRender: function(ctx) {
+        ctx.fillRect(0, 0, this._boundWidth, this._boundHeight);
     }
 });
 
-enchant.Label.prototype.cvsRender = function(ctx) {
-    if (this.text) {
-        ctx.textBaseline = 'top';
-        ctx.font = this.font;
-        ctx.fillStyle = this.color || '#000000';
-        ctx.fillText(this.text, 0, 0);
     }
 };

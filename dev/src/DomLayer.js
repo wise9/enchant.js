@@ -135,23 +135,3 @@ enchant.DomLayer._detachDomManager = function(node) {
         }
     }
 };
-
-enchant.Label.prototype.domRender = function() {
-    this._domManager.element.innerHTML = this._text;
-    this._domManager.element.style.font = this._font;
-    this._domManager.element.style.color = this._color;
-    this._domManager.element.style.textAlign = this._textAlign;
-};
-
-enchant.Sprite.prototype.domRender = function() {
-    var element = this._domManager.element;
-    if (this._image) {
-        if (this._image._css) {
-            element.style.backgroundImage = this._image._css;
-            element.style.backgroundPosition =
-                -this._frameLeft + 'px ' +
-                -this._frameTop + 'px';
-        } else if (this._image._element) {
-        }
-    }
-};
