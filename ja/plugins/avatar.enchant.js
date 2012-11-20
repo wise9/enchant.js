@@ -14,25 +14,25 @@
  *  var game = new Game(320, 320);
  * game.preload('avatarBg1.png','avatarBg2.png','avatarBg3.png','bigmonster1.gif');
  * game.onload = function(){
- * 		game.rootScene.backgroundColor="#000000";
- * 		// show infinite scrolling background
- * 		bg =new AvatarBG(0); 
- * 		bg.y=50;
- * 		game.rootScene.addChild(bg);
- * 		
- * 		//show monster
- * 		monster = new AvatarMonster(game.assets['bigmonster1.gif']);
- * 		monster.x=200;
- * 		monster.y=100;
- * 		game.rootScene.addChild(monster);
- * 		
- * 		//show avatar
- * 		chara = new Avatar("2:2:1:2004:21230:22480");
- * 		game.rootScene.addChild(chara);
- * 		chara.scaleX=-1;
- * 		chara.scaleY=1;
- * 		chara.x=50;
- * 		chara.y=100;
+ *         game.rootScene.backgroundColor="#000000";
+ *         // show infinite scrolling background
+ *         bg =new AvatarBG(0);
+ *         bg.y=50;
+ *         game.rootScene.addChild(bg);
+ *
+ *         //show monster
+ *         monster = new AvatarMonster(game.assets['bigmonster1.gif']);
+ *         monster.x=200;
+ *         monster.y=100;
+ *         game.rootScene.addChild(monster);
+ *
+ *         //show avatar
+ *         chara = new Avatar("2:2:1:2004:21230:22480");
+ *         game.rootScene.addChild(chara);
+ *         chara.scaleX=-1;
+ *         chara.scaleY=1;
+ *         chara.x=50;
+ *         chara.y=100;
  *  };
  * game.start();
  */
@@ -77,20 +77,21 @@ enchant.avatar.AvatarCharacter = enchant.Class.create(enchant.Sprite, {
          */
         this.animFrame = 0;
         this.addEventListener('enterframe', function() {
-            if ((~~(this.age) & 0x03) != 0)return;
+            if ((~~(this.age) & 0x03) !== 0)return;
             if (this.action) {
                 var animPattern = this.animPattern[this.action];
                 this.frame = animPattern[this.animFrame];
                 this.animFrame++;
-                if (animPattern[this.animFrame] == -1) {
+                if (animPattern[this.animFrame] === -1) {
                     this.animFrame = 0;
                     this.action = "stop";
                 }
-                if (animPattern[this.animFrame] == -2) {
+                if (animPattern[this.animFrame] === -2) {
                     this.parentNode.removeChild(this);
                 }
-                if (this.animFrame >= animPattern.length)
+                if (this.animFrame >= animPattern.length) {
                     this.animFrame = 0;
+                }
             }
         });
     },
@@ -132,7 +133,7 @@ enchant.avatar.AvatarMonster = enchant.Class.create(enchant.avatar.AvatarCharact
             "walk": [ 2, 3, 4, 3],
             "appear": [ 0, 1, 7, 6, 5, 4, 2, 3, -1],
             "disappear": [ 3, 2, 4, 5, 6, 7, 1, 0, -2],
-            "attack": [ 5, 4, 6, 6, 6, -1],
+            "attack": [ 5, 4, 6, 6, 6, -1]
         };
         this.action = "attack";
         this.left();
@@ -153,14 +154,14 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
     initialize: function(mode) {
         enchant.Group.call(this);
 
-        this.veryfarbg = new Sprite(320, 51);
+        this.veryfarbg = new enchant.Sprite(320, 51);
         this.veryfarbg.y = 0;
         this.veryfarbg.image = game.assets["avatarBg2.png"];
         this.veryfarbg.frame = mode;
         this.addChild(this.veryfarbg);
         this.farbgs = [];
         for (i = 0; i < 3; i++) {
-            var bg = new Sprite(320, 32);
+            var bg = new enchant.Sprite(320, 32);
             bg.image = game.assets["avatarBg3.png"];
             bg.frame = mode;
             bg.x = i * 320 - 320;
@@ -171,7 +172,7 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
 
         this.tiles = [];
         for (i = 0; i < 14; i++) {
-            var tile = new Sprite(32, 128);
+            var tile = new enchant.Sprite(32, 128);
             tile.image = game.assets["avatarBg1.png"];
             tile.frame = mode;
             tile.x = i * 31 - 48;
