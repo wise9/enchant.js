@@ -282,6 +282,7 @@ enchant.ENV = {
         div.setAttribute('ontouchstart', 'return');
         return typeof div.ontouchstart === 'function';
     }()),
+    MOUSE_ENABLED: true,
     /**
      * Is this browser iPhone with Retina display?
      * @type {String}
@@ -953,35 +954,36 @@ enchant.EventTarget = enchant.Class.create({
                         }
                     }, true);
                 }
-                stage.addEventListener('mousedown', function(e) {
-                    var tagName = (e.target.tagName).toLowerCase();
-                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        e.preventDefault();
-                        game._mousedownID++;
-                        if (!game.running) {
-                            e.stopPropagation();
+                if (enchant.ENV.MOUSE_ENABLED) {
+                    stage.addEventListener('mousedown', function(e) {
+                        var tagName = (e.target.tagName).toLowerCase();
+                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                            e.preventDefault();
+                            game._mousedownID++;
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
-                    }
-                }, true);
-                stage.addEventListener('mousemove', function(e) {
-                    var tagName = (e.target.tagName).toLowerCase();
-                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        e.preventDefault();
-                        if (!game.running) {
-                            e.stopPropagation();
+                    }, true);
+                    stage.addEventListener('mousemove', function(e) {
+                        var tagName = (e.target.tagName).toLowerCase();
+                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                            e.preventDefault();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
-                    }
-                }, true);
-                stage.addEventListener('mouseup', function(e) {
-                    var tagName = (e.target.tagName).toLowerCase();
-                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        // フォームじゃない
-                        e.preventDefault();
-                        if (!game.running) {
-                            e.stopPropagation();
+                    }, true);
+                    stage.addEventListener('mouseup', function(e) {
+                        var tagName = (e.target.tagName).toLowerCase();
+                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                            e.preventDefault();
+                            if (!game.running) {
+                                e.stopPropagation();
+                            }
                         }
-                    }
-                }, true);
+                    }, true);
+                }
             }
         },
         /**
@@ -1524,9 +1526,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this.addEventListener('render', function() {
             if (this._offsetX !== this._previousOffsetX) {
                 this._style.left = this._offsetX + 'px';
-                /**
-                 * @TODO transform-left で移動するやつをためす
-                 */
             }
             if (this._offsetY !== this._previousOffsetY) {
                 this._style.top = this._offsetY + 'px';
@@ -1542,6 +1541,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     e = new enchant.Event('touchstart');
                     e.identifier = touches[i].identifier;
                     e._initPosition(touches[i].pageX, touches[i].pageY);
+
+                    /*
+                     * if preventDefault() of touch event called,
+                     * mouse*** event won't be dispatched for the element. (see issue #129)
+                     */
+                    e.preventDefault();
+
                     that.dispatchEvent(e);
                 }
             }, false);
@@ -1551,6 +1557,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     e = new enchant.Event('touchmove');
                     e.identifier = touches[i].identifier;
                     e._initPosition(touches[i].pageX, touches[i].pageY);
+                    e.preventDefault();
                     that.dispatchEvent(e);
                 }
             }, false);
@@ -1560,43 +1567,45 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     e = new enchant.Event('touchend');
                     e.identifier = touches[i].identifier;
                     e._initPosition(touches[i].pageX, touches[i].pageY);
+                    e.preventDefault();
                     that.dispatchEvent(e);
                 }
             }, false);
         }
-        this._element.addEventListener('mousedown', function(e) {
-            var x = e.pageX;
-            var y = e.pageY;
-            e = new enchant.Event('touchstart');
-            e.identifier = game._mousedownID;
-            e._initPosition(x, y);
-            that.dispatchEvent(e);
-            that._mousedown = true;
-        }, false);
-        game._element.addEventListener('mousemove', function(e) {
-            if (!that._mousedown) {
-                return;
-            }
-            var x = e.pageX;
-            var y = e.pageY;
-            e = new enchant.Event('touchmove');
-            e.identifier = game._mousedownID;
-            e._initPosition(x, y);
-            that.dispatchEvent(e);
-        }, false);
-        game._element.addEventListener('mouseup', function(e) {
-            if (!that._mousedown) {
-                return;
-            }
-            var x = e.pageX;
-            var y = e.pageY;
-            e = new enchant.Event('touchend');
-            e.identifier = game._mousedownID;
-            e._initPosition(x, y);
-            that.dispatchEvent(e);
-            that._mousedown = false;
-        }, false);
-
+        if (enchant.ENV.MOUSE_ENABLED){
+            this._element.addEventListener('mousedown', function(e) {
+                var x = e.pageX;
+                var y = e.pageY;
+                e = new enchant.Event('touchstart');
+                e.identifier = game._mousedownID;
+                e._initPosition(x, y);
+                that.dispatchEvent(e);
+                that._mousedown = true;
+            }, false);
+            game._element.addEventListener('mousemove', function(e) {
+                if (!that._mousedown) {
+                    return;
+                }
+                var x = e.pageX;
+                var y = e.pageY;
+                e = new enchant.Event('touchmove');
+                e.identifier = game._mousedownID;
+                e._initPosition(x, y);
+                that.dispatchEvent(e);
+            }, false);
+            game._element.addEventListener('mouseup', function(e) {
+                if (!that._mousedown) {
+                    return;
+                }
+                var x = e.pageX;
+                var y = e.pageY;
+                e = new enchant.Event('touchend');
+                e.identifier = game._mousedownID;
+                e._initPosition(x, y);
+                that.dispatchEvent(e);
+                that._mousedown = false;
+            }, false);
+        }
     },
     /**
      * DOM ID.
@@ -1732,11 +1741,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @param {Number} [y] Scaling for y axis to be expanded.
      */
     scale: function(x, y) {
-        if (y == null) {
-            y = x;
-        }
         this._scaleX *= x;
-        this._scaleY *= y;
+        this._scaleY *= (y != null) ? y : x;
         this._dirty = true;
     },
     /**
