@@ -609,6 +609,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
  * Event occurring when a button is pushed.
  * Issued object: enchant.Core, enchant.Scene
  * @type {String}
+ [/lang]
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
@@ -622,6 +623,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
  * Event occurring when a button is released.
  * Issued object: enchant.Core, enchant.Scene
  * @type {String}
+ [/lang]
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
@@ -635,6 +637,7 @@ enchant.Event.A_BUTTON_UP = 'abuttonup';
  * Event occurring when b button is pushed.
  * Issued object: enchant.Core, enchant.Scene
  * @type {String}
+ [/lang]
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
@@ -648,6 +651,7 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
  * Event occurring when b button is released.
  * Issued object: enchant.Core, enchant.Scene
  * @type {String}
+ [/lang]
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 
@@ -687,6 +691,7 @@ enchant.Event.ACTION_TICK = "actiontick";
  * @type {String}
  */
 enchant.Event.ACTION_ADDED = "actionadded";
+
 /**
  * アクションが削除された時に、タイムラインに対して発行されるイベント
  * @type {String}
