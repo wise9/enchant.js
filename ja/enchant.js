@@ -443,6 +443,26 @@ enchant.Event.LOAD = 'load';
  * Coreのロード進行中に発生するイベント.
  * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: enchant.Core
  * @type {String}
+ */
+enchant.Event.PROGRESS = 'progress';
+
+/**
+ * フレーム開始時に発生するイベント.
+ * 発行するオブジェクト: enchant.Core, enchant.Node
+ * @type {String}
+ */
+enchant.Event.ENTER_FRAME = 'enterframe';
+
+/**
+ * フレーム終了時に発生するイベント.
+ * 発行するオブジェクト: enchant.Core
+ * @type {String}
+ */
+enchant.Event.EXIT_FRAME = 'exitframe';
+
+/**
+ * Sceneが開始したとき発生するイベント.
+ * 発行するオブジェクト: {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.ENTER = 'enter';
@@ -541,6 +561,13 @@ enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
  * ボタン入力が終了したとき発生するイベント.
+ * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Scene}
+ * @type {String}
+ */
+enchant.Event.INPUT_END = 'inputend';
+
+/**
+ * leftボタンが押された発生するイベント.
  * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
  */

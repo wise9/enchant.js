@@ -449,6 +449,22 @@ enchant.Event.LOAD = 'load';
 enchant.Event.PROGRESS = 'progress';
 
 /**
+ * Events occurring during frame start.
+ * Issued object: enchant.Core, enchant.Node
+ * @type {String}
+ */
+enchant.Event.ENTER_FRAME = 'enterframe';
+
+/**
+ * Events occurring during frame end.
+ * Issued object: enchant.Core
+ * @type {String}
+ */
+enchant.Event.EXIT_FRAME = 'exitframe';
+
+/**
+ * Events occurring during Scene beginning.
+ * Issued object: {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.ENTER = 'enter';
@@ -553,6 +569,8 @@ enchant.Event.INPUT_CHANGE = 'inputchange';
 enchant.Event.INPUT_END = 'inputend';
 
 /**
+ * An event which is occurring when the left button is pressed.
+ * Issued object: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';

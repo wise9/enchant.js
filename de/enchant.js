@@ -443,6 +443,21 @@ enchant.Event = enchant.Class.create({
 enchant.Event.LOAD = 'load';
 
 /**
+ * @type {String}
+ */
+enchant.Event.PROGRESS = 'progress';
+
+/**
+ * @type {String}
+ */
+enchant.Event.ENTER_FRAME = 'enterframe';
+
+/**
+ * @type {String}
+ */
+enchant.Event.EXIT_FRAME = 'exitframe';
+
+/**
  * Ereignis, dass auftritt wenn eine neue Szene
  * ({@link enchant.Scene}) beginnt.
  * Objekt des Auftretens: {@link enchant.Scene}
@@ -553,6 +568,11 @@ enchant.Event.INPUT_START = 'inputstart';
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
+ * @type {String}
+ */
+enchant.Event.INPUT_END = 'inputend';
+
+/**
  * Ereignis, welchses auftritt wenn der "Nach Links"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
@@ -609,10 +629,12 @@ enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 /**
+ * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
+ * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
@@ -621,6 +643,7 @@ enchant.Event.A_BUTTON_UP = 'abuttonup';
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
 /**
+ * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 

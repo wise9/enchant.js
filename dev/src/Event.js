@@ -164,11 +164,11 @@ enchant.Event.LOAD = 'load';
  [lang:ja]
  * Coreのロード進行中に発生するイベント.
  * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: enchant.Core
- * @type {String}
  [/lang]
  [lang:en]
  * Events occurring during core loading.
  * Activated each time a preloaded image is loaded. Issued object: enchant.Core
+ [/lang]
  * @type {String}
  */
 enchant.Event.PROGRESS = 'progress';
@@ -177,11 +177,11 @@ enchant.Event.PROGRESS = 'progress';
  [lang:ja]
  * フレーム開始時に発生するイベント.
  * 発行するオブジェクト: enchant.Core, enchant.Node
- * @type {String}
  [/lang]
  [lang:en]
  * Events occurring during frame start.
  * Issued object: enchant.Core, enchant.Node
+ [/lang]
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
@@ -190,11 +190,11 @@ enchant.Event.ENTER_FRAME = 'enterframe';
  [lang:ja]
  * フレーム終了時に発生するイベント.
  * 発行するオブジェクト: enchant.Core
- * @type {String}
  [/lang]
  [lang:en]
  * Events occurring during frame end.
  * Issued object: enchant.Core
+ [/lang]
  * @type {String}
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
@@ -459,6 +459,7 @@ enchant.Event.INPUT_CHANGE = 'inputchange';
  [lang:en]
  * Event occurring when button input ends.
  * Issued object: enchant.Core, enchant.Scene
+ [/lang]
  * @type {String}
  */
 enchant.Event.INPUT_END = 'inputend';
@@ -603,13 +604,12 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
  [lang:ja]
  * aボタンが押された発生するイベント.
  * 発行するオブジェクト: enchant.Core, enchant.Scene
- * @type {String}
  [/lang]
  [lang:en]
  * Event occurring when a button is pushed.
  * Issued object: enchant.Core, enchant.Scene
- * @type {String}
  [/lang]
+ * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
@@ -617,13 +617,12 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
  [lang:ja]
  * aボタンが離された発生するイベント.
  * 発行するオブジェクト: enchant.Core, enchant.Scene
- * @type {String}
  [/lang]
  [lang:en]
  * Event occurring when a button is released.
  * Issued object: enchant.Core, enchant.Scene
- * @type {String}
  [/lang]
+ * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
@@ -645,13 +644,12 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
  [lang:ja]
  * bボタンが離された発生するイベント.
  * 発行するオブジェクト: enchant.Core, enchant.Scene
- * @type {String}
  [/lang]
  [lang:en]
  * Event occurring when b button is released.
  * Issued object: enchant.Core, enchant.Scene
- * @type {String}
  [/lang]
+ * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 
