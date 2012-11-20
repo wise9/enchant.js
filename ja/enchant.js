@@ -599,6 +599,80 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
  * aボタンが押された発生するイベント.
  * 発行するオブジェクト: enchant.Core, enchant.Scene
  * @type {String}
+ */
+enchant.Event.A_BUTTON_DOWN = 'abuttondown';
+
+/**
+ * aボタンが離された発生するイベント.
+ * 発行するオブジェクト: enchant.Core, enchant.Scene
+ * @type {String}
+ */
+enchant.Event.A_BUTTON_UP = 'abuttonup';
+
+/**
+ * bボタンが押された発生するイベント.
+ * 発行するオブジェクト: enchant.Core, enchant.Scene
+ * @type {String}
+ */
+enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
+
+/**
+ * bボタンが離された発生するイベント.
+ * 発行するオブジェクト: enchant.Core, enchant.Scene
+ * @type {String}
+ */
+enchant.Event.B_BUTTON_UP = 'bbuttonup';
+
+/**
+ * アクションがタイムラインに追加された時に発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
+
+/**
+ * アクションがタイムラインから削除された時に発行されるイベント
+ * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * @type {String}
+ */
+enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
+
+/**
+ * アクションが開始された時に発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_START = "actionstart";
+
+/**
+ * アクションが終了するときに発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_END = "actionend";
+
+/**
+ * アクションが1フレーム経過するときに発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_TICK = "actiontick";
+
+/**
+ * アクションが追加された時に、タイムラインに対して発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_ADDED = "actionadded";
+
+/**
+ * アクションが削除された時に、タイムラインに対して発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_REMOVED = "actionremoved";
+
+/**
+ * @scope enchant.EventTarget.prototype
+ */
+enchant.EventTarget = enchant.Class.create({
+    /**
+     * DOM Event風味の独自イベント実装を行ったクラス.
+     * ただしフェーズの概念はなし.
      * @constructs
      */
     initialize: function() {
@@ -676,7 +750,6 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 /**
  * @scope enchant.Core.prototype
  */
-
 (function() {
     var core;
 
@@ -729,9 +802,10 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
             if (!stage) {
                 stage = document.createElement('div');
                 stage.id = 'enchant-stage';
-                stage.style.width = window.innerWidth + 'px';
-                stage.style.height = window.innerHeight + 'px';
+//                stage.style.width = window.innerWidth + 'px';
+//                stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
+
                 if (document.body.firstChild) {
                     document.body.insertBefore(stage, document.body.firstChild);
                 } else {
@@ -760,6 +834,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
+
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
                 this._pageY = Math.round(window.scrollY + bounding.top);
@@ -977,13 +1052,46 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        // フォームじゃない
                         e.preventDefault();
                         if (!core.running) {
                             e.stopPropagation();
                         }
                     }
                 }, true);
+                core._touchEventTarget = null;
+                var _ontouchstart = function(e) {
+                    var core = enchant.Core.instance;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                    evt._initPosition(e.pageX, e.pageY);
+                    core._touchEventTarget = core.currentScene._determineEventTarget(evt);
+                    core._touchEventTarget.dispatchEvent(evt);
+                };
+                var _ontouchmove = function(e) {
+                    var evt;
+                    if (core._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        evt._initPosition(e.pageX, e.pageY);
+                        core._touchEventTarget.dispatchEvent(evt);
+                    }
+                };
+                var _ontouchend = function(e) {
+                    var evt;
+                    if (core._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        evt._initPosition(e.pageX, e.pageY);
+                        core._touchEventTarget.dispatchEvent(evt);
+                        core._touchEventTarget = null;
+                        core.currentScene._layers.Dom._touchEventTarget = null;
+                    }
+                };
+                if (enchant.ENV.TOUCH_ENABLED) {
+                    stage.addEventListener('touchstart', _ontouchstart, false);
+                    stage.addEventListener('touchmove', _ontouchmove, false);
+                    stage.addEventListener('touchend', _ontouchend, false);
+                }
+                stage.addEventListener('mousedown', _ontouchstart, false);
+                stage.addEventListener('mousemove', _ontouchmove, false);
+                stage.addEventListener('mouseup', _ontouchend, false);
             }
         },
         /**
@@ -1114,7 +1222,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 core._tick();
             }, 1000 / this.fps);
@@ -1138,7 +1246,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
             }
         },
         _tick: function() {
-            var now = Date.now();
+            var now = this.getTime();
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
@@ -1160,6 +1268,15 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+        },
+        getTime: function() {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }else if(window.performance && window.performance.webkitNow){
+                return window.performance.webkitNow();
+            }else{
+                return Date.now();
+            }
         },
         /**
          * アプリを停止する.
@@ -1193,7 +1310,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
             if (this._intervalID) {
                 return;
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 core._tick();
             }, 1000 / this.fps);
@@ -1311,7 +1428,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 
     /**
-     * find extension from path
+     * Get the file extension from a path
      * @param path
      * @return {*}
      */

@@ -614,6 +614,77 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
+ * Event occurring when a button is released.
+ * Issued object: enchant.Core, enchant.Scene
+ * @type {String}
+ */
+enchant.Event.A_BUTTON_UP = 'abuttonup';
+
+/**
+ * Event occurring when b button is pushed.
+ * Issued object: enchant.Core, enchant.Scene
+ * @type {String}
+ */
+enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
+
+/**
+ * Event occurring when b button is released.
+ * Issued object: enchant.Core, enchant.Scene
+ * @type {String}
+ */
+enchant.Event.B_BUTTON_UP = 'bbuttonup';
+
+/**
+ * アクションがタイムラインに追加された時に発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
+
+/**
+ * アクションがタイムラインから削除された時に発行されるイベント
+ * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * @type {String}
+ */
+enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
+
+/**
+ * アクションが開始された時に発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_START = "actionstart";
+
+/**
+ * アクションが終了するときに発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_END = "actionend";
+
+/**
+ * アクションが1フレーム経過するときに発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_TICK = "actiontick";
+
+/**
+ * アクションが追加された時に、タイムラインに対して発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_ADDED = "actionadded";
+
+/**
+ * アクションが削除された時に、タイムラインに対して発行されるイベント
+ * @type {String}
+ */
+enchant.Event.ACTION_REMOVED = "actionremoved";
+
+/**
+ * @scope enchant.EventTarget.prototype
+ */
+enchant.EventTarget = enchant.Class.create({
+    /**
+     * A class for an independent implementation of events
+     * similar to DOM Events.
+     * However, it does not include the phase concept.
      * @constructs
      */
     initialize: function() {
@@ -693,7 +764,6 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 /**
  * @scope enchant.Core.prototype
  */
-
 (function() {
     var core;
 
@@ -702,14 +772,14 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
-         * Class controlling core main loop, scene.
+         * A class which is controlling the cores main loop and scenes.
          *
-         * There can be only one instance, and when the constructor is executed
-         * with an instance present, the existing item will be overwritten. The existing instance
-         * can be accessed from enchant.Core.instance.
+         * There can be only one instance at a time, when the constructor is executed
+         * with an instance present, the existing instance will be overwritten. The existing instance
+         * can be accessed from {@link enchant.Core.instance}.
          *
-         * @param {Number} width screen width.
-         * @param {Number} height screen height.
+         * @param {Number} width The width of the core screen.
+         * @param {Number} height The height of the core screen.
          * @constructs
          * @extends enchant.EventTarget
          */
@@ -727,17 +797,17 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             core = enchant.Core.instance = this;
 
             /**
-             * Core screen width.
+             * The width of the core screen.
              * @type {Number}
              */
             this.width = width || 320;
             /**
-             * Core screen height.
+             * The height of the core screen.
              * @type {Number}
              */
             this.height = height || 320;
             /**
-             * Core display scaling.
+             * The scaling of the core rendering.
              * @type {Number}
              */
             this.scale = 1;
@@ -746,9 +816,10 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             if (!stage) {
                 stage = document.createElement('div');
                 stage.id = 'enchant-stage';
-                stage.style.width = window.innerWidth + 'px';
-                stage.style.height = window.innerHeight + 'px';
+//                stage.style.width = window.innerWidth + 'px';
+//                stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
+
                 if (document.body.firstChild) {
                     document.body.insertBefore(stage, document.body.firstChild);
                 } else {
@@ -777,6 +848,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
                     stage.removeChild(stage.firstChild);
                 }
                 stage.style.position = 'relative';
+
                 var bounding = stage.getBoundingClientRect();
                 this._pageX = Math.round(window.scrollX + bounding.left);
                 this._pageY = Math.round(window.scrollY + bounding.top);
@@ -789,27 +861,27 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             this._element = stage;
 
             /**
-             * Core frame rate.
+             * The frame rate of the core.
              * @type {Number}
              */
             this.fps = 30;
             /**
-             * Number of frames from core start.
+             * The amount of frames since the core was started.
              * @type {Number}
              */
             this.frame = 0;
             /**
-             * Core executability (valid or not).
+             * Indicates if the core can be executed.
              * @type {Boolean}
              */
             this.ready = null;
             /**
-             * Core execution state (valid or not).
+             * Indicates if the core is currently executed.
              * @type {Boolean}
              */
             this.running = false;
             /**
-             * Object saved as loaded image path key.
+             * Object which stores loaded objects with the path as key.
              * @type {Object.<String, Surface>}
              */
             this.assets = {};
@@ -829,18 +901,18 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
             this._scenes = [];
             /**
-             * Current Scene. Scene at top of Scene stack.
+             * The Scene which is currently displayed. This Scene is on top of Scene stack.
              * @type {enchant.Scene}
              */
             this.currentScene = null;
             /**
-             * Route Scene. Scene at bottom of Scene stack.
+             * The root Scene. The Scene at bottom of Scene stack.
              * @type {enchant.Scene}
              */
             this.rootScene = new enchant.Scene();
             this.pushScene(this.rootScene);
             /**
-             * Scene displayed during loading.
+             * The Scene which is getting displayed during loading.
              * @type {enchant.Scene}
              */
             this.loadingScene = new enchant.Scene();
@@ -879,7 +951,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             this._offsetY = 0;
 
             /**
-             * Object that saves input conditions for core.
+             * Object that saves the current input state for the core.
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
@@ -994,26 +1066,60 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
                 stage.addEventListener('mouseup', function(e) {
                     var tagName = (e.target.tagName).toLowerCase();
                     if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        // フォームじゃない
                         e.preventDefault();
                         if (!core.running) {
                             e.stopPropagation();
                         }
                     }
                 }, true);
+                core._touchEventTarget = null;
+                var _ontouchstart = function(e) {
+                    var core = enchant.Core.instance;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                    evt._initPosition(e.pageX, e.pageY);
+                    core._touchEventTarget = core.currentScene._determineEventTarget(evt);
+                    core._touchEventTarget.dispatchEvent(evt);
+                };
+                var _ontouchmove = function(e) {
+                    var evt;
+                    if (core._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        evt._initPosition(e.pageX, e.pageY);
+                        core._touchEventTarget.dispatchEvent(evt);
+                    }
+                };
+                var _ontouchend = function(e) {
+                    var evt;
+                    if (core._touchEventTarget) {
+                        evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        evt._initPosition(e.pageX, e.pageY);
+                        core._touchEventTarget.dispatchEvent(evt);
+                        core._touchEventTarget = null;
+                        core.currentScene._layers.Dom._touchEventTarget = null;
+                    }
+                };
+                if (enchant.ENV.TOUCH_ENABLED) {
+                    stage.addEventListener('touchstart', _ontouchstart, false);
+                    stage.addEventListener('touchmove', _ontouchmove, false);
+                    stage.addEventListener('touchend', _ontouchend, false);
+                }
+                stage.addEventListener('mousedown', _ontouchstart, false);
+                stage.addEventListener('mousemove', _ontouchmove, false);
+                stage.addEventListener('mouseup', _ontouchend, false);
             }
         },
         /**
-         * Performs file preload.
+         * Performs a file preload.
          *
-         * enchant is a file set to execute preload. It is loaded when
-         * Core#start is activated. When all files are loaded, load events are activated
-         * from Core objects. When an image file is from Core object assets properties,
-         * it will as a Surface object, or a Sound object for sound files,
-         * and in other cases it will be accessible as string.
+         * Sets files which are to be preloaded. When {@link enchant.Core#start} is called the
+         * actual loading takes place. When all files are loaded, a {@link enchant.Event.LOAD} event
+         * is dispatched from the Core object. Depending on the type of the file different objects will be
+         * created and stored in {@link enchant.Core#assets} Variable.
+         * When an image file is loaded, an {@link enchant.Surface} is created. If a sound file is loaded, an
+         * {@link enchant.Sound} object is created. Otherwise it will be accessible as a string.
          *
-         * In addition, because this Surface object used made with enchant.Surface.load,
-         * direct object manipulation is not possible. Refer to the items of enchant.Surface.load
+         * In addition, because this Surface object used made with {@link enchant.Surface.load},
+         * direct object manipulation is not possible. Refer to the items of {@link enchant.Surface.load}
          *
          * @example
          *   core.preload('player.gif');
@@ -1024,7 +1130,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
          *   };
          *   core.start();
          *
-         * @param {...String} assets Preload image path. Multiple settings possible.
+         * @param {...String} assets Path of images to be preloaded. Multiple settings possible.
          */
         preload: function(assets) {
             if (!(assets instanceof Array)) {
@@ -1033,9 +1139,9 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             [].push.apply(this._assets, assets);
         },
         /**
-         * File loading.
+         * Loads a file.
          *
-         * @param {String} asset Load file path.
+         * @param {String} asset File path of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
          */
         load: function(src, callback) {
@@ -1075,10 +1181,10 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             }
         },
         /**
-         * Begin core.
+         * Start the core.
          *
-         * Obeying the frame rate set in enchant.Core#fps, the frame in
-         * enchant.Core#currentScene will be updated. When a preloaded image is present,
+         * Obeying the frame rate set in {@link enchant.Core#fps}, the frame in
+         * {@link enchant.Core#currentScene} will be updated. If images to preload are present,
          * loading will begin and the loading screen will be displayed.
          */
         start: function() {
@@ -1131,7 +1237,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 core._tick();
             }, 1000 / this.fps);
@@ -1140,7 +1246,8 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
         /**
          * Begin core debug mode.
          *
-         * Core debug mode can be set to on even if enchant.Core.instance._debug flag is set to true.
+         * Core debug mode can be set to on even if enchant.Core.instance._debug
+         * flag is already set to true.
          */
         debug: function() {
             this._debug = true;
@@ -1155,7 +1262,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             }
         },
         _tick: function() {
-            var now = Date.now();
+            var now = this.getTime();
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
@@ -1178,11 +1285,20 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
         },
+        getTime: function() {
+            if (window.performance && window.performance.now) {
+                return window.performance.now();
+            }else if(window.performance && window.performance.webkitNow){
+                return window.performance.webkitNow();
+            }else{
+                return Date.now();
+            }
+        },
         /**
-         * Stops core.
+         * Stops the core.
          *
-         * The frame will not be updated, and player input will not be accepted.
-         * Core can be reopened in enchant.Core#start.
+         * The frame will not be updated, and player input will not be accepted anymore.
+         * Core can be restarted using {@link enchant.Core#start}.
          */
         stop: function() {
             if (this._intervalID) {
@@ -1192,10 +1308,10 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             this.running = false;
         },
         /**
-         * Stops core.
+         * Stops the core.
          *
-         * The frame will not be updated, and player input will not be accepted.
-         * Core can be reopened in enchant.Core#start.
+         * The frame will not be updated, and player input will not be accepted anymore.
+         * Core can be started again using {@link enchant.Core#start}.
          */
         pause: function() {
             if (this._intervalID) {
@@ -1204,13 +1320,13 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             }
         },
         /**
-         * Resumes core.
+         * Resumes the core.
          */
         resume: function() {
             if (this._intervalID) {
                 return;
             }
-            this.currentTime = Date.now();
+            this.currentTime = this.getTime();
             this._intervalID = window.setInterval(function() {
                 core._tick();
             }, 1000 / this.fps);
@@ -1218,14 +1334,14 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
         },
 
         /**
-         * Switch to new Scene.
+         * Switch to a new Scene.
          *
-         * Scene is controlled in stack, and the display order also obeys stack order.
-         * When enchant.Core#pushScene is executed, Scene can be brought to the top of stack.
-         * Frame will be updated to reflect Scene at the top of stack.
+         * Scenes are controlled using a stack, and the display order also obeys that stack order.
+         * When {@link enchant.Core#pushScene} is executed, the Scene can be brought to the top of stack.
+         * Frames will be updated in the Scene which is on the top of the stack.
          *
-         * @param {enchant.Scene} scene Switch to new Scene.
-         * @return {enchant.Scene} New Scene.
+         * @param {enchant.Scene} scene The new scene to be switched to.
+         * @return {enchant.Scene} The new Scene.
          */
         pushScene: function(scene) {
             this._element.appendChild(scene._element);
@@ -1237,10 +1353,11 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             return this._scenes.push(scene);
         },
         /**
-         * End current Scene, return to previous Scene.
+         * Ends the current Scene, return to the previous Scene.
          *
-         * Scene is controlled in stack, with display order obeying stack order.
-         * When enchant.Core#popScene is activated, the Scene at the top of the stack can be pulled out.
+         * Scenes are controlled using a stack, and the display order also obeys that stack order.
+         * When {@link enchant.Core#popScene} is executed, the Scene at the top of the stack
+         * will be removed and returned.
          *
          * @return {enchant.Scene} Ended Scene.
          */
@@ -1255,24 +1372,25 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             return this._scenes.pop();
         },
         /**
-         * Overwrite current Scene with separate Scene.
+         * Overwrites the current Scene with a new Scene.
          *
-         * enchant.Core#popScene, enchant.Core#pushScene are enacted simultaneously.
+         * {@link enchant.Core#popScene}, {@link enchant.Core#pushScene} are executed after
+         * each other to replace to current scene with the new scene.
          *
-         * @param {enchant.Scene} scene Replace Scene.
-         * @return {enchant.Scene} New Scene.
+         * @param {enchant.Scene} scene The new scene which will replace the previous scene.
+         * @return {enchant.Scene} The new Scene.
          */
         replaceScene: function(scene) {
             this.popScene();
             return this.pushScene(scene);
         },
         /**
-         * Delete Scene.
+         * Removes a Scene.
          *
-         * Deletes Scene from Scene stack.
+         * Removes a Scene from the Scene stack.
          *
-         * @param {enchant.Scene} scene Delete Scene.
-         * @return {enchant.Scene} Deleted Scene.
+         * @param {enchant.Scene} scene Scene to be removed.
+         * @return {enchant.Scene} The deleted Scene.
          */
         removeScene: function(scene) {
             if (this.currentScene === scene) {
@@ -1289,19 +1407,19 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
             }
         },
         /**
-         * Set key binding.
+         * Set a key binding.
          *
-         * Assigns key input to left, right, up, down, a, b button input.
+         * Maps an input key to an enchant.js left, right, up, down, a, b button.
          *
-         * @param {Number} key Key code that sets key bind.
-         * @param {String} button Assign button.
+         * @param {Number} key Key code for the button which will be bound.
+         * @param {String} button The enchant.js button (left, right, up, down, a, b).
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
         },
         /**
-         * get elapsed time from core.start is called
-         * @return {Number} elapsed time (seconds)
+         * Get the elapsed core time (not actual) from when core.start was called.
+         * @return {Number} The elapsed time (seconds)
          */
         getElapsedTime: function() {
             return this.frame / this.fps;
@@ -1328,7 +1446,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 
     /**
-     * find extension from path
+     * Get the file extension from a path
      * @param path
      * @return {*}
      */
@@ -1346,7 +1464,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
     };
 
     /**
-     * Current Core instance.
+     * The Current Core instance.
      * @type {enchant.Core}
      * @static
      */
