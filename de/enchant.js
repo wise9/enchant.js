@@ -3314,7 +3314,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var __onchildadded = function(e) {
             var child = e.node;
             var self = e.target;
-            var layer = self._cvsCache.layer;
+            var layer = self.scene._layers.Canvas;
             if (child.childNodes) {
                 child.addEventListener('childadded', __onchildadded);
                 child.addEventListener('childremoved', __onchildremoved);
@@ -3327,7 +3327,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var __onchildremoved = function(e) {
             var child = e.node;
             var self = e.target;
-            var layer = self._cvsCache.layer;
+            var layer = self.scene._layers.Canvas;
             if (child.childNodes) {
                 child.removeEventListener('childadded', __onchildadded);
                 child.removeEventListener('childremoved', __onchildremoved);
