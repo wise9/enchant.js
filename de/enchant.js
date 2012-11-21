@@ -2967,7 +2967,14 @@ enchant.DomManager = enchant.Class.create({
         matrix.multiplyVec(dest, vec, vec);
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
-        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' + dest + ')';
+        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' +
+            dest[0].toFixed(10) + ',' +
+            dest[1].toFixed(10) + ',' +
+            dest[2].toFixed(10) + ',' +
+            dest[3].toFixed(10) + ',' +
+            dest[4].toFixed(10) + ',' +
+            dest[5].toFixed(10) +
+        ')';
         this.domRender();
     },
     domRender: function() {
