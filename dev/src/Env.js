@@ -1,6 +1,7 @@
 /**
  [lang:ja]
- * 環境変数.
+ * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
+ * @type {Object}
  [/lang]
  [lang:en]
  * Environment variable.
@@ -84,7 +85,10 @@ enchant.ENV = {
     /**
      * @type {Boolean}
      */
-    SOUND_ENABLED_IN_MOBILE_SAFARI: false,
+    SOUND_ENABLED_ON_MOBILE_SAFARI: false,
+    /**
+     * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
+     */
     USE_WEBAUDIO: true,
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
