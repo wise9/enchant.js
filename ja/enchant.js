@@ -2988,18 +2988,23 @@ enchant.Matrix = enchant.Class.create({
 });
 enchant.Matrix.instance = new enchant.Matrix();
 
-
 enchant.DetectColorManager = enchant.Class.create({
     initialize: function(reso, max) {
         this.reference = [];
-        this.detectColorNum = 0;
         this.colorResolution = reso || 16;
         this.max = max || 1;
+        this.capacity = Math.pow(this.colorResolution, 3);
+        for (var i = 1, l = this.capacity; i < l; i++) {
+            this.reference[i] = null;
+        }
     },
     attachDetectColor: function(sprite) {
-        this.detectColorNum += 1;
-        this.reference[this.detectColorNum] = sprite;
-        return this._createNewColor();
+        var i = this.reference.indexOf(null);
+        if (i === -1) {
+            i = 1;
+        }
+        this.reference[i] = sprite;
+        return this._getColor(i);
     },
     detachDetectColor: function(sprite) {
         var i = this.reference.indexOf(sprite);
@@ -3007,14 +3012,14 @@ enchant.DetectColorManager = enchant.Class.create({
             this.reference[i] = null;
         }
     },
-    _createNewColor: function() {
-        var n = this.detectColorNum;
+    _getColor: function(n) {
         var C = this.colorResolution;
         var d = C / this.max;
         return [
             parseInt((n / C / C) % C, 10) / d,
             parseInt((n / C) % C, 10) / d,
-            parseInt(n % C, 10) / d, 1.0
+            parseInt(n % C, 10) / d,
+            1.0
         ];
     },
     _decodeDetectColor: function(color) {
