@@ -37,7 +37,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._buttonMode = null;
 
         this._style = {};
-
+        this.__styleStatus = {};
 
         /**
          [lang:ja]
