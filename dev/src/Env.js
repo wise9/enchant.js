@@ -75,6 +75,18 @@ enchant.ENV = {
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
     ],
+    /**
+     * Keybind Table.
+     * You can use 'left', 'up', 'right', 'down', 'a', 'b' for preset event.
+     * @example
+     * enchant.ENV.KEY_BIND_TABLE = {
+     *    37: 'left',
+     *    38: 'up',
+     *    39: 'right',
+     *    40: 'down',
+     *    32: 'a', //-> use 'space' key as 'a button'
+     * }
+     */
     KEY_BIND_TABLE: {
         37: 'left',
         38: 'up',
