@@ -8,7 +8,7 @@ Bear = enchant.Class.create(Sprite, {
         this.addEventListener('enterframe', function() {
             if (this.x < -320 || 640 < this.x ||
                 this.y < -320 || 640 < this.y) {
-                this.parentNode.removeChild(this);
+                this.scene.removeChild(this);
             }
         });
     }
@@ -21,7 +21,7 @@ Player = enchant.Class.create(Bear, {
     onenterframe: function() {
         if (this.age % 15 == 0) {
             var bullet = new Bullet(this.x + 8, this.y - 8);
-            this.parentNode.addChild(bullet);
+            this.scene.addChild(bullet);
         }
     }
 });
@@ -61,26 +61,23 @@ Bullet = enchant.Class.create(Sprite, {
         this.addEventListener('enterframe', function() {
             if (this.x < -320 || 640 < this.x ||
                 this.y < -320 || 640 < this.y) {
-                this.parentNode.removeChild(this);
-                //this.remove();
+                this.scene.removeChild(this);
             }
         });
     }
 });
 
-enchant();
-
 window.onload = function() {
     var game = new Game(320, 320);
     game.preload('chara1.png', 'icon0.png');
     game.onload = function() {
+        var info = new Label('');
+        game.rootScene.addChild(info);
+
         var player = new Player();
         player.x = 144;
         player.y = 144;
-        var info = new Label('');
-
         game.rootScene.addChild(player);
-        game.rootScene.addChild(info);
 
         var touchX, touchY;
         touchX = touchY = 160;
@@ -98,13 +95,12 @@ window.onload = function() {
         });
 
         game.rootScene.addEventListener('enterframe', function() {
-            info.text = '';
-            info.text += 'Entity: ' + Entity.collection.length;
-            info.text += 'Sprite: ' + Sprite.collection.length;
-            info.text += 'Label: ' + Label.collection.length;
-            info.text += 'Enemy: ' + Enemy.collection.length;
-            info.text += 'SineEnemy: ' + SineEnemy.collection.length;
-            info.text += 'Bullet: ' + Bullet.collection.length;
+            info.text = 'Entity: ' + Entity.collection.length + '<br/>' +
+                'Sprite: ' + Sprite.collection.length + '<br/>' +
+                'Label: ' + Label.collection.length + '<br/>' +
+                'Enemy: ' + Enemy.collection.length + '<br/>' +
+                'SineEnemy: ' + SineEnemy.collection.length + '<br/>' +
+                'Bullet: ' + Bullet.collection.length;
             if (game.frame % 30 == 0) {
                 this.addChild(new (Math.random() > 0.5 ? Enemy : SineEnemy)());
             }
@@ -114,6 +110,6 @@ window.onload = function() {
                 set[i][1].remove();
             }
         });
-};
+    };
     game.start();
 };
