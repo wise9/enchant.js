@@ -1,4 +1,4 @@
-if (webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
+if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
 
     enchant.Game._loadFuncs['mp3'] =
     enchant.Game._loadFuncs['aac'] =
@@ -21,10 +21,10 @@ if (webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
         },
         play: function(dup) {
             var actx = enchant.Sound.audioContext;
-            if (this._state == 2) {
+            if (this._state === 2) {
                 this.src.connect(this.connectTarget);
             } else {
-                if (this._state == 1 && !dup) {
+                if (this._state === 1 && !dup) {
                     this.src.disconnect(this.connectTarget);
                 }
                 this.src = actx.createBufferSource();

@@ -2,7 +2,7 @@ var game;
 module('Group', {
 	setup: function () {
 		enchant();
-		game = new Game(320, 320);
+		game = new Core(320, 320);
 	},
 	teardown: function () {
 	}

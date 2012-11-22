@@ -1,7 +1,7 @@
 module('gl.enchant.js', {
     setup : function() {
         enchant();
-        // var game = new Game();
+        // var game = new Core();
     },
     teardown : function() {
 

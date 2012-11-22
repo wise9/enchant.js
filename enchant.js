@@ -369,11 +369,13 @@ enchant.ENV = {
      * @type {Boolean}
      */
     SOUND_ENABLED_IN_MOBILE_SAFARI: false,
+    USE_WEBAUDIO: true,
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
      */
     USE_ANIMATION: true
 };
+
 /**
  * @scope enchant.Event.prototype
  */
@@ -3976,182 +3978,298 @@ enchant.Surface.load = function(src, callback) {
     return surface;
 };
 
-/**
- * @scope enchant.Sound.prototype
- */
-enchant.Sound = enchant.Class.create(enchant.EventTarget, {
+if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
+
+    enchant.Game._loadFuncs['mp3'] =
+    enchant.Game._loadFuncs['aac'] =
+    enchant.Game._loadFuncs['m4a'] =
+    enchant.Game._loadFuncs['wav'] =
+    enchant.Game._loadFuncs['ogg'] = function(src, callback, ext) {
+        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext, callback);
+    };
+
+    enchant.Sound = enchant.Class.create(enchant.EventTarget, {
+        initialize: function() {
+            var actx = enchant.Sound.audioContext;
+            enchant.EventTarget.call(this);
+            this.src = actx.createBufferSource();
+            this.buffer = null;
+            this._volume = 1;
+            this._currentTime = 0;
+            this._state = 0;
+            this.connectTarget = enchant.Sound.destination;
+        },
+        play: function(dup) {
+            var actx = enchant.Sound.audioContext;
+            if (this._state === 2) {
+                this.src.connect(this.connectTarget);
+            } else {
+                if (this._state === 1 && !dup) {
+                    this.src.disconnect(this.connectTarget);
+                }
+                this.src = actx.createBufferSource();
+                this.src.buffer = this.buffer;
+                this.src.gain.value = this._volume;
+                this.src.connect(this.connectTarget);
+                this.src.noteOn(0);
+            }
+            this._state = 1;
+        },
+        pause: function() {
+            var actx = enchant.Sound.audioContext;
+            this.src.disconnect(this.connectTarget);
+            this._state = 2;
+        },
+        stop: function() {
+            this.src.noteOff(0);
+            this._state = 0;
+        },
+        clone: function() {
+            var sound = new enchant.Sound();
+            sound.buffer = this.buffer;
+            return sound;
+        },
+        dulation: {
+            get: function() {
+                if (this.buffer) {
+                    return this.buffer.dulation;
+                } else {
+                    return 0;
+                }
+            }
+        },
+        volume: {
+            get: function() {
+                return this._volume;
+            },
+            set: function(volume) {
+                volume = Math.max(0, Math.min(1, volume));
+                this._volume = volume;
+                if (this.src) {
+                    this.src.gain.value = volume;
+                }
+            }
+        },
+        currentTime: {
+            get: function() {
+                window.console.log('currentTime is not allowed');
+                return this._currentTime;
+            },
+            set: function(time) {
+                window.console.log('currentTime is not allowed');
+                this._currentTime = time;
+            }
+        }
+    });
+
+    enchant.Sound.load = function(src, type, callback) {
+        var actx = enchant.Sound.audioContext;
+        var xhr = new XMLHttpRequest();
+        var sound = new enchant.Sound();
+        var mimeType = 'audio/' + enchant.Game.findExt(src);
+        // TODO check Audio.canPlayType(mimeType)
+        xhr.responseType = 'arraybuffer';
+        xhr.open('GET', src, true);
+        xhr.onload = function() {
+            actx.decodeAudioData(
+                xhr.response,
+                function(buffer) {
+                    sound.buffer = buffer;
+                    callback();
+                },
+                function(error) {
+                    // TODO change to enchant Error
+                    window.console.log(error);
+                }
+            );
+        };
+        xhr.send(null);
+        return sound;
+    };
+
+    enchant.Sound.audioContext = new webkitAudioContext();
+    enchant.Sound.destination = enchant.Sound.audioContext.destination;
+
+} else {
+
     /**
-     * Class to wrap audio elements.
-     *
-     * Safari, Chrome, Firefox, Opera, and IE all play MP3 files
-     * (Firefox and Opera play via Flash). WAVE files can be played on
-     * Safari, Chrome, Firefox, and Opera. When the browser is not compatible with
-     * the used codec the file will not play.
-     *
-     * Instances are created not via constructor but via {@link enchant.Sound.load}.
-     * @constructs
+     * @scope enchant.Sound.prototype
      */
-    initialize: function() {
-        enchant.EventTarget.call(this);
+    enchant.Sound = enchant.Class.create(enchant.EventTarget, {
         /**
-         * Sound file duration (seconds).
+         * Class to wrap audio elements.
+         *
+         * Safari, Chrome, Firefox, Opera, and IE all play MP3 files
+         * (Firefox and Opera play via Flash). WAVE files can be played on
+         * Safari, Chrome, Firefox, and Opera. When the browser is not compatible with
+         * the used codec the file will not play.
+         *
+         * Instances are created not via constructor but via {@link enchant.Sound.load}.
+         * @constructs
+         */
+        initialize: function() {
+            enchant.EventTarget.call(this);
+            /**
+             * Sound file duration (seconds).
+             * @type {Number}
+             */
+            this.duration = 0;
+            throw new Error("Illegal Constructor");
+        },
+        /**
+         * Begin playing.
+         */
+        play: function() {
+            if (this._element){
+                this._element.play();
+            }
+        },
+        /**
+         * Pause playback.
+         */
+        pause: function() {
+            if (this._element){
+                this._element.pause();
+            }
+        },
+        /**
+         * Stop playing.
+         */
+        stop: function() {
+            this.pause();
+            this.currentTime = 0;
+        },
+        /**
+         * Create a copy of this Sound object.
+         * @return {enchant.Sound} Copied Sound.
+         */
+        clone: function() {
+            var clone;
+            if (this._element instanceof Audio) {
+                clone = Object.create(enchant.Sound.prototype, {
+                    _element: { value: this._element.cloneNode(false) },
+                    duration: { value: this.duration }
+                });
+            } else if (enchant.ENV.USE_FLASH_SOUND) {
+                return this;
+            } else {
+                clone = Object.create(enchant.Sound.prototype);
+            }
+            enchant.EventTarget.call(clone);
+            return clone;
+        },
+        /**
+         * Current playback position (seconds).
          * @type {Number}
          */
-        this.duration = 0;
-        throw new Error("Illegal Constructor");
-    },
-    /**
-     * Begin playing.
-     */
-    play: function() {
-        if (this._element){
-            this._element.play();
-        }
-    },
-    /**
-     * Pause playback.
-     */
-    pause: function() {
-        if (this._element){
-            this._element.pause();
-        }
-    },
-    /**
-     * Stop playing.
-     */
-    stop: function() {
-        this.pause();
-        this.currentTime = 0;
-    },
-    /**
-     * Create a copy of this Sound object.
-     * @return {enchant.Sound} Copied Sound.
-     */
-    clone: function() {
-        var clone;
-        if (this._element instanceof Audio) {
-            clone = Object.create(enchant.Sound.prototype, {
-                _element: { value: this._element.cloneNode(false) },
-                duration: { value: this.duration }
-            });
-        } else if (enchant.ENV.USE_FLASH_SOUND) {
-            return this;
-        } else {
-            clone = Object.create(enchant.Sound.prototype);
-        }
-        enchant.EventTarget.call(clone);
-        return clone;
-    },
-    /**
-     * Current playback position (seconds).
-     * @type {Number}
-     */
-    currentTime: {
-        get: function() {
-            return this._element ? this._element.currentTime : 0;
+        currentTime: {
+            get: function() {
+                return this._element ? this._element.currentTime : 0;
+            },
+            set: function(time) {
+                if (this._element){
+                    this._element.currentTime = time;
+                }
+            }
         },
-        set: function(time) {
-            if (this._element){
-                this._element.currentTime = time;
+        /**
+         * Volume. 0 (muted) ～ 1 (full volume).
+         * @type {Number}
+         */
+        volume: {
+            get: function() {
+                return this._element ? this._element.volume : 1;
+            },
+            set: function(volume) {
+                if (this._element){
+                    this._element.volume = volume;
+                }
             }
         }
-    },
+    });
+
     /**
-     * Volume. 0 (muted) ～ 1 (full volume).
-     * @type {Number}
+     * Loads an audio file and creates Sound object.
+     *
+     * @param {String} src Path of the audio file to be loaded.
+     * @param {String} [type] MIME Type of the audio file.
+     * @static
      */
-    volume: {
-        get: function() {
-            return this._element ? this._element.volume : 1;
-        },
-        set: function(volume) {
-            if (this._element){
-                this._element.volume = volume;
+    enchant.Sound.load = function(src, type) {
+        if (type == null) {
+            var ext = enchant.Game.findExt(src);
+            if (ext) {
+                type = 'audio/' + ext;
+            } else {
+                type = '';
             }
         }
-    }
-});
+        type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
 
-/**
- * Loads an audio file and creates Sound object.
- *
- * @param {String} src Path of the audio file to be loaded.
- * @param {String} [type] MIME Type of the audio file.
- * @static
- */
-enchant.Sound.load = function(src, type) {
-    if (type == null) {
-        var ext = enchant.Core.findExt(src);
-        if (ext) {
-            type = 'audio/' + ext;
-        } else {
-            type = '';
-        }
-    }
-    type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
-
-    var sound = Object.create(enchant.Sound.prototype);
-    enchant.EventTarget.call(sound);
-    var audio = new Audio();
-    if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
-        enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
-        window.setTimeout(function() {
-            sound.dispatchEvent(new enchant.Event('load'));
-        }, 0);
-    } else {
-        if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
-            audio.src = src;
-            audio.load();
-            audio.autoplay = false;
-            audio.onerror = function() {
-                throw new Error('Cannot load an asset: ' + audio.src);
-            };
-            audio.addEventListener('canplaythrough', function() {
-                sound.duration = audio.duration;
-                sound.dispatchEvent(new enchant.Event('load'));
-            }, false);
-            sound._element = audio;
-        } else if (type === 'audio/mpeg') {
-            var embed = document.createElement('embed');
-            var id = 'enchant-audio' + enchant.Core.instance._soundID++;
-            embed.width = embed.height = 1;
-            embed.name = id;
-            embed.src = 'sound.swf?id=' + id + '&src=' + src;
-            embed.allowscriptaccess = 'always';
-            embed.style.position = 'absolute';
-            embed.style.left = '-1px';
-            sound.addEventListener('load', function() {
-                Object.defineProperties(embed, {
-                    currentTime: {
-                        get: function() {
-                            return embed.getCurrentTime();
-                        },
-                        set: function(time) {
-                            embed.setCurrentTime(time);
-                        }
-                    },
-                    volume: {
-                        get: function() {
-                            return embed.getVolume();
-                        },
-                        set: function(volume) {
-                            embed.setVolume(volume);
-                        }
-                    }
-                });
-                sound._element = embed;
-                sound.duration = embed.getDuration();
-            });
-            enchant.Core.instance._element.appendChild(embed);
-            enchant.Sound[id] = sound;
-        } else {
+        var sound = Object.create(enchant.Sound.prototype);
+        enchant.EventTarget.call(sound);
+        var audio = new Audio();
+        if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
+            enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
             window.setTimeout(function() {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, 0);
+        } else {
+            if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
+                audio.src = src;
+                audio.load();
+                audio.autoplay = false;
+                audio.onerror = function() {
+                    throw new Error('Cannot load an asset: ' + audio.src);
+                };
+                audio.addEventListener('canplaythrough', function() {
+                    sound.duration = audio.duration;
+                    sound.dispatchEvent(new enchant.Event('load'));
+                }, false);
+                sound._element = audio;
+            } else if (type === 'audio/mpeg') {
+                var embed = document.createElement('embed');
+                var id = 'enchant-audio' + enchant.Game.instance._soundID++;
+                embed.width = embed.height = 1;
+                embed.name = id;
+                embed.src = 'sound.swf?id=' + id + '&src=' + src;
+                embed.allowscriptaccess = 'always';
+                embed.style.position = 'absolute';
+                embed.style.left = '-1px';
+                sound.addEventListener('load', function() {
+                    Object.defineProperties(embed, {
+                        currentTime: {
+                            get: function() {
+                                return embed.getCurrentTime();
+                            },
+                            set: function(time) {
+                                embed.setCurrentTime(time);
+                            }
+                        },
+                        volume: {
+                            get: function() {
+                                return embed.getVolume();
+                            },
+                            set: function(volume) {
+                                embed.setVolume(volume);
+                            }
+                        }
+                    });
+                    sound._element = embed;
+                    sound.duration = embed.getDuration();
+                });
+                enchant.Game.instance._element.appendChild(embed);
+                enchant.Sound[id] = sound;
+            } else {
+                window.setTimeout(function() {
+                    sound.dispatchEvent(new enchant.Event('load'));
+                }, 0);
+            }
         }
-    }
-    return sound;
-};
+        return sound;
+    };
+
+}
 
 
 /**

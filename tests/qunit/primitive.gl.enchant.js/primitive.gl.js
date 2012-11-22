@@ -15,7 +15,7 @@ if (document.createElement('canvas').getContext('experimental-webgl')) {
      * BillboardAnimation#frame
      */
     test('BillboardAnimation#frame', function() {
-        var game = new Game();
+        var game = new Core();
         var scene = new Scene3D();
         var ba = new BillboardAnimation();
         scene.addChild(ba);

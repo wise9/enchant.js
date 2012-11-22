@@ -119,6 +119,7 @@ module.exports = function(grunt) {
                 },
                 globals: {
                     enchant: true,
+                    webkitAudioContext: true,
                     DocumentFragment: true,
                     WebGLBuffer: true,
                     gl: true,

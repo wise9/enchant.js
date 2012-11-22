@@ -10,10 +10,10 @@ function findElementWithId(id) {
 module('Entity', {
 	setup: function () {
 		enchant();
-		var game = new Game(320, 320);
+		var game = new Core(320, 320);
 	},
 	teardown: function () {
-		// Gameインスタンスを破棄したいのだがそんな処理は無い様子
+		// Coreインスタンスを破棄したいのだがそんな処理は無い様子
 	}
 });
 
@@ -28,7 +28,7 @@ test('Entity.frame issue 14', function() {
 
     try{
         sprite.frame = 0;
-    	sprite.image = enchant.Game.instance.assets['start.png'];
+    	sprite.image = enchant.Core.instance.assets['start.png'];
     }catch(e){
         error = e;
     }

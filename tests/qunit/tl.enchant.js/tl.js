@@ -1,7 +1,7 @@
 module('tl.enchant.js', {
     setup: function() {
         enchant();
-        var game = new Game();
+        var game = new Core();
         var sprite = new Sprite(32, 32);
         sprite.moveTo(0, 0);
         game.rootScene.addChild(sprite);
@@ -12,7 +12,7 @@ module('tl.enchant.js', {
 });
 
 test('tl.frameBased', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
 
     equal(sprite.tl.isFrameBased, true);
     sprite.tl.setFrameBased();
@@ -24,7 +24,7 @@ test('tl.frameBased', function() {
 });
 
 test('tl.delay.then', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     var then = false;
     sprite.tl.delay(30).then(function() {
         then = true;
@@ -44,7 +44,7 @@ test('tl.delay.then', function() {
 });
 
 test('tl.tween', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.moveTo(320, 320, 30);
     equal(sprite.x, 0);
     equal(sprite.y, 0);
@@ -62,7 +62,7 @@ test('tl.tween', function() {
 
 
 test('tl.tween', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.moveTo(320, 320, 30);
     equal(sprite.x, 0);
     equal(sprite.y, 0);
@@ -80,7 +80,7 @@ test('tl.tween', function() {
 
 
 test('tl.tween (minus)', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
 
     sprite.moveTo(200, 0);
     sprite.tl.moveBy(-200, 0, 8);
@@ -95,7 +95,7 @@ test('tl.tween (minus)', function() {
 
 
 test('tl.fadeOut', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.fadeOut(10);
     equal(sprite.opacity, 1);
     for (var i = 0; i < 10 - 1; i++) {
@@ -111,7 +111,7 @@ test('tl.fadeOut', function() {
 /* time based testing */
 
 test('tl.timebased.delay.then', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.setTimeBased();
     var then = false;
     sprite.tl.delay(1000).then(function() {
@@ -137,7 +137,7 @@ test('tl.timebased.delay.then', function() {
 });
 
 test('tl.timebased.tween', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.setTimeBased();
     sprite.tl.moveTo(320, 320, 1000);
     equal(sprite.x, 0);
@@ -164,7 +164,7 @@ test('tl.timebased.tween', function() {
 
 
 test('tl.timebased.tween (minus)', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.setTimeBased();
     sprite.moveTo(200, 0);
     sprite.tl.moveBy(-200, 0, 800);
@@ -185,7 +185,7 @@ test('tl.timebased.tween (minus)', function() {
 
 
 test('tl.timebased.fadeOut', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.setTimeBased();
     sprite.tl.fadeOut(100);
     equal(sprite.opacity, 1);
@@ -206,7 +206,7 @@ test('tl.timebased.fadeOut', function() {
 
 
 test('tl.timebased.tween (framebased with elapsed)', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.moveTo(320, 320, 30);
     equal(sprite.x, 0);
     equal(sprite.y, 0);
@@ -225,7 +225,7 @@ test('tl.timebased.tween (framebased with elapsed)', function() {
 });
 
 test('tl.timebased.parallel (random time)', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.moveTo(320, 320, 2000).and().scaleTo(100, 2000);
     sprite.tl.setTimeBased();
     equal(sprite.x, 0);
@@ -251,7 +251,7 @@ test('tl.timebased.parallel (random time)', function() {
 });
 
 test('tl.parallel (random time)', function() {
-    var sprite = enchant.Game.instance.rootScene.childNodes[0];
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.moveTo(100, 100, 20).and().scaleTo(100, 20);
     equal(sprite.x, 0);
     equal(sprite.y, 0);
