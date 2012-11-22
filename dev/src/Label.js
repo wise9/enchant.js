@@ -20,7 +20,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 
         this.width = 300;
         this.font = '14px serif';
-        this.text = text;
+        this.text = text || '';
         this.textAlign = 'left';
     },
     /**
