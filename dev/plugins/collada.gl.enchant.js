@@ -515,7 +515,6 @@ if (enchant.gl !== undefined) {
                 return table;
             },
             getAnimationMatrixFromOneAnimationNode: function(Animation, libAnimationClips, flag) {
-                console.log(this.sid);
                 var core = enchant.Core.instance;
                 var rotation = this.getRotationMatrix();
                 var translation = this.getTranslationMatrix();
@@ -632,11 +631,12 @@ if (enchant.gl !== undefined) {
                     for (var ackey in libAnimationClips) {
                         if (libAnimationClips[ackey].urls.indexOf(key) > -1 && flag) {
                             length = 0;
-                        } else if (libAnimations[key].animations.length > 0) {
-                            var child = this.getAnimationMatrixesLocal(libAnimations[key].animations, libAnimationClips, true);
-                            for (var ckey in child) {
-                                animationMatrixes[ckey] = child[ckey];
-                            }
+                        } 
+                    }
+                    if (libAnimations[key].animations.length > 0 && length > 0) {
+                        var child = this.getAnimationMatrixesLocal(libAnimations[key].animations, libAnimationClips, true);
+                        for (var ckey in child) {
+                            animationMatrixes[ckey] = child[ckey];
                         }
                     }
                 }
@@ -714,9 +714,19 @@ if (enchant.gl !== undefined) {
                     var urls = libAnimationClips[ackey].urls;
                     animationMatrixClips[ackey] = [];
                     for (var ui = 0, ul = urls.length; ui < ul; ui++) {
-                        var child = this.getNode()[libAnimations[urls[ui]].channels[0].target.split('/')[0]].getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
+                        var child = [];
+                        if (libAnimations[urls[ui]].channels[0]) {
+                            child = this.getNode()[libAnimations[urls[ui]].channels[0].target.split('/')[0]].getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
+                        }
+                        var child2 = [];
+                        if (libAnimations[urls[ui]].animations[0]) {
+                            child2 = this.getAnimationMatrixesLocal(libAnimations[urls[ui]].animations, libAnimationClips, true);
+                        }
                         for (var l in child) {
                             animationMatrixClips[ackey][l] = child[l];
+                        }
+                        for (l in child2) {
+                            animationMatrixClips[ackey][l] = child2[l];
                         }
                     }
                 }
@@ -1146,7 +1156,7 @@ if (enchant.gl !== undefined) {
                 return pose;
             },
             createPoses: function(node, poses, lib) {
-                var matrix = node.getAnimationMatrixesLocal(lib['animations'], lib['animation_clips'], false);
+                var matrix = node.getAnimationMatrixesLocal(lib['animations'], lib['animation_clips'], true);
                 var length = 0;
                 for (var k in matrix) {
                     poses[k] = new enchant.gl.KeyFrameManager();
@@ -1163,12 +1173,10 @@ if (enchant.gl !== undefined) {
             },
             createPosesClips: function(node, poseclips, lib) {
                 var matrixclips = node.getAnimationMatrixesLocalFromAnimationClips(lib['animations'],lib['animation_clips']);
-                console.log(matrixclips);
                 var length = [];
                 var core = enchant.Core.instance;
                 for (var pkey in matrixclips) {
                     length[pkey] = 0;
-                    console.log(pkey);
                     var matrix = matrixclips[pkey];
                     poseclips[pkey] = [];
                     for (var mkey in matrix) {
@@ -1191,7 +1199,6 @@ if (enchant.gl !== undefined) {
                         length[pkey] = Math.max(poseclips[pkey][mkey].length, length[pkey]);
                     }
                 }
-                console.log(length);
                 return length;
             },
             initSpriteTexture: function(node, lib, triangles) {
@@ -1351,7 +1358,7 @@ if (enchant.gl !== undefined) {
                         }
                     }
                     poses = [];
-                    var poselength = this.createPoses(node, poses, this.lib);
+                    //var poselength = this.createPoses(node, poses, this.lib);
                     //if (poselength > 0) {
                         //sprite.addEventListener('enterframe', function() {
                             //var currentPose = this.getPose(poses, poselength)[node.sid];
