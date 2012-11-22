@@ -82,8 +82,13 @@ enchant.DomManager = enchant.Class.create({
         var oy = (typeof node._originY === 'number') ? node._originY : node.height / 2 || 0;
         var vec = [ ox, oy ];
         matrix.multiplyVec(dest, vec, vec);
+        
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
+        if(node.parentNode && !(node instanceof enchant.Group)) {
+        	node._offsetX += node.parentNode._offsetX;
+        	node._offsetY += node.parentNode._offsetY;
+        }
         this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' +
             dest[0].toFixed(10) + ',' +
             dest[1].toFixed(10) + ',' +
