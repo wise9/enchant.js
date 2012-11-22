@@ -1818,6 +1818,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.dispatchEvent(e);
             core.dispatchEvent(e);
         });
+
+        this.enableCollection();
     },
     /**
      * The width of the Entity.
@@ -3318,8 +3320,8 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
 
         touch.forEach(function(type) {
             this.addEventListener(type, function(e) {
-                if (this.scene) {
-                    this.scene.dispatchEvent(e);
+                if (this._scene) {
+                    this._scene.dispatchEvent(e);
                 }
             });
         }, this);
@@ -3475,8 +3477,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
         touch.forEach(function(type) {
             this.addEventListener(type, function(e) {
-                if (this.scene) {
-                    this.scene.dispatchEvent(e);
+                if (this._scene) {
+                    this._scene.dispatchEvent(e);
                 }
             });
         }, this);
@@ -3484,7 +3486,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var __onchildadded = function(e) {
             var child = e.node;
             var self = e.target;
-            var layer = self.scene._layers.Canvas;
+            var layer;
+            if (self instanceof enchant.CanvasLayer) {
+                layer = self._scene._layers.Canvas;
+            } else {
+                layer = self.scene._layers.Canvas;
+            }
             if (child.childNodes) {
                 child.addEventListener('childadded', __onchildadded);
                 child.addEventListener('childremoved', __onchildremoved);
@@ -3497,7 +3504,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var __onchildremoved = function(e) {
             var child = e.node;
             var self = e.target;
-            var layer = self.scene._layers.Canvas;
+            var layer;
+            if (self instanceof enchant.CanvasLayer) {
+                layer = self._scene._layers.Canvas;
+            } else {
+                layer = self.scene._layers.Canvas;
+            }
             if (child.childNodes) {
                 child.removeEventListener('childadded', __onchildadded);
                 child.removeEventListener('childremoved', __onchildremoved);
@@ -3792,7 +3804,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._element.appendChild(element);
             this._layerPriority.push(type);
         }
-        layer.scene = this;
+        layer._scene = this;
     },
     _determineEventTarget: function(e) {
         var layer, target;
@@ -3818,6 +3830,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._layers.Canvas.insertBefore(child, next);
             child._layer = this._layers.Canvas;
         }
+        child.parentNode = this;
     },
     _onchildremoved: function(e) {
         var child = e.node;
