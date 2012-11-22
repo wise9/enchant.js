@@ -1,7 +1,6 @@
 /**
  [lang:ja]
- * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
- * @type {Object}
+ * 環境変数.
  [/lang]
  [lang:en]
  * Environment variable.
@@ -57,8 +56,9 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Will Use Flash instead of native Audio class?
-     * @type {String}
+     * Determines if for current browser Flash should be used to play 
+     * sound instead of the native audio class.
+     * @type {Boolean} True, if flash should be used.
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;

@@ -218,7 +218,31 @@ enchant.Class = function(superclass, definition) {
  *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
  *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
  *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
- *          this.image = game.assets['ball.gif'];
+ *          this.image = core.assets['ball.gif'];
+ *       }
+ *   });
+ *
+ * @param {Function} [superclass] The class from which the
+ * new class will inherit the class definition.
+ * @param {*} [definition] Class definition.
+ * Erstellt eine neue Klasse
+ *
+ * Wenn eine Klasse definiert wird, die von einer anderen Klasse erbt, wird der Konstruktor der
+ * Basisklasse als Standard definiert. Sollte dieser Konstruktor in der neuen Klasse überschrieben
+ * werden, sollte der vorherige Konstruktor explizit aufgerufen werden, um eine korrekte
+ * Klasseninitialisierung sicherzustellen.
+ * 
+ * @example
+ *   var Ball = Class.create({ // definiert eine unabhängige Klasse.
+ *       initialize: function(radius) { ... }, // Methodendefinitionen
+ *       fall: function() { ... }
+ *   });
+ *
+ *   var Ball = Class.create(Sprite);  // definiert eine Klasse die von "Sprite" erbt.
+ *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
+ *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
+ *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
+ *          this.image = core.assets['ball.gif'];
  *       }
  *   });
  *
@@ -276,8 +300,8 @@ enchant.Class.create = function(superclass, definition) {
 
 /**
  * @param {ConstructorFunction}
-    * @param {...ConstructorFunction}
-    */
+ * @return {...ConstructorFunction}
+ */
 enchant.Class.getInheritanceTree = function(Constructor) {
     var ret = [];
     var C = Constructor;
@@ -340,8 +364,9 @@ enchant.ENV = {
         }
     }()),
     /**
-     * Will Use Flash instead of native Audio class?
-     * @type {String}
+     * Determines if for current browser Flash should be used to play 
+     * sound instead of the native audio class.
+     * @type {Boolean} True, if flash should be used.
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
@@ -428,31 +453,38 @@ enchant.Event = enchant.Class.create({
  *
  * Wenn Grafiken im voraus geladen werden ist es notwendig, auf dieses Ereignis zu warten bis mit
  * diesen gearbeitet werden kann. 
- * Objekt des Auftretens: {@link enchant.Game}
+ * Objekt des Auftretens: {@link enchant.Core}
  *
  * @example
- *   var game = new Game(320, 320);
- *   game.preload('player.gif');
- *   game.onload = function() {
+ *   var core = new Core(320, 320);
+ *   core.preload('player.gif');
+ *   core.onload = function() {
  *      ... // initialisierung des Spieles 
  *   };
- *   game.start();
+ *   core.start();
  *
  * @type {String}
  */
 enchant.Event.LOAD = 'load';
 
 /**
+ * Ereignis, welches während des Ladens des Spieles auftritt.
+ * Das Ereignis tritt jedesmal auf, wenn eine im voraus geladene Grafik geladen wurde.
+ * Objekt des Auftretens: {@link enchant.Core}
  * @type {String}
  */
 enchant.Event.PROGRESS = 'progress';
 
 /**
+ * Ereignis, welches auftritt wenn ein neuer Frame bearbeitet wird.
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Node}
  * @type {String}
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
 
 /**
+ * Ereignis, welches auftritt wenn ein Frame beendet wird.
+ * Objekt des Auftretens: {@link enchant.Core}
  * @type {String}
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
@@ -568,6 +600,8 @@ enchant.Event.INPUT_START = 'inputstart';
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
 /**
+ * Ereignis, welchses auftritt wenn eine Knopf losgelassen wird.
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.INPUT_END = 'inputend';
@@ -629,20 +663,29 @@ enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
 /**
+ * Ereignis, welchses auftritt wenn der "A"-Knopf gedrückt wird.
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
 /**
+ * Ereignis, welchses auftritt wenn der "A"-Knopf losgelassen wird.
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
 /**
+ * Ereignis, welchses auftritt wenn der "B"-Knopf gedrückt wird.
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
+ * @type {String}
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
 /**
+ * Ereignis, welchses auftritt wenn der "B"-Knopf losgelassen wird.
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  * @type {String}
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
@@ -1659,6 +1702,56 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
     }
 });
 
+var _intersectBetweenClassAndInstance = function(Class, instance) {
+    /*
+    return Class.collection.filter(function(classInstance) {
+        return enchant.Entity.prototype._intersectone.call(instance, classInstance);
+    });
+    */
+    var ret = [];
+    var c;
+    for (var i = 0, l = Class.collection.length; i < l; i++) {
+        c = Class.collection[i];
+        if (instance._intersectone(c)) {
+            ret.push(c);
+        }
+    }
+    return ret;
+};
+
+var _intersectBetweenClassAndClass = function(Class1, Class2) {
+    var ret = [];
+    /*
+    Class1.collection.forEach(function(instance1) {
+        Class2.collection.forEach(function(instance2) {
+            if (enchant.Entity.prototype._intersectone.call(instance1, instance2)) {
+                 ret.push([ instance1, instance2 ]);
+            }
+        });
+    });
+    */
+    var c1, c2;
+    for (var i = 0, l = Class1.collection.length; i < l; i++) {
+        c1 = Class1.collection[i];
+        for (var j = 0, ll = Class2.collection.length; j < ll; j++) {
+            c2 = Class2.collection[j];
+            if (c1._intersectone(c2)) {
+                ret.push([ c1, c2 ]);
+            }
+        }
+    }
+    return ret;
+};
+
+var _staticintersect = function(other) {
+    if (other instanceof enchant.Entity) {
+        return _intersectBetweenClassAndInstance(this, other);
+    } else if (typeof other === 'function' && other.collection) {
+        return _intersectBetweenClassAndClass(this, other);
+    }
+    return false;
+};
+
 /**
  * @scope enchant.Entity.prototype
  */
@@ -1821,6 +1914,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * @return {Boolean} True, falls eine Kollision festgestellt wurde.
      */
     intersect: function(other) {
+        if (other instanceof enchant.Entity) {
+            return this._intersectone(other);
+        } else if (typeof other === 'function' && other.collection) {
+            return _intersectBetweenClassAndInstance(other, this);
+        }
+        return false;
+    },
+    _intersectone: function(other) {
         if (this._dirty) {
             this._updateCoordinate();
         } if (other._dirty) {
@@ -1932,8 +2033,69 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._originY = originY;
             this._dirty = true;
         }
+    },
+    /**
+     * インスタンスをコレクションの対象にする.
+     * デフォルトで呼び出される.
+     */
+    enableCollection: function() {
+        this.addEventListener('addedtoscene', this._addSelfToCollection);
+        this.addEventListener('removedfromscene', this._removeSelfFromCollection);
+        if (this.scene) {
+            this._addSelfToCollection();
+        }
+    },
+    /**
+     * インスタンスをコレクションの対象から除外する.
+     */
+    disableCollection: function() {
+        this.removeEventListener('addedtoscene', this._addSelfToCollection);
+        this.removeEventListener('removedfromscene', this._removeSelfFromCollection);
+        if (this.scene) {
+            this._removeSelfFromCollection();
+        }
+    },
+    _addSelfToCollection: function() {
+        var Constructor = this.getConstructor();
+        Constructor._collectionTarget.forEach(function(C) {
+            C.collection.push(this);
+        }, this);
+    },
+    _removeSelfFromCollection: function() {
+        var Constructor = this.getConstructor();
+        Constructor._collectionTarget.forEach(function(C) {
+            var i = C.collection.indexOf(this);
+            if (i !== -1) {
+                C.collection.splice(i, 1);
+            }
+        }, this);
+    },
+    getConstructor: function() {
+        return Object.getPrototypeOf(this).constructor;
     }
 });
+
+var _collectizeConstructor = function(Constructor) {
+    if (Constructor._collective) {
+        return;
+    }
+    var rel = enchant.Class.getInheritanceTree(Constructor);
+    var i = rel.indexOf(enchant.Entity);
+    if (i !== -1) {
+        Constructor._collectionTarget = rel.splice(0, i + 1);
+    } else {
+        Constructor._collectionTarget = [];
+    }
+    Constructor.intersect = _staticintersect;
+    Constructor.collection = [];
+    Constructor._collective = true;
+};
+
+_collectizeConstructor(enchant.Entity);
+
+enchant.Entity._inherited = function(subclass) {
+    _collectizeConstructor(subclass);
+};
 
 /**
  * @scope enchant.Sprite.prototype
@@ -1947,9 +2109,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * @example
      *   var bear = new Sprite(32, 32);
      *   bear.image = core.assets['chara1.gif'];
-     *
-     * @param {Number} [width] Sprite width.g
-     * @param {Number} [height] Sprite height.
+     *   
      * @constructs
      * @extends enchant.Entity
      */

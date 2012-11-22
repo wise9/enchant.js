@@ -94,7 +94,33 @@ enchant.Class = function(superclass, definition) {
  *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
  *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
  *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
- *          this.image = game.assets['ball.gif'];
+ *          this.image = core.assets['ball.gif'];
+ *       }
+ *   });
+ *
+ * @param {Function} [superclass] The class from which the
+ * new class will inherit the class definition.
+ * @param {*} [definition] Class definition.
+ [/lang]
+ [lang:de]
+ * Erstellt eine neue Klasse
+ *
+ * Wenn eine Klasse definiert wird, die von einer anderen Klasse erbt, wird der Konstruktor der
+ * Basisklasse als Standard definiert. Sollte dieser Konstruktor in der neuen Klasse überschrieben
+ * werden, sollte der vorherige Konstruktor explizit aufgerufen werden, um eine korrekte
+ * Klasseninitialisierung sicherzustellen.
+ * 
+ * @example
+ *   var Ball = Class.create({ // definiert eine unabhängige Klasse.
+ *       initialize: function(radius) { ... }, // Methodendefinitionen
+ *       fall: function() { ... }
+ *   });
+ *
+ *   var Ball = Class.create(Sprite);  // definiert eine Klasse die von "Sprite" erbt.
+ *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
+ *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
+ *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
+ *          this.image = core.assets['ball.gif'];
  *       }
  *   });
  *
@@ -159,8 +185,8 @@ enchant.Class.create = function(superclass, definition) {
  * Get the inheritance tree of this class.
  [/lang]
  * @param {ConstructorFunction}
-    * @param {...ConstructorFunction}
-    */
+ * @return {...ConstructorFunction}
+ */
 enchant.Class.getInheritanceTree = function(Constructor) {
     var ret = [];
     var C = Constructor;
