@@ -1,6 +1,7 @@
 /**
  [lang:ja]
- * 環境変数.
+ * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
+ * @type {Object}
  [/lang]
  [lang:en]
  * Environment variable.
@@ -74,6 +75,18 @@ enchant.ENV = {
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
     ],
+    /**
+     * Keybind Table.
+     * You can use 'left', 'up', 'right', 'down', 'a', 'b' for preset event.
+     * @example
+     * enchant.ENV.KEY_BIND_TABLE = {
+     *    37: 'left',
+     *    38: 'up',
+     *    39: 'right',
+     *    40: 'down',
+     *    32: 'a', //-> use 'space' key as 'a button'
+     * }
+     */
     KEY_BIND_TABLE: {
         37: 'left',
         38: 'up',
@@ -84,7 +97,10 @@ enchant.ENV = {
     /**
      * @type {Boolean}
      */
-    SOUND_ENABLED_IN_MOBILE_SAFARI: false,
+    SOUND_ENABLED_ON_MOBILE_SAFARI: false,
+    /**
+     * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
+     */
     USE_WEBAUDIO: true,
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
