@@ -1814,6 +1814,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.dispatchEvent(e);
             core.dispatchEvent(e);
         });
+
+        this.enableCollection();
     },
     /**
      * Entityの横幅.
@@ -2988,18 +2990,23 @@ enchant.Matrix = enchant.Class.create({
 });
 enchant.Matrix.instance = new enchant.Matrix();
 
-
 enchant.DetectColorManager = enchant.Class.create({
     initialize: function(reso, max) {
         this.reference = [];
-        this.detectColorNum = 0;
         this.colorResolution = reso || 16;
         this.max = max || 1;
+        this.capacity = Math.pow(this.colorResolution, 3);
+        for (var i = 1, l = this.capacity; i < l; i++) {
+            this.reference[i] = null;
+        }
     },
     attachDetectColor: function(sprite) {
-        this.detectColorNum += 1;
-        this.reference[this.detectColorNum] = sprite;
-        return this._createNewColor();
+        var i = this.reference.indexOf(null);
+        if (i === -1) {
+            i = 1;
+        }
+        this.reference[i] = sprite;
+        return this._getColor(i);
     },
     detachDetectColor: function(sprite) {
         var i = this.reference.indexOf(sprite);
@@ -3007,14 +3014,14 @@ enchant.DetectColorManager = enchant.Class.create({
             this.reference[i] = null;
         }
     },
-    _createNewColor: function() {
-        var n = this.detectColorNum;
+    _getColor: function(n) {
         var C = this.colorResolution;
         var d = C / this.max;
         return [
             parseInt((n / C / C) % C, 10) / d,
             parseInt((n / C) % C, 10) / d,
-            parseInt(n % C, 10) / d, 1.0
+            parseInt(n % C, 10) / d,
+            1.0
         ];
     },
     _decodeDetectColor: function(color) {
@@ -3307,8 +3314,8 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
 
         touch.forEach(function(type) {
             this.addEventListener(type, function(e) {
-                if (this.scene) {
-                    this.scene.dispatchEvent(e);
+                if (this._scene) {
+                    this._scene.dispatchEvent(e);
                 }
             });
         }, this);
@@ -3464,8 +3471,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
         touch.forEach(function(type) {
             this.addEventListener(type, function(e) {
-                if (this.scene) {
-                    this.scene.dispatchEvent(e);
+                if (this._scene) {
+                    this._scene.dispatchEvent(e);
                 }
             });
         }, this);
@@ -3473,7 +3480,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var __onchildadded = function(e) {
             var child = e.node;
             var self = e.target;
-            var layer = self.scene._layers.Canvas;
+            var layer;
+            if (self instanceof enchant.CanvasLayer) {
+                layer = self._scene._layers.Canvas;
+            } else {
+                layer = self.scene._layers.Canvas;
+            }
             if (child.childNodes) {
                 child.addEventListener('childadded', __onchildadded);
                 child.addEventListener('childremoved', __onchildremoved);
@@ -3486,7 +3498,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var __onchildremoved = function(e) {
             var child = e.node;
             var self = e.target;
-            var layer = self.scene._layers.Canvas;
+            var layer;
+            if (self instanceof enchant.CanvasLayer) {
+                layer = self._scene._layers.Canvas;
+            } else {
+                layer = self.scene._layers.Canvas;
+            }
             if (child.childNodes) {
                 child.removeEventListener('childadded', __onchildadded);
                 child.removeEventListener('childremoved', __onchildremoved);
@@ -3781,7 +3798,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._element.appendChild(element);
             this._layerPriority.push(type);
         }
-        layer.scene = this;
+        layer._scene = this;
     },
     _determineEventTarget: function(e) {
         var layer, target;
@@ -3807,6 +3824,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._layers.Canvas.insertBefore(child, next);
             child._layer = this._layers.Canvas;
         }
+        child.parentNode = this;
     },
     _onchildremoved: function(e) {
         var child = e.node;

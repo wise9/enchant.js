@@ -24,8 +24,8 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
 
         touch.forEach(function(type) {
             this.addEventListener(type, function(e) {
-                if (this.scene) {
-                    this.scene.dispatchEvent(e);
+                if (this._scene) {
+                    this._scene.dispatchEvent(e);
                 }
             });
         }, this);

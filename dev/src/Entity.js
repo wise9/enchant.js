@@ -152,6 +152,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this.dispatchEvent(e);
             core.dispatchEvent(e);
         });
+
+        this.enableCollection();
     },
     /**
      [lang:ja]

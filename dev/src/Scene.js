@@ -118,7 +118,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._element.appendChild(element);
             this._layerPriority.push(type);
         }
-        layer.scene = this;
+        layer._scene = this;
     },
     _determineEventTarget: function(e) {
         var layer, target;
@@ -144,6 +144,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._layers.Canvas.insertBefore(child, next);
             child._layer = this._layers.Canvas;
         }
+        child.parentNode = this;
     },
     _onchildremoved: function(e) {
         var child = e.node;
