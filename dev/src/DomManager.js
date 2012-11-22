@@ -105,7 +105,7 @@ enchant.DomManager = enchant.Class.create({
         }
         if (node._style) {
             for (var prop in node._style) {
-                this.style[prop] = node._style[prop];
+                this.style.setProperty(prop, node._style[prop]);
             }
         }
         if (typeof node.domRender === 'function') {
