@@ -88,8 +88,6 @@ task :doc do |t|
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/plugins/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/plugins/en'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js de/plugins/*.js -t=doc/template -d=doc/plugins/de'
-#    sh 'jsduck ja/enchant.js ja/plugins/*.enchant.js --output duck/ja';
-#    sh 'jsduck enchant.js plugins/*.enchant.js --output duck/en';
 end
 
 file 'jsdoc-toolkit' do |t|
