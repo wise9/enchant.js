@@ -502,15 +502,29 @@ if (enchant.gl !== undefined) {
                 }
                 return matrix;
             },
+            getNode: function() {
+                var table = this.nodes;
+                var child = [];
+                for (var key in table){
+                    child[key] = [];
+                    child[key] = table[key].getNode();
+                    for(var ckey in child[key]){
+                        table[ckey] = child[key][ckey];
+                    }
+                }
+                return table;
+            },
             getAnimationMatrixFromOneAnimationNode: function(Animation, libAnimationClips, flag) {
+                console.log(this.sid);
                 var core = enchant.Core.instance;
                 var rotation = this.getRotationMatrix();
                 var translation = this.getTranslationMatrix();
                 var matrix = this.getnMatrix();
                 var animationMatrixes = [];
-                animationMatrixes[this.sid] = [];
-                animationMatrixes[this.sid][0] = mat4.multiply(translation, rotation, mat4.create());
-                mat4.multiply(animationMatrixes[this.sid][0], matrix);
+                var sid = this.sid;
+                animationMatrixes[sid] = [];
+                animationMatrixes[sid][0] = mat4.multiply(translation, rotation, mat4.create());
+                mat4.multiply(animationMatrixes[sid][0], matrix);
                 var output = [];
                 var input = [];
                 var length = 0;
@@ -581,8 +595,8 @@ if (enchant.gl !== undefined) {
                             }
                         }
                     }
-                    animationMatrixes[this.sid][Math.round(core.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
-                    mat4.multiply(animationMatrixes[this.sid][Math.round(core.fps * input[i])],nMat);
+                    animationMatrixes[sid][Math.round(core.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
+                    mat4.multiply(animationMatrixes[sid][Math.round(core.fps * input[i])],nMat);
                 }
                 if (Animation.animations.length > 0) {
                     var child = this.getAnimationMatrixesLocal(Animation.animations, libAnimationClips, true);
@@ -700,7 +714,7 @@ if (enchant.gl !== undefined) {
                     var urls = libAnimationClips[ackey].urls;
                     animationMatrixClips[ackey] = [];
                     for (var ui = 0, ul = urls.length; ui < ul; ui++) {
-                        var child = this.getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
+                        var child = this.getNode()[libAnimations[urls[ui]].channels[0].target.split('/')[0]].getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
                         for (var l in child) {
                             animationMatrixClips[ackey][l] = child[l];
                         }
@@ -1149,10 +1163,12 @@ if (enchant.gl !== undefined) {
             },
             createPosesClips: function(node, poseclips, lib) {
                 var matrixclips = node.getAnimationMatrixesLocalFromAnimationClips(lib['animations'],lib['animation_clips']);
+                console.log(matrixclips);
                 var length = [];
                 var core = enchant.Core.instance;
                 for (var pkey in matrixclips) {
                     length[pkey] = 0;
+                    console.log(pkey);
                     var matrix = matrixclips[pkey];
                     poseclips[pkey] = [];
                     for (var mkey in matrix) {
@@ -1175,6 +1191,7 @@ if (enchant.gl !== undefined) {
                         length[pkey] = Math.max(poseclips[pkey][mkey].length, length[pkey]);
                     }
                 }
+                console.log(length);
                 return length;
             },
             initSpriteTexture: function(node, lib, triangles) {
@@ -1408,7 +1425,7 @@ if (enchant.gl !== undefined) {
                         for(var i = 0, l = this.childNodes.length; i < l; i++) {
                             first.animation.enterframe(this.childNodes[i], first.frame);
                         }
-                        if (first.frame > this.animation[0].animation.length) {
+                        if (first.frame >= this.animation[0].animation.length) {
                             first = this.animation.shift();
                             if (this.loop) {
                                 first.frame = 0;
