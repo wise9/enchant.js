@@ -382,6 +382,18 @@ enchant.ENV = {
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
     ],
+    /**
+     * Keybind Table.
+     * You can use 'left', 'up', 'right', 'down', 'a', 'b' for preset event.
+     * @example
+     * enchant.ENV.KEY_BIND_TABLE = {
+     *    37: 'left',
+     *    38: 'up',
+     *    39: 'right',
+     *    40: 'down',
+     *    32: 'a', //-> use 'space' key as 'a button'
+     * }
+     */
     KEY_BIND_TABLE: {
         37: 'left',
         38: 'up',
@@ -1139,40 +1151,75 @@ enchant.EventTarget = enchant.Class.create({
                         }
                     }
                 }, true);
-                core._touchEventTarget = null;
-                var _ontouchstart = function(e) {
+                core._touchEventTarget = {};
+                if (enchant.ENV.TOUCH_ENABLED) {
+                    stage.addEventListener('touchstart', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                        var touches = e.changedTouches;
+                        var touch, target;
+                        for (var i = 0, l = touches.length; i < l; i++) {
+                            touch = touches[i];
+                            evt._initPosition(touch.pageX, touch.pageY);
+                            target = core.currentScene._determineEventTarget(evt);
+                            core._touchEventTarget[touch.identifier] = target;
+                            target.dispatchEvent(evt);
+                        }
+                    }, false);
+                    stage.addEventListener('touchmove', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        var touches = e.changedTouches;
+                        var touch, target;
+                        for (var i = 0, l = touches.length; i < l; i++) {
+                            touch = touches[i];
+                            target = core._touchEventTarget[touch.identifier];
+                            if (target) {
+                                evt._initPosition(touch.pageX, touch.pageY);
+                                target.dispatchEvent(evt);
+                            }
+                        }
+                    }, false);
+                    stage.addEventListener('touchend', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        var touches = e.changedTouches;
+                        var touch, target;
+                        for (var i = 0, l = touches.length; i < l; i++) {
+                            touch = touches[i];
+                            target = core._touchEventTarget[touch.identifier];
+                            if (target) {
+                                evt._initPosition(touch.pageX, touch.pageY);
+                                target.dispatchEvent(evt);
+                                delete core._touchEventTarget[touch.identifier];
+                            }
+                        }
+                    }, false);
+                }
+                stage.addEventListener('mousedown', function(e) {
                     var core = enchant.Core.instance;
                     var evt = new enchant.Event(enchant.Event.TOUCH_START);
                     evt._initPosition(e.pageX, e.pageY);
-                    core._touchEventTarget = core.currentScene._determineEventTarget(evt);
-                    core._touchEventTarget.dispatchEvent(evt);
-                };
-                var _ontouchmove = function(e) {
-                    var evt;
-                    if (core._touchEventTarget) {
-                        evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
-                        evt._initPosition(e.pageX, e.pageY);
-                        core._touchEventTarget.dispatchEvent(evt);
+                    var target = core.currentScene._determineEventTarget(evt);
+                    core._touchEventTarget[core._mousedownID] = target;
+                    target.dispatchEvent(evt);
+                }, false);
+                stage.addEventListener('mousemove', function(e) {
+                    var core = enchant.Core.instance;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                    evt._initPosition(e.pageX, e.pageY);
+                    var target = core._touchEventTarget[core._mousedownID];
+                    if (target) {
+                        target.dispatchEvent(evt);
                     }
-                };
-                var _ontouchend = function(e) {
-                    var evt;
-                    if (core._touchEventTarget) {
-                        evt = new enchant.Event(enchant.Event.TOUCH_END);
-                        evt._initPosition(e.pageX, e.pageY);
-                        core._touchEventTarget.dispatchEvent(evt);
-                        core._touchEventTarget = null;
-                        core.currentScene._layers.Dom._touchEventTarget = null;
-                    }
-                };
-                if (enchant.ENV.TOUCH_ENABLED) {
-                    stage.addEventListener('touchstart', _ontouchstart, false);
-                    stage.addEventListener('touchmove', _ontouchmove, false);
-                    stage.addEventListener('touchend', _ontouchend, false);
-                }
-                stage.addEventListener('mousedown', _ontouchstart, false);
-                stage.addEventListener('mousemove', _ontouchmove, false);
-                stage.addEventListener('mouseup', _ontouchend, false);
+                }, false);
+                stage.addEventListener('mouseup', function(e) {
+                    var core = enchant.Core.instance;
+                    var evt = new enchant.Event(enchant.Event.TOUCH_END);
+                    evt._initPosition(e.pageX, e.pageY);
+                    core._touchEventTarget[core._mousedownID].dispatchEvent(evt);
+                    delete core._touchEventTarget[core._mousedownID];
+                }, false);
             }
         },
         /**
