@@ -4668,7 +4668,7 @@ enchant.DomManager = enchant.Class.create({
 
         node._offsetX = vec[0] - ox;
         node._offsetY = vec[1] - oy;
-        if(node.parentNode && !(node instanceof enchant.Group)) {
+        if(node.parentNode && !(node.parentNode instanceof enchant.Group)) {
             node._offsetX += node.parentNode._offsetX;
             node._offsetY += node.parentNode._offsetY;
         }
