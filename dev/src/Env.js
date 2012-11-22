@@ -85,6 +85,7 @@ enchant.ENV = {
      * @type {Boolean}
      */
     SOUND_ENABLED_IN_MOBILE_SAFARI: false,
+    USE_WEBAUDIO: true,
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
      */
