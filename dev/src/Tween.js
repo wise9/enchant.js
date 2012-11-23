@@ -3,6 +3,8 @@
  */
 enchant.Tween = enchant.Class.create(enchant.Action, {
     /**
+     * [lang:ja]
+     * @class
      * トゥイーンクラス。
      * アクションを扱いやすく拡張したクラス。
      * オブジェクトの特定のプロパティを、なめらかに変更したい時に用いる。
@@ -17,6 +19,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
      * @constructs
      * @config {time}
      * @config {easing} [function]
+     * [/lang]
      */
     initialize: function(params) {
         var origin = {};

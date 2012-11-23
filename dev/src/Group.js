@@ -3,6 +3,7 @@
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
+     * @class
      [lang:ja]
      * 複数の{@link enchant.Node}を子に持つことができるクラス.
      *

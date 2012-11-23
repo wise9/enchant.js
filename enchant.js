@@ -188,6 +188,7 @@ window.addEventListener("message", function(msg, origin) {
     }
 }, false);
 /**
+ * @class
  * A Class representing a class which supports inheritance.
  *
  * @param {Function} [superclass] The class from which the
@@ -396,6 +397,7 @@ enchant.ENV = {
  */
 enchant.Event = enchant.Class.create({
     /**
+     * @class
      * A class for an independent implementation of events
      * similar to DOM Events.
      * However, it does not include phase concept.
@@ -718,9 +720,11 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
  */
 enchant.EventTarget = enchant.Class.create({
     /**
+     * @class
      * A class for an independent implementation of events
      * similar to DOM Events.
      * However, it does not include the phase concept.
+     * @extends {enchant.Event}
      * @constructs
      */
     initialize: function() {
@@ -808,6 +812,7 @@ enchant.EventTarget = enchant.Class.create({
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
+         * @class
          * A class which is controlling the cores main loop and scenes.
          *
          * There can be only one instance at a time, when the constructor is executed
@@ -1553,6 +1558,7 @@ enchant.Game = enchant.Core;
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      * Base class for objects in the display tree which is rooted at a Scene.
      * Not to be used directly.
      * @constructs
@@ -1571,8 +1577,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetY = 0;
 
         /**
-         *         *         * The age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
-         *         *         * @type {Number}
+         * The age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
+         * @type {Number}
          */
         this.age = 0;
 
@@ -1756,6 +1762,7 @@ var _staticintersect = function(other) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
+     * @class
      * A class with objects displayed as DOM elements. Not to be used directly.
      * @constructs
      * @extends enchant.Node
@@ -2099,6 +2106,7 @@ enchant.Entity._inherited = function(subclass) {
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      * Class which can display images.
      * 
      * @param {Number} [width] Sprite width.
@@ -2234,7 +2242,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
-     * Create Label object.
+     * @class
+     * A class for Label object.
      * @constructs
      * @extends enchant.Entity
      */
@@ -2372,6 +2381,7 @@ enchant.Label.prototype.getMetrics = function(text) {
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      * A class to create and display maps from a tile set.
      *
      * @param {Number} tileWidth Tile width.
@@ -2728,6 +2738,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
+     * @class
      * A class that can hold multiple {@link enchant.Node}.
      *
      * @example
@@ -3435,6 +3446,7 @@ enchant.DomLayer._detachDomManager = function(node) {
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
+     * @class
      * A class which is using HTML Canvas for the rendering.
      * The rendering of children will be replaced by the Canvas rendering.
      * @constructs
@@ -3856,6 +3868,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      * Class that wraps canvas elements.
      *
      * Can be used to set the {@link enchant.Sprite} and {@link enchant.Map}'s image properties to be displayed.
@@ -4350,10 +4363,8 @@ if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
  */
 
 /**
- * イージング関数ライブラリ
- * ActionScript で広く使われている
- * Robert Penner による Easing Equations を JavaScript に移植した。
  * @type {Object}
+ * @static
  */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {
@@ -4576,7 +4587,8 @@ enchant.Easing = {
  */
 enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
-     * イベントリスナの実行時にコンテキストを this.target にするよう書き換えた EventTarget
+     * @class
+     * EventTarget which can change the context of event listeners
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -4616,20 +4628,21 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
-     * タイムラインクラス。
-     * アクションを管理するためのクラス。
-     * 操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
+     * @class
+     * Time-line class.
+     * Class for managing the action.
+     * For one node to manipulate the timeline of one must correspond.
      *
-     * tl.enchant.js を読み込むと、Node クラスを継承したすべてのクラス (Group, Scene, Entity, Label, Sprite)の
-     * tl プロパティに、タイムラインクラスのインスタンスが生成される。
-     * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
-     * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
-     * タイムラインクラスはフレームとタイムのアニメーションができる。
+     * Reading a tl.enchant.js, all classes (Group, Scene, Entity, Label, Sprite) of the Node class that inherits
+     * Tlthe property, an instance of the Timeline class is generated.
+     * Time-line class has a method to add a variety of actions to himself,
+     * entities can be animated and various operations by using these briefly.
+     * You can choose time based and frame based(default) animation.
      *
+     * @param node target node
+     * @param [unitialized] if this param is true, when add method called in the first time,
+     * enchant.Event.ENTER_FRAME event listener will be added to node (for reducing unused event listeners)
      * @constructs
-     * @param node 操作の対象となるノード
-     * @param [unitialized] このパラメータはtrueだったら、
-     * 最初のaddメソッド呼ぶ時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
      */
     initialize: function(node, unitialized) {
         enchant.EventTarget.call(this);
@@ -4643,27 +4656,16 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
     },
     /**
-     * 一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる。 （デフォルト）
      */
     setFrameBased: function() {
         this.isFrameBased = true;
     },
     /**
-     * 一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに前のフレームから経過した時間になる。
      */
     setTimeBased: function() {
         this.isFrameBased = false;
     },
     /**
-     * キューの先頭にあるアクションを終了し、次のアクションへ移行する。
-     * アクションの中から呼び出されるが、外から呼び出すこともできる。
-     *
-     * アクション実行中に、アクションが終了した場合、
-     * もう一度 tick() 関数が呼ばれるため、1フレームに複数のアクションが処理される場合もある。
-     * ex.
-     *   sprite.tl.then(function A(){ .. }).then(function B(){ .. });
-     * と記述した場合、最初のフレームで A・B の関数どちらも実行される
-     *
      */
     next: function(remainingTime) {
         var e, action = this.queue.shift();
@@ -4690,9 +4692,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.dispatchEvent(event);
     },
     /**
-     * ターゲットの enterframe イベントのリスナとして登録される関数
-     * 1フレーム経過する際に実行する処理が書かれている。
-     * (キューの先頭にあるアクションに対して、actionstart/actiontickイベントを発行する)
      */
     tick: function(enterFrameEvent) {
         if (this.paused) {
@@ -4743,23 +4742,16 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * アクションを簡単に追加するためのメソッド。
-     * 実体は add メソッドのラッパ。
-     * @param params アクションの設定オブジェクト
      */
     action: function(params) {
         return this.add(new enchant.Action(params));
     },
     /**
-     * トゥイーンを簡単に追加するためのメソッド。
-     * 実体は add メソッドのラッパ。
-     * @param params トゥイーンの設定オブジェクト。
      */
     tween: function(params) {
         return this.add(new enchant.Tween(params));
     },
     /**
-     * タイムラインのキューをすべて破棄する。終了イベントは発行されない。
      */
     clear: function() {
         var e = new enchant.Event("removedfromtimeline");
@@ -4772,10 +4764,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * タイムラインを早送りする。
-     * 指定したフレーム数が経過したのと同様の処理を、瞬時に実行する。
-     * 巻き戻しはできない。
-     * @param frames
      */
     skip: function(frames) {
         var event = new enchant.Event("enterframe");
@@ -4791,38 +4779,30 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * タイムラインの実行を一時停止する
      */
     pause: function() {
         this.paused = true;
         return this;
     },
     /**
-     * タイムラインの実行を再開する
      */
     resume: function() {
         this.paused = false;
         return this;
     },
     /**
-     * タイムラインをループさせる。
-     * ループしているときに終了したアクションは、タイムラインから取り除かれた後
-     * 再度タイムラインに追加される。このアクションは、ループが解除されても残る。
      */
     loop: function() {
         this.looped = true;
         return this;
     },
     /**
-     * タイムラインのループを解除する。
      */
     unloop: function() {
         this.looped = false;
         return this;
     },
     /**
-     * 指定したフレーム数だけ待ち、何もしないアクションを追加する。
-     * @param time
      */
     delay: function(time) {
         this.add(new enchant.Action({
@@ -4831,16 +4811,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * @ignore
-     * @param time
      */
     wait: function(time) {
         // reserved
         return this;
     },
     /**
-     * 関数を実行し、即時に次のアクションに移るアクションを追加する。
-     * @param func
      */
     then: function(func) {
         var timeline = this;
@@ -4853,24 +4829,11 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * then メソッドのシノニム。
-     * 関数を実行し、即時に次のアクションに移る。
-     * @param func
      */
     exec: function(func) {
         this.then(func);
     },
     /**
-     * 実行したい関数を、フレーム数をキーとした連想配列(オブジェクト)で複数指定し追加する。
-     * 内部的には delay, then を用いている。
-     *
-     * @example
-     * sprite.tl.cue({
-     *    10: function(){ 10フレーム経過した後に実行される関数 },
-     *    20: function(){ 20フレーム経過した後に実行される関数 },
-     *    30: function(){ 30フレーム経過した後に実行される関数 }
-     * });
-     * @param cue キューオブジェクト
      */
     cue: function(cue) {
         var ptr = 0;
@@ -4883,9 +4846,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
     },
     /**
-     * ある関数を指定したフレーム数繰り返し実行するアクションを追加する。
-     * @param func 実行したい関数
-     * @param time 持続フレーム数
      */
     repeat: function(func, time) {
         this.add(new enchant.Action({
@@ -4897,11 +4857,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * 複数のアクションを並列で実行したいときに指定する。
-     * and で結ばれたすべてのアクションが終了するまで次のアクションには移行しない
-     * @example
-     * sprite.tl.fadeIn(30).and.rotateBy(360, 30);
-     * 30フレームでフェードインしながら 360度回転する
      */
     and: function() {
         var last = this.queue.pop();
@@ -4935,14 +4890,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * true値 が返るまで、関数を毎フレーム実行するアクションを追加する。
-     * @example
-     * sprite.tl.waitUntil(function(){
-     *    return this.x-- < 0
-     * }).then(function(){ .. });
-     * // x 座標が負になるまで毎フレーム x座標を減算し続ける
-     *
-     * @param func 実行したい関数
      */
     waitUntil: function(func) {
         var timeline = this;
@@ -4957,10 +4904,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * Entity の不透明度をなめらかに変えるアクションを追加する。
-     * @param opacity 目標の不透明度
-     * @param time フレーム数
-     * @param [easing] イージング関数
      */
     fadeTo: function(opacity, time, easing) {
         this.tween({
@@ -4971,29 +4914,16 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     /**
-     * Entity をフェードインするアクションを追加する。
-     * fadeTo(1) のエイリアス。
-     * @param time フレーム数
-     * @param [easing] イージング関数
      */
     fadeIn: function(time, easing) {
         return this.fadeTo(1, time, easing);
     },
     /**
-     * Entity をフェードアウトするアクションを追加する。
-     * fadeTo(1) のエイリアス。
-     * @param time フレーム数
-     * @param [easing] イージング関数
      */
     fadeOut: function(time, easing) {
         return this.fadeTo(0, time, easing);
     },
     /**
-     * Entity の位置をなめらかに移動させるアクションを追加する。
-     * @param x 目標のx座標
-     * @param y 目標のy座標
-     * @param time フレーム数
-     * @param [easing] イージング関数
      */
     moveTo: function(x, y, time, easing) {
         return this.tween({
@@ -5004,10 +4934,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity のx座標をなめらかに変化させるアクションを追加する。
-     * @param x
-     * @param time
-     * @param [easing]
      */
     moveX: function(x, time, easing) {
         return this.tween({
@@ -5017,10 +4943,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity のy座標をなめらかに変化させるアクションを追加する。
-     * @param y
-     * @param time
-     * @param [easing]
      */
     moveY: function(y, time, easing) {
         return this.tween({
@@ -5030,12 +4952,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity の位置をなめらかに変化させるアクションを追加する。
-     * 座標は、アクション開始時からの相対座標で指定する。
-     * @param x
-     * @param y
-     * @param time
-     * @param [easing]
      */
     moveBy: function(x, y, time, easing) {
         return this.tween({
@@ -5050,7 +4966,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity の opacity を0にする (即時)
      */
     hide: function() {
         return this.then(function() {
@@ -5058,7 +4973,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity の opacity を1にする (即時)
      */
     show: function() {
         return this.then(function() {
@@ -5066,10 +4980,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity をシーンから削除する。
-     * シーンから削除された場合、 enterframe イベントは呼ばれなくなるので、
-     * タイムラインも止まることに注意。
-     * これ以降のアクションは、再度シーンに追加されるまで実行されない。
      */
     removeFromScene: function() {
         return this.then(function() {
@@ -5077,11 +4987,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity をなめらかに拡大・縮小するアクションを追加する。
-     * @param scaleX 縮尺
-     * @param [scaleY] 縮尺。省略した場合 scaleX と同じ
-     * @param time
-     * @param [easing]
      */
     scaleTo: function(scale, time, easing) {
         if (typeof easing === "number") {
@@ -5100,12 +5005,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity をなめらかに拡大・縮小させるアクションを追加する。
-     * 相対縮尺 (ex. アクション開始時の縮尺の n 倍) で指定する。
-     * @param scaleX 相対縮尺
-     * @param [scaleY] 相対縮尺。省略した場合 scaleX と同じ
-     * @param time
-     * @param [easing]
      */
     scaleBy: function(scale, time, easing) {
         if (typeof easing === "number") {
@@ -5132,10 +5031,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity をなめらかに回転させるアクションを追加する。
-     * @param deg 目標の回転角度 (弧度法: 1回転を 360 とする)
-     * @param time フレーム数
-     * @param [easing] イージング関数
      */
     rotateTo: function(deg, time, easing) {
         return this.tween({
@@ -5145,11 +5040,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     },
     /**
-     * Entity をなめらかに回転させるアクションを追加する。
-     * 角度は相対角度 (アクション開始時の角度から更に n 度) で指定する
-     * @param deg 目標の相対角度 (弧度法: 1回転を 360 とする)
-     * @param time フレーム数
-     * @param [easing] イージング関数
      */
     rotateBy: function(deg, time, easing) {
         return this.tween({
@@ -5169,24 +5059,23 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
      * @class
-     * アクションクラス。
-     * アクションはタイムラインを構成する単位であり、
-     * 実行したい処理を指定するためのユニットである。
-     * タイムラインに追加されたアクションは順に実行される。
-     *
-     * アクションが開始・終了された時に actionstart, actiontick イベントが発行され、
-     * また1フレーム経過した時には actiontick イベントが発行される。
-     * これらのイベントのリスナとして実行したい処理を指定する。
-     *
-     * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
-     * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
+     * Action class.
+     * Actions are units that make up the time line,
+     * It is a unit used to specify the action you want to perform.
+     * Action has been added to the time line is performed in order.
+     *
+     * Actionstart, actiontick event is fired when the action is started and stopped,
+     * When one frame has elapsed actiontick event is also issued.
+     * Specify the action you want to perform as a listener for these events.
+     * The transition to the next action automatically the number of frames that are specified in the time has elapsed.
      *
      * @constructs
      * @param param
-     * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
-     * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
-     * @config {function} [onactiontick] アクションが1フレーム経過するときのイベントリスナ
-     * @config {function} [onactionend] アクションがが終了する時のイベントリスナ
+     * @config {integer} [time] The number of frames that will last action. infinite length is specified null
+     * @config {function} [onactionstart] Event listener for when the action is initiated
+     * @config {function} [onactiontick] Event listener for when the action has passed one frame
+     * @config {function} [onactionend] Event listener for when the action is finished
+     * @constructs
      */
     initialize: function(param) {
         enchant.ActionEventTarget.call(this);
@@ -5234,8 +5123,6 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {
     /**
-     * アクションを並列で実行するためのアクション。
-     * 子アクションを複数持つことができる。
      * @constructs
      * @extends enchant.Action
      */
@@ -5244,11 +5131,11 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         var timeline = this.timeline;
         var node = this.node;
         /**
-         * 子アクション
+         * Children Actions
          */
         this.actions = [];
         /**
-         * 実行が終了したアクション
+         * Removed actions
          */
         this.endedActions = [];
         var that = this;
@@ -5311,20 +5198,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
  */
 enchant.Tween = enchant.Class.create(enchant.Action, {
     /**
-     * トゥイーンクラス。
-     * アクションを扱いやすく拡張したクラス。
-     * オブジェクトの特定のプロパティを、なめらかに変更したい時に用いる。
-     *
-     * コンストラクタに渡す設定オブジェクトに、プロパティの目標値を指定すると、
-     * アクションが実行された時に、目標値までなめらかに値を変更するようなアクションを生成する。
-     *
-     * トゥイーンのイージングも、easing プロパティで指定できる。
-     * デフォルトでは enchant.Easing.LINEAR が指定されている。
-     *
-     * @param params
-     * @constructs
-     * @config {time}
-     * @config {easing} [function]
      */
     initialize: function(params) {
         var origin = {};

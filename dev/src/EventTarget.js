@@ -3,6 +3,7 @@
  */
 enchant.EventTarget = enchant.Class.create({
     /**
+     * @class
      [lang:ja]
      * DOM Event風味の独自イベント実装を行ったクラス.
      * ただしフェーズの概念はなし.
@@ -17,6 +18,7 @@ enchant.EventTarget = enchant.Class.create({
      * (Events), ähnlich wie DOM Events.
      * Jedoch wird das Phasenkonzept nicht unterstützt.
      [/lang]
+     * @extends {enchant.Event}
      * @constructs
      */
     initialize: function() {

@@ -3,11 +3,12 @@
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      [lang:ja]
-     * Labelオブジェクトを作成する.
+     * Label クラス。
      [/lang]
      [lang:en]
-     * Create Label object.
+     * A class for Label object.
      [/lang]
      [lang:de]
      * Erstellt ein Label Objekt.

@@ -9,10 +9,15 @@
  */
 
 /**
+ * [lang:ja]
  * イージング関数ライブラリ
  * ActionScript で広く使われている
  * Robert Penner による Easing Equations を JavaScript に移植した。
+ * [/lang]
+ * [lang:en]
+ * [/lang]
  * @type {Object}
+ * @static
  */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {

@@ -6,6 +6,7 @@
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
      * @class
+     * [lang:ja]
      * アクションクラス。
      * アクションはタイムラインを構成する単位であり、
      * 実行したい処理を指定するためのユニットである。
@@ -17,13 +18,32 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
      *
      * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
      * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
-     *
      * @constructs
      * @param param
      * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
      * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
      * @config {function} [onactiontick] アクションが1フレーム経過するときのイベントリスナ
      * @config {function} [onactionend] アクションがが終了する時のイベントリスナ
+     * [/lang]
+     * [lang:en]
+     * Action class.
+     * Actions are units that make up the time line,
+     * It is a unit used to specify the action you want to perform.
+     * Action has been added to the time line is performed in order.
+     *
+     * Actionstart, actiontick event is fired when the action is started and stopped,
+     * When one frame has elapsed actiontick event is also issued.
+     * Specify the action you want to perform as a listener for these events.
+     * The transition to the next action automatically the number of frames that are specified in the time has elapsed.
+     *
+     * @constructs
+     * @param param
+     * @config {integer} [time] The number of frames that will last action. infinite length is specified null
+     * @config {function} [onactionstart] Event listener for when the action is initiated
+     * @config {function} [onactiontick] Event listener for when the action has passed one frame
+     * @config {function} [onactionend] Event listener for when the action is finished
+     * [/lang]
+     * @constructs
      */
     initialize: function(param) {
         enchant.ActionEventTarget.call(this);

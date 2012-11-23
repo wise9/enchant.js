@@ -188,6 +188,7 @@ window.addEventListener("message", function(msg, origin) {
     }
 }, false);
 /**
+ * @class
  * クラスのクラス.
  *
  * @param {Function} [superclass] 継承するクラス.
@@ -395,6 +396,7 @@ enchant.ENV = {
  */
 enchant.Event = enchant.Class.create({
     /**
+     * @class
      * DOM Event風味の独自イベント実装を行ったクラス.
      * ただしフェーズの概念はなし.
      * @param {String} type Eventのタイプ
@@ -716,8 +718,10 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
  */
 enchant.EventTarget = enchant.Class.create({
     /**
+     * @class
      * DOM Event風味の独自イベント実装を行ったクラス.
      * ただしフェーズの概念はなし.
+     * @extends {enchant.Event}
      * @constructs
      */
     initialize: function() {
@@ -803,6 +807,7 @@ enchant.EventTarget = enchant.Class.create({
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
+         * @class
          * アプリケーションのメインループ, シーンを管理するクラス.
          *
          * インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
@@ -1544,6 +1549,7 @@ enchant.Game = enchant.Core;
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      * Sceneをルートとした表示オブジェクトツリーに属するオブジェクトの基底クラス.
      * 直接使用することはない.
      * @constructs
@@ -1562,10 +1568,10 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetY = 0;
 
         /**
-         *         * Node が画面に表示されてから経過したフレーム数。
+         * Node が画面に表示されてから経過したフレーム数。
          * {@link enchant.Event.ENTER_FRAME} イベントを受け取る前にインクリメントされる。
          * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
-         *         *         *         * @type {Number}
+         * @type {Number}
          */
         this.age = 0;
 
@@ -1749,6 +1755,7 @@ var _staticintersect = function(other) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
+     * @class
      * DOM上で表示する実体を持ったクラス.直接使用することはない.
      * @constructs
      * @extends enchant.Node
@@ -2091,6 +2098,7 @@ enchant.Entity._inherited = function(subclass) {
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      * 画像表示機能を持ったクラス。
      * Entity を継承している。
      *
@@ -2228,7 +2236,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
-     * Labelオブジェクトを作成する.
+     * @class
+     * Label クラス。
      * @constructs
      * @extends enchant.Entity
      */
@@ -2366,6 +2375,7 @@ enchant.Label.prototype.getMetrics = function(text) {
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      * タイルセットからマップを生成して表示するクラス.
      *
      * @param {Number} tileWidth タイルの横幅.
@@ -2721,6 +2731,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
+     * @class
      * 複数の{@link enchant.Node}を子に持つことができるクラス.
      *
      * @example
@@ -3429,6 +3440,7 @@ enchant.DomLayer._detachDomManager = function(node) {
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
+     * @class
      * Canvas を用いた描画を行うクラス。
      * 子を Canvas を用いた描画に切り替えるクラス
      * @constructs
@@ -3850,6 +3862,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      * canvas要素をラップしたクラス.
      *
      * {@link enchant.Sprite}や{@link enchant.Map}のimageプロパティに設定して表示させることができる.
@@ -4345,6 +4358,7 @@ if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
  * ActionScript で広く使われている
  * Robert Penner による Easing Equations を JavaScript に移植した。
  * @type {Object}
+ * @static
  */
 enchant.Easing = {
     LINEAR: function(t, b, c, d) {
@@ -4567,6 +4581,7 @@ enchant.Easing = {
  */
 enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      * イベントリスナの実行時にコンテキストを this.target にするよう書き換えた EventTarget
      * @constructs
      * @extends enchant.EventTarget
@@ -4607,6 +4622,7 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      * タイムラインクラス。
      * アクションを管理するためのクラス。
      * 操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
@@ -4616,11 +4632,10 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
      * タイムラインクラスはフレームとタイムのアニメーションができる。
-     *
-     * @constructs
      * @param node 操作の対象となるノード
      * @param [unitialized] このパラメータはtrueだったら、
-     * 最初のaddメソッド呼ぶ時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
+     * 最初のaddメソッドが呼ばれる時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
+     * @constructs
      */
     initialize: function(node, unitialized) {
         enchant.EventTarget.call(this);
@@ -4654,7 +4669,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * ex.
      *   sprite.tl.then(function A(){ .. }).then(function B(){ .. });
      * と記述した場合、最初のフレームで A・B の関数どちらも実行される
-     *
      */
     next: function(remainingTime) {
         var e, action = this.queue.shift();
@@ -5171,13 +5185,13 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
      *
      * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
      * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
-     *
      * @constructs
      * @param param
      * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
      * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
      * @config {function} [onactiontick] アクションが1フレーム経過するときのイベントリスナ
      * @config {function} [onactionend] アクションがが終了する時のイベントリスナ
+     * @constructs
      */
     initialize: function(param) {
         enchant.ActionEventTarget.call(this);
@@ -5225,6 +5239,7 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {
     /**
+     * @class
      * アクションを並列で実行するためのアクション。
      * 子アクションを複数持つことができる。
      * @constructs
@@ -5302,6 +5317,7 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
  */
 enchant.Tween = enchant.Class.create(enchant.Action, {
     /**
+     * @class
      * トゥイーンクラス。
      * アクションを扱いやすく拡張したクラス。
      * オブジェクトの特定のプロパティを、なめらかに変更したい時に用いる。

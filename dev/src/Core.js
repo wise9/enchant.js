@@ -9,6 +9,7 @@
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
+         * @class
          [lang:ja]
          * アプリケーションのメインループ, シーンを管理するクラス.
          *

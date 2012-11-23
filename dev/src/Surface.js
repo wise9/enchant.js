@@ -3,6 +3,7 @@
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @class
      [lang:ja]
      * canvas要素をラップしたクラス.
      *

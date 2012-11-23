@@ -3,6 +3,7 @@
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      [lang:ja]
      * タイルセットからマップを生成して表示するクラス.
      *

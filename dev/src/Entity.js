@@ -53,6 +53,7 @@ var _staticintersect = function(other) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
+     * @class
      [lang:ja]
      * DOM上で表示する実体を持ったクラス.直接使用することはない.
      [/lang]

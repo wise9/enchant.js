@@ -3,6 +3,7 @@
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
+     * @class
      [lang:ja]
      * Canvas を用いた描画を行うクラス。
      * 子を Canvas を用いた描画に切り替えるクラス

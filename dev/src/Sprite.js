@@ -3,6 +3,7 @@
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
+     * @class
      [lang:ja]
      * 画像表示機能を持ったクラス。
      * Entity を継承している。
