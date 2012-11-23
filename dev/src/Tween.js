@@ -35,11 +35,11 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
 
         var tween = this;
         this.addEventListener(enchant.Event.ACTION_START, function() {
-            // トゥイーンの対象とならないプロパティ
+            // excepted property
             var excepted = ["frame", "time", "callback", "onactiontick", "onactionstart", "onactionend"];
             for (var prop in params) {
                 if (params.hasOwnProperty(prop)) {
-                    // 値の代わりに関数が入っていた場合評価した結果を用いる
+                    // if function is used instead of numerical value, evaluate it
                     var target_val;
                     if (typeof params[prop] === "function") {
                         target_val = params[prop].call(tween.node);

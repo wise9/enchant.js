@@ -513,8 +513,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
+     * [lang:ja]
      * インスタンスをコレクションの対象にする.
      * デフォルトで呼び出される.
+     * [/lang]
      */
     enableCollection: function() {
         this.addEventListener('addedtoscene', this._addSelfToCollection);
@@ -524,7 +526,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
+     * [lang:ja]
      * インスタンスをコレクションの対象から除外する.
+     * [/lang]
      */
     disableCollection: function() {
         this.removeEventListener('addedtoscene', this._addSelfToCollection);

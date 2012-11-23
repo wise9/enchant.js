@@ -92,7 +92,9 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         });
 
         /**
+         * [lang:ja]
          * Node が生成される際に、tl プロパティに Timeline オブジェクトを追加している
+         * [/lang]
          */
         if(enchant.ENV.USE_ANIMATION){
             var tl = this.tl = new enchant.Timeline(this);

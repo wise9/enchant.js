@@ -81,6 +81,16 @@ file 'enchant.min.js' => ['enchant.js'] do |t|
     print "done\n"
 end
 
+task :mbcheck => ['enchant.js'] do |t|
+    linenum = 0;
+    File.read('enchant.js').each_line do |line|
+        linenum += 1;
+        if line.match(/[^\x01-\x7E]/)
+            print "#{linenum}: #{line}"
+        end
+    end
+end
+
 task :doc do |t|
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js -t=doc/template -d=doc/core/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js -t=doc/template -d=doc/core/en'

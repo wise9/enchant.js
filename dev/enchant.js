@@ -487,7 +487,7 @@ enchant.ENV = {
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
         var vendor = navigator.vendor || "";
-        // ローカルではなく、モバイル端末向けでもなく、Safariでもない場合 (デフォルト)
+        // non-local access, not on mobile mobile device, not on safari
         return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
     }()),
     /**
@@ -1220,44 +1220,58 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 
 /**
+ * [lang:ja]
  * アクションがタイムラインに追加された時に発行されるイベント
  * @type {String}
+ * [/lang]
  */
 enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
 
 /**
+ * [lang:ja]
  * アクションがタイムラインから削除された時に発行されるイベント
  * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * [/lang]
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
 
 /**
+ * [lang:ja]
  * アクションが開始された時に発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_START = "actionstart";
 
 /**
+ * [lang:ja]
  * アクションが終了するときに発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_END = "actionend";
 
 /**
+ * [lang:ja]
  * アクションが1フレーム経過するときに発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_TICK = "actiontick";
 
 /**
+ * [lang:ja]
  * アクションが追加された時に、タイムラインに対して発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_ADDED = "actionadded";
 
 /**
+ * [lang:ja]
  * アクションが削除された時に、タイムラインに対して発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";
@@ -2626,7 +2640,9 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         });
 
         /**
+         * [lang:ja]
          * Node が生成される際に、tl プロパティに Timeline オブジェクトを追加している
+         * [/lang]
          */
         if(enchant.ENV.USE_ANIMATION){
             var tl = this.tl = new enchant.Timeline(this);
@@ -3278,8 +3294,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
+     * [lang:ja]
      * インスタンスをコレクションの対象にする.
      * デフォルトで呼び出される.
+     * [/lang]
      */
     enableCollection: function() {
         this.addEventListener('addedtoscene', this._addSelfToCollection);
@@ -3289,7 +3307,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     /**
+     * [lang:ja]
      * インスタンスをコレクションの対象から除外する.
+     * [/lang]
      */
     disableCollection: function() {
         this.removeEventListener('addedtoscene', this._addSelfToCollection);
@@ -3384,8 +3404,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameSequence = [];
 
         /**
+         * [lang:ja]
          * frame に配列が指定されたときの処理。
-         * _frameSeuence に
+         * [/lang]
          */
         this.addEventListener('enterframe', function() {
             if (this._frameSequence.length !== 0) {
@@ -3475,7 +3496,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 0 <= frame
+     * [lang:ja]
      * 0以下の動作は未定義.
+     * [/lang]
      * @param frame
      * @private
      */
@@ -5093,7 +5116,9 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
     },
     /**
+     * [lang:ja]
      * レンダリングを開始.
+     * [/lang:ja]
      * @private
      */
     _startRendering: function() {
@@ -5101,7 +5126,9 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     /**
+     * [lang:ja]
      * レンダリングを停止.
+     * [/lang:ja]
      * @private
      */
     _stopRendering: function() {
@@ -6575,7 +6602,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 
             this.add(action);
         } else {
-            // イベントを発行して捨てる
+            // remove after dispatching removedfromtimeline event
             e = new enchant.Event("removedfromtimeline");
             e.timeline = this;
             action.dispatchEvent(e);
@@ -7244,7 +7271,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         var that = this;
 
         this.addEventListener(enchant.Event.ACTION_START, function(evt) {
-            // start するときは同時
             for (var i = 0, len = that.actions.length; i < len; i++) {
                 that.actions[i].dispatchEvent(evt);
             }
@@ -7258,7 +7284,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
                     len = that.actions.length;
                     that.endedActions.push(action);
 
-                    // イベントを発行
                     var e = new enchant.Event("actionend");
                     e.timeline = this;
                     action.dispatchEvent(e);
@@ -7275,7 +7300,7 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
             for (i = 0, len = that.actions.length; i < len; i++) {
                 that.actions[i].dispatchEvent(e);
             }
-            // 残りアクションが 0 になったら次のアクションへ
+
             if (that.actions.length === 0) {
                 evt.timeline.next();
             }
@@ -7288,7 +7313,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         });
 
         this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function() {
-            // すべて戻す
             this.actions = this.endedActions;
             this.endedActions = [];
         });
@@ -7333,11 +7357,11 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
 
         var tween = this;
         this.addEventListener(enchant.Event.ACTION_START, function() {
-            // トゥイーンの対象とならないプロパティ
+            // excepted property
             var excepted = ["frame", "time", "callback", "onactiontick", "onactionstart", "onactionend"];
             for (var prop in params) {
                 if (params.hasOwnProperty(prop)) {
-                    // 値の代わりに関数が入っていた場合評価した結果を用いる
+                    // if function is used instead of numerical value, evaluate it
                     var target_val;
                     if (typeof params[prop] === "function") {
                         target_val = params[prop].call(tween.node);

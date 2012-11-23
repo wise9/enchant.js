@@ -64,7 +64,7 @@ enchant.ENV = {
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
         var vendor = navigator.vendor || "";
-        // ローカルではなく、モバイル端末向けでもなく、Safariでもない場合 (デフォルト)
+        // non-local access, not on mobile mobile device, not on safari
         return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
     }()),
     /**

@@ -36,7 +36,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         var that = this;
 
         this.addEventListener(enchant.Event.ACTION_START, function(evt) {
-            // start するときは同時
             for (var i = 0, len = that.actions.length; i < len; i++) {
                 that.actions[i].dispatchEvent(evt);
             }
@@ -50,7 +49,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
                     len = that.actions.length;
                     that.endedActions.push(action);
 
-                    // イベントを発行
                     var e = new enchant.Event("actionend");
                     e.timeline = this;
                     action.dispatchEvent(e);
@@ -67,7 +65,7 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
             for (i = 0, len = that.actions.length; i < len; i++) {
                 that.actions[i].dispatchEvent(e);
             }
-            // 残りアクションが 0 になったら次のアクションへ
+
             if (that.actions.length === 0) {
                 evt.timeline.next();
             }
@@ -80,7 +78,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         });
 
         this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function() {
-            // すべて戻す
             this.actions = this.endedActions;
             this.endedActions = [];
         });

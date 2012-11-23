@@ -687,44 +687,58 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 
 /**
+ * [lang:ja]
  * アクションがタイムラインに追加された時に発行されるイベント
  * @type {String}
+ * [/lang]
  */
 enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
 
 /**
+ * [lang:ja]
  * アクションがタイムラインから削除された時に発行されるイベント
  * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * [/lang]
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
 
 /**
+ * [lang:ja]
  * アクションが開始された時に発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_START = "actionstart";
 
 /**
+ * [lang:ja]
  * アクションが終了するときに発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_END = "actionend";
 
 /**
+ * [lang:ja]
  * アクションが1フレーム経過するときに発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_TICK = "actiontick";
 
 /**
+ * [lang:ja]
  * アクションが追加された時に、タイムラインに対して発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_ADDED = "actionadded";
 
 /**
+ * [lang:ja]
  * アクションが削除された時に、タイムラインに対して発行されるイベント
+ * [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";

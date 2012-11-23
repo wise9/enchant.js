@@ -92,7 +92,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 
             this.add(action);
         } else {
-            // イベントを発行して捨てる
+            // remove after dispatching removedfromtimeline event
             e = new enchant.Event("removedfromtimeline");
             e.timeline = this;
             action.dispatchEvent(e);
