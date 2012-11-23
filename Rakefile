@@ -41,13 +41,13 @@ task :lang do |t|
         dest_ja = file.gsub(/\/dev\//, '/ja/')
         dest_de = file.gsub(/\/dev\//, '/de/')
         File.open(dest_en, 'w'){ |f|
-            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:de\]\n(.*?)[\t ]*\[\/lang\]\n/m, "")
+            f << source.gsub(/^[\t \*]*\[lang\:en\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "\\1").gsub(/^[\t \*]*\[lang\:ja\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "").gsub(/^[\t \*]*\[lang\:de\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "")
         }
         File.open(dest_ja, 'w'){ |f|
-            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1").gsub(/[\t ]*\[lang\:de\]\n(.*?)[\t ]*\[\/lang\]\n/m, "")
+            f << source.gsub(/^[\t \*]*\[lang\:en\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "").gsub(/^[\t \*]*\[lang\:ja\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "\\1").gsub(/^[\t \*]*\[lang\:de\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "")
         }
         File.open(dest_de, 'w'){ |f|
-            f << source.gsub(/[\t ]*\[lang\:en\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:ja\]\n(.*?)[\t ]*\[\/lang\]\n/m, "").gsub(/[\t ]*\[lang\:de\]\n(.*?)[\t ]*\[\/lang\]\n/m, "\\1")
+            f << source.gsub(/^[\t \*]*\[lang\:en\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "").gsub(/^[\t \*]*\[lang\:ja\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "").gsub(/^[\t \*]*\[lang\:de\]\n(.*?)[\t \*]*\[\/lang\]\n/m, "\\1")
         }
         print "source: #{file}\n"
         print "generated: #{dest_en}\n"
