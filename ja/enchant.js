@@ -3530,7 +3530,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     },
     /**
      * レンダリングを開始.
-     * [/lang:ja]
      * @private
      */
     _startRendering: function() {
@@ -3538,9 +3537,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     /**
-     * [lang:ja]
      * レンダリングを停止.
-     * [/lang:ja]
      * @private
      */
     _stopRendering: function() {
@@ -3867,7 +3864,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
      * @class
-     [lang:ja]
      * canvas要素をラップしたクラス.
      *
      * {@link enchant.Sprite}や{@link enchant.Map}のimageプロパティに設定して表示させることができる.

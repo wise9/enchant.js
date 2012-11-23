@@ -5118,7 +5118,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
      * [lang:ja]
      * レンダリングを開始.
-     * [/lang:ja]
+     * [/lang]
      * @private
      */
     _startRendering: function() {
@@ -5128,7 +5128,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
      * [lang:ja]
      * レンダリングを停止.
-     * [/lang:ja]
+     * [/lang]
      * @private
      */
     _stopRendering: function() {
