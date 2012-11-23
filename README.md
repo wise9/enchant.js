@@ -17,7 +17,16 @@ Download
 Documentation
 -------------
 
-- See [enchantjs.com](http://enchantjs.com)
+- English
+    - <http://wise9.github.com/enchant.js/doc/core/en/index.html>
+    - <http://wise9.github.com/enchant.js/doc/plugins/en/index.html> (with plugins)
+- Deutsch (German)
+    - <http://wise9.github.com/enchant.js/doc/core/de/index.html>
+    - <http://wise9.github.com/enchant.js/doc/plugins/de/index.html> (with plugins)
+- Japanese
+    - <http://wise9.github.com/enchant.js/doc/core/ja/index.html>
+    - <http://wise9.github.com/enchant.js/doc/plugins/ja/index.html> (with plugins)
+- See also [enchantjs.com](http://enchantjs.com)
 
 Design
 ------
