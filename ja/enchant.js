@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.6-pre
+ * enchant.js v0.6.0
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -384,7 +384,9 @@ enchant.ENV = {
     /**
      * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
      */
-    USE_WEBAUDIO: true,
+    USE_WEBAUDIO: (function(){
+        return location.protocol !== 'file:';
+    }()),
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
      */
@@ -4052,6 +4054,7 @@ enchant.Surface.load = function(src, callback) {
     return surface;
 };
 
+/* jshint newcap: false */
 if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
 
     enchant.Game._loadFuncs['mp3'] =
