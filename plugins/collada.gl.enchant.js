@@ -3,7 +3,6 @@
  * collada.gl.enchant.js
  * @version v0.4.0
  * @require enchant.js v0.4.5+
- * @require bone.gl.enchant.js v0.2.1+
  * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
  *

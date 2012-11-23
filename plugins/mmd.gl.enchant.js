@@ -4,7 +4,6 @@
  * @version 0.2.0
  * @require enchant.js v0.4.3+
  * @require gl.enchant.js v0.3.5+
- * @require bone.gl.enchant.js v0.2.0+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
