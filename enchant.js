@@ -3203,9 +3203,11 @@ enchant.DomlessManager = enchant.Class.create({
     },
     _register: function(element, nextElement) {
         var i = this._domRef.indexOf(nextElement);
+        var childNodes;
         if (element instanceof DocumentFragment) {
             if (i === -1) {
-                Array.prototype.push.apply(this._domRef, element.childNodes);
+                childNodes = Array.prototype.slice.call(element.childNodes);
+                Array.prototype.push.apply(this._domRef, childNodes);
             } else {
                 //this._domRef.splice(i, 0, element);
                 Array.prototype.splice.apply(this._domRef, [i, 0].join(element.childNodes));
