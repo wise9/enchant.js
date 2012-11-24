@@ -3386,12 +3386,8 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             var child = e.node;
             var next = e.next;
             var self = e.target;
-            if (child.childNodes) {
-                child.addEventListener('childadded', __onchildadded);
-                child.addEventListener('childremoved', __onchildremoved);
-            }
             var nextManager = next ? next._domManager : null;
-            enchant.DomLayer._attachDomManager(child);
+            enchant.DomLayer._attachDomManager(child, __onchildadded, __onchildremoved);
             self._domManager.addManager(child._domManager, nextManager);
             var render = new enchant.Event(enchant.Event.RENDER);
             self._domManager.layer._rendering(child, render);
@@ -3400,12 +3396,8 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         var __onchildremoved = function(e) {
             var child = e.node;
             var self = e.target;
-            if (child.childNodes) {
-                child.removeEventListener('childadded', __onchildadded);
-                child.removeEventListener('childremoved', __onchildremoved);
-            }
             self._domManager.removeManager(child._domManager);
-            enchant.DomLayer._detachDomManager(child);
+            enchant.DomLayer._detachDomManager(child, __onchildadded, __onchildremoved);
         };
 
         this.addEventListener('childremoved', __onchildremoved);
@@ -3451,9 +3443,11 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
     }
 });
 
-enchant.DomLayer._attachDomManager = function(node) {
+enchant.DomLayer._attachDomManager = function(node, onchildadded, onchildremoved) {
     var child;
     if (!node._domManager) {
+        node.addEventListener('childadded', onchildadded);
+        node.addEventListener('childremoved', onchildremoved);
         if (node instanceof enchant.Group) {
             node._domManager = new enchant.DomlessManager(node);
         } else {
@@ -3467,20 +3461,22 @@ enchant.DomLayer._attachDomManager = function(node) {
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.DomLayer._attachDomManager(child);
+            enchant.DomLayer._attachDomManager(child, onchildadded, onchildremoved);
             node._domManager.addManager(child._domManager, null);
         }
     }
 };
 
-enchant.DomLayer._detachDomManager = function(node) {
+enchant.DomLayer._detachDomManager = function(node, onchildadded, onchildremoved) {
     var child;
     node._domManager.remove();
+    node.removeEventListener('childadded', onchildadded);
+    node.removeEventListener('childremoved', onchildremoved);
     delete node._domManager;
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.DomLayer._detachDomManager(child);
+            enchant.DomLayer._detachDomManager(child, onchildadded, onchildremoved);
             node._domManager.removeManager(child._domManager, null);
         }
     }
@@ -3549,11 +3545,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             } else {
                 layer = self.scene._layers.Canvas;
             }
-            if (child.childNodes) {
-                child.addEventListener('childadded', __onchildadded);
-                child.addEventListener('childremoved', __onchildremoved);
-            }
-            enchant.CanvasLayer._attachCache(child, layer);
+            enchant.CanvasLayer._attachCache(child, layer, __onchildadded, __onchildremoved);
             var render = new enchant.Event(enchant.Event.RENDER);
             layer._rendering(child, render);
         };
@@ -3567,11 +3559,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             } else {
                 layer = self.scene._layers.Canvas;
             }
-            if (child.childNodes) {
-                child.removeEventListener('childadded', __onchildadded);
-                child.removeEventListener('childremoved', __onchildremoved);
-            }
-            enchant.CanvasLayer._detachCache(child, layer);
+            enchant.CanvasLayer._detachCache(child, layer, __onchildadded, __onchildremoved);
         };
 
         this.addEventListener('childremoved', __onchildremoved);
@@ -3710,31 +3698,35 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     }
 });
 
-enchant.CanvasLayer._attachCache = function(node, layer) {
+enchant.CanvasLayer._attachCache = function(node, layer, onchildadded, onchildremoved) {
     var child;
     if (!node._cvsCache) {
         node._cvsCache = {};
         node._cvsCache.matrix = [ 1, 0, 0, 1, 0, 0 ];
         node._cvsCache.detectColor = 'rgba(' + layer._colorManager.attachDetectColor(node) + ')';
+        node.addEventListener('childadded', onchildadded);
+        node.addEventListener('childremoved', onchildremoved);
     }
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.CanvasLayer._attachCache(child, layer);
+            enchant.CanvasLayer._attachCache(child, layer, onchildadded, onchildremoved);
         }
     }
 };
 
-enchant.CanvasLayer._detachCache = function(node, layer) {
+enchant.CanvasLayer._detachCache = function(node, layer, onchildadded, onchildremoved) {
     var child;
     if (node._cvsCache) {
         layer._colorManager.detachDetectColor(node);
+        node.removeEventListener('childadded', onchildadded);
+        node.removeEventListener('childremoved', onchildremoved);
         delete node._cvsCache;
     }
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.CanvasLayer._detachCache(child, layer);
+            enchant.CanvasLayer._detachCache(child, layer, onchildadded, onchildremoved);
         }
     }
 };
