@@ -1256,8 +1256,6 @@
             this.height = height;
             this.childNodes = [];
             this.parentNode;
-            this.__offsetX = 0;
-            this.__offsetY = 0;
             this._renderFrag = true;
 
             [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
@@ -1269,19 +1267,6 @@
                         }, this);
                     });
                 }, this);
-        },
-        dispatchEvent: function(e) {
-            e.target = this;
-            e.localX = e.x - this.__offsetX;
-            e.localY = e.y - this.__offsetY;
-            if (this['on' + e.type] != null) this['on' + e.type](e);
-            var listeners = this._listeners[e.type];
-            if (listeners != null) {
-                listeners = listeners.slice();
-                for (var i = 0, len = listeners.length; i < len; i++) {
-                    listeners[i].call(this, e);
-                }
-            }
         },
         /**
          * @type {Number}
