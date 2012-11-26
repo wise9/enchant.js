@@ -40,7 +40,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
-
+		this._spriteImageDirty = false;
         /**
          * frame に配列が指定されたときの処理。
          * _frameSeuence に
@@ -145,6 +145,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             row = image.width / this._width | 0;
             this._frameLeft = (frame % row | 0) * this._width;
             this._frameTop = (frame / row | 0) * this._height % image.height;
+            this._spriteImageDirty = true;
         }
     },
     cvsRender: function(ctx) {
@@ -162,12 +163,13 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     domRender: function(element) {
-        if (this._image) {
+        if (this._image && this._spriteImageDirty) {
             if (this._image._css) {
                 element.style.backgroundImage = this._image._css;
                 element.style.backgroundPosition =
                     -this._frameLeft + 'px ' +
                     -this._frameTop + 'px';
+                this._spriteImageDirty = false;
             } else if (this._image._element) {
             }
         }
