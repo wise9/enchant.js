@@ -168,7 +168,9 @@ enchant.Label.prototype.getMetrics = function(text) {
     if (document.body) {
         div = document.createElement('div');
         for (var prop in this._style) {
-            div.style[prop] = this._style[prop];
+            if(prop !== 'width' && prop !== 'height') {
+                div.style[prop] = this._style[prop];
+            }
         }
         div.innerHTML = text || this._text;
         document.body.appendChild(div);
