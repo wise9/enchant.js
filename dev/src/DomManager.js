@@ -178,9 +178,11 @@ enchant.DomlessManager = enchant.Class.create({
         }
     },
     getDomElement: function() {
-        return this.targetNode.childNodes.map(function(child) {
-            return child._domManager.getDomElement();
+        var ret = [];
+        this.targetNode.childNodes.forEach(function(child) {
+            ret = ret.concat(child._domManager.getDomElement());
         });
+        return ret;
     },
     getDomElementAsNext: function() {
         if (this._domRef.length) {

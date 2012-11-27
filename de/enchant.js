@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.6-pre
+ * enchant.js v0.6.0
  *
  * Copyright (c) Ubiquitous Entertainment Inc.
  * Dual licensed under the MIT or GPL Version 3 licenses
@@ -3274,9 +3274,11 @@ enchant.DomlessManager = enchant.Class.create({
         }
     },
     getDomElement: function() {
-        return this.targetNode.childNodes.map(function(child) {
-            return child._domManager.getDomElement();
+        var ret = [];
+        this.targetNode.childNodes.forEach(function(child) {
+            ret = ret.concat(child._domManager.getDomElement());
         });
+        return ret;
     },
     getDomElementAsNext: function() {
         if (this._domRef.length) {
