@@ -110,7 +110,7 @@ enchant.DomManager = enchant.Class.create({
         node._style.width = node.width + 'px';
         node._style.height = node.height + 'px';
         node._style.opacity = node._opacity;
-        node._style.backgroundColor = node._backgroundColor;
+        node._style['background-color'] = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
             node._style.display = node._visible ? 'block' : 'none';
         }
