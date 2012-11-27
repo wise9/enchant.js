@@ -49,7 +49,7 @@ Platform
 License
 -------
 
-Dual licensed under the MIT or GPL Version 3 licenses
+MIT License
 
 Usage
 -----
