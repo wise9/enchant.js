@@ -3137,10 +3137,15 @@ enchant.DomManager = enchant.Class.create({
         var nextElement;
         if (nextManager) {
             nextElement = nextManager.getDomElementAsNext();
-        } else if (this.targetNode.parentNode) {
-            //nextElement = this.getNextManager(this);
         }
-        this.element.insertBefore(childManager.getDomElement(), nextElement);
+        var element = childManager.getDomElement();
+        if (element instanceof Array) {
+            element.forEach(function(child) {
+                this.element.insertBefore(child, nextElement);
+            }, this);
+        } else {
+            this.element.insertBefore(element, nextElement);
+        }
         this.setLayer(this.layer);
     },
     removeManager: function(childManager) {
@@ -3247,13 +3252,11 @@ enchant.DomlessManager = enchant.Class.create({
     _register: function(element, nextElement) {
         var i = this._domRef.indexOf(nextElement);
         var childNodes;
-        if (element instanceof DocumentFragment) {
+        if (element instanceof Array) {
             if (i === -1) {
-                childNodes = Array.prototype.slice.call(element.childNodes);
-                Array.prototype.push.apply(this._domRef, childNodes);
+                Array.prototype.push.apply(this._domRef, element);
             } else {
-                //this._domRef.splice(i, 0, element);
-                Array.prototype.splice.apply(this._domRef, [i, 0].join(element.childNodes));
+                Array.prototype.splice.apply(this._domRef, [i, 0].join(element));
             }
         } else {
             if (i === -1) {
@@ -3272,14 +3275,9 @@ enchant.DomlessManager = enchant.Class.create({
         }
     },
     getDomElement: function() {
-        var frag = document.createDocumentFragment();
-        var children = this.targetNode.childNodes;
-        children.forEach(function(child) {
-            var element = child._domManager.getDomElement();
-            this._domRef.push(element);
-            frag.appendChild(element);
-        }, this);
-        return frag;
+        return this.targetNode.childNodes.map(function(child) {
+            return child._domManager.getDomElement();
+        });
     },
     getDomElementAsNext: function() {
         if (this._domRef.length) {
@@ -3294,11 +3292,16 @@ enchant.DomlessManager = enchant.Class.create({
         }
     },
     addManager: function(childManager, nextManager) {
-        if (this.targetNode.parentNode) {
+        var parentNode = this.targetNode.parentNode;
+        if (parentNode) {
             if (nextManager === null) {
                 nextManager = this.getNextManager(this);
             }
-            this.targetNode.parentNode._domManager.addManager(childManager, nextManager);
+            if (parentNode instanceof enchant.Scene) {
+                parentNode._layers.Dom._domManager.addManager(childManager, nextManager);
+            } else {
+                parentNode._domManager.addManager(childManager, nextManager);
+            }
         }
         var nextElement = nextManager ? nextManager.getDomElementAsNext() : null;
         this._register(childManager.getDomElement(), nextElement);
