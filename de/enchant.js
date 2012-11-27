@@ -1819,6 +1819,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._scaleX = 1;
         this._scaleY = 1;
 
+        this._touchEnabled = true;
         this._clipping = false;
 
         this._originX = null;
@@ -1948,13 +1949,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(enabled) {
             this._touchEnabled = enabled;
-            /*
             if (this._touchEnabled = enabled) {
                 this._style.pointerEvents = 'all';
             } else {
                 this._style.pointerEvents = 'none';
             }
-            */
         }
     },
     /**
@@ -3645,10 +3644,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         ctx.save();
         this._transform(node, ctx);
         ctx.fillStyle = node._cvsCache.detectColor;
-        if (node.detectRender) {
-            node.detectRender(ctx);
-        } else {
-            ctx.fillRect(0, 0, node.width, node.height);
+        if (node._touchEnabled) {
+            if (node.detectRender) {
+                node.detectRender(ctx);
+            } else {
+                ctx.fillRect(0, 0, node.width, node.height);
+            }
         }
         if (node._clipping) {
             ctx.clip();

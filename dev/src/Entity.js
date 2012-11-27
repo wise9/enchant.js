@@ -75,6 +75,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._scaleX = 1;
         this._scaleY = 1;
 
+        this._touchEnabled = true;
         this._clipping = false;
 
         this._originX = null;
@@ -284,13 +285,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(enabled) {
             this._touchEnabled = enabled;
-            /*
             if (this._touchEnabled = enabled) {
                 this._style.pointerEvents = 'all';
             } else {
                 this._style.pointerEvents = 'none';
             }
-            */
         }
     },
     /**

@@ -174,10 +174,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         ctx.save();
         this._transform(node, ctx);
         ctx.fillStyle = node._cvsCache.detectColor;
-        if (node.detectRender) {
-            node.detectRender(ctx);
-        } else {
-            ctx.fillRect(0, 0, node.width, node.height);
+        if (node._touchEnabled) {
+            if (node.detectRender) {
+                node.detectRender(ctx);
+            } else {
+                ctx.fillRect(0, 0, node.width, node.height);
+            }
         }
         if (node._clipping) {
             ctx.clip();
