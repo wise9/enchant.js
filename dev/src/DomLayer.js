@@ -117,15 +117,15 @@ enchant.DomLayer._attachDomManager = function(node, onchildadded, onchildremoved
 
 enchant.DomLayer._detachDomManager = function(node, onchildadded, onchildremoved) {
     var child;
-    node._domManager.remove();
     node.removeEventListener('childadded', onchildadded);
     node.removeEventListener('childremoved', onchildremoved);
-    delete node._domManager;
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.DomLayer._detachDomManager(child, onchildadded, onchildremoved);
             node._domManager.removeManager(child._domManager, null);
+            enchant.DomLayer._detachDomManager(child, onchildadded, onchildremoved);
         }
     }
+    node._domManager.remove();
+    delete node._domManager;
 };

@@ -159,7 +159,7 @@ enchant.DomlessManager = enchant.Class.create({
             if (i === -1) {
                 Array.prototype.push.apply(this._domRef, element);
             } else {
-                Array.prototype.splice.apply(this._domRef, [i, 0].join(element));
+                Array.prototype.splice.apply(this._domRef, [i, 0].concat(element));
             }
         } else {
             if (i === -1) {

@@ -3196,7 +3196,7 @@ enchant.DomlessManager = enchant.Class.create({
             if (i === -1) {
                 Array.prototype.push.apply(this._domRef, element);
             } else {
-                Array.prototype.splice.apply(this._domRef, [i, 0].join(element));
+                Array.prototype.splice.apply(this._domRef, [i, 0].concat(element));
             }
         } else {
             if (i === -1) {
@@ -3414,17 +3414,17 @@ enchant.DomLayer._attachDomManager = function(node, onchildadded, onchildremoved
 
 enchant.DomLayer._detachDomManager = function(node, onchildadded, onchildremoved) {
     var child;
-    node._domManager.remove();
     node.removeEventListener('childadded', onchildadded);
     node.removeEventListener('childremoved', onchildremoved);
-    delete node._domManager;
     if (node.childNodes) {
         for (var i = 0, l = node.childNodes.length; i < l; i++) {
             child = node.childNodes[i];
-            enchant.DomLayer._detachDomManager(child, onchildadded, onchildremoved);
             node._domManager.removeManager(child._domManager, null);
+            enchant.DomLayer._detachDomManager(child, onchildadded, onchildremoved);
         }
     }
+    node._domManager.remove();
+    delete node._domManager;
 };
 
 /**
