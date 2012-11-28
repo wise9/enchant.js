@@ -2645,7 +2645,10 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          * [/lang]
          */
         if(enchant.ENV.USE_ANIMATION){
-            this.tl = new enchant.Timeline(this);
+            var tl = this.tl = new enchant.Timeline(this);
+            this.addEventListener("enterframe", function(e) {
+                tl.dispatchEvent(e);
+            });
         }
     },
     /**
@@ -6503,10 +6506,6 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     }
 });
 
-var _forwardEvent = function(e) {
-    this.tl.dispatchEvent(e);
-};
-
 /**
  * @scope enchant.Timeline.prototype
  */
@@ -6553,7 +6552,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.looped = false;
         this.isFrameBased = true;
         this._parallel = null;
-        this._initialized = unitialized;
+        this._initialized = !unitialized;
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
     },
     /**
@@ -6637,14 +6636,14 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
                 e.elapsed = enterFrameEvent.elapsed;
             }
             action.dispatchEvent(e);
-        } else {
-            this.node.removeEventListener("enterframe", _forwardEvent);
-            this._initialized = false;
         }
     },
     add: function(action) {
         if (!this._initialized) {
-            this.node.addEventListener("enterframe", _forwardEvent);
+            var tl = this;
+            this.node.addEventListener("enterframe", function(e) {
+                tl.dispatchEvent(e);
+            });
             this._initialized = true;
         }
         if (this._parallel) {
@@ -6698,8 +6697,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.queue[i].dispatchEvent(e);
         }
         this.queue = [];
-        this.node.removeEventListener("enterframe", _forwardEvent);
-        this._initialized = false;
         return this;
     },
     /**
@@ -7146,7 +7143,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         });
     }
 });
-
 /**
  * @scope enchant.Action.prototype
  * @type {*}
@@ -7250,6 +7246,8 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
      */
     initialize: function(param) {
         enchant.Action.call(this, param);
+        var timeline = this.timeline;
+        var node = this.node;
         /**
          * [lang:ja]
          * 子アクション

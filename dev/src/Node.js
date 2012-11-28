@@ -97,7 +97,10 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          * [/lang]
          */
         if(enchant.ENV.USE_ANIMATION){
-            this.tl = new enchant.Timeline(this);
+            var tl = this.tl = new enchant.Timeline(this);
+            this.addEventListener("enterframe", function(e) {
+                tl.dispatchEvent(e);
+            });
         }
     },
     /**

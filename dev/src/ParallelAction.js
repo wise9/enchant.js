@@ -13,6 +13,8 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
      */
     initialize: function(param) {
         enchant.Action.call(this, param);
+        var timeline = this.timeline;
+        var node = this.node;
         /**
          * [lang:ja]
          * 子アクション
