@@ -96,31 +96,47 @@
         return 1;
     };
 
-    enchant.gl.collision.AABB2 = enchant.Class.create(
-            enchant.gl.collision.Bounding, {
-                initialize : function() {
-                    enchant.gl.collision.Bounding.call(this);
-                    this.type = 'AABB2';
-                    this.scaleX = 0.5;
-                    this.scaleY = 0.5;
-                    this.scaleZ = 0.5;
-                },
-                toBounding : function(another) {
-                    return point2AABB2(another, this);
-                },
-                toBS : function(another) {
-                    return (point2AABB2(another, this) - another.radius
-                            * another.radius);
-                },
-                toAABB : function(another) {
-                    return AABB2AABB2(this, another);
-                },
-                toAABB2 : function(another) {
-                    return AABB22AABB2(this, another);
-                },
-                toOBB : function(another) {
-                    return 1;
-                }
-            });
+    /**
+     * @scope enchant.gl.collision.AABB2.prototype
+     */
+    enchant.gl.collision.AABB2 = enchant.Class.create(enchant.gl.collision.Bounding, {
+        /**
+         [lang:ja]
+         * Sprite3Dの衝突判定を設定するクラス.
+         * 回転しない直方体として定義されている.
+         * @constructs
+         * @see enchant.gl.collision.Bounding
+         [/lang]
+         [lang:en]
+         * Class that sets Sprite3D collision detection.
+         * Defined as non-rotating box.
+         * @constructs
+         * @see enchant.gl.collision.Bounding
+         [/lang]
+         */
+        initialize : function() {
+            enchant.gl.collision.Bounding.call(this);
+            this.type = 'AABB2';
+            this.scaleX = 0.5;
+            this.scaleY = 0.5;
+            this.scaleZ = 0.5;
+        },
+        toBounding : function(another) {
+            return point2AABB2(another, this);
+        },
+        toBS : function(another) {
+            return (point2AABB2(another, this) - another.radius
+                    * another.radius);
+        },
+        toAABB : function(another) {
+            return AABB2AABB2(this, another);
+        },
+        toAABB2 : function(another) {
+            return AABB22AABB2(this, another);
+        },
+        toOBB : function(another) {
+            return 1;
+        }
+    });
 
 })();
