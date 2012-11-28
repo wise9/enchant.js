@@ -18,7 +18,8 @@ module.exports = function(grunt) {
             },
             lint: {
                 core: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); })],
-                plugins: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js']
+                plugins: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js'],
+                mixing: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); }),'dev/plugins/mixing.enchant.js']
             },
             qunit: {
                 files: ['tests/qunit/*/*.html']
