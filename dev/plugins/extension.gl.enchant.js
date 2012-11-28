@@ -1,5 +1,340 @@
-(function() {
+/**
+ * @fileOverview
+ [lang:ja]
+ * extension.gl.enchant.js
+ * @version 0.0.1
+ * @require gl.enchant.js v0.3.7
+ * @author daishi_hmr
+ *
+ * @description
+ * gl.enchant.jsを拡張するライブラリ
+ *
+ * @detail
+ * AABB2: 幅・高さ・奥行きを個別に設定可能なAABB.
+ * Sprite3D#tl: タイムラインアニメーションをSprite3Dで利用可能にする.
+ * 
+ [/lang]
+ [lang:en]
+ * extension.gl.enchant.js
+ * @version 0.0.1
+ * @require gl.enchant.js v0.3.7
+ * @author daishi_hmr
+ [/lang]
+ */
 
+/**
+ * @namespace
+ */
+enchant.gl.extension = {};
+
+// #################################################################
+// #
+// # utility
+// #
+// #################################################################
+
+/**
+ * クォータニオン同士の積.
+ */
+enchant.gl.Quat.prototype.multiply = function(another) {
+    var q = new Quat(0, 0, 0, 0);
+    quat4.multiply(this._quat, another._quat, q._quat);
+    return q;
+};
+
+/**
+ * 回転行列をクォータニオンに変換.
+ */
+enchant.gl.extension.mat4ToQuat = function(m, q) {
+    if (!q) {
+        q = quat4.create();
+    }
+
+    var s;
+    var tr = m[0] + m[5] + m[10] + 1.0;
+    if (tr >= 1.0) {
+        s = 0.5 / Math.sqrt(tr);
+        q[0] = (m[6] - m[9]) * s;
+        q[1] = (m[8] - m[2]) * s;
+        q[2] = (m[1] - m[4]) * s;
+        q[3] = 0.25 / s;
+    } else {
+        var max;
+        if (m[5] > m[10]) {
+            max = m[5];
+        } else {
+            max = m[10];
+        }
+
+        if (max < m[0]) {
+            s = Math.sqrt(m[0] - (m[5] + m[10]) + 1.0);
+            var x = s * 0.5;
+            s = 0.5 / s;
+            q[0] = x;
+            q[1] = (m[1] + m[4]) * s;
+            q[2] = (m[8] + m[2]) * s;
+            q[3] = (m[6] - m[9]) * s;
+        } else if (max == m[5]) {
+            s = Math.sqrt(m[5] - (m[10] + m[0]) + 1.0);
+            var y = s * 0.5;
+            s = 0.5 / s;
+            q[0] = (m[1] + m[4]) * s;
+            q[1] = y;
+            q[2] = (m[6] + m[9]) * s;
+            q[3] = (m[8] - m[2]) * s;
+        } else {
+            s = Math.sqrt(m[10] - (m[0] + m[5]) + 1.0);
+            var z = s * 0.5;
+            s = 0.5 / s;
+            q[0] = (m[8] + m[2]) * s;
+            q[1] = (m[6] + m[9]) * s;
+            q[2] = z;
+            q[3] = (m[1] - m[4]) * s;
+        }
+    }
+
+    return q;
+};
+
+
+
+// #################################################################
+// #
+// # Scene3Dの拡張
+// #
+// #################################################################
+
+/**
+ * 現在の姿勢をクォータニオンで取得する.
+ */
+enchant.gl.Sprite3D.prototype.getQuat = function() {
+    var quat = new Quat();
+    quat._quat = enchant.gl.extension.mat4ToQuat(this._rotation);
+    return quat;
+};
+
+
+
+// #################################################################
+// #
+// # タイムラインアニメーション
+// #
+// #################################################################
+(function(enchant) {
+    // Sprite3Dのコンストラクタを拡張
+    var orig = enchant.gl.Sprite3D.prototype.initialize;
+    enchant.gl.Sprite3D.prototype.initialize = function() {
+        orig.apply(this, arguments);
+        var tl = this.tl = new enchant.gl.extension.Timeline(this);
+        this.addEventListener("enterframe", function() {
+            tl.dispatchEvent(new enchant.Event("enterframe"));
+        });
+    };
+})(enchant);
+
+enchant.gl.extension.Tween = enchant.Class.create(enchant.Action, {
+    initialize : function(params) {
+        var origin = {};
+        var target = {};
+        enchant.Action.call(this, params);
+
+        if (this.easing == null) {
+            // linear
+            this.easing = function(t, b, c, d) {
+                return c * t / d + b;
+            };
+        }
+
+        var tween = this;
+        this.addEventListener(enchant.Event.ACTION_START, function() {
+            // トゥイーンの対象とならないプロパティ
+            var excepted = [ "frame", "time", "callback", "onactiontick",
+                    "onactionstart", "onactionend" ];
+            for ( var prop in params) {
+                if (params.hasOwnProperty(prop)) {
+                    // 値の代わりに関数が入っていた場合評価した結果を用いる
+                    var target_val;
+                    if (typeof params[prop] == "function") {
+                        target_val = params[prop].call(tween.node);
+                    } else
+                        target_val = params[prop];
+
+                    if (excepted.indexOf(prop) == -1) {
+                        origin[prop] = tween.node[prop];
+                        target[prop] = target_val;
+                    }
+
+                    if (prop === "quat") {
+                        origin[prop] = tween.node.getQuat();
+                        target[prop] = target_val;
+                    }
+                }
+            }
+        });
+
+        this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
+            var ratio = tween.easing(tween.frame, 0, 1, tween.time);
+            for ( var prop in target) {
+                if (target.hasOwnProperty(prop)) {
+                    if (prop === "quat") {
+                        var val = origin[prop].slerp(target[prop], ratio);
+                        tween.node.rotationSet(val);
+                    } else {
+                        if (typeof this[prop] === "undefined") {
+                            continue;
+                        }
+                        var val = target[prop] * ratio + origin[prop]
+                                * (1 - ratio);
+                        tween.node[prop] = val;
+                    }
+                }
+            }
+        });
+    }
+});
+
+enchant.gl.extension.Timeline = enchant.Class.create(enchant.Timeline, {
+    initialize : function(node) {
+        enchant.Timeline.call(this, node);
+    },
+    tween : function(params) {
+        return this.add(new enchant.gl.extension.Tween(params));
+    },
+    moveTo : function(x, y, z, time, easing) {
+        return this.tween({
+            x : x,
+            y : y,
+            z : z,
+            time : time,
+            easing : easing
+        });
+    },
+    moveX : function(x, time, easing) {
+        return this.tween({
+            x : x,
+            time : time,
+            easing : easing
+        });
+    },
+    moveY : function(y, time, easing) {
+        return this.tween({
+            y : y,
+            time : time,
+            easing : easing
+        });
+    },
+    moveZ : function(z, time, easing) {
+        return this.tween({
+            z : z,
+            time : time,
+            easing : easing
+        });
+    },
+    moveBy : function(x, y, z, time, easing) {
+        return this.tween({
+            x : function() {
+                return this.x + x
+            },
+            y : function() {
+                return this.y + y
+            },
+            z : function() {
+                return this.z + z
+            },
+            time : time,
+            easing : easing
+        });
+    },
+    scaleTo : function(scale, time, easing) {
+        return this.tween({
+            scaleX : scale,
+            scaleY : scale,
+            scaleZ : scale,
+            time : time,
+            easing : easing
+        });
+    },
+    scaleXYZTo : function(scaleX, scaleY, scaleZ, time, easing) {
+        return this.tween({
+            scaleX : scaleX,
+            scaleY : scaleY,
+            scaleZ : scaleZ,
+            time : time,
+            easing : easing
+        });
+    },
+    scaleBy : function(scale, time, easing) {
+        return this.tween({
+            scaleX : function() {
+                return this.scaleX * scale
+            },
+            scaleY : function() {
+                return this.scaleY * scale
+            },
+            scaleZ : function() {
+                return this.scaleZ * scale
+            },
+            time : time,
+            easing : easing
+        })
+    },
+    scaleXYZBy : function(scaleX, scaleY, scaleZ, time, easing) {
+        return this.tween({
+            scaleX : function() {
+                return this.scaleX * scaleX
+            },
+            scaleY : function() {
+                return this.scaleY * scaleY
+            },
+            scaleZ : function() {
+                return this.scaleZ * scaleZ
+            },
+            time : time,
+            easing : easing
+        })
+    },
+    rotateTo : function(quat, time, easing) {
+        return this.tween({
+            quat : quat,
+            time : time,
+            easing : easing
+        });
+    },
+    rotateBy : function(quat, time, easing) {
+        return this.tween({
+            quat : this.node.getQuat().multiply(quat),
+            time : time,
+            easing : easing
+        });
+    },
+    rotatePitchTo : function(angle, time, easing) {
+        return this.rotateTo(new Quat(1, 0, 0, angle), time, easing);
+    },
+    rotateYawTo : function(angle, time, easing) {
+        return this.rotateTo(new Quat(0, 1, 0, angle), time, easing);
+    },
+    rotateRollTo : function(angle, time, easing) {
+        return this.rotateTo(new Quat(0, 0, 1, angle), time, easing);
+    },
+    rotatePitchBy : function(angle, time, easing) {
+        return this.rotateBy(new Quat(1, 0, 0, angle), time, easing);
+    },
+    rotateYawBy : function(angle, time, easing) {
+        return this.rotateBy(new Quat(0, 1, 0, angle), time, easing);
+    },
+    rotateRollBy : function(angle, time, easing) {
+        return this.rotateBy(new Quat(0, 0, 1, angle), time, easing);
+    }
+});
+
+
+
+// #################################################################
+// #
+// # 衝突判定
+// #
+// #################################################################
+(function(enchant) {
     var point2AABB2 = function(p, aabb) {
         var ppx = p.x + p.parent.x;
         var ppy = p.y + p.parent.y;
@@ -125,8 +460,7 @@
             return point2AABB2(another, this);
         },
         toBS : function(another) {
-            return (point2AABB2(another, this) - another.radius
-                    * another.radius);
+            return (point2AABB2(another, this) - another.radius * another.radius);
         },
         toAABB : function(another) {
             return AABB2AABB2(this, another);
@@ -139,4 +473,26 @@
         }
     });
 
-})();
+    enchant.gl.collision.NONE = enchant.Class.create(enchant.gl.collision.Bounding, {
+        /**
+         * 衝突が発生しないBounding.
+         */
+        initialize : function() {
+            enchant.gl.collision.Bounding.call(this);
+            this.type = 'NONE';
+        },
+        toBounding : function(another) {
+            return 1000;
+        },
+        toBS : function(another) {
+            return 1000;
+        },
+        toAABB : function(another) {
+            return 1000;
+        },
+        toOBB : function(another) {
+            return 1000;
+        }
+    });
+
+})(enchant);
