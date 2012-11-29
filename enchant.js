@@ -2100,7 +2100,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
-
+		this._spriteImageDirty = false;
         /**
          * frame に配列が指定されたときの処理。
          * _frameSeuence に
@@ -2180,6 +2180,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             row = image.width / this._width | 0;
             this._frameLeft = (frame % row | 0) * this._width;
             this._frameTop = (frame / row | 0) * this._height % image.height;
+            this._spriteImageDirty = true;
         }
     },
     cvsRender: function(ctx) {
@@ -2197,12 +2198,13 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     domRender: function(element) {
-        if (this._image) {
+        if (this._image && this._spriteImageDirty) {
             if (this._image._css) {
                 element.style.backgroundImage = this._image._css;
                 element.style.backgroundPosition =
                     -this._frameLeft + 'px ' +
                     -this._frameTop + 'px';
+                this._spriteImageDirty = false;
             } else if (this._image._element) {
             }
         }
@@ -2333,7 +2335,9 @@ enchant.Label.prototype.getMetrics = function(text) {
     if (document.body) {
         div = document.createElement('div');
         for (var prop in this._style) {
-            div.style[prop] = this._style[prop];
+            if(prop !== 'width' && prop !== 'height') {
+                div.style[prop] = this._style[prop];
+            }
         }
         div.innerHTML = text || this._text;
         document.body.appendChild(div);
@@ -3136,7 +3140,7 @@ enchant.DomManager = enchant.Class.create({
         node._style.width = node.width + 'px';
         node._style.height = node.height + 'px';
         node._style.opacity = node._opacity;
-        node._style.backgroundColor = node._backgroundColor;
+        node._style['background-color'] = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
             node._style.display = node._visible ? 'block' : 'none';
         }
