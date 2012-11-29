@@ -1588,11 +1588,8 @@ if (enchant !== undefined) {
                 }
                 if(this.textAlign !== 'center' && this.__newText) {
                     this.__newText = false;
-                    var metrics = this.getMetrics();
-                    this.width = metrics.width;
-                    this.height = metrics.height;
-                    element.style.width = metrics.width + 'px';
-                    element.style.height = metrics.height + 'px';
+                    this.originX = this._boundWidth/2;
+                    this.originY = this._boundHeight/2;
                 }
                 enchant.Label.prototype.domRender.apply(this,arguments);
             }
@@ -1913,10 +1910,10 @@ if (enchant !== undefined) {
                 var parent = null;
                 do {
                     parent = result.getParentSymbol();
-                    if (parent !== null) {
+                    if (parent instanceof enchant.edge.Symbol) {
                         result = parent;
                     }
-                } while (parent !== null);
+                } while (parent instanceof enchant.edge.Symbol);
                 return result;
             },
             /**
