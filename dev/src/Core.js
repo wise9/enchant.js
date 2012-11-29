@@ -713,7 +713,11 @@
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = this.getTime();
+            var onloadTimeSetter = function() {
+                this.currentTime = this.getTime();
+                this.removeEventListener('load',onloadTimeSetter);
+            };
+            this.addEventListener('load',onloadTimeSetter);
             this._intervalID = window.setInterval(function() {
                 core._tick();
             }, 1000 / this.fps);
