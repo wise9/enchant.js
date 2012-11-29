@@ -1074,12 +1074,19 @@ if (enchant !== undefined) {
                 }
                 return null;
             },
+            _applyPendingAutoPlay : function() {
+                if(this.__pendingAutoPlay !== undefined && this.__pendingAutoPlay !== null) {
+                    this._playTimelines(this.__pendingAutoPlay);
+                    this.__pendingAutoPlay = undefined;
+                }
+            },
             /**
              * Method which will create the tween animations used for regular or reverse playback of the animation.
              * @param [number] time Time to be used as elapsed time on the newly created animation.
              * @param [bool] reverse If set to true the created timeline will be reversed.
              */
             createTimelines: function(time, reverse) {
+                reverse = reverse === true;
                 if (!time) {
                     time = 0;
                 }
@@ -1192,7 +1199,9 @@ if (enchant !== undefined) {
                 this._created = 1;
                 this._isPlayingReverse = reverse;
                 if (autoplay) {
-                    this._playTimelines(reverse);
+                    this.__pendingAutoPlay = reverse;
+                } else {
+                    this.__pendingAutoPlay = undefined;
                 }
             },
             _timelineSymbolTweenActionFunctionFactory : function(symbol, func, params) {
@@ -1317,22 +1326,22 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeEntity.prototype
          */
         enchant.edge.EdgeEntity = enchant.Class.create(Object,{
             /**
-            * Creates a new edge entity - should not be used directly.
-            * @class A class which holds common functionality for edge - 
-            * should not be used directly. edge.enchant.js uses this class
-            * for mixing.enchant.js.
-            * Furthermore, using mixing.enchant.js {@link enchant.Group} 
-            * is mixed into this class.
-            * @extends Object
-            * @extends enchant.Group
-            * @constructs
-            */
+             * Creates a new edge entity - should not be used directly.
+             * @class A class which holds common functionality for edge - 
+             * should not be used directly. edge.enchant.js uses this class
+             * for mixing.enchant.js.
+             * Furthermore, using mixing.enchant.js {@link enchant.Group} 
+             * is mixed into this class.
+             * @extends Object
+             * @extends enchant.Group
+             * @constructs
+             */
             initialize : function() {
                 this._initiliazeDomLayer();
             },
@@ -1408,10 +1417,10 @@ if (enchant !== undefined) {
                 Object.defineProperty(target,propertyName,prop);
             },
             /**
-            * Sets both, scaleX and scaleY.
-            * @param {Number} scale The scale used to scale this entity.
-            * @type {Number}
-            */
+             * Sets both, scaleX and scaleY.
+             * @param {Number} scale The scale used to scale this entity.
+             * @type {Number}
+             */
             defineScale: function(scale) {
                 this.scaleX = scale;
                 this.scaleY = scale;
@@ -1435,17 +1444,17 @@ if (enchant !== undefined) {
          */
         enchant.edge.EdgeGroup = enchant.Class.create(enchant.Entity,{
             /**
-            * Creates a new group for entities which will be hosted in a div element.
-            * @param {String} id The id for this div element.
-            * @param {Number} [width] The width of the EdgeGroup.
-            * @param {Number} [height] The height of the EdgeGroup.
-            * @class A class which extendes {@link enchant.Entity}.
-            * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
-            * is mixed into this class.
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Entity
-            * @constructs
-            */
+             * Creates a new group for entities which will be hosted in a div element.
+             * @param {String} id The id for this div element.
+             * @param {Number} [width] The width of the EdgeGroup.
+             * @param {Number} [height] The height of the EdgeGroup.
+             * @class A class which extendes {@link enchant.Entity}.
+             * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
+             * is mixed into this class.
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Entity
+             * @constructs
+             */
             initialize: function(id,w,h) {
                 enchant.Entity.call(this);
                 this._symbol = null;
@@ -1466,19 +1475,19 @@ if (enchant !== undefined) {
          */
         enchant.edge.EdgeSprite = enchant.Class.create(enchant.Sprite,{
             /**
-            * Creates a new sprite.
-            * @class This class is a subclass of {@link enchant.Sprite}.
-            * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
-            * is mixed into this class.
-            * Unlike {@link enchant.Sprite} this sprite does not support multiple frames.
-            * @param {enchant.Surface} surface The surface to be displayed.
-            * @param {Number} width The width of the sprite.
-            * @param {Number} height The height of the sprite.
-            * @param {String} backgroundColor The CSS background color string
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Sprite
-            * @constructs
-            */
+             * Creates a new sprite.
+             * @class This class is a subclass of {@link enchant.Sprite}.
+             * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
+             * is mixed into this class.
+             * Unlike {@link enchant.Sprite} this sprite does not support multiple frames.
+             * @param {enchant.Surface} surface The surface to be displayed.
+             * @param {Number} width The width of the sprite.
+             * @param {Number} height The height of the sprite.
+             * @param {String} backgroundColor The CSS background color string
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Sprite
+             * @constructs
+             */
             initialize: function(surface, width, height, backgroundColor) {
                 enchant.Sprite.call(this);
                 this.width = width;
@@ -1503,20 +1512,20 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeLabel.prototype
          */
         /**
-        * Creates a new label used to display text.
-        * @class @class This class is a subclass of {@link enchant.Label}.
-        * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
-        * is mixed into this class.
-        * @param [String] text The text to be displayed.
-        * @extends enchant.edge.EdgeEntity
-        * @extends enchant.Label
-        * @constructs
-        */
+         * Creates a new label used to display text.
+         * @class @class This class is a subclass of {@link enchant.Label}.
+         * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
+         * is mixed into this class.
+         * @param [String] text The text to be displayed.
+         * @extends enchant.edge.EdgeEntity
+         * @extends enchant.Label
+         * @constructs
+         */
         enchant.edge.EdgeLabel = enchant.Class.create(enchant.Label,{
             initialize: function(text) {
                 this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'text', function() {this._element.innerHTML = this._text;});
@@ -1562,9 +1571,9 @@ if (enchant !== undefined) {
                 this.__newText = true;
             },
             /**
-            * Text to be displayed.
-            * @type {String}
-            */
+             * Text to be displayed.
+             * @type {String}
+             */
             text : {
                 get: Object.getOwnPropertyDescriptor(enchant.Label.prototype,'text').get,
                 set: function(text) {
@@ -1783,6 +1792,16 @@ if (enchant !== undefined) {
                         this.__detectChildSymbols(group.childNodes[key], list);
                     }
                 }
+            },
+            /**
+             * @private
+             */
+            _applyPendingAutoPlay: function() {
+                var children = this.getChildSymbols();
+                for (var key in children) {
+                    children[key]._applyPendingAutoPlay();
+                }
+                this._currentStateObject._applyPendingAutoPlay();
             },
             /* Edge Callback Methods */
             /**
@@ -2357,6 +2376,7 @@ if (enchant !== undefined) {
                 for (var actionKey in completeActions) {
                     completeActions[actionKey].callback(child);
                 }
+                child._applyPendingAutoPlay();
                 return child;
             },
             /**

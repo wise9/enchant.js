@@ -1056,9 +1056,16 @@ if (enchant !== undefined) {
                 }
                 return null;
             },
+            _applyPendingAutoPlay : function() {
+                if(this.__pendingAutoPlay !== undefined && this.__pendingAutoPlay !== null) {
+                    this._playTimelines(this.__pendingAutoPlay);
+                    this.__pendingAutoPlay = undefined;
+                }
+            },
             /**
              */
             createTimelines: function(time, reverse) {
+                reverse = reverse === true;
                 if (!time) {
                     time = 0;
                 }
@@ -1171,7 +1178,9 @@ if (enchant !== undefined) {
                 this._created = 1;
                 this._isPlayingReverse = reverse;
                 if (autoplay) {
-                    this._playTimelines(reverse);
+                    this.__pendingAutoPlay = reverse;
+                } else {
+                    this.__pendingAutoPlay = undefined;
                 }
             },
             _timelineSymbolTweenActionFunctionFactory : function(symbol, func, params) {
@@ -1296,22 +1305,22 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeEntity.prototype
          */
         enchant.edge.EdgeEntity = enchant.Class.create(Object,{
             /**
-            * 新たなEdgeEntityを作成する。直接使用することはない.
-            * @class edgeオブジェクトのための機能を持っているクラス。
-            * 直接使用することはない.
-            * edge.enchant.jsはこのクラスを「mixing.enchant.js」に使用している.
-            * その上、{@link enchant.Group}が
-            * mixing.enchant.jsでこのクラスに混ぜっている。
-            * @extends Object
-            * @extends enchant.Group
-            * @constructs
-            */
+             * 新たなEdgeEntityを作成する。直接使用することはない.
+             * @class edgeオブジェクトのための機能を持っているクラス。
+             * 直接使用することはない.
+             * edge.enchant.jsはこのクラスを「mixing.enchant.js」に使用している.
+             * その上、{@link enchant.Group}が
+             * mixing.enchant.jsでこのクラスに混ぜっている。
+             * @extends Object
+             * @extends enchant.Group
+             * @constructs
+             */
             initialize : function() {
                 this._initiliazeDomLayer();
             },
@@ -1387,10 +1396,10 @@ if (enchant !== undefined) {
                 Object.defineProperty(target,propertyName,prop);
             },
             /**
-            * scaleXやscaleYを設定する.
-            * @param {Number} scale entityを拡大縮小する倍率.
-            * @type {Number}
-            */
+             * scaleXやscaleYを設定する.
+             * @param {Number} scale entityを拡大縮小する倍率.
+             * @type {Number}
+             */
             defineScale: function(scale) {
                 this.scaleX = scale;
                 this.scaleY = scale;
@@ -1414,17 +1423,17 @@ if (enchant !== undefined) {
          */
         enchant.edge.EdgeGroup = enchant.Class.create(enchant.Entity,{
             /**
-            * 新たなentityをdivエレメントの中持っているグループのオブジェクトを作成する.
-            * @param {String} id divエレメントのID.
-            * @param [Number] width EdgeGroupの横幅.
-            * @param [Number] height EdgeGroupの高さ.
-            * @class このクラスは{@link enchant.Entity}を汎化している。
-            * その上、{@link enchant.edge.EdgeEntity}が
-            * mixing.enchant.jsでこのクラスに混ぜっている。
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Entity
-            * @constructs
-            */
+             * 新たなentityをdivエレメントの中持っているグループのオブジェクトを作成する.
+             * @param {String} id divエレメントのID.
+             * @param [Number] width EdgeGroupの横幅.
+             * @param [Number] height EdgeGroupの高さ.
+             * @class このクラスは{@link enchant.Entity}を汎化している。
+             * その上、{@link enchant.edge.EdgeEntity}が
+             * mixing.enchant.jsでこのクラスに混ぜっている。
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Entity
+             * @constructs
+             */
             initialize: function(id,w,h) {
                 enchant.Entity.call(this);
                 this._symbol = null;
@@ -1445,18 +1454,18 @@ if (enchant !== undefined) {
          */
         enchant.edge.EdgeSprite = enchant.Class.create(enchant.Sprite,{
             /**
-            * 新たなスプライトを作成する.
-            * @class このクラスは{@link enchant.Sprite}のサブクラス.
-            * その上、{@link enchant.edge.EdgeEntity}が
-            * mixing.enchant.jsでこのクラスに混ぜっている。
-            * @param {enchant.Surface} surface 表示される{@link enchant.Surface}.
-            * @param {Number} width スプライトの横幅.
-            * @param {Number} height スプライトの高さ.
-            * @param {String} backgroundColor CSSバックグランドの色の指定.
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Sprite
-            * @constructs
-            */
+             * 新たなスプライトを作成する.
+             * @class このクラスは{@link enchant.Sprite}のサブクラス.
+             * その上、{@link enchant.edge.EdgeEntity}が
+             * mixing.enchant.jsでこのクラスに混ぜっている。
+             * @param {enchant.Surface} surface 表示される{@link enchant.Surface}.
+             * @param {Number} width スプライトの横幅.
+             * @param {Number} height スプライトの高さ.
+             * @param {String} backgroundColor CSSバックグランドの色の指定.
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Sprite
+             * @constructs
+             */
             initialize: function(surface, width, height, backgroundColor) {
                 enchant.Sprite.call(this);
                 this.width = width;
@@ -1481,20 +1490,20 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeLabel.prototype
          */
         /**
-        * テキストを表示する新たなlabelを作成する.
-        * @class このクラスは{@link enchant.Label}のサブクラス.
-        * その上、{@link enchant.edge.EdgeEntity}が
-        * mixing.enchant.jsでこのクラスに混ぜっている。
-        * @param [String] text 表示されるテキスト.
-        * @extends enchant.edge.EdgeEntity
-        * @extends enchant.Label
-        * @constructs
-        */
+         * テキストを表示する新たなlabelを作成する.
+         * @class このクラスは{@link enchant.Label}のサブクラス.
+         * その上、{@link enchant.edge.EdgeEntity}が
+         * mixing.enchant.jsでこのクラスに混ぜっている。
+         * @param [String] text 表示されるテキスト.
+         * @extends enchant.edge.EdgeEntity
+         * @extends enchant.Label
+         * @constructs
+         */
         enchant.edge.EdgeLabel = enchant.Class.create(enchant.Label,{
             initialize: function(text) {
                 this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'text', function() {this._element.innerHTML = this._text;});
@@ -1540,9 +1549,9 @@ if (enchant !== undefined) {
                 this.__newText = true;
             },
             /**
-            * 表示するテキスト.
-            * @type {String}
-            */
+             * 表示するテキスト.
+             * @type {String}
+             */
             text : {
                 get: Object.getOwnPropertyDescriptor(enchant.Label.prototype,'text').get,
                 set: function(text) {
@@ -1761,6 +1770,16 @@ if (enchant !== undefined) {
                         this.__detectChildSymbols(group.childNodes[key], list);
                     }
                 }
+            },
+            /**
+             * @private
+             */
+            _applyPendingAutoPlay: function() {
+                var children = this.getChildSymbols();
+                for (var key in children) {
+                    children[key]._applyPendingAutoPlay();
+                }
+                this._currentStateObject._applyPendingAutoPlay();
             },
             /* Edge Callback Methods */
             /**
@@ -2331,6 +2350,7 @@ if (enchant !== undefined) {
                 for (var actionKey in completeActions) {
                     completeActions[actionKey].callback(child);
                 }
+                child._applyPendingAutoPlay();
                 return child;
             },
             /**

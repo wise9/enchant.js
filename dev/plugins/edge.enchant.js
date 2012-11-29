@@ -1112,6 +1112,12 @@ if (enchant !== undefined) {
                 }
                 return null;
             },
+            _applyPendingAutoPlay : function() {
+                if(this.__pendingAutoPlay !== undefined && this.__pendingAutoPlay !== null) {
+                    this._playTimelines(this.__pendingAutoPlay);
+                    this.__pendingAutoPlay = undefined;
+                }
+            },
             /**
              [lang:en]
              * Method which will create the tween animations used for regular or reverse playback of the animation.
@@ -1120,6 +1126,7 @@ if (enchant !== undefined) {
              [/lang]
              */
             createTimelines: function(time, reverse) {
+                reverse = reverse === true;
                 if (!time) {
                     time = 0;
                 }
@@ -1232,7 +1239,9 @@ if (enchant !== undefined) {
                 this._created = 1;
                 this._isPlayingReverse = reverse;
                 if (autoplay) {
-                    this._playTimelines(reverse);
+                    this.__pendingAutoPlay = reverse;
+                } else {
+                    this.__pendingAutoPlay = undefined;
                 }
             },
             _timelineSymbolTweenActionFunctionFactory : function(symbol, func, params) {
@@ -1405,32 +1414,32 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeEntity.prototype
          */
         enchant.edge.EdgeEntity = enchant.Class.create(Object,{
             /**
             [lang:ja]
-            * 新たなEdgeEntityを作成する。直接使用することはない.
-            * @class edgeオブジェクトのための機能を持っているクラス。
-            * 直接使用することはない.
-            * edge.enchant.jsはこのクラスを「mixing.enchant.js」に使用している.
-            * その上、{@link enchant.Group}が
-            * mixing.enchant.jsでこのクラスに混ぜっている。
+             * 新たなEdgeEntityを作成する。直接使用することはない.
+             * @class edgeオブジェクトのための機能を持っているクラス。
+             * 直接使用することはない.
+             * edge.enchant.jsはこのクラスを「mixing.enchant.js」に使用している.
+             * その上、{@link enchant.Group}が
+             * mixing.enchant.jsでこのクラスに混ぜっている。
             [/lang]
             [lang:en]
-            * Creates a new edge entity - should not be used directly.
-            * @class A class which holds common functionality for edge - 
-            * should not be used directly. edge.enchant.js uses this class
-            * for mixing.enchant.js.
-            * Furthermore, using mixing.enchant.js {@link enchant.Group} 
-            * is mixed into this class.
+             * Creates a new edge entity - should not be used directly.
+             * @class A class which holds common functionality for edge - 
+             * should not be used directly. edge.enchant.js uses this class
+             * for mixing.enchant.js.
+             * Furthermore, using mixing.enchant.js {@link enchant.Group} 
+             * is mixed into this class.
             [/lang]
-            * @extends Object
-            * @extends enchant.Group
-            * @constructs
-            */
+             * @extends Object
+             * @extends enchant.Group
+             * @constructs
+             */
             initialize : function() {
                 this._initiliazeDomLayer();
             },
@@ -1507,15 +1516,15 @@ if (enchant !== undefined) {
             },
             /**
             [lang:ja]
-            * scaleXやscaleYを設定する.
-            * @param {Number} scale entityを拡大縮小する倍率.
+             * scaleXやscaleYを設定する.
+             * @param {Number} scale entityを拡大縮小する倍率.
             [/lang]
             [lang:en]
-            * Sets both, scaleX and scaleY.
-            * @param {Number} scale The scale used to scale this entity.
+             * Sets both, scaleX and scaleY.
+             * @param {Number} scale The scale used to scale this entity.
             [/lang]
-            * @type {Number}
-            */
+             * @type {Number}
+             */
             defineScale: function(scale) {
                 this.scaleX = scale;
                 this.scaleY = scale;
@@ -1540,27 +1549,27 @@ if (enchant !== undefined) {
         enchant.edge.EdgeGroup = enchant.Class.create(enchant.Entity,{
             /**
             [lang:ja]
-            * 新たなentityをdivエレメントの中持っているグループのオブジェクトを作成する.
-            * @param {String} id divエレメントのID.
-            * @param [Number] width EdgeGroupの横幅.
-            * @param [Number] height EdgeGroupの高さ.
-            * @class このクラスは{@link enchant.Entity}を汎化している。
-            * その上、{@link enchant.edge.EdgeEntity}が
-            * mixing.enchant.jsでこのクラスに混ぜっている。
+             * 新たなentityをdivエレメントの中持っているグループのオブジェクトを作成する.
+             * @param {String} id divエレメントのID.
+             * @param [Number] width EdgeGroupの横幅.
+             * @param [Number] height EdgeGroupの高さ.
+             * @class このクラスは{@link enchant.Entity}を汎化している。
+             * その上、{@link enchant.edge.EdgeEntity}が
+             * mixing.enchant.jsでこのクラスに混ぜっている。
             [/lang]
             [lang:en]
-            * Creates a new group for entities which will be hosted in a div element.
-            * @param {String} id The id for this div element.
-            * @param {Number} [width] The width of the EdgeGroup.
-            * @param {Number} [height] The height of the EdgeGroup.
-            * @class A class which extendes {@link enchant.Entity}.
-            * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
-            * is mixed into this class.
+             * Creates a new group for entities which will be hosted in a div element.
+             * @param {String} id The id for this div element.
+             * @param {Number} [width] The width of the EdgeGroup.
+             * @param {Number} [height] The height of the EdgeGroup.
+             * @class A class which extendes {@link enchant.Entity}.
+             * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
+             * is mixed into this class.
             [/lang]
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Entity
-            * @constructs
-            */
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Entity
+             * @constructs
+             */
             initialize: function(id,w,h) {
                 enchant.Entity.call(this);
                 this._symbol = null;
@@ -1582,30 +1591,30 @@ if (enchant !== undefined) {
         enchant.edge.EdgeSprite = enchant.Class.create(enchant.Sprite,{
             /**
             [lang:ja]
-            * 新たなスプライトを作成する.
-            * @class このクラスは{@link enchant.Sprite}のサブクラス.
-            * その上、{@link enchant.edge.EdgeEntity}が
-            * mixing.enchant.jsでこのクラスに混ぜっている。
-            * @param {enchant.Surface} surface 表示される{@link enchant.Surface}.
-            * @param {Number} width スプライトの横幅.
-            * @param {Number} height スプライトの高さ.
-            * @param {String} backgroundColor CSSバックグランドの色の指定.
+             * 新たなスプライトを作成する.
+             * @class このクラスは{@link enchant.Sprite}のサブクラス.
+             * その上、{@link enchant.edge.EdgeEntity}が
+             * mixing.enchant.jsでこのクラスに混ぜっている。
+             * @param {enchant.Surface} surface 表示される{@link enchant.Surface}.
+             * @param {Number} width スプライトの横幅.
+             * @param {Number} height スプライトの高さ.
+             * @param {String} backgroundColor CSSバックグランドの色の指定.
             [/lang]
             [lang:en]
-            * Creates a new sprite.
-            * @class This class is a subclass of {@link enchant.Sprite}.
-            * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
-            * is mixed into this class.
-            * Unlike {@link enchant.Sprite} this sprite does not support multiple frames.
-            * @param {enchant.Surface} surface The surface to be displayed.
-            * @param {Number} width The width of the sprite.
-            * @param {Number} height The height of the sprite.
-            * @param {String} backgroundColor The CSS background color string
+             * Creates a new sprite.
+             * @class This class is a subclass of {@link enchant.Sprite}.
+             * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
+             * is mixed into this class.
+             * Unlike {@link enchant.Sprite} this sprite does not support multiple frames.
+             * @param {enchant.Surface} surface The surface to be displayed.
+             * @param {Number} width The width of the sprite.
+             * @param {Number} height The height of the sprite.
+             * @param {String} backgroundColor The CSS background color string
             [/lang]
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Sprite
-            * @constructs
-            */
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Sprite
+             * @constructs
+             */
             initialize: function(surface, width, height, backgroundColor) {
                 enchant.Sprite.call(this);
                 this.width = width;
@@ -1630,29 +1639,29 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeLabel.prototype
          */
         /**
         [lang:ja]
-        * テキストを表示する新たなlabelを作成する.
-        * @class このクラスは{@link enchant.Label}のサブクラス.
-        * その上、{@link enchant.edge.EdgeEntity}が
-        * mixing.enchant.jsでこのクラスに混ぜっている。
-        * @param [String] text 表示されるテキスト.
+         * テキストを表示する新たなlabelを作成する.
+         * @class このクラスは{@link enchant.Label}のサブクラス.
+         * その上、{@link enchant.edge.EdgeEntity}が
+         * mixing.enchant.jsでこのクラスに混ぜっている。
+         * @param [String] text 表示されるテキスト.
         [/lang]
         [lang:en]
-        * Creates a new label used to display text.
-        * @class @class This class is a subclass of {@link enchant.Label}.
-        * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
-        * is mixed into this class.
-        * @param [String] text The text to be displayed.
+         * Creates a new label used to display text.
+         * @class @class This class is a subclass of {@link enchant.Label}.
+         * Furthermore, using mixing.enchant.js {@link enchant.edge.EdgeEntity} 
+         * is mixed into this class.
+         * @param [String] text The text to be displayed.
         [/lang]
-        * @extends enchant.edge.EdgeEntity
-        * @extends enchant.Label
-        * @constructs
-        */
+         * @extends enchant.edge.EdgeEntity
+         * @extends enchant.Label
+         * @constructs
+         */
         enchant.edge.EdgeLabel = enchant.Class.create(enchant.Label,{
             initialize: function(text) {
                 this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'text', function() {this._element.innerHTML = this._text;});
@@ -1709,13 +1718,13 @@ if (enchant !== undefined) {
             },
             /**
             [lang:ja]
-            * 表示するテキスト.
+             * 表示するテキスト.
             [/lang]
             [lang:en]
-            * Text to be displayed.
+             * Text to be displayed.
             [/lang]
-            * @type {String}
-            */
+             * @type {String}
+             */
             text : {
                 get: Object.getOwnPropertyDescriptor(enchant.Label.prototype,'text').get,
                 set: function(text) {
@@ -2022,6 +2031,16 @@ if (enchant !== undefined) {
                         this.__detectChildSymbols(group.childNodes[key], list);
                     }
                 }
+            },
+            /**
+             * @private
+             */
+            _applyPendingAutoPlay: function() {
+                var children = this.getChildSymbols();
+                for (var key in children) {
+                    children[key]._applyPendingAutoPlay();
+                }
+                this._currentStateObject._applyPendingAutoPlay();
             },
             /* Edge Callback Methods */
             /**
@@ -2878,6 +2897,7 @@ if (enchant !== undefined) {
                 for (var actionKey in completeActions) {
                     completeActions[actionKey].callback(child);
                 }
+                child._applyPendingAutoPlay();
                 return child;
             },
             /**

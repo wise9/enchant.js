@@ -1044,9 +1044,16 @@ if (enchant !== undefined) {
                 }
                 return null;
             },
+            _applyPendingAutoPlay : function() {
+                if(this.__pendingAutoPlay !== undefined && this.__pendingAutoPlay !== null) {
+                    this._playTimelines(this.__pendingAutoPlay);
+                    this.__pendingAutoPlay = undefined;
+                }
+            },
             /**
              */
             createTimelines: function(time, reverse) {
+                reverse = reverse === true;
                 if (!time) {
                     time = 0;
                 }
@@ -1159,7 +1166,9 @@ if (enchant !== undefined) {
                 this._created = 1;
                 this._isPlayingReverse = reverse;
                 if (autoplay) {
-                    this._playTimelines(reverse);
+                    this.__pendingAutoPlay = reverse;
+                } else {
+                    this.__pendingAutoPlay = undefined;
                 }
             },
             _timelineSymbolTweenActionFunctionFactory : function(symbol, func, params) {
@@ -1260,16 +1269,16 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeEntity.prototype
          */
         enchant.edge.EdgeEntity = enchant.Class.create(Object,{
             /**
-            * @extends Object
-            * @extends enchant.Group
-            * @constructs
-            */
+             * @extends Object
+             * @extends enchant.Group
+             * @constructs
+             */
             initialize : function() {
                 this._initiliazeDomLayer();
             },
@@ -1345,8 +1354,8 @@ if (enchant !== undefined) {
                 Object.defineProperty(target,propertyName,prop);
             },
             /**
-            * @type {Number}
-            */
+             * @type {Number}
+             */
             defineScale: function(scale) {
                 this.scaleX = scale;
                 this.scaleY = scale;
@@ -1370,10 +1379,10 @@ if (enchant !== undefined) {
          */
         enchant.edge.EdgeGroup = enchant.Class.create(enchant.Entity,{
             /**
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Entity
-            * @constructs
-            */
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Entity
+             * @constructs
+             */
             initialize: function(id,w,h) {
                 enchant.Entity.call(this);
                 this._symbol = null;
@@ -1394,10 +1403,10 @@ if (enchant !== undefined) {
          */
         enchant.edge.EdgeSprite = enchant.Class.create(enchant.Sprite,{
             /**
-            * @extends enchant.edge.EdgeEntity
-            * @extends enchant.Sprite
-            * @constructs
-            */
+             * @extends enchant.edge.EdgeEntity
+             * @extends enchant.Sprite
+             * @constructs
+             */
             initialize: function(surface, width, height, backgroundColor) {
                 enchant.Sprite.call(this);
                 this.width = width;
@@ -1422,15 +1431,15 @@ if (enchant !== undefined) {
                 }
             }
         });
-        
+
         /**
          * @scope enchant.edge.EdgeLabel.prototype
          */
         /**
-        * @extends enchant.edge.EdgeEntity
-        * @extends enchant.Label
-        * @constructs
-        */
+         * @extends enchant.edge.EdgeEntity
+         * @extends enchant.Label
+         * @constructs
+         */
         enchant.edge.EdgeLabel = enchant.Class.create(enchant.Label,{
             initialize: function(text) {
                 this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'text', function() {this._element.innerHTML = this._text;});
@@ -1474,8 +1483,8 @@ if (enchant !== undefined) {
                 this.__newText = true;
             },
             /**
-            * @type {String}
-            */
+             * @type {String}
+             */
             text : {
                 get: Object.getOwnPropertyDescriptor(enchant.Label.prototype,'text').get,
                 set: function(text) {
@@ -1654,6 +1663,16 @@ if (enchant !== undefined) {
                         this.__detectChildSymbols(group.childNodes[key], list);
                     }
                 }
+            },
+            /**
+             * @private
+             */
+            _applyPendingAutoPlay: function() {
+                var children = this.getChildSymbols();
+                for (var key in children) {
+                    children[key]._applyPendingAutoPlay();
+                }
+                this._currentStateObject._applyPendingAutoPlay();
             },
             /* Edge Callback Methods */
             /**
@@ -2070,6 +2089,7 @@ if (enchant !== undefined) {
                 for (var actionKey in completeActions) {
                     completeActions[actionKey].callback(child);
                 }
+                child._applyPendingAutoPlay();
                 return child;
             },
             /**
