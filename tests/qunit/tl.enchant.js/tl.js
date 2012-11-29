@@ -188,6 +188,64 @@ test('tl.fadeOut', function() {
     equal(sprite.opacity, 0);
 });
 
+var periodTestingFunction = function(time, checkArray,period,sprite,property) {
+    for(var j = 0; j < checkArray.length; j++) {
+        if(checkArray[j][0] === time%period) {
+            equal(sprite[property] === checkArray[j][1],checkArray[j][2],' ' + property + ' for time ' + time + ' testing: ' + checkArray[j][1] + ' === ' + sprite[property] + ', expecting ' + checkArray[j][2]);
+        }
+    }
+}
+
+test('tl.multipleTl', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    var tl = new Timeline(sprite,true);
+    tl.rotateTo(360,10).delay(2).rotateTo(0,10).delay(2).loop();
+    var rotateCheck = [[0,0,true],[9,0,false],[10,360,true],
+                   [11,360,false],[19,360,false],
+                   [19,0,false]
+                   ];
+    var rotationPeriod = 20;
+    
+    tl = new Timeline(sprite,true);
+    tl.delay(Math.round(Math.random()*10+5)).delay(Math.round(Math.random()*10+5))
+    .delay(Math.round(Math.random()*10+5)).delay(Math.round(Math.random()*10+5));
+    
+    tl = new Timeline(sprite,true);
+    tl.fadeOut(20).delay(2).fadeIn(20).delay(2).loop();
+    var fadeCheck = [[0,1,true],[9,1,false],[19,1,false],[20,0,true],
+                   [21,0,false],[29,0,false],[39,0,false],
+                   [39,1,false]
+                   ];
+    var fadePeriod = 40;
+    
+    sprite.tl.moveTo(300,sprite.y,10).scaleTo(-1,1,1).delay(2).moveTo(0,sprite.y,10).scaleTo(1,1,1).delay(2).loop();
+    
+    var spriteTlMoveCheckX = [[0,0,true],[9,300,false],[10,300,true],
+                              [11,300,false],[19,300,false],
+                              [19,0,false]
+                              ];
+    var spriteTlMoveCheckPeriodX = 20;
+    
+    var spriteTlScaleCheckX = [[0,1,true],[9,-1,false],[10,-1,true],
+                              [11,-1,true],[19,-1,true]];
+    var spriteTlScaleCheckPeriodX = 20;
+    
+    var enterframe = new enchant.Event('enterframe');
+    
+    for (var i = 0; i < 200 - 1; i++) {
+        equal(sprite.y,0,' testing sprite.y === 0');
+        equal(sprite.scaleY,1,' testing sprite.scaleY === 1');
+        periodTestingFunction(i, rotateCheck,rotationPeriod,sprite,'rotation');
+        periodTestingFunction(i, fadeCheck,fadePeriod,sprite,'opacity');
+        periodTestingFunction(i, spriteTlMoveCheckX,spriteTlMoveCheckPeriodX,sprite,'x');
+        periodTestingFunction(i, spriteTlScaleCheckX,spriteTlScaleCheckPeriodX,sprite,'scaleX');
+        
+        enterframe.elapsed = Math.round((Math.random()*50+10));
+        sprite.dispatchEvent(enterframe);
+    }
+});
+
+
 /* time based testing */
 
 test('tl.timebased.delay.then', function() {
