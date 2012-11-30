@@ -73,10 +73,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      */
     textAlign: {
         get: function() {
-            return this._style.textAlign;
+            return this._style['text-align'];
         },
         set: function(textAlign) {
-            this._style.textAlign = textAlign;
+            this._style['text-align'] = textAlign;
         }
     },
     /**
@@ -153,9 +153,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         if (element.innerHTML !== this._text) {
             element.innerHTML = this._text;
         }
-        element.style.font = this._font;
-        element.style.color = this._color;
-        element.style.textAlign = this._textAlign;
     },
     detectRender: function(ctx) {
         ctx.fillRect(0, 0, this._boundWidth, this._boundHeight);

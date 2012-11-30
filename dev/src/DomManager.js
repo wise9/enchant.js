@@ -114,14 +114,14 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node._visible !== 'undefined') {
             node._style.display = node._visible ? 'block' : 'none';
         }
+        if (typeof node.domRender === 'function') {
+            node.domRender(this.element);
+        }
         for (var prop in node._style) {
             if(node.__styleStatus[prop] !== node._style[prop]) {
                 this.style.setProperty(prop, node._style[prop]);
                 node.__styleStatus[prop] = node._style[prop];
             }
-        }
-        if (typeof node.domRender === 'function') {
-            node.domRender(this.element);
         }
     },
     _attachEvent: function() {
