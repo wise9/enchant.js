@@ -56,7 +56,6 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
                 }
             }
         }
-
         var action = this;
 
         this.timeline = null;

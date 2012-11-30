@@ -4582,14 +4582,14 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * @class
      * Time-line class.
-     * Class for managing the action.
-     * For one node to manipulate the timeline of one must correspond.
+          * Class for managing the action.
+          * For one node to manipulate the timeline of one must correspond.
      *
-     * Reading a tl.enchant.js, all classes (Group, Scene, Entity, Label, Sprite) of the Node class that inherits
-     * Tlthe property, an instance of the Timeline class is generated.
-     * Time-line class has a method to add a variety of actions to himself,
-     * entities can be animated and various operations by using these briefly.
-     * You can choose time based and frame based(default) animation.
+          * Reading a tl.enchant.js, all classes (Group, Scene, Entity, Label, Sprite) of the Node class that inherits
+          * Tlthe property, an instance of the Timeline class is generated.
+          * Time-line class has a method to add a variety of actions to himself,
+          * entities can be animated and various operations by using these briefly.
+          * You can choose time based and frame based(default) animation.
      *
      * @param node target node
      * @param [unitialized] if this param is true, when add method called in the first time,
@@ -4629,7 +4629,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             e = new enchant.Event("removedfromtimeline");
             e.timeline = this;
             action.dispatchEvent(e);
-
             action.frame = 0;
 
             this.add(action);
@@ -4639,9 +4638,11 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             e.timeline = this;
             action.dispatchEvent(e);
         }
-        var event = new enchant.Event("enterframe");
-        event.elapsed = Math.max(remainingTime, 1);
-        this.dispatchEvent(event);
+        if (remainingTime > 0 || (this.queue[0] && this.queue[0].time == 0)) {
+            var event = new enchant.Event("enterframe");
+            event.elapsed = remainingTime;
+            this.dispatchEvent(event);
+        }
     },
     /**
      */
@@ -4775,8 +4776,8 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.add(new enchant.Action({
             onactiontick: function(evt) {
                 func.call(timeline.node);
-                timeline.next(evt.elapsed);
-            }
+            },
+            time: 0
         }));
         return this;
     },
@@ -5040,7 +5041,6 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
                 }
             }
         }
-
         var action = this;
 
         this.timeline = null;
@@ -5183,15 +5183,22 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
+            if (tween.time != 0){
+                var ratio = tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
+            }
             for (var prop in target){
                 if (target.hasOwnProperty(prop)) {
                     if (typeof this[prop] === "undefined"){
                         continue;
                     }
-                    tween.node[prop] += (target[prop] - origin[prop]) * ratio;
-                    if (Math.abs(tween.node[prop]) < 10e-8){
-                        tween.node[prop] = 0;
+                    if (tween.time == 0){
+                        // if time is 0, set property to target value immediately
+                        tween.node[prop] = target[prop];
+                    }else{
+                        tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                        if (Math.abs(tween.node[prop]) < 10e-8){
+                            tween.node[prop] = 0;
+                        }
                     }
                 }
             }
