@@ -11,6 +11,7 @@ module('tl.enchant.js', {
     }
 });
 
+
 test('tl.frameBased', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
 
@@ -27,6 +28,27 @@ test('tl.delay.then', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
     var then = false;
     sprite.tl.delay(30).then(function() {
+        then = true;
+    });
+    ok(!then);
+
+    var enterframe = new enchant.Event('enterframe');
+    for (var i = 0; i < 30 - 1; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    ok(!then);
+    sprite.dispatchEvent(enterframe);
+    ok(then);
+
+    sprite.tl.clear();
+});
+
+
+test('tl.delay x 2.then', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    var then = false;
+    sprite.tl.delay(15).delay(15).then(function() {
         then = true;
     });
     ok(!then);
@@ -60,6 +82,37 @@ test('tl.tween', function() {
     equal(Math.round(sprite.y, 5), 320);
 });
 
+test('tl.tween (zero)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    var then = false;
+    sprite.tl.delay(1).moveTo(320, 320, 0).then(function(){
+        then = true;
+    });
+
+    var enterframe = new enchant.Event('enterframe');
+    sprite.dispatchEvent(enterframe);
+
+    equal(Math.round(sprite.x, 5), 320);
+    equal(Math.round(sprite.y, 5), 320);
+    equal(then, true);
+});
+
+test('tl.multiMove', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.clear();
+    for (var i = 0; i < 10; i++) {
+        sprite.tl.moveTo((i + 1) * 10, 0, 1);
+    }
+    equal(Math.round(sprite.x, 5), 0);
+    var enterframe = new enchant.Event('enterframe');
+    for (i = 0; i < 9; i++) {
+        sprite.dispatchEvent(enterframe);
+        notEqual(Math.round(sprite.x, 5), 0);
+        notEqual(Math.round(sprite.x, 5), 100);
+    }
+    sprite.dispatchEvent(enterframe);
+    equal(Math.round(sprite.x, 5), 100);
+})
 
 test('tl.tween', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];

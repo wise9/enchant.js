@@ -56,15 +56,22 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
+            if (tween.time != 0){
+                var ratio = tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
+            }
             for (var prop in target){
                 if (target.hasOwnProperty(prop)) {
                     if (typeof this[prop] === "undefined"){
                         continue;
                     }
-                    tween.node[prop] += (target[prop] - origin[prop]) * ratio;
-                    if (Math.abs(tween.node[prop]) < 10e-8){
-                        tween.node[prop] = 0;
+                    if (tween.time == 0){
+                        // if time is 0, set property to target value immediately
+                        tween.node[prop] = target[prop];
+                    }else{
+                        tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                        if (Math.abs(tween.node[prop]) < 10e-8){
+                            tween.node[prop] = 0;
+                        }
                     }
                 }
             }
