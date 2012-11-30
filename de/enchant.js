@@ -1627,9 +1627,6 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          */
         if(enchant.ENV.USE_ANIMATION){
             var tl = this.tl = new enchant.Timeline(this);
-            this.addEventListener("enterframe", function(e) {
-                tl.dispatchEvent(e);
-            });
         }
     },
     /**
@@ -4642,7 +4639,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * @constructs
      */
-    initialize: function(node, unitialized) {
+    initialize: function(node) {
         enchant.EventTarget.call(this);
         this.node = node;
         this.queue = [];
@@ -4650,7 +4647,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.looped = false;
         this.isFrameBased = true;
         this._parallel = null;
-        this._initialized = !unitialized;
+        this._activated = false;
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
     },
     /**
@@ -4671,6 +4668,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         e.timeline = this;
         action.dispatchEvent(e);
 
+        if (this.queue.length === 0) {
+            this._activated = false;
+            this.node.removeEventListener('enterframe', this._nodeEventListener);
+            return;
+        }
+
         if (this.looped) {
             e = new enchant.Event("removedfromtimeline");
             e.timeline = this;
@@ -4684,7 +4687,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             e.timeline = this;
             action.dispatchEvent(e);
         }
-        if (remainingTime > 0 || (this.queue[0] && this.queue[0].time == 0)) {
+        if (remainingTime > 0 || (this.queue[0] && this.queue[0].time === 0)) {
             var event = new enchant.Event("enterframe");
             event.elapsed = remainingTime;
             this.dispatchEvent(event);
@@ -4704,6 +4707,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
                 f.timeline = this;
                 action.dispatchEvent(f);
             }
+
             var e = new enchant.Event("actiontick");
             e.timeline = this;
             if (this.isFrameBased) {
@@ -4715,12 +4719,14 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
     },
     add: function(action) {
-        if (!this._initialized) {
+        if (!this._activated) {
             var tl = this;
-            this.node.addEventListener("enterframe", function(e) {
+            this._nodeEventListener = function(e) {
                 tl.dispatchEvent(e);
-            });
-            this._initialized = true;
+            };
+            this.node.addEventListener("enterframe", this._nodeEventListener);
+
+            this._activated = true;
         }
         if (this._parallel) {
             this._parallel.actions.push(action);
@@ -5211,22 +5217,17 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
 
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            if (tween.time != 0){
-                var ratio = tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
-            }
+            // if time is 0, set property to target value immediately
+            var ratio = tween.time === 0 ? 1 : tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
+
             for (var prop in target){
                 if (target.hasOwnProperty(prop)) {
                     if (typeof this[prop] === "undefined"){
                         continue;
                     }
-                    if (tween.time == 0){
-                        // if time is 0, set property to target value immediately
-                        tween.node[prop] = target[prop];
-                    }else{
-                        tween.node[prop] += (target[prop] - origin[prop]) * ratio;
-                        if (Math.abs(tween.node[prop]) < 10e-8){
-                            tween.node[prop] = 0;
-                        }
+                    tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                    if (Math.abs(tween.node[prop]) < 10e-8){
+                        tween.node[prop] = 0;
                     }
                 }
             }
