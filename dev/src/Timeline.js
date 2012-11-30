@@ -36,7 +36,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * [/lang]
      * @constructs
      */
-    initialize: function(node, unitialized) {
+    initialize: function(node) {
         enchant.EventTarget.call(this);
         this.node = node;
         this.queue = [];
@@ -44,7 +44,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.looped = false;
         this.isFrameBased = true;
         this._parallel = null;
-        this._initialized = !unitialized;
+        this._activated = false;
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
     },
     /**
@@ -83,6 +83,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         e.timeline = this;
         action.dispatchEvent(e);
 
+        if (this.queue.length === 0) {
+            this._activated = false;
+            this.node.removeEventListener('enterframe', this._nodeEventListener);
+            return;
+        }
+
         if (this.looped) {
             e = new enchant.Event("removedfromtimeline");
             e.timeline = this;
@@ -96,7 +102,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             e.timeline = this;
             action.dispatchEvent(e);
         }
-        if (remainingTime > 0 || (this.queue[0] && this.queue[0].time == 0)) {
+        if (remainingTime > 0 || (this.queue[0] && this.queue[0].time === 0)) {
             var event = new enchant.Event("enterframe");
             event.elapsed = remainingTime;
             this.dispatchEvent(event);
@@ -121,6 +127,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
                 f.timeline = this;
                 action.dispatchEvent(f);
             }
+
             var e = new enchant.Event("actiontick");
             e.timeline = this;
             if (this.isFrameBased) {
@@ -132,12 +139,14 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
     },
     add: function(action) {
-        if (!this._initialized) {
+        if (!this._activated) {
             var tl = this;
-            this.node.addEventListener("enterframe", function(e) {
+            this._nodeEventListener = function(e) {
                 tl.dispatchEvent(e);
-            });
-            this._initialized = true;
+            };
+            this.node.addEventListener("enterframe", this._nodeEventListener);
+
+            this._activated = true;
         }
         if (this._parallel) {
             this._parallel.actions.push(action);

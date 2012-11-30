@@ -24,6 +24,33 @@ test('tl.frameBased', function() {
     equal(sprite.tl.isFrameBased, true);
 });
 
+test('tl.activated', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(30);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    for (var i = 0; i < 30 - 1; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.dispatchEvent(enterframe);
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+
+
 test('tl.delay.then', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
     var then = false;
