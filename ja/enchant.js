@@ -1279,7 +1279,11 @@ enchant.EventTarget = enchant.Class.create({
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = this.getTime();
+            var onloadTimeSetter = function() {
+                this.currentTime = this.getTime();
+                this.removeEventListener('load',onloadTimeSetter);
+            };
+            this.addEventListener('load',onloadTimeSetter);
             this._intervalID = window.setInterval(function() {
                 core._tick();
             }, 1000 / this.fps);
@@ -2093,7 +2097,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
-
         /**
          * frame に配列が指定されたときの処理。
          * _frameSeuence に
@@ -2147,6 +2150,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._frame;
         },
         set: function(frame) {
+            if(this._frame === frame) {
+                return;
+            }
             if (frame instanceof Array) {
                 var frameSequence = frame;
                 var nextFrame = frameSequence.shift();
@@ -2193,8 +2199,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     domRender: function(element) {
         if (this._image) {
             if (this._image._css) {
-                element.style.backgroundImage = this._image._css;
-                element.style.backgroundPosition =
+                this._style['background-image'] = this._image._css;
+                this._style['background-position'] =
                     -this._frameLeft + 'px ' +
                     -this._frameTop + 'px';
             } else if (this._image._element) {
@@ -2230,6 +2236,9 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             return this._text;
         },
         set: function(text) {
+            if(this._text === text) {
+                return;
+            }
             this._text = text;
             text = text.replace(/<(br|BR) ?\/?>/g, '<br/>');
             this._splitText = text.split('<br/>');
@@ -2252,10 +2261,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      */
     textAlign: {
         get: function() {
-            return this._style.textAlign;
+            return this._style['text-align'];
         },
         set: function(textAlign) {
-            this._style.textAlign = textAlign;
+            this._style['text-align'] = textAlign;
         }
     },
     /**
@@ -2312,9 +2321,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         if (element.innerHTML !== this._text) {
             element.innerHTML = this._text;
         }
-        element.style.font = this._font;
-        element.style.color = this._color;
-        element.style.textAlign = this._textAlign;
     },
     detectRender: function(ctx) {
         ctx.fillRect(0, 0, this._boundWidth, this._boundHeight);
@@ -2327,7 +2333,9 @@ enchant.Label.prototype.getMetrics = function(text) {
     if (document.body) {
         div = document.createElement('div');
         for (var prop in this._style) {
-            div.style[prop] = this._style[prop];
+            if(prop !== 'width' && prop !== 'height') {
+                div.style[prop] = this._style[prop];
+            }
         }
         div.innerHTML = text || this._text;
         document.body.appendChild(div);
@@ -2690,9 +2698,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     domRender: function(element) {
         if (this._image) {
-            element.style.backgroundImage = this._surface._css;
+            this._style['background-image'] = this._surface._css;
             // bad performance
-            element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
+            this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
         }
     }
 });
@@ -3130,18 +3138,18 @@ enchant.DomManager = enchant.Class.create({
         node._style.width = node.width + 'px';
         node._style.height = node.height + 'px';
         node._style.opacity = node._opacity;
-        node._style.backgroundColor = node._backgroundColor;
+        node._style['background-color'] = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
             node._style.display = node._visible ? 'block' : 'none';
+        }
+        if (typeof node.domRender === 'function') {
+            node.domRender(this.element);
         }
         for (var prop in node._style) {
             if(node.__styleStatus[prop] !== node._style[prop]) {
                 this.style.setProperty(prop, node._style[prop]);
                 node.__styleStatus[prop] = node._style[prop];
             }
-        }
-        if (typeof node.domRender === 'function') {
-            node.domRender(this.element);
         }
     },
     _attachEvent: function() {
