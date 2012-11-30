@@ -4,8 +4,8 @@
  * <p>A plugin for enchant.js which allows to mix 
  * arbitrary many {@link enchant.Class} classes together.
  * It is also possible to add functions and properties defined
- * as a recipe to arbitrary many classes to avoid copy and paste.</p>
- * <p>Through this it is possible to achieve a behaviur similar to multiple inheritance</p>
+ * as a recipe ({@link enchant.Class.MixingRecipe}) to arbitrary many classes to avoid copy and paste.</p>
+ * <p>Through this it is possible to achieve a behavior similar to multiple inheritance</p>
  * <p>Requires:<ul>
  * <li>enchant.js v0.6 or later.</li></ul></p>
  * See also {@link enchant.Class.mixClasses}, {@link enchant.Class.MixingRecipe.createFromClass}, 
@@ -40,11 +40,16 @@ if (enchant !== undefined) {
         /**
          * @private
          */
+        var voidFunction = function(){};
+
+        /**
+         * @private
+         */
         var multipleMixingCombinationFunctionFactory = function(oldFunc,newFunc, key) {
             return function() {
                 var firstResult = oldFunc.apply(this,arguments);
                 var mixingStore = this._mixing[key];
-                this._mixing[key] = function(){};
+                this._mixing[key] = voidFunction;
                 var secondResult = newFunc.apply(this,arguments);
                 this._mixing[key] = mixingStore;
                 if(secondResult) {
@@ -55,11 +60,6 @@ if (enchant !== undefined) {
                 }
             };
         };
-
-        /**
-         * @private
-         */
-        var voidFunction = function(){};
 
         /**
          * @private
@@ -114,15 +114,41 @@ if (enchant !== undefined) {
              * Creates a new MixingRecipe which is used for describing in which way functions and properties should be added during the mixing.
              * To create a recipe from an existing class see {@link enchant.Class.MixingRecipe.createFromClass}
              * @class This class is describing in which way the mixing will be performed on the target classes.
-             * For this purpose, a MixingRecipe contains three properties: decorateMethods (methods which will be decorated in the target),
-             * overrideMethods (methods which will be overriden in the target) and overrideProperties (properties which will be redefined in the target)
-             * See also {@link enchant.Class.mixClasses}, {@link enchant.Class.mixClassesFromRecipe} and {@link enchant.Class.applyMixingRecipe}.
-             * @param {Object} decorateMethods The methods which will be decorated in the target (Object containing key-value pairs, key := function name, value := function).
-             * @param {Object} overrideMethods The methods which will be overriden in the target (Object containing key-value pairs, key := function name, value := function).
-             * @param {Object} properties The properties which will be redefined in the target (Object containing key-value pairs, key := function name, value := property descriptor).
-             * @property {Object} decorateMethods The methods which will be decorated in the target (Object containing key-value pairs, key := function name, value := function).
-             * @property {Object} overrideMethods The methods which will be overriden in the target (Object containing key-value pairs, key := function name, value := function).
-             * @property {Object} overrideProperties The properties which will be redefined in the target (Object containing key-value pairs, key := function name, value := property descriptor).
+             * For this purpose, MixingRecipe contains three properties:
+             * <ul><li>decorateMethods (methods which will be decorated in the target, see decorator pattern)</li>
+             * <li>overrideMethods (methods which will be overriden in the target)</li>
+             * <li>overrideProperties (properties which will be redefined in the target)</li></ul>
+             * <p>See also {@link enchant.Class.mixClasses}, {@link enchant.Class.mixClassesFromRecipe} and {@link enchant.Class.applyMixingRecipe}.</p>
+             * @param {Object} decorateMethods The methods which will be decorated in the target, see decorator pattern. To access methods which have been decorated in the class resulting from mixing the _mixing property can be used, e.g. this._mixing.myFunction.apply(this,arguments).<br>(Object containing key-value pairs, key := function name, value := function).
+             * @param {Object} overrideMethods The methods which will be overriden in the target.<br>(Object containing key-value pairs, key := function name, value := function).
+             * @param {Object} properties The properties which will be redefined in the target.<br>(Object containing key-value pairs, key := function name, value := property descriptor).
+             * @property {Object} decorateMethods The methods which will be decorated in the target, see decorator pattern. To access methods which have been decorated in the class resulting from mixing the _mixing property can be used, e.g. this._mixing.myFunction.apply(this,arguments).<br>(Object containing key-value pairs, key := function name, value := function).
+             * @property {Object} overrideMethods The methods which will be overriden in the target.<br>(Object containing key-value pairs, key := function name, value := function).
+             * @property {Object} overrideProperties The properties which will be redefined in the target.<br>(Object containing key-value pairs, key := function name, value := property descriptor).
+             * @example
+             *      var recipe = new enchant.Class.MixingRecipe({
+             *          add : function(value) {
+             *              this._myValue += 3*value;
+             *              this._mixing.add.apply(this,arguments);
+             *          },
+             *          mult : function(value) {
+             *              this._myValue *= value*7;
+             *              this._mixing.mult.apply(this,arguments);
+             *          }
+             *      },{
+             *          sub : function(value) {
+             *              this._myValue -= 5*value;
+             *          }
+             *      },{
+             *      myProperty : {
+             *          get: function() {
+             *              return 3*this._myPropertyValue;
+             *          },
+             *          set : function(val) {
+             *              this._myPropertyValue = val;
+             *          }
+             *      }});
+             *      var NewClass = enchant.Class.applyMixingRecipe(Class1,recipe);
              * @extends Object
              * @constructs
              */
@@ -137,8 +163,10 @@ if (enchant !== undefined) {
          * Takes the methods and properties of the given class to create a new MixingRecipe.
          * The default behavior is to take all functions and properties of the given class
          * including functions and properties defined in super classes, whereas functions
-         * are set to decorate the mixing target.
-         * To change the default behavior set the corresponding arguments of the function.
+         * are set to decorate the mixing target.<br>Methods which are decorated will automatically
+         * call the soureClass method and the mixing target method (using the _mixing property) - 
+         * so there is no need to handle this yourself.
+         * <p>To change the default behavior set the corresponding arguments of the function.</p>
          * 
          * @param {Function<constructor function created with enchant.Class>} sourceClass The class which will be used to create the recipe.
          * @param [boolean] onlyOwnProperties If set to true, the functions and properties of the super classes will be ignored.
@@ -146,6 +174,23 @@ if (enchant !== undefined) {
          * @param [Array<String>] functionIgnoreNameList An array containing names of functions which should be ignored when creating the recipe.
          * @param [Array<String>] propertyIgnoreNameList An array containing names of properties which should be ignored when creating the recipe.
          * @returns {enchant.Class.MixingRecipe} The MixingRecipe created from the definition of the sourceClass.
+         * @example
+         *      var recipe = enchant.Class.MixingRecipe.createFromClass(Class2, true, 
+         *              ['overrideFunction1','overrideFunction2'],
+         *              ['ignoreFunction1','ignoreFunction2'],
+         *              ['ignoreProperty1','ignorePropterty2']);
+         *      recipe.overrideMethods['additionalFunction'] = new function() {
+         *          console.log('Hello, World');
+         *      }
+         *      recipe.overrideProperties['newProperty'] = {
+         *          get: function() {
+         *              return this._newProperty;
+         *          },
+         *          set : function(val) {
+         *              this._newProperty = val;
+         *          }
+         *      }
+         *      var NewClass = enchant.Class.mixClassesFromRecipe(Class1,Class2,recipe);
          * @constructs
          * @static
          */
@@ -158,19 +203,24 @@ if (enchant !== undefined) {
             createFromPrototype(decorate,override,properties,source,onlyOwnProperties, functionOverrideNameList, functionIgnoreNameList, propertyIgnoreNameList);
             return new enchant.Class.MixingRecipe(decorate,override,properties);
         };
-        
+
         /**
          * Uses the given MixingRecipe, applies it to the first class and returns the result - the MixingRecipe should correspond to the secondClass.
          * A default initialize method will be added which will call the initialize functions of both classes.
-         * The signature for the default initialize method is:
+         * The signature for the default initialize method is:<br>
          * ([firstClass constructor arg 1],...,[firstClass constructor arg n],[secondClass constructor arg1],...[secondClass constructor arg n])
-         * Both classes will not be modified. See also: {@link enchant.Class.MixingRecipe}
+         * <p>Both classes will not be modified.</p> See also: {@link enchant.Class.MixingRecipe}
          * 
          * @param {Function<constructor function created with enchant.Class>} firstClass The class to which the recipe will be applied.
          * @param {Function<constructor function created with enchant.Class>} secondClass The class which is related to the MixingRecipe, used for the default initialize function.
          * @param {enchant.Class.MixingRecipe} recipe The recipe which is applied to the first class - should correspond to the secondClass. 
          * @param [Function] initializeMethod If provided, this function will be used to initialize the resulting class instead of the default initialize method.
          * @returns {Function<constructor function created with enchant.Class>} initializeMethod The class which is the result of mixing both classes using the recipe.
+         * @example
+         *      var MapGroup = enchant.Class.mixClasses(Map, Group,true);
+         *      var map = new MapGroup(16, 16);
+         *      var SpriteLabel = enchant.Class.mixClasses(Sprite, Label,true);
+         *      var kumaLabel = new SpriteLabel(32,32,'Kuma');
          * @static
          */
         enchant.Class.mixClassesFromRecipe = function(firstClass, secondClass, recipe, initializeMethod) {
@@ -186,34 +236,52 @@ if (enchant !== undefined) {
             result.prototype.initialize = initializeMethod;
             return result;
         };
-        
+
+
         /**
          * Creates an MixingRecipe out of the second class, applies it to the first class and returns the result.
          * The default behavior is to take all functions and properties of the second class,
          * including functions and properties defined in its super classes, whereas functions
-         * are set to decorate the mixing target. Furthermore, a default initialize method will be added which will
-         * call the initialize functions of both classes. The signature for the default initialize method is:
-         * ([firstClass constructor arg 1],...,[firstClass constructor arg n],[secondClass constructor arg1],...[secondClass constructor arg n])
-         * Both classes will not be modified. See also: {@link enchant.Class.MixingRecipe}
+         * are set to decorate the mixing target.<br>Methods which are decorated will automatically
+         * call the soureClass method and the mixing target method (using the _mixing property) - 
+         * so there is no need to handle this yourself.
+         * <p>Furthermore, a default initialize method will be added which will
+         * call the initialize functions of both classes. The signature for the default initialize method is:<br>
+         * ([firstClass constructor arg 1],...,[firstClass constructor arg n],[secondClass constructor arg 1],...[secondClass constructor arg n])</p>
+         * <p>Both classes will not be modified.</p> See also: {@link enchant.Class.MixingRecipe}
          * 
          * @param {Function<constructor function created with enchant.Class>} firstClass The class to which the recipe will be applied.
          * @param {Function<constructor function created with enchant.Class>} secondClass The class from which the recipe will be created
          * @param [boolean] useOnlyOwnPropertiesForSecondClass If set to true, the functions and properties of the super classes will be ignored during the recipe creation of the secondClass.
          * @param [Function] initializeMethod If provided, this function will be used to initialize the resulting class instead of the default initialize method.
          * @returns {Function<constructor function created with enchant.Class>} The class which is the result of mixing both classes.
+         * @example
+         *      var MapGroup = enchant.Class.mixClasses(Map, Group,true);
+         *      var map = new MapGroup(16, 16);
+         *      var SpriteLabel = enchant.Class.mixClasses(Sprite, Label,true);
+         *      var kumaLabel = new SpriteLabel(32,32,'Kuma');
          * @static
          */
         enchant.Class.mixClasses = function(firstClass, secondClass, useOnlyOwnPropertiesForSecondClass, initializeMethod) {
             return enchant.Class.mixClassesFromRecipe(firstClass,secondClass,enchant.Class.MixingRecipe.createFromClass(secondClass, useOnlyOwnPropertiesForSecondClass, [], ['initialize'], []),initializeMethod);
         };
-        
+
         /**
          * Applies the defined MixingRecipe to the target class creating a new class definition which is then returned.
-         * The target class is not modified directly. See also: {@link enchant.Class.MixingRecipe}
+         * The target class is not modified directly.<br>See also: {@link enchant.Class.MixingRecipe}.
          * 
          * @param {Function<constructor function created with enchant.Class>} target The class to which the recipe will be applied.
          * @param {enchant.Class.MixingRecipe} source The MixingRecipe which is used to add new functionality to the target.
          * @returns {Function<constructor function created with enchant.Class>} The class which is the result of mixing the target class with the source recipe.
+         * @example
+         *      var recipe = new enchant.Class.MixingRecipe({
+         *         // ... see enchant.Class.MixingRecipe
+         *      },{
+         *          // ... see enchant.Class.MixingRecipe
+         *      },{
+         *          // ... see enchant.Class.MixingRecipe
+         *      });
+         *      var NewClass = applyMixingRecipe(Class1,recipe);
          * @static
          */
         enchant.Class.applyMixingRecipe = function(target, source) {

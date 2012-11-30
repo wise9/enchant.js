@@ -1,7 +1,9 @@
 /**
  * @fileOverview
  * mixing.enchant.js
- * <p>複数のクラスを混ぜることができるし、同じ関数やプロパティを複数のクラスに追加することができるようにするenchant.jsプラグイン.</p>
+ * <p>複数のクラスを混ぜることができるようにし、同じ関数やプロパティを複数のクラスに追加することができるようにするenchant.jsプラグイン.
+ * その上、コピーアンドペーストをしないために、製法（{@link enchant.Class.MixingRecipe}）で定義された関数やプロパティを
+ * 複数クラスに混ぜることもできるようにする.</p>
  * <p>これで複数の継承ようなことができるということ</p>
  * <p>必要なもの:</p><ul>
  * <li>enchant.js v0.6　以上.</li></ul></p>
@@ -37,11 +39,16 @@ if (enchant !== undefined) {
         /**
          * @private
          */
+        var voidFunction = function(){};
+
+        /**
+         * @private
+         */
         var multipleMixingCombinationFunctionFactory = function(oldFunc,newFunc, key) {
             return function() {
                 var firstResult = oldFunc.apply(this,arguments);
                 var mixingStore = this._mixing[key];
-                this._mixing[key] = function(){};
+                this._mixing[key] = voidFunction;
                 var secondResult = newFunc.apply(this,arguments);
                 this._mixing[key] = mixingStore;
                 if(secondResult) {
@@ -52,11 +59,6 @@ if (enchant !== undefined) {
                 }
             };
         };
-
-        /**
-         * @private
-         */
-        var voidFunction = function(){};
 
         /**
          * @private
@@ -108,6 +110,44 @@ if (enchant !== undefined) {
          */
         enchant.Class.MixingRecipe = enchant.Class.create({
             /**
+             * 混ぜる中、どういう風に関数やプロパティが追加されるか設定する新たなMixingRecipeを生成する.
+             * クラスからMixingRecipeを生成することには　{@link enchant.Class.MixingRecipe.createFromClass}　を参照してください.
+             * @class 混ぜる先にどういう風に混ぜる処理を行うか設定する.
+             * このために、MixingRecipeはプロパティが三つある：
+             * <ul><li>decorateMethods（先の関数をラップする関数、デコレータ・パターンを参照してください）</li>
+             * <li>overrideMethods (先の関数をオーバーライドする関数)</li>
+             * <li>overrideProperties　（先のプロパティをオーバーライドするプロパティ）</li></ul>
+             * <p>{@link enchant.Class.mixClasses}、 {@link enchant.Class.mixClassesFromRecipe} や {@link enchant.Class.applyMixingRecipe}　を参照してください.</p>
+             * @param {Object} decorateMethods 先の関数をラップする関数、デコレータ・パターンを参照してください. 混ぜる結果のクラスでラップされた関数をアクセスするように_mixingというプロパティがある、例：this._mixing.myFunction.apply(this,arguments).<br>（キーと値のペア持っているオブジェクト、キーは関数名、値は関数）.
+             * @param {Object} overrideMethods 先の関数をオーバーライドする関数.<br>（キーと値のペア持っているオブジェクト、キーは関数名、値は関数）.
+             * @param {Object} properties 先のプロパティをオーバーライドするプロパティ.<br>（キーと値のペア持っているオブジェクト、キーは関数名、値はプロパティデスクリプタ）.
+             * @property {Object} decorateMethods 先の関数をラップする関数、デコレータ・パターンを参照してください. 混ぜる結果のクラスでラップされた関数をアクセスするように_mixingというプロパティがある、例：this._mixing.myFunction.apply(this,arguments).<br>（キーと値のペア持っているオブジェクト、キーは関数名、値は関数）.
+             * @property {Object} overrideMethods 先の関数をオーバーライドする関数.<br>（キーと値のペア持っているオブジェクト、キーは関数名、値は関数）.
+             * @property {Object} overrideProperties 先のプロパティをオーバーライドするプロパティ.<br>（キーと値のペア持っているオブジェクト、キーは関数名、値はプロパティデスクリプタ）.
+             * @example
+             *      var recipe = new enchant.Class.MixingRecipe({
+             *          add : function(value) {
+             *              this._myValue += 3*value;
+             *              this._mixing.add.apply(this,arguments);
+             *          },
+             *          mult : function(value) {
+             *              this._myValue *= value*7;
+             *              this._mixing.mult.apply(this,arguments);
+             *          }
+             *      },{
+             *          sub : function(value) {
+             *              this._myValue -= 5*value;
+             *          }
+             *      },{
+             *      myProperty : {
+             *          get: function() {
+             *              return 3*this._myPropertyValue;
+             *          },
+             *          set : function(val) {
+             *              this._myPropertyValue = val;
+             *          }
+             *      }});
+             *      var NewClass = enchant.Class.applyMixingRecipe(Class1,recipe);
              * @extends Object
              * @constructs
              */
@@ -119,6 +159,35 @@ if (enchant !== undefined) {
         });
 
         /**
+         * 引数のクルスの関数やプロパティから、MixingRecipeを生成する.
+         * デフォルト振舞はsourceClassの全ての関数やプロパティ、スーパークラスの関数やプロパティも使用して、
+         * 混ぜる先の関数をラップする（decorate).<br>_mixingプロパティでラップされた関数が自動的に、
+         * sourceClassと混ぜる先の関数を呼び出されるので、関係なくてもいい.
+         * <p>対応引数でデフォルト振舞を変更ができる.</p>
+         * 
+         * @param {Function<constructor enchant.Classで生成された関数>} sourceClass このクラスから、MixingRecipeが生成される.
+         * @param [boolean] onlyOwnProperties Trueの場合、スーパークラスの関数やプロパティが無視されない. 
+         * @param [Array<String>] functionOverrideNameList 混ぜるときオーバーライドされる関数名を持っている配列.  
+         * @param [Array<String>] functionIgnoreNameList MixingRecipeを生成するとき無視される関数名を持っている配列.  
+         * @param [Array<String>] propertyIgnoreNameList MixingRecipeを生成するとき無視されるプロパティ名を持っている配列.
+         * @returns {enchant.Class.MixingRecipe}　クラス定義から生成されたMixingRecipe.
+         * @example
+         *      var recipe = enchant.Class.MixingRecipe.createFromClass(Class2, true, 
+         *              ['overrideFunction1','overrideFunction2'],
+         *              ['ignoreFunction1','ignoreFunction2'],
+         *              ['ignoreProperty1','ignorePropterty2']);
+         *      recipe.overrideMethods['additionalFunction'] = new function() {
+         *          console.log('Hello, World');
+         *      }
+         *      recipe.overrideProperties['newProperty'] = {
+         *          get: function() {
+         *              return this._newProperty;
+         *          },
+         *          set : function(val) {
+         *              this._newProperty = val;
+         *          }
+         *      }
+         *      var NewClass = enchant.Class.mixClassesFromRecipe(Class1,Class2,recipe);
          * @constructs
          * @static
          */
@@ -131,8 +200,23 @@ if (enchant !== undefined) {
             createFromPrototype(decorate,override,properties,source,onlyOwnProperties, functionOverrideNameList, functionIgnoreNameList, propertyIgnoreNameList);
             return new enchant.Class.MixingRecipe(decorate,override,properties);
         };
-        
+
         /**
+         * 設定されたMixingRecipeを使用して、firstClassというクラスに実行して、この結果を戻る。設定されたMixingRecipeはsecondClassというクラスに関係があったほうがいい.
+         * どちらでもクラスの初期化関数を呼び出すデフォルト初期化関数が追加される.
+         * このデフォルト初期か関数の書式は：<br>
+         * ([firstClass コンストラクタ 引数 1],...,[firstClass コンストラクタ 引数 n],[secondClass コンストラクタ 引数 1],...[secondClass コンストラクタ 引数 n])</p>
+         * <p>どちらでもクラスが変更されない</p>{@link enchant.Class.MixingRecipe}　を参照してください.
+         * @param {Function<constructor enchant.Classで生成された関数>} firstClass MixingRecipeを実行されるクラス.
+         * @param {Function<constructor enchant.Classで生成された関数>} sourceClass MixingRecipに関係があるクラス。デフォルト初期化関数に使用される。
+         * @param {enchant.Class.MixingRecipe} recipe firstClassに実行される製法。 secondClassに関係があったほうがいい.
+         * @param [Function] initializeMethod 設定すると、新しいクラスの初期化にデフォルト初期化関数が使用されないけど、この関数が使用される. 
+         * @returns {Function<constructor enchant.Classで生成された関数>} 製法でどちらでもクラスを混ぜた結果クラス.
+         * @example
+         *      var MapGroup = enchant.Class.mixClasses(Map, Group,true);
+         *      var map = new MapGroup(16, 16);
+         *      var SpriteLabel = enchant.Class.mixClasses(Sprite, Label,true);
+         *      var kumaLabel = new SpriteLabel(32,32,'Kuma');
          * @static
          */
         enchant.Class.mixClassesFromRecipe = function(firstClass, secondClass, recipe, initializeMethod) {
@@ -148,15 +232,48 @@ if (enchant !== undefined) {
             result.prototype.initialize = initializeMethod;
             return result;
         };
-        
+
+
         /**
+         * secondClassというクルスからMixingRecipeを生成して、firstClassというクラスに実行して、この結果を戻る.
+         * デフォルト振舞はsecondClassの全ての関数やプロパティ、スーパークラスの関数やプロパティも使用して、
+         * 混ぜる先の関数をラップする（decorate).<br>_mixingプロパティでラップされた関数が自動的に、
+         * sourceClassと混ぜる先の関数を呼び出されるので、関係なくてもいい.
+         * <p>その上、どちらでもクラスの初期化関数を呼び出すデフォルト初期化関数が追加される.このデフォルト初期か関数の書式は：<br>
+         * ([firstClass コンストラクタ 引数 1],...,[firstClass コンストラクタ 引数 n],[secondClass コンストラクタ 引数 1],...[secondClass コンストラクタ 引数 n])</p>
+         * <p>どちらでもクラスが変更されない</p>{@link enchant.Class.MixingRecipe}　を参照してください.
+         * @param {Function<constructor enchant.Classで生成された関数>} firstClass MixingRecipeを実行されるクラス.
+         * @param {Function<constructor enchant.Classで生成された関数>} sourceClass このクラスから、MixingRecipeが生成される.
+         * @param [boolean] onlyOwnProperties Trueの場合、スーパークラスの関数やプロパティが無視されない. 
+         * @param [Function] initializeMethod 設定すると、新しいクラスの初期化にデフォルト初期化関数が使用されないけど、この関数が使用される. 
+         * @returns {Function<constructor enchant.Classで生成された関数>} どちらでもクラスを混ぜた結果クラス.
+         * @example
+         *      var MapGroup = enchant.Class.mixClasses(Map, Group,true);
+         *      var map = new MapGroup(16, 16);
+         *      var SpriteLabel = enchant.Class.mixClasses(Sprite, Label,true);
+         *      var kumaLabel = new SpriteLabel(32,32,'Kuma');
          * @static
          */
         enchant.Class.mixClasses = function(firstClass, secondClass, useOnlyOwnPropertiesForSecondClass, initializeMethod) {
             return enchant.Class.mixClassesFromRecipe(firstClass,secondClass,enchant.Class.MixingRecipe.createFromClass(secondClass, useOnlyOwnPropertiesForSecondClass, [], ['initialize'], []),initializeMethod);
         };
-        
+
         /**
+         * 設定されたMixingRecipeを先クラスに実行して、新たなクラスを生成してこのクラスを戻る.
+         * 先クラスが変更されない.<br>{@link enchant.Class.MixingRecipe}　を参照してください.
+         * 
+         * @param {Function<constructor enchant.Classで生成された関数>} target MixingRecipeを実行される先クラス.
+         * @param {enchant.Class.MixingRecipe} source 先に新しい機能を追加するMixingRecipe.
+         * @returns {Function<constructor enchant.Classで生成された関数>} sourceという製法とtargetというクラスを混ぜた結果クラス.
+         * @example
+         *      var recipe = new enchant.Class.MixingRecipe({
+         *         // ... see enchant.Class.MixingRecipe
+         *      },{
+         *          // ... see enchant.Class.MixingRecipe
+         *      },{
+         *          // ... see enchant.Class.MixingRecipe
+         *      });
+         *      var NewClass = applyMixingRecipe(Class1,recipe);
          * @static
          */
         enchant.Class.applyMixingRecipe = function(target, source) {
