@@ -41,6 +41,9 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             return this._text;
         },
         set: function(text) {
+            if(this._text === text) {
+                return;
+            }
             this._text = text;
             text = text.replace(/<(br|BR) ?\/?>/g, '<br/>');
             this._splitText = text.split('<br/>');
