@@ -1,3 +1,23 @@
+# v0.6.0
+
+- features
+    - WebAudioAPI support
+    - DOM/Canvas Compatible rendering
+    - Object Collection
+    - Animation Engine (tl.enchant.js is included to core)
+- license
+    - Eliminated GPLv3 license
+- Release Note
+    - http://wise9.jp/archives/8077 (Japanese)
+
+From v0.6.0, documents were excluded from repository. see <doc/readme.md>.
+
+# v0.6.0-pre
+- features
+    - Canvas based rendering support
+    - enchant.Game -> enchant.Core (renamed)
+
+# v0.5.3
 
 # v0.5.2
 
