@@ -871,7 +871,6 @@ if (enchant !== undefined) {
                 this._instanceName = instanceName;
                 this._timelineData = timelines;
                 this._timelines = {};
-                this._listener = {};
                 this._gameListener = {};
                 this._created = -1;
                 this._isPlayingReverse = false;
@@ -906,11 +905,6 @@ if (enchant !== undefined) {
             /**
              */
             destroyTimelines: function() {
-                for (var listenerKey in this._listener) {
-                    for (var listenerKey2 in this._listener[listenerKey]) {
-                        this._sprites[listenerKey].removeEventListener(enchant.Event.ENTER_FRAME, this._listener[listenerKey][listenerKey2]);
-                    }
-                }
                 for (var timelinesKey in this._timelines) {
                     for (var timelinesKey2 in this._timelines[timelinesKey]) {
                         this._timelines[timelinesKey][timelinesKey2].clear();
@@ -918,7 +912,6 @@ if (enchant !== undefined) {
                 }
                 this.clearAndStopTimelines(true);
                 this._timelines = {};
-                this._listener = {};
                 this._gameListener = {};
                 this._created = -1;
                 this.currentDuration = 0;
@@ -1147,21 +1140,6 @@ if (enchant !== undefined) {
                     event.duration = timelineList.duration;
                     event.timelineName = timelineList.name;
                     this._gameListener[timelineList.name] = this._eventDispatcherFunctionFactory(timelineList.duration, timelineList.name, timeValue, this._gameListener, this._symbol, this, reverse, event);
-                    if (!recycle) {
-                        for (var timelineKey in this._timelines) {
-                            var timelines = this._timelines[timelineKey];
-                            if (!this._sprites[timelineKey]) {
-                                continue;
-                            }
-                            var listener = this._timelineEventDispatcherFunctionFactory(timelines);
-
-                            if (!this._listener[timelineKey]) {
-                                this._listener[timelineKey] = [];
-                            }
-                            this._sprites[timelineKey].addEventListener(enchant.Event.ENTER_FRAME, listener);
-                            this._listener[timelineKey].push(listener);
-                        }
-                    }
                 }
                 this._created = 1;
                 this._isPlayingReverse = reverse;
@@ -1210,13 +1188,6 @@ if (enchant !== undefined) {
                     symbol.dispatchEvent(event);
                     enchant.edge.Compositions.instance.dispatchEvent(event);
                     symbol.__isFirstFrame = false;
-                };
-            },
-            _timelineEventDispatcherFunctionFactory : function(timelines) {
-                return function(e) {
-                    for (var tl in timelines) {
-                        timelines[tl].dispatchEvent(e);
-                    }
                 };
             }
         });
