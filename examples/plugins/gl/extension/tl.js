@@ -21,11 +21,11 @@ window.onload = function() {
                 var sy = Math.random();
                 var sz = Math.random();
                 this.tl
-                    .moveTo(mx, my, mz, 30, enchant.Easing.BOUNCE_EASEOUT)
+                    .moveTo(mx, my, mz, 60, enchant.Easing.BOUNCE_EASEOUT)
                     .and()
-                    .rotateBy(new Quat(rx, ry, rz, ra), 30, enchant.Easing.QUAD_EASEINOUT)
+                    .rotateBy(new Quat(rx, ry, rz, ra), 60, enchant.Easing.QUAD_EASEINOUT)
                     .and()
-                    .scaleXYZTo(sx, sy, sz, 30, enchant.Easing.SWING);
+                    .scaleXYZTo(sx, sy, sz, 60, enchant.Easing.SWING);
             });
         }
     };
