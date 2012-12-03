@@ -49,7 +49,89 @@ test('tl.activated', function() {
     equal(sprite._listeners['enterframe'].length, defaultListeners);
 });
 
+test('tl.activated (clear)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
 
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(30);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.clear();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+test('tl.activated (pause,resume)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(30);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.pause();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    for (i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    sprite.tl.resume();
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    for (i = 0; i < 14; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    sprite.dispatchEvent(enterframe);
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    
+});
 
 test('tl.delay.then', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
@@ -107,6 +189,50 @@ test('tl.tween', function() {
     sprite.dispatchEvent(enterframe);
     equal(Math.round(sprite.x, 5), 320);
     equal(Math.round(sprite.y, 5), 320);
+});
+
+test('tl.tween (paused)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    equal(sprite.tl.paused,false);
+    sprite.tl.moveTo(320, 320, 60);
+    equal(sprite.x, 0);
+    equal(sprite.y, 0);
+    for (var i = 0; i < 30 - 1; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    equal(sprite.tl.paused,false);
+    notEqual(Math.round(sprite.x, 5), 320);
+    notEqual(Math.round(sprite.y, 5), 320);
+    
+    equal(sprite.tl.paused,false);
+    sprite.tl.pause();
+    equal(sprite.tl.paused,true);
+    
+    for (i = 0; i < 100 - 1; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    notEqual(Math.round(sprite.x, 5), 320);
+    notEqual(Math.round(sprite.y, 5), 320);
+    
+    equal(sprite.tl.paused,true);
+    sprite.tl.resume();
+    equal(sprite.tl.paused,false);
+    
+    for (var i = 0; i < 30; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    notEqual(Math.round(sprite.x, 5), 320);
+    notEqual(Math.round(sprite.y, 5), 320);
+    equal(sprite.tl.paused,false);
+    
+    sprite.dispatchEvent(enterframe);
+    equal(Math.round(sprite.x, 5), 320);
+    equal(Math.round(sprite.y, 5), 320);
+    equal(sprite.tl.paused,false);
 });
 
 test('tl.tween (zero)', function() {
