@@ -200,11 +200,13 @@ test('tl.multipleTl', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
     var tl = new Timeline(sprite,true);
     tl.rotateTo(360,10).delay(2).rotateTo(0,10).delay(2).loop();
-    var rotateCheck = [[0,0,true],[9,0,false],[10,360,true],
-                   [11,360,false],[19,360,false],
-                   [19,0,false]
+    //<- 1-10 rotate -><- 11,12 delay -><- 13-22 rotate -><- 23,24 delay ->
+    var rotateCheck = [[0,0,true],[1,0,false],[9,360,false],[9,0,false],[10,360,true],  //rotate
+                       [11,360,true],[12,360,true],             //delay
+                       [13,360,false],[13,0,false],[21,360,false],[21,0,false],[22,0,true],           //rotate
+                       [23,0,true]             //delay
                    ];
-    var rotationPeriod = 20;
+    var rotationPeriod = 24;
     
     tl = new Timeline(sprite,true);
     tl.delay(Math.round(Math.random()*10+5)).delay(Math.round(Math.random()*10+5))
@@ -212,23 +214,29 @@ test('tl.multipleTl', function() {
     
     tl = new Timeline(sprite,true);
     tl.fadeOut(20).delay(2).fadeIn(20).delay(2).loop();
-    var fadeCheck = [[0,1,true],[9,1,false],[19,1,false],[20,0,true],
-                   [21,0,false],[29,0,false],[39,0,false],
-                   [39,1,false]
+    //<- 1-20 fadeOut -><- 21,22 delay -><- 23-42 fadeIn -><- 43,44 delay ->
+    var fadeCheck = [[0,1,true],[1,1,false],[9,1,false],[9,0,false],
+                     [19,1,false],[19,0,false],[20,0,true],
+                     [21,0,true],[22,0,true],
+                   [23,0,false],[23,1,false],[29,0,false],[29,1,false],
+                   [41,0,false],[41,1,false],[42,1,true],[43,1,true]
                    ];
-    var fadePeriod = 40;
+    var fadePeriod = 44;
     
     sprite.tl.moveTo(300,sprite.y,10).scaleTo(-1,1,1).delay(2).moveTo(0,sprite.y,10).scaleTo(1,1,1).delay(2).loop();
-    
+    //<- 1-10 move -><- 11 scale -><- 12,13 delay -><- 14-23 move -><- 24 scale -><- 25,26 delay ->
     var spriteTlMoveCheckX = [[0,0,true],[9,300,false],[10,300,true],
-                              [11,300,false],[19,300,false],
-                              [19,0,false]
+                              [11,300,true],[12,300,true],[13,300,true],
+                              [19,300,false],[19,0,false],
+                              [23,300,false],[23,0,true],
+                              [24,300,false],[24,0,true],
+                              [25,0,true]
                               ];
-    var spriteTlMoveCheckPeriodX = 20;
+    var spriteTlMoveCheckPeriodX = 26;
     
-    var spriteTlScaleCheckX = [[0,1,true],[9,-1,false],[10,-1,true],
-                              [11,-1,true],[19,-1,true]];
-    var spriteTlScaleCheckPeriodX = 20;
+    var spriteTlScaleCheckX = [[0,1,true],[9,-1,false],[10,-1,false],[11,-1,true],
+                              [11,-1,true],[19,-1,true],[23,-1,true],[24,1,true],[25,1,true]];
+    var spriteTlScaleCheckPeriodX = 26;
     
     var enterframe = new enchant.Event('enterframe');
     
