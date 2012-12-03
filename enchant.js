@@ -4612,7 +4612,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * Time-line class.
           * Class for managing the action.
           * For one node to manipulate the timeline of one must correspond.
-     *
+          *
           * Reading a tl.enchant.js, all classes (Group, Scene, Entity, Label, Sprite) of the Node class that inherits
           * Tlthe property, an instance of the Timeline class is generated.
           * Time-line class has a method to add a variety of actions to himself,
@@ -4633,7 +4633,29 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.isFrameBased = true;
         this._parallel = null;
         this._activated = false;
+        var tl = this;
+        this._nodeEventListener = function(e) {
+            tl.dispatchEvent(e);
+        };
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
+    },
+    /**
+     * @private
+     */
+    _deactivateTimeline: function() {
+        if(this._activated) {
+            this._activated = false;
+            this.node.removeEventListener('enterframe', this._nodeEventListener);
+        }
+    },
+    /**
+     * @private
+     */
+    _activateTimeline: function() {
+        if (!this._activated) {
+            this.node.addEventListener("enterframe", this._nodeEventListener);
+            this._activated = true;
+        }
     },
     /**
      */
@@ -4654,8 +4676,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         action.dispatchEvent(e);
 
         if (this.queue.length === 0) {
-            this._activated = false;
-            this.node.removeEventListener('enterframe', this._nodeEventListener);
+            this._deactivateTimeline();
             return;
         }
 
@@ -4704,15 +4725,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
     },
     add: function(action) {
-        if (!this._activated) {
-            var tl = this;
-            this._nodeEventListener = function(e) {
-                tl.dispatchEvent(e);
-            };
-            this.node.addEventListener("enterframe", this._nodeEventListener);
-
-            this._activated = true;
-        }
+        this._activateTimeline();
         if (this._parallel) {
             this._parallel.actions.push(action);
             this._parallel = null;
@@ -4751,6 +4764,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.queue[i].dispatchEvent(e);
         }
         this.queue = [];
+        this._deactivateTimeline();
         return this;
     },
     /**
@@ -4771,13 +4785,19 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      */
     pause: function() {
-        this.paused = true;
+        if(!this.paused) {
+            this.paused = true;
+            this._deactivateTimeline();
+        }
         return this;
     },
     /**
      */
     resume: function() {
-        this.paused = false;
+        if(this.paused) {
+            this.paused = false;
+            this._activateTimeline();
+        }
         return this;
     },
     /**

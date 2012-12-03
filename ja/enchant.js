@@ -4626,7 +4626,29 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.isFrameBased = true;
         this._parallel = null;
         this._activated = false;
+        var tl = this;
+        this._nodeEventListener = function(e) {
+            tl.dispatchEvent(e);
+        };
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
+    },
+    /**
+     * @private
+     */
+    _deactivateTimeline: function() {
+        if(this._activated) {
+            this._activated = false;
+            this.node.removeEventListener('enterframe', this._nodeEventListener);
+        }
+    },
+    /**
+     * @private
+     */
+    _activateTimeline: function() {
+        if (!this._activated) {
+            this.node.addEventListener("enterframe", this._nodeEventListener);
+            this._activated = true;
+        }
     },
     /**
      * 一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる。 （デフォルト）
@@ -4657,8 +4679,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         action.dispatchEvent(e);
 
         if (this.queue.length === 0) {
-            this._activated = false;
-            this.node.removeEventListener('enterframe', this._nodeEventListener);
+            this._deactivateTimeline();
             return;
         }
 
@@ -4710,15 +4731,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
     },
     add: function(action) {
-        if (!this._activated) {
-            var tl = this;
-            this._nodeEventListener = function(e) {
-                tl.dispatchEvent(e);
-            };
-            this.node.addEventListener("enterframe", this._nodeEventListener);
-
-            this._activated = true;
-        }
+        this._activateTimeline();
         if (this._parallel) {
             this._parallel.actions.push(action);
             this._parallel = null;
@@ -4764,6 +4777,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.queue[i].dispatchEvent(e);
         }
         this.queue = [];
+        this._deactivateTimeline();
         return this;
     },
     /**
@@ -4789,14 +4803,20 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * タイムラインの実行を一時停止する
      */
     pause: function() {
-        this.paused = true;
+        if(!this.paused) {
+            this.paused = true;
+            this._deactivateTimeline();
+        }
         return this;
     },
     /**
      * タイムラインの実行を再開する
      */
     resume: function() {
-        this.paused = false;
+        if(this.paused) {
+            this.paused = false;
+            this._activateTimeline();
+        }
         return this;
     },
     /**
