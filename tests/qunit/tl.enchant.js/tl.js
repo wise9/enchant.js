@@ -194,8 +194,8 @@ var periodTestingFunction = function(time, checkArray,period,sprite,property) {
             equal(sprite[property] === checkArray[j][1],checkArray[j][2],' ' + property + ' for time ' + time + ' testing: ' + checkArray[j][1] + ' === ' + sprite[property] + ', expecting ' + checkArray[j][2]);
         }
     }
-}
-
+};
+/*
 test('tl.multipleTl', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
     var tl = new Timeline(sprite,true);
@@ -244,7 +244,7 @@ test('tl.multipleTl', function() {
         sprite.dispatchEvent(enterframe);
     }
 });
-
+*/
 
 /* time based testing */
 
