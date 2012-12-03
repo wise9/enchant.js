@@ -125,10 +125,9 @@ enchant.gl.Sprite3D.prototype.getQuat = function() {
     var orig = enchant.gl.Sprite3D.prototype.initialize;
     enchant.gl.Sprite3D.prototype.initialize = function() {
         orig.apply(this, arguments);
-        var tl = this.tl = new enchant.gl.extension.Timeline(this);
-        this.addEventListener("enterframe", function() {
-            tl.dispatchEvent(new enchant.Event("enterframe"));
-        });
+        if(enchant.ENV.USE_ANIMATION){
+            var tl = this.tl = new enchant.gl.extension.Timeline(this);
+        }
     };
 })(enchant);
 
@@ -148,16 +147,16 @@ enchant.gl.extension.Tween = enchant.Class.create(enchant.Action, {
         var tween = this;
         this.addEventListener(enchant.Event.ACTION_START, function() {
             // トゥイーンの対象とならないプロパティ
-            var excepted = [ "frame", "time", "callback", "onactiontick",
-                    "onactionstart", "onactionend" ];
+            var excepted = [ "frame", "time", "callback", "onactiontick", "onactionstart", "onactionend" ];
             for ( var prop in params) {
                 if (params.hasOwnProperty(prop)) {
                     // 値の代わりに関数が入っていた場合評価した結果を用いる
                     var target_val;
                     if (typeof params[prop] == "function") {
                         target_val = params[prop].call(tween.node);
-                    } else
+                    } else {
                         target_val = params[prop];
+                    }
 
                     if (excepted.indexOf(prop) == -1) {
                         origin[prop] = tween.node[prop];
@@ -172,20 +171,27 @@ enchant.gl.extension.Tween = enchant.Class.create(enchant.Action, {
             }
         });
 
+        var action = this;
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
-            var ratio = tween.easing(tween.frame, 0, 1, tween.time);
             for ( var prop in target) {
                 if (target.hasOwnProperty(prop)) {
                     if (prop === "quat") {
+                        var ratio = tween.easing(tween.frame, 0, 1, tween.time);
+                        if (1 - ratio < 10e-8) {
+                            ratio = 1;
+                        }
                         var val = origin[prop].slerp(target[prop], ratio);
                         tween.node.rotationSet(val);
                     } else {
                         if (typeof this[prop] === "undefined") {
                             continue;
                         }
-                        var val = target[prop] * ratio + origin[prop]
-                                * (1 - ratio);
-                        tween.node[prop] = val;
+                        // if time is 0, set property to target value immediately
+                        var ratio = tween.time === 0 ? 1 : tween.easing(Math.min(tween.time,tween.frame + evt.elapsed), 0, 1, tween.time) - tween.easing(tween.frame, 0, 1, tween.time);
+                        tween.node[prop] += (target[prop] - origin[prop]) * ratio;
+                        if (Math.abs(tween.node[prop]) < 10e-8){
+                            tween.node[prop] = 0;
+                        }
                     }
                 }
             }
@@ -205,20 +211,6 @@ enchant.gl.extension.Timeline = enchant.Class.create(enchant.Timeline, {
             x : x,
             y : y,
             z : z,
-            time : time,
-            easing : easing
-        });
-    },
-    moveX : function(x, time, easing) {
-        return this.tween({
-            x : x,
-            time : time,
-            easing : easing
-        });
-    },
-    moveY : function(y, time, easing) {
-        return this.tween({
-            y : y,
             time : time,
             easing : easing
         });
@@ -246,6 +238,15 @@ enchant.gl.extension.Timeline = enchant.Class.create(enchant.Timeline, {
         });
     },
     scaleTo : function(scale, time, easing) {
+        if (typeof easing === "number") {
+            return this.tween({
+                scaleX : arguments[0],
+                scaleY : arguments[1],
+                scaleZ : arguments[2],
+                time : arguments[3],
+                easing: arguments[4]
+            });
+        }
         return this.tween({
             scaleX : scale,
             scaleY : scale,
@@ -254,16 +255,22 @@ enchant.gl.extension.Timeline = enchant.Class.create(enchant.Timeline, {
             easing : easing
         });
     },
-    scaleXYZTo : function(scaleX, scaleY, scaleZ, time, easing) {
-        return this.tween({
-            scaleX : scaleX,
-            scaleY : scaleY,
-            scaleZ : scaleZ,
-            time : time,
-            easing : easing
-        });
-    },
     scaleBy : function(scale, time, easing) {
+        if (typeof easing === "number") {
+            return this.tween({
+                scaleX : function() {
+                    return this.scaleX * arguments[0]
+                },
+                scaleY : function() {
+                    return this.scaleY * arguments[1]
+                },
+                scaleZ : function() {
+                    return this.scaleZ * arguments[2]
+                },
+                time : arguments[3],
+                easing : arguments[4]
+            });
+        }
         return this.tween({
             scaleX : function() {
                 return this.scaleX * scale
@@ -276,22 +283,7 @@ enchant.gl.extension.Timeline = enchant.Class.create(enchant.Timeline, {
             },
             time : time,
             easing : easing
-        })
-    },
-    scaleXYZBy : function(scaleX, scaleY, scaleZ, time, easing) {
-        return this.tween({
-            scaleX : function() {
-                return this.scaleX * scaleX
-            },
-            scaleY : function() {
-                return this.scaleY * scaleY
-            },
-            scaleZ : function() {
-                return this.scaleZ * scaleZ
-            },
-            time : time,
-            easing : easing
-        })
+        });
     },
     rotateTo : function(quat, time, easing) {
         return this.tween({
@@ -302,7 +294,9 @@ enchant.gl.extension.Timeline = enchant.Class.create(enchant.Timeline, {
     },
     rotateBy : function(quat, time, easing) {
         return this.tween({
-            quat : this.node.getQuat().multiply(quat),
+            quat : function() {
+                return this.getQuat().multiply(quat)
+            },
             time : time,
             easing : easing
         });

@@ -25,7 +25,7 @@ window.onload = function() {
                     .and()
                     .rotateBy(new Quat(rx, ry, rz, ra), 60, enchant.Easing.QUAD_EASEINOUT)
                     .and()
-                    .scaleXYZTo(sx, sy, sz, 60, enchant.Easing.SWING);
+                    .scaleTo(sx, sy, sz, 60, enchant.Easing.SWING);
             });
         }
     };
