@@ -382,6 +382,120 @@ test('tl.multipleTl', function() {
 
 /* time based testing */
 
+test('tl.timebased.activated', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(300);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 10;
+    for (var i = 0; i < 30 - 1; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.dispatchEvent(enterframe);
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+test('tl.timebased.activated (clear)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(1000);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 33;
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.clear();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+test('tl.timebased.activated (pause,resume)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(1000);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 33;
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.pause();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    for (i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    sprite.tl.resume();
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    for (i = 0; i < 14; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    enterframe.elapsed = 1000-29*33;
+    sprite.dispatchEvent(enterframe);
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    
+});
+
 test('tl.timebased.delay.then', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
     sprite.tl.setTimeBased();
@@ -406,6 +520,29 @@ test('tl.timebased.delay.then', function() {
 
     sprite.tl.clear();
     sprite.tl.setFrameBased();
+});
+
+test('tl.timebased.delay x 2.then', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    
+    var then = false;
+    sprite.tl.delay(150).delay(150).then(function() {
+        then = true;
+    });
+    ok(!then);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 10;
+    for (var i = 0; i < 30 - 1; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    ok(!then);
+    sprite.dispatchEvent(enterframe);
+    ok(then);
+
+    sprite.tl.clear();
 });
 
 test('tl.timebased.tween', function() {

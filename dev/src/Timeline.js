@@ -64,7 +64,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @private
      */
     _activateTimeline: function() {
-        if (!this._activated) {
+        if (!this._activated && !this.paused) {
             this.node.addEventListener("enterframe", this._nodeEventListener);
             this._activated = true;
         }
