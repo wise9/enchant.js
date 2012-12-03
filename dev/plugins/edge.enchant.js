@@ -358,6 +358,10 @@ if (enchant !== undefined) {
                         case "skewY":
                             property = "skewY";
                             break;
+                        case "display":
+                            property = 'visible';
+                            value = modifier[2];
+                            break;
                         }
                         if (property) {
                             settings.push(this._defaultStateSettingFunctionFactory(property, value));
@@ -716,7 +720,11 @@ if (enchant !== undefined) {
             },
             _setStyleFunctionFactory : function(sprite, parameter, value) {
                 return function() {
-                    sprite._style[parameter] = value;
+                    if(parameter === 'display') {
+                        sprite.visibile = value;
+                    } else {
+                        sprite._style[parameter] = value;
+                    }
                 };
             }
         });
@@ -932,9 +940,6 @@ if (enchant !== undefined) {
                 for (var key in this._elementSettings) {
                     var sprite = this._sprites[key];
                     var settings = this._elementSettings[key];
-                    if (!sprite) {
-                        sprite = this._symbol.groupedSprites.parentNode;
-                    }
                     if (sprite) {
                         for (var i = 0; i < settings.length; i++) {
                             settings[i](sprite);
@@ -956,11 +961,6 @@ if (enchant !== undefined) {
              [/lang]
              */
             destroyTimelines: function() {
-                for (var timelinesKey in this._timelines) {
-                    for (var timelinesKey2 in this._timelines[timelinesKey]) {
-                        this._timelines[timelinesKey][timelinesKey2].clear();
-                    }
-                }
                 this.clearAndStopTimelines(true);
                 this._timelines = {};
                 this._gameListener = {};
@@ -1161,7 +1161,7 @@ if (enchant !== undefined) {
                         if (reverse) {
                             delay = timelineList.duration - timeline.startTime - timeline.duration;
                         } else {
-                            delay = Math.max(0, timeline.startTime - 1);
+                            delay = Math.max(0, timeline.startTime);
                         }
                         if (!sprite) {
                             debugLog('undefined sprite for tween ' + timeline.sprite);
@@ -1188,7 +1188,7 @@ if (enchant !== undefined) {
                                     second['time'] = duration;
                                     second['easing'] = timeline.easing;
                                 }
-                                tl.delay(delay)[functionName](first, 1)[functionName](second, duration, timeline.easing);
+                                tl.delay(delay)[functionName](first, 0)[functionName](second, duration, timeline.easing);
                             }
                         } else if (timelineAction.executeSymbolAction) {
                             var symbol = null;
@@ -1198,6 +1198,7 @@ if (enchant !== undefined) {
                                     break;
                                 }
                             }
+                            
                             tl.delay(delay).then(this._timelineSymbolTweenActionFunctionFactory(symbol, timeline.func, timeline.params));
                         }
                         tl.timeLineName = timelineList.name;
@@ -1413,14 +1414,74 @@ if (enchant !== undefined) {
              */
             initialize : function() {
                 this._initiliazeDomLayer();
+                this._updateStyleOnPropertyChangeFactory(this,enchant.Entity.prototype,'width', function(width) {
+                    var styleWidth = null;
+                    if(width && !isNaN(width) && width !== 0) {
+                        styleWidth = width + 'px';
+                    }
+                    this._element.style.width = styleWidth;
+                    this.__styleStatus.width = styleWidth;
+                });
+                this._updateStyleOnPropertyChangeFactory(this,enchant.Entity.prototype,'height', function(height) {
+                    var styleHeight = null;
+                    if(height && !isNaN(height) && height !== 0) {
+                        styleHeight = height + 'px';
+                    }
+                    this._element.style.height = styleHeight;
+                    this.__styleStatus.height = styleHeight;
+                });
+                this._updateStyleOnPropertyChangeFactory(this,enchant.Entity.prototype,'opacity', function(opacity) {
+                    this._element.style.opacity = opacity;
+                    this.__styleStatus.opacity = opacity;
+                });
+                this._updateStyleOnPropertyChangeFactory(this,enchant.Entity.prototype,'backgroundColor', function(color) {
+                    this._element.style.setProperty('background-color',color);
+                    this.__styleStatus['background-color'] = color;                    
+                });
+            },
+            visible : {
+                get: Object.getOwnPropertyDescriptor(enchant.Entity.prototype,'visible').get,
+                set: function(visible) {
+                    if(typeof(visible) === 'string') {
+                        this._element.style.display = visible;
+                        visible = visible !== 'none' && visible !== 'hidden';
+                    } else {
+                        this._element.style.display = visible ? 'block' : 'none';
+                    }
+                    Object.getOwnPropertyDescriptor(enchant.Entity.prototype,'visible').set.call(this,visible);
+                }
             },
             // TODO comment
             domRender : function(element) {
+                var styleWidth = parseFloat(element.style.width,10);
+                styleWidth = (styleWidth && !isNaN(styleWidth)) ? styleWidth : 0; 
+                if(styleWidth !== this.width) {
+                    this.width = styleWidth;
+                }
+                var styleHeight = parseFloat(element.style.height,10);
+                styleHeight = (styleHeight && !isNaN(styleHeight)) ? styleHeight : 0;
+                if(styleHeight !== this.height) {
+                    this.height = styleHeight;
+                }
+                var styleOpacity = element.style.opacity;
+                if(styleOpacity !== this.opacity) {
+                    this.opacity = parseFloat(styleOpacity,10);
+                }
+                var styleBackgroundColor = element.style.getPropertyValue('background-color');
+                if(styleBackgroundColor !== this.backgroundColor) {
+                    this.backgroundColor = styleBackgroundColor;
+                }
+                var styleDisplay = element.style.display;
+                var styleVisible = styleDisplay !== 'none' && styleDisplay !== 'hidden';
+                if(styleVisible !== this.visible) {
+                    this.visible = styleDisplay;
+                }
+
                 if (this.width === 0) {
-                    element.style.width = null;
+                    this._style.width = null;
                 }
                 if (this.height === 0) {
-                    element.style.height = null;
+                    this._style.height = null;
                 }
             },
             /**
@@ -1448,7 +1509,7 @@ if (enchant !== undefined) {
                 }
                 return null;
             },
-            // TODO: comment
+            // TODO: not completed
             processCSSTransformOriginString: function(cssTransform) {
                 var split = cssTransform.replace(/^\s+|\s+$/g, "").split(/\s+/,2);
                 if(split.length === 0) {
@@ -1597,17 +1658,12 @@ if (enchant !== undefined) {
              * @private
              */
             _setFrame: function(frame) {
-                this._frame = 0;
-                this._frameLeft = 0;
-                this._frameTop = 0;
-                this._spriteImageDirty = true;
+                enchant.Sprite.prototype._setFrame.call(this,0);
             },
             //TODO: comment
             domRender : function(element) {
-                if(this._spriteImageDirty) {
-                    enchant.Sprite.prototype.domRender.apply(this,arguments);
-                    element.style.setProperty('background-size','100% 100%');
-                }
+                enchant.Sprite.prototype.domRender.apply(this,arguments);
+                this._style['background-size'] = '100% 100%';
             }
         });
 
@@ -1636,8 +1692,14 @@ if (enchant !== undefined) {
         enchant.edge.EdgeLabel = enchant.Class.create(enchant.Label,{
             initialize: function(text) {
                 this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'text', function() {this._element.innerHTML = this._text;});
-                this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'textAlign', function(textAlign) {this._element.style.textAlign = textAlign;});
-                this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'color', function(color) {this._element.style.color = color;});
+                this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'textAlign', function(textAlign) {
+                    this._element.style.textAlign = textAlign;
+                    this.__styleStatus['text-align'] = textAlign;
+                });
+                this._updateStyleOnPropertyChangeFactory(this,enchant.Label.prototype,'color', function(color) {
+                    this._element.style.color = color;
+                    this.__styleStatus.color = color;
+                });
 
                 enchant.Label.call(this, text);
                 this.width = 0;
@@ -1726,12 +1788,12 @@ if (enchant !== undefined) {
             }
         });
 
-        /* Mix */
+        /* -- BEGIN: Mix classes using mixing.enchant.js -- */
         enchant.edge.EdgeEntity = enchant.Class.mixClasses(enchant.edge.EdgeEntity, enchant.Group,true,[],[],['rotation','scaleX','scaleY','originX','originY']);
         enchant.edge.EdgeGroup = enchant.Class.mixClasses(enchant.edge.EdgeGroup,enchant.edge.EdgeEntity);
         enchant.edge.EdgeSprite = enchant.Class.mixClasses(enchant.edge.EdgeSprite,enchant.edge.EdgeEntity);
         enchant.edge.EdgeLabel = enchant.Class.mixClasses(enchant.edge.EdgeLabel,enchant.edge.EdgeEntity);
-
+        /* -- END: Mix classes using mixing.enchant.js -- */
 
 
 
@@ -1795,6 +1857,11 @@ if (enchant !== undefined) {
                 this._edgeVariables = {};
                 this._edgeParameters = {};
                 this.composition = this;
+                if(this.groupedSprites.childNodes.length !== 1) {
+                    this.sprites["${symbolSelector}"] = this.groupedSprites;    
+                } else {
+                    this.sprites["${symbolSelector}"] = this.groupedSprites.childNodes[0];
+                }
             },
             /**
              [lang:ja]
@@ -1810,6 +1877,20 @@ if (enchant !== undefined) {
              */
             getSprite: function(name) {
                 return this._findChildSprite(name);
+            },
+            //TODO comment
+            getSpriteRecursive: function(name) {
+                var sprite = this.getSprite(name);
+                if(!sprite) {
+                    var childSymbols = this.getChildSymbols();
+                    for(var i = 0; i < childSymbols.length; i++) {
+                        sprite = childSymbols[i];
+                        if(sprite) {
+                            break;
+                        }
+                    }
+                }
+                return sprite;
             },
             /**
              * @private
@@ -1849,6 +1930,7 @@ if (enchant !== undefined) {
                 this._currentStateName = state;
                 this._currentStateObject = new StateManager(this._symbolFactory._states.getStateSettings(state), this._symbolFactory._timelines.getStateTimelines(state), this.sprites, this, this.instanceName);
                 this._currentStateObject.enableState();
+                this.resetStateSettings();
             },
             /**
              [lang:ja]
@@ -2080,7 +2162,7 @@ if (enchant !== undefined) {
                 this.__isFirstFrame = true;
                 if (typeof(time) !== 'undefined') {
                     if (!ignoreStateCreation) {
-                        this.resetStateSettings();
+                        this.resetStateSettings(); // TODO required?
                     }
                     this._currentStateObject.createReverseTimelines(time);
                 }
@@ -2102,7 +2184,7 @@ if (enchant !== undefined) {
                 this.__isFirstFrame = true;
                 if (typeof(time) !== 'undefined') {
                     if (!ignoreStateCreation) {
-                        this.resetStateSettings();
+                        this.resetStateSettings(); // TODO: required?
                     }
                     this._currentStateObject.createTimelines(time);
                 }
