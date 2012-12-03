@@ -34,6 +34,29 @@ enchant.gl.extension = {};
 // #################################################################
 
 /**
+ * 3Dワールド座標を2Dスクリーン座標に変換.
+ */
+enchant.gl.extension.toScreenCoord = function(x, y, z) {
+    var game = enchant.Game.instance;
+    var camera = game.currentScene3D.getCamera();
+
+    // プロジェクション行列
+    var pm = mat4.perspective(20, game.width / game.height, 1.0, 1000.0);
+    var vm = mat4.lookAt([ camera._x, camera._y, camera._z ], [
+            camera._centerX, camera._centerY, camera._centerZ ], [
+            camera._upVectorX, camera._upVectorY, camera._upVectorZ ]);
+    var sc = mat4.multiplyVec4(mat4.multiply(pm, vm, mat4.create()), [ x, y, z, 1 ]);
+
+    var scX = (1 - (-sc[0] / sc[3])) * (game.width / 2);
+    var scY = (1 - (sc[1] / sc[3])) * (game.height / 2);
+
+    return {
+        x : scX,
+        y : scY
+    };
+};
+
+/**
  * クォータニオン同士の積.
  */
 enchant.gl.Quat.prototype.multiply = function(another) {
@@ -100,7 +123,7 @@ enchant.gl.extension.mat4ToQuat = function(m, q) {
 
 // #################################################################
 // #
-// # Scene3Dの拡張
+// # Sprite3Dの拡張
 // #
 // #################################################################
 
@@ -111,6 +134,60 @@ enchant.gl.Sprite3D.prototype.getQuat = function() {
     var quat = new Quat();
     quat._quat = enchant.gl.extension.mat4ToQuat(this._rotation);
     return quat;
+};
+
+/**
+ * ワールド座標を返す.
+ */
+enchant.gl.Sprite3D.prototype.getWorldCoord = function() {
+    function baseMatrix(s3d) {
+        if (s3d.parentNode instanceof enchant.gl.Sprite3D) {
+            return mat4.multiply(baseMatrix(s3d.parentNode), s3d.modelMat, mat4.create());
+        } else {
+            return s3d.modelMat;
+        }
+    }
+
+    var game = enchant.Game.instance;
+
+    // キャッシュチェック
+    if (this.globalCoordCache && this.globalCoordCache.frame === game.frame) {
+        return this.globalCoordCache.coord;
+    } else {
+        this.globalCoordCache = {
+            frame : game.frame
+        }
+    }
+
+    var m = baseMatrix(this)
+
+    this.globalCoordCache.coord = { x: m[12], y: m[13], z: m[14] };
+    return this.globalCoordCache.coord;
+};
+
+/**
+ * スクリーン上の座標を返す.
+ */
+enchant.gl.Sprite3D.prototype.getScreenCoord = function() {
+    var game = enchant.Game.instance;
+
+    // キャッシュチェック
+    if (this.screenCoordCache && this.screenCoordCache.frame === game.frame) {
+        return this.screenCoordCache.coord;
+    } else {
+        this.screenCoordCache = {
+            frame : game.frame
+        }
+    }
+
+    var scene = game.currentScene3D;
+    if (!scene) {
+        return null;
+    }
+
+    var g = this.getWorldCoord();
+    this.screenCoordCache.coord = enchant.gl.extension.toScreenCoord(g.x, g.y, g.z);
+    return this.screenCoordCache.coord;
 };
 
 
@@ -171,7 +248,6 @@ enchant.gl.extension.Tween = enchant.Class.create(enchant.Action, {
             }
         });
 
-        var action = this;
         this.addEventListener(enchant.Event.ACTION_TICK, function(evt) {
             for ( var prop in target) {
                 if (target.hasOwnProperty(prop)) {
