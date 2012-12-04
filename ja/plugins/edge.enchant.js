@@ -1137,7 +1137,7 @@ if (enchant !== undefined) {
                                     break;
                                 }
                             }
-                            
+
                             tl.delay(delay).then(this._timelineSymbolTweenActionFunctionFactory(symbol, timeline.func, timeline.params));
                         }
                         tl.timeLineName = timelineList.name;
@@ -1666,9 +1666,9 @@ if (enchant !== undefined) {
                 this._edgeParameters = {};
                 this.composition = this;
                 if(this.groupedSprites.childNodes.length !== 1) {
-                    this.sprites["${symbolSelector}"] = this.groupedSprites;    
+                    this.sprites["${symbolSelector}"] = this.groupedSprites.parentNode;    
                 } else {
-                    this.sprites["${symbolSelector}"] = this.groupedSprites.childNodes[0];
+                    this.sprites["${symbolSelector}"] = this.groupedSprites;
                 }
             },
             /**
@@ -1678,20 +1678,6 @@ if (enchant !== undefined) {
              */
             getSprite: function(name) {
                 return this._findChildSprite(name);
-            },
-            //TODO comment
-            getSpriteRecursive: function(name) {
-                var sprite = this.getSprite(name);
-                if(!sprite) {
-                    var childSymbols = this.getChildSymbols();
-                    for(var i = 0; i < childSymbols.length; i++) {
-                        sprite = childSymbols[i];
-                        if(sprite) {
-                            break;
-                        }
-                    }
-                }
-                return sprite;
             },
             /**
              * @private
@@ -1840,7 +1826,6 @@ if (enchant !== undefined) {
              */
             $: function(selector, context) {
                 var sprite = this._findChildSprite(selector);
-
                 if (typeof(jQuery) === 'function') {
                     if (sprite && sprite._element) {
                         return jQuery(sprite._element, context);
