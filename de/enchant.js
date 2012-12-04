@@ -3518,7 +3518,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             }
             enchant.CanvasLayer._attachCache(child, layer, __onchildadded, __onchildremoved);
             var render = new enchant.Event(enchant.Event.RENDER);
+            if (self._dirty) {
+                self._updateCoordinate();
+            }
+            enchant.Matrix.instance.stack.push(self._matrix);
             layer._rendering(child, render);
+            enchant.Matrix.instance.stack.pop(self._matrix);
         };
 
         var __onchildremoved = function(e) {
