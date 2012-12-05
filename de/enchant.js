@@ -2217,6 +2217,26 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._setFrame();
+            this._dirty = true;
+        }
+    },
+    height: {
+        get: function() {
+            return this._height;
+        },
+        set: function(height) {
+            this._height = height;
+            this._setFrame();
+            this._dirty = true;
+        }
+    },
     cvsRender: function(ctx) {
         var img, imgdata, row, frame;
         var sx, sy, sw, sh;
