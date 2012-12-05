@@ -125,7 +125,7 @@ test('Sprite should draw a image repetitively, ' +
     'when the image is smaller than the sprite', function() {
     var surface = new enchant.Surface(24, 24);
     var context = surface.context;
-    // Draw checkboard pattern.
+    // Draw checkerboard pattern.
     context.fillStyle = '#FFFFFF';
     context.fillRect(0, 0, 24, 24);
     context.fillStyle = '#000000';
