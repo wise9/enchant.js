@@ -161,10 +161,13 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         var sh = Math.min(this.height, image.height - sy);
         var dw = Math.min(image.width, this.width);
         var dh = Math.min(image.height, this.height);
-        var x, y;
+        var x, y, w, h;
         for (y = 0; y < this.height; y += dh) {
+            h = (this.height < y + dh) ? this.height - y : dh;
             for (x = 0; x < this.width; x += dw) {
-                ctx.drawImage(element, sx, sy, sw, sh, x, y, dw, dh);
+                w = (this.width < x + dw) ? this.width - x : dw;
+                ctx.drawImage(element, sx, sy,
+                    sw * w / dw, sh * h / dh, x, y, w, h);
             }
         }
     },
