@@ -142,14 +142,16 @@ test('Sprite should draw a image repetitively, ' +
     ctx.fillRect(24, 0, 8, 12);
     ctx.fillRect(0, 24, 12, 8);
     ctx.fillRect(24, 24, 8, 8);
-    var expectedURL = expected._element.toDataURL();
+    var expectedArray = ctx.getImageData(0, 0, 32, 32).data;
 
     var sprite = new enchant.Sprite(32, 32);
     sprite.image = surface;
 
     var actual = new enchant.Surface(32, 32);
     sprite.cvsRender(actual.context);
-    var actualURL = actual._element.toDataURL();
+    var actualArray = actual.context.getImageData(0, 0, 32, 32).data;
 
-    equal(actualURL, expectedURL);
+    equal(actualArray.length, expectedArray.length);
+    for (var i = 0; i < actualArray.length; i++)
+        equal(actualArray[i], expectedArray[i]);
 });
