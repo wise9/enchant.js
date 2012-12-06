@@ -117,3 +117,41 @@ test('Entity#intersect, #within between two entities in different Group', functi
     equal(a.intersect(b), true);
     equal(a.within(b), true);
 });
+
+/**
+ * @see https://github.com/wise9/enchant.js/issues/95
+ */
+test('Sprite should draw a image repetitively, ' +
+    'when the image is smaller than the sprite', function() {
+    var surface = new enchant.Surface(24, 24);
+    var context = surface.context;
+    // Draw checkerboard pattern.
+    context.fillStyle = '#FFFFFF';
+    context.fillRect(0, 0, 24, 24);
+    context.fillStyle = '#000000';
+    context.fillRect(0, 0, 12, 12);
+    context.fillRect(12, 12, 12, 12);
+
+    var expected = new enchant.Surface(32, 32);
+    var ctx = expected.context;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, 32, 32);
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, 12, 12);
+    ctx.fillRect(12, 12, 12, 12);
+    ctx.fillRect(24, 0, 8, 12);
+    ctx.fillRect(0, 24, 12, 8);
+    ctx.fillRect(24, 24, 8, 8);
+    var expectedArray = ctx.getImageData(0, 0, 32, 32).data;
+
+    var sprite = new enchant.Sprite(32, 32);
+    sprite.image = surface;
+
+    var actual = new enchant.Surface(32, 32);
+    sprite.cvsRender(actual.context);
+    var actualArray = actual.context.getImageData(0, 0, 32, 32).data;
+
+    equal(actualArray.length, expectedArray.length);
+    for (var i = 0; i < actualArray.length; i++)
+        equal(actualArray[i], expectedArray[i]);
+});
