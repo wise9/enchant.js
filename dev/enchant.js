@@ -2046,6 +2046,16 @@ enchant.EventTarget = enchant.Class.create({
          [/lang]
          */
         start: function() {
+            var onloadTimeSetter = function() {
+                this.currentTime = this.getTime();
+                this.removeEventListener('load',onloadTimeSetter);
+                this._intervalID = window.setInterval(function() {
+                    core._tick();
+                }, 1000 / this.fps);
+                this.running = true;
+            };
+            this.addEventListener('load',onloadTimeSetter);
+            
             if (this._intervalID) {
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
@@ -2095,15 +2105,6 @@ enchant.EventTarget = enchant.Class.create({
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            var onloadTimeSetter = function() {
-                this.currentTime = this.getTime();
-                this.removeEventListener('load',onloadTimeSetter);
-            };
-            this.addEventListener('load',onloadTimeSetter);
-            this._intervalID = window.setInterval(function() {
-                core._tick();
-            }, 1000 / this.fps);
-            this.running = true;
         },
         /**
          [lang:ja]
@@ -3465,17 +3466,25 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var img, imgdata, row, frame;
-        var sx, sy, sw, sh;
-        if (this._image && this._width !== 0 && this._height !== 0) {
-            frame = Math.abs(this._frame) || 0;
-            img = this._image;
-            imgdata = img._element;
-            sx = this._frameLeft;
-            sy = Math.min(this._frameTop, img.height - this._height);
-            sw = Math.min(img.width - sx, this._width);
-            sh = Math.min(img.height - sy, this._height);
-            ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
+        if (this._image == null || this._width === 0 || this._height === 0) {
+            return;
+        }
+        var image = this._image;
+        var element = image._element;
+        var sx = this._frameLeft;
+        var sy = this._frameTop;
+        var sw = Math.min(this.width, image.width - sx);
+        var sh = Math.min(this.height, image.height - sy);
+        var dw = Math.min(image.width, this.width);
+        var dh = Math.min(image.height, this.height);
+        var x, y, w, h;
+        for (y = 0; y < this.height; y += dh) {
+            h = (this.height < y + dh) ? this.height - y : dh;
+            for (x = 0; x < this.width; x += dw) {
+                w = (this.width < x + dw) ? this.width - x : dw;
+                ctx.drawImage(element, sx, sy,
+                    sw * w / dw, sh * h / dh, x, y, w, h);
+            }
         }
     },
     domRender: function(element) {
@@ -6525,7 +6534,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @private
      */
     _activateTimeline: function() {
-        if (!this._activated) {
+        if (!this._activated && !this.paused) {
             this.node.addEventListener("enterframe", this._nodeEventListener);
             this._activated = true;
         }
