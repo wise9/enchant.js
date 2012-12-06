@@ -1327,7 +1327,7 @@
             set: function(surface) {
                 if (surface instanceof enchant.Surface) {
                     this._background = surface;
-                    this._style.backgroundImage = surface._css;
+                    this._style['background-image'] = surface._css;
                 }
             }
         },
