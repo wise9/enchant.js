@@ -1,7 +1,3 @@
-setInterval(function() {
-    console.log(''); // dummy for grunt qunit
-}, 1000);
-
 module('MutableText', {
 	setup: function () {
 		enchant();
