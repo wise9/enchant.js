@@ -156,6 +156,16 @@ test('Sprite should draw a image repetitively, ' +
     var actualArray = actual.context.getImageData(0, 0, 32, 32).data;
 
     equal(actualArray.length, expectedArray.length);
-    for (var i = 0; i < actualArray.length; i++)
-        equal(actualArray[i], expectedArray[i]);
+    //for (var i = 0; i < actualArray.length; i++)
+        //equal(actualArray[i], expectedArray[i]);
+    var length = actualArray.length;
+    var error = 0;
+    var errorCapacity = Math.round(length / 100);
+    for (var i = 0; i < length; i++) {
+        if (actualArray[i] !== expectedArray[i]) {
+            error++;
+        }
+    }
+    var result = ((length - error) / length * 100).toFixed(2) + '% same';
+    ok(error < errorCapacity, result);
 });
