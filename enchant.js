@@ -2933,8 +2933,8 @@ enchant.Matrix = enchant.Class.create({
     makeTransformMatrix: function(node, dest) {
         var x = node._x;
         var y = node._y;
-        var width = node._width || 0;
-        var height = node._height || 0;
+        var width = node.width || 0;
+        var height = node.height || 0;
         var rotation = node._rotation || 0;
         var scaleX = (typeof node._scaleX === 'number') ? node._scaleX : 1;
         var scaleY = (typeof node._scaleY === 'number') ? node._scaleY : 1;
