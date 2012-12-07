@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
             meta: {
-                version: 'v0.6.0',
+                version: 'v0.6.1',
                 banner: '/**\n\
  * enchant.js <%= meta.version %>\n\
  * http://enchantjs.com\n\

@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.6.0
+ * enchant.js v0.6.1
  * http://enchantjs.com
  * 
  * Copyright Ubiquitous Entertainment Inc.
