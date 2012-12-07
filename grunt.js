@@ -68,8 +68,17 @@ module.exports = function(grunt) {
                 }
             },
             watch: {
-                files: 'dev/src/*.js',
-                tasks: 'concat min'
+                core: {
+                    files: 'dev/src/*.js',
+                    tasks: 'concat min'
+                },
+                plugins: {
+                    files: [
+                        'dev/src/*.js',
+                        'dev/plugins/*.js',
+                    ],
+                    tasks: 'lint:core concat min qunit exec:lang'
+                }
             },
             jshint: {
                 options: {

@@ -468,15 +468,28 @@ if (enchant.gl !== undefined) {
                 }
                 return matrix;
             },
+            getNode: function() {
+                var table = this.nodes;
+                var child = [];
+                for (var key in table){
+                    child[key] = [];
+                    child[key] = table[key].getNode();
+                    for(var ckey in child[key]){
+                        table[ckey] = child[key][ckey];
+                    }
+                }
+                return table;
+            },
             getAnimationMatrixFromOneAnimationNode: function(Animation, libAnimationClips, flag) {
                 var core = enchant.Core.instance;
                 var rotation = this.getRotationMatrix();
                 var translation = this.getTranslationMatrix();
                 var matrix = this.getnMatrix();
                 var animationMatrixes = [];
-                animationMatrixes[this.sid] = [];
-                animationMatrixes[this.sid][0] = mat4.multiply(translation, rotation, mat4.create());
-                mat4.multiply(animationMatrixes[this.sid][0], matrix);
+                var sid = this.sid;
+                animationMatrixes[sid] = [];
+                animationMatrixes[sid][0] = mat4.multiply(translation, rotation, mat4.create());
+                mat4.multiply(animationMatrixes[sid][0], matrix);
                 var output = [];
                 var input = [];
                 var length = 0;
@@ -547,8 +560,8 @@ if (enchant.gl !== undefined) {
                             }
                         }
                     }
-                    animationMatrixes[this.sid][Math.round(core.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
-                    mat4.multiply(animationMatrixes[this.sid][Math.round(core.fps * input[i])],nMat);
+                    animationMatrixes[sid][Math.round(core.fps * input[i])] = mat4.multiply(trans, rot, mat4.create());
+                    mat4.multiply(animationMatrixes[sid][Math.round(core.fps * input[i])],nMat);
                 }
                 if (Animation.animations.length > 0) {
                     var child = this.getAnimationMatrixesLocal(Animation.animations, libAnimationClips, true);
@@ -584,11 +597,12 @@ if (enchant.gl !== undefined) {
                     for (var ackey in libAnimationClips) {
                         if (libAnimationClips[ackey].urls.indexOf(key) > -1 && flag) {
                             length = 0;
-                        } else if (libAnimations[key].animations.length > 0) {
-                            var child = this.getAnimationMatrixesLocal(libAnimations[key].animations, libAnimationClips, true);
-                            for (var ckey in child) {
-                                animationMatrixes[ckey] = child[ckey];
-                            }
+                        } 
+                    }
+                    if (libAnimations[key].animations.length > 0 && length > 0) {
+                        var child = this.getAnimationMatrixesLocal(libAnimations[key].animations, libAnimationClips, true);
+                        for (var ckey in child) {
+                            animationMatrixes[ckey] = child[ckey];
                         }
                     }
                 }
@@ -666,9 +680,19 @@ if (enchant.gl !== undefined) {
                     var urls = libAnimationClips[ackey].urls;
                     animationMatrixClips[ackey] = [];
                     for (var ui = 0, ul = urls.length; ui < ul; ui++) {
-                        var child = this.getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
+                        var child = [];
+                        if (libAnimations[urls[ui]].channels[0]) {
+                            child = this.getNode()[libAnimations[urls[ui]].channels[0].target.split('/')[0]].getAnimationMatrixFromOneAnimationNode(libAnimations[urls[ui]], libAnimationClips, true);
+                        }
+                        var child2 = [];
+                        if (libAnimations[urls[ui]].animations[0]) {
+                            child2 = this.getAnimationMatrixesLocal(libAnimations[urls[ui]].animations, libAnimationClips, true);
+                        }
                         for (var l in child) {
                             animationMatrixClips[ackey][l] = child[l];
+                        }
+                        for (l in child2) {
+                            animationMatrixClips[ackey][l] = child2[l];
                         }
                     }
                 }
@@ -1047,7 +1071,7 @@ if (enchant.gl !== undefined) {
                 return pose;
             },
             createPoses: function(node, poses, lib) {
-                var matrix = node.getAnimationMatrixesLocal(lib['animations'], lib['animation_clips'], false);
+                var matrix = node.getAnimationMatrixesLocal(lib['animations'], lib['animation_clips'], true);
                 var length = 0;
                 for (var k in matrix) {
                     poses[k] = new enchant.gl.KeyFrameManager();
@@ -1226,7 +1250,7 @@ if (enchant.gl !== undefined) {
                         }
                     }
                     poses = [];
-                    var poselength = this.createPoses(node, poses, this.lib);
+                    //var poselength = this.createPoses(node, poses, this.lib);
                     //if (poselength > 0) {
                         //sprite.addEventListener('enterframe', function() {
                             //var currentPose = this.getPose(poses, poselength)[node.sid];
@@ -1289,7 +1313,7 @@ if (enchant.gl !== undefined) {
                         for(var i = 0, l = this.childNodes.length; i < l; i++) {
                             first.animation.enterframe(this.childNodes[i], first.frame);
                         }
-                        if (first.frame > this.animation[0].animation.length) {
+                        if (first.frame >= this.animation[0].animation.length) {
                             first = this.animation.shift();
                             if (this.loop) {
                                 first.frame = 0;

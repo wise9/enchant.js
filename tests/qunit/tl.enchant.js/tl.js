@@ -49,7 +49,89 @@ test('tl.activated', function() {
     equal(sprite._listeners['enterframe'].length, defaultListeners);
 });
 
+test('tl.activated (clear)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
 
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(30);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.clear();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+test('tl.activated (pause,resume)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(30);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.pause();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    for (i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    sprite.tl.resume();
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    for (i = 0; i < 14; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    sprite.dispatchEvent(enterframe);
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    
+});
 
 test('tl.delay.then', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
@@ -107,6 +189,50 @@ test('tl.tween', function() {
     sprite.dispatchEvent(enterframe);
     equal(Math.round(sprite.x, 5), 320);
     equal(Math.round(sprite.y, 5), 320);
+});
+
+test('tl.tween (paused)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    equal(sprite.tl.paused,false);
+    sprite.tl.moveTo(320, 320, 60);
+    equal(sprite.x, 0);
+    equal(sprite.y, 0);
+    for (var i = 0; i < 30 - 1; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    equal(sprite.tl.paused,false);
+    notEqual(Math.round(sprite.x, 5), 320);
+    notEqual(Math.round(sprite.y, 5), 320);
+    
+    equal(sprite.tl.paused,false);
+    sprite.tl.pause();
+    equal(sprite.tl.paused,true);
+    
+    for (i = 0; i < 100 - 1; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    notEqual(Math.round(sprite.x, 5), 320);
+    notEqual(Math.round(sprite.y, 5), 320);
+    
+    equal(sprite.tl.paused,true);
+    sprite.tl.resume();
+    equal(sprite.tl.paused,false);
+    
+    for (var i = 0; i < 30; i++) {
+        var enterframe = new enchant.Event('enterframe');
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    notEqual(Math.round(sprite.x, 5), 320);
+    notEqual(Math.round(sprite.y, 5), 320);
+    equal(sprite.tl.paused,false);
+    
+    sprite.dispatchEvent(enterframe);
+    equal(Math.round(sprite.x, 5), 320);
+    equal(Math.round(sprite.y, 5), 320);
+    equal(sprite.tl.paused,false);
 });
 
 test('tl.tween (zero)', function() {
@@ -194,17 +320,19 @@ var periodTestingFunction = function(time, checkArray,period,sprite,property) {
             equal(sprite[property] === checkArray[j][1],checkArray[j][2],' ' + property + ' for time ' + time + ' testing: ' + checkArray[j][1] + ' === ' + sprite[property] + ', expecting ' + checkArray[j][2]);
         }
     }
-};
-/*
+}
+
 test('tl.multipleTl', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
     var tl = new Timeline(sprite,true);
     tl.rotateTo(360,10).delay(2).rotateTo(0,10).delay(2).loop();
-    var rotateCheck = [[0,0,true],[9,0,false],[10,360,true],
-                   [11,360,false],[19,360,false],
-                   [19,0,false]
+    //<- 1-10 rotate -><- 11,12 delay -><- 13-22 rotate -><- 23,24 delay ->
+    var rotateCheck = [[0,0,true],[1,0,false],[9,360,false],[9,0,false],[10,360,true],  //rotate
+                       [11,360,true],[12,360,true],             //delay
+                       [13,360,false],[13,0,false],[21,360,false],[21,0,false],[22,0,true],           //rotate
+                       [23,0,true]             //delay
                    ];
-    var rotationPeriod = 20;
+    var rotationPeriod = 24;
     
     tl = new Timeline(sprite,true);
     tl.delay(Math.round(Math.random()*10+5)).delay(Math.round(Math.random()*10+5))
@@ -212,23 +340,29 @@ test('tl.multipleTl', function() {
     
     tl = new Timeline(sprite,true);
     tl.fadeOut(20).delay(2).fadeIn(20).delay(2).loop();
-    var fadeCheck = [[0,1,true],[9,1,false],[19,1,false],[20,0,true],
-                   [21,0,false],[29,0,false],[39,0,false],
-                   [39,1,false]
+    //<- 1-20 fadeOut -><- 21,22 delay -><- 23-42 fadeIn -><- 43,44 delay ->
+    var fadeCheck = [[0,1,true],[1,1,false],[9,1,false],[9,0,false],
+                     [19,1,false],[19,0,false],[20,0,true],
+                     [21,0,true],[22,0,true],
+                   [23,0,false],[23,1,false],[29,0,false],[29,1,false],
+                   [41,0,false],[41,1,false],[42,1,true],[43,1,true]
                    ];
-    var fadePeriod = 40;
+    var fadePeriod = 44;
     
     sprite.tl.moveTo(300,sprite.y,10).scaleTo(-1,1,1).delay(2).moveTo(0,sprite.y,10).scaleTo(1,1,1).delay(2).loop();
-    
+    //<- 1-10 move -><- 11 scale -><- 12,13 delay -><- 14-23 move -><- 24 scale -><- 25,26 delay ->
     var spriteTlMoveCheckX = [[0,0,true],[9,300,false],[10,300,true],
-                              [11,300,false],[19,300,false],
-                              [19,0,false]
+                              [11,300,true],[12,300,true],[13,300,true],
+                              [19,300,false],[19,0,false],
+                              [23,300,false],[23,0,true],
+                              [24,300,false],[24,0,true],
+                              [25,0,true]
                               ];
-    var spriteTlMoveCheckPeriodX = 20;
+    var spriteTlMoveCheckPeriodX = 26;
     
-    var spriteTlScaleCheckX = [[0,1,true],[9,-1,false],[10,-1,true],
-                              [11,-1,true],[19,-1,true]];
-    var spriteTlScaleCheckPeriodX = 20;
+    var spriteTlScaleCheckX = [[0,1,true],[9,-1,false],[10,-1,false],[11,-1,true],
+                              [11,-1,true],[19,-1,true],[23,-1,true],[24,1,true],[25,1,true]];
+    var spriteTlScaleCheckPeriodX = 26;
     
     var enterframe = new enchant.Event('enterframe');
     
@@ -244,9 +378,123 @@ test('tl.multipleTl', function() {
         sprite.dispatchEvent(enterframe);
     }
 });
-*/
+
 
 /* time based testing */
+
+test('tl.timebased.activated', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(300);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 10;
+    for (var i = 0; i < 30 - 1; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.dispatchEvent(enterframe);
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+test('tl.timebased.activated (clear)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    equal(sprite.tl._activated, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(1000);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 33;
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.clear();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+});
+
+test('tl.timebased.activated (pause,resume)', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    var defaultListeners = sprite._listeners['enterframe'].length;
+
+    sprite.tl.delay(1000);
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 33;
+    for (var i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+
+    sprite.tl.pause();
+
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    for (i = 0; i < 15; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, true);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    sprite.tl.resume();
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    for (i = 0; i < 14; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+    
+    equal(sprite.tl._activated, true);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners + 1);
+    
+    enterframe.elapsed = 1000-29*33;
+    sprite.dispatchEvent(enterframe);
+    
+    equal(sprite.tl._activated, false);
+    equal(sprite.tl.paused, false);
+    equal(sprite._listeners['enterframe'].length, defaultListeners);
+    
+    
+});
 
 test('tl.timebased.delay.then', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
@@ -272,6 +520,29 @@ test('tl.timebased.delay.then', function() {
 
     sprite.tl.clear();
     sprite.tl.setFrameBased();
+});
+
+test('tl.timebased.delay x 2.then', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    sprite.tl.setTimeBased();
+    
+    var then = false;
+    sprite.tl.delay(150).delay(150).then(function() {
+        then = true;
+    });
+    ok(!then);
+
+    var enterframe = new enchant.Event('enterframe');
+    enterframe.elapsed = 10;
+    for (var i = 0; i < 30 - 1; i++) {
+        sprite.dispatchEvent(enterframe);
+    }
+
+    ok(!then);
+    sprite.dispatchEvent(enterframe);
+    ok(then);
+
+    sprite.tl.clear();
 });
 
 test('tl.timebased.tween', function() {

@@ -355,7 +355,9 @@ enchant.ENV = {
     /**
      * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
      */
-    USE_WEBAUDIO: true,
+    USE_WEBAUDIO: (function(){
+        return location.protocol !== 'file:';
+    }()),
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
      */
@@ -1225,6 +1227,16 @@ enchant.EventTarget = enchant.Class.create({
          * loading will begin and the loading screen will be displayed.
          */
         start: function() {
+            var onloadTimeSetter = function() {
+                this.currentTime = this.getTime();
+                this.removeEventListener('load',onloadTimeSetter);
+                this._intervalID = window.setInterval(function() {
+                    core._tick();
+                }, 1000 / this.fps);
+                this.running = true;
+            };
+            this.addEventListener('load',onloadTimeSetter);
+            
             if (this._intervalID) {
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
@@ -1274,11 +1286,6 @@ enchant.EventTarget = enchant.Class.create({
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = this.getTime();
-            this._intervalID = window.setInterval(function() {
-                core._tick();
-            }, 1000 / this.fps);
-            this.running = true;
         },
         /**
          * Begin core debug mode.
@@ -2081,7 +2088,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
-
         /**
          */
         this.addEventListener('enterframe', function() {
@@ -2132,6 +2138,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._frame;
         },
         set: function(frame) {
+            if(this._frame === frame) {
+                return;
+            }
             if (frame instanceof Array) {
                 var frameSequence = frame;
                 var nextFrame = frameSequence.shift();
@@ -2181,24 +2190,32 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var img, imgdata, row, frame;
-        var sx, sy, sw, sh;
-        if (this._image && this._width !== 0 && this._height !== 0) {
-            frame = Math.abs(this._frame) || 0;
-            img = this._image;
-            imgdata = img._element;
-            sx = this._frameLeft;
-            sy = Math.min(this._frameTop, img.height - this._height);
-            sw = Math.min(img.width - sx, this._width);
-            sh = Math.min(img.height - sy, this._height);
-            ctx.drawImage(imgdata, sx, sy, sw, sh, 0, 0, this._width, this._height);
+        if (this._image == null || this._width === 0 || this._height === 0) {
+            return;
+        }
+        var image = this._image;
+        var element = image._element;
+        var sx = this._frameLeft;
+        var sy = this._frameTop;
+        var sw = Math.min(this.width, image.width - sx);
+        var sh = Math.min(this.height, image.height - sy);
+        var dw = Math.min(image.width, this.width);
+        var dh = Math.min(image.height, this.height);
+        var x, y, w, h;
+        for (y = 0; y < this.height; y += dh) {
+            h = (this.height < y + dh) ? this.height - y : dh;
+            for (x = 0; x < this.width; x += dw) {
+                w = (this.width < x + dw) ? this.width - x : dw;
+                ctx.drawImage(element, sx, sy,
+                    sw * w / dw, sh * h / dh, x, y, w, h);
+            }
         }
     },
     domRender: function(element) {
         if (this._image) {
             if (this._image._css) {
-                element.style.backgroundImage = this._image._css;
-                element.style.backgroundPosition =
+                this._style['background-image'] = this._image._css;
+                this._style['background-position'] =
                     -this._frameLeft + 'px ' +
                     -this._frameTop + 'px';
             } else if (this._image._element) {
@@ -2234,6 +2251,9 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             return this._text;
         },
         set: function(text) {
+            if(this._text === text) {
+                return;
+            }
             this._text = text;
             text = text.replace(/<(br|BR) ?\/?>/g, '<br/>');
             this._splitText = text.split('<br/>');
@@ -2256,10 +2276,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      */
     textAlign: {
         get: function() {
-            return this._style.textAlign;
+            return this._style['text-align'];
         },
         set: function(textAlign) {
-            this._style.textAlign = textAlign;
+            this._style['text-align'] = textAlign;
         }
     },
     /**
@@ -2316,9 +2336,6 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         if (element.innerHTML !== this._text) {
             element.innerHTML = this._text;
         }
-        element.style.font = this._font;
-        element.style.color = this._color;
-        element.style.textAlign = this._textAlign;
     },
     detectRender: function(ctx) {
         ctx.fillRect(0, 0, this._boundWidth, this._boundHeight);
@@ -2331,7 +2348,9 @@ enchant.Label.prototype.getMetrics = function(text) {
     if (document.body) {
         div = document.createElement('div');
         for (var prop in this._style) {
-            div.style[prop] = this._style[prop];
+            if(prop !== 'width' && prop !== 'height') {
+                div.style[prop] = this._style[prop];
+            }
         }
         div.innerHTML = text || this._text;
         document.body.appendChild(div);
@@ -2695,9 +2714,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     domRender: function(element) {
         if (this._image) {
-            element.style.backgroundImage = this._surface._css;
+            this._style['background-image'] = this._surface._css;
             // bad performance
-            element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
+            this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
         }
     }
 });
@@ -3139,18 +3158,18 @@ enchant.DomManager = enchant.Class.create({
         node._style.width = node.width + 'px';
         node._style.height = node.height + 'px';
         node._style.opacity = node._opacity;
-        node._style.backgroundColor = node._backgroundColor;
+        node._style['background-color'] = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
             node._style.display = node._visible ? 'block' : 'none';
+        }
+        if (typeof node.domRender === 'function') {
+            node.domRender(this.element);
         }
         for (var prop in node._style) {
             if(node.__styleStatus[prop] !== node._style[prop]) {
                 this.style.setProperty(prop, node._style[prop]);
                 node.__styleStatus[prop] = node._style[prop];
             }
-        }
-        if (typeof node.domRender === 'function') {
-            node.domRender(this.element);
         }
     },
     _attachEvent: function() {
@@ -4033,6 +4052,7 @@ enchant.Surface.load = function(src, callback) {
     return surface;
 };
 
+/* jshint newcap: false */
 if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
 
     enchant.Game._loadFuncs['mp3'] =
@@ -4604,14 +4624,14 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      * @class
      * Time-line class.
-          * Class for managing the action.
-          * For one node to manipulate the timeline of one must correspond.
+     * Class for managing the action.
+     * For one node to manipulate the timeline of one must correspond.
      *
-          * Reading a tl.enchant.js, all classes (Group, Scene, Entity, Label, Sprite) of the Node class that inherits
-          * Tlthe property, an instance of the Timeline class is generated.
-          * Time-line class has a method to add a variety of actions to himself,
-          * entities can be animated and various operations by using these briefly.
-          * You can choose time based and frame based(default) animation.
+     * Reading a tl.enchant.js, all classes (Group, Scene, Entity, Label, Sprite) of the Node class that inherits
+     * Tlthe property, an instance of the Timeline class is generated.
+     * Time-line class has a method to add a variety of actions to himself,
+     * entities can be animated and various operations by using these briefly.
+     * You can choose time based and frame based(default) animation.
      *
      * @param node target node
      * @param [unitialized] if this param is true, when add method called in the first time,
@@ -4628,6 +4648,24 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this._parallel = null;
         this._activated = false;
         this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
+    },
+    /**
+     * @private
+     */
+    _deactivateTimeline: function() {
+        if(this._activated) {
+            this._activated = false;
+            this.node.removeEventListener('enterframe', this._nodeEventListener);
+        }
+    },
+    /**
+     * @private
+     */
+    _activateTimeline: function() {
+        if (!this._activated && !this.paused) {
+            this.node.addEventListener("enterframe", this._nodeEventListener);
+            this._activated = true;
+        }
     },
     /**
      */
@@ -4745,6 +4783,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.queue[i].dispatchEvent(e);
         }
         this.queue = [];
+        this._deactivateTimeline();
         return this;
     },
     /**
@@ -4765,13 +4804,19 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      */
     pause: function() {
-        this.paused = true;
+        if(!this.paused) {
+            this.paused = true;
+            this._deactivateTimeline();
+        }
         return this;
     },
     /**
      */
     resume: function() {
-        this.paused = false;
+        if(this.paused) {
+            this.paused = false;
+            this._activateTimeline();
+        }
         return this;
     },
     /**

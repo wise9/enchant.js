@@ -2,6 +2,11 @@ enchant();
 
 enchant.Sound.enabledInMobileSafari = true;
 
+if(location.protocol == 'file:'){
+    enchant.ENV.USE_WEBAUDIO = false;
+    console.log('1');
+}
+
 window.onload = function() {
     var Rectangle = enchant.Class.create({
         initialize: function(x, y, width, height) {

@@ -15,17 +15,7 @@ CLEAN << 'enchant.js' << 'enchant.ja.js' << 'enchant.min.js' << 'doc/index.html'
 SOURCE = File.read('dev/enchant.js')
 VER = SOURCE[/enchant\.js\s+(v\d+\.\d+\.\d+)/, 1]
 
-Copyright = <<EOS
-/*
-enchant.js #{VER}
-Copyright (c) Ubiquitous Entertainment Inc.
-Dual licensed under the MIT or GPL Version 3 licenses
-http://www.opensource.org/licenses/mit-license.php
-http://www.gnu.org/licenses/gpl-3.0.html
-*/
-EOS
-
-task :default => [:lang, :minify]
+task :default => [:lang]
 
 task :create => RELEASES
 
@@ -56,31 +46,6 @@ task :lang do |t|
     }
 end
 
-task :test do |t|
-    Dir.glob('./examples/**/index.html') {|example|
-        res = `phantomjs test-phantomjs.js #{example} | grep Error`
-        print res
-    }
-end
-
-task :minify => ['enchant.min.js']
-
-file 'enchant.min.js' => ['enchant.js'] do |t|
-    print "generated: #{t.name} ..";
-    File.open(t.name, 'w') {|f|
-        uri = URI.parse('http://closure-compiler.appspot.com/compile')
-        req = Net::HTTP::Post.new(uri.request_uri)
-        req.set_form_data({
-            'js_code'           => SOURCE,
-            'compilation_level' => 'SIMPLE_OPTIMIZATIONS',
-            'output_format'     => 'text',
-            'output_info'       => 'compiled_code'
-        })
-        f << Net::HTTP.start(uri.host, uri.port) {|http| Copyright + http.request(req).body }
-  }
-    print "done\n"
-end
-
 task :mbcheck => ['enchant.js'] do |t|
     linenum = 0;
     File.read('enchant.js').each_line do |line|
@@ -98,8 +63,6 @@ task :doc do |t|
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/plugins/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/plugins/en'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js de/plugins/*.js -t=doc/template -d=doc/plugins/de'
-#    sh 'jsduck ja/enchant.js ja/plugins/*.enchant.js --output duck/ja';
-#    sh 'jsduck enchant.js plugins/*.enchant.js --output duck/en';
 end
 
 file 'jsdoc-toolkit' do |t|

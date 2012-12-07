@@ -1107,7 +1107,7 @@
             set: function(surface) {
                 if (surface instanceof enchant.Surface) {
                     this._background = surface;
-                    this._style.backgroundImage = surface._css;
+                    this._style['background-image'] = surface._css;
                 }
             }
         },
@@ -1137,17 +1137,17 @@
          * @type {enchant.Node}
          */
         lastChild: Object.getOwnPropertyDescriptor(enchant.Group.prototype, 'lastChild'),
-        _dirty: Object.getOwnPropertyDescriptor(enchant.Group.prototype, '_dirty')
-    });
-    enchant.widget.EntityGroup.prototype.cvsRender = function(ctx) {
-        if (this.background &&
-            this.background._element.width > 0 &&
-            this.background._element.height > 0) {
-            ctx.drawImage(this.background._element, 0, 0, this.width, this.height);
+        _dirty: Object.getOwnPropertyDescriptor(enchant.Group.prototype, '_dirty'),
+        cvsRender: function(ctx) {
+            if (this.background &&
+                this.background._element.width > 0 &&
+                this.background._element.height > 0) {
+                ctx.drawImage(this.background._element, 0, 0, this.width, this.height);
+            }
+            ctx.beginPath();
+            ctx.rect(0, 0, this.width, this.height);
         }
-        ctx.beginPath();
-        ctx.rect(0, 0, this.width, this.height);
-    };
+    });
 
     /**
      * @scope enchant.widget.Modal

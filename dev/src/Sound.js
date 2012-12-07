@@ -1,3 +1,4 @@
+/* jshint newcap: false */
 if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
 
     enchant.Game._loadFuncs['mp3'] =

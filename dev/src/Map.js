@@ -438,9 +438,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     domRender: function(element) {
         if (this._image) {
-            element.style.backgroundImage = this._surface._css;
+            this._style['background-image'] = this._surface._css;
             // bad performance
-            element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
+            this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';
         }
     }
 });
