@@ -1,3 +1,7 @@
+setInterval(function() {
+    console.log(''); // dummy for grunt qunit
+}, 1000);
+
 function findElementsWithClass(className) {
 	return document.getElementsByClassName(className);
 }

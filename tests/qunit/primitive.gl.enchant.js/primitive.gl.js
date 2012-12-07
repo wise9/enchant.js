@@ -1,3 +1,7 @@
+setInterval(function() {
+    console.log(''); // dummy for grunt qunit
+}, 1000);
+
 module('primitive.gl.enchant.js', {
     setup: function() {
         enchant();
