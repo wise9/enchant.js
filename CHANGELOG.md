@@ -10,7 +10,7 @@
 - Release Note
     - http://wise9.jp/archives/8077 (Japanese)
 
-From v0.6.0, documents were excluded from repository. see <doc/readme.md>.
+From v0.6.0, documents were excluded from repository. see 'doc/readme.md'.
 
 # v0.6.0-pre
 - features
