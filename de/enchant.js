@@ -2366,7 +2366,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var y = 0;
+        var x, y = 0;
         var text, buf, c;
         if (this._splitText) {
             ctx.textBaseline = 'top';
@@ -2384,7 +2384,14 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                     }
                     buf += c;
                 }
-                ctx.fillText(buf, 0, y);
+                if (this.textAlign === 'right') {
+                    x = this.width - ctx.measureText(buf).width;
+                } else if (this.textAlign === 'center') {
+                    x = (this.width - ctx.measureText(buf).width) / 2;
+                } else {
+                    x = 0;
+                }
+                ctx.fillText(buf, x, y);
                 y += text.height - 1;
             }
         }
