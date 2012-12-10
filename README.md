@@ -53,18 +53,20 @@ MIT License
 
 Usage
 -----
-    <script src='./enchant.js'></script>
-    <script>
-        enchant();
-        window.onload = function(){
-            var game = new Game(320, 320); 
+```html
+<script src='./enchant.js'></script>
+<script>
+    enchant();
+    window.onload = function(){
+        var game = new Game(320, 320); 
 
-            var label = new Label('Hello, enchant.js!');
-            game.rootScene.addChild(label);
-            
-            game.start();
-        }
-    </script>
+        var label = new Label('Hello, enchant.js!');
+        game.rootScene.addChild(label);
+
+        game.start();
+    }
+</script>
+```
 
 More examples and references: [enchantjs.com](http://enchantjs.com)
 
