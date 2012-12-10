@@ -132,9 +132,12 @@ enchant.Class = function(superclass, definition) {
  * @static
  */
 enchant.Class.create = function(superclass, definition) {
-    if (superclass == null){
-        throw new Error("superclass is undefined");
+    if (superclass == null && definition){
+        throw new Error("superclass is undefined (enchant.Class.create)");
+    }else if(superclass == null){
+        throw new Error("definition is undefined (enchant.Class.create)");
     }
+
     if (arguments.length === 0) {
         return enchant.Class.create(Object, definition);
     } else if (arguments.length === 1 && typeof arguments[0] !== 'function') {
