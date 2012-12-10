@@ -1,9 +1,9 @@
 module('gl.enchant.js', {
-    setup : function() {
+    setup: function() {
         enchant();
         // var game = new Core();
     },
-    teardown : function() {
+    teardown: function() {
 
     }
 });
@@ -14,7 +14,6 @@ module('gl.enchant.js', {
  * Quat#slerp
  */
 test('Quat#slerp', function() {
-
     function nearlyEqual(numA, numB, message) {
         console.log(numA, numB);
         var a = Math.floor(numA * 1000);
@@ -35,4 +34,6 @@ test('Quat#slerp', function() {
             "result._quat[2] == expected._quat[2]");
     nearlyEqual(result._quat[3], expected._quat[3],
             "result._quat[3] == expected._quat[3]");
+    QUnit.done({});
 });
+
