@@ -47,12 +47,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             this._text = text;
             text = text.replace(/<(br|BR) ?\/?>/g, '<br/>');
             this._splitText = text.split('<br/>');
-            var metrics = this.getMetrics();
-            this._boundWidth = metrics.width;
-            this._boundHeight = metrics.height;
+            this.updateBoundArea();
             for (var i = 0, l = this._splitText.length; i < l; i++) {
                 text = this._splitText[i];
-                metrics = this.getMetrics(text);
+                var metrics = this.getMetrics(text);
                 this._splitText[i] = {};
                 this._splitText[i].text = text;
                 this._splitText[i].height = metrics.height;
@@ -80,6 +78,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         },
         set: function(textAlign) {
             this._style['text-align'] = textAlign;
+            this.updateBoundArea();
         }
     },
     /**
@@ -103,6 +102,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         },
         set: function(font) {
             this._style.font = font;
+            this.updateBoundArea();
         }
     },
     /**
@@ -165,7 +165,19 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         }
     },
     detectRender: function(ctx) {
-        ctx.fillRect(0, 0, this._boundWidth, this._boundHeight);
+        ctx.fillRect(this._boundOffset, 0, this._boundWidth, this._boundHeight);
+    },
+    updateBoundArea: function() {
+        var metrics = this.getMetrics();
+        this._boundWidth = metrics.width;
+        this._boundHeight = metrics.height;
+        if (this.textAlign === 'right') {
+            this._boundOffset = this.width - this._boundWidth;
+        } else if (this.textAlign === 'center') {
+            this._boundOffset = (this.width - this._boundWidth) / 2;
+        } else {
+            this._boundOffset = 0;
+        }
     }
 });
 
