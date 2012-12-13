@@ -1307,7 +1307,7 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
-     * Synonym of addEventListener
+     * Synonym for addEventListener
      * @see {enchant.EventTarget#addEventListener}
      * @param {String} type Type of the events.
      * @param {function(e:enchant.Event)} listener Event listener to be added.
@@ -6964,29 +6964,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             }
         }));
         return this;
-    },
-    /**
-     * [lang:ja]
-     * 引数の関数 func を、defered オブジェクトを引数として呼ぶ。
-     * そのオブジェクトの next メソッドが実行されるまで待つ。
-     * @param func 実行する関数
-     * [/lang]
-     */
-    async: function(func) {
-        var timeline = this;
-        var action = new enchant.Action({
-            onactionstart: function() {
-                func.call(this, defered);
-            }
-        });
-        var defered = {
-            next: function() {
-                if(timeline.queue[0] === action){
-                    timeline.next();
-                }
-            }
-        };
-        this.add(action);
     },
     /**
      * [lang:ja]

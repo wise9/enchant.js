@@ -54,7 +54,7 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
-     * Synonym of addEventListener
+     * Synonym for addEventListener
      * @see {enchant.EventTarget#addEventListener}
      * @param {String} type Type of the events.
      * @param {function(e:enchant.Event)} listener Event listener to be added.
