@@ -47,6 +47,10 @@ module.exports = function(grunt) {
                         'dev/src/CanvasLayer.js',
                         'dev/src/Scene.js',
                         'dev/src/Surface.js',
+
+                        // sound support
+                        'dev/src/DOMSound.js',
+                        'dev/src/WebAudioSound.js',
                         'dev/src/Sound.js',
 
                         // animation feature

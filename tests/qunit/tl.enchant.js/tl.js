@@ -12,6 +12,32 @@ module('tl.enchant.js', {
 });
 
 
+test('tl.async', function() {
+    var sprite = enchant.Core.instance.rootScene.childNodes[0];
+    var enterframe = new enchant.Event('enterframe');
+
+
+    equal(sprite.tl.queue.length, 0);
+    sprite.tl.async(function(defered) {
+        defered.next();
+    });
+    equal(sprite.tl.queue.length, 1);
+    sprite.dispatchEvent(enterframe);
+    equal(sprite.tl.queue.length, 0);
+
+    var next;
+    sprite.tl.async(function(defered) {
+        next = defered.next;
+    });
+    equal(sprite.tl.queue.length, 1);
+    sprite.dispatchEvent(enterframe);
+    equal(sprite.tl.queue.length, 1);
+    next.call(this);
+    equal(sprite.tl.queue.length, 0);
+
+    sprite.tl.clear();
+});
+
 test('tl.frameBased', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
 

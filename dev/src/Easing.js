@@ -16,6 +16,7 @@
  * [/lang]
  * [lang:en]
  * [/lang]
+ * Easing function library, from "Easing Equations" by Robert Penner.
  * @type {Object}
  * @static
  */

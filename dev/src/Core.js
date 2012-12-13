@@ -46,6 +46,7 @@
          */
         initialize: function(width, height) {
             if (window.document.body === null) {
+                // @TODO postpone initialization after window.onload
                 throw new Error("document.body is null. Please excute 'new Core()' in window.onload.");
             }
 
@@ -1082,10 +1083,8 @@
             enchant.Core._loadFuncs['m4a'] =
                 enchant.Core._loadFuncs['wav'] =
                     enchant.Core._loadFuncs['ogg'] = function(src, callback, ext) {
-                        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
-                        this.assets[src].addEventListener('load', callback);
+                        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext, callback);
                     };
-
 
     /**
      * Get the file extension from a path
