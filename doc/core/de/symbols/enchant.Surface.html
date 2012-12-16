@@ -1,0 +1,854 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>enchant.Surface | JsDoc Reference</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/enchant.Action.html">enchant<span class='break'> </span>.<span class='break'> </span>Action</a></li>
+				
+					<li><a href="../symbols/enchant.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
+				
+					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
+				
+					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
+				
+					<li><a href="../symbols/enchant.Easing.html">enchant<span class='break'> </span>.<span class='break'> </span>Easing</a></li>
+				
+					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
+				
+					<li><a href="../symbols/enchant.ENV.html">enchant<span class='break'> </span>.<span class='break'> </span>ENV</a></li>
+				
+					<li><a href="../symbols/enchant.Event.html">enchant<span class='break'> </span>.<span class='break'> </span>Event</a></li>
+				
+					<li><a href="../symbols/enchant.EventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>EventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
+				
+					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
+				
+					<li><a href="../symbols/enchant.Node.html">enchant<span class='break'> </span>.<span class='break'> </span>Node</a></li>
+				
+					<li><a href="../symbols/enchant.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
+				
+					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+				
+					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
+				
+					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
+				
+					<li><a href="../symbols/enchant.Timeline.html">enchant<span class='break'> </span>.<span class='break'> </span>Timeline</a></li>
+				
+					<li><a href="../symbols/enchant.Tween.html">enchant<span class='break'> </span>.<span class='break'> </span>Tween</a></li>
+				
+					<li><a href="../symbols/enchant.WebAudioSound.html">enchant<span class='break'> </span>.<span class='break'> </span>WebAudioSound</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2012-11-17 3:10
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>enchant.Surface</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				Diese Klasse dient als Hüllenklasse (Wrapper) für Canvas Elemente.
+
+Mit dieser Klasse können die image Felder der <a href="../symbols/enchant.Sprite.html">enchant.Sprite</a> und <a href="../symbols/enchant.Map.html">enchant.Map</a>'s
+Klassen gesetzt werden und dadurch dargestellt werden.
+Falls die Canvas API genutzt werden möchte kann dies über die
+<a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a> Variable erfolgen.
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/de_enchant.js.html">enchant.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.Surface.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/enchant.Surface.html#constructor">enchant.Surface</a></b>(width, height)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.Surface.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Surface.html#context">context</a></b>
+										</div>
+										<div class="description">Der Surface Zeichenkontext.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Surface.html#height">height</a></b>
+										</div>
+										<div class="description">Die Höhe der Surface.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Surface.html#width">width</a></b>
+										</div>
+										<div class="description">Die Breite der Surface.</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+					<table class="summaryTable" id="MethodsList" cellspacing="0" summary="A summary of the methods documented in the class enchant.Surface.">
+						<thead>
+							<tr>
+								<th scope="col">Method Attributes</th>
+								<th scope="col">Method Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+							
+								<tr
+									 class='item0'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#clear">clear</a></b>()
+										</div>
+										<div class="description">Löscht alle Pixel und setzt macht die Pixel transparent.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item1'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#clone">clone</a></b>()
+										</div>
+										<div class="description">Kopiert diese Surface.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item2'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#draw">draw</a></b>(image)
+										</div>
+										<div class="description">Zeichnet den Inhalt der gegebenen Surface auf diese Surface.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item3'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#getPixel">getPixel</a></b>(x, y)
+										</div>
+										<div class="description">Liefert einen Pixel der Surface.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item4'
+								>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">enchant.Surface.<b><a href="../symbols/enchant.Surface.html#.load">load</a></b>(src, callback)
+										</div>
+										<div class="description">Läd eine Grafik und erstellt daraus ein Surface Objekt.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item5'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#setPixel">setPixel</a></b>(x, y, r, g, b, a)
+										</div>
+										<div class="description">Setzt einen Pixel in der Surface.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item6'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Surface.html#toDataURL">toDataURL</a></b>()
+										</div>
+										<div class="description">Erstellt eine Data-URL (URI Schema) für diese Surface.</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				
+			
+				
+			</div>
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>enchant.Surface</b>(width, height)
+					</div>
+					
+					<div class="description">
+						
+						
+					</div>
+					
+					
+						
+							<pre class="code">  // Erstellt einen Sprite und stellt einen Kreis dar.
+  var ball = new Sprite(50, 50);
+  var surface = new Surface(50, 50);
+  surface.context.beginPath();
+  surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+  surface.context.fill();
+  ball.image = surface;</pre>
+						
+					
+				
+					
+						<dl class="detailList params">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span>  <b>width</b>
+									
+								</dt>
+								<dd>Die Breite der Surface.</dd>
+							
+								<dt>
+									<span class="light fixedFont">{Number}</span>  <b>height</b>
+									
+								</dt>
+								<dd>Die Höhe der Surface.</dd>
+							
+						</dl>
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id="context">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>context</b>							
+						</div>
+						
+						<div class="description">
+							Der Surface Zeichenkontext.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="height">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>height</b>							
+						</div>
+						
+						<div class="description">
+							Die Höhe der Surface.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="width">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>width</b>							
+						</div>
+						
+						<div class="description">
+							Die Breite der Surface.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Method Detail
+					</h2>
+					
+					<ul class="methodDetail" id="MethodDetail">
+						
+						
+							<li 
+								 class='item0'
+							>
+								<div class="fixedFont heading" id="clear">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>clear</b>()
+								</div>
+								
+								<div class="description">
+									Löscht alle Pixel und setzt macht die Pixel transparent.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item1'
+							>
+								<div class="fixedFont heading" id="clone">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span>
+									
+									<b>clone</b>()
+								</div>
+								
+								<div class="description">
+									Kopiert diese Surface.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span> Die kopierte Surface.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item2'
+							>
+								<div class="fixedFont heading" id="draw">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>draw</b>(image)
+								</div>
+								
+								<div class="description">
+									Zeichnet den Inhalt der gegebenen Surface auf diese Surface.
+
+Umhüllt (wraps) die Canvas drawImage Methode und sollten mehrere Argumente
+übergeben werden, werden diese auf die Canvas drawImage Methode angewendet.
+									
+									
+									
+									
+								</div>
+								
+								
+									
+										<pre class="code">  var src = game.assets['src.gif'];
+  var dst = new Surface(100, 100);
+  dst.draw(src);         // Zeichnet src bei (0, 0)
+  dst.draw(src, 50, 50); // Zeichnet src bei (50, 50)
+  // Zeichnet src an der Position (50,50), jedoch nur 30x30 Pixel
+  dst.draw(src, 50, 50, 30, 30);
+  // Skaliert und zeichnet den Bereich mit der (Breite, Höhe) von (40, 40)
+  // in src ab (10,10) in diese Surface bei (50,50) mit einer (Breite, Höhe) von (30, 30).
+  dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);</pre>
+									
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span> <b>image</b>
+												
+											</dt>
+											<dd>Surface used in drawing.</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item3'
+							>
+								<div class="fixedFont heading" id="getPixel">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{Array.<Number>}</span>
+									
+									<b>getPixel</b>(x, y)
+								</div>
+								
+								<div class="description">
+									Liefert einen Pixel der Surface.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>x</b>
+												
+											</dt>
+											<dd>Die x Koordinaten des Pixel.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>y</b>
+												
+											</dt>
+											<dd>Die y Koordinaten des Pixel.</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{Array.&lt;Number&gt;}</span> Ein Array das die Pixelinformationen im [r, g, b, a] Format enthält.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
+								<div class="fixedFont heading" id=".load">
+									<span class='lighter'>
+									&lt;static&gt; 
+									</span>
+									
+									
+									
+									<span class="light">enchant.Surface.</span><b>load</b>(src, callback)
+								</div>
+								
+								<div class="description">
+									Läd eine Grafik und erstellt daraus ein Surface Objekt.
+
+Bei Grafiken die mit dieser Methode erstellt wurden ist es nicht möglich auf Variablen oder Methoden des <a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a>
+zuzugreifen, oder Methoden die die Canvas API nutzen, wie <a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>, <a href="../symbols/enchant.Surface.html#clear">enchant.Surface#clear</a>,
+<a href="../symbols/enchant.Surface.html#getPixel">enchant.Surface#getPixel</a>, <a href="../symbols/enchant.Surface.html#setPixel">enchant.Surface#setPixel</a>.., aufzurufen.
+Jedoch ist es möglich diese Surface zu nutzen um sie in eine andere Surface mittels der <a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a> zu zeichen.
+Die daraus resultierende Surface kann dann manipuliert werden. (Wenn Bilder in einer Cross-Origin Resource Sharing Umgebung
+geladen werden, kann es sein, dass die Pixelabfrage und andere Bildmanipulationen limitiert sind)
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>src</b>
+												
+											</dt>
+											<dd>Der Dateipfad der Grafik die geladen werden soll.</dd>
+										
+											<dt>
+												<b>callback</b>
+												
+											</dt>
+											<dd></dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item5'
+							>
+								<div class="fixedFont heading" id="setPixel">
+									<span class='lighter'>
+									
+									</span>
+									
+									
+									
+									<b>setPixel</b>(x, y, r, g, b, a)
+								</div>
+								
+								<div class="description">
+									Setzt einen Pixel in der Surface.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>x</b>
+												
+											</dt>
+											<dd>Die x Koordinaten des Pixel.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>y</b>
+												
+											</dt>
+											<dd>Die y Koordinaten des Pixel.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>r</b>
+												
+											</dt>
+											<dd>Der Rotwert des Pixel.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>g</b>
+												
+											</dt>
+											<dd>Der Grünwert des Pixel.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>b</b>
+												
+											</dt>
+											<dd>Der Blauwert des Pixels.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>a</b>
+												
+											</dt>
+											<dd>Die Transparenz des Pixels</dd>
+										
+									</dl>
+								
+								
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item6'
+							>
+								<div class="fixedFont heading" id="toDataURL">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{String}</span>
+									
+									<b>toDataURL</b>()
+								</div>
+								
+								<div class="description">
+									Erstellt eine Data-URL (URI Schema) für diese Surface.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{String}</span> Die Data-URL, welche diese Surface identifiziert und
+welche genutzt werden kann um diese in einen DOM Baum einzubinden.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+

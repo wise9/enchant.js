@@ -1,0 +1,1700 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta name="generator" content="JsDoc Toolkit"></meta>
+		<title>enchant.Event | JsDoc Reference</title>
+
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;"></meta>
+		<meta name="mobileoptimized" content="0"></meta>
+	
+		<link rel="stylesheet" href="../css/all.css" media="all"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="only screen and (max-width: 660px)"></link>
+		<link rel="stylesheet" href="../css/handheld.css" media="handheld"></link>
+		<link rel="stylesheet" href="../css/screen.css" media="screen and (min-width: 661px)"></link>
+
+		<script src="../javascript/all.js"></script>
+		<!--[if lt IE 9]>
+			<script src="../javascript/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+<div class="index">
+	<div class="menu">
+		<div class="indexLinks">
+			<a href="../index.html">Classes</a>
+			<a href="../files.html">Files</a>
+		</div>
+	
+		<h2 class="heading1">Classes</h2>
+		
+		<input type="text" name="classFilter" class="classFilter" id="ClassFilter" placeholder="Filter"></input>
+		
+		<nav>
+			<ul class="classList" id="ClassList">
+				
+					<li><a href="../symbols/_global_.html">_global_</a></li>
+				
+					<li><a href="../symbols/enchant.Action.html">enchant<span class='break'> </span>.<span class='break'> </span>Action</a></li>
+				
+					<li><a href="../symbols/enchant.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
+				
+					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
+				
+					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
+				
+					<li><a href="../symbols/enchant.Easing.html">enchant<span class='break'> </span>.<span class='break'> </span>Easing</a></li>
+				
+					<li><a href="../symbols/enchant.Entity.html">enchant<span class='break'> </span>.<span class='break'> </span>Entity</a></li>
+				
+					<li><a href="../symbols/enchant.ENV.html">enchant<span class='break'> </span>.<span class='break'> </span>ENV</a></li>
+				
+					<li><a href="../symbols/enchant.Event.html">enchant<span class='break'> </span>.<span class='break'> </span>Event</a></li>
+				
+					<li><a href="../symbols/enchant.EventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>EventTarget</a></li>
+				
+					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
+				
+					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
+				
+					<li><a href="../symbols/enchant.Node.html">enchant<span class='break'> </span>.<span class='break'> </span>Node</a></li>
+				
+					<li><a href="../symbols/enchant.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
+				
+					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
+				
+					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
+				
+					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
+				
+					<li><a href="../symbols/enchant.Timeline.html">enchant<span class='break'> </span>.<span class='break'> </span>Timeline</a></li>
+				
+					<li><a href="../symbols/enchant.Tween.html">enchant<span class='break'> </span>.<span class='break'> </span>Tween</a></li>
+				
+					<li><a href="../symbols/enchant.WebAudioSound.html">enchant<span class='break'> </span>.<span class='break'> </span>WebAudioSound</a></li>
+				
+			</ul>
+		</nav>
+	</div>
+	<div class="fineprint" style="clear:both">
+		
+		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
+		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
+		Generated on: 2012-11-17 3:09
+	</div>
+</div>
+
+<div class="index indexStatic"></div>
+
+<div class="content">
+	<div class="innerContent">
+		<h1 class="classTitle">
+			
+			Class <span>enchant.Event</span>
+		</h1>
+		
+		<div class="intro">
+			<p class="description summary">
+				A class for an independent implementation of events
+similar to DOM Events.
+However, it does not include phase concept.
+			</p>
+				
+			
+				<ul class="summary">
+					
+					
+					
+						<li>Defined in: <a href="../symbols/src/enchant.js.html">enchant.js</a></li>
+					
+						
+				</ul>
+			
+		</div>
+		
+		
+			<div class="props">
+				<table class="summaryTable" cellspacing="0" summary="A summary of the constructor documented in the class enchant.Event.">
+					<caption class="sectionTitle">Class Summary</caption>
+					<thead>
+						<tr>
+							<th scope="col">Constructor Attributes</th>
+							<th scope="col">Constructor Name and Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="attributes">&nbsp;</td>
+							<td class="nameDescription" >
+								<div class="fixedFont">
+									<b><a href="../symbols/enchant.Event.html#constructor">enchant.Event</a></b>(type)
+								</div>
+								<div class="description"></div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		
+		
+		
+			
+			
+				<div class="props">
+					<table class="summaryTable" cellspacing="0" summary="A summary of the fields documented in the class enchant.Event.">
+						<caption class="sectionTitle">Field Summary</caption>
+						
+						<thead>
+							<tr>
+								<th scope="col">Field Attributes</th>
+								<th scope="col">Field Name and Description</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.A_BUTTON_DOWN">A_BUTTON_DOWN</a></b>
+										</div>
+										<div class="description">An event which is occurring when the a button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.A_BUTTON_UP">A_BUTTON_UP</a></b>
+										</div>
+										<div class="description">An event which is occurring when the a button is released.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ACTION_ADDED">ACTION_ADDED</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ACTION_END">ACTION_END</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ACTION_REMOVED">ACTION_REMOVED</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ACTION_START">ACTION_START</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ACTION_TICK">ACTION_TICK</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ADDED">ADDED</a></b>
+										</div>
+										<div class="description">An event which is occurring when the Node is added to a Group.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ADDED_TO_SCENE">ADDED_TO_SCENE</a></b>
+										</div>
+										<div class="description">An event which is occurring when the Node is added to a Scene.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ADDED_TO_TIMELINE">ADDED_TO_TIMELINE</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.B_BUTTON_DOWN">B_BUTTON_DOWN</a></b>
+										</div>
+										<div class="description">An event which is occurring when the b button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.B_BUTTON_UP">B_BUTTON_UP</a></b>
+										</div>
+										<div class="description">An event which is occurring when the b button is released.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.CHILD_ADDED">CHILD_ADDED</a></b>
+										</div>
+										<div class="description">An event which is occurring when a Child is getting added to a Node.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.CHILD_REMOVED">CHILD_REMOVED</a></b>
+										</div>
+										<div class="description">An event which is occurring when a Child is removed from a Node.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.DOWN_BUTTON_DOWN">DOWN_BUTTON_DOWN</a></b>
+										</div>
+										<div class="description">An event which is occurring when the down button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.DOWN_BUTTON_UP">DOWN_BUTTON_UP</a></b>
+										</div>
+										<div class="description">An event which is occurring when the down button is released.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ENTER">ENTER</a></b>
+										</div>
+										<div class="description">Events occurring during Scene beginning.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.ENTER_FRAME">ENTER_FRAME</a></b>
+										</div>
+										<div class="description">An event which is occurring when a new frame is beeing processed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.EXIT">EXIT</a></b>
+										</div>
+										<div class="description">Events occurring during Scene end.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.EXIT_FRAME">EXIT_FRAME</a></b>
+										</div>
+										<div class="description">An event which is occurring when the frame processing is about to end.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.INPUT_CHANGE">INPUT_CHANGE</a></b>
+										</div>
+										<div class="description">An event which is occurring when a button input changes.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.INPUT_END">INPUT_END</a></b>
+										</div>
+										<div class="description">An event which is occurring when a button input ends.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.INPUT_START">INPUT_START</a></b>
+										</div>
+										<div class="description">An event which is occurring when a button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.LEFT_BUTTON_DOWN">LEFT_BUTTON_DOWN</a></b>
+										</div>
+										<div class="description">An event which is occurring when the left button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.LEFT_BUTTON_UP">LEFT_BUTTON_UP</a></b>
+										</div>
+										<div class="description">An event which is occurring when the left button is released.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.LOAD">LOAD</a></b>
+										</div>
+										<div class="description">An event dispatched upon completion of core loading.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Event.html#localX">localX</a></b>
+										</div>
+										<div class="description">The event occurrences local coordinate systems x coordinates.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Event.html#localY">localY</a></b>
+										</div>
+										<div class="description">The event occurrences local coordinate systems y coordinates.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.PROGRESS">PROGRESS</a></b>
+										</div>
+										<div class="description">Events which are occurring during core loading.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.REMOVED">REMOVED</a></b>
+										</div>
+										<div class="description">An event which is occurring when the Node is deleted from a Group.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.REMOVED_FROM_SCENE">REMOVED_FROM_SCENE</a></b>
+										</div>
+										<div class="description">An event which is occurring when the Node is deleted from a Scene.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.REMOVED_FROM_TIMELINE">REMOVED_FROM_TIMELINE</a></b>
+										</div>
+										<div class="description"></div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.RENDER">RENDER</a></b>
+										</div>
+										<div class="description">An event which is occurring when an Entity is rendered.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.RIGHT_BUTTON_DOWN">RIGHT_BUTTON_DOWN</a></b>
+										</div>
+										<div class="description">An event which is occurring when the right button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.RIGHT_BUTTON_UP">RIGHT_BUTTON_UP</a></b>
+										</div>
+										<div class="description">An event which is occurring when the right button is released.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Event.html#target">target</a></b>
+										</div>
+										<div class="description">The target of the event.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.TOUCH_END">TOUCH_END</a></b>
+										</div>
+										<div class="description">An event which is occurring when a touch related to the Node has ended.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.TOUCH_MOVE">TOUCH_MOVE</a></b>
+										</div>
+										<div class="description">An event occurring when a touch related to the Node has been moved.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.TOUCH_START">TOUCH_START</a></b>
+										</div>
+										<div class="description">An event occurring when a touch related to the Node has begun.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Event.html#type">type</a></b>
+										</div>
+										<div class="description">The type of the event.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.UP_BUTTON_DOWN">UP_BUTTON_DOWN</a></b>
+										</div>
+										<div class="description">An event which is occurring when the up button is pressed.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										enchant.Event.<b><a href="../symbols/enchant.Event.html#.UP_BUTTON_UP">UP_BUTTON_UP</a></b>
+										</div>
+										<div class="description">An event which is occurring when the up button is released.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Event.html#x">x</a></b>
+										</div>
+										<div class="description">The x coordinate of the events occurrence.</div>
+									</td>
+								</tr>
+							
+								<tr>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
+										<div class="fixedFont">
+										<b><a href="../symbols/enchant.Event.html#y">y</a></b>
+										</div>
+										<div class="description">The y coordinate of the events occurrence.</div>
+									</td>
+								</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			
+			
+			
+		
+<!--
+#### METHODS SUMMARY
+-->
+		
+		
+<!--
+#### EVENTS SUMMARY
+-->
+		
+<!--
+#### CONSTRUCTOR DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle" id="constructor">
+						Class Detail
+					</h2>
+					
+					<div class="fixedFont">
+						<b>enchant.Event</b>(type)
+					</div>
+					
+					<div class="description">
+						
+						
+					</div>
+					
+					
+				
+					
+						<dl class="detailList params">
+							<dt class="heading">Parameters:</dt>
+							
+								<dt>
+									<span class="light fixedFont">{String}</span>  <b>type</b>
+									
+								</dt>
+								<dd>Event type.</dd>
+							
+						</dl>
+					
+					
+					
+				</div>
+			</div>
+		
+<!--
+#### FIELD DETAILS
+-->
+		
+			<div class="details props">
+				<div class="innerProps">
+					<h2 class="sectionTitle">
+						Field Detail
+					</h2>
+					
+					
+						<div class="fixedFont heading" id=".A_BUTTON_DOWN">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>A_BUTTON_DOWN</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the a button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".A_BUTTON_UP">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>A_BUTTON_UP</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the a button is released.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ACTION_ADDED">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ACTION_ADDED</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ACTION_END">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ACTION_END</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ACTION_REMOVED">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ACTION_REMOVED</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ACTION_START">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ACTION_START</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ACTION_TICK">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ACTION_TICK</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ADDED">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ADDED</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the Node is added to a Group.
+Issued object: <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ADDED_TO_SCENE">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ADDED_TO_SCENE</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the Node is added to a Scene.
+Issued object: <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ADDED_TO_TIMELINE">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ADDED_TO_TIMELINE</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".B_BUTTON_DOWN">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>B_BUTTON_DOWN</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the b button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".B_BUTTON_UP">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>B_BUTTON_UP</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the b button is released.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".CHILD_ADDED">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>CHILD_ADDED</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a Child is getting added to a Node.
+Issued object: <a href="../symbols/enchant.Group.html">enchant.Group</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".CHILD_REMOVED">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>CHILD_REMOVED</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a Child is removed from a Node.
+Issued object: <a href="../symbols/enchant.Group.html">enchant.Group</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".DOWN_BUTTON_DOWN">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>DOWN_BUTTON_DOWN</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the down button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".DOWN_BUTTON_UP">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>DOWN_BUTTON_UP</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the down button is released.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ENTER">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ENTER</b>							
+						</div>
+						
+						<div class="description">
+							Events occurring during Scene beginning.
+Issued object: <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".ENTER_FRAME">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>ENTER_FRAME</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a new frame is beeing processed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".EXIT">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>EXIT</b>							
+						</div>
+						
+						<div class="description">
+							Events occurring during Scene end.
+Issued object: <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".EXIT_FRAME">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>EXIT_FRAME</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the frame processing is about to end.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".INPUT_CHANGE">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>INPUT_CHANGE</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a button input changes.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".INPUT_END">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>INPUT_END</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a button input ends.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".INPUT_START">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>INPUT_START</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".LEFT_BUTTON_DOWN">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>LEFT_BUTTON_DOWN</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the left button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".LEFT_BUTTON_UP">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>LEFT_BUTTON_UP</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the left button is released.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".LOAD">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>LOAD</b>							
+						</div>
+						
+						<div class="description">
+							An event dispatched upon completion of core loading.
+
+It is necessary to wait for loading to finish and to do initial processing when preloading images.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>
+							
+							
+							
+						</div>
+						
+						
+							
+								<pre class="code">  var core = new Core(320, 320);
+  core.preload('player.gif');
+  core.onload = function() {
+     ... // Describes initial core processing
+  };
+  core.start();</pre>
+							
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="localX">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>localX</b>							
+						</div>
+						
+						<div class="description">
+							The event occurrences local coordinate systems x coordinates.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="localY">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>localY</b>							
+						</div>
+						
+						<div class="description">
+							The event occurrences local coordinate systems y coordinates.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".PROGRESS">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>PROGRESS</b>							
+						</div>
+						
+						<div class="description">
+							Events which are occurring during core loading.
+Dispatched each time preloaded image is loaded. Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".REMOVED">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>REMOVED</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the Node is deleted from a Group.
+Issued object: <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".REMOVED_FROM_SCENE">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>REMOVED_FROM_SCENE</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the Node is deleted from a Scene.
+Issued object: <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".REMOVED_FROM_TIMELINE">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>REMOVED_FROM_TIMELINE</b>							
+						</div>
+						
+						<div class="description">
+							
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".RENDER">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>RENDER</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when an Entity is rendered.
+Issued object: <a href="../symbols/enchant.Entity.html">enchant.Entity</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".RIGHT_BUTTON_DOWN">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>RIGHT_BUTTON_DOWN</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the right button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".RIGHT_BUTTON_UP">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>RIGHT_BUTTON_UP</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the right button is released.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="target">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>target</b>							
+						</div>
+						
+						<div class="description">
+							The target of the event.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".TOUCH_END">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>TOUCH_END</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when a touch related to the Node has ended.
+A Click is also treated as touch. Issued object: enchant.Node
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".TOUCH_MOVE">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>TOUCH_MOVE</b>							
+						</div>
+						
+						<div class="description">
+							An event occurring when a touch related to the Node has been moved.
+A click is also treated as touch. Issued object: <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".TOUCH_START">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>TOUCH_START</b>							
+						</div>
+						
+						<div class="description">
+							An event occurring when a touch related to the Node has begun.
+A click is also treated as touch. Issued object: <a href="../symbols/enchant.Node.html">enchant.Node</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="type">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>type</b>							
+						</div>
+						
+						<div class="description">
+							The type of the event.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".UP_BUTTON_DOWN">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>UP_BUTTON_DOWN</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the up button is pressed.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id=".UP_BUTTON_UP">
+							<span class='lighter'>
+							&lt;static&gt; 
+							</span>
+							
+							
+							
+							<span class="light">enchant.Event.</span><b>UP_BUTTON_UP</b>							
+						</div>
+						
+						<div class="description">
+							An event which is occurring when the up button is released.
+Issued object: <a href="../symbols/enchant.Core.html">enchant.Core</a>, <a href="../symbols/enchant.Scene.html">enchant.Scene</a>
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="x">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>x</b>							
+						</div>
+						
+						<div class="description">
+							The x coordinate of the events occurrence.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						<div class="hr"></div>
+					
+						<div class="fixedFont heading" id="y">
+							<span class='lighter'>
+							
+							</span>
+							
+							
+							
+							<b>y</b>							
+						</div>
+						
+						<div class="description">
+							The y coordinate of the events occurrence.
+							
+							
+							
+						</div>
+						
+						
+							
+						
+						
+					
+				</div>
+			</div>
+		
+<!--
+#### METHOD DETAILS
+-->		
+		
+		
+<!--
+#### EVENT DETAILS
+-->		
+		
+	</div>
+</div>
+		<script type="text/javascript">
+			wbos.CssTools.MediaQueryFallBack.LoadCss('../css/screen.css', '../css/handheld.css', 660)
+			codeview.classFilter.Init()
+		</script>
+	</body>
+</html>
+
