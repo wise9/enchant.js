@@ -6,6 +6,13 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext || window
  * @type {*}
  */
 enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
+    /**
+     * @name enchant.WebAudioSound
+     * @class
+     * Sound wrapper class for Web Audio API (supported on some webkit-based browsers)
+     *
+     * @constructs
+     */
     initialize: function() {
         if(!window.webkitAudioContext){
             throw new Error("This browser does not support WebAudio API.");

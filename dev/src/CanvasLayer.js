@@ -1,11 +1,12 @@
 /**
- * @scope enchant.CanvasGroup.prototype
+ * @scope enchant.CanvasLayer.prototype
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
+     * @name enchant.CanvasLayer
      * @class
      [lang:ja]
-     * Canvas を用いた描画を行うクラス。
+     * Canvas を用いた描画を行うクラス.
      * 子を Canvas を用いた描画に切り替えるクラス
      [/lang]
      [lang:en]

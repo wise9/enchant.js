@@ -1,4 +1,5 @@
 /**
+ * @name enchant.Class
  * @class
  [lang:ja]
  * クラスのクラス.
@@ -22,7 +23,6 @@
  [/lang]
  * @constructor
  */
-
 enchant.Class = function(superclass, definition) {
     return enchant.Class.create(superclass, definition);
 };

@@ -1,7 +1,8 @@
 /**
+ * @namespace
  [lang:ja]
- * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
- * @type {Object}
+ * enchant.js の環境変数.
+ * new Game() を呼ぶ前に変更することで変更することで, 動作設定を変えることができる.
  [/lang]
  [lang:en]
  * Environment variable.

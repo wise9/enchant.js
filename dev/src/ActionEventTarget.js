@@ -4,12 +4,13 @@
  */
 enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
-     * [lang:ja]
+     * @name enchant.ActionEventTarget
      * @class
-     * イベントリスナの実行時にコンテキストを this.target にするよう書き換えた EventTarget
+     * [lang:ja]
+     * {@link enchant.Action} クラス向けに拡張された {@link enchant.EventTarget} クラス .
+     *
      * [/lang]
      * [lang:en]
-     * @class
      * EventTarget which can change the context of event listeners
      * [/lang]
      * @constructs

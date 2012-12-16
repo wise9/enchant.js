@@ -8,6 +8,9 @@
 
 (function(window, undefined){
 
+/**
+ * ECMA-262 5th edition Functions
+ */
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -82,6 +85,9 @@ if (typeof Function.prototype.bind !== 'function') {
  *   enchant('ui'); // enchant.js本体のクラスとui.enchant.jsのクラスがエクスポートされる
  *
  * @param {...String} [modules] エクスポートするモジュール. 複数指定できる.
+ * @global
+ * @type {Object}
+ * @name enchant
  */
 var enchant = function(modules) {
     if (modules != null) {
@@ -158,6 +164,7 @@ window.addEventListener("message", function(msg, origin) {
     }
 }, false);
 /**
+ * @name enchant.Class
  * @class
  * クラスのクラス.
  *
@@ -165,7 +172,6 @@ window.addEventListener("message", function(msg, origin) {
  * @param {*} definition クラス定義.
  * @constructor
  */
-
 enchant.Class = function(superclass, definition) {
     return enchant.Class.create(superclass, definition);
 };
@@ -263,8 +269,9 @@ enchant.Class.getInheritanceTree = function(Constructor) {
 };
 
 /**
- * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
- * @type {Object}
+ * @namespace
+ * enchant.js の環境変数.
+ * new Game() を呼ぶ前に変更することで変更することで, 動作設定を変えることができる.
  * @type {Object}
  */
 enchant.ENV = {
@@ -371,6 +378,7 @@ enchant.ENV = {
  */
 enchant.Event = enchant.Class.create({
     /**
+     * @name enchant.Event
      * @class
      * DOM Event風味の独自イベント実装を行ったクラス.
      * ただしフェーズの概念はなし.
@@ -693,6 +701,7 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
  */
 enchant.EventTarget = enchant.Class.create({
     /**
+     * @name enchant.EventTarget
      * @class
      * DOM Event風味の独自イベント実装を行ったクラス.
      * ただしフェーズの概念はなし.
@@ -776,12 +785,12 @@ enchant.EventTarget = enchant.Class.create({
  */
 (function() {
     var core;
-
     /**
      * @scope enchant.Core.prototype
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
+         * @name enchant.Core
          * @class
          * アプリケーションのメインループ, シーンを管理するクラス.
          *
@@ -1521,13 +1530,13 @@ enchant.EventTarget = enchant.Class.create({
  * enchant.Core is moved to enchant.Core from v0.6
  * @type {*}
  */
-
 enchant.Game = enchant.Core;
 /**
  * @scope enchant.Node.prototype
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Node
      * @class
      * Sceneをルートとした表示オブジェクトツリーに属するオブジェクトの基底クラス.
      * 直接使用することはない.
@@ -1731,8 +1740,9 @@ var _staticintersect = function(other) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
+     * @name enchant.Entity
      * @class
-     * DOM上で表示する実体を持ったクラス.直接使用することはない.
+     * DOM上で表示する実体を持ったクラス. 直接使用することはない.
      * @constructs
      * @extends enchant.Node
      */
@@ -2073,9 +2083,9 @@ enchant.Entity._inherited = function(subclass) {
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Sprite
      * @class
-     * 画像表示機能を持ったクラス。
-     * Entity を継承している。
+     * 画像表示機能を持ったクラス. Entity を継承している.
      *
      * @param {Number} [width] Spriteの横幅.
      * @param {Number} [height] Spriteの高さ.
@@ -2180,6 +2190,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     },
+    /**
+     * width of Sprite
+     * @type {Number}
+     */
     width: {
         get: function() {
             return this._width;
@@ -2190,6 +2204,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._dirty = true;
         }
     },
+    /**
+     * height of Sprite
+     * @type {Number}
+     */
     height: {
         get: function() {
             return this._height;
@@ -2240,6 +2258,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Label
      * @class
      * Label クラス。
      * @constructs
@@ -2381,6 +2400,7 @@ enchant.Label.prototype.getMetrics = function(text) {
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Map
      * @class
      * タイルセットからマップを生成して表示するクラス.
      *
@@ -2737,6 +2757,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
+     * @name enchant.Group
      * @class
      * 複数の{@link enchant.Node}を子に持つことができるクラス.
      *
@@ -3445,12 +3466,13 @@ enchant.DomLayer._detachDomManager = function(node, onchildadded, onchildremoved
 };
 
 /**
- * @scope enchant.CanvasGroup.prototype
+ * @scope enchant.CanvasLayer.prototype
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
+     * @name enchant.CanvasLayer
      * @class
-     * Canvas を用いた描画を行うクラス。
+     * Canvas を用いた描画を行うクラス.
      * 子を Canvas を用いた描画に切り替えるクラス
      * @constructs
      */
@@ -3702,18 +3724,45 @@ enchant.CanvasLayer._detachCache = function(node, layer, onchildadded, onchildre
     }
 };
 
+/**
+ * @scope enchant.Scene.prototype
+ * @type {*}
+ */
 enchant.Scene = enchant.Class.create(enchant.Group, {
+    /**
+     * @name enchant.Scene
+     * @class
+     * 表示オブジェクトツリーのルートになるクラス.
+     * シーンはレイヤーを持っていて、子として追加されたオブジェクト (Entity) は描画方法に応じてレイヤーに振り分けられる。
+     * Scene クラスは最も汎用的なシーンの実装で、({@link enchant.DOMLayer} と {@link enchant.CanvasLayer}) を持っており、
+     * それぞれ DOM, Canvas を用いて描画される。描画順は DOM が手前、Canvas が奥で、
+     * 各レイヤーの間では新しく追加されたオブジェクトほど手前に表示される。
+     * Scene クラスを継承することで、新しい種類の Layer を持つシーンクラスを作ることができる。
+     *
+     * @example
+     *   var scene = new Scene();
+     *   scene.addChild(player);
+     *   scene.addChild(enemy);
+     *   core.pushScene(scene);
+     *
+     * @constructs
+     * @extends enchant.Group
+     */
     initialize: function() {
         var game = enchant.Game.instance;
+
+        // Call initialize method of enchant.Group
         enchant.Group.call(this);
 
         this.width = game.width;
         this.height = game.height;
 
+        // All nodes (entities, groups, scenes) have reference to the scene that it belongs to.
         this.scene = this;
 
         this._backgroundColor = null;
 
+        // Create div tag which possesses its layers
         this._element = document.createElement('div');
         this._element.style.width = this.width + 'px';
         this._element.style.height = this.height + 'px';
@@ -3724,8 +3773,11 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 
         this._layers = {};
         this._layerPriority = [];
+
+        // Add layers
         this.addLayer('Canvas');
         this.addLayer('Dom');
+
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
         this.addEventListener(enchant.Event.ENTER, this._onenter);
@@ -3874,6 +3926,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Surface
      * @class
      * canvas要素をラップしたクラス.
      *
@@ -4068,6 +4121,8 @@ enchant.Surface.load = function(src, callback) {
  */
 enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.DOMSound
+     * @class
      * audio要素をラップしたクラス.
      *
      * MP3ファイルの再生はSafari, Chrome, Firefox, Opera, IEが対応
@@ -4251,6 +4306,13 @@ window.AudioContext = window.AudioContext || window.webkitAudioContext || window
  * @type {*}
  */
 enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
+    /**
+     * @name enchant.WebAudioSound
+     * @class
+     * Sound wrapper class for Web Audio API (supported on some webkit-based browsers)
+     *
+     * @constructs
+     */
     initialize: function() {
         if(!window.webkitAudioContext){
             throw new Error("This browser does not support WebAudio API.");
@@ -4372,26 +4434,66 @@ enchant.Sound = window.AudioContext && enchant.ENV.USE_WEBAUDIO ? enchant.WebAud
 
 /**
  * イージング関数ライブラリ
- * ActionScript で広く使われている
- * Robert Penner による Easing Equations を JavaScript に移植した。
+ * {@link enchant.Easing} 以下にある関数は全て t(現在の時刻), b(初期値), c(変化後の値), d(値の変化にかける時間) の引数を取り、指定した時刻に取る値を返す。
+ * ActionScript で広く使われている Robert Penner による Easing Equations を JavaScript に移植した。
+ *
+ * @see http://www.robertpenner.com/easing/
+ * @see http://www.robertpenner.com/easing/penner_chapter7_tweening.pdf
+ *
  * Easing function library, from "Easing Equations" by Robert Penner.
  * @type {Object}
- * @static
+ * @namespace
+ * {@link enchant.Tween} クラスで用いるイージング関数のライブラリ名前空間.
  */
 enchant.Easing = {
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     LINEAR: function(t, b, c, d) {
         return c * t / d + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SWING: function(t, b, c, d) {
         return c * (0.5 - Math.cos(((t / d) * Math.PI)) / 2) + b;
     },
     // quad
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUAD_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUAD_EASEOUT: function(t, b, c, d) {
         return -c * (t /= d) * (t - 2) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUAD_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t + b;
@@ -4399,12 +4501,33 @@ enchant.Easing = {
         return -c / 2 * ((--t) * (t - 2) - 1) + b;
     },
     // cubic
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CUBIC_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CUBIC_EASEOUT: function(t, b, c, d) {
         return c * ((t = t / d - 1) * t * t + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CUBIC_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t * t + b;
@@ -4412,12 +4535,33 @@ enchant.Easing = {
         return c / 2 * ((t -= 2) * t * t + 2) + b;
     },
     // quart
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUART_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t * t * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUART_EASEOUT: function(t, b, c, d) {
         return -c * ((t = t / d - 1) * t * t * t - 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUART_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t * t * t + b;
@@ -4425,12 +4569,33 @@ enchant.Easing = {
         return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
     },
     // quint
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUINT_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t * t * t * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUINT_EASEOUT: function(t, b, c, d) {
         return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUINT_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t * t * t * t + b;
@@ -4438,22 +4603,64 @@ enchant.Easing = {
         return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
     },
     //sin
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SIN_EASEIN: function(t, b, c, d) {
         return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SIN_EASEOUT: function(t, b, c, d) {
         return c * Math.sin(t / d * (Math.PI / 2)) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SIN_EASEINOUT: function(t, b, c, d) {
         return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
     },
     // circ
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CIRC_EASEIN: function(t, b, c, d) {
         return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CIRC_EASEOUT: function(t, b, c, d) {
         return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CIRC_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
@@ -4461,6 +4668,13 @@ enchant.Easing = {
         return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
     },
     // elastic
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     ELASTIC_EASEIN: function(t, b, c, d, a, p) {
         if (t === 0) {
             return b;
@@ -4482,6 +4696,13 @@ enchant.Easing = {
         }
         return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     ELASTIC_EASEOUT: function(t, b, c, d, a, p) {
         if (t === 0) {
             return b;
@@ -4501,6 +4722,13 @@ enchant.Easing = {
         }
         return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     ELASTIC_EASEINOUT: function(t, b, c, d, a, p) {
         if (t === 0) {
             return b;
@@ -4524,6 +4752,13 @@ enchant.Easing = {
         return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
     },
     // bounce
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BOUNCE_EASEOUT: function(t, b, c, d) {
         if ((t /= d) < (1 / 2.75)) {
             return c * (7.5625 * t * t) + b;
@@ -4535,9 +4770,23 @@ enchant.Easing = {
             return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
         }
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BOUNCE_EASEIN: function(t, b, c, d) {
         return c - enchant.Easing.BOUNCE_EASEOUT(d - t, 0, c, d) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BOUNCE_EASEINOUT: function(t, b, c, d) {
         if (t < d / 2) {
             return enchant.Easing.BOUNCE_EASEIN(t * 2, 0, c, d) * 0.5 + b;
@@ -4547,18 +4796,39 @@ enchant.Easing = {
 
     },
     // back
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BACK_EASEIN: function(t, b, c, d, s) {
         if (s === undefined) {
             s = 1.70158;
         }
         return c * (t /= d) * t * ((s + 1) * t - s) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BACK_EASEOUT: function(t, b, c, d, s) {
         if (s === undefined) {
             s = 1.70158;
         }
         return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BACK_EASEINOUT: function(t, b, c, d, s) {
         if (s === undefined) {
             s = 1.70158;
@@ -4569,12 +4839,33 @@ enchant.Easing = {
         return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
     },
     // expo
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     EXPO_EASEIN: function(t, b, c, d) {
         return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     EXPO_EASEOUT: function(t, b, c, d) {
         return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     EXPO_EASEINOUT: function(t, b, c, d) {
         if (t === 0) {
             return b;
@@ -4599,8 +4890,10 @@ enchant.Easing = {
  */
 enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.ActionEventTarget
      * @class
-     * イベントリスナの実行時にコンテキストを this.target にするよう書き換えた EventTarget
+     * {@link enchant.Action} クラス向けに拡張された {@link enchant.EventTarget} クラス .
+     *
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -4640,19 +4933,19 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Timeline
      * @class
-     * タイムラインクラス。
-     * アクションを管理するためのクラス。
-     * 操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
+     * アニメーションを管理するためのクラス.
      *
+     * 操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
      * tl.enchant.js を読み込むと、Node クラスを継承したすべてのクラス (Group, Scene, Entity, Label, Sprite)の
+     *
      * tl プロパティに、タイムラインクラスのインスタンスが生成される。
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
      * タイムラインクラスはフレームとタイムのアニメーションができる。
      * @param node 操作の対象となるノード
-     * @param [unitialized] このパラメータはtrueだったら、
-     * 最初のaddメソッドが呼ばれる時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
+     * @param [unitialized] このパラメータがtrueならば、最初のaddメソッドが呼ばれる時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
      * @constructs
      */
     initialize: function(node) {
@@ -5227,13 +5520,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
+     * @name enchant.Action
      * @class
-     * アクションクラス。
-     * アクションはタイムラインを構成する単位であり、
-     * 実行したい処理を指定するためのユニットである。
-     * タイムラインに追加されたアクションは順に実行される。
+     * アニメーションタイムラインを構成する、実行したい処理を指定するためのクラス.
      *
-     * アクションが開始・終了された時に actionstart, actiontick イベントが発行され、
+     * タイムラインに追加されたアクションは順に実行される。
+     * アクションが開始・終了された時に actionstart, actionend イベントが発行され、
      * また1フレーム経過した時には actiontick イベントが発行される。
      * これらのイベントのリスナとして実行したい処理を指定する。
      *
@@ -5292,6 +5584,7 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {
     /**
+     * @name enchant.ParallelAction
      * @class
      * アクションを並列で実行するためのアクション。
      * 子アクションを複数持つことができる。
@@ -5367,10 +5660,10 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
  */
 enchant.Tween = enchant.Class.create(enchant.Action, {
     /**
+     * @name enchant.Tween
      * @class
-     * トゥイーンクラス。
-     * アクションを扱いやすく拡張したクラス。
-     * オブジェクトの特定のプロパティを、なめらかに変更したい時に用いる。
+     * {@link enchant.Action} を継承した、オブジェクトの特定のプロパティを、なめらかに変更したい時に用いるためのアクションクラス.
+     * アクションを扱いやすく拡張したクラス.
      *
      * コンストラクタに渡す設定オブジェクトに、プロパティの目標値を指定すると、
      * アクションが実行された時に、目標値までなめらかに値を変更するようなアクションを生成する。

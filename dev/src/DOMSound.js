@@ -4,6 +4,8 @@
  */
 enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.DOMSound
+     * @class
      [lang:ja]
      * audio要素をラップしたクラス.
      *

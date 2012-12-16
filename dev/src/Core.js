@@ -3,12 +3,12 @@
  */
 (function() {
     var core;
-
     /**
      * @scope enchant.Core.prototype
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
+         * @name enchant.Core
          * @class
          [lang:ja]
          * アプリケーションのメインループ, シーンを管理するクラス.
