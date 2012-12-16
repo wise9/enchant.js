@@ -3,6 +3,7 @@
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Node
      * @class
      [lang:ja]
      * Sceneをルートとした表示オブジェクトツリーに属するオブジェクトの基底クラス.

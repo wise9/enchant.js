@@ -3,6 +3,7 @@
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Label
      * @class
      [lang:ja]
      * Label クラス。

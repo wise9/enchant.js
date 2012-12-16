@@ -3,6 +3,7 @@
  */
 enchant.DOMScene = enchant.Class.create(enchant.Group, {
 	/**
+     * @name enchant.DOMScene
      * @class
     [lang:ja]
     * 表示オブジェクトツリーのルートになるクラス.

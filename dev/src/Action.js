@@ -5,14 +5,13 @@
 
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
+     * @name enchant.Action
      * @class
      * [lang:ja]
-     * アクションクラス。
-     * アクションはタイムラインを構成する単位であり、
-     * 実行したい処理を指定するためのユニットである。
-     * タイムラインに追加されたアクションは順に実行される。
+     * アニメーションタイムラインを構成する、実行したい処理を指定するためのクラス.
      *
-     * アクションが開始・終了された時に actionstart, actiontick イベントが発行され、
+     * タイムラインに追加されたアクションは順に実行される。
+     * アクションが開始・終了された時に actionstart, actionend イベントが発行され、
      * また1フレーム経過した時には actiontick イベントが発行される。
      * これらのイベントのリスナとして実行したい処理を指定する。
      *

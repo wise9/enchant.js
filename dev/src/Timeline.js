@@ -3,23 +3,22 @@
  */
 enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
-     * [lang:ja]
+     * @name enchant.Timeline
      * @class
-     * タイムラインクラス。
-     * アクションを管理するためのクラス。
-     * 操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
+     * [lang:ja]
+     * アニメーションを管理するためのクラス.
      *
+     * 操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
      * tl.enchant.js を読み込むと、Node クラスを継承したすべてのクラス (Group, Scene, Entity, Label, Sprite)の
+     *
      * tl プロパティに、タイムラインクラスのインスタンスが生成される。
      * タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
      * これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
      * タイムラインクラスはフレームとタイムのアニメーションができる。
      * @param node 操作の対象となるノード
-     * @param [unitialized] このパラメータはtrueだったら、
-     * 最初のaddメソッドが呼ばれる時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
+     * @param [unitialized] このパラメータがtrueならば、最初のaddメソッドが呼ばれる時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。
      * [/lang]
      * [lang:en]
-     * @class
      * Time-line class.
      * Class for managing the action.
      * For one node to manipulate the timeline of one must correspond.

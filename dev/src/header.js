@@ -1,3 +1,6 @@
+/**
+ * ECMA-262 5th edition Functions
+ */
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -104,6 +107,9 @@ if (typeof Function.prototype.bind !== 'function') {
  *
  * @param {...String} [modules] Module die exportiert werden sollen.
  [/lang]
+ * @global
+ * @type {Object}
+ * @name enchant
  */
 var enchant = function(modules) {
     if (modules != null) {

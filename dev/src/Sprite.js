@@ -3,10 +3,10 @@
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Sprite
      * @class
      [lang:ja]
-     * 画像表示機能を持ったクラス。
-     * Entity を継承している。
+     * 画像表示機能を持ったクラス. Entity を継承している.
      *
      * @param {Number} [width] Spriteの横幅.
      * @param {Number} [height] Spriteの高さ.
@@ -152,6 +152,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     },
+    /**
+     * width of Sprite
+     * @type {Number}
+     */
     width: {
         get: function() {
             return this._width;
@@ -162,6 +166,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._dirty = true;
         }
     },
+    /**
+     * height of Sprite
+     * @type {Number}
+     */
     height: {
         get: function() {
             return this._height;
