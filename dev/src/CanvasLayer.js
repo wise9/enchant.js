@@ -164,6 +164,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
+                ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
         }
@@ -177,6 +178,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         enchant.Matrix.instance.stack.pop();
     },
     _detectrendering: function(node) {
+        var width = node.width;
+        var height = node.height;
         var ctx = this._dctx;
         var child;
         ctx.save();
@@ -186,10 +189,11 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (node.detectRender) {
                 node.detectRender(ctx);
             } else {
-                ctx.fillRect(0, 0, node.width, node.height);
+                ctx.fillRect(0, 0, width, height);
             }
         }
         if (node._clipping) {
+            ctx.rect(0, 0, width, height);
             ctx.clip();
         }
         if (node.childNodes) {
