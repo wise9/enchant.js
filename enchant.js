@@ -781,12 +781,12 @@ enchant.EventTarget = enchant.Class.create({
  */
 (function() {
     var core;
+
     /**
      * @scope enchant.Core.prototype
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
-         * @name enchant.Core
          * @class
          * A class which is controlling the cores main loop and scenes.
          *
@@ -1249,7 +1249,7 @@ enchant.EventTarget = enchant.Class.create({
                 this.running = true;
             };
             this.addEventListener('load',onloadTimeSetter);
-            
+
             if (this._intervalID) {
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
