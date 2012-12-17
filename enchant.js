@@ -1855,7 +1855,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._opacity;
         },
         set: function(opacity) {
-            this._opacity = opacity;
+            this._opacity = parseFloat(opacity);
         }
     },
     /**
