@@ -50,35 +50,37 @@ enchant.wiiu.Core = enchant.Class.create(enchant.Core, {
             'left': 0x0400
         };
         var core = this;
-
+        core.input.rstick = {x: 0, y: 0};
+        core.input.lstick = {x: 0, y: 0};
 
         if (window.wiiu) {
-            this.addEventListener("enterframe", function() {
+            core.addEventListener("enterframe", function() {
                 /**
                  * watch data from wiiU controller
                  */
                 var data = window.wiiu.update();
-                console.log(data);
                 if (!data.isEnabled) {
-                    console.log('This browser is not wiiU browser.');
+                    console.log('Wii U Gamepad is not connected');
                 }
 
                 var evt, target;
 
-//                if (data.lStickX !== prevData.lStickX || data.lStickY !== prevData.lStickY) {
+                if (data.lStickX !== prevData.lStickX || data.lStickY !== prevData.lStickY) {
                     evt = new enchant.Event(enchant.Event.L_STICK_MOVE);
                     evt.x = data.lStickX;
                     evt.y = data.lStickY;
                     console.log(evt.type, evt, enchant.Event.L_STICK_MOVE);
                     this.rootScene.dispatchEvent(evt);
-//                }
+                }
+                core.input['lstick'] = {x: data.lStickX, y: data.lStickY};
 
-//                if (data.rStickX !== prevData.rStickX || data.rStickY !== prevData.rStickY) {
+                if (data.rStickX !== prevData.rStickX || data.rStickY !== prevData.rStickY) {
                     evt = new enchant.Event(enchant.Event.R_STICK_MOVE);
                     evt.x = data.rStickX;
                     evt.y = data.rStickY;
                     this.rootScene.dispatchEvent(evt);
-//                }
+                }
+                core.input['rstick'] = {x: data.rStickX, y: data.rStickY};
 
                 evt = new enchant.Event(enchant.Event.DEVICE_MOTION);
                 evt.x = data.accX;

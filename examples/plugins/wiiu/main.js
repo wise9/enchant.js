@@ -42,9 +42,9 @@ window.onload = function() {
         bear.image = game.assets['chara1.png'];
         bear.frame = 0;
         bear.moveTo(100, 160);
-        game.rootScene.on(enchant.Event.L_STICK_MOVE, function(evt) {
-            bear.x += evt.x * 10;
-            bear.y += evt.y * 10;
+        bear.on('enterframe', function() {
+            this.x += game.input.rstick.x * 10;
+            this.y += game.input.rstick.y * 10;
         });
         game.rootScene.addChild(bear);
 
@@ -52,9 +52,9 @@ window.onload = function() {
         white.image = game.assets['chara1.png'];
         white.frame = 5;
         white.moveTo(140, 160);
-        game.rootScene.on(enchant.Event.R_STICK_MOVE, function(evt) {
-            white.x += evt.x * 10;
-            white.y += evt.y * 10;
+        white.on('enterframe', function() {
+            this.x += game.input.lstick.x * 10;
+            this.y += game.input.lstick.y * 10;
         });
         game.rootScene.addChild(white);
     };
