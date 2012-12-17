@@ -5192,6 +5192,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var game = enchant.Game.instance;
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
+        var width = node.width;
+        var height = node.height;
         var ctx = this.context;
         var child;
         ctx.save();
@@ -5209,7 +5211,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         if (typeof node._visible === 'undefined' || node._visible) {
             if (node._backgroundColor) {
                 ctx.fillStyle = node._backgroundColor;
-                ctx.fillRect(0, 0, node._width, node._height);
+                ctx.fillRect(0, 0, width, height);
             }
 
             if (node.cvsRender) {
@@ -5222,9 +5224,10 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 } else {
                     ctx.strokeStyle = '#0000ff';
                 }
-                ctx.strokeRect(0, 0, node._width, node._height);
+                ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
+                ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
         }
@@ -5238,6 +5241,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         enchant.Matrix.instance.stack.pop();
     },
     _detectrendering: function(node) {
+        var width = node.width;
+        var height = node.height;
         var ctx = this._dctx;
         var child;
         ctx.save();
@@ -5247,10 +5252,11 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (node.detectRender) {
                 node.detectRender(ctx);
             } else {
-                ctx.fillRect(0, 0, node.width, node.height);
+                ctx.fillRect(0, 0, width, height);
             }
         }
         if (node._clipping) {
+            ctx.rect(0, 0, width, height);
             ctx.clip();
         }
         if (node.childNodes) {
