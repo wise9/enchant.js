@@ -12,9 +12,9 @@ module.exports = function(grunt) {
  * http://enchantjs.com\n\
  * \n\
  * Copyright Ubiquitous Entertainment Inc.\n\
- * Released under MIT license.\n\
+ * Released under the MIT license.\n\
  */',
-                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Copyright (c) Ubiquitous Entertainment Inc. Released Under MIT license. */'
+                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Copyright (c) Ubiquitous Entertainment Inc. Released Under the MIT license. */'
             },
             lint: {
                 core: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); })],
