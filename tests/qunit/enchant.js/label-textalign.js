@@ -1,9 +1,10 @@
-﻿var context, core, label;
+﻿var context, core, surface, label;
 module('Label.textAlign', {
     setup: function () {
         enchant();
         core = new Core(320, 320);
-        context = document.getElementsByTagName('canvas')[0].getContext('2d');
+        surface = new Surface(320, 320);
+        context = surface.context;
         label = new Label('■');
         label.color = '#f00'
         label.font = '10px monospace';
