@@ -10,6 +10,7 @@
  [/lang]
  */
 
+
 /**
  * plugin namespace object
  * @namespace
@@ -24,7 +25,14 @@ enchant.Event.DEVICE_ORIENTATION = 'deviceorientation';
 
 enchant.wiiu.Core = enchant.Class.create(enchant.Core, {
     initialize: function() {
+        alert("width: " + window.innerWidth + " height: " + window.innerHeight);
         enchant.Core.apply(this, arguments);
+
+        var label = new Label("");
+        this.rootScene.addChild(label);
+        var debug = function(str) {
+            label.text += str + '<br />';
+        };
 
         /**
          * disable default keybind
@@ -53,87 +61,73 @@ enchant.wiiu.Core = enchant.Class.create(enchant.Core, {
         core.input.rstick = {x: 0, y: 0};
         core.input.lstick = {x: 0, y: 0};
 
+        debug('wiiu?' + (window.wiiu ? "on" : "off"));
+        for(var i in window.wiiu){
+        }
+
         if (window.wiiu) {
             core.addEventListener("enterframe", function() {
                 /**
                  * watch data from wiiU controller
                  */
-                var data = window.wiiu.update();
+                var data = window.wiiu.gamepad.update();
                 if (!data.isEnabled) {
                     console.log('Wii U Gamepad is not connected');
                 }
 
                 var evt, target;
 
+                core.input = {};
+
                 if (data.lStickX !== prevData.lStickX || data.lStickY !== prevData.lStickY) {
                     evt = new enchant.Event(enchant.Event.L_STICK_MOVE);
                     evt.x = data.lStickX;
-                    evt.y = data.lStickY;
+                    evt.y = -data.lStickY;
                     console.log(evt.type, evt, enchant.Event.L_STICK_MOVE);
-                    this.rootScene.dispatchEvent(evt);
+                    core.rootScene.dispatchEvent(evt);
                 }
-                core.input['lstick'] = {x: data.lStickX, y: data.lStickY};
+                core.input['lstick'] = {x: data.lStickX, y: -data.lStickY};
 
                 if (data.rStickX !== prevData.rStickX || data.rStickY !== prevData.rStickY) {
                     evt = new enchant.Event(enchant.Event.R_STICK_MOVE);
                     evt.x = data.rStickX;
-                    evt.y = data.rStickY;
+                    evt.y = -data.rStickY;
                     this.rootScene.dispatchEvent(evt);
                 }
-                core.input['rstick'] = {x: data.rStickX, y: data.rStickY};
+                core.input['rstick'] = {x: data.rStickX, y: -data.rStickY};
 
                 evt = new enchant.Event(enchant.Event.DEVICE_MOTION);
-                evt.x = data.accX;
-                evt.y = data.accY;
-                evt.z = data.accZ;
-                this.rootScene.dispatchEvent(evt);
+                core.input['accX'] = evt.x = data.accX;
+                core.input['accY'] = evt.y = data.accY;
+                core.input['accZ'] = evt.z = data.accZ;
+                core.rootScene.dispatchEvent(evt);
 
                 evt = new enchant.Event(enchant.Event.DEVICE_ORIENTATION);
-                evt.x = data.angleX;
-                evt.y = data.angleY;
-                evt.z = data.angleZ;
-                this.rootScene.dispatchEvent(evt);
+                core.input['angleX'] = evt.x = data.angleX;
+                core.input['angleY'] = evt.y = data.angleY;
+                core.input['angleZ'] = evt.z = data.angleZ;
+                core.rootScene.dispatchEvent(evt);
+
 
                 for(var type in keyEventTable){
                     if(keyEventTable.hasOwnProperty(type)){
                         var bitmask = keyEventTable[type];
                         var hold = data.hold & bitmask;
+
                         if(hold && !core.input[type]){
                             // Button data: On, Flag: Off -> buttondown
-                            pushed[type] = true;
-                            evt = new enchant.Event(button + 'buttondown');
+                            core.input[type] = true;
+                            evt = new enchant.Event(type + 'buttondown');
                             this.dispatchEvent(evt);
+                            debug(type + 'buttondown');
                         }else if(!hold && core.input[type]){
                             // Button data: On, Flag: Off -> buttonup
-                            delete pushed[type];
-                            evt = new enchant.Event(button + 'buttonup');
+                            delete core.input[type];
+                            evt = new enchant.Event(type  + 'buttonup');
                             this.dispatchEvent(evt);
+                            debug(type + 'buttondown');
                         }
                     }
-                    this.addEventListener(type + 'buttondown', function(e) {
-                        var inputEvent;
-                        if (!this.input[type]) {
-                            this.input[type] = true;
-                            inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
-                            this.dispatchEvent(inputEvent);
-                        }
-                        this.currentScene.dispatchEvent(e);
-                        if (inputEvent) {
-                            this.currentScene.dispatchEvent(inputEvent);
-                        }
-                    });
-                    this.addEventListener(type + 'buttonup', function(e) {
-                        var inputEvent;
-                        if (this.input[type]) {
-                            this.input[type] = false;
-                            inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
-                            this.dispatchEvent(inputEvent);
-                        }
-                        this.currentScene.dispatchEvent(e);
-                        if (inputEvent) {
-                            this.currentScene.dispatchEvent(inputEvent);
-                        }
-                    });
                 }
                 prevData = data;
             });
