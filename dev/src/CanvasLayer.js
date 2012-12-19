@@ -77,6 +77,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (self._dirty) {
                 self._updateCoordinate();
             }
+            child._dirty = true;
             enchant.Matrix.instance.stack.push(self._matrix);
             layer._rendering(child, render);
             enchant.Matrix.instance.stack.pop(self._matrix);
