@@ -777,9 +777,7 @@
                     core._checkTick.call(core);
                 });
             } else {
-                var rest = elapsed - 1000 / this.fps;
-                var processTime = (this.getTime() - this.currentTime);
-                var delay = Math.max(0, 1000 / this.fps - processTime - rest);
+                var delay = Math.max(0, 1000 / this.fps - this._frameDelay);
                 window.setTimeout(function() {
                     core._tick.call(core);
                 }, delay);
@@ -794,8 +792,10 @@
         _checkTick: function() {
             var now = this.getTime();
             if (now - this.currentTime + this._frameDelay >= 1000 / this.fps) {
+                // if enough time has passed, execute _tick
                 this._tick();
             } else {
+                // if enough time has not passed yet, request next frame
                 window.requestAnimationFrame(function() {
                     core._checkTick.call(core);
                 });
@@ -807,8 +807,8 @@
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
 
+            // frame fragment time, will be used in _checkTick
             this._frameDelay = Math.max(0, e.elapsed - 1000 / this.fps);
-
             this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : null;
 
             var nodes = this.currentScene.childNodes.slice();
