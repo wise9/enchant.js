@@ -32,7 +32,7 @@ if (typeof Object.create !== 'function') {
 
         F.prototype = prototype;
         var obj = new F();
-        if (descs != null){
+        if (descs != null) {
             Object.defineProperties(obj, descs);
         }
         return obj;
@@ -60,6 +60,12 @@ if (typeof Function.prototype.bind !== 'function') {
         return bound;
     };
 }
+
+/**
+ * define requestAnimationFrame
+ */
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 /**
  [lang:ja]
@@ -123,7 +129,7 @@ var enchant = function(modules) {
     (function include(module, prefix) {
         var submodules = [],
             i, len;
-        for (var prop in module){
+        for (var prop in module) {
             if (module.hasOwnProperty(prop)) {
                 if (typeof module[prop] === 'function') {
                     window[prop] = module[prop];

@@ -3,7 +3,7 @@
  * http://enchantjs.com
  * 
  * Copyright Ubiquitous Entertainment Inc.
- * Released under MIT license.
+ * Released under the MIT license.
  */
 
 (function(window, undefined){
@@ -42,7 +42,7 @@ if (typeof Object.create !== 'function') {
 
         F.prototype = prototype;
         var obj = new F();
-        if (descs != null){
+        if (descs != null) {
             Object.defineProperties(obj, descs);
         }
         return obj;
@@ -70,6 +70,12 @@ if (typeof Function.prototype.bind !== 'function') {
         return bound;
     };
 }
+
+/**
+ * define requestAnimationFrame
+ */
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 /**
  * Globaler Export der Programmbibliotheken.
@@ -101,7 +107,7 @@ var enchant = function(modules) {
     (function include(module, prefix) {
         var submodules = [],
             i, len;
-        for (var prop in module){
+        for (var prop in module) {
             if (module.hasOwnProperty(prop)) {
                 if (typeof module[prop] === 'function') {
                     window[prop] = module[prop];
@@ -300,6 +306,11 @@ enchant.Class.getInheritanceTree = function(Constructor) {
  * @type {Object}
  */
 enchant.ENV = {
+    /**
+     * Version of enchant.js
+     * @type {String}
+     */
+    VERSION: "0.6.1",
     /**
      * The CSS vendor prefix of the current browser.
      * @type {String}
@@ -932,7 +943,7 @@ enchant.EventTarget = enchant.Class.create({
              * Zeigt an ob das Spiel ausgeführt werden kann.
              * @type {Boolean}
              */
-            this.ready = null;
+            this.ready = false;
             /**
              * Zeigt an ob das Spiel derzeit ausgeführt wird.
              * @type {Boolean}
@@ -1005,7 +1016,12 @@ enchant.EventTarget = enchant.Class.create({
             this._mousedownID = 0;
             this._surfaceID = 0;
             this._soundID = 0;
-            this._intervalID = null;
+
+            /**
+             * @type {Boolean}
+             * @private
+             */
+            this._activated = false;
 
             this._offsetX = 0;
             this._offsetY = 0;
@@ -1287,18 +1303,18 @@ enchant.EventTarget = enchant.Class.create({
          */
         start: function() {
             var onloadTimeSetter = function() {
+                console.log('game.start');
                 this.currentTime = this.getTime();
-                this.removeEventListener('load',onloadTimeSetter);
-                this._intervalID = window.setInterval(function() {
-                    core._tick();
-                }, 1000 / this.fps);
+                this._frameDelay = 0;
+                this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
+                this.ready = true;
+                this._requestNextFrame();
             };
-            this.addEventListener('load',onloadTimeSetter);
-            
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-            } else if (this._assets.length) {
+            this.addEventListener('load', onloadTimeSetter);
+
+            if (!this._activated && this._assets.length) {
+                this._activated = true;
                 if (enchant.Sound.enabledInMobileSafari && !core._touched &&
                     enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
                     var scene = new enchant.Scene();
@@ -1354,9 +1370,6 @@ enchant.EventTarget = enchant.Class.create({
          */
         debug: function() {
             this._debug = true;
-            this.rootScene.addEventListener("enterframe", function(time) {
-                this._actualFps = (1 / time);
-            });
             this.start();
         },
         actualFps: {
@@ -1364,11 +1377,49 @@ enchant.EventTarget = enchant.Class.create({
                 return this._actualFps || this.fps;
             }
         },
+        /**
+         * @private
+         */
+        _requestNextFrame: function(elapsed) {
+            if (!this.ready) {
+                return;
+            }
+            var core = this;
+            if (window.requestAnimationFrame) {
+                window.requestAnimationFrame(function() {
+                    core._checkTick.call(core);
+                });
+            } else {
+                var rest = elapsed - 1000 / this.fps;
+                var processTime = (this.getTime() - this.currentTime);
+                var delay = Math.max(0, 1000 / this.fps - processTime - rest);
+                window.setTimeout(function() {
+                    core._tick.call(core);
+                }, delay);
+            }
+        },
+        /**
+         * @private
+         */
+        _checkTick: function() {
+            var now = this.getTime();
+            if (now - this.currentTime + this._frameDelay >= 1000 / this.fps) {
+                this._tick();
+            } else {
+                window.requestAnimationFrame(function() {
+                    core._checkTick.call(core);
+                });
+            }
+        },
         _tick: function() {
             var now = this.getTime();
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
             this.currentTime = now;
+
+            this._frameDelay = Math.max(0, e.elapsed - 1000 / this.fps);
+
+            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : null;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -1387,13 +1438,14 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+            this._requestNextFrame(e.elapsed);
         },
         getTime: function() {
             if (window.performance && window.performance.now) {
                 return window.performance.now();
-            }else if(window.performance && window.performance.webkitNow){
+            } else if (window.performance && window.performance.webkitNow) {
                 return window.performance.webkitNow();
-            }else{
+            } else {
                 return Date.now();
             }
         },
@@ -1405,10 +1457,7 @@ enchant.EventTarget = enchant.Class.create({
          * erneut gestartet werden.
          */
         stop: function() {
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-                this._intervalID = null;
-            }
+            this.ready = false;
             this.running = false;
         },
         /**
@@ -1419,23 +1468,19 @@ enchant.EventTarget = enchant.Class.create({
          * erneut gestartet werden.
          */
         pause: function() {
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-                this._intervalID = null;
-            }
+            this.ready = false;
         },
         /**
          * Setzt die Ausführung des Spieles fort.
          */
         resume: function() {
-            if (this._intervalID) {
+            if (this.ready) {
                 return;
             }
             this.currentTime = this.getTime();
-            this._intervalID = window.setInterval(function() {
-                core._tick();
-            }, 1000 / this.fps);
+            this.ready = true;
             this.running = true;
+            this._requestNextFrame();
         },
 
         /**
@@ -5629,4 +5674,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
     }
 });
+/**
+ *
+ */
 }(window));
