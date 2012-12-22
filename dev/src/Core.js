@@ -315,7 +315,10 @@
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
-            this._keybind = enchant.ENV.KEY_BIND_TABLE || {};
+            if (!enchant.ENV.KEY_BIND_TABLE) {
+                enchant.ENV.KEY_BIND_TABLE = {};
+            }
+            this._keybind = enchant.ENV.KEY_BIND_TABLE;
 
             var c = 0;
             ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
