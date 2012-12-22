@@ -1006,23 +1006,17 @@
          [lang:ja]
          * キーバインドを設定する.
          *
-         * キー入力をleft, right, up, down, a, bいずれかのボタン入力として割り当てる.
-         *
          * @param {Number} key キーバインドを設定するキーコード.
          * @param {String} button 割り当てるボタン.
          [/lang]
          [lang:en]
          * Set a key binding.
          *
-         * Maps an input key to an enchant.js left, right, up, down, a, b button.
-         *
          * @param {Number} key Key code for the button which will be bound.
          * @param {String} button The enchant.js button (left, right, up, down, a, b).
          [/lang]
          [lang:de]
          * Bindet eine Taste.
-         *
-         * Diese Methode bindet eine Taste an einen in enchant.js verwendeten Knopf (Button).
          *
          * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
          * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
@@ -1057,6 +1051,23 @@
             this._internalButtondownListeners[key] = onxbuttondown;
             this._internalButtonupListeners[key] = onxbuttonup;
         },
+        /**
+         [lang:ja]
+         * キーバインドを削除する.
+         *
+         * @param {Number} key 削除するキーコード.
+         [/lang]
+         [lang:en]
+         * Delete a key binding.
+         *
+         * @param {Number} key Key code that want to delete.
+         [/lang]
+         [lang:de]
+         * Entbindet eine Taste.
+         *
+         * @param {Number} key Der Tastencode der entfernt werden soll.
+         [/lang]
+         */
         keyunbind: function(key) {
             if (!this._keybind[key]) {
                 return;
