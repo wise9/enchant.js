@@ -319,30 +319,11 @@
                 enchant.ENV.KEY_BIND_TABLE = {};
             }
             this._keybind = enchant.ENV.KEY_BIND_TABLE;
+            this.pressedKeysNum = 0;
 
-            var c = 0;
-            ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
-                this.addEventListener(type + 'buttondown', function(e) {
-                    var inputEvent;
-                    if (!this.input[type]) {
-                        this.input[type] = true;
-                        inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
-                        this.dispatchEvent(inputEvent);
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                });
-                this.addEventListener(type + 'buttonup', function(e) {
-                    var inputEvent;
-                    if (this.input[type]) {
-                        this.input[type] = false;
-                        inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
-                        this.dispatchEvent(inputEvent);
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                });
-            }, this);
+            for (var prop in this._keybind) {
+                this.keybind(prop, this._keybind[prop]);
+            }
 
             if (initial) {
                 stage = enchant.Core.instance._element;
@@ -1047,6 +1028,26 @@
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
+            this.addEventListener(button + 'buttondown', function(e) {
+                var inputEvent;
+                if (!this.input[button]) {
+                    this.input[button] = true;
+                    inputEvent = new enchant.Event((this.pressedKeysNum++) ? 'inputchange' : 'inputstart');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            });
+            this.addEventListener(button + 'buttonup', function(e) {
+                var inputEvent;
+                if (this.input[button]) {
+                    this.input[button] = false;
+                    inputEvent = new enchant.Event((--this.pressedKeysNum) ? 'inputchange' : 'inputend');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            });
         },
         /**
          [lang:ja]
