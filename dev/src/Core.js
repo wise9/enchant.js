@@ -328,11 +328,9 @@
                         this.input[type] = true;
                         inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
                         this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
                         this.currentScene.dispatchEvent(inputEvent);
                     }
+                    this.currentScene.dispatchEvent(e);
                 });
                 this.addEventListener(type + 'buttonup', function(e) {
                     var inputEvent;
@@ -340,11 +338,9 @@
                         this.input[type] = false;
                         inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
                         this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
                         this.currentScene.dispatchEvent(inputEvent);
                     }
+                    this.currentScene.dispatchEvent(e);
                 });
             }, this);
 
