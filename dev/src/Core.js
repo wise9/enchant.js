@@ -320,6 +320,8 @@
             }
             this._keybind = enchant.ENV.KEY_BIND_TABLE;
             this.pressedKeysNum = 0;
+            this._internalButtondownListeners = {};
+            this._internalButtonupListeners = {};
 
             for (var prop in this._keybind) {
                 this.keybind(prop, this._keybind[prop]);
@@ -1028,7 +1030,7 @@
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
-            this.addEventListener(button + 'buttondown', function(e) {
+            var onxbuttondown = function(e) {
                 var inputEvent;
                 if (!this.input[button]) {
                     this.input[button] = true;
@@ -1037,8 +1039,8 @@
                     this.currentScene.dispatchEvent(inputEvent);
                 }
                 this.currentScene.dispatchEvent(e);
-            });
-            this.addEventListener(button + 'buttonup', function(e) {
+            };
+            var onxbuttonup = function(e) {
                 var inputEvent;
                 if (this.input[button]) {
                     this.input[button] = false;
@@ -1047,7 +1049,28 @@
                     this.currentScene.dispatchEvent(inputEvent);
                 }
                 this.currentScene.dispatchEvent(e);
-            });
+            };
+
+            this.addEventListener(button + 'buttondown', onxbuttondown);
+            this.addEventListener(button + 'buttonup', onxbuttonup);
+
+            this._internalButtondownListeners[key] = onxbuttondown;
+            this._internalButtonupListeners[key] = onxbuttonup;
+        },
+        keyunbind: function(key) {
+            if (!this._keybind[key]) {
+                return;
+            }
+            var buttondowns = this._internalButtondownListeners;
+            var buttonups = this._internalButtonupListeners;
+
+            this.removeEventListener(key + 'buttondown', buttondowns);
+            this.removeEventListener(key + 'buttonup', buttonups);
+
+            delete buttondowns[key];
+            delete buttonups[key];
+
+            delete this._keybind[key];
         },
         /**
          [lang:ja]
