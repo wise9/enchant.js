@@ -1,6 +1,6 @@
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementDefinition) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         this.layer = null;
         this.targetNode = node;
         if (typeof elementDefinition === 'string') {
@@ -11,7 +11,7 @@ enchant.DomManager = enchant.Class.create({
         this.style = this.element.style;
         this.style.position = 'absolute';
         this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0px 0px';
-        if (game._debug) {
+        if (core._debug) {
             this.style.border = '1px solid blue';
             this.style.margin = '-1px';
         }
