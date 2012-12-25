@@ -7,9 +7,8 @@
  *
  * @description
  * Library for making game for Nintendo wii U
- [/lang]
+ * ("Wii U" is registered trademark of Nintendo,Inc.)
  */
-
 
 /**
  * plugin namespace object
@@ -83,8 +82,7 @@ enchant.wiiu.Core = enchant.Class.create(enchant.Core, {
                     evt = new enchant.Event(enchant.Event.L_STICK_MOVE);
                     evt.x = data.lStickX;
                     evt.y = -data.lStickY;
-                    console.log(evt.type, evt, enchant.Event.L_STICK_MOVE);
-                    core.rootScene.dispatchEvent(evt);
+                    core.dispatchEvent(evt);
                 }
                 core.input['lstick'] = {x: data.lStickX, y: -data.lStickY};
 
@@ -92,22 +90,25 @@ enchant.wiiu.Core = enchant.Class.create(enchant.Core, {
                     evt = new enchant.Event(enchant.Event.R_STICK_MOVE);
                     evt.x = data.rStickX;
                     evt.y = -data.rStickY;
-                    this.rootScene.dispatchEvent(evt);
+                    core.dispatchEvent(evt);
                 }
                 core.input['rstick'] = {x: data.rStickX, y: -data.rStickY};
 
                 evt = new enchant.Event(enchant.Event.DEVICE_MOTION);
-                core.input['accX'] = evt.x = data.accX;
-                core.input['accY'] = evt.y = data.accY;
-                core.input['accZ'] = evt.z = data.accZ;
+                core.input['acc'] = {
+                    x: evt.x = data.accX,
+                    y: evt.y = data.accY,
+                    z: evt.z = data.accZ
+                };
                 core.rootScene.dispatchEvent(evt);
 
                 evt = new enchant.Event(enchant.Event.DEVICE_ORIENTATION);
-                core.input['angleX'] = evt.x = data.angleX;
-                core.input['angleY'] = evt.y = data.angleY;
-                core.input['angleZ'] = evt.z = data.angleZ;
+                core.input['angle'] = {
+                    x: evt.x = data.angleX,
+                    y: evt.y = data.angleY,
+                    z: evt.z = data.angleZ
+                };
                 core.rootScene.dispatchEvent(evt);
-
 
                 for(var type in keyEventTable){
                     if(keyEventTable.hasOwnProperty(type)){
