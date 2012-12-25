@@ -4,9 +4,12 @@ module('Label.textAlign', {
         enchant();
         core = new Core(320, 320);
         context = document.getElementsByTagName('canvas')[0].getContext('2d');
-        label = new Label('■');
+
+        // using multibyte char in tests causes problem when running on phantomjs
+        label = new Label('*');
         label.color = '#f00'
         label.font = '10px monospace';
+
         ok(!verifyTextAt('left'));
         ok(!verifyTextAt('center'));
         ok(!verifyTextAt('right'));
@@ -14,7 +17,7 @@ module('Label.textAlign', {
 });
 
 function verifyTextAt(textAlign) {
-    var x = 5, image;
+    var x = 4, image;
     if (textAlign === 'center') {
         x = label.width / 2;
     } else if (textAlign === 'right') {
