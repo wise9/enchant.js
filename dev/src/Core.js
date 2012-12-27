@@ -674,7 +674,6 @@
          */
         start: function() {
             var onloadTimeSetter = function() {
-                console.log('game.start');
                 this.currentTime = this.getTime();
                 this._frameDelay = 0;
                 this.removeEventListener('load', onloadTimeSetter);
