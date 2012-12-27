@@ -61,11 +61,34 @@ if (typeof Function.prototype.bind !== 'function') {
     };
 }
 
+window.getTime = (function() {
+
+    if (window.performance && window.performance.now) {
+        return window.performance.now;
+    } else if (window.performance && window.performance.webkitNow) {
+        return window.performance.webkitNow;
+    } else {
+        return Date.now;
+    }
+}());
+
 /**
  * define requestAnimationFrame
  */
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+window.requestAnimationFrame =
+    window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    (function() {
+        var time = window.getTime();
+        return function(func) {
+            return setTimeout(function() {
+                time = window.getTime();
+                func(window.getTime(time));
+            }, 1000 / 60);
+        };
+    }());
 
 /**
  [lang:ja]

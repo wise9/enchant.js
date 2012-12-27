@@ -675,7 +675,7 @@
         start: function() {
             var onloadTimeSetter = function() {
                 this.currentTime = this.getTime();
-                this._frameDelay = 0;
+                this._nextTime = 0;
                 this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
                 this.ready = true;
@@ -766,21 +766,12 @@
          * [/lang]
          * @private
          */
-        _requestNextFrame: function(elapsed) {
+        _requestNextFrame: function() {
             if (!this.ready) {
                 return;
             }
             var core = this;
-            if (window.requestAnimationFrame) {
-                window.requestAnimationFrame(function() {
-                    core._checkTick.call(core);
-                });
-            } else {
-                var delay = Math.max(0, 1000 / this.fps - this._frameDelay);
-                window.setTimeout(function() {
-                    core._tick.call(core);
-                }, delay);
-            }
+            window.requestAnimationFrame(core._checkTick);
         },
         /**
          * [lang:ja]
@@ -788,27 +779,26 @@
          * [/lang]
          * @private
          */
-        _checkTick: function() {
-            var now = this.getTime();
-            if (now - this.currentTime + this._frameDelay >= 1000 / this.fps) {
+        _checkTick: function(now) {
+            var core = enchant.Core.instance;
+            if (core._nextTime < now) {
                 // if enough time has passed, execute _tick
-                this._tick();
+                core._tick(now);
             } else {
                 // if enough time has not passed yet, request next frame
-                window.requestAnimationFrame(function() {
-                    core._checkTick.call(core);
-                });
+                window.requestAnimationFrame(core._checkTick);
             }
         },
-        _tick: function() {
-            var now = this.getTime();
+        _tick: function(now) {
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
-            this.currentTime = now;
 
             // frame fragment time, will be used in _checkTick
-            this._frameDelay = Math.max(0, e.elapsed - 1000 / this.fps);
-            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : null;
+            //this._nextTime = 1000 / this.fps;
+            this._nextTime = 2 * this.currentTime - now + 1000 / this.fps;
+            //this._nextTime = now + 1000 / this.fps;
+            this.currentTime = now;
+            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -827,16 +817,10 @@
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
-            this._requestNextFrame(e.elapsed);
+            this._requestNextFrame();
         },
         getTime: function() {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
-            } else if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
-            } else {
-                return Date.now();
-            }
+            return window.getTime();
         },
         /**
          [lang:ja]
