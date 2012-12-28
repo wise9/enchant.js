@@ -1579,8 +1579,8 @@ enchant.EventTarget = enchant.Class.create({
                 stage.style.position = 'relative';
 
                 var bounding = stage.getBoundingClientRect();
-                this._pageX = Math.round(window.scrollX + bounding.left);
-                this._pageY = Math.round(window.scrollY + bounding.top);
+                this._pageX = Math.round(window.scrollX || window.pageXOffset + bounding.left);
+                this._pageY = Math.round(window.scrollY || window.pageYOffset + bounding.top);
             }
             if (!this.scale) {
                 this.scale = 1;

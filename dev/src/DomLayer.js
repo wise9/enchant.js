@@ -1,10 +1,10 @@
 enchant.DomLayer = enchant.Class.create(enchant.Group, {
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         enchant.Group.call(this);
 
-        this.width = this._width = game.width;
-        this.height = this._height = game.height;
+        this.width = this._width = core.width;
+        this.height = this._height = core.height;
 
         this._touchEventTarget = null;
 

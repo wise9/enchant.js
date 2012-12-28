@@ -31,13 +31,13 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @extends enchant.Group
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         // Call initialize method of enchant.Group
         enchant.Group.call(this);
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
         // All nodes (entities, groups, scenes) have reference to the scene that it belongs to.
         this.scene = this;
@@ -51,7 +51,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Core.instance.scale + ')';
 
         this._layers = {};
         this._layerPriority = [];
@@ -138,12 +138,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
     },
     addLayer: function(type, i) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this._layers[type]) {
             return;
         }
         var layer = new enchant[type + 'Layer']();
-        if (game.currentScene === this) {
+        if (core.currentScene === this) {
             layer._startRendering();
         }
         this._layers[type] = layer;
@@ -193,12 +193,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         for (var type in this._layers) {
             this._layers[type]._startRendering();
         }
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         for (var type in this._layers) {
             this._layers[type]._stopRendering();
         }
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });

@@ -20,7 +20,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * @constructs
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         enchant.Group.call(this);
 
@@ -30,17 +30,17 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         };
         this._cvsCache.layer = this;
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
         this._element = document.createElement('canvas');
-        this._element.width = game.width;
-        this._element.height = game.height;
+        this._element.width = core.width;
+        this._element.height = core.height;
         this._element.style.position = 'absolute';
 
         this._detect = document.createElement('canvas');
-        this._detect.width = game.width;
-        this._detect.height = game.height;
+        this._detect.width = core.width;
+        this._detect.height = core.height;
         this._detect.style.position = 'absolute';
         this._lastDetected = 0;
 
@@ -120,14 +120,14 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     _onexitframe: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var ctx = this.context;
-        ctx.clearRect(0, 0, game.width, game.height);
+        ctx.clearRect(0, 0, core.width, core.height);
         var render = new enchant.Event(enchant.Event.RENDER);
         this._rendering(this, render);
     },
     _rendering:  function(node, e) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
         var width = node.width;
@@ -156,7 +156,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 node.cvsRender(ctx);
             }
 
-            if (game._debug) {
+            if (core._debug) {
                 if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
                     ctx.strokeStyle = '#ff0000';
                 } else {
@@ -233,12 +233,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         return this._getEntityByPosition(e.x, e.y);
     },
     _getEntityByPosition: function(x, y) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var ctx = this._dctx;
-        if (this._lastDetected < game.frame) {
+        if (this._lastDetected < core.frame) {
             ctx.clearRect(0, 0, this.width, this.height);
             this._detectrendering(this);
-            this._lastDetected = game.frame;
+            this._lastDetected = core.frame;
         }
         var color = ctx.getImageData(x, y, 1, 1).data;
         return this._colorManager.getSpriteByColor(color);
