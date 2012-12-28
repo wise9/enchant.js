@@ -434,7 +434,7 @@ enchant.Class.getInheritanceTree = function(Constructor) {
  * @namespace
  [lang:ja]
  * enchant.js の環境変数.
- * new Game() を呼ぶ前に変更することで変更することで, 動作設定を変えることができる.
+ * new Core() を呼ぶ前に変更することで変更することで, 動作設定を変えることができる.
  [/lang]
  [lang:en]
  * Environment variable.
@@ -4260,12 +4260,12 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this.width !== 0 && this.height !== 0) {
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             var cvs = this._context.canvas;
-                ctx.drawImage(cvs, 0, 0, game.width, game.height);
+                ctx.drawImage(cvs, 0, 0, core.width, core.height);
             ctx.restore();
         }
     },
@@ -4732,7 +4732,7 @@ enchant.DetectColorManager = enchant.Class.create({
 
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementDefinition) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         this.layer = null;
         this.targetNode = node;
         if (typeof elementDefinition === 'string') {
@@ -4743,7 +4743,7 @@ enchant.DomManager = enchant.Class.create({
         this.style = this.element.style;
         this.style.position = 'absolute';
         this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0px 0px';
-        if (game._debug) {
+        if (core._debug) {
             this.style.border = '1px solid blue';
             this.style.margin = '-1px';
         }
@@ -4992,11 +4992,11 @@ enchant.DomlessManager = enchant.Class.create({
 
 enchant.DomLayer = enchant.Class.create(enchant.Group, {
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         enchant.Group.call(this);
 
-        this.width = this._width = game.width;
-        this.height = this._height = game.height;
+        this.width = this._width = core.width;
+        this.height = this._height = core.height;
 
         this._touchEventTarget = null;
 
@@ -5145,7 +5145,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * @constructs
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         enchant.Group.call(this);
 
@@ -5155,17 +5155,17 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         };
         this._cvsCache.layer = this;
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
         this._element = document.createElement('canvas');
-        this._element.width = game.width;
-        this._element.height = game.height;
+        this._element.width = core.width;
+        this._element.height = core.height;
         this._element.style.position = 'absolute';
 
         this._detect = document.createElement('canvas');
-        this._detect.width = game.width;
-        this._detect.height = game.height;
+        this._detect.width = core.width;
+        this._detect.height = core.height;
         this._detect.style.position = 'absolute';
         this._lastDetected = 0;
 
@@ -5245,14 +5245,14 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     _onexitframe: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var ctx = this.context;
-        ctx.clearRect(0, 0, game.width, game.height);
+        ctx.clearRect(0, 0, core.width, core.height);
         var render = new enchant.Event(enchant.Event.RENDER);
         this._rendering(this, render);
     },
     _rendering:  function(node, e) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
         var width = node.width;
@@ -5281,7 +5281,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 node.cvsRender(ctx);
             }
 
-            if (game._debug) {
+            if (core._debug) {
                 if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
                     ctx.strokeStyle = '#ff0000';
                 } else {
@@ -5358,12 +5358,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         return this._getEntityByPosition(e.x, e.y);
     },
     _getEntityByPosition: function(x, y) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var ctx = this._dctx;
-        if (this._lastDetected < game.frame) {
+        if (this._lastDetected < core.frame) {
             ctx.clearRect(0, 0, this.width, this.height);
             this._detectrendering(this);
-            this._lastDetected = game.frame;
+            this._lastDetected = core.frame;
         }
         var color = ctx.getImageData(x, y, 1, 1).data;
         return this._colorManager.getSpriteByColor(color);
@@ -5436,13 +5436,13 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @extends enchant.Group
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         // Call initialize method of enchant.Group
         enchant.Group.call(this);
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
         // All nodes (entities, groups, scenes) have reference to the scene that it belongs to.
         this.scene = this;
@@ -5456,7 +5456,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Core.instance.scale + ')';
 
         this._layers = {};
         this._layerPriority = [];
@@ -5543,12 +5543,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
     },
     addLayer: function(type, i) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this._layers[type]) {
             return;
         }
         var layer = new enchant[type + 'Layer']();
-        if (game.currentScene === this) {
+        if (core.currentScene === this) {
             layer._startRendering();
         }
         this._layers[type] = layer;
@@ -5598,13 +5598,13 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         for (var type in this._layers) {
             this._layers[type]._startRendering();
         }
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         for (var type in this._layers) {
             this._layers[type]._stopRendering();
         }
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
 
@@ -5865,7 +5865,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * übergeben werden, werden diese auf die Canvas drawImage Methode angewendet.
      *
      * @example
-     *   var src = game.assets['src.gif'];
+     *   var src = core.assets['src.gif'];
      *   var dst = new Surface(100, 100);
      *   dst.draw(src);         // Zeichnet src bei (0, 0)
      *   dst.draw(src, 50, 50); // Zeichnet src bei (50, 50)
@@ -6199,7 +6199,7 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.DOMSound.load = function(src, type, callback) {
     if (type == null) {
-        var ext = enchant.Game.findExt(src);
+        var ext = enchant.Core.findExt(src);
         if (ext) {
             type = 'audio/' + ext;
         } else {
@@ -6231,7 +6231,7 @@ enchant.DOMSound.load = function(src, type, callback) {
             sound._element = audio;
         } else if (type === 'audio/mpeg') {
             var embed = document.createElement('embed');
-            var id = 'enchant-audio' + enchant.Game.instance._soundID++;
+            var id = 'enchant-audio' + enchant.Core.instance._soundID++;
             embed.width = embed.height = 1;
             embed.name = id;
             embed.src = 'sound.swf?id=' + id + '&src=' + src;
@@ -6260,7 +6260,7 @@ enchant.DOMSound.load = function(src, type, callback) {
                 sound._element = embed;
                 sound.duration = embed.getDuration();
             });
-            enchant.Game.instance._element.appendChild(embed);
+            enchant.Core.instance._element.appendChild(embed);
             enchant.DOMSound[id] = sound;
         } else {
             window.setTimeout(function() {
