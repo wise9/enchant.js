@@ -1773,35 +1773,17 @@ enchant.EventTarget = enchant.Class.create({
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
-            this._keybind = enchant.ENV.KEY_BIND_TABLE || {};
+            if (!enchant.ENV.KEY_BIND_TABLE) {
+                enchant.ENV.KEY_BIND_TABLE = {};
+            }
+            this._keybind = enchant.ENV.KEY_BIND_TABLE;
+            this.pressedKeysNum = 0;
+            this._internalButtondownListeners = {};
+            this._internalButtonupListeners = {};
 
-            var c = 0;
-            ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
-                this.addEventListener(type + 'buttondown', function(e) {
-                    var inputEvent;
-                    if (!this.input[type]) {
-                        this.input[type] = true;
-                        inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
-                        this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                });
-                this.addEventListener(type + 'buttonup', function(e) {
-                    var inputEvent;
-                    if (this.input[type]) {
-                        this.input[type] = false;
-                        inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
-                        this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                });
-            }, this);
+            for (var prop in this._keybind) {
+                this.keybind(prop, this._keybind[prop]);
+            }
 
             if (initial) {
                 stage = enchant.Core.instance._element;
@@ -2497,15 +2479,11 @@ enchant.EventTarget = enchant.Class.create({
          [lang:ja]
          * キーバインドを設定する.
          *
-         * キー入力をleft, right, up, down, a, bいずれかのボタン入力として割り当てる.
-         *
          * @param {Number} key キーバインドを設定するキーコード.
          * @param {String} button 割り当てるボタン.
          [/lang]
          [lang:en]
          * Set a key binding.
-         *
-         * Maps an input key to an enchant.js left, right, up, down, a, b button.
          *
          * @param {Number} key Key code for the button which will be bound.
          * @param {String} button The enchant.js button (left, right, up, down, a, b).
@@ -2513,14 +2491,70 @@ enchant.EventTarget = enchant.Class.create({
          [lang:de]
          * Bindet eine Taste.
          *
-         * Diese Methode bindet eine Taste an einen in enchant.js verwendeten Knopf (Button).
-         *
          * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
          * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
          [/lang]
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
+            var onxbuttondown = function(e) {
+                var inputEvent;
+                if (!this.input[button]) {
+                    this.input[button] = true;
+                    inputEvent = new enchant.Event((this.pressedKeysNum++) ? 'inputchange' : 'inputstart');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            };
+            var onxbuttonup = function(e) {
+                var inputEvent;
+                if (this.input[button]) {
+                    this.input[button] = false;
+                    inputEvent = new enchant.Event((--this.pressedKeysNum) ? 'inputchange' : 'inputend');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            };
+
+            this.addEventListener(button + 'buttondown', onxbuttondown);
+            this.addEventListener(button + 'buttonup', onxbuttonup);
+
+            this._internalButtondownListeners[key] = onxbuttondown;
+            this._internalButtonupListeners[key] = onxbuttonup;
+        },
+        /**
+         [lang:ja]
+         * キーバインドを削除する.
+         *
+         * @param {Number} key 削除するキーコード.
+         [/lang]
+         [lang:en]
+         * Delete a key binding.
+         *
+         * @param {Number} key Key code that want to delete.
+         [/lang]
+         [lang:de]
+         * Entbindet eine Taste.
+         *
+         * @param {Number} key Der Tastencode der entfernt werden soll.
+         [/lang]
+         */
+        keyunbind: function(key) {
+            if (!this._keybind[key]) {
+                return;
+            }
+            var buttondowns = this._internalButtondownListeners;
+            var buttonups = this._internalButtonupListeners;
+
+            this.removeEventListener(key + 'buttondown', buttondowns);
+            this.removeEventListener(key + 'buttonup', buttonups);
+
+            delete buttondowns[key];
+            delete buttonups[key];
+
+            delete this._keybind[key];
         },
         /**
          [lang:ja]
@@ -5465,10 +5499,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._layers = {};
         this._layerPriority = [];
 
-        // Add layers
-        this.addLayer('Canvas');
-        this.addLayer('Dom');
-
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
         this.addEventListener(enchant.Event.ENTER, this._onenter);
@@ -5558,7 +5588,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._layers[type] = layer;
         var element = layer._element;
         if (typeof i === 'number') {
-            var nextSibling = this._element.childNodes.indexOf(i);
+            var nextSibling = this._element.childNodes[i];
             this._element.insertBefore(element, nextSibling);
             this._layerPriority.splice(i, 0, type);
         } else {
@@ -5585,9 +5615,15 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var child = e.node;
         var next = e.next;
         if (child._element) {
+            if (!this._layers.Dom) {
+                this.addLayer('Dom', 1);
+            }
             this._layers.Dom.insertBefore(child, next);
             child._layer = this._layers.Dom;
         } else {
+            if (!this._layers.Canvas) {
+                this.addLayer('Canvas', 0);
+            }
             this._layers.Canvas.insertBefore(child, next);
             child._layer = this._layers.Canvas;
         }
@@ -5609,6 +5645,70 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._layers[type]._stopRendering();
         }
         enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
+    }
+});
+
+/**
+ * @scope enchant.CanvasScene.prototype
+ * @type {*}
+ */
+enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
+    initialize: function() {
+        enchant.Scene.call(this);
+        this.addLayer('Canvas');
+    },
+    _determineEventTarget: function(e) {
+        var target = this._layers.Canvas._determineEventTarget(e);
+        if (!target) {
+            target = this;
+        }
+        return target;
+    },
+    _onchildadded: function(e) {
+        var child = e.node;
+        var next = e.next;
+        this._layers.Canvas.insertBefore(child, next);
+        child._layer = this._layers.Canvas;
+    },
+    _onenter: function() {
+        this._layers.Canvas._startRendering();
+        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+    },
+    _onexit: function() {
+        this._layers.Canvas._stopRendering();
+        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+    }
+});
+
+/**
+ * @scope enchant.CanvasScene.prototype
+ * @type {*}
+ */
+enchant.DOMScene = enchant.Class.create(enchant.Scene, {
+    initialize: function() {
+        enchant.Scene.call(this);
+        this.addLayer('Dom');
+    },
+    _determineEventTarget: function(e) {
+        var target = this._layers.Dom._determineEventTarget(e);
+        if (!target) {
+            target = this;
+        }
+        return target;
+    },
+    _onchildadded: function(e) {
+        var child = e.node;
+        var next = e.next;
+        this._layers.Dom.insertBefore(child, next);
+        child._layer = this._layers.Dom;
+    },
+    _onenter: function() {
+        this._layers.Dom._startRendering();
+        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+    },
+    _onexit: function() {
+        this._layers.Dom._stopRendering();
+        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
 
