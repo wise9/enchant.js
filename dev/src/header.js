@@ -90,7 +90,7 @@ window.requestAnimationFrame =
         return function(func) {
             var currentTime = window.getTime();
             var _id = setTimeout(function() {
-                func(currentTime);
+                func(window.getTime());
             }, Math.max(0, lastTime + frame - currentTime));
             lastTime = currentTime;
             return _id;
