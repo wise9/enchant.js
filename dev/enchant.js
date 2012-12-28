@@ -74,9 +74,13 @@ if (typeof Function.prototype.bind !== 'function') {
 window.getTime = (function() {
 
     if (window.performance && window.performance.now) {
-        return window.performance.now;
+        return function() {
+            return window.performance.now();
+        };
     } else if (window.performance && window.performance.webkitNow) {
-        return window.performance.webkitNow;
+        return function() {
+            return window.performance.webkitNow();
+        };
     } else {
         return Date.now;
     }
@@ -91,12 +95,15 @@ window.requestAnimationFrame =
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
     (function() {
-        var time = window.getTime();
+        var lastTime = window.getTime();
+        var frame = 1000 / 60;
         return function(func) {
-            return setTimeout(function() {
-                time = window.getTime();
-                func(window.getTime(time));
-            }, 1000 / 60);
+            var currentTime = window.getTime();
+            var _id = setTimeout(function() {
+                func(window.getTime());
+            }, Math.max(0, lastTime + frame - currentTime));
+            lastTime = currentTime;
+            return _id;
         };
     }());
 
@@ -2237,10 +2244,7 @@ enchant.EventTarget = enchant.Class.create({
             e.elapsed = now - this.currentTime;
 
             // frame fragment time, will be used in _checkTick
-            // this._nextTime = 1000 / this.fps;
-            this._nextTime = 2 * this.currentTime - now + 1000 / this.fps;
-            // this._nextTime = now + 1000 / this.fps;
-            this.currentTime = now;
+            this._nextTime = now + 1000 / this.fps;
             this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
