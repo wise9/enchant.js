@@ -87,7 +87,7 @@ window.requestAnimationFrame =
             var currentTime = window.getTime();
             var _id = setTimeout(function() {
                 func(currentTime);
-            }, lastTime + frame - currentTime);
+            }, Math.max(0, lastTime + frame - currentTime));
             lastTime = currentTime;
             return _id;
         };
