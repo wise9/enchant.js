@@ -64,9 +64,13 @@ if (typeof Function.prototype.bind !== 'function') {
 window.getTime = (function() {
 
     if (window.performance && window.performance.now) {
-        return window.performance.now;
+        return function() {
+            return window.performance.now();
+        };
     } else if (window.performance && window.performance.webkitNow) {
-        return window.performance.webkitNow;
+        return function() {
+            return window.performance.webkitNow();
+        };
     } else {
         return Date.now;
     }
