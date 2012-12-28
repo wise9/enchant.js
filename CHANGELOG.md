@@ -1,3 +1,10 @@
+# v0.6.2
+
+- features
+    - support requestAnimationFrame API (feature/requestAnimationFrame, #131)
+    - better keybind (feature/better-keybind, #148)
+    - improved performance on Android (feature/lazy-scene, #145)
+
 # v0.6.0
 
 - features
