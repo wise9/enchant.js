@@ -794,9 +794,9 @@
             e.elapsed = now - this.currentTime;
 
             // frame fragment time, will be used in _checkTick
-            //this._nextTime = 1000 / this.fps;
+            // this._nextTime = 1000 / this.fps;
             this._nextTime = 2 * this.currentTime - now + 1000 / this.fps;
-            //this._nextTime = now + 1000 / this.fps;
+            // this._nextTime = now + 1000 / this.fps;
             this.currentTime = now;
             this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 

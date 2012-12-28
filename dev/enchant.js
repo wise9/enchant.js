@@ -71,11 +71,34 @@ if (typeof Function.prototype.bind !== 'function') {
     };
 }
 
+window.getTime = (function() {
+
+    if (window.performance && window.performance.now) {
+        return window.performance.now;
+    } else if (window.performance && window.performance.webkitNow) {
+        return window.performance.webkitNow;
+    } else {
+        return Date.now;
+    }
+}());
+
 /**
  * define requestAnimationFrame
  */
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-    window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+window.requestAnimationFrame =
+    window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    (function() {
+        var time = window.getTime();
+        return function(func) {
+            return setTimeout(function() {
+                time = window.getTime();
+                func(window.getTime(time));
+            }, 1000 / 60);
+        };
+    }());
 
 /**
  [lang:ja]
@@ -201,6 +224,7 @@ window.addEventListener("message", function(msg, origin) {
         // ignore
     }
 }, false);
+
 /**
  * @name enchant.Class
  * @class
@@ -2093,9 +2117,8 @@ enchant.EventTarget = enchant.Class.create({
          */
         start: function() {
             var onloadTimeSetter = function() {
-                console.log('game.start');
                 this.currentTime = this.getTime();
-                this._frameDelay = 0;
+                this._nextTime = 0;
                 this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
                 this.ready = true;
@@ -2186,23 +2209,12 @@ enchant.EventTarget = enchant.Class.create({
          * [/lang]
          * @private
          */
-        _requestNextFrame: function(elapsed) {
+        _requestNextFrame: function() {
             if (!this.ready) {
                 return;
             }
             var core = this;
-            if (window.requestAnimationFrame) {
-                window.requestAnimationFrame(function() {
-                    core._checkTick.call(core);
-                });
-            } else {
-                var rest = elapsed - 1000 / this.fps;
-                var processTime = (this.getTime() - this.currentTime);
-                var delay = Math.max(0, 1000 / this.fps - processTime - rest);
-                window.setTimeout(function() {
-                    core._tick.call(core);
-                }, delay);
-            }
+            window.requestAnimationFrame(core._checkTick);
         },
         /**
          * [lang:ja]
@@ -2210,25 +2222,26 @@ enchant.EventTarget = enchant.Class.create({
          * [/lang]
          * @private
          */
-        _checkTick: function() {
-            var now = this.getTime();
-            if (now - this.currentTime + this._frameDelay >= 1000 / this.fps) {
-                this._tick();
+        _checkTick: function(now) {
+            var core = enchant.Core.instance;
+            if (core._nextTime < now) {
+                // if enough time has passed, execute _tick
+                core._tick(now);
             } else {
-                window.requestAnimationFrame(function() {
-                    core._checkTick.call(core);
-                });
+                // if enough time has not passed yet, request next frame
+                window.requestAnimationFrame(core._checkTick);
             }
         },
-        _tick: function() {
-            var now = this.getTime();
+        _tick: function(now) {
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
+
+            // frame fragment time, will be used in _checkTick
+            // this._nextTime = 1000 / this.fps;
+            this._nextTime = 2 * this.currentTime - now + 1000 / this.fps;
+            // this._nextTime = now + 1000 / this.fps;
             this.currentTime = now;
-
-            this._frameDelay = Math.max(0, e.elapsed - 1000 / this.fps);
-
-            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : null;
+            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -2247,16 +2260,10 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
-            this._requestNextFrame(e.elapsed);
+            this._requestNextFrame();
         },
         getTime: function() {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
-            } else if (window.performance && window.performance.webkitNow) {
-                return window.performance.webkitNow();
-            } else {
-                return Date.now();
-            }
+            return window.getTime();
         },
         /**
          [lang:ja]
@@ -5023,6 +5030,7 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             enchant.DomLayer._attachDomManager(child, __onchildadded, __onchildremoved);
             self._domManager.addManager(child._domManager, nextManager);
             var render = new enchant.Event(enchant.Event.RENDER);
+            child._dirty = true;
             self._domManager.layer._rendering(child, render);
         };
 
@@ -5194,6 +5202,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (self._dirty) {
                 self._updateCoordinate();
             }
+            child._dirty = true;
             enchant.Matrix.instance.stack.push(self._matrix);
             layer._rendering(child, render);
             enchant.Matrix.instance.stack.pop(self._matrix);
