@@ -81,12 +81,15 @@ window.requestAnimationFrame =
     window.webkitRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
     (function() {
-        var time = window.getTime();
+        var lastTime = window.getTime();
+        var frame = 1000 / 60;
         return function(func) {
-            return setTimeout(function() {
-                time = window.getTime();
-                func(window.getTime(time));
-            }, 1000 / 60);
+            var currentTime = window.getTime();
+            var _id = setTimeout(function() {
+                func(currentTime);
+            }, lastTime + frame - currentTime);
+            lastTime = currentTime;
+            return _id;
         };
     }());
 
