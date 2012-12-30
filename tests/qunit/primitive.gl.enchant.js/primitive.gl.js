@@ -8,7 +8,6 @@ module('primitive.gl.enchant.js', {
 });
 
 if (document.createElement('canvas').getContext('experimental-webgl')) {
-
     /*
      * issue#54.
      *

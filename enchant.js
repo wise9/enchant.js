@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.6.1
+ * enchant.js v0.6.2
  * http://enchantjs.com
  * 
  * Copyright Ubiquitous Entertainment Inc.
@@ -1610,6 +1610,8 @@ enchant.EventTarget = enchant.Class.create({
 
 /**
  * enchant.Core is moved to enchant.Core from v0.6
+ * @class
+ * Game = Core
  * @type {*}
  */
 enchant.Game = enchant.Core;
@@ -3843,11 +3845,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @extends enchant.Group
      */
     initialize: function() {
-<<<<<<< HEAD
-        var game = enchant.Game.instance;
-=======
         var core = enchant.Core.instance;
->>>>>>> develop
 
         // Call initialize method of enchant.Group
         enchant.Group.call(this);
@@ -3872,13 +3870,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._layers = {};
         this._layerPriority = [];
 
-<<<<<<< HEAD
-        // Add layers
-        this.addLayer('Canvas');
-        this.addLayer('Dom');
-
-=======
->>>>>>> develop
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
         this.addEventListener(enchant.Event.ENTER, this._onenter);
@@ -4594,8 +4585,14 @@ if(window.AudioContext){
 }
 
 /* jshint newcap: false */
-
+/**
+ * サウンドクラス。
+ * WebAudio API が利用できるならば, WebAudioSound, DOMSound へのエイリアスとなる。
+ * @class
+ * @type {*}
+ */
 enchant.Sound = window.AudioContext && enchant.ENV.USE_WEBAUDIO ? enchant.WebAudioSound : enchant.DOMSound;
+
 
 /**
  * ============================================================================================

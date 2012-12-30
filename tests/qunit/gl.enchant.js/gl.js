@@ -13,7 +13,6 @@ module('gl.enchant.js', {
  * 
  * Quat#slerp
  */
-
 if (document.createElement('canvas').getContext('experimental-webgl')) {
     test('Quat#slerp', function() {
         function nearlyEqual(numA, numB, message) {
