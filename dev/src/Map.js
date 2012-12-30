@@ -3,6 +3,7 @@
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Map
      * @class
      [lang:ja]
      * タイルセットからマップを生成して表示するクラス.
@@ -427,12 +428,12 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this.width !== 0 && this.height !== 0) {
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             var cvs = this._context.canvas;
-                ctx.drawImage(cvs, 0, 0, game.width, game.height);
+                ctx.drawImage(cvs, 0, 0, core.width, core.height);
             ctx.restore();
         }
     },

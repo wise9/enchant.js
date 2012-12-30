@@ -3,6 +3,7 @@
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Surface
      * @class
      [lang:ja]
      * canvas要素をラップしたクラス.
@@ -254,7 +255,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * übergeben werden, werden diese auf die Canvas drawImage Methode angewendet.
      *
      * @example
-     *   var src = game.assets['src.gif'];
+     *   var src = core.assets['src.gif'];
      *   var dst = new Surface(100, 100);
      *   dst.draw(src);         // Zeichnet src bei (0, 0)
      *   dst.draw(src, 50, 50); // Zeichnet src bei (50, 50)

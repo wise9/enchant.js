@@ -19,6 +19,8 @@
  * Primitive objects for gl.enchant.js
  [/lang]
  */
+
+
 if (enchant.gl !== undefined) {
     (function() {
         enchant.gl.primitive = {};

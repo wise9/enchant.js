@@ -1,13 +1,19 @@
-﻿var context, core, label;
+var context, core, label;
 module('Label.textAlign', {
     setup: function () {
         enchant();
-        core = new Core(320, 320);
+        core = new enchant.Core(320, 320);
+
+        // dummy label for activate canvas layer
+        dummylabel = new Label('.');
+        dummylabel.moveTo(320, 320);
+        core.rootScene.addChild(dummylabel);
+
         context = document.getElementsByTagName('canvas')[0].getContext('2d');
 
         // using multibyte char in tests causes problem when running on phantomjs
         label = new Label('*');
-        label.color = '#f00'
+        label.color = '#f00';
         label.font = '10px monospace';
 
         ok(!verifyTextAt('left'));

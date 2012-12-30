@@ -435,10 +435,10 @@ enchant.box2d = {};
          * removeChildではなくこちらでSpriteを取り除く
          */
         destroy: function() {
-            if (this.scene != null) {
-                world.DestroyBody(this.body.m_body);
-                this.body.Destroy();
-                this.scene.removeChild(this);
+            world.DestroyBody(this.body.m_body);
+            this.body.Destroy();
+            if (this.parentNode !== null) {
+                this.parentNode.removeChild(this);
             }
         }
 

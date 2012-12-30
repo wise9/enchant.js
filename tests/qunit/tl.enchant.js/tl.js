@@ -11,7 +11,6 @@ module('tl.enchant.js', {
     }
 });
 
-
 test('tl.frameBased', function() {
     var sprite = enchant.Core.instance.rootScene.childNodes[0];
 

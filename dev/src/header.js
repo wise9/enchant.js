@@ -1,3 +1,6 @@
+/**
+ * ECMA-262 5th edition Functions
+ */
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -29,7 +32,7 @@ if (typeof Object.create !== 'function') {
 
         F.prototype = prototype;
         var obj = new F();
-        if (descs != null){
+        if (descs != null) {
             Object.defineProperties(obj, descs);
         }
         return obj;
@@ -57,6 +60,42 @@ if (typeof Function.prototype.bind !== 'function') {
         return bound;
     };
 }
+
+window.getTime = (function() {
+
+    if (window.performance && window.performance.now) {
+        return function() {
+            return window.performance.now();
+        };
+    } else if (window.performance && window.performance.webkitNow) {
+        return function() {
+            return window.performance.webkitNow();
+        };
+    } else {
+        return Date.now;
+    }
+}());
+
+/**
+ * define requestAnimationFrame
+ */
+window.requestAnimationFrame =
+    window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    (function() {
+        var lastTime = window.getTime();
+        var frame = 1000 / 60;
+        return function(func) {
+            var currentTime = window.getTime();
+            var _id = setTimeout(function() {
+                func(window.getTime());
+            }, Math.max(0, lastTime + frame - currentTime));
+            lastTime = currentTime;
+            return _id;
+        };
+    }());
 
 /**
  [lang:ja]
@@ -104,6 +143,9 @@ if (typeof Function.prototype.bind !== 'function') {
  *
  * @param {...String} [modules] Module die exportiert werden sollen.
  [/lang]
+ * @global
+ * @type {Object}
+ * @name enchant
  */
 var enchant = function(modules) {
     if (modules != null) {
@@ -117,7 +159,7 @@ var enchant = function(modules) {
     (function include(module, prefix) {
         var submodules = [],
             i, len;
-        for (var prop in module){
+        for (var prop in module) {
             if (module.hasOwnProperty(prop)) {
                 if (typeof module[prop] === 'function') {
                     window[prop] = module[prop];

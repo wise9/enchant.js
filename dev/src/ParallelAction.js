@@ -3,8 +3,9 @@
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {
     /**
-     * [lang:ja]
+     * @name enchant.ParallelAction
      * @class
+     * [lang:ja]
      * アクションを並列で実行するためのアクション。
      * 子アクションを複数持つことができる。
      * [/lang]

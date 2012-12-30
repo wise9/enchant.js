@@ -1,7 +1,8 @@
 /**
+ * @namespace
  [lang:ja]
- * enchant.js の環境変数。new Game() を呼ぶ前に変更することで変更することで、動作設定を変えることができる。
- * @type {Object}
+ * enchant.js の環境変数.
+ * new Core() を呼ぶ前に変更することで変更することで, 動作設定を変えることができる.
  [/lang]
  [lang:en]
  * Environment variable.
@@ -12,6 +13,11 @@
  * @type {Object}
  */
 enchant.ENV = {
+    /**
+     * Version of enchant.js
+     * @type {String}
+     */
+    VERSION: "0.6.1",
     /**
      * The CSS vendor prefix of the current browser.
      * @type {String}

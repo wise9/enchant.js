@@ -41,4 +41,3 @@ if (document.createElement('canvas').getContext('experimental-webgl')) {
 } else {
     console.log('\nskipping tests using webgl..');
 }
-

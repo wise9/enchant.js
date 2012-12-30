@@ -5,7 +5,7 @@ window.onload = function(){
     game.fps = 15;
     game.preload("chara1.png");
     game.onload = function(){
-        bear = new Sprite(32, 32);
+        var bear = new Sprite(32, 32);
         bear.image = game.assets["chara1.png"];
         bear.x = 0;
         bear.y = 0;

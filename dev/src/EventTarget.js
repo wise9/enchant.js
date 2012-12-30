@@ -3,6 +3,7 @@
  */
 enchant.EventTarget = enchant.Class.create({
     /**
+     * @name enchant.EventTarget
      * @class
      [lang:ja]
      * DOM Event風味の独自イベント実装を行ったクラス.

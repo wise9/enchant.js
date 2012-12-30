@@ -6,15 +6,15 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
             meta: {
-                version: 'v0.6.1',
+                version: 'v0.6.2',
                 banner: '/**\n\
  * enchant.js <%= meta.version %>\n\
  * http://enchantjs.com\n\
  * \n\
  * Copyright Ubiquitous Entertainment Inc.\n\
- * Released under MIT license.\n\
+ * Released under the MIT license.\n\
  */',
-                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Copyright (c) Ubiquitous Entertainment Inc. Released Under MIT license. */'
+                min_banner: '/* enchant.js <%= meta.version %> http://enchantjs.com Copyright (c) Ubiquitous Entertainment Inc. Released Under the MIT license. */'
             },
             lint: {
                 core: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); })],
@@ -46,7 +46,13 @@ module.exports = function(grunt) {
                         'dev/src/DomLayer.js',
                         'dev/src/CanvasLayer.js',
                         'dev/src/Scene.js',
+                        'dev/src/CanvasScene.js',
+                        'dev/src/DOMScene.js',
                         'dev/src/Surface.js',
+
+                        // sound support
+                        'dev/src/DOMSound.js',
+                        'dev/src/WebAudioSound.js',
                         'dev/src/Sound.js',
 
                         // animation feature
@@ -75,9 +81,9 @@ module.exports = function(grunt) {
                 plugins: {
                     files: [
                         'dev/src/*.js',
-                        'dev/plugins/*.js',
+                        'dev/plugins/*.js'
                     ],
-                    tasks: 'lint:core concat min qunit exec:lang'
+                    tasks: 'lint:core concat min exec:lang'
                 }
             },
             jshint: {

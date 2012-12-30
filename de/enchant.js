@@ -3,11 +3,14 @@
  * http://enchantjs.com
  * 
  * Copyright Ubiquitous Entertainment Inc.
- * Released under MIT license.
+ * Released under the MIT license.
  */
 
 (function(window, undefined){
 
+/**
+ * ECMA-262 5th edition Functions
+ */
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -39,7 +42,7 @@ if (typeof Object.create !== 'function') {
 
         F.prototype = prototype;
         var obj = new F();
-        if (descs != null){
+        if (descs != null) {
             Object.defineProperties(obj, descs);
         }
         return obj;
@@ -68,6 +71,42 @@ if (typeof Function.prototype.bind !== 'function') {
     };
 }
 
+window.getTime = (function() {
+
+    if (window.performance && window.performance.now) {
+        return function() {
+            return window.performance.now();
+        };
+    } else if (window.performance && window.performance.webkitNow) {
+        return function() {
+            return window.performance.webkitNow();
+        };
+    } else {
+        return Date.now;
+    }
+}());
+
+/**
+ * define requestAnimationFrame
+ */
+window.requestAnimationFrame =
+    window.requestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    (function() {
+        var lastTime = window.getTime();
+        var frame = 1000 / 60;
+        return function(func) {
+            var currentTime = window.getTime();
+            var _id = setTimeout(function() {
+                func(window.getTime());
+            }, Math.max(0, lastTime + frame - currentTime));
+            lastTime = currentTime;
+            return _id;
+        };
+    }());
+
 /**
  * Globaler Export der Programmbibliotheken.
  *
@@ -82,6 +121,9 @@ if (typeof Function.prototype.bind !== 'function') {
  *   enchant('ui'); // enchant.js Klassen und ui.enchant.js Klassen werden exportiert.
  *
  * @param {...String} [modules] Module die exportiert werden sollen.
+ * @global
+ * @type {Object}
+ * @name enchant
  */
 var enchant = function(modules) {
     if (modules != null) {
@@ -95,7 +137,7 @@ var enchant = function(modules) {
     (function include(module, prefix) {
         var submodules = [],
             i, len;
-        for (var prop in module){
+        for (var prop in module) {
             if (module.hasOwnProperty(prop)) {
                 if (typeof module[prop] === 'function') {
                     window[prop] = module[prop];
@@ -157,7 +199,9 @@ window.addEventListener("message", function(msg, origin) {
         // ignore
     }
 }, false);
+
 /**
+ * @name enchant.Class
  * @class
  * Eine Klasse für Klassen, die Vererbung unterstützen.
  *
@@ -166,7 +210,6 @@ window.addEventListener("message", function(msg, origin) {
  * @param {*} definition Klassendefinition.
  * @constructor
  */
-
 enchant.Class = function(superclass, definition) {
     return enchant.Class.create(superclass, definition);
 };
@@ -223,9 +266,12 @@ enchant.Class = function(superclass, definition) {
  * @static
  */
 enchant.Class.create = function(superclass, definition) {
-    if (superclass == null){
-        throw new Error("superclass is undefined");
+    if (superclass == null && definition){
+        throw new Error("superclass is undefined (enchant.Class.create)");
+    }else if(superclass == null){
+        throw new Error("definition is undefined (enchant.Class.create)");
     }
+
     if (arguments.length === 0) {
         return enchant.Class.create(Object, definition);
     } else if (arguments.length === 1 && typeof arguments[0] !== 'function') {
@@ -286,10 +332,16 @@ enchant.Class.getInheritanceTree = function(Constructor) {
 };
 
 /**
+ * @namespace
  * Umgebungsvariable.
  * @type {Object}
  */
 enchant.ENV = {
+    /**
+     * Version of enchant.js
+     * @type {String}
+     */
+    VERSION: "0.6.1",
     /**
      * The CSS vendor prefix of the current browser.
      * @type {String}
@@ -393,6 +445,7 @@ enchant.ENV = {
  */
 enchant.Event = enchant.Class.create({
     /**
+     * @name enchant.Event
      * @class
      * Eine Klasse für eine unabhängige Implementierung von Ereignissen 
      * (Events), ähnlich wie DOM Events.
@@ -720,6 +773,7 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
  */
 enchant.EventTarget = enchant.Class.create({
     /**
+     * @name enchant.EventTarget
      * @class
      * Eine Klasse für eine unabhängige Implementierung von Ereignissen 
      * (Events), ähnlich wie DOM Events.
@@ -809,12 +863,12 @@ enchant.EventTarget = enchant.Class.create({
  */
 (function() {
     var core;
-
     /**
      * @scope enchant.Core.prototype
      */
     enchant.Core = enchant.Class.create(enchant.EventTarget, {
         /**
+         * @name enchant.Core
          * @class
          * Klasse, welche die Spielschleife und Szenen kontrolliert.
          *
@@ -830,6 +884,7 @@ enchant.EventTarget = enchant.Class.create({
          */
         initialize: function(width, height) {
             if (window.document.body === null) {
+                // @TODO postpone initialization after window.onload
                 throw new Error("document.body is null. Please excute 'new Core()' in window.onload.");
             }
 
@@ -919,7 +974,7 @@ enchant.EventTarget = enchant.Class.create({
              * Zeigt an ob das Spiel ausgeführt werden kann.
              * @type {Boolean}
              */
-            this.ready = null;
+            this.ready = false;
             /**
              * Zeigt an ob das Spiel derzeit ausgeführt wird.
              * @type {Boolean}
@@ -992,7 +1047,12 @@ enchant.EventTarget = enchant.Class.create({
             this._mousedownID = 0;
             this._surfaceID = 0;
             this._soundID = 0;
-            this._intervalID = null;
+
+            /**
+             * @type {Boolean}
+             * @private
+             */
+            this._activated = false;
 
             this._offsetX = 0;
             this._offsetY = 0;
@@ -1002,35 +1062,17 @@ enchant.EventTarget = enchant.Class.create({
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
-            this._keybind = enchant.ENV.KEY_BIND_TABLE || {};
+            if (!enchant.ENV.KEY_BIND_TABLE) {
+                enchant.ENV.KEY_BIND_TABLE = {};
+            }
+            this._keybind = enchant.ENV.KEY_BIND_TABLE;
+            this.pressedKeysNum = 0;
+            this._internalButtondownListeners = {};
+            this._internalButtonupListeners = {};
 
-            var c = 0;
-            ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
-                this.addEventListener(type + 'buttondown', function(e) {
-                    var inputEvent;
-                    if (!this.input[type]) {
-                        this.input[type] = true;
-                        inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
-                        this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                });
-                this.addEventListener(type + 'buttonup', function(e) {
-                    var inputEvent;
-                    if (this.input[type]) {
-                        this.input[type] = false;
-                        inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
-                        this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                });
-            }, this);
+            for (var prop in this._keybind) {
+                this.keybind(prop, this._keybind[prop]);
+            }
 
             if (initial) {
                 stage = enchant.Core.instance._element;
@@ -1275,17 +1317,16 @@ enchant.EventTarget = enchant.Class.create({
         start: function() {
             var onloadTimeSetter = function() {
                 this.currentTime = this.getTime();
-                this.removeEventListener('load',onloadTimeSetter);
-                this._intervalID = window.setInterval(function() {
-                    core._tick();
-                }, 1000 / this.fps);
+                this._nextTime = 0;
+                this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
+                this.ready = true;
+                this._requestNextFrame();
             };
-            this.addEventListener('load',onloadTimeSetter);
-            
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-            } else if (this._assets.length) {
+            this.addEventListener('load', onloadTimeSetter);
+
+            if (!this._activated && this._assets.length) {
+                this._activated = true;
                 if (enchant.Sound.enabledInMobileSafari && !core._touched &&
                     enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
                     var scene = new enchant.Scene();
@@ -1341,9 +1382,6 @@ enchant.EventTarget = enchant.Class.create({
          */
         debug: function() {
             this._debug = true;
-            this.rootScene.addEventListener("enterframe", function(time) {
-                this._actualFps = (1 / time);
-            });
             this.start();
         },
         actualFps: {
@@ -1351,11 +1389,36 @@ enchant.EventTarget = enchant.Class.create({
                 return this._actualFps || this.fps;
             }
         },
-        _tick: function() {
-            var now = this.getTime();
+        /**
+         * @private
+         */
+        _requestNextFrame: function() {
+            if (!this.ready) {
+                return;
+            }
+            var core = this;
+            window.requestAnimationFrame(core._checkTick);
+        },
+        /**
+         * @private
+         */
+        _checkTick: function(now) {
+            var core = enchant.Core.instance;
+            if (core._nextTime < now) {
+                // if enough time has passed, execute _tick
+                core._tick(now);
+            } else {
+                // if enough time has not passed yet, request next frame
+                window.requestAnimationFrame(core._checkTick);
+            }
+        },
+        _tick: function(now) {
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
-            this.currentTime = now;
+
+            // frame fragment time, will be used in _checkTick
+            this._nextTime = now + 1000 / this.fps;
+            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -1374,15 +1437,10 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+            this._requestNextFrame();
         },
         getTime: function() {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
-            }else if(window.performance && window.performance.webkitNow){
-                return window.performance.webkitNow();
-            }else{
-                return Date.now();
-            }
+            return window.getTime();
         },
         /**
          * Stoppt das Spiel.
@@ -1392,10 +1450,7 @@ enchant.EventTarget = enchant.Class.create({
          * erneut gestartet werden.
          */
         stop: function() {
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-                this._intervalID = null;
-            }
+            this.ready = false;
             this.running = false;
         },
         /**
@@ -1406,23 +1461,19 @@ enchant.EventTarget = enchant.Class.create({
          * erneut gestartet werden.
          */
         pause: function() {
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-                this._intervalID = null;
-            }
+            this.ready = false;
         },
         /**
          * Setzt die Ausführung des Spieles fort.
          */
         resume: function() {
-            if (this._intervalID) {
+            if (this.ready) {
                 return;
             }
             this.currentTime = this.getTime();
-            this._intervalID = window.setInterval(function() {
-                core._tick();
-            }, 1000 / this.fps);
+            this.ready = true;
             this.running = true;
+            this._requestNextFrame();
         },
 
         /**
@@ -1504,13 +1555,57 @@ enchant.EventTarget = enchant.Class.create({
         /**
          * Bindet eine Taste.
          *
-         * Diese Methode bindet eine Taste an einen in enchant.js verwendeten Knopf (Button).
-         *
          * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
          * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
+            var onxbuttondown = function(e) {
+                var inputEvent;
+                if (!this.input[button]) {
+                    this.input[button] = true;
+                    inputEvent = new enchant.Event((this.pressedKeysNum++) ? 'inputchange' : 'inputstart');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            };
+            var onxbuttonup = function(e) {
+                var inputEvent;
+                if (this.input[button]) {
+                    this.input[button] = false;
+                    inputEvent = new enchant.Event((--this.pressedKeysNum) ? 'inputchange' : 'inputend');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            };
+
+            this.addEventListener(button + 'buttondown', onxbuttondown);
+            this.addEventListener(button + 'buttonup', onxbuttonup);
+
+            this._internalButtondownListeners[key] = onxbuttondown;
+            this._internalButtonupListeners[key] = onxbuttonup;
+        },
+        /**
+         * Entbindet eine Taste.
+         *
+         * @param {Number} key Der Tastencode der entfernt werden soll.
+         */
+        keyunbind: function(key) {
+            if (!this._keybind[key]) {
+                return;
+            }
+            var buttondowns = this._internalButtondownListeners;
+            var buttonups = this._internalButtonupListeners;
+
+            this.removeEventListener(key + 'buttondown', buttondowns);
+            this.removeEventListener(key + 'buttonup', buttonups);
+
+            delete buttondowns[key];
+            delete buttonups[key];
+
+            delete this._keybind[key];
         },
         /**
          * Liefert die vergange Spielzeit (keine reale) die seit dem Aufruf von core.start
@@ -1536,10 +1631,8 @@ enchant.EventTarget = enchant.Class.create({
             enchant.Core._loadFuncs['m4a'] =
                 enchant.Core._loadFuncs['wav'] =
                     enchant.Core._loadFuncs['ogg'] = function(src, callback, ext) {
-                        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext);
-                        this.assets[src].addEventListener('load', callback);
+                        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext, callback);
                     };
-
 
     /**
      * Get the file extension from a path
@@ -1571,13 +1664,13 @@ enchant.EventTarget = enchant.Class.create({
  * enchant.Core is moved to enchant.Core from v0.6
  * @type {*}
  */
-
 enchant.Game = enchant.Core;
 /**
  * @scope enchant.Node.prototype
  */
 enchant.Node = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Node
      * @class
      * Basisklasse für Objekte die im Darstellungsbaum, 
      * dessen Wurzel eine Szene ist, enthalten sind.
@@ -1779,6 +1872,7 @@ var _staticintersect = function(other) {
  */
 enchant.Entity = enchant.Class.create(enchant.Node, {
     /**
+     * @name enchant.Entity
      * @class
      * Eine Klasse die Objekte mit Hilfe von DOM Elementen darstellt.
      * Sollte nicht direkt verwendet werden.
@@ -1898,7 +1992,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._opacity;
         },
         set: function(opacity) {
-            this._opacity = opacity;
+            this._opacity = parseFloat(opacity);
         }
     },
     /**
@@ -2123,6 +2217,7 @@ enchant.Entity._inherited = function(subclass) {
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Sprite
      * @class
      * Eine Klasse die Grafiken darstellen kann.
      * 
@@ -2226,6 +2321,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     },
+    /**
+     * width of Sprite
+     * @type {Number}
+     */
     width: {
         get: function() {
             return this._width;
@@ -2236,6 +2335,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._dirty = true;
         }
     },
+    /**
+     * height of Sprite
+     * @type {Number}
+     */
     height: {
         get: function() {
             return this._height;
@@ -2286,6 +2389,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
  */
 enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Label
      * @class
      * Erstellt ein Label Objekt.
      * @constructs
@@ -2314,12 +2418,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             this._text = text;
             text = text.replace(/<(br|BR) ?\/?>/g, '<br/>');
             this._splitText = text.split('<br/>');
-            var metrics = this.getMetrics();
-            this._boundWidth = metrics.width;
-            this._boundHeight = metrics.height;
+            this.updateBoundArea();
             for (var i = 0, l = this._splitText.length; i < l; i++) {
                 text = this._splitText[i];
-                metrics = this.getMetrics(text);
+                var metrics = this.getMetrics(text);
                 this._splitText[i] = {};
                 this._splitText[i].text = text;
                 this._splitText[i].height = metrics.height;
@@ -2337,6 +2439,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         },
         set: function(textAlign) {
             this._style['text-align'] = textAlign;
+            this.updateBoundArea();
         }
     },
     /**
@@ -2350,6 +2453,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         },
         set: function(font) {
             this._style.font = font;
+            this.updateBoundArea();
         }
     },
     /**
@@ -2366,7 +2470,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var y = 0;
+        var x, y = 0;
         var text, buf, c;
         if (this._splitText) {
             ctx.textBaseline = 'top';
@@ -2384,7 +2488,14 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                     }
                     buf += c;
                 }
-                ctx.fillText(buf, 0, y);
+                if (this.textAlign === 'right') {
+                    x = this.width - ctx.measureText(buf).width;
+                } else if (this.textAlign === 'center') {
+                    x = (this.width - ctx.measureText(buf).width) / 2;
+                } else {
+                    x = 0;
+                }
+                ctx.fillText(buf, x, y);
                 y += text.height - 1;
             }
         }
@@ -2395,7 +2506,19 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         }
     },
     detectRender: function(ctx) {
-        ctx.fillRect(0, 0, this._boundWidth, this._boundHeight);
+        ctx.fillRect(this._boundOffset, 0, this._boundWidth, this._boundHeight);
+    },
+    updateBoundArea: function() {
+        var metrics = this.getMetrics();
+        this._boundWidth = metrics.width;
+        this._boundHeight = metrics.height;
+        if (this.textAlign === 'right') {
+            this._boundOffset = this.width - this._boundWidth;
+        } else if (this.textAlign === 'center') {
+            this._boundOffset = (this.width - this._boundWidth) / 2;
+        } else {
+            this._boundOffset = 0;
+        }
     }
 });
 
@@ -2427,6 +2550,7 @@ enchant.Label.prototype.getMetrics = function(text) {
  */
 enchant.Map = enchant.Class.create(enchant.Entity, {
     /**
+     * @name enchant.Map
      * @class
      * Eine Klasse mit der Karten aus Kacheln (Tiles)
      * erstellt und angezeigt werden können.
@@ -2762,12 +2886,12 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this.width !== 0 && this.height !== 0) {
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             var cvs = this._context.canvas;
-                ctx.drawImage(cvs, 0, 0, game.width, game.height);
+                ctx.drawImage(cvs, 0, 0, core.width, core.height);
             ctx.restore();
         }
     },
@@ -2786,6 +2910,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
  */
 enchant.Group = enchant.Class.create(enchant.Node, {
     /**
+     * @name enchant.Group
      * @class
      * Eine Klasse die mehrere {@link enchant.Node} beinhalten kann.
      *
@@ -3102,7 +3227,7 @@ enchant.DetectColorManager = enchant.Class.create({
 
 enchant.DomManager = enchant.Class.create({
     initialize: function(node, elementDefinition) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         this.layer = null;
         this.targetNode = node;
         if (typeof elementDefinition === 'string') {
@@ -3113,7 +3238,7 @@ enchant.DomManager = enchant.Class.create({
         this.style = this.element.style;
         this.style.position = 'absolute';
         this.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0px 0px';
-        if (game._debug) {
+        if (core._debug) {
             this.style.border = '1px solid blue';
             this.style.margin = '-1px';
         }
@@ -3362,11 +3487,11 @@ enchant.DomlessManager = enchant.Class.create({
 
 enchant.DomLayer = enchant.Class.create(enchant.Group, {
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         enchant.Group.call(this);
 
-        this.width = this._width = game.width;
-        this.height = this._height = game.height;
+        this.width = this._width = core.width;
+        this.height = this._height = core.height;
 
         this._touchEventTarget = null;
 
@@ -3400,6 +3525,7 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             enchant.DomLayer._attachDomManager(child, __onchildadded, __onchildremoved);
             self._domManager.addManager(child._domManager, nextManager);
             var render = new enchant.Event(enchant.Event.RENDER);
+            child._dirty = true;
             self._domManager.layer._rendering(child, render);
         };
 
@@ -3493,17 +3619,18 @@ enchant.DomLayer._detachDomManager = function(node, onchildadded, onchildremoved
 };
 
 /**
- * @scope enchant.CanvasGroup.prototype
+ * @scope enchant.CanvasLayer.prototype
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     /**
+     * @name enchant.CanvasLayer
      * @class
      * Eine Klasse die HTML Canvas für das Rendern nutzt.
      * Das Rendern der Kinder wird durch das Canvas Rendering ersetzt.
      * @constructs
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         enchant.Group.call(this);
 
@@ -3513,17 +3640,17 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         };
         this._cvsCache.layer = this;
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
         this._element = document.createElement('canvas');
-        this._element.width = game.width;
-        this._element.height = game.height;
+        this._element.width = core.width;
+        this._element.height = core.height;
         this._element.style.position = 'absolute';
 
         this._detect = document.createElement('canvas');
-        this._detect.width = game.width;
-        this._detect.height = game.height;
+        this._detect.width = core.width;
+        this._detect.height = core.height;
         this._detect.style.position = 'absolute';
         this._lastDetected = 0;
 
@@ -3560,6 +3687,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (self._dirty) {
                 self._updateCoordinate();
             }
+            child._dirty = true;
             enchant.Matrix.instance.stack.push(self._matrix);
             layer._rendering(child, render);
             enchant.Matrix.instance.stack.pop(self._matrix);
@@ -3596,16 +3724,18 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     _onexitframe: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var ctx = this.context;
-        ctx.clearRect(0, 0, game.width, game.height);
+        ctx.clearRect(0, 0, core.width, core.height);
         var render = new enchant.Event(enchant.Event.RENDER);
         this._rendering(this, render);
     },
     _rendering:  function(node, e) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
+        var width = node.width;
+        var height = node.height;
         var ctx = this.context;
         var child;
         ctx.save();
@@ -3623,22 +3753,23 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         if (typeof node._visible === 'undefined' || node._visible) {
             if (node._backgroundColor) {
                 ctx.fillStyle = node._backgroundColor;
-                ctx.fillRect(0, 0, node._width, node._height);
+                ctx.fillRect(0, 0, width, height);
             }
 
             if (node.cvsRender) {
                 node.cvsRender(ctx);
             }
 
-            if (game._debug) {
+            if (core._debug) {
                 if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
                     ctx.strokeStyle = '#ff0000';
                 } else {
                     ctx.strokeStyle = '#0000ff';
                 }
-                ctx.strokeRect(0, 0, node._width, node._height);
+                ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
+                ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
         }
@@ -3652,6 +3783,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         enchant.Matrix.instance.stack.pop();
     },
     _detectrendering: function(node) {
+        var width = node.width;
+        var height = node.height;
         var ctx = this._dctx;
         var child;
         ctx.save();
@@ -3661,10 +3794,11 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (node.detectRender) {
                 node.detectRender(ctx);
             } else {
-                ctx.fillRect(0, 0, node.width, node.height);
+                ctx.fillRect(0, 0, width, height);
             }
         }
         if (node._clipping) {
+            ctx.rect(0, 0, width, height);
             ctx.clip();
         }
         if (node.childNodes) {
@@ -3703,12 +3837,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         return this._getEntityByPosition(e.x, e.y);
     },
     _getEntityByPosition: function(x, y) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         var ctx = this._dctx;
-        if (this._lastDetected < game.frame) {
+        if (this._lastDetected < core.frame) {
             ctx.clearRect(0, 0, this.width, this.height);
             this._detectrendering(this);
-            this._lastDetected = game.frame;
+            this._lastDetected = core.frame;
         }
         var color = ctx.getImageData(x, y, 1, 1).data;
         return this._colorManager.getSpriteByColor(color);
@@ -3748,30 +3882,51 @@ enchant.CanvasLayer._detachCache = function(node, layer, onchildadded, onchildre
     }
 };
 
+/**
+ * @scope enchant.Scene.prototype
+ * @type {*}
+ */
 enchant.Scene = enchant.Class.create(enchant.Group, {
+    /**
+     * @name enchant.Scene
+     * @class
+     * Eine Klasse die zur Wurzel im Darstellungsobjektbaum wird.
+     *
+     * @example
+     *   var scene = new Scene();
+     *   scene.addChild(player);
+     *   scene.addChild(enemy);
+     *   core.pushScene(scene);
+     *
+     * @constructs
+     * @extends enchant.Group
+     */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
+
+        // Call initialize method of enchant.Group
         enchant.Group.call(this);
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
+        // All nodes (entities, groups, scenes) have reference to the scene that it belongs to.
         this.scene = this;
 
         this._backgroundColor = null;
 
+        // Create div tag which possesses its layers
         this._element = document.createElement('div');
         this._element.style.width = this.width + 'px';
         this._element.style.height = this.height + 'px';
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Core.instance.scale + ')';
 
         this._layers = {};
         this._layerPriority = [];
-        this.addLayer('Canvas');
-        this.addLayer('Dom');
+
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
         this.addEventListener(enchant.Event.ENTER, this._onenter);
@@ -3850,18 +4005,18 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
     },
     addLayer: function(type, i) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this._layers[type]) {
             return;
         }
         var layer = new enchant[type + 'Layer']();
-        if (game.currentScene === this) {
+        if (core.currentScene === this) {
             layer._startRendering();
         }
         this._layers[type] = layer;
         var element = layer._element;
         if (typeof i === 'number') {
-            var nextSibling = this._element.childNodes.indexOf(i);
+            var nextSibling = this._element.childNodes[i];
             this._element.insertBefore(element, nextSibling);
             this._layerPriority.splice(i, 0, type);
         } else {
@@ -3888,9 +4043,15 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var child = e.node;
         var next = e.next;
         if (child._element) {
+            if (!this._layers.Dom) {
+                this.addLayer('Dom', 1);
+            }
             this._layers.Dom.insertBefore(child, next);
             child._layer = this._layers.Dom;
         } else {
+            if (!this._layers.Canvas) {
+                this.addLayer('Canvas', 0);
+            }
             this._layers.Canvas.insertBefore(child, next);
             child._layer = this._layers.Canvas;
         }
@@ -3905,12 +4066,76 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         for (var type in this._layers) {
             this._layers[type]._startRendering();
         }
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         for (var type in this._layers) {
             this._layers[type]._stopRendering();
         }
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
+    }
+});
+
+/**
+ * @scope enchant.CanvasScene.prototype
+ * @type {*}
+ */
+enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
+    initialize: function() {
+        enchant.Scene.call(this);
+        this.addLayer('Canvas');
+    },
+    _determineEventTarget: function(e) {
+        var target = this._layers.Canvas._determineEventTarget(e);
+        if (!target) {
+            target = this;
+        }
+        return target;
+    },
+    _onchildadded: function(e) {
+        var child = e.node;
+        var next = e.next;
+        this._layers.Canvas.insertBefore(child, next);
+        child._layer = this._layers.Canvas;
+    },
+    _onenter: function() {
+        this._layers.Canvas._startRendering();
+        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+    },
+    _onexit: function() {
+        this._layers.Canvas._stopRendering();
+        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+    }
+});
+
+/**
+ * @scope enchant.CanvasScene.prototype
+ * @type {*}
+ */
+enchant.DOMScene = enchant.Class.create(enchant.Scene, {
+    initialize: function() {
+        enchant.Scene.call(this);
+        this.addLayer('Dom');
+    },
+    _determineEventTarget: function(e) {
+        var target = this._layers.Dom._determineEventTarget(e);
+        if (!target) {
+            target = this;
+        }
+        return target;
+    },
+    _onchildadded: function(e) {
+        var child = e.node;
+        var next = e.next;
+        this._layers.Dom.insertBefore(child, next);
+        child._layer = this._layers.Dom;
+    },
+    _onenter: function() {
+        this._layers.Dom._startRendering();
+        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+    },
+    _onexit: function() {
+        this._layers.Dom._stopRendering();
         enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
@@ -3920,6 +4145,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
  */
 enchant.Surface = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Surface
      * @class
      * Diese Klasse dient als Hüllenklasse (Wrapper) für Canvas Elemente.
      *
@@ -4030,7 +4256,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * übergeben werden, werden diese auf die Canvas drawImage Methode angewendet.
      *
      * @example
-     *   var src = game.assets['src.gif'];
+     *   var src = core.assets['src.gif'];
      *   var dst = new Surface(100, 100);
      *   dst.draw(src);         // Zeichnet src bei (0, 0)
      *   dst.draw(src, 50, 50); // Zeichnet src bei (50, 50)
@@ -4113,301 +4339,314 @@ enchant.Surface.load = function(src, callback) {
     return surface;
 };
 
-/* jshint newcap: false */
-if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
-
-    enchant.Game._loadFuncs['mp3'] =
-    enchant.Game._loadFuncs['aac'] =
-    enchant.Game._loadFuncs['m4a'] =
-    enchant.Game._loadFuncs['wav'] =
-    enchant.Game._loadFuncs['ogg'] = function(src, callback, ext) {
-        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext, callback);
-    };
-
-    enchant.Sound = enchant.Class.create(enchant.EventTarget, {
-        initialize: function() {
-            var actx = enchant.Sound.audioContext;
-            enchant.EventTarget.call(this);
-            this.src = actx.createBufferSource();
-            this.buffer = null;
-            this._volume = 1;
-            this._currentTime = 0;
-            this._state = 0;
-            this.connectTarget = enchant.Sound.destination;
-        },
-        play: function(dup) {
-            var actx = enchant.Sound.audioContext;
-            if (this._state === 2) {
-                this.src.connect(this.connectTarget);
-            } else {
-                if (this._state === 1 && !dup) {
-                    this.src.disconnect(this.connectTarget);
-                }
-                this.src = actx.createBufferSource();
-                this.src.buffer = this.buffer;
-                this.src.gain.value = this._volume;
-                this.src.connect(this.connectTarget);
-                this.src.noteOn(0);
-            }
-            this._state = 1;
-        },
-        pause: function() {
-            var actx = enchant.Sound.audioContext;
-            this.src.disconnect(this.connectTarget);
-            this._state = 2;
-        },
-        stop: function() {
-            this.src.noteOff(0);
-            this._state = 0;
-        },
-        clone: function() {
-            var sound = new enchant.Sound();
-            sound.buffer = this.buffer;
-            return sound;
-        },
-        dulation: {
-            get: function() {
-                if (this.buffer) {
-                    return this.buffer.dulation;
-                } else {
-                    return 0;
-                }
-            }
-        },
-        volume: {
-            get: function() {
-                return this._volume;
-            },
-            set: function(volume) {
-                volume = Math.max(0, Math.min(1, volume));
-                this._volume = volume;
-                if (this.src) {
-                    this.src.gain.value = volume;
-                }
-            }
-        },
-        currentTime: {
-            get: function() {
-                window.console.log('currentTime is not allowed');
-                return this._currentTime;
-            },
-            set: function(time) {
-                window.console.log('currentTime is not allowed');
-                this._currentTime = time;
-            }
-        }
-    });
-
-    enchant.Sound.load = function(src, type, callback) {
-        var actx = enchant.Sound.audioContext;
-        var xhr = new XMLHttpRequest();
-        var sound = new enchant.Sound();
-        var mimeType = 'audio/' + enchant.Game.findExt(src);
-        // TODO check Audio.canPlayType(mimeType)
-        xhr.responseType = 'arraybuffer';
-        xhr.open('GET', src, true);
-        xhr.onload = function() {
-            actx.decodeAudioData(
-                xhr.response,
-                function(buffer) {
-                    sound.buffer = buffer;
-                    callback();
-                },
-                function(error) {
-                    // TODO change to enchant Error
-                    window.console.log(error);
-                }
-            );
-        };
-        xhr.send(null);
-        return sound;
-    };
-
-    enchant.Sound.audioContext = new webkitAudioContext();
-    enchant.Sound.destination = enchant.Sound.audioContext.destination;
-
-} else {
-
+/**
+ * @scope enchant.DOMSound.prototype
+ * @type {*}
+ */
+enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
     /**
-     * @scope enchant.Sound.prototype
-     */
-    enchant.Sound = enchant.Class.create(enchant.EventTarget, {
-        /**
-         * Klasse die eine Hüllenklasse (Wrapper) für Audio Elemente darstellt. 
-         *
-         * Safari, Chrome, Firefox, Opera, und IE können alle MP3 Dateien abspielen
-         * (Firefox und Opera spielen diese mit Hilfe von Flash ab). WAVE Dateien können 
-         * Safari, Chrome, Firefox, and Opera abspielen. Sollte der Browser nicht mit
-         * dem genutzten Codec kompatibel sein, wird die Datei nicht abgespielt. 
-         *
-         * Instanzen dieser Klasse werden nicht mit Hilfe des Konstruktors, sondern mit 
-         * {@link enchant.Sound.load} erstellt.
-         * @constructs
-         */
-        initialize: function() {
-            enchant.EventTarget.call(this);
-            /**
-             * Die länge der Sounddatei in Sekunden.
-             * @type {Number}
-             */
-            this.duration = 0;
-            throw new Error("Illegal Constructor");
-        },
-        /**
-         * Startet die Wiedergabe.
-         */
-        play: function() {
-            if (this._element){
-                this._element.play();
-            }
-        },
-        /**
-         * Pausiert die Wiedergabe.
-         */
-        pause: function() {
-            if (this._element){
-                this._element.pause();
-            }
-        },
-        /**
-         * Stoppt die Wiedergabe.
-         */
-        stop: function() {
-            this.pause();
-            this.currentTime = 0;
-        },
-        /**
-         * Erstellt eine Kopie dieses Soundobjektes.
-         * @return {enchant.Sound} Kopiertes Sound Objekt.
-         */
-        clone: function() {
-            var clone;
-            if (this._element instanceof Audio) {
-                clone = Object.create(enchant.Sound.prototype, {
-                    _element: { value: this._element.cloneNode(false) },
-                    duration: { value: this.duration }
-                });
-            } else if (enchant.ENV.USE_FLASH_SOUND) {
-                return this;
-            } else {
-                clone = Object.create(enchant.Sound.prototype);
-            }
-            enchant.EventTarget.call(clone);
-            return clone;
-        },
-        /**
-         * Aktuelle Wiedergabeposition (seconds).
-         * @type {Number}
-         */
-        currentTime: {
-            get: function() {
-                return this._element ? this._element.currentTime : 0;
-            },
-            set: function(time) {
-                if (this._element){
-                    this._element.currentTime = time;
-                }
-            }
-        },
-        /**
-         * Lautstärke. 0 (stumm) ～ 1 (volle Lautstärke).
-         * @type {Number}
-         */
-        volume: {
-            get: function() {
-                return this._element ? this._element.volume : 1;
-            },
-            set: function(volume) {
-                if (this._element){
-                    this._element.volume = volume;
-                }
-            }
-        }
-    });
-
-    /**
-     * Läd eine Audio Datei und erstellt ein Sound objekt.
+     * @name enchant.DOMSound
+     * @class
+     * Klasse die eine Hüllenklasse (Wrapper) für Audio Elemente darstellt.
      *
-     * @param {String} src Pfad zu der zu ladenden Audiodatei.
-     * @param {String} [type] MIME Type der Audtiodatei.
-     * @static
+     * Safari, Chrome, Firefox, Opera, und IE können alle MP3 Dateien abspielen
+     * (Firefox und Opera spielen diese mit Hilfe von Flash ab). WAVE Dateien können
+     * Safari, Chrome, Firefox, and Opera abspielen. Sollte der Browser nicht mit
+     * dem genutzten Codec kompatibel sein, wird die Datei nicht abgespielt.
+     *
+     * Instanzen dieser Klasse werden nicht mit Hilfe des Konstruktors, sondern mit
+     * {@link enchant.DOMSound.load} erstellt.
+     * @constructs
      */
-    enchant.Sound.load = function(src, type) {
-        if (type == null) {
-            var ext = enchant.Game.findExt(src);
-            if (ext) {
-                type = 'audio/' + ext;
-            } else {
-                type = '';
+    initialize: function() {
+        enchant.EventTarget.call(this);
+        /**
+         * Die länge der Sounddatei in Sekunden.
+         * @type {Number}
+         */
+        this.duration = 0;
+        throw new Error("Illegal Constructor");
+    },
+    /**
+     * Startet die Wiedergabe.
+     */
+    play: function() {
+        if (this._element) {
+            this._element.play();
+        }
+    },
+    /**
+     * Pausiert die Wiedergabe.
+     */
+    pause: function() {
+        if (this._element) {
+            this._element.pause();
+        }
+    },
+    /**
+     * Stoppt die Wiedergabe.
+     */
+    stop: function() {
+        this.pause();
+        this.currentTime = 0;
+    },
+    /**
+     * Erstellt eine Kopie dieses Soundobjektes.
+     * @return {enchant.DOMSound} Kopiertes Sound Objekt.
+     */
+    clone: function() {
+        var clone;
+        if (this._element instanceof Audio) {
+            clone = Object.create(enchant.DOMSound.prototype, {
+                _element: { value: this._element.cloneNode(false) },
+                duration: { value: this.duration }
+            });
+        } else if (enchant.ENV.USE_FLASH_SOUND) {
+            return this;
+        } else {
+            clone = Object.create(enchant.DOMSound.prototype);
+        }
+        enchant.EventTarget.call(clone);
+        return clone;
+    },
+    /**
+     * Aktuelle Wiedergabeposition (seconds).
+     * @type {Number}
+     */
+    currentTime: {
+        get: function() {
+            return this._element ? this._element.currentTime : 0;
+        },
+        set: function(time) {
+            if (this._element) {
+                this._element.currentTime = time;
             }
         }
-        type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
+    },
+    /**
+     * Lautstärke. 0 (stumm) ～ 1 (volle Lautstärke).
+     * @type {Number}
+     */
+    volume: {
+        get: function() {
+            return this._element ? this._element.volume : 1;
+        },
+        set: function(volume) {
+            if (this._element) {
+                this._element.volume = volume;
+            }
+        }
+    }
+});
 
-        var sound = Object.create(enchant.Sound.prototype);
-        enchant.EventTarget.call(sound);
-        var audio = new Audio();
-        if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
-            enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+/**
+ * Läd eine Audio Datei und erstellt ein Sound objekt.
+ *
+ * @param {String} src Pfad zu der zu ladenden Audiodatei.
+ * @param {String} [type] MIME Type der Audtiodatei.
+ * @static
+ */
+enchant.DOMSound.load = function(src, type, callback) {
+    if (type == null) {
+        var ext = enchant.Core.findExt(src);
+        if (ext) {
+            type = 'audio/' + ext;
+        } else {
+            type = '';
+        }
+    }
+    type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
+
+    var sound = Object.create(enchant.DOMSound.prototype);
+    enchant.EventTarget.call(sound);
+    var audio = new Audio();
+    if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
+        enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+        window.setTimeout(function() {
+            sound.dispatchEvent(new enchant.Event('load'));
+        }, 0);
+    } else {
+        if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
+            audio.src = src;
+            audio.load();
+            audio.autoplay = false;
+            audio.onerror = function() {
+                throw new Error('Cannot load an asset: ' + audio.src);
+            };
+            audio.addEventListener('canplaythrough', function() {
+                sound.duration = audio.duration;
+                sound.dispatchEvent(new enchant.Event('load'));
+            }, false);
+            sound._element = audio;
+        } else if (type === 'audio/mpeg') {
+            var embed = document.createElement('embed');
+            var id = 'enchant-audio' + enchant.Core.instance._soundID++;
+            embed.width = embed.height = 1;
+            embed.name = id;
+            embed.src = 'sound.swf?id=' + id + '&src=' + src;
+            embed.allowscriptaccess = 'always';
+            embed.style.position = 'absolute';
+            embed.style.left = '-1px';
+            sound.addEventListener('load', function() {
+                Object.defineProperties(embed, {
+                    currentTime: {
+                        get: function() {
+                            return embed.getCurrentTime();
+                        },
+                        set: function(time) {
+                            embed.setCurrentTime(time);
+                        }
+                    },
+                    volume: {
+                        get: function() {
+                            return embed.getVolume();
+                        },
+                        set: function(volume) {
+                            embed.setVolume(volume);
+                        }
+                    }
+                });
+                sound._element = embed;
+                sound.duration = embed.getDuration();
+            });
+            enchant.Core.instance._element.appendChild(embed);
+            enchant.DOMSound[id] = sound;
+        } else {
             window.setTimeout(function() {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, 0);
+        }
+        sound.addEventListener('load', function() {
+            callback.call(enchant.Core.instance);
+        });
+    }
+    return sound;
+};
+
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext || window.oAudioContext;
+
+/**
+ * @scope enchant.WebAudioSound.prototype
+ * @type {*}
+ */
+enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
+    /**
+     * @name enchant.WebAudioSound
+     * @class
+     * Sound wrapper class for Web Audio API (supported on some webkit-based browsers)
+     *
+     * @constructs
+     */
+    initialize: function() {
+        if(!window.webkitAudioContext){
+            throw new Error("This browser does not support WebAudio API.");
+        }
+        var actx = enchant.WebAudioSound.audioContext;
+        enchant.EventTarget.call(this);
+        this.src = actx.createBufferSource();
+        this.buffer = null;
+        this._volume = 1;
+        this._currentTime = 0;
+        this._state = 0;
+        this.connectTarget = enchant.WebAudioSound.destination;
+    },
+    play: function(dup) {
+        var actx = enchant.WebAudioSound.audioContext;
+        if (this._state === 2) {
+            this.src.connect(this.connectTarget);
         } else {
-            if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
-                audio.src = src;
-                audio.load();
-                audio.autoplay = false;
-                audio.onerror = function() {
-                    throw new Error('Cannot load an asset: ' + audio.src);
-                };
-                audio.addEventListener('canplaythrough', function() {
-                    sound.duration = audio.duration;
-                    sound.dispatchEvent(new enchant.Event('load'));
-                }, false);
-                sound._element = audio;
-            } else if (type === 'audio/mpeg') {
-                var embed = document.createElement('embed');
-                var id = 'enchant-audio' + enchant.Game.instance._soundID++;
-                embed.width = embed.height = 1;
-                embed.name = id;
-                embed.src = 'sound.swf?id=' + id + '&src=' + src;
-                embed.allowscriptaccess = 'always';
-                embed.style.position = 'absolute';
-                embed.style.left = '-1px';
-                sound.addEventListener('load', function() {
-                    Object.defineProperties(embed, {
-                        currentTime: {
-                            get: function() {
-                                return embed.getCurrentTime();
-                            },
-                            set: function(time) {
-                                embed.setCurrentTime(time);
-                            }
-                        },
-                        volume: {
-                            get: function() {
-                                return embed.getVolume();
-                            },
-                            set: function(volume) {
-                                embed.setVolume(volume);
-                            }
-                        }
-                    });
-                    sound._element = embed;
-                    sound.duration = embed.getDuration();
-                });
-                enchant.Game.instance._element.appendChild(embed);
-                enchant.Sound[id] = sound;
+            if (this._state === 1 && !dup) {
+                this.src.disconnect(this.connectTarget);
+            }
+            this.src = actx.createBufferSource();
+            this.src.buffer = this.buffer;
+            this.src.gain.value = this._volume;
+            this.src.connect(this.connectTarget);
+            this.src.noteOn(0);
+        }
+        this._state = 1;
+    },
+    pause: function() {
+        var actx = enchant.WebAudioSound.audioContext;
+        this.src.disconnect(this.connectTarget);
+        this._state = 2;
+    },
+    stop: function() {
+        this.src.noteOff(0);
+        this._state = 0;
+    },
+    clone: function() {
+        var sound = new enchant.WebAudioSound();
+        sound.buffer = this.buffer;
+        return sound;
+    },
+    dulation: {
+        get: function() {
+            if (this.buffer) {
+                return this.buffer.dulation;
             } else {
-                window.setTimeout(function() {
-                    sound.dispatchEvent(new enchant.Event('load'));
-                }, 0);
+                return 0;
             }
         }
-        return sound;
-    };
+    },
+    volume: {
+        get: function() {
+            return this._volume;
+        },
+        set: function(volume) {
+            volume = Math.max(0, Math.min(1, volume));
+            this._volume = volume;
+            if (this.src) {
+                this.src.gain.value = volume;
+            }
+        }
+    },
+    currentTime: {
+        get: function() {
+            window.console.log('currentTime is not allowed');
+            return this._currentTime;
+        },
+        set: function(time) {
+            window.console.log('currentTime is not allowed');
+            this._currentTime = time;
+        }
+    }
+});
 
+enchant.WebAudioSound.load = function(src, type, callback) {
+    var actx = enchant.WebAudioSound.audioContext;
+    var xhr = new XMLHttpRequest();
+    var sound = new enchant.WebAudioSound();
+    var mimeType = 'audio/' + enchant.Core.findExt(src);
+    // TODO check Audio.canPlayType(mimeType)
+    xhr.responseType = 'arraybuffer';
+    xhr.open('GET', src, true);
+    xhr.onload = function() {
+        actx.decodeAudioData(
+            xhr.response,
+            function(buffer) {
+                sound.buffer = buffer;
+                callback.call(enchant.Core.instance);
+            },
+            function(error) {
+                // TODO change to enchant Error
+                window.console.log(error);
+            }
+        );
+    };
+    xhr.send(null);
+    return sound;
+};
+
+if(window.AudioContext){
+    enchant.WebAudioSound.audioContext = new window.AudioContext();
+    enchant.WebAudioSound.destination = enchant.WebAudioSound.audioContext.destination;
 }
 
+/* jshint newcap: false */
+
+enchant.Sound = window.AudioContext && enchant.ENV.USE_WEBAUDIO ? enchant.WebAudioSound : enchant.DOMSound;
 
 /**
  * ============================================================================================
@@ -4419,23 +4658,60 @@ if (window.webkitAudioContext && enchant.ENV.USE_WEBAUDIO) {
  */
 
 /**
+ * Easing function library, from "Easing Equations" by Robert Penner.
  * @type {Object}
- * @static
+ * @namespace
+ * {@link enchant.Tween} クラスで用いるイージング関数のライブラリ名前空間.
  */
 enchant.Easing = {
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     LINEAR: function(t, b, c, d) {
         return c * t / d + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SWING: function(t, b, c, d) {
         return c * (0.5 - Math.cos(((t / d) * Math.PI)) / 2) + b;
     },
     // quad
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUAD_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUAD_EASEOUT: function(t, b, c, d) {
         return -c * (t /= d) * (t - 2) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUAD_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t + b;
@@ -4443,12 +4719,33 @@ enchant.Easing = {
         return -c / 2 * ((--t) * (t - 2) - 1) + b;
     },
     // cubic
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CUBIC_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CUBIC_EASEOUT: function(t, b, c, d) {
         return c * ((t = t / d - 1) * t * t + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CUBIC_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t * t + b;
@@ -4456,12 +4753,33 @@ enchant.Easing = {
         return c / 2 * ((t -= 2) * t * t + 2) + b;
     },
     // quart
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUART_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t * t * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUART_EASEOUT: function(t, b, c, d) {
         return -c * ((t = t / d - 1) * t * t * t - 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUART_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t * t * t + b;
@@ -4469,12 +4787,33 @@ enchant.Easing = {
         return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
     },
     // quint
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUINT_EASEIN: function(t, b, c, d) {
         return c * (t /= d) * t * t * t * t + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUINT_EASEOUT: function(t, b, c, d) {
         return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     QUINT_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return c / 2 * t * t * t * t * t + b;
@@ -4482,22 +4821,64 @@ enchant.Easing = {
         return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
     },
     //sin
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SIN_EASEIN: function(t, b, c, d) {
         return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SIN_EASEOUT: function(t, b, c, d) {
         return c * Math.sin(t / d * (Math.PI / 2)) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     SIN_EASEINOUT: function(t, b, c, d) {
         return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
     },
     // circ
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CIRC_EASEIN: function(t, b, c, d) {
         return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CIRC_EASEOUT: function(t, b, c, d) {
         return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     CIRC_EASEINOUT: function(t, b, c, d) {
         if ((t /= d / 2) < 1) {
             return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
@@ -4505,6 +4886,13 @@ enchant.Easing = {
         return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
     },
     // elastic
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     ELASTIC_EASEIN: function(t, b, c, d, a, p) {
         if (t === 0) {
             return b;
@@ -4526,6 +4914,13 @@ enchant.Easing = {
         }
         return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     ELASTIC_EASEOUT: function(t, b, c, d, a, p) {
         if (t === 0) {
             return b;
@@ -4545,6 +4940,13 @@ enchant.Easing = {
         }
         return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     ELASTIC_EASEINOUT: function(t, b, c, d, a, p) {
         if (t === 0) {
             return b;
@@ -4568,6 +4970,13 @@ enchant.Easing = {
         return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
     },
     // bounce
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BOUNCE_EASEOUT: function(t, b, c, d) {
         if ((t /= d) < (1 / 2.75)) {
             return c * (7.5625 * t * t) + b;
@@ -4579,9 +4988,23 @@ enchant.Easing = {
             return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
         }
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BOUNCE_EASEIN: function(t, b, c, d) {
         return c - enchant.Easing.BOUNCE_EASEOUT(d - t, 0, c, d) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BOUNCE_EASEINOUT: function(t, b, c, d) {
         if (t < d / 2) {
             return enchant.Easing.BOUNCE_EASEIN(t * 2, 0, c, d) * 0.5 + b;
@@ -4591,18 +5014,39 @@ enchant.Easing = {
 
     },
     // back
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BACK_EASEIN: function(t, b, c, d, s) {
         if (s === undefined) {
             s = 1.70158;
         }
         return c * (t /= d) * t * ((s + 1) * t - s) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BACK_EASEOUT: function(t, b, c, d, s) {
         if (s === undefined) {
             s = 1.70158;
         }
         return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     BACK_EASEINOUT: function(t, b, c, d, s) {
         if (s === undefined) {
             s = 1.70158;
@@ -4613,12 +5057,33 @@ enchant.Easing = {
         return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
     },
     // expo
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     EXPO_EASEIN: function(t, b, c, d) {
         return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     EXPO_EASEOUT: function(t, b, c, d) {
         return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
     },
+    /**
+     * @param t
+     * @param b
+     * @param c
+     * @param d
+     * @return {Number}
+     */
     EXPO_EASEINOUT: function(t, b, c, d) {
         if (t === 0) {
             return b;
@@ -4643,6 +5108,8 @@ enchant.Easing = {
  */
 enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.ActionEventTarget
+     * @class
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -4682,6 +5149,8 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
  */
 enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
+     * @name enchant.Timeline
+     * @class
      * @constructs
      */
     initialize: function(node) {
@@ -4699,7 +5168,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      * @private
      */
     _deactivateTimeline: function() {
-        if(this._activated) {
+        if (this._activated) {
             this._activated = false;
             this.node.removeEventListener('enterframe', this._nodeEventListener);
         }
@@ -4850,7 +5319,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      */
     pause: function() {
-        if(!this.paused) {
+        if (!this.paused) {
             this.paused = true;
             this._deactivateTimeline();
         }
@@ -4859,7 +5328,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     /**
      */
     resume: function() {
-        if(this.paused) {
+        if (this.paused) {
             this.paused = false;
             this._activateTimeline();
         }
@@ -4899,6 +5368,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             onactiontick: function(evt) {
                 func.call(timeline.node);
             },
+            // if time is 0, next action will be immediately executed
             time: 0
         }));
         return this;
@@ -5133,6 +5603,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
+     * @name enchant.Action
      * @class
      * @constructs
      */
@@ -5181,6 +5652,8 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {
     /**
+     * @name enchant.ParallelAction
+     * @class
      * @constructs
      * @extends enchant.Action
      */
@@ -5251,6 +5724,8 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
  */
 enchant.Tween = enchant.Class.create(enchant.Action, {
     /**
+     * @name enchant.Tween
+     * @class
      */
     initialize: function(params) {
         var origin = {};
@@ -5304,4 +5779,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
     }
 });
+/**
+ *
+ */
 }(window));
