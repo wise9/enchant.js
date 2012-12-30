@@ -2,13 +2,13 @@
  * @scope enchant.CanvasScene.prototype
  * @type {*}
  */
-enchant.DOMScene = enchant.Class.create(enchant.Scene, {
+enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
     initialize: function() {
         enchant.Scene.call(this);
-        this.addLayer('Dom');
+        this.addLayer('Canvas');
     },
     _determineEventTarget: function(e) {
-        var target = this._layers.Dom._determineEventTarget(e);
+        var target = this._layers.Canvas._determineEventTarget(e);
         if (!target) {
             target = this;
         }
@@ -17,15 +17,15 @@ enchant.DOMScene = enchant.Class.create(enchant.Scene, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
-        this._layers.Dom.insertBefore(child, next);
-        child._layer = this._layers.Dom;
+        this._layers.Canvas.insertBefore(child, next);
+        child._layer = this._layers.Canvas;
     },
     _onenter: function() {
-        this._layers.Dom._startRendering();
+        this._layers.Canvas._startRendering();
         enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
-        this._layers.Dom._stopRendering();
+        this._layers.Canvas._stopRendering();
         enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });

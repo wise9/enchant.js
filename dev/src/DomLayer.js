@@ -1,10 +1,10 @@
 enchant.DomLayer = enchant.Class.create(enchant.Group, {
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         enchant.Group.call(this);
 
-        this.width = this._width = game.width;
-        this.height = this._height = game.height;
+        this.width = this._width = core.width;
+        this.height = this._height = core.height;
 
         this._touchEventTarget = null;
 
@@ -38,6 +38,7 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
             enchant.DomLayer._attachDomManager(child, __onchildadded, __onchildremoved);
             self._domManager.addManager(child._domManager, nextManager);
             var render = new enchant.Event(enchant.Event.RENDER);
+            child._dirty = true;
             self._domManager.layer._rendering(child, render);
         };
 

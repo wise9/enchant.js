@@ -10,7 +10,7 @@
         /**
          * @name enchant.Core
          * @class
-         [lang:ja]
+            [lang:ja]
          * アプリケーションのメインループ, シーンを管理するクラス.
          *
          * インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
@@ -136,8 +136,8 @@
                 stage.style.position = 'relative';
 
                 var bounding = stage.getBoundingClientRect();
-                this._pageX = Math.round(window.scrollX + bounding.left);
-                this._pageY = Math.round(window.scrollY + bounding.top);
+                this._pageX = Math.round(window.scrollX || window.pageXOffset + bounding.left);
+                this._pageY = Math.round(window.scrollY || window.pageYOffset + bounding.top);
             }
             if (!this.scale) {
                 this.scale = 1;
@@ -184,7 +184,7 @@
              [/lang]
              * @type {Boolean}
              */
-            this.ready = null;
+            this.ready = false;
             /**
              [lang:ja]
              * アプリが実行状態かどうか.
@@ -297,7 +297,15 @@
             this._mousedownID = 0;
             this._surfaceID = 0;
             this._soundID = 0;
-            this._intervalID = null;
+
+            /**
+             * [lang:ja]
+             * 一度でも game.start() が呼ばれたことがあるかどうか。
+             * [/lang]
+             * @type {Boolean}
+             * @private
+             */
+            this._activated = false;
 
             this._offsetX = 0;
             this._offsetY = 0;
@@ -315,35 +323,17 @@
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
-            this._keybind = enchant.ENV.KEY_BIND_TABLE || {};
+            if (!enchant.ENV.KEY_BIND_TABLE) {
+                enchant.ENV.KEY_BIND_TABLE = {};
+            }
+            this._keybind = enchant.ENV.KEY_BIND_TABLE;
+            this.pressedKeysNum = 0;
+            this._internalButtondownListeners = {};
+            this._internalButtonupListeners = {};
 
-            var c = 0;
-            ['left', 'right', 'up', 'down', 'a', 'b'].forEach(function(type) {
-                this.addEventListener(type + 'buttondown', function(e) {
-                    var inputEvent;
-                    if (!this.input[type]) {
-                        this.input[type] = true;
-                        inputEvent = new enchant.Event((c++) ? 'inputchange' : 'inputstart');
-                        this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                });
-                this.addEventListener(type + 'buttonup', function(e) {
-                    var inputEvent;
-                    if (this.input[type]) {
-                        this.input[type] = false;
-                        inputEvent = new enchant.Event((--c) ? 'inputchange' : 'inputend');
-                        this.dispatchEvent(inputEvent);
-                    }
-                    this.currentScene.dispatchEvent(e);
-                    if (inputEvent) {
-                        this.currentScene.dispatchEvent(inputEvent);
-                    }
-                });
-            }, this);
+            for (var prop in this._keybind) {
+                this.keybind(prop, this._keybind[prop]);
+            }
 
             if (initial) {
                 stage = enchant.Core.instance._element;
@@ -667,17 +657,16 @@
         start: function() {
             var onloadTimeSetter = function() {
                 this.currentTime = this.getTime();
-                this.removeEventListener('load',onloadTimeSetter);
-                this._intervalID = window.setInterval(function() {
-                    core._tick();
-                }, 1000 / this.fps);
+                this._nextTime = 0;
+                this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
+                this.ready = true;
+                this._requestNextFrame();
             };
-            this.addEventListener('load',onloadTimeSetter);
-            
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-            } else if (this._assets.length) {
+            this.addEventListener('load', onloadTimeSetter);
+
+            if (!this._activated && this._assets.length) {
+                this._activated = true;
                 if (enchant.Sound.enabledInMobileSafari && !core._touched &&
                     enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
                     var scene = new enchant.Scene();
@@ -746,9 +735,6 @@
          */
         debug: function() {
             this._debug = true;
-            this.rootScene.addEventListener("enterframe", function(time) {
-                this._actualFps = (1 / time);
-            });
             this.start();
         },
         actualFps: {
@@ -756,11 +742,42 @@
                 return this._actualFps || this.fps;
             }
         },
-        _tick: function() {
-            var now = this.getTime();
+        /**
+         * [lang:ja]
+         * 次のフレームの実行を要求する
+         * [/lang]
+         * @private
+         */
+        _requestNextFrame: function() {
+            if (!this.ready) {
+                return;
+            }
+            var core = this;
+            window.requestAnimationFrame(core._checkTick);
+        },
+        /**
+         * [lang:ja]
+         * もし1フレームぶんの時間が経過していれば、_tick 関数を実行する
+         * [/lang]
+         * @private
+         */
+        _checkTick: function(now) {
+            var core = enchant.Core.instance;
+            if (core._nextTime < now) {
+                // if enough time has passed, execute _tick
+                core._tick(now);
+            } else {
+                // if enough time has not passed yet, request next frame
+                window.requestAnimationFrame(core._checkTick);
+            }
+        },
+        _tick: function(now) {
             var e = new enchant.Event('enterframe');
             e.elapsed = now - this.currentTime;
-            this.currentTime = now;
+
+            // frame fragment time, will be used in _checkTick
+            this._nextTime = now + 1000 / this.fps;
+            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -779,15 +796,10 @@
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+            this._requestNextFrame();
         },
         getTime: function() {
-            if (window.performance && window.performance.now) {
-                return window.performance.now();
-            }else if(window.performance && window.performance.webkitNow){
-                return window.performance.webkitNow();
-            }else{
-                return Date.now();
-            }
+            return window.getTime();
         },
         /**
          [lang:ja]
@@ -811,10 +823,7 @@
          [/lang]
          */
         stop: function() {
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-                this._intervalID = null;
-            }
+            this.ready = false;
             this.running = false;
         },
         /**
@@ -839,10 +848,7 @@
          [/lang]
          */
         pause: function() {
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-                this._intervalID = null;
-            }
+            this.ready = false;
         },
         /**
          [lang:ja]
@@ -856,14 +862,13 @@
          [/lang]
          */
         resume: function() {
-            if (this._intervalID) {
+            if (this.ready) {
                 return;
             }
             this.currentTime = this.getTime();
-            this._intervalID = window.setInterval(function() {
-                core._tick();
-            }, 1000 / this.fps);
+            this.ready = true;
             this.running = true;
+            this._requestNextFrame();
         },
 
         /**
@@ -1024,15 +1029,11 @@
          [lang:ja]
          * キーバインドを設定する.
          *
-         * キー入力をleft, right, up, down, a, bいずれかのボタン入力として割り当てる.
-         *
          * @param {Number} key キーバインドを設定するキーコード.
          * @param {String} button 割り当てるボタン.
          [/lang]
          [lang:en]
          * Set a key binding.
-         *
-         * Maps an input key to an enchant.js left, right, up, down, a, b button.
          *
          * @param {Number} key Key code for the button which will be bound.
          * @param {String} button The enchant.js button (left, right, up, down, a, b).
@@ -1040,14 +1041,70 @@
          [lang:de]
          * Bindet eine Taste.
          *
-         * Diese Methode bindet eine Taste an einen in enchant.js verwendeten Knopf (Button).
-         *
          * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
          * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
          [/lang]
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
+            var onxbuttondown = function(e) {
+                var inputEvent;
+                if (!this.input[button]) {
+                    this.input[button] = true;
+                    inputEvent = new enchant.Event((this.pressedKeysNum++) ? 'inputchange' : 'inputstart');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            };
+            var onxbuttonup = function(e) {
+                var inputEvent;
+                if (this.input[button]) {
+                    this.input[button] = false;
+                    inputEvent = new enchant.Event((--this.pressedKeysNum) ? 'inputchange' : 'inputend');
+                    this.dispatchEvent(inputEvent);
+                    this.currentScene.dispatchEvent(inputEvent);
+                }
+                this.currentScene.dispatchEvent(e);
+            };
+
+            this.addEventListener(button + 'buttondown', onxbuttondown);
+            this.addEventListener(button + 'buttonup', onxbuttonup);
+
+            this._internalButtondownListeners[key] = onxbuttondown;
+            this._internalButtonupListeners[key] = onxbuttonup;
+        },
+        /**
+         [lang:ja]
+         * キーバインドを削除する.
+         *
+         * @param {Number} key 削除するキーコード.
+         [/lang]
+         [lang:en]
+         * Delete a key binding.
+         *
+         * @param {Number} key Key code that want to delete.
+         [/lang]
+         [lang:de]
+         * Entbindet eine Taste.
+         *
+         * @param {Number} key Der Tastencode der entfernt werden soll.
+         [/lang]
+         */
+        keyunbind: function(key) {
+            if (!this._keybind[key]) {
+                return;
+            }
+            var buttondowns = this._internalButtondownListeners;
+            var buttonups = this._internalButtonupListeners;
+
+            this.removeEventListener(key + 'buttondown', buttondowns);
+            this.removeEventListener(key + 'buttonup', buttonups);
+
+            delete buttondowns[key];
+            delete buttonups[key];
+
+            delete this._keybind[key];
         },
         /**
          [lang:ja]

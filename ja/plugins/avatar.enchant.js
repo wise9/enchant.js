@@ -153,6 +153,7 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
      */
     initialize: function(mode) {
         enchant.Group.call(this);
+        var core = enchant.Core.instance;
 
         this.veryfarbg = new enchant.Sprite(320, 51);
         this.veryfarbg.y = 0;

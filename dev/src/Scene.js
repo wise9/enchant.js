@@ -31,13 +31,13 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @extends enchant.Group
      */
     initialize: function() {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
 
         // Call initialize method of enchant.Group
         enchant.Group.call(this);
 
-        this.width = game.width;
-        this.height = game.height;
+        this.width = core.width;
+        this.height = core.height;
 
         // All nodes (entities, groups, scenes) have reference to the scene that it belongs to.
         this.scene = this;
@@ -51,14 +51,10 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Game.instance.scale + ')';
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Core.instance.scale + ')';
 
         this._layers = {};
         this._layerPriority = [];
-
-        // Add layers
-        this.addLayer('Canvas');
-        this.addLayer('Dom');
 
         this.addEventListener(enchant.Event.CHILD_ADDED, this._onchildadded);
         this.addEventListener(enchant.Event.CHILD_REMOVED, this._onchildremoved);
@@ -138,18 +134,18 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         }
     },
     addLayer: function(type, i) {
-        var game = enchant.Game.instance;
+        var core = enchant.Core.instance;
         if (this._layers[type]) {
             return;
         }
         var layer = new enchant[type + 'Layer']();
-        if (game.currentScene === this) {
+        if (core.currentScene === this) {
             layer._startRendering();
         }
         this._layers[type] = layer;
         var element = layer._element;
         if (typeof i === 'number') {
-            var nextSibling = this._element.childNodes.indexOf(i);
+            var nextSibling = this._element.childNodes[i];
             this._element.insertBefore(element, nextSibling);
             this._layerPriority.splice(i, 0, type);
         } else {
@@ -176,9 +172,15 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var child = e.node;
         var next = e.next;
         if (child._element) {
+            if (!this._layers.Dom) {
+                this.addLayer('Dom', 1);
+            }
             this._layers.Dom.insertBefore(child, next);
             child._layer = this._layers.Dom;
         } else {
+            if (!this._layers.Canvas) {
+                this.addLayer('Canvas', 0);
+            }
             this._layers.Canvas.insertBefore(child, next);
             child._layer = this._layers.Canvas;
         }
@@ -193,12 +195,12 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         for (var type in this._layers) {
             this._layers[type]._startRendering();
         }
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         for (var type in this._layers) {
             this._layers[type]._stopRendering();
         }
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
