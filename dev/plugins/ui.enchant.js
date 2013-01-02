@@ -531,7 +531,7 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
         }
         newHeight = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
         // if image is to small or was to big for a long time create new image
-        if(true || newWidth > this.width || newHeight > this.height || this._imageAge > 300) {
+        if(newWidth > this.width || newHeight > this.height || this._imageAge > 300) {
             this.width = newWidth;
             this.height = newHeight;
             this.image = new enchant.Surface(this.width, this.height);
