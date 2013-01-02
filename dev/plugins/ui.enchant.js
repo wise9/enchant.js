@@ -510,8 +510,8 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
         this.widthItemNum = 16;
         this.x = x;
         this.y = y;
+        this._imageAge = Number.MAX_VALUE;
         this.text = '';
-        this._imageAge = 0;
         if (arguments[2]) {
             this.row = Math.floor(arguments[2] / this.fontSize);
         }
@@ -523,20 +523,18 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
     setText: function(txt) {
         var i, x, y, wNum, charCode, charPos;
         this._text = txt;
-        var newWidth, newHeight;
+        var newWidth;
         if (!this.returnLength) {
-            newWidth = Math.min(this.fontSize * this._text.length, enchant.Game.instance.width);
+            this.width = Math.min(this.fontSize * this._text.length, enchant.Game.instance.width);
         } else {
-            newWidth = Math.min(this.returnLength * this.fontSize, enchant.Game.instance.width);
+            this.width = Math.min(this.returnLength * this.fontSize, enchant.Game.instance.width);
         }
-        newHeight = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
+        this.height = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
         // if image is to small or was to big for a long time create new image
-        if(newWidth > this.width || newHeight > this.height || this._imageAge > 300) {
-            this.width = newWidth;
-            this.height = newHeight;
+        if(!this.image || this.width > this.image.width || this.height > this.image.height || this._imageAge > 300) {
             this.image = new enchant.Surface(this.width, this.height);
             this._imageAge = 0;
-        } else if(newWidth < this.width || newHeight < this.height) {
+        } else if(this.width < this.image.width || this.height < this.image.height) {
             this._imageAge++;
         } else {
             this._imageAge = 0;
