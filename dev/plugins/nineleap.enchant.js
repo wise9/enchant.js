@@ -94,6 +94,16 @@
         start: function() {
             var core = this;
 
+            var onloadTimeSetter = function() {
+                this.currentTime = this.getTime();
+                this._nextTime = 0;
+                this.removeEventListener('load', onloadTimeSetter);
+                this.running = true;
+                this.ready = true;
+                this._requestNextFrame();
+            };
+            this.addEventListener('load', onloadTimeSetter);
+
             if (this._intervalID) {
                 window.clearInterval(this._intervalID);
             } else if (this._assets.length) {
@@ -185,11 +195,6 @@
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
-            this.currentTime = Date.now();
-            this._intervalID = window.setInterval(function() {
-                core._tick();
-            }, 1000 / this.fps);
-            this.running = true;
         },
 
         end: function(score, result, img) {
