@@ -22,10 +22,10 @@ enchant.DOMScene = enchant.Class.create(enchant.Scene, {
     },
     _onenter: function() {
         this._layers.Dom._startRendering();
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         this._layers.Dom._stopRendering();
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
