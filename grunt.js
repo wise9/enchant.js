@@ -102,6 +102,9 @@ module.exports = function(grunt) {
                     proto: true,
                     multistr: true
                 },
+                /**
+                 * allowed global variables
+                 */
                 globals: {
                     enchant: true,
                     webkitAudioContext: true,
