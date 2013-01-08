@@ -8,6 +8,8 @@
  * @description
  * Primitive objects for gl.enchant.js
  */
+
+
 if (enchant.gl !== undefined) {
     (function() {
         enchant.gl.primitive = {};

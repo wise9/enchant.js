@@ -1,6 +1,8 @@
 /**
  * @fileOverview
  */
+
+
 if (enchant.gl !== undefined) {
     (function() {
         enchant.gl.primitive = {};
