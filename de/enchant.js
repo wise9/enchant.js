@@ -1,5 +1,5 @@
 /**
- * enchant.js v0.6.1
+ * enchant.js v0.6.2
  * http://enchantjs.com
  * 
  * Copyright Ubiquitous Entertainment Inc.
@@ -1418,6 +1418,7 @@ enchant.EventTarget = enchant.Class.create({
 
             // frame fragment time, will be used in _checkTick
             this._nextTime = now + 1000 / this.fps;
+            this.currentTime = now;
             this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
@@ -2017,7 +2018,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(enabled) {
             this._touchEnabled = enabled;
-            if (this._touchEnabled = enabled) {
+            if (enabled) {
                 this._style.pointerEvents = 'all';
             } else {
                 this._style.pointerEvents = 'none';
@@ -4100,11 +4101,11 @@ enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
     },
     _onenter: function() {
         this._layers.Canvas._startRendering();
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         this._layers.Canvas._stopRendering();
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
 
@@ -4132,11 +4133,11 @@ enchant.DOMScene = enchant.Class.create(enchant.Scene, {
     },
     _onenter: function() {
         this._layers.Dom._startRendering();
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         this._layers.Dom._stopRendering();
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });
 
