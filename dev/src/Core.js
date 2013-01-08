@@ -777,6 +777,7 @@
 
             // frame fragment time, will be used in _checkTick
             this._nextTime = now + 1000 / this.fps;
+            this.currentTime = now;
             this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
