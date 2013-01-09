@@ -218,7 +218,7 @@
                 }
                 for (var prop in module) {
                     if (module.hasOwnProperty(prop)) {
-                        if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                        if (typeof module[prop] === 'object' && module[prop] !== null && Object.getPrototypeOf(module[prop]) === Object.prototype) {
                             detectAssets(module[prop]);
                         }
                     }
