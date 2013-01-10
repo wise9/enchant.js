@@ -1144,8 +1144,6 @@
                 this.background._element.height > 0) {
                 ctx.drawImage(this.background._element, 0, 0, this.width, this.height);
             }
-            ctx.beginPath();
-            ctx.rect(0, 0, this.width, this.height);
         }
     });
 
