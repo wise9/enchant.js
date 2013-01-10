@@ -89,6 +89,9 @@ window.onload = function() {
             touchX = e.x;
             touchY = e.y;
         });
+        game.addEventListener('enterframe', function(e) {
+            console.log(e.elapsed);
+        });
         player.addEventListener('enterframe', function() {
             this.x += (touchX - this.x - 16) / 10;
             this.y += (touchY - this.y - 16) / 10;

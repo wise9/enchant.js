@@ -1274,7 +1274,7 @@ enchant.EventTarget = enchant.Class.create({
          */
         start: function() {
             var onloadTimeSetter = function() {
-                this.currentTime = this.getTime();
+                this.currentTime = 0;
                 this._nextTime = 0;
                 this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
@@ -1373,7 +1373,11 @@ enchant.EventTarget = enchant.Class.create({
         },
         _tick: function(now) {
             var e = new enchant.Event('enterframe');
-            e.elapsed = now - this.currentTime;
+            if (this.currentTime === 0) {
+                e.elapsed = 0;
+            } else {
+                e.elapsed = now - this.currentTime;
+            }
 
             // frame fragment time, will be used in _checkTick
             this._nextTime = now + 1000 / this.fps;
@@ -1428,7 +1432,7 @@ enchant.EventTarget = enchant.Class.create({
             if (this.ready) {
                 return;
             }
-            this.currentTime = this.getTime();
+            this.currentTime = 0;
             this.ready = true;
             this.running = true;
             this._requestNextFrame();
