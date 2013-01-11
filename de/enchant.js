@@ -141,7 +141,7 @@ var enchant = function(modules) {
             if (module.hasOwnProperty(prop)) {
                 if (typeof module[prop] === 'function') {
                     window[prop] = module[prop];
-                } else if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                } else if (typeof module[prop] === 'object' && module[prop] !== null && Object.getPrototypeOf(module[prop]) === Object.prototype) {
                     if (modules == null) {
                         submodules.push(prop);
                     } else {
@@ -992,7 +992,7 @@ enchant.EventTarget = enchant.Class.create({
                 }
                 for (var prop in module) {
                     if (module.hasOwnProperty(prop)) {
-                        if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                        if (typeof module[prop] === 'object' && module[prop] !== null && Object.getPrototypeOf(module[prop]) === Object.prototype) {
                             detectAssets(module[prop]);
                         }
                     }
