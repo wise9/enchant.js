@@ -2419,32 +2419,47 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     cvsRender: function(ctx) {
         var x, y = 0;
-        var text, buf, c;
+        var labelWidth = this.width;
+        var charWidth, amount, line, text, c, buf, increase, length;
+        var bufWidth;
         if (this._splitText) {
             ctx.textBaseline = 'top';
             ctx.font = this.font;
             ctx.fillStyle = this.color || '#000000';
+            charWidth = ctx.measureText(' ').width;
+            amount = labelWidth / charWidth;
             for (var i = 0, l = this._splitText.length; i < l; i++) {
-                text = this._splitText[i];
-                buf = '';
-                for (var j = 0, ll = text.text.length; j < ll; j++) {
-                    c = text.text[j];
-                    if (ctx.measureText(buf).width > this.width) {
-                        ctx.fillText(buf, 0, y);
-                        y += text.height - 1;
-                        buf = '';
+                line = this._splitText[i];
+                text = line.text;
+                c = 0;
+                while (text.length > c + amount || ctx.measureText(text.slice(c, c + amount)).width > labelWidth) {
+                    buf = '';
+                    increase = amount;
+                    length = 0;
+                    while (increase > 0) {
+                        if (ctx.measureText(buf).width < labelWidth) {
+                            length += increase;
+                            buf = text.slice(c, c + length);
+                        } else {
+                            length -= increase;
+                            buf = text.slice(c, c + length);
+                        }
+                        increase = increase / 2 | 0;
                     }
-                    buf += c;
+                    ctx.fillText(buf, 0, y);
+                    y += line.height - 1;
+                    c += length;
                 }
+                buf = text.slice(c, c + text.length);
                 if (this.textAlign === 'right') {
-                    x = this.width - ctx.measureText(buf).width;
+                    x = labelWidth - ctx.measureText(buf).width;
                 } else if (this.textAlign === 'center') {
-                    x = (this.width - ctx.measureText(buf).width) / 2;
+                    x = (labelWidth - ctx.measureText(buf).width) / 2;
                 } else {
                     x = 0;
                 }
                 ctx.fillText(buf, x, y);
-                y += text.height - 1;
+                y += line.height - 1;
             }
         }
     },
@@ -2481,6 +2496,7 @@ enchant.Label.prototype.getMetrics = function(text) {
             }
         }
         div.innerHTML = text || this._text;
+        div.style.whiteSpace = 'noWrap';
         document.body.appendChild(div);
         ret.height = parseInt(getComputedStyle(div).height, 10) + 1;
         div.style.position = 'absolute';
