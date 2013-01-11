@@ -20,9 +20,9 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     initialize: function(text) {
         enchant.Entity.call(this);
 
+        this.text = text || '';
         this.width = 300;
         this.font = '14px serif';
-        this.text = text || '';
         this.textAlign = 'left';
     },
     /**
@@ -207,7 +207,8 @@ enchant.Label.prototype.getMetrics = function(text) {
                 div.style[prop] = this._style[prop];
             }
         }
-        div.innerHTML = text || this._text;
+        text = text || this._text;
+        div.innerHTML = text.replace(/ /g, '&nbsp;');
         div.style.whiteSpace = 'noWrap';
         document.body.appendChild(div);
         ret.height = parseInt(getComputedStyle(div).height, 10) + 1;
