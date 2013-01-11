@@ -42,6 +42,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             return this._text;
         },
         set: function(text) {
+            text = '' + text;
             if(this._text === text) {
                 return;
             }
