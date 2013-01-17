@@ -1107,7 +1107,9 @@
             set: function(surface) {
                 if (surface instanceof enchant.Surface) {
                     this._background = surface;
-                    this._style['background-image'] = surface._css;
+                    if (surface._css) {
+                        this._style['background-image'] = surface._css;
+                    }
                 }
             }
         },
@@ -1269,10 +1271,8 @@
                 if (image == this._image) {
                     return;
                 }
-                if (image._css) {
-                    this.background = image;
-                    this._image = image;
-                }
+                this.background = image;
+                this._image = image;
             }
         },
         /**
@@ -1287,9 +1287,7 @@
                 if (image == this._pushedimage) {
                     return;
                 }
-                if (image._css) {
-                    this._pushedimage = image;
-                }
+                this._pushedimage = image;
             }
         },
         /**
