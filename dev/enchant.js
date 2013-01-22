@@ -5350,6 +5350,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
+                ctx.beginPath();
                 ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
@@ -6335,6 +6336,9 @@ enchant.DOMSound.load = function(src, type, callback) {
     type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
 
     var sound = Object.create(enchant.DOMSound.prototype);
+    sound.addEventListener('load', function() {
+        callback.call(enchant.Core.instance);
+    });
     enchant.EventTarget.call(sound);
     var audio = new Audio();
     if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
@@ -6344,16 +6348,16 @@ enchant.DOMSound.load = function(src, type, callback) {
         }, 0);
     } else {
         if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
+            audio.addEventListener('canplaythrough', function() {
+                sound.duration = audio.duration;
+                sound.dispatchEvent(new enchant.Event('load'));
+            }, false);
             audio.src = src;
             audio.load();
             audio.autoplay = false;
             audio.onerror = function() {
                 throw new Error('Cannot load an asset: ' + audio.src);
             };
-            audio.addEventListener('canplaythrough', function() {
-                sound.duration = audio.duration;
-                sound.dispatchEvent(new enchant.Event('load'));
-            }, false);
             sound._element = audio;
         } else if (type === 'audio/mpeg') {
             var embed = document.createElement('embed');
@@ -6393,9 +6397,6 @@ enchant.DOMSound.load = function(src, type, callback) {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, 0);
         }
-        sound.addEventListener('load', function() {
-            callback.call(enchant.Core.instance);
-        });
     }
     return sound;
 };
