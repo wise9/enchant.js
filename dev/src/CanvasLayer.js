@@ -165,6 +165,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
+                ctx.beginPath();
                 ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
