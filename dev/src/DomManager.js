@@ -44,10 +44,18 @@ enchant.DomManager = enchant.Class.create({
         var element = childManager.getDomElement();
         if (element instanceof Array) {
             element.forEach(function(child) {
-                this.element.insertBefore(child, nextElement);
+                if (nextElement) {
+                    this.element.insertBefore(child, nextElement);
+                } else {
+                    this.element.appendChild(child);
+                }
             }, this);
         } else {
-            this.element.insertBefore(element, nextElement);
+            if (nextElement) {
+                this.element.insertBefore(element, nextElement);
+            } else {
+                this.element.appendChild(element);
+            }
         }
         this.setLayer(this.layer);
     },
