@@ -3320,10 +3320,12 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node.domRender === 'function') {
             node.domRender(this.element);
         }
+        var value;
         for (var prop in node._style) {
-            if(node.__styleStatus[prop] !== node._style[prop]) {
-                this.style.setProperty(prop, node._style[prop]);
-                node.__styleStatus[prop] = node._style[prop];
+            value = node._style[prop];
+            if(node.__styleStatus[prop] !== value && value != null) {
+                this.style.setProperty(prop, '' + value);
+                node.__styleStatus[prop] = value;
             }
         }
     },
