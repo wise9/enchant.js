@@ -3245,10 +3245,18 @@ enchant.DomManager = enchant.Class.create({
         var element = childManager.getDomElement();
         if (element instanceof Array) {
             element.forEach(function(child) {
-                this.element.insertBefore(child, nextElement);
+                if (nextElement) {
+                    this.element.insertBefore(child, nextElement);
+                } else {
+                    this.element.appendChild(child);
+                }
             }, this);
         } else {
-            this.element.insertBefore(element, nextElement);
+            if (nextElement) {
+                this.element.insertBefore(element, nextElement);
+            } else {
+                this.element.appendChild(element);
+            }
         }
         this.setLayer(this.layer);
     },
@@ -3999,7 +4007,11 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var element = layer._element;
         if (typeof i === 'number') {
             var nextSibling = this._element.childNodes[i];
-            this._element.insertBefore(element, nextSibling);
+            if (nextSibling) {
+                this._element.insertBefore(element, nextSibling);
+            } else {
+                this._element.appendChild(element);
+            }
             this._layerPriority.splice(i, 0, type);
         } else {
             this._element.appendChild(element);
