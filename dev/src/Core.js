@@ -667,8 +667,7 @@
 
             if (!this._activated && this._assets.length) {
                 if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED &&
-                    !(window.AudioContext && enchant.ENV.USE_WEBAUDIO) ) {
+                    navigator.userAgent.indexOf('iPhone OS') !== -1) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
