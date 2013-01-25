@@ -668,7 +668,8 @@
             if (!this._activated && this._assets.length) {
                 this._activated = true;
                 if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED &&
+                    !(window.AudioContext && enchant.ENV.USE_WEBAUDIO) ) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);

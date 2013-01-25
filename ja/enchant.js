@@ -1286,7 +1286,8 @@ enchant.EventTarget = enchant.Class.create({
             if (!this._activated && this._assets.length) {
                 this._activated = true;
                 if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED &&
+                    !(window.AudioContext && enchant.ENV.USE_WEBAUDIO) ) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -3246,10 +3247,18 @@ enchant.DomManager = enchant.Class.create({
         var element = childManager.getDomElement();
         if (element instanceof Array) {
             element.forEach(function(child) {
-                this.element.insertBefore(child, nextElement);
+                if (nextElement) {
+                    this.element.insertBefore(child, nextElement);
+                } else {
+                    this.element.appendChild(child);
+                }
             }, this);
         } else {
-            this.element.insertBefore(element, nextElement);
+            if (nextElement) {
+                this.element.insertBefore(element, nextElement);
+            } else {
+                this.element.appendChild(element);
+            }
         }
         this.setLayer(this.layer);
     },
@@ -3296,14 +3305,16 @@ enchant.DomManager = enchant.Class.create({
             node._offsetX += node.parentNode._offsetX;
             node._offsetY += node.parentNode._offsetY;
         }
-        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' +
-        dest[0].toFixed(10) + ',' +
-        dest[1].toFixed(10) + ',' +
-        dest[2].toFixed(10) + ',' +
-        dest[3].toFixed(10) + ',' +
-        dest[4].toFixed(10) + ',' +
-        dest[5].toFixed(10) +
-        ')';
+        if (node._dirty) {
+            this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' +
+                dest[0].toFixed(10) + ',' +
+                dest[1].toFixed(10) + ',' +
+                dest[2].toFixed(10) + ',' +
+                dest[3].toFixed(10) + ',' +
+                dest[4].toFixed(10) + ',' +
+                dest[5].toFixed(10) +
+            ')';
+        }
         this.domRender();
     },
     domRender: function() {
@@ -3324,10 +3335,12 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node.domRender === 'function') {
             node.domRender(this.element);
         }
+        var value;
         for (var prop in node._style) {
-            if(node.__styleStatus[prop] !== node._style[prop]) {
-                this.style.setProperty(prop, node._style[prop]);
-                node.__styleStatus[prop] = node._style[prop];
+            value = node._style[prop];
+            if(node.__styleStatus[prop] !== value && value != null) {
+                this.style.setProperty(prop, '' + value);
+                node.__styleStatus[prop] = value;
             }
         }
     },
@@ -3746,6 +3759,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
+                ctx.beginPath();
                 ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
@@ -3999,7 +4013,11 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var element = layer._element;
         if (typeof i === 'number') {
             var nextSibling = this._element.childNodes[i];
-            this._element.insertBefore(element, nextSibling);
+            if (nextSibling) {
+                this._element.insertBefore(element, nextSibling);
+            } else {
+                this._element.appendChild(element);
+            }
             this._layerPriority.splice(i, 0, type);
         } else {
             this._element.appendChild(element);
