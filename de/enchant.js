@@ -4495,10 +4495,10 @@ enchant.DOMSound.load = function(src, type, callback) {
     type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
 
     var sound = Object.create(enchant.DOMSound.prototype);
+    enchant.EventTarget.call(sound);
     sound.addEventListener('load', function() {
         callback.call(enchant.Core.instance);
     });
-    enchant.EventTarget.call(sound);
     var audio = new Audio();
     if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
