@@ -385,7 +385,7 @@
             margin |= 0;
             var anotherScaleOffset = getScaleOffest(another.height, another.scaleY);
             var scaleOffset = getScaleOffest(this.height, this.scaleY);
-            this.x = another.y + anotherScaleOffset - scaleOffset - this.height - margin;
+            this.y = another.y + anotherScaleOffset - scaleOffset - this.height - margin;
             return this;
         },
         /**

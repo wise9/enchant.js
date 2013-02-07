@@ -305,7 +305,7 @@ enchant.Class.create = function(superclass, definition) {
     }
 
     var tree = this.getInheritanceTree(superclass);
-    for (var i = tree.length - 1; i >= 0; i--) {
+    for (var i = 0, l = tree.length; i < l; i++) {
         if (typeof tree[i]._inherited === 'function') {
             tree[i]._inherited(Constructor);
             break;
@@ -1326,10 +1326,8 @@ enchant.EventTarget = enchant.Class.create({
             this.addEventListener('load', onloadTimeSetter);
 
             if (!this._activated && this._assets.length) {
-                this._activated = true;
-                if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED &&
-                    !(window.AudioContext && enchant.ENV.USE_WEBAUDIO) ) {
+                if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
+                    navigator.userAgent.indexOf('iPhone OS') !== -1) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -1349,6 +1347,8 @@ enchant.EventTarget = enchant.Class.create({
                     core.pushScene(scene);
                     return;
                 }
+
+                this._activated = true;
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {
