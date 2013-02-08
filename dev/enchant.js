@@ -2117,7 +2117,8 @@ enchant.EventTarget = enchant.Class.create({
 
             if (!this._activated && this._assets.length) {
                 if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
-                    navigator.userAgent.indexOf('iPhone OS') !== -1) {
+                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
+                    navigator.userAgent.indexOf('iPad') !== -1)) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
