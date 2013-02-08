@@ -666,9 +666,8 @@
             this.addEventListener('load', onloadTimeSetter);
 
             if (!this._activated && this._assets.length) {
-                this._activated = true;
-                if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+                if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
+                    navigator.userAgent.indexOf('iPhone OS') !== -1) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -688,6 +687,8 @@
                     core.pushScene(scene);
                     return;
                 }
+
+                this._activated = true;
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {

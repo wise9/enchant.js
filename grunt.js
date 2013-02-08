@@ -6,7 +6,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
             meta: {
-                version: 'v0.6.2',
+                version: 'v0.6.3',
                 banner: '/**\n\
  * enchant.js <%= meta.version %>\n\
  * http://enchantjs.com\n\
@@ -18,7 +18,8 @@ module.exports = function(grunt) {
             },
             lint: {
                 core: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); })],
-                plugins: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js']
+                plugins: ['dev/header.js', 'dev/src/*.js', 'dev/plugins/*.js'],
+                mixing: ['dev/header.js', grunt.file.expand('dev/src/*.js').filter(function(file){ return !file.match(/_/); }),'dev/plugins/mixing.enchant.js']
             },
             qunit: {
                 files: ['tests/qunit/*/*.html']
@@ -102,6 +103,9 @@ module.exports = function(grunt) {
                     proto: true,
                     multistr: true
                 },
+                /**
+                 * allowed global variables
+                 */
                 globals: {
                     enchant: true,
                     webkitAudioContext: true,

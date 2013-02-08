@@ -12,9 +12,9 @@ module('Label.textAlign', {
         context = document.getElementsByTagName('canvas')[0].getContext('2d');
 
         // using multibyte char in tests causes problem when running on phantomjs
-        label = new Label('*');
+        label = new Label('=');
         label.color = '#f00';
-        label.font = '10px monospace';
+        label.font = '10px mono monospace';
 
         ok(!verifyTextAt('left'));
         ok(!verifyTextAt('center'));
@@ -29,8 +29,15 @@ function verifyTextAt(textAlign) {
     } else if (textAlign === 'right') {
         x = label.width - 5;
     }
-    image = context.getImageData(x,5,1,1).data;
-    return image[0] === 255;
+
+    // this code trying to avoid problem about difference of font
+    var max = 0;
+    for(var y = 0; y < 10; y++){
+        image = context.getImageData(x,y,1,1).data;
+        max = Math.max(image[0], max);
+    }
+
+    return max > 128;
 }
 
 test('textAlign supports "left"', function (){

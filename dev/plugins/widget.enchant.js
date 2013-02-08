@@ -525,7 +525,7 @@
             margin |= 0;
             var anotherScaleOffset = getScaleOffest(another.height, another.scaleY);
             var scaleOffset = getScaleOffest(this.height, this.scaleY);
-            this.x = another.y + anotherScaleOffset - scaleOffset - this.height - margin;
+            this.y = another.y + anotherScaleOffset - scaleOffset - this.height - margin;
             return this;
         },
         /**
@@ -1312,7 +1312,9 @@
             set: function(surface) {
                 if (surface instanceof enchant.Surface) {
                     this._background = surface;
-                    this._style['background-image'] = surface._css;
+                    if (surface._css) {
+                        this._style['background-image'] = surface._css;
+                    }
                 }
             }
         },
@@ -1378,8 +1380,6 @@
                 this.background._element.height > 0) {
                 ctx.drawImage(this.background._element, 0, 0, this.width, this.height);
             }
-            ctx.beginPath();
-            ctx.rect(0, 0, this.width, this.height);
         }
     });
 
@@ -1534,10 +1534,8 @@
                 if (image == this._image) {
                     return;
                 }
-                if (image._css) {
-                    this.background = image;
-                    this._image = image;
-                }
+                this.background = image;
+                this._image = image;
             }
         },
         /**
@@ -1557,9 +1555,7 @@
                 if (image == this._pushedimage) {
                     return;
                 }
-                if (image._css) {
-                    this._pushedimage = image;
-                }
+                this._pushedimage = image;
             }
         },
         /**
