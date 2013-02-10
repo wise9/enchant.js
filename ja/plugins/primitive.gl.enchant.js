@@ -8,6 +8,8 @@
  * @description
  * gl.enchant.js で使える基本立体オブジェクト
  */
+
+
 if (enchant.gl !== undefined) {
     (function() {
         enchant.gl.primitive = {};

@@ -1,4 +1,4 @@
-﻿var context, core, label;
+var context, core, label;
 module('Label.textAlign', {
     setup: function () {
         enchant();

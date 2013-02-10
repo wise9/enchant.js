@@ -1,8 +1,8 @@
 /**
  * @fileOverview
  * nineleap.enchant.js
- * @version 0.3.1 (2012/11/15)
- * @requires enchant.js v0.4.0 or later
+ * @version 0.3.2 (2013/02/08)
+ * @requires enchant.js v0.6.0 or later
  *
  * @description
  * enchant.js extension for 9leap.net
@@ -76,6 +76,7 @@
 
                 this.endScene = new SplashScene();
                 this.endScene.image = this.assets['end.png'];
+                this.removeEventListener('load', arguments.callee);
             });
             this.scoreQueue = false;
             this.started = false;
@@ -104,13 +105,11 @@
             };
             this.addEventListener('load', onloadTimeSetter);
 
-            if (this._intervalID) {
-                window.clearInterval(this._intervalID);
-            } else if (this._assets.length) {
+            if (!this._activated && this._assets.length) {
 
                 if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
-                    console.log("mobile_first");
+                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
+                    navigator.userAgent.indexOf('iPad') !== -1)) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -130,6 +129,8 @@
                     core.pushScene(scene);
                     return;
                 }
+
+                this._activated = true;
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {

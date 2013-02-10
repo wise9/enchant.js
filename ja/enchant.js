@@ -955,7 +955,7 @@ enchant.EventTarget = enchant.Class.create({
                 }
                 for (var prop in module) {
                     if (module.hasOwnProperty(prop)) {
-                        if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                        if (typeof module[prop] === 'object' && module[prop] !== null && Object.getPrototypeOf(module[prop]) === Object.prototype) {
                             detectAssets(module[prop]);
                         }
                     }
@@ -1285,7 +1285,8 @@ enchant.EventTarget = enchant.Class.create({
 
             if (!this._activated && this._assets.length) {
                 if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
-                    navigator.userAgent.indexOf('iPhone OS') !== -1) {
+                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
+                    navigator.userAgent.indexOf('iPad') !== -1)) {
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -2362,6 +2363,17 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         this.width = 300;
         this.font = '14px serif';
         this.textAlign = 'left';
+    },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._dirty = true;
+            // issue #164
+            this.updateBoundArea();
+        }
     },
     /**
      * 表示するテキスト.
@@ -4453,6 +4465,9 @@ enchant.DOMSound.load = function(src, type, callback) {
 
     var sound = Object.create(enchant.DOMSound.prototype);
     enchant.EventTarget.call(sound);
+    sound.addEventListener('load', function() {
+        callback.call(enchant.Core.instance);
+    });
     var audio = new Audio();
     if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
@@ -4461,16 +4476,16 @@ enchant.DOMSound.load = function(src, type, callback) {
         }, 0);
     } else {
         if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
+            audio.addEventListener('canplaythrough', function() {
+                sound.duration = audio.duration;
+                sound.dispatchEvent(new enchant.Event('load'));
+            }, false);
             audio.src = src;
             audio.load();
             audio.autoplay = false;
             audio.onerror = function() {
                 throw new Error('Cannot load an asset: ' + audio.src);
             };
-            audio.addEventListener('canplaythrough', function() {
-                sound.duration = audio.duration;
-                sound.dispatchEvent(new enchant.Event('load'));
-            }, false);
             sound._element = audio;
         } else if (type === 'audio/mpeg') {
             var embed = document.createElement('embed');
@@ -4510,9 +4525,6 @@ enchant.DOMSound.load = function(src, type, callback) {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, 0);
         }
-        sound.addEventListener('load', function() {
-            callback.call(enchant.Core.instance);
-        });
     }
     return sound;
 };
