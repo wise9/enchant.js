@@ -2364,6 +2364,17 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         this.font = '14px serif';
         this.textAlign = 'left';
     },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._dirty = true;
+            // issue #164
+            this.updateBoundArea();
+        }
+    },
     /**
      * 表示するテキスト.
      * @type {String}
