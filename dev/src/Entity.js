@@ -330,6 +330,73 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         return this._offsetX < other._offsetX + other.width && other._offsetX < this._offsetX + this.width &&
             this._offsetY < other._offsetY + other.height && other._offsetY < this._offsetY + this.height;
     },
+    intersectStrict: function(other) {
+        if (this._dirty) {
+            this._updateCoordinate();
+        } if (other._dirty) {
+            other._updateCoordinate();
+        }
+        var rect1 = this.getOrientedBoundingRect();
+        var rect2 = other.getOrientedBoundingRect();
+        var lt1 = rect1.leftTop, rt1 = rect1.rightTop,
+            lb1 = rect1.leftBottom, rb1 = rect1.rightBottom,
+            lt2 = rect2.leftTop, rt2 = rect2.rightTop,
+            lb2 = rect2.leftBottom, rb2 = rect2.rightBottom,
+            ltx1 = lt1[0], lty1 = lt1[1], rtx1 = rt1[0], rty1 = rt1[1],
+            lbx1 = lb1[0], lby1 = lb1[1], rbx1 = rb1[0], rby1 = rb1[1],
+            ltx2 = lt2[0], lty2 = lt2[1], rtx2 = rt2[0], rty2 = rt2[1],
+            lbx2 = lb2[0], lby2 = lb2[1], rbx2 = rb2[0], rby2 = rb2[1],
+            t1 = [ rtx1 - ltx1, rty1 - lty1 ],
+            r1 = [ rbx1 - rtx1, rby1 - rty1 ],
+            b1 = [ lbx1 - rbx1, lby1 - rby1 ],
+            l1 = [ ltx1 - lbx1, lty1 - lby1 ],
+            t2 = [ rtx2 - ltx2, rty2 - lty2 ],
+            r2 = [ rbx2 - rtx2, rby2 - rty2 ],
+            b2 = [ lbx2 - rbx2, lby2 - rby2 ],
+            l2 = [ ltx2 - lbx2, lty2 - lby2 ];
+        var vert1 = [
+            rect2.leftTop,
+            rect2.rightTop,
+            rect2.leftBottom,
+            rect2.rightBottom,
+            [
+                (ltx2 + rtx2 + lbx2 + rbx2) >> 2,
+                (lty2 + rty2 + lby2 + rby2) >> 2
+            ]
+        ];
+        var vert2 = [
+            rect1.leftTop,
+            rect1.rightTop,
+            rect1.leftBottom,
+            rect1.rightBottom,
+            [
+                (ltx1 + rtx1 + lbx1 + rbx1) >> 2,
+                (lty1 + rty1 + lby1 + rby1) >> 2
+            ]
+        ];
+        var vx, vy;
+        for (var i = 0; i < 5; i++) {
+            vx = vert1[i][0];
+            vy = vert1[i][1];
+            if (t1[0] * (vy - lty1) - t1[1] * (vx - ltx1) > 0 &&
+                r1[0] * (vy - rty1) - r1[1] * (vx - rtx1) > 0 &&
+                b1[0] * (vy - rby1) - b1[1] * (vx - rbx1) > 0 &&
+                l1[0] * (vy - lby1) - l1[1] * (vx - lbx1) > 0) {
+                return true;
+            }
+        }
+        for (var i = 0; i < 5; i++) {
+            vx = vert2[i][0];
+            vy = vert2[i][1];
+            if (t2[0] * (vy - lty2) - t2[1] * (vx - ltx2) > 0 &&
+                r2[0] * (vy - rty2) - r2[1] * (vx - rtx2) > 0 &&
+                b2[0] * (vy - rby2) - b2[1] * (vx - rbx2) > 0 &&
+                l2[0] * (vy - lby2) - l2[1] * (vx - lbx2) > 0) {
+                return true;
+            }
+        }
+        return false;
+    },
     /**
      [lang:ja]
      * Entityの中心点どうしの距離により衝突判定を行う.
@@ -551,6 +618,43 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 C.collection.splice(i, 1);
             }
         }, this);
+    },
+    getBoundingRect: function() {
+        var w = this.width || 0;
+        var h = this.height || 0;
+        var mat = this._matrix;
+        var m11 = mat[0], m21 = mat[2], mdx = mat[4],
+            m12 = mat[1], m22 = mat[3], mdy = mat[5];
+        var m11w = m11 * w;
+        var m12w = m12 * w;
+        var m21h = m21 * h;
+        var m22h = m22 * h;
+        var xw = [ mdx, m11w + mdx, m21h + mdx, m11w + m21h + mdx ].sort(function(a, b) { return a - b; });
+        var yh = [ mdy, m12w + mdy, m22h + mdy, m12w + m22h + mdy ].sort(function(a, b) { return a - b; });
+        return {
+            left: xw[0],
+            top: yh[0],
+            width: xw[3] - xw[0],
+            height: yh[3] - yh[0]
+        };
+    },
+    getOrientedBoundingRect: function() {
+        var w = this.width || 0;
+        var h = this.height || 0;
+        var mat = this._matrix;
+        var m11 = mat[0], m21 = mat[2], mdx = mat[4],
+            m12 = mat[1], m22 = mat[3], mdy = mat[5];
+        var m11w = m11 * w;
+        var m12w = m12 * w;
+        var m21h = m21 * h;
+        var m22h = m22 * h;
+
+        return {
+            leftTop: [ mdx, mdy ],
+            rightTop: [ m11w + mdx, m12w + mdy ],
+            leftBottom: [ m21h + mdx, m22h + mdy ],
+            rightBottom: [ m11w + m21h + mdx, m12w + m22h + mdy ]
+        };
     },
     getConstructor: function() {
         return Object.getPrototypeOf(this).constructor;
