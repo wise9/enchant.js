@@ -374,8 +374,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 (lty1 + rty1 + lby1 + rby1) >> 2
             ]
         ];
-        var vx, vy;
-        for (var i = 0; i < 5; i++) {
+        var i, vx, vy;
+        for (i = 0; i < 5; i++) {
             vx = vert1[i][0];
             vy = vert1[i][1];
             if (t1[0] * (vy - lty1) - t1[1] * (vx - ltx1) > 0 &&
@@ -385,7 +385,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 return true;
             }
         }
-        for (var i = 0; i < 5; i++) {
+        for (i = 0; i < 5; i++) {
             vx = vert2[i][0];
             vy = vert2[i][1];
             if (t2[0] * (vy - lty2) - t2[1] * (vx - ltx2) > 0 &&
