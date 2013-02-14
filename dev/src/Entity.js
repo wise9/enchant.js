@@ -623,14 +623,12 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var w = this.width || 0;
         var h = this.height || 0;
         var mat = this._matrix;
-        var m11 = mat[0], m21 = mat[2], mdx = mat[4],
-            m12 = mat[1], m22 = mat[3], mdy = mat[5];
-        var m11w = m11 * w;
-        var m12w = m12 * w;
-        var m21h = m21 * h;
-        var m22h = m22 * h;
+        var m11w = mat[0] * w, m12w = mat[1] * w,
+            m21h = mat[2] * h, m22h = mat[3] * h,
+            mdx = mat[4], mdy = mat[5];
         var xw = [ mdx, m11w + mdx, m21h + mdx, m11w + m21h + mdx ].sort(function(a, b) { return a - b; });
         var yh = [ mdy, m12w + mdy, m22h + mdy, m12w + m22h + mdy ].sort(function(a, b) { return a - b; });
+
         return {
             left: xw[0],
             top: yh[0],
@@ -642,12 +640,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var w = this.width || 0;
         var h = this.height || 0;
         var mat = this._matrix;
-        var m11 = mat[0], m21 = mat[2], mdx = mat[4],
-            m12 = mat[1], m22 = mat[3], mdy = mat[5];
-        var m11w = m11 * w;
-        var m12w = m12 * w;
-        var m21h = m21 * h;
-        var m22h = m22 * h;
+        var m11w = mat[0] * w, m12w = mat[1] * w,
+            m21h = mat[2] * h, m22h = mat[3] * h,
+            mdx = mat[4], mdy = mat[5];
 
         return {
             leftTop: [ mdx, mdy ],
