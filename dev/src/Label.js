@@ -39,6 +39,9 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     /**
      [lang:ja]
      * 表示するテキスト.
+     * DOM レンダラを利用している場合 (DOMScene 以下にある場合) 改行タグ (br) も利用できるが、
+     * ユーザから入力したり、サーバから取得した文字列を表示する場合, XSS 脆弱性などに注意してください.
+     * Canvas レンダラを利用できる場合でも、改行タグ (br, BR) は改行に変換されます。
      [/lang]
      [lang:en]
      * Text to be displayed.
