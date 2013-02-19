@@ -1261,7 +1261,7 @@
             [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
                 .forEach(function(event) {
                     this.addEventListener(event, function(e) {
-                        this.childNodes.forEach(function(child) {
+                        this.childNodes.slice().forEach(function(child) {
                             child.scene = this.scene;
                             child.dispatchEvent(e);
                         }, this);
@@ -3833,7 +3833,7 @@
                 var removeChild = enchant.widget.EntityGroup.prototype.removeChild;
                 var menu = this;
                 if (this.childNodes) {
-                    this.childNodes.forEach(function(child) {
+                    this.childNodes.slice().forEach(function(child) {
                         removeChild.call(menu, child);
                     });
                 }
