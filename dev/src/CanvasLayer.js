@@ -210,24 +210,24 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     _transform: function(node, ctx) {
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
-        var newmat;
+        var newmat, ox, oy, vec;
         if (node._dirty) {
             matrix.makeTransformMatrix(node, node._cvsCache.matrix);
             newmat = [];
             matrix.multiply(stack[stack.length - 1], node._cvsCache.matrix, newmat);
             node._matrix = newmat;
+            ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+            oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+            vec = [ ox, oy ];
+            matrix.multiplyVec(newmat, vec, vec);
+            node._offsetX = vec[0] - ox;
+            node._offsetY = vec[1] - oy;
+            node._dirty = false;
         } else {
             newmat = node._matrix;
         }
         stack.push(newmat);
         ctx.setTransform.apply(ctx, newmat);
-        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
-        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
-        var vec = [ ox, oy ];
-        matrix.multiplyVec(newmat, vec, vec);
-        node._offsetX = vec[0] - ox;
-        node._offsetY = vec[1] - oy;
-        node._dirty = false;
 
     },
     _determineEventTarget: function(e) {
