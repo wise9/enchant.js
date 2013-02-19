@@ -169,11 +169,11 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
-        }
-        if (node.childNodes) {
-            for (var i = 0, l = node.childNodes.length; i < l; i++) {
-                child = node.childNodes[i];
-                this._rendering(child, e);
+            if (node.childNodes) {
+                for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                    child = node.childNodes[i];
+                    this._rendering(child, e);
+                }
             }
         }
         ctx.restore();
