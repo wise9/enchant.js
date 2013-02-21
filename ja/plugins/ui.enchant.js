@@ -295,8 +295,6 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
             this._element = 'div';
         }
 
-        var prefix = '-' + enchant.ENV.VENDOR_PREFIX + '-';
-
         this.width = width || null;
         this.height = height || null;
         this.text = text;
@@ -312,7 +310,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         style["padding"] = "2px 10px";
         style["text-align"] = "center";
         style["font-weight"] = "bold";
-        style[prefix + "border-radius"] = "0.5em";
+        style["border-radius"] = "0.5em";
 
         // テーマの指定がなければ "dark" を使う
         theme = theme || "dark";
@@ -415,7 +413,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
 });
 
 enchant.ui.Button.theme2css = function(theme) {
-    var prefix = '-' + enchant.ENV.VENDOR_PREFIX + '-';
+    var prefix = '-' + enchant.ENV.VENDOR_PREFIX.toLowerCase() + '-';
     var obj = {};
     var bg = theme.background;
     var bd = theme.border;
