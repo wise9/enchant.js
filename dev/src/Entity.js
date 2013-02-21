@@ -1,9 +1,4 @@
 var _intersectBetweenClassAndInstance = function(Class, instance) {
-    /*
-    return Class.collection.filter(function(classInstance) {
-        return enchant.Entity.prototype._intersectone.call(instance, classInstance);
-    });
-    */
     var ret = [];
     var c;
     for (var i = 0, l = Class.collection.length; i < l; i++) {
@@ -17,15 +12,6 @@ var _intersectBetweenClassAndInstance = function(Class, instance) {
 
 var _intersectBetweenClassAndClass = function(Class1, Class2) {
     var ret = [];
-    /*
-    Class1.collection.forEach(function(instance1) {
-        Class2.collection.forEach(function(instance2) {
-            if (enchant.Entity.prototype._intersectone.call(instance1, instance2)) {
-                 ret.push([ instance1, instance2 ]);
-            }
-        });
-    });
-    */
     var c1, c2;
     for (var i = 0, l = Class1.collection.length; i < l; i++) {
         c1 = Class1.collection[i];
