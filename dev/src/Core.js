@@ -620,11 +620,9 @@
 
                         var type = req.getResponseHeader('Content-Type') || '';
                         if (type.match(/^image/)) {
-                            core.assets[src] = enchant.Surface.load(src);
-                            core.assets[src].addEventListener('load', callback);
+                            core.assets[src] = enchant.Surface.load(src, callback);
                         } else if (type.match(/^audio/)) {
-                            core.assets[src] = enchant.Sound.load(src, type);
-                            core.assets[src].addEventListener('load', callback);
+                            core.assets[src] = enchant.Sound.load(src, type, callback);
                         } else {
                             core.assets[src] = req.responseText;
                             callback();
