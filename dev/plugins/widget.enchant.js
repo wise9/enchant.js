@@ -3271,7 +3271,7 @@
          * @param {Boolean} draggable Sets whether or not item can be dragged.
          [/lang]
          * @constructs
-         * @extends enchant.widget.EntityGroup
+         * @extends enchant.widget.ScrollView
          */
         initialize: function(width, height, draggable) {
             enchant.widget.ScrollView.call(this, width, height);
