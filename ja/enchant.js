@@ -4337,7 +4337,6 @@ enchant.Surface.load = function(src, callback) {
         _element: { value: image }
     });
     enchant.EventTarget.call(surface);
-    image.src = src;
     image.onerror = function() {
         throw new Error('Cannot load an asset: ' + image.src);
     };
@@ -4346,6 +4345,7 @@ enchant.Surface.load = function(src, callback) {
         surface.height = image.height;
         surface.dispatchEvent(new enchant.Event('load'));
     };
+    image.src = src;
     return surface;
 };
 
