@@ -1254,11 +1254,9 @@ enchant.EventTarget = enchant.Class.create({
 
                         var type = req.getResponseHeader('Content-Type') || '';
                         if (type.match(/^image/)) {
-                            core.assets[src] = enchant.Surface.load(src);
-                            core.assets[src].addEventListener('load', callback);
+                            core.assets[src] = enchant.Surface.load(src, callback);
                         } else if (type.match(/^audio/)) {
-                            core.assets[src] = enchant.Sound.load(src, type);
-                            core.assets[src].addEventListener('load', callback);
+                            core.assets[src] = enchant.Sound.load(src, type, callback);
                         } else {
                             core.assets[src] = req.responseText;
                             callback();
@@ -4337,6 +4335,9 @@ enchant.Surface.load = function(src, callback) {
         _element: { value: image }
     });
     enchant.EventTarget.call(surface);
+    if (typeof callback === 'function') {
+        surface.addEventListener('load', callback);
+    }
     image.onerror = function() {
         throw new Error('Cannot load an asset: ' + image.src);
     };
