@@ -1369,10 +1369,10 @@ enchant.EventTarget = enchant.Class.create({
                         }
                     };
 
+                this.pushScene(this.loadingScene);
                 for (var i = 0; i < len; i++) {
                     this.load(assets[i], loadFunc);
                 }
-                this.pushScene(this.loadingScene);
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
@@ -1631,8 +1631,7 @@ enchant.EventTarget = enchant.Class.create({
             enchant.Core._loadFuncs['gif'] =
                 enchant.Core._loadFuncs['png'] =
                     enchant.Core._loadFuncs['bmp'] = function(src, callback) {
-                        this.assets[src] = enchant.Surface.load(src);
-                        this.assets[src].addEventListener('load', callback);
+                        this.assets[src] = enchant.Surface.load(src, callback);
                     };
     enchant.Core._loadFuncs['mp3'] =
         enchant.Core._loadFuncs['aac'] =

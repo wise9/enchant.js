@@ -88,8 +88,7 @@
                 callback = function() {
                 };
             }
-            this.assets[src] = enchant.Surface.load(src);
-            this.assets[src].addEventListener('load', callback);
+            this.assets[src] = enchant.Surface.load(src, callback);
         },
 
         start: function() {
@@ -152,6 +151,7 @@
                         core.dispatchEvent(new enchant.Event('load'));
                     }
                 };
+                this.pushScene(this.loadingScene);
                 for (i = 0, l = assets.length; i < l; i++) {
                     this.load(assets[i], loadListener);
                 }
@@ -192,7 +192,6 @@
                         }
                     });
                 }
-                this.pushScene(this.loadingScene);
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
             }
