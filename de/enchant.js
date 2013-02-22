@@ -1227,7 +1227,10 @@ enchant.EventTarget = enchant.Class.create({
                     var core = enchant.Core.instance;
                     var evt = new enchant.Event(enchant.Event.TOUCH_END);
                     evt._initPosition(e.pageX, e.pageY);
-                    core._touchEventTarget[core._mousedownID].dispatchEvent(evt);
+                    var target = core._touchEventTarget[core._mousedownID];
+                    if (target) {
+                        target.dispatchEvent(evt);
+                    }
                     delete core._touchEventTarget[core._mousedownID];
                 }, false);
             }
