@@ -20,43 +20,36 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
         return this;
     },
     call: function(arg) {
-        return this._emit('succ', arg);
+        var received;
+        if (this._succ) {
+            try {
+                received = this._succ(arg);
+            } catch (e) {
+                return this.fail(e);
+            }
+        } else {
+            received = arg;
+        }
+        if (this._next instanceof enchant.Queue) {
+            if (received instanceof enchant.Queue) {
+                enchant.Queue.insert(this, received);
+            } else {
+                this._next.call(received);
+            }
+        }
     },
     fail: function(arg) {
-        return this._emit('fail', arg);
-    },
-    _emit: function(stat, arg) {
-        var received;
-        if (stat === 'succ') {
-            if (this._succ) {
-                try {
-                    received = this._succ.call(this, arg);
-                } catch (e) {
-                    return this._emit('fail', e);
-                }
-            } else {
-                received = arg;
-            }
-            if (this._next instanceof enchant.Queue) {
-                if (received instanceof enchant.Queue) {
-                    enchant.Queue.insert(this, received);
-                } else {
-                    this._next._emit('succ', received);
-                }
-            }
-        } else if (stat === 'fail') {
-            var queue = this;
-            while (queue && !queue._fail) {
-                queue = queue._next;
-            }
-            if (queue instanceof enchant.Queue) {
-                var n = queue._fail.call(queue, arg);
-                queue._emit.call(queue, 'succ', n);
-            } else {
-                var e = new Error('queue failed');
-                e.arg = arg;
-                throw e;
-            }
+        var queue = this;
+        while (queue && !queue._fail) {
+            queue = queue._next;
+        }
+        if (queue instanceof enchant.Queue) {
+            var n = queue._fail(arg);
+            queue.call(n);
+        } else {
+            var e = new Error('queue failed');
+            e.arg = arg;
+            throw e;
         }
     }
 });
