@@ -113,13 +113,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     e = new enchant.Event('touchstart');
                     e.identifier = touches[i].identifier;
                     e._initPosition(touches[i].pageX, touches[i].pageY);
-
-                    /*
-                     * if preventDefault() of touch event called,
-                     * mouse*** event won't be dispatched for the element. (see issue #129)
-                     */
-                    e.preventDefault();
-
                     that.dispatchEvent(e);
                 }
             }, false);
@@ -129,7 +122,6 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     e = new enchant.Event('touchmove');
                     e.identifier = touches[i].identifier;
                     e._initPosition(touches[i].pageX, touches[i].pageY);
-                    e.preventDefault();
                     that.dispatchEvent(e);
                 }
             }, false);
@@ -139,45 +131,43 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                     e = new enchant.Event('touchend');
                     e.identifier = touches[i].identifier;
                     e._initPosition(touches[i].pageX, touches[i].pageY);
-                    e.preventDefault();
                     that.dispatchEvent(e);
                 }
             }, false);
         }
-        if (enchant.ENV.MOUSE_ENABLED){
-            this._element.addEventListener('mousedown', function(e) {
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchstart');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                that.dispatchEvent(e);
-                that._mousedown = true;
-            }, false);
-            game._element.addEventListener('mousemove', function(e) {
-                if (!that._mousedown) {
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchmove');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                that.dispatchEvent(e);
-            }, false);
-            game._element.addEventListener('mouseup', function(e) {
-                if (!that._mousedown) {
-                    return;
-                }
-                var x = e.pageX;
-                var y = e.pageY;
-                e = new enchant.Event('touchend');
-                e.identifier = game._mousedownID;
-                e._initPosition(x, y);
-                that.dispatchEvent(e);
-                that._mousedown = false;
-            }, false);
-        }
+        this._element.addEventListener('mousedown', function(e) {
+            var x = e.pageX;
+            var y = e.pageY;
+            e = new enchant.Event('touchstart');
+            e.identifier = game._mousedownID;
+            e._initPosition(x, y);
+            that.dispatchEvent(e);
+            that._mousedown = true;
+        }, false);
+        game._element.addEventListener('mousemove', function(e) {
+            if (!that._mousedown) {
+                return;
+            }
+            var x = e.pageX;
+            var y = e.pageY;
+            e = new enchant.Event('touchmove');
+            e.identifier = game._mousedownID;
+            e._initPosition(x, y);
+            that.dispatchEvent(e);
+        }, false);
+        game._element.addEventListener('mouseup', function(e) {
+            if (!that._mousedown) {
+                return;
+            }
+            var x = e.pageX;
+            var y = e.pageY;
+            e = new enchant.Event('touchend');
+            e.identifier = game._mousedownID;
+            e._initPosition(x, y);
+            that.dispatchEvent(e);
+            that._mousedown = false;
+        }, false);
+
     },
     /**
      [lang:ja]

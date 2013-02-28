@@ -371,36 +371,34 @@
                         }
                     }, true);
                 }
-                if (enchant.ENV.MOUSE_ENABLED) {
-                    stage.addEventListener('mousedown', function(e) {
-                        var tagName = (e.target.tagName).toLowerCase();
-                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                            e.preventDefault();
-                            game._mousedownID++;
-                            if (!game.running) {
-                                e.stopPropagation();
-                            }
+                stage.addEventListener('mousedown', function(e) {
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                        e.preventDefault();
+                        game._mousedownID++;
+                        if (!game.running) {
+                            e.stopPropagation();
                         }
-                    }, true);
-                    stage.addEventListener('mousemove', function(e) {
-                        var tagName = (e.target.tagName).toLowerCase();
-                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                            e.preventDefault();
-                            if (!game.running) {
-                                e.stopPropagation();
-                            }
+                    }
+                }, true);
+                stage.addEventListener('mousemove', function(e) {
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                        e.preventDefault();
+                        if (!game.running) {
+                            e.stopPropagation();
                         }
-                    }, true);
-                    stage.addEventListener('mouseup', function(e) {
-                        var tagName = (e.target.tagName).toLowerCase();
-                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                            e.preventDefault();
-                            if (!game.running) {
-                                e.stopPropagation();
-                            }
+                    }
+                }, true);
+                stage.addEventListener('mouseup', function(e) {
+                    var tagName = (e.target.tagName).toLowerCase();
+                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                        e.preventDefault();
+                        if (!game.running) {
+                            e.stopPropagation();
                         }
-                    }, true);
-                }
+                    }
+                }, true);
             }
         },
         /**

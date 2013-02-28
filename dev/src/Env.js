@@ -36,7 +36,6 @@ enchant.ENV = {
         div.setAttribute('ontouchstart', 'return');
         return typeof div.ontouchstart === 'function';
     }()),
-    MOUSE_ENABLED: true,
     /**
      * Is this browser iPhone with Retina display?
      * @type {String}
