@@ -127,26 +127,23 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._rendering(this, render);
     },
     _rendering:  function(node, e) {
-        var core = enchant.Core.instance;
-        var matrix = enchant.Matrix.instance;
-        var stack = matrix.stack;
-        var width = node.width;
-        var height = node.height;
         var ctx = this.context;
-        var child;
-        ctx.save();
+        var width, height, child;
         node.dispatchEvent(e);
-        // composite
-        if (node.compositeOperation) {
-            ctx.globalCompositeOperation = node.compositeOperation;
-        } else {
-            ctx.globalCompositeOperation = 'source-over';
-        }
-        ctx.globalAlpha = (typeof node._opacity === 'number') ? node._opacity : 1.0;
+        ctx.save();
         // transform
         this._transform(node, ctx);
-        // render
         if (typeof node._visible === 'undefined' || node._visible) {
+            width = node.width;
+            height = node.height;
+            // composite
+            if (node.compositeOperation) {
+                ctx.globalCompositeOperation = node.compositeOperation;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+            }
+            ctx.globalAlpha = (typeof node._opacity === 'number') ? node._opacity : 1.0;
+            // render
             if (node._backgroundColor) {
                 ctx.fillStyle = node._backgroundColor;
                 ctx.fillRect(0, 0, width, height);
@@ -156,7 +153,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 node.cvsRender(ctx);
             }
 
-            if (core._debug) {
+            if (enchant.Core.instance._debug) {
                 if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
                     ctx.strokeStyle = '#ff0000';
                 } else {
@@ -180,33 +177,35 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         enchant.Matrix.instance.stack.pop();
     },
     _detectrendering: function(node) {
-        var width = node.width;
-        var height = node.height;
-        var ctx = this._dctx;
-        var child;
-        ctx.save();
-        this._transform(node, ctx);
-        ctx.fillStyle = node._cvsCache.detectColor;
-        if (node._touchEnabled) {
-            if (node.detectRender) {
-                node.detectRender(ctx);
-            } else {
-                ctx.fillRect(0, 0, width, height);
+        var ctx, width, height, child;
+        if (typeof node._visible === 'undefined' || node._visible) {
+            width = node.width;
+            height = node.height;
+            ctx = this._dctx;
+            ctx.save();
+            this._transform(node, ctx);
+            ctx.fillStyle = node._cvsCache.detectColor;
+            if (node._touchEnabled) {
+                if (node.detectRender) {
+                    node.detectRender(ctx);
+                } else {
+                    ctx.fillRect(0, 0, width, height);
+                }
             }
-        }
-        if (node._clipping) {
-            ctx.beginPath();
-            ctx.rect(0, 0, width, height);
-            ctx.clip();
-        }
-        if (node.childNodes) {
-            for (var i = 0, l = node.childNodes.length; i < l; i++) {
-                child = node.childNodes[i];
-                this._detectrendering(child);
+            if (node._clipping) {
+                ctx.beginPath();
+                ctx.rect(0, 0, width, height);
+                ctx.clip();
             }
+            if (node.childNodes) {
+                for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                    child = node.childNodes[i];
+                    this._detectrendering(child);
+                }
+            }
+            ctx.restore();
+            enchant.Matrix.instance.stack.pop();
         }
-        ctx.restore();
-        enchant.Matrix.instance.stack.pop();
     },
     _transform: function(node, ctx) {
         var matrix = enchant.Matrix.instance;
