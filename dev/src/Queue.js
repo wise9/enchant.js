@@ -63,5 +63,9 @@ enchant.Queue.insert = function(queue1, ins) {
     enchant.Queue.connect(queue1, ins);
 };
 enchant.Queue.next = function(func) {
-    return new enchant.Queue(func);
+    var q = new enchant.Queue(func);
+    setTimeout(function() {
+        q.call();
+    }, 0);
+    return q;
 };

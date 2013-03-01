@@ -16,12 +16,15 @@ test('new Queue', function() {
 
 test('Queue.next', function() {
     var result = false;
-    var q = Queue.next(function() {
+    Queue.next(function() {
         result = true;
     });
     equal(result, false, 'before call queue');
-    q.call();
-    equal(result, true, 'after call queue');
+    stop();
+    setTimeout(function() {
+        start();
+        equal(result, true, 'after call queue');
+    }, 0);
 });
 
 test('Queue chain', function() {
@@ -33,10 +36,13 @@ test('Queue chain', function() {
     .next(function(arg) {
         result2 = true;
         hoge = arg;
-    })
-    .call();
-    equal((result1 & result2), true, 'chain');
-    equal(hoge, 'hoge', 'pass returned value');
+    });
+    stop();
+    setTimeout(function() {
+        start();
+        equal((result1 & result2), true, 'chain');
+        equal(hoge, 'hoge', 'pass returned value');
+    }, 0);
 });
 
 test('Queue#error', function() {
@@ -49,16 +55,18 @@ test('Queue#error', function() {
     })
     .error(function() {
         result2 = true;
-    })
-    .call();
-    equal(result1, false, 'skipped in error');
-    equal(result2, true, 'error handling');
+    });
+    stop();
+    setTimeout(function() {
+        start();
+        equal(result1, false, 'skipped in error');
+        equal(result2, true, 'error handling');
+    }, 0);
 
     raises(function() {
-        Queue.next(function() {
+        (new Queue()).next(function() {
             throw new Error('fail');
-        })
-        .call();
+        }).call();
     }, /queue failed/, 'no handler');
 });
 
@@ -66,7 +74,6 @@ test('async Queue', function() {
     var result = false;
     Queue.next(function() {
         var q = new Queue();
-        stop();
         setTimeout(function() {
             q.call();
         }, 100);
@@ -74,9 +81,9 @@ test('async Queue', function() {
     })
     .next(function() {
         result = true;
-    })
-    .call();
+    });
     equal(result, false, 'before wait (q.call)');
+    stop();
     setTimeout(function() {
         start();
         equal(result, true, 'after wait (q.call)');
@@ -85,7 +92,6 @@ test('async Queue', function() {
     var result1 = false, result2 = false;
     Queue.next(function() {
         var q = new Queue();
-        stop();
         setTimeout(function() {
             q.fail();
         }, 100);
@@ -96,9 +102,9 @@ test('async Queue', function() {
     })
     .error(function() {
         result2 = true;
-    })
-    .call();
+    });
     equal(result1 | result2, false, 'before wait (q.fail)');
+    stop();
     setTimeout(function() {
         start();
         equal(result1, false, 'skip in error (q.fail)');
