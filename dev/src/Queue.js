@@ -21,20 +21,23 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
     },
     call: function(arg) {
         var received;
-        if (this._succ) {
-            try {
-                received = this._succ(arg);
-            } catch (e) {
-                return this.fail(e);
-            }
-        } else {
-            received = arg;
+        var queue = this;
+        while (queue && !queue._succ) {
+            queue = queue._next;
         }
-        if (this._next instanceof enchant.Queue) {
+        if (!(queue instanceof enchant.Queue)) {
+            return;
+        }
+        try {
+            received = queue._succ(arg);
+        } catch (e) {
+            return queue.fail(e);
+        }
+        if (queue._next instanceof enchant.Queue) {
             if (received instanceof enchant.Queue) {
-                enchant.Queue.insert(this, received);
+                enchant.Queue.insert(queue, received);
             } else {
-                this._next.call(received);
+                queue._next.call(received);
             }
         }
     },
