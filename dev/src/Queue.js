@@ -54,6 +54,36 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
             e.arg = arg;
             throw e;
         }
+    },
+    parallel: function(arg) {
+        var progress = 0;
+        var ret = (arg instanceof Array) ? [] : {};
+        this.next(function() {
+            var q = new enchant.Queue();
+            for (var prop in arg) {
+                if (arg.hasOwnProperty(prop)) {
+                    progress++;
+                    /*jshint loopfunc:true */
+                    (function(queue, name) {
+                        queue.next(function(arg) {
+                            progress--;
+                            ret[name] = arg;
+                            if (progress <= 0) {
+                                q.call(ret);
+                            }
+                        })
+                        .error(function(e) {
+                            q.fail(e);
+                        });
+                        setTimeout(function(q) {
+                            queue.call();
+                        }, 0);
+                    }(arg[prop], prop));
+                }
+            }
+            return q;
+        });
+        return this;
     }
 });
 enchant.Queue.connect = function(queue1, queue2) {
@@ -67,6 +97,14 @@ enchant.Queue.insert = function(queue1, ins) {
 };
 enchant.Queue.next = function(func) {
     var q = new enchant.Queue(func);
+    setTimeout(function() {
+        q.call();
+    }, 0);
+    return q;
+};
+enchant.Queue.parallel = function(arg) {
+    var q = new enchant.Queue();
+    q.parallel(arg);
     setTimeout(function() {
         q.call();
     }, 0);

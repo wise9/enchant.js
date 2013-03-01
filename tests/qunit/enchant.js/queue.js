@@ -27,7 +27,7 @@ test('Queue.next', function() {
     }, 0);
 });
 
-test('Queue chain', function() {
+test('chained Queue', function() {
     var result1 = false, result2 = false, hoge;
     Queue.next(function() {
         result1 = true;
@@ -110,4 +110,71 @@ test('async Queue', function() {
         equal(result1, false, 'skip in error (q.fail)');
         equal(result2, true, 'error handling (q.fail)');
     }, 150);
+});
+
+test('parallel Queue', function() {
+    stop();
+    (new enchant.Queue()).parallel([
+        new Queue(function() {
+            return 1;
+        }),
+        new Queue(function() {
+            return 2;
+        }),
+        new Queue(function() {
+            return 3;
+        })
+    ])
+    .next(function(arr) {
+        start();
+        deepEqual(arr, [ 1, 2, 3 ], 'returns array');
+    })
+    .call();
+
+    stop();
+    Queue.parallel({
+        one: new Queue(function() {
+            return 1;
+        }),
+        two: new Queue(function() {
+            return 2;
+        }),
+        three: new Queue(function() {
+            return 3;
+        })
+    })
+    .next(function(obj) {
+        start();
+        deepEqual(obj, { one: 1, two: 2, three: 3 }, 'returns object');
+    });
+
+    var result = false;
+    var c = 0;
+    stop();
+    Queue.parallel([
+        new Queue(function() {
+            throw new Error('error1');
+        }),
+        new Queue(function() {
+            throw new Error('error2');
+        }),
+        new Queue(function() {
+            return 'success';
+        })
+    ])
+    .next(function(arr) {
+        result = true;
+    })
+    .error(function(err) {
+        c++;
+        if (!(err instanceof Error) || !(/error\d/.test(err.message))) {
+            throw new Error('');
+        }
+    });
+    setTimeout(function() {
+        start();
+        equal(result, false, 'skipped');
+        equal(c, 2, 'receive 2 errors');
+
+    }, 50);
 });
