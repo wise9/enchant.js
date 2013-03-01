@@ -15,7 +15,7 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
         return this._add(q);
     },
     _add: function(queue) {
-        enchant.Queue.connect(this._tail, queue);
+        this._tail._next = queue;
         this._tail = queue;
         return this;
     },
@@ -33,12 +33,10 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
         } catch (e) {
             return queue.fail(e);
         }
-        if (queue._next instanceof enchant.Queue) {
-            if (received instanceof enchant.Queue) {
-                enchant.Queue.insert(queue, received);
-            } else {
-                queue._next.call(received);
-            }
+        if (received instanceof enchant.Queue) {
+            enchant.Queue._insert(queue, received);
+        } else if (queue._next instanceof enchant.Queue) {
+            queue._next.call(received);
         }
     },
     fail: function(arg) {
@@ -50,9 +48,9 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
             var n = queue._fail(arg);
             queue.call(n);
         } else {
-            var e = new Error('queue failed');
-            e.arg = arg;
-            throw e;
+            var err = new Error('queue failed');
+            err.arg = arg;
+            throw err;
         }
     },
     parallel: function(arg) {
@@ -72,12 +70,8 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
                                 q.call(ret);
                             }
                         })
-                        .error(function(e) {
-                            q.fail(e);
-                        });
-                        setTimeout(function(q) {
-                            queue.call();
-                        }, 0);
+                        .error(function(err) { q.fail(err); });
+                        setTimeout(function(q) { queue.call(); }, 0);
                     }(arg[prop], prop));
                 }
             }
@@ -86,27 +80,20 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
         return this;
     }
 });
-enchant.Queue.connect = function(queue1, queue2) {
-    queue1._next = queue2;
-};
-enchant.Queue.insert = function(queue1, ins) {
-    if (queue1._next instanceof enchant.Queue) {
-        ins._next = queue1._next;
+enchant.Queue._insert = function(queue, ins) {
+    if (queue._next instanceof enchant.Queue) {
+        ins._next = queue._next;
     }
-    enchant.Queue.connect(queue1, ins);
+    queue._next = ins;
 };
 enchant.Queue.next = function(func) {
     var q = new enchant.Queue(func);
-    setTimeout(function() {
-        q.call();
-    }, 0);
+    setTimeout(function() { q.call(); }, 0);
     return q;
 };
 enchant.Queue.parallel = function(arg) {
     var q = new enchant.Queue();
     q.parallel(arg);
-    setTimeout(function() {
-        q.call();
-    }, 0);
+    setTimeout(function() { q.call(); }, 0);
     return q;
 };
