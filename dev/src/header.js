@@ -62,13 +62,14 @@ if (typeof Function.prototype.bind !== 'function') {
 }
 
 window.getTime = (function() {
+    var origin;
     if (window.performance && window.performance.now) {
-        var origin = Date.now();
+        origin = Date.now();
         return function() {
             return origin + window.performance.now();
         };
     } else if (window.performance && window.performance.webkitNow) {
-        var origin = Date.now();
+        origin = Date.now();
         return function() {
             return origin + window.performance.webkitNow();
         };
