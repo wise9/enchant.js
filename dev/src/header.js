@@ -62,14 +62,15 @@ if (typeof Function.prototype.bind !== 'function') {
 }
 
 window.getTime = (function() {
-
     if (window.performance && window.performance.now) {
+        var origin = Date.now();
         return function() {
-            return window.performance.now();
+            return origin + window.performance.now();
         };
     } else if (window.performance && window.performance.webkitNow) {
+        var origin = Date.now();
         return function() {
-            return window.performance.webkitNow();
+            return origin + window.performance.webkitNow();
         };
     } else {
         return Date.now;
