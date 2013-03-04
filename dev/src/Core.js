@@ -285,6 +285,8 @@
             var progress = 0, _progress = 0;
             this.addEventListener('progress', function(e) {
                 progress = e.loaded / e.total;
+                // avoid #167 https://github.com/wise9/enchant.js/issues/177
+                progress += 0.0;
             });
             bar.addEventListener('enterframe', function() {
                 _progress *= 0.9;
@@ -293,6 +295,8 @@
                 image.context.fillRect(border, 0, (barWidth - border * 2) * _progress, barHeight);
             });
             this.loadingScene.addChild(bar);
+
+            this._calledTime = 0;
 
             this._mousedownID = 0;
             this._surfaceID = 0;
@@ -657,12 +661,8 @@
          */
         start: function() {
             var onloadTimeSetter = function() {
-                this.currentTime = window.getTime();
-                this._calledTime = 0;
+                this.frame = 0;
                 this.removeEventListener('load', onloadTimeSetter);
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame(0);
             };
             this.addEventListener('load', onloadTimeSetter);
 
@@ -691,6 +691,10 @@
                 }
 
                 this._activated = true;
+                this.currentTime = window.getTime();
+                this.running = true;
+                this.ready = true;
+                this._requestNextFrame(0);
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {

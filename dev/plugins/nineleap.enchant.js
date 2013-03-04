@@ -95,12 +95,8 @@
             var core = this;
 
             var onloadTimeSetter = function() {
-                this.currentTime = this.getTime();
-                this._calledTime = 0;
+                this.frame = 0;
                 this.removeEventListener('load', onloadTimeSetter);
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame();
             };
             this.addEventListener('load', onloadTimeSetter);
 
@@ -130,6 +126,11 @@
                 }
 
                 this._activated = true;
+                this.currentTime = this.getTime();
+                this._calledTime = 0;
+                this.running = true;
+                this.ready = true;
+                this._requestNextFrame(0);
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {
