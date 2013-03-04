@@ -96,7 +96,7 @@
 
             var onloadTimeSetter = function() {
                 this.currentTime = this.getTime();
-                this._nextTime = 0;
+                this._calledTime = 0;
                 this.removeEventListener('load', onloadTimeSetter);
                 this.running = true;
                 this.ready = true;
