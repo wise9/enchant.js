@@ -285,6 +285,8 @@
             var progress = 0, _progress = 0;
             this.addEventListener('progress', function(e) {
                 progress = e.loaded / e.total;
+                // avoid #167 https://github.com/wise9/enchant.js/issues/177
+                progress += 0.0;
             });
             bar.addEventListener('enterframe', function() {
                 _progress *= 0.9;
