@@ -294,6 +294,8 @@
             });
             this.loadingScene.addChild(bar);
 
+            this._calledTime = 0;
+
             this._mousedownID = 0;
             this._surfaceID = 0;
             this._soundID = 0;
@@ -657,12 +659,8 @@
          */
         start: function() {
             var onloadTimeSetter = function() {
-                this.currentTime = window.getTime();
-                this._calledTime = 0;
+                this.frame = 0;
                 this.removeEventListener('load', onloadTimeSetter);
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame(0);
             };
             this.addEventListener('load', onloadTimeSetter);
 
@@ -691,6 +689,10 @@
                 }
 
                 this._activated = true;
+                this.currentTime = window.getTime();
+                this.running = true;
+                this.ready = true;
+                this._requestNextFrame(0);
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {
