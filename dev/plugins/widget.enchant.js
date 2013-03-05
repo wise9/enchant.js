@@ -1276,7 +1276,8 @@
                 return this._width;
             },
             set: function(width) {
-                this._style.width = (this._width = width) + 'px';
+                this._width = width;
+                this._dirty = true;
                 if (this.background instanceof enchant.widget.Ninepatch) {
                     this.background.width = this.width;
                 }
@@ -1290,7 +1291,8 @@
                 return this._height;
             },
             set: function(height) {
-                this._style.height = (this._height = height) + 'px';
+                this._height = height;
+                this._dirty = true;
                 if (this.background instanceof enchant.widget.Ninepatch) {
                     this.background.height = this.height;
                 }
