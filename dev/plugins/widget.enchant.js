@@ -1255,8 +1255,6 @@
             this.width = width;
             this.height = height;
             this.childNodes = [];
-            this.parentNode;
-            this._renderFrag = true;
 
             [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
                 .forEach(function(event) {
