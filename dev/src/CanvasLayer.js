@@ -129,8 +129,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     _rendering:  function(node, e) {
         var ctx = this.context;
         var width, height, child;
-        node.dispatchEvent(e);
         ctx.save();
+        node.dispatchEvent(e);
         // transform
         this._transform(node, ctx);
         if (typeof node._visible === 'undefined' || node._visible) {
