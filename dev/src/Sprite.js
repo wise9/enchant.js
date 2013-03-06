@@ -181,24 +181,21 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        if (this._image == null || this._width === 0 || this._height === 0) {
-            return;
-        }
-        var image = this._image;
-        var element = image._element;
-        var sx = this._frameLeft;
-        var sy = this._frameTop;
-        var sw = Math.min(this.width, image.width - sx);
-        var sh = Math.min(this.height, image.height - sy);
-        var dw = Math.min(image.width, this.width);
-        var dh = Math.min(image.height, this.height);
-        var x, y, w, h;
-        for (y = 0; y < this.height; y += dh) {
-            h = (this.height < y + dh) ? this.height - y : dh;
-            for (x = 0; x < this.width; x += dw) {
-                w = (this.width < x + dw) ? this.width - x : dw;
-                ctx.drawImage(element, sx, sy,
-                    sw * w / dw, sh * h / dh, x, y, w, h);
+        var image = this._image,
+            w = this._width, h = this._height,
+            iw, ih, elem, sx, sy, sw, sh;
+        if (image && w !== 0 && h !== 0) {
+            iw = image.width, ih = image.height;
+            if (iw < w || ih < h) {
+                ctx.fillStyle = enchant.Surface._getPattern(image);
+                ctx.fillRect(0, 0, w, h);
+            } else {
+                elem = image._element;
+                sx = this._frameLeft;
+                sy = Math.min(this._frameTop, ih - h);
+                sw = Math.min(iw - sx, w);
+                sh = Math.min(ih - sy, h);
+                ctx.drawImage(elem, sx, sy, sw, sh, 0, 0, w, h);
             }
         }
     },
