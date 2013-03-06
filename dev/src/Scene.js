@@ -175,19 +175,19 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
+        var target, i;
         if (child._element) {
-            if (!this._layers.Dom) {
-                this.addLayer('Dom', 1);
-            }
-            this._layers.Dom.insertBefore(child, next);
-            child._layer = this._layers.Dom;
+            target = 'DOM';
+            i = 1;
         } else {
-            if (!this._layers.Canvas) {
-                this.addLayer('Canvas', 0);
-            }
-            this._layers.Canvas.insertBefore(child, next);
-            child._layer = this._layers.Canvas;
+            target = 'Canvas';
+            i = 0;
         }
+        if (!this._layers[target]) {
+            this.addLayer(target, i);
+        }
+        child._layer = this._layers[target];
+        this._layers[target].insertBefore(child, next);
         child.parentNode = this;
     },
     _onchildremoved: function(e) {
