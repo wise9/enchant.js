@@ -49,6 +49,19 @@ enchant.Matrix = enchant.Class.create({
             m12 = mat[1], m22 = mat[3], mdy = mat[5];
         dest[0] = m11 * x + m21 * y + mdx;
         dest[1] = m12 * x + m22 * y + mdy;
+    },
+    inverse: function(mat, dest) {
+        var m11 = mat[0], m21 = mat[2], mdx = mat[4],
+            m12 = mat[1], m22 = mat[3], mdy = mat[5],
+            s = 1 / (m11 * m22 + m12 * -m21);
+
+        dest[0] = m22 * s;
+        dest[1] = -m12 * s;
+        dest[2] = -m21 * s;
+        dest[3] = m11 * s;
+        dest[4] = (m21 * mdy - m22 * mdx) * s;
+        dest[5] = (m12 * mdx - m11 * mdy) * s;
+        return dest;
     }
 });
 enchant.Matrix.instance = new enchant.Matrix();
