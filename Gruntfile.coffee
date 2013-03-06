@@ -67,6 +67,8 @@ module.exports = (grunt) ->
             'dev/src/CanvasScene.js'
             'dev/src/DOMScene.js'
             'dev/src/Surface.js'
+            'dev/src/RectGroup.js'
+            'dev/src/CacheRectGroup.js'
 
             'dev/src/Deferred.js'
 
