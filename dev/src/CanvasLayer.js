@@ -37,6 +37,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._element.width = core.width;
         this._element.height = core.height;
         this._element.style.position = 'absolute';
+        // issue 179
+        this._element.style.left = this._element.style.top = '0px';
 
         this._detect = document.createElement('canvas');
         this._detect.width = core.width;
