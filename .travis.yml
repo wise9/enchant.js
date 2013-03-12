@@ -3,3 +3,5 @@ node_js:
   - 0.8
 before_install:
   - phantomjs --version
+before_script:
+  - npm install -g grunt-cli
