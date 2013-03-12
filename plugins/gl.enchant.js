@@ -14,7 +14,6 @@
  * Uses gl-matrix.js in vector, matrix operation.
  * gl-matrix.js:
  * https://github.com/toji/gl-matrix/
- *
  */
 
 /**
@@ -1655,7 +1654,6 @@ if (typeof glMatrixArrayType === 'undefined') {
          *   var sp = new Sprite3D();
          *   sp.set(core.assets['sample.dae']);
          *   //Becomes Sprite3D with sample.dae model information
-         *
          */
         set: function(sprite) {
             for (var prop in sprite) {
@@ -2966,7 +2964,6 @@ if (typeof glMatrixArrayType === 'undefined') {
          * Defined as rotating.
          * @constructs
          * @see enchant.gl.collision.Bounding
-
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);

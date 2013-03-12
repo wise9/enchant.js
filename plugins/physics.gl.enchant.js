@@ -606,7 +606,6 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * Begin World time progress.
              * Ever other enterframe, stepSimulation will be automaticall called up.
-             *
              */
             play: function() {
                 var core = enchant.Core.instance;

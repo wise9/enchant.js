@@ -15,7 +15,7 @@
  * http://code.google.com/p/glmatrix/
  * glMatrix.jsの詳しい使い方:
  * http://code.google.com/p/glmatrix/wiki/Usage
- */
+*/
 if (enchant.gl !== undefined) {
     enchant.Core._loadFuncs['dae'] = function(src, callback) {
         enchant.gl.Sprite3D.loadCollada(src, function(collada, src) {
@@ -38,7 +38,7 @@ if (enchant.gl !== undefined) {
         * @param {String} url コラーダモデルのURL
         * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
         * @static
-        */
+*/
         enchant.gl.Sprite3D.loadCollada = function(url, onload) {
             if (typeof onload !== 'function') {
                 return;
@@ -870,7 +870,7 @@ if (enchant.gl !== undefined) {
 
         /**
          * enchantにcollada.gl.enchant.jsのクラスをエクスポートする.
-         */
+*/
         enchant.gl.collada = {};
         /**
          * @scope enchant.gl.collada.ColladaBone.prototype
@@ -883,7 +883,7 @@ if (enchant.gl !== undefined) {
              * @param {quat4} parentrot
              * @constructs
              * @extends enchant.gl.Bone
-             */
+*/
             initialize: function(node, parentpos, parentrot) {
                 var rotation = node.getRotationMatrix();
                 var translation = node.getTranslationMatrix();
@@ -920,7 +920,7 @@ if (enchant.gl !== undefined) {
              * colladaのボーンの構造のルートになるクラス.
              * @constructs
              * @extends enchant.gl.Skeleton
-             */
+*/
             initialize: function() {
                 enchant.gl.Skeleton.call(this);
             },
@@ -956,7 +956,7 @@ if (enchant.gl !== undefined) {
              * @param {Triangle} triangles
              * @constructs
              * @extends enchant.gl.Mesh
-             */
+*/
             initialize: function(triangles) {
                 enchant.gl.Mesh.call(this);
                 this.parseMeshFromGeometryMesh(triangles);
@@ -1003,7 +1003,7 @@ if (enchant.gl !== undefined) {
              * @param {Triangle} triangles
              * @constructs
              * @extends enchant.gl.collada.ColladaMesh
-             */
+*/
             initialize: function(triangles) {
                 enchant.gl.collada.ColladaMesh.call(this, triangles);
                 var vpos1Buffer = new enchant.gl.Buffer(enchant.gl.Buffer.VERTICES);
@@ -1046,7 +1046,7 @@ if (enchant.gl !== undefined) {
              * @param {Triangle} triangles
              * @constructs
              * @extends enchant.gl.Sprite3D
-             */
+*/
             initialize: function(lib, node, triangles) {
                 enchant.gl.Sprite3D.call(this);
                 this.lib = lib;
@@ -1157,13 +1157,13 @@ if (enchant.gl !== undefined) {
             * アニメーションクリップを追加する.
             * アニメーションクリップは追加された順に再生されていく.
             * @param {String} clipId
-            */
+*/
             pushAnimationClip: function(clipId){
                 this.childNodes[1].pushAnimationClip(clipId);
             },
             /**
             * 追加されたアニメーションクリップを削除する.
-            */
+*/
             clearAnimationClip: function(){
                 this.childNodes[1].clearAnimationClip();
             },
@@ -1193,7 +1193,7 @@ if (enchant.gl !== undefined) {
              * @param {Node} node
              * @constructs
              * @extends enchant.gl.collada.AbstractColladaSprite3D
-             */
+*/
             addColladaSprite3DFromNode: function(node) {
                 var geometry = this.lib['geometries'][node.geometryUrl];
                 var trianglesLength = this._getTrianglesLength(geometry);
@@ -1288,7 +1288,7 @@ if (enchant.gl !== undefined) {
              * @param {Triangle} triangles
              * @constructs
              * @extends enchant.gl.collada.ColladaSprite3D
-             */
+*/
             initialize: function(lib, node, triangles) {
                 enchant.gl.collada.AbstractColladaSprite3D.call(this, lib, node, triangles);
                 this.program = enchant.gl.collada.COLLADA_SHADER_PROGRAM;
@@ -1341,7 +1341,7 @@ if (enchant.gl !== undefined) {
              * @param {Node} node
              * @constructs
              * @extends enchant.gl.collada.ColladaSprite3D
-             */
+*/
             addColladaSkeletonSprite3DFromNode: function(node, skin, skeleton, maxbonenum) {
                 var controller = this.lib['controllers'][node.controllerUrl];
                 var geometry = this.lib['geometries'][controller.skin.source];

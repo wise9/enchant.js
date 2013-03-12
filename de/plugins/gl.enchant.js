@@ -2315,7 +2315,6 @@ if (typeof glMatrixArrayType === 'undefined') {
      */
     enchant.gl.collision.OBB = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
-
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);

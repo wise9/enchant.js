@@ -14,12 +14,11 @@
  * ベクトル・行列演算にgl-matrix.jsを使用しています.
  * gl-matrix.js:
  * https://github.com/toji/gl-matrix/
- *
- */
+*/
 
 /**
  * enchantにgl.enchant.jsのクラスをエクスポートする.
- */
+*/
 enchant.gl = {};
 
 if (typeof glMatrixArrayType === 'undefined') {
@@ -381,7 +380,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {String} width フレームバッファの横幅
          * @param {String} height フレームバッファの縦幅
          * @constructs
-         */
+*/
         initialize: function(width, height) {
             var core = enchant.Core.instance;
             if (typeof width === 'undefined') {
@@ -409,19 +408,19 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * フレームバッファをバインドする.
-         */
+*/
         bind: function() {
             gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer);
         },
         /**
          * フレームバッファをアンバインドする.
-         */
+*/
         unbind: function() {
             gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         },
         /**
          * オブジェクトを破棄する.
-         */
+*/
         destroy: function() {
             gl.deleteFramebuffer(this.framebuffer);
             gl.deleteFramebuffer(this.colorbuffer);
@@ -439,7 +438,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {String} vshader バーテックスシェーダのソース
          * @param {String} fshader フラグメントシェーダのソース
          * @constructs
-         */
+*/
         initialize: function(vshader, fshader) {
             this._vShaderSource = '';
             this._fShaderSource = '';
@@ -466,7 +465,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * バーテックスシェーダのソース
          * @type String
-         */
+*/
         vShaderSource: {
             get: function() {
                 return this._vShaderSource;
@@ -479,7 +478,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * フラグメントシェーダのソース
          * @type String
-         */
+*/
         fShaderSource: {
             get: function() {
                 return this._fShaderSource;
@@ -499,7 +498,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * shader.fShaderSource = frag;
          * // コンパイル.
          * shader.compile();
-         */
+*/
         compile: function() {
             if (this._updatedVShaderSource) {
                 this._prepareVShader();
@@ -525,7 +524,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * シェーダプログラムを使用するように設定する.
-         */
+*/
         use: function() {
             gl.useProgram(this._program);
         },
@@ -539,7 +538,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *     aVertexPosition: indices,
          *     aNormal: normals
          * });
-         */
+*/
         setAttributes: function(params) {
             for (var prop in params) {
                 if (params.hasOwnProperty(prop)) {
@@ -557,7 +556,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *     uDiffuse: diffuse,
          *     uLightColor: lightColor
          * });
-         */
+*/
         setUniforms: function(params) {
             for (var prop in params) {
                 if (params.hasOwnProperty(prop)) {
@@ -604,7 +603,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * オブジェクトを破棄する.
-         */
+*/
         destroy: function() {
             gl.deleteProgram(this._vShaderProgram);
             gl.deleteProgram(this._fShaderProgram);
@@ -735,7 +734,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {Number} z
          * @param {Number} rad
          * @constructs
-         */
+*/
         initialize: function(x, y, z, rad) {
             var l = Math.sqrt(x * x + y * y + z * z);
             if (l) {
@@ -756,7 +755,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
-         */
+*/
         slerp: function(another, ratio) {
             var q = new enchant.gl.Quat(0, 0, 0, 0);
             quat4.slerp(this._quat, another._quat, ratio, q._quat);
@@ -770,7 +769,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {enchant.gl.Quat} another Quaternion
          * @param {Number} ratio
          * @return {enchant.gl.Quat}
-         */
+*/
         slerpApply: function(another, ratio) {
             quat4.slerp(this._quat, another._quat, ratio);
             return this;
@@ -779,7 +778,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * クォータニオンを回転行列に変換する.
          * @param {Number[]} matrix
          * @return {Number[]}
-         */
+*/
         toMat4: function(matrix) {
             quat4.toMat4(this._quat, matrix);
             return matrix;
@@ -788,7 +787,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * クォータニオンをベクトルに適用する.
          * @param {Number[]} vector
          * @return {Number[]}
-         */
+*/
         multiplyVec3: function(vector) {
             quat4.multiplyVec3(this._quat, vector);
             return vector;
@@ -804,7 +803,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *
          * @constructs
          * @extends enchant.EventTarget
-         */
+*/
         initialize: function() {
             this._changedColor = true;
             this._color = [0.8, 0.8, 0.8];
@@ -813,7 +812,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * 光源の光の色
          * @type Number[]
-         */
+*/
         color: {
             set: function(array) {
                 this._color = array;
@@ -841,7 +840,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *
          * @constructs
          * @extends enchant.gl.Light3D
-         */
+*/
         initialize: function() {
             enchant.gl.Light3D.call(this);
         }
@@ -863,7 +862,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *
          * @constructs
          * @extends enchant.gl.Light3D
-         */
+*/
         initialize: function() {
             enchant.gl.Light3D.call(this);
             this._directionX = 0.5;
@@ -876,25 +875,25 @@ if (typeof glMatrixArrayType === 'undefined') {
     /**
      * 光源の照射方向のx成分
      * @type Number
-     */
+*/
     enchant.gl.DirectionalLight.prototype.directionX = 0.5;
 
     /**
      * 光源の照射方向のy成分
      * @type Number
-     */
+*/
     enchant.gl.DirectionalLight.prototype.directionY = 0.5;
 
     /**
      * 光源の照射方向のz成分
      * @type Number
-     */
+*/
     enchant.gl.DirectionalLight.prototype.directionZ = 1.0;
 
     /**
      * 光源の照射方向
      * @type {Number}
-     */
+*/
     'directionX directionY directionZ'.split(' ').forEach(function(prop) {
         Object.defineProperty(enchant.gl.DirectionalLight.prototype, prop, {
             get: function() {
@@ -925,7 +924,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *
          * @constructs
          * @extends enchant.gl.Light3D
-         */
+*/
         initialize: function() {
             enchant.gl.Light3D.call(this);
             this._x = 0;
@@ -938,19 +937,19 @@ if (typeof glMatrixArrayType === 'undefined') {
     /**
      * 光源のx座標
      * @type Number
-     */
+*/
     enchant.gl.PointLight.prototype.x = 0;
 
     /**
      * 光源のy座標
      * @type Number
-     */
+*/
     enchant.gl.PointLight.prototype.y = 0;
 
     /**
      * 光源のz座標
      * @type Number
-     */
+*/
     enchant.gl.PointLight.prototype.z = 0;
 
     'x y z'.split(' ').forEach(function(prop) {
@@ -981,36 +980,36 @@ if (typeof glMatrixArrayType === 'undefined') {
          *   // var texture = new Texture("http://example.com/texture.png");
          *   sprite.texture = texture;
          * @constructs
-         */
+*/
         initialize: function(src, opt) {
             /**
              * 環境光のパラメータ
              * @type Number[]
-             */
+*/
             this.ambient = [ 0.1, 0.1, 0.1, 1.0 ];
 
             /**
              * 拡散光のパラメータ
              * @type Number[]
-             */
+*/
             this.diffuse = [ 1.0, 1.0, 1.0, 1.0];
 
             /**
              * 光の反射量
              * @type Number[]
-             */
+*/
             this.specular = [ 1.0, 1.0, 1.0, 1.0 ];
 
             /**
              * 光の発光量
              * @type Number[]
-             */
+*/
             this.emission = [ 0.0, 0.0, 0.0, 1.0 ];
 
             /**
              * 鏡面計数
              * @type Number
-             */
+*/
             this.shininess = 20;
 
             this._glTexture = null;
@@ -1044,7 +1043,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * URLかcore.assets内のデータを指定できる.
          * @type String
          * @type enchant.Surface
-         */
+*/
         src: {
             get: function() {
                 return this._src;
@@ -1095,7 +1094,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * var indices = new Buffer(Buffer.INDICES, index);
          *
          * @constructs
-         */
+*/
         initialize: function(params, array) {
             this._setParams(params);
             if (typeof array !== 'undefined') {
@@ -1107,13 +1106,13 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * バッファをバインドする.
-         */
+*/
         bind: function() {
             gl.bindBuffer(this.btype, this._buffer);
         },
         /**
          * バッファをアンバインドする.
-         */
+*/
         unbind: function() {
             gl.bindBuffer(this.btype, null);
         },
@@ -1147,7 +1146,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * オブジェクトを破棄する.
-         */
+*/
         destroy: function() {
             this._delete();
         }
@@ -1199,7 +1198,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 頂点配列やテクスチャを格納するクラス.
          * enchant.gl.Sprite3Dのプロパティとして使用される.
          * @constructs
-         */
+*/
         initialize: function() {
             this.__count = 0;
             this._appear = false;
@@ -1221,7 +1220,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *   sprite.mesh.setBaseColor('#ff00ff');
          *   sprite.mesh.setBaseColor('rgb(255, 0, 255');
          *   sprite.mesh.setBaseColor('rgba(255, 0, 255, 1.0');
-         */
+*/
         setBaseColor: function(color) {
             var c = enchant.Core.instance.GL.parseColor(color);
             var newColors = [];
@@ -1232,7 +1231,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * メッシュの面の向きと法線の向きを反転させる.
-         */
+*/
         reverse: function() {
             var norm = this.normals;
             var idx = this.indices;
@@ -1313,7 +1312,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * オブジェクトを破棄する.
-         */
+*/
         destroy: function() {
             this._deleteBuffer();
         }
@@ -1337,7 +1336,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texCoords
-     */
+*/
     enchant.gl.Mesh.prototype.vertices = [];
 
     /**
@@ -1368,7 +1367,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @see enchant.gl.Mesh#vertices
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#texCoords
-     */
+*/
     enchant.gl.Mesh.prototype.normals = [];
 
     /**
@@ -1404,7 +1403,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @see enchant.gl.Mesh#indices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texture#
-     */
+*/
     enchant.gl.Mesh.prototype.texCoords = [];
 
     /**
@@ -1436,7 +1435,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @see enchant.gl.Mesh#vertices
      * @see enchant.gl.Mesh#normals
      * @see enchant.gl.Mesh#texCoords
-     */
+*/
     enchant.gl.Mesh.prototype.indices = [];
 
     /**
@@ -1466,7 +1465,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      *   ];
      * @type Number[]
      * @see enchant.gl.Mesh#setBaseColor
-     */
+*/
     enchant.gl.Mesh.prototype.colors = [];
 
     'vertices normals colors texCoords indices'.split(' ').forEach(function(prop) {
@@ -1501,7 +1500,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *   var sprite = new Sprite3D();
          *   //Sprite3Dをシーンに追加
          *   scene.addChild(sprite);
-         * @constructs
+* @constructs
          * @extends enchant.EventTarget
          */
         initialize: function() {
@@ -1515,7 +1514,7 @@ if (typeof glMatrixArrayType === 'undefined') {
              * @type enchant.gl.Sprite3D[]
              * @see enchant.gl.Sprite3D#addChild
              * @see enchant.gl.Sprite3D#removeChild
-             */
+*/
             this.childNodes = [];
 
             /**
@@ -1523,14 +1522,14 @@ if (typeof glMatrixArrayType === 'undefined') {
              * どのシーンにも追加されていないときにはnull.
              * @type enchant.gl.Scene3D
              * @see enchant.gl.Scene3D#addChild
-             */
+*/
             this.scene = null;
 
             /**
              * Sprite3Dの親要素.
              * 親が存在しない場合にはnull.
              * @type enchant.gl.Sprite3D|enchant.gl.Scene3D
-             */
+*/
             this.parentNode = null;
 
             /**
@@ -1539,7 +1538,7 @@ if (typeof glMatrixArrayType === 'undefined') {
              * @example
              *   var sprite = new Sprite3D();
              *   sprite.mesh = new Mesh();
-             */
+*/
             this._mesh = null;
 
             this.program = null;
@@ -1620,7 +1619,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *   var sp2 = sp.clone();
          *   //sp2.x = 15;
          * @return {enchant.gl.Sprite3D}
-         */
+*/
         clone: function() {
             var clone = new enchant.gl.Sprite3D();
             for (var prop in this) {
@@ -1655,8 +1654,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *   var sp = new Sprite3D();
          *   sp.set(core.assets['sample.dae']);
          *   //sample.daeのモデル情報を持ったSprite3Dになる
-         *
-         */
+*/
         set: function(sprite) {
             for (var prop in sprite) {
                 if (typeof sprite[prop] === 'number' ||
@@ -1696,7 +1694,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @see enchant.gl.Sprite3D#removeChild
          * @see enchant.gl.Sprite3D#childNodes
          * @see enchant.gl.Sprite3D#parentNode
-         */
+*/
         addChild: function(sprite) {
             this.childNodes.push(sprite);
             sprite.parentNode = this;
@@ -1720,7 +1718,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @see enchant.gl.Sprite3D#addChild
          * @see enchant.gl.Sprite3D#childNodes
          * @see enchant.gl.Sprite3D#parentNode
-         */
+*/
         removeChild: function(sprite) {
             var i;
             if ((i = this.childNodes.indexOf(sprite)) !== -1) {
@@ -1740,7 +1738,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 衝突判定オブジェクトか, x, y, zプロパティを持っているオブジェクトとの衝突を判定することができる.
          * @param {enchant.gl.Sprite3D} bounding 対象のオブジェクト
          * @return {Boolean}
-         */
+*/
         intersect: function(another) {
             return this.bounding.intersect(another.bounding);
         },
@@ -1759,7 +1757,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @see enchant.gl.Sprite3D#y
          * @see enchant.gl.Sprite3D#z
          * @see enchant.gl.Sprite3D#scale
-         */
+*/
         translate: function(x, y, z) {
             this._x += x;
             this._y += y;
@@ -1770,7 +1768,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3DをローカルのZ軸方向に動かす.
          * @param {Number} speed
-         */
+*/
         forward: function(speed) {
             var x = this._rotation[8] * speed;
             var y = this._rotation[9] * speed;
@@ -1781,7 +1779,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3DをローカルのX軸方向に動かす.
          * @param {Number} speed
-         */
+*/
         sidestep: function(speed) {
             var x = this._rotation[0] * speed;
             var y = this._rotation[1] * speed;
@@ -1792,7 +1790,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3DをローカルのY軸方向に動かす.
          * @param {Number} speed
-         */
+*/
         altitude: function(speed) {
             var x = this._rotation[4] * speed;
             var y = this._rotation[5] * speed;
@@ -1814,7 +1812,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @see enchant.gl.Sprite3D#scaleY
          * @see enchant.gl.Sprite3D#scaleZ
          * @see enchant.gl.Sprite3D#translate
-         */
+*/
         scale: function(x, y, z) {
             this._scaleX *= x;
             this._scaleY *= y;
@@ -1825,7 +1823,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3Dの名前
          * @type String
-         */
+*/
         name: {
             get: function() {
                 return this._name;
@@ -1849,7 +1847,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *       0, 0, 0, 1
          *   ];
          * @type Number[]
-         */
+*/
         rotation: {
             get: function() {
                 return this._rotation;
@@ -1863,7 +1861,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * 回転行列にクォータニオンから得られる回転行列をセットする.
          * @param {enchant.gl.Quat} quat
-         */
+*/
         rotationSet: function(quat) {
             quat.toMat4(this._rotation);
             this._changedRotation = true;
@@ -1872,7 +1870,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * 回転行列にクォータニオンから得られる回転行列を適用する.
          * @param {enchant.gl.Quat} quat
-         */
+*/
         rotationApply: function(quat) {
             quat.toMat4(this.tmpMat);
             mat4.multiply(this._rotation, this.tmpMat);
@@ -1882,7 +1880,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3DのローカルのZ軸を軸に回転させる.
          * @param {Number} radius
-         */
+*/
         rotateRoll: function(rad) {
             this.rotationApply(new enchant.gl.Quat(0, 0, 1, rad));
             this._changedRotation = true;
@@ -1891,7 +1889,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3DのローカルのX軸を軸に回転させる.
          * @param {Number} radius
-         */
+*/
         rotatePitch: function(rad) {
             this.rotationApply(new enchant.gl.Quat(1, 0, 0, rad));
             this._changedRotation = true;
@@ -1900,7 +1898,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3DのローカルのY軸を軸に回転させる.
          * @param {Number} radius
-         */
+*/
         rotateYaw: function(rad) {
             this.rotationApply(new enchant.gl.Quat(0, 1, 0, rad));
             this._changedRotation = true;
@@ -1926,7 +1924,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * Sprite3Dに適用する変換行列.
          * @deprecated
          * @type Number[]
-         */
+*/
         matrix: {
             get: function() {
                 return this._matrix;
@@ -1939,7 +1937,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Sprite3Dの当たり判定に利用されるオブジェクト.
          * @type enchant.gl.Bounding | enchant.gl.BS | enchant.gl.AABB
-         */
+*/
         bounding: {
             get: function() {
                 return this._bounding;
@@ -1954,7 +1952,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * Sprite3Dをタッチ可能にするか決定する.
          * falseに設定するとタッチ判定の際無視される.
          * @type bool
-         */
+*/
         touchable: {
             get: function() {
                 return this._touchable;
@@ -2055,7 +2053,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 0
      * @type Number
      * @see enchant.gl.Sprite3D#translate
-     */
+*/
     enchant.gl.Sprite3D.prototype.x = 0;
 
     /**
@@ -2063,7 +2061,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 0
      * @type Number
      * @see enchant.gl.Sprite3D#translate
-     */
+*/
     enchant.gl.Sprite3D.prototype.y = 0;
 
     /**
@@ -2071,7 +2069,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 0
      * @type Number
      * @see enchant.gl.Sprite3D#translate
-     */
+*/
     enchant.gl.Sprite3D.prototype.z = 0;
 
     'x y z'.split(' ').forEach(function(prop) {
@@ -2091,7 +2089,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 1.0
      * @type Number
      * @see enchant.gl.Sprite3D#scale
-     */
+*/
     enchant.gl.Sprite3D.prototype.scaleX = 1;
 
     /**
@@ -2099,14 +2097,14 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 1.0
      * @type Number
      * @see enchant.gl.Sprite3D#scale
-     */
+*/
     enchant.gl.Sprite3D.prototype.scaleY = 1;
     /**
      * Sprite3Dのz軸方向に対する拡大率
      * @default 1.0
      * @type Number
      * @see enchant.gl.Sprite3D#scale
-     */
+*/
     enchant.gl.Sprite3D.prototype.scaleZ = 1;
 
     'scaleX scaleY scaleZ'.split(' ').forEach(function(prop) {
@@ -2126,7 +2124,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 0
      * @type Number
      * @see enchant.gl.Sprite3D#translate
-     */
+*/
     enchant.gl.Sprite3D.prototype.globalX = 0;
 
     /**
@@ -2134,7 +2132,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 0
      * @type Number
      * @see enchant.gl.Sprite3D#translate
-     */
+*/
     enchant.gl.Sprite3D.prototype.globalY = 0;
 
     /**
@@ -2142,7 +2140,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      * @default 0
      * @type Number
      * @see enchant.gl.Sprite3D#translate
-     */
+*/
     enchant.gl.Sprite3D.prototype.globalZ = 0;
 
     /**
@@ -2159,7 +2157,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * camera.z = 10;
          * scene.setCamera(camera);
          * @constructs
-         */
+*/
         initialize: function() {
             var core = enchant.Core.instance;
             this.mat = mat4.identity();
@@ -2196,7 +2194,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * カメラの注視点をSprite3Dの位置に合わせる.
          * @param {enchant.gl.Sprite3D} sprite 注視するSprite3D
-         */
+*/
         lookAt: function(sprite) {
             if (sprite instanceof enchant.gl.Sprite3D) {
                 this._centerX = sprite.x;
@@ -2218,7 +2216,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *     camera.lookAt(sp);
          *     camera.chase(sp, -10, 20);
          * });
-         */
+*/
         chase: function(sprite, position, speed) {
             if (sprite instanceof enchant.gl.Sprite3D) {
                 var vx = sprite.x + sprite.rotation[8] * position;
@@ -2261,7 +2259,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Camera3DをローカルのZ軸方向に動かす.
          * @param {Number} speed
-         */
+*/
         forward: function(s) {
             var v = this._getForwardVec();
             this._move(v, s);
@@ -2269,7 +2267,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Camera3DをローカルのX軸方向に動かす.
          * @param {Number} speed
-         */
+*/
         sidestep: function(s) {
             var v = this._getSideVec();
             this._move(v, s);
@@ -2277,7 +2275,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Camera3DをローカルのY軸方向に動かす.
          * @param {Number} speed
-         */
+*/
         altitude: function(s) {
             var v = this._getUpVec();
             this._move(v, s);
@@ -2285,7 +2283,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Camera3DのローカルのZ軸を軸に回転させる.
          * @param {Number} radius
-         */
+*/
         rotateRoll: function(rad) {
             var u = this._getUpVec();
             var f = this._getForwardVec();
@@ -2302,7 +2300,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Camera3DのローカルのX軸を軸に回転させる.
          * @param {Number} radius
-         */
+*/
         rotatePitch: function(rad) {
             var u = this._getUpVec();
             var f = this._getForwardVec();
@@ -2325,7 +2323,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Camera3DのローカルのY軸を軸に回転させる.
          * @param {Number} radius
-         */
+*/
         rotateYaw: function(rad) {
             var u = this._getUpVec();
             var ux = u[0];
@@ -2367,19 +2365,19 @@ if (typeof glMatrixArrayType === 'undefined') {
     /**
      * カメラのx座標
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.x = 0;
 
     /**
      * カメラのy座標
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.y = 0;
 
     /**
      * カメラのz座標
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.z = 0;
 
     'x y z'.split(' ').forEach(function(prop) {
@@ -2397,19 +2395,19 @@ if (typeof glMatrixArrayType === 'undefined') {
     /**
      * カメラの視点のx座標
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.centerX = 0;
 
     /**
      * カメラの視点のy座標
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.centerY = 0;
 
     /**
      * カメラの視点のz座標
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.centerZ = 0;
 
     'centerX centerY centerZ'.split(' ').forEach(function(prop) {
@@ -2427,19 +2425,19 @@ if (typeof glMatrixArrayType === 'undefined') {
     /**
      * カメラの上方向ベクトルのx成分
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.upVectorX = 0;
 
     /**
      * カメラの上方向ベクトルのy成分
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.upVectorY = 1;
 
     /**
      * カメラの上方向ベクトルのz成分
      * @type Number
-     */
+*/
     enchant.gl.Camera3D.prototype.upVectorZ = 0;
 
     'upVectorX upVectorY upVectorZ'.split(' ').forEach(function(prop) {
@@ -2469,7 +2467,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          *
          * @constructs
          * @extends enchant.EventTarget
-         */
+*/
         initialize: function() {
             var core = enchant.Core.instance;
             if (core.currentScene3D) {
@@ -2482,7 +2480,7 @@ if (typeof glMatrixArrayType === 'undefined') {
              * 子を追加したり削除したりする場合には, この配列を直接操作せずに,
              * {@link enchant.gl.Scene3D#addChild}や{@link enchant.gl.Scene3D#removeChild}を利用する.
              * @type enchant.gl.Sprite3D[]
-             */
+*/
             this.childNodes = [];
 
             /**
@@ -2492,7 +2490,7 @@ if (typeof glMatrixArrayType === 'undefined') {
              * 照明を追加したり削除したりする場合には, この配列を直接操作せずに,
              * {@link enchant.gl.Scene3D#addLight}や{@link enchant.gl.Scene3D#removeLight}を利用する.
              * @type enchant.gl.PointLight[]
-             */
+*/
             this.lights = [];
 
             this.identityMat = mat4.identity();
@@ -2533,7 +2531,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Scene3Dの背景色
          * @type Number[]
-         */
+*/
         backgroundColor: {
             get: function() {
                 return this._backgroundColor;
@@ -2554,7 +2552,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {enchant.gl.Sprite3D} sprite 追加するSprite3D
          * @see enchant.gl.Scene3D#removeChild
          * @see enchant.gl.Scene3D#childNodes
-         */
+*/
         addChild: function(sprite) {
             this.childNodes.push(sprite);
             sprite.parentNode = sprite.scene = this;
@@ -2571,7 +2569,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {enchant.gl.Sprite3D} sprite 削除するSprite3D
          * @see enchant.gl.Scene3D#addChild
          * @see enchant.gl.Scene3D#childNodes
-         */
+*/
         removeChild: function(sprite) {
             var i;
             if ((i = this.childNodes.indexOf(sprite)) !== -1) {
@@ -2586,7 +2584,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンのカメラ位置をセットする.
          * @param {enchant.gl.Camera3D} camera セットするカメラ
          * @see enchant.gl.Camera3D
-         */
+*/
         setCamera: function(camera) {
             camera._changedPosition = true;
             camera._changedCenter = true;
@@ -2602,7 +2600,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンに設定されているカメラを取得する.
          * @see enchant.gl.Camera3D
          * @return {enchant.gl.Camera}
-         */
+*/
         getCamera: function() {
             return this._camera;
         },
@@ -2611,7 +2609,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンに環境光源を設定する.
          * @param {enchant.gl.AmbientLight} light 設定する照明
          * @see enchant.gl.AmbientLight
-         */
+*/
         setAmbientLight: function(light) {
             this.ambientLight = light;
         },
@@ -2620,7 +2618,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンに設定されている環境光源を取得する.
          * @see enchant.gl.AmbientLight
          * @return {enchant.gl.AmbientLight}
-         */
+*/
         getAmbientLight: function() {
             return this.ambientLight;
         },
@@ -2629,7 +2627,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンに平行光源を設定する.
          * @param {enchant.gl.DirectionalLight} light 設定する照明
          * @see enchant.gl.DirectionalLight
-         */
+*/
         setDirectionalLight: function(light) {
             this.directionalLight = light;
             this.useDirectionalLight = true;
@@ -2642,7 +2640,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンに設定されている平行光源を取得する.
          * @see enchant.gl.DirectionalLight
          * @return {enchant.gl.DirectionalLight}
-         */
+*/
         getDirectionalLight: function() {
             return this.directionalLight;
         },
@@ -2652,7 +2650,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 現在, シーンに追加しても適用されない.
          * @param {enchant.gl.PointLight} light 追加する照明
          * @see enchant.gl.PointLight
-         */
+*/
         addLight: function(light) {
             this.lights.push(light);
             this.usePointLight = true;
@@ -2662,7 +2660,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * シーンから照明を削除する
          * @param {enchant.gl.PointLight} light 削除する照明
          * @see enchant.gl.PointLight.
-         */
+*/
         removeLight: function(light) {
             var i;
             if ((i = this.lights.indexOf(light)) !== -1) {
@@ -2830,7 +2828,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * {@link enchant.gl.collision.OBB}, がある.
          * 現在, OBBはサポートされていない.
          * @constructs
-         */
+*/
         initialize: function() {
             this.type = 'point';
             this.threshold = 0.0001;
@@ -2847,7 +2845,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 点との距離を計算する.
          * @param {enchant.gl.collision.Bounding} bounding 衝突点オブジェクト
          * @return {Number}
-         */
+*/
         toBounding: function(another) {
             return point2point(this, another);
         },
@@ -2855,7 +2853,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 球との距離を計算する.
          * @param {enchant.gl.collision.BS} boudning 衝突球オブジェクト
          * @return {Number}
-         */
+*/
         toBS: function(another) {
             return point2BS(this, another);
         },
@@ -2864,7 +2862,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 現在, 衝突していなければ1, 衝突していれば0が返される.
          * @param {enchant.gl.collision.AABB} bounding AABB
          * @return {Number}
-         */
+*/
         toAABB: function(another) {
             return point2AABB(this, another);
         },
@@ -2873,7 +2871,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 現在, サポートされていない.
          * @param {enchant.gl.collision.OBB} bounding OBB
          * @return {Number}
-         */
+*/
         toOBB: function(another) {
             return point2OBB(this, another);
         },
@@ -2882,7 +2880,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 衝突判定オブジェクトか, x, y, zプロパティを持っているオブジェクトとの衝突を判定することができる.
          * @param {enchant.gl.collision.Bounding|enchant.gl.collision.BS|enchant.gl.collision.AABB|enchant.gl.collision.OBB} bounding 衝突判定オブジェクト
          * @return {Boolean}
-         */
+*/
         intersect: function(another) {
             switch (another.type) {
                 case 'point':
@@ -2908,7 +2906,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 球として定義されている.
          * @constructs
          * @see enchant.gl.collision.Bounding
-         */
+*/
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
             this.type = 'BS';
@@ -2937,7 +2935,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 回転しない立方体として定義されている.
          * @constructs
          * @see enchant.gl.collision.Bounding
-         */
+*/
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
             this.type = 'AABB';
@@ -2966,8 +2964,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 回転するとして定義されている.
          * @constructs
          * @see enchant.gl.collision.Bounding
-
-         */
+*/
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);
             this.type = 'OBB';
@@ -3028,7 +3025,7 @@ if (typeof glMatrixArrayType === 'undefined') {
     enchant.gl.State = enchant.Class.create({
         /**
          * アニメーションの状態を表すための基底クラス.
-         * @param {Number[]} position
+* @param {Number[]} position
          * @param {Number[]} rotation
          * @constructs
          */
@@ -3040,7 +3037,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         },
         /**
          * 位置・回転をセットする.
-         */
+*/
         set: function(pose) {
             vec3.set(pose._position, this._position);
             quat4.set(pose._rotation, this._rotation);
@@ -3057,7 +3054,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {Number[]} rotation
          * @constructs
          * @extends enchant.gl.State
-         */
+*/
         initialize: function(position, rotation) {
             enchant.gl.State.call(this, position, rotation);
         },
@@ -3066,7 +3063,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {enchant.gl.Pose} another
          * @param {Number} ratio
          * @return {enchant.gl.Pose}
-         */
+*/
         getInterpolation: function(another, ratio) {
             vec3.lerp(this._position, another._position, ratio, _tmpve);
             quat4.slerp(this._rotation, another._rotation, ratio, _tmpquat);
@@ -3085,7 +3082,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * キーフレームアニメーションを実現するためのクラス.
          * enchant.gl.Poseに限らず様々なデータを扱える.
          * @constructs
-         */
+*/
         initialize: function() {
             this._frames = [];
             this._units = [];
@@ -3096,7 +3093,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * フレームを追加する.
          * @param {*} pose キーフレーム.
          * @param {Number} frame フレーム番号.
-         */
+*/
         addFrame: function(pose, frame) {
             if (typeof frame !== 'number') {
                 this.length += 1;
@@ -3114,7 +3111,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * 指定されたフレーム番号に該当するデータがない場合, 指定されたフレーム番号の前後のデータから補間したデータを取得する.
          * @param {Number} frame フレーム番号
          * @return {*}
-         */
+*/
         getFrame: function(frame) {
             var prev, next, index, pidx, nidx;
             var ratio = 0;
@@ -3177,7 +3174,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {Number} rotation
          * @constructs
          * @extends enchant.gl.State
-         */
+*/
         initialize: function(name, head, position, rotation) {
             enchant.gl.State.call(this, position, rotation);
             this._name = name;
@@ -3195,13 +3192,13 @@ if (typeof glMatrixArrayType === 'undefined') {
 
             /**
              * IK解決の際にクォータニオンに変換をかける関数を設定する.
-             */
+*/
             this.constraint = null;
         },
         /**
          * ボーンに子のボーンを追加する.
          * @param {enchant.gl.Bone} child
-         */
+*/
         addChild: function(child) {
             this.childNodes.push(child);
             child.parentNode = this;
@@ -3209,7 +3206,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * ボーンから子のボーンを削除する.
          * @param {enchant.gl.Bone} child
-         */
+*/
         removeChild: function(child) {
             var i;
             if ((i = this.childNodes.indexOf(child)) !== -1) {
@@ -3220,7 +3217,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * ボーンの姿勢をセットする.
          * @param {*} poses
-         */
+*/
         setPoses: function(poses) {
             var child;
             if (poses[this._name]) {
@@ -3258,7 +3255,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * ボーンの構造のルートになるクラス.
          * @constructs
-         */
+*/
         initialize: function() {
             this.childNodes = [];
             this._origin = vec3.create();
@@ -3271,7 +3268,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Skeletonに子のボーンを追加する.
          * @param {enchant.gl.Bone} child
-         */
+*/
         addChild: function(bone) {
             this.childNodes.push(bone);
             bone.parentNode = this;
@@ -3279,7 +3276,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * Skeletonから子のボーンを削除する.
          * @param {enchant.gl.Bone} child
-         */
+*/
         removeChild: function(bone) {
             var i;
             if ((i = this.childNodes.indexOf(bone)) !== -1) {
@@ -3290,7 +3287,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * 姿勢をセットする.
          * @param {*} poses
-         */
+*/
         setPoses: function(poses) {
             var child;
             for (var i = 0, l = this.childNodes.length; i < l; i++) {
@@ -3301,7 +3298,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * FKによって姿勢解決を行う.
          * セットされた姿勢情報から姿勢をつくる.
-         */
+*/
         solveFKs: function() {
             var child;
             for (var i = 0, l = this.childNodes.length; i < l; i++) {
@@ -3317,7 +3314,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * @param {Number} maxangle
          * @param {Number} iteration
          * @see enchant.gl.Skeleton#solveIKs
-         */
+*/
         addIKControl: function(effector, target, bones, maxangle, iteration) {
             this._iks.push(arguments);
         },
@@ -3325,7 +3322,7 @@ if (typeof glMatrixArrayType === 'undefined') {
         /**
          * IKによって姿勢解決を行う.
          * {@link enchant.gl.Skeleton#addIKControl}によって追加された情報をもとにする.
-         */
+*/
         solveIKs: function() {
             var param;
             for (var i = 0, l = this._iks.length; i < l; i++) {

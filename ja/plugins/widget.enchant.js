@@ -7,7 +7,7 @@
  *
  * @description
  * enchant.jsでモバイル向けウェブページのようなUIを作成するためのライブラリ.
- */
+*/
 
 (function() {
 
@@ -49,7 +49,7 @@
          * 文字列やenchant.Surfaceなど単体で表示できないオブジェクトを表示できる形にして返す.
          * @param {*} content 表示させたいデータ.
          * @return {*} enchantのEntity系オブジェクト.
-         */
+*/
         parseContent: function(content, font, color) {
             var en;
             if (typeof content === 'undefined') {
@@ -85,80 +85,80 @@
      * Sceneが開始したとき発生するイベント.
      * {@link enchant.Core#transitionPush}のアニメーションが終了した際に発生する.
      * @type {String}
-     */
+*/
     enchant.Event.TRANSITIONENTER = 'transitionenter';
 
     /**
      * Sceneが終了したとき発生するイベント.
      * {@link enchant.Core#transitionPop}のアニメーションが終了した際に発生する.
      * @type {String}
-     */
+*/
     enchant.Event.TRANSITIONEXIT = 'transitionexit';
 
     /**
      * enchant.widget.Confirmで肯定側のボタンが押されたときに発生されるイベント.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.ACCEPT = 'accept';
 
     /**
      * enchant.widget.Confirmで否定側のボタンが押されたときに発生されるイベント.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.CANCEL = 'cancel';
 
     /**
      * form系のオブジェクトで内容が変更されたときに発生されるイベント.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.CHANGE = 'change';
 
     /**
      * タップが検出されたときに発生されるイベント.
      * 移動なしでタッチが終了し, ダブルタップの判定時間が終了した場合検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.TAP = 'tap';
 
     /**
      * ダブルタップが検出されたときに発生されるイベント.
      * 一定時間, 一定距離以内に2回タップが検出された場合検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.DOUBLETAP = 'doubletap';
 
     /**
      * ホールドが検出されたときに発生されるイベント.
      * 移動なしで一定時間タッチが続いた場合検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.HOLD = 'hold';
 
     /**
      * ドラッグが検出されたときに発生されるイベント.
      * ホールド中にタッチ位置が移動した際に検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.DRAG = 'drag';
 
     /**
      * リリースが検出されたときに発生されるイベント.
      * ホールド中にタッチが終了した際に検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.RELEASE = 'release';
 
     /**
      * スリップが検出されたときに発生されるイベント.
      * ホールドされずタッチ位置が移動した場合検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.SLIP = 'slip';
 
     /**
      * フリックが検出されたときに発生されるイベント.
      * タッチが終了した際に, 一定速度以上で位置が移動していた場合検出される.
-     * @type {String}
+* @type {String}
      */
     enchant.Event.FLING = 'fling';
 
@@ -389,7 +389,7 @@
          * 指定オブジェクトの左側に寄せる.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignLeftOf: function(another, margin) {
             margin |= 0;
@@ -402,7 +402,7 @@
          * 指定オブジェクトの右側に寄せる.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignRightOf: function(another, margin) {
             margin |= 0;
@@ -415,7 +415,7 @@
          * 指定オブジェクトの上側に寄せる.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignTopOf: function(another, margin) {
             margin |= 0;
@@ -428,7 +428,7 @@
          * 指定オブジェクトの下側に寄せる.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignBottomOf: function(another, margin) {
             margin |= 0;
@@ -441,7 +441,7 @@
          * 指定オブジェクト内で左寄せを行う.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignLeftIn: function(another, margin) {
             var scaleOffset = getScaleOffest(this.width, this.scaleX);
@@ -452,7 +452,7 @@
          * 指定オブジェクト内で右寄せを行う.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignRightIn: function(another, margin) {
             var scaleOffset = getScaleOffest(this.width, this.scaleX);
@@ -463,7 +463,7 @@
          * 指定オブジェクト内で上寄せを行う.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignTopIn: function(another, margin) {
             var scaleOffset = getScaleOffest(this.height, this.scaleY);
@@ -474,7 +474,7 @@
          * 指定オブジェクト内で下寄せを行う.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignBottomIn: function(another, margin) {
             var scaleOffset = getScaleOffest(this.height, this.scaleY);
@@ -485,7 +485,7 @@
          * 指定オブジェクト内でx方向の中央寄せを行う.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignHorizontalCenterIn: function(another) {
             this.x = calcCenteredPosition(this.width, another.width);
@@ -495,7 +495,7 @@
          * 指定オブジェクト内でy方向の中央寄せを行う.
          * @param {*} another 基準となるオブジェクト.
          * @param {Number} margin ずらすピクセル数.
-         * @requires widget.enchant.js
+* @requires widget.enchant.js
          */
         alignVerticalCenterIn: function(another) {
             this.y = calcCenteredPosition(this.height, another.height);
@@ -517,7 +517,7 @@
      * トランジションアニメーションのついたpushSceneを行う.
      * @param {enchant.Scene} scene 移行する新しいシーン.
      * @return {enchant.Scene} 新しいシーン.
-     * @requires widget.enchant.js
+* @requires widget.enchant.js
      */
     enchant.Core.prototype.transitionPush = function(inScene) {
         if (_transitionLock) return null;
@@ -543,7 +543,7 @@
     /**
      * トランジションアニメーションのついたpopSceneを行う.
      * @return {enchant.Scene} 終了させたシーン.
-     * @requires widget.enchant.js
+* @requires widget.enchant.js
      */
     enchant.Core.prototype.transitionPop = function() {
         if (_transitionLock) return null;
@@ -577,7 +577,7 @@
          * タッチ入力の動きから幾つかのジェスチャーを検出してイベントを発行する.
          * タップ, ダブルタップ, ホールド, ドラッグ, フリックなどを検出することができる.
          * @param {enchant.Entity} target 入力を検出させたいオブジェクト.
-         * @constructs
+* @constructs
          * @extends enchant.EventTarget
          */
         initialize: function(target) {
@@ -769,7 +769,7 @@
          * コンテンツ領域の設定には対応していない.
          * @param {Number} width Surfaceの横幅.
          * @param {Number} height Surfaceの高さ.
-         * @constructs
+* @constructs
          * @extends enchant.Surface
          */
         initialize: function(width, height) {
@@ -783,7 +783,7 @@
         },
         /**
          * 9patchのソース.
-         * @type {enchant.Surface}
+* @type {enchant.Surface}
          */
         src: {
             get: function() {
@@ -1026,7 +1026,7 @@
          * 指定したサイズで作りなおす.
          * @param {Number} width 新しい横幅.
          * @param {Number} height 新しい高さ.
-         */
+*/
         resize: function(width, height) {
             this._width = width;
             this._height = height;
@@ -1046,7 +1046,7 @@
          * 子を持つことができるEntity.
          * @param {Number} width Entityの横幅.
          * @param {Number} height Entityの高さ.
-         * @constructs
+* @constructs
          * @extends enchant.Entity
          */
         initialize: function(width, height) {
@@ -1055,13 +1055,11 @@
             this.width = width;
             this.height = height;
             this.childNodes = [];
-            this.parentNode;
-            this._renderFrag = true;
 
             [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
                 .forEach(function(event) {
                     this.addEventListener(event, function(e) {
-                        this.childNodes.forEach(function(child) {
+                        this.childNodes.slice().forEach(function(child) {
                             child.scene = this.scene;
                             child.dispatchEvent(e);
                         }, this);
@@ -1076,7 +1074,8 @@
                 return this._width;
             },
             set: function(width) {
-                this._style.width = (this._width = width) + 'px';
+                this._width = width;
+                this._dirty = true;
                 if (this.background instanceof enchant.widget.Ninepatch) {
                     this.background.width = this.width;
                 }
@@ -1090,7 +1089,8 @@
                 return this._height;
             },
             set: function(height) {
-                this._style.height = (this._height = height) + 'px';
+                this._height = height;
+                this._dirty = true;
                 if (this.background instanceof enchant.widget.Ninepatch) {
                     this.background.height = this.height;
                 }
@@ -1098,7 +1098,7 @@
         },
         /**
          * 背景として使用するSurface.
-         * @type {enchant.Surface}
+* @type {enchant.Surface}
          */
         background: {
             get: function() {
@@ -1116,26 +1116,26 @@
         /**
          * EntityGroupにNodeを追加する.
          * @param {enchant.Node} child 追加するNode.
-         */
+*/
         addChild: enchant.Group.prototype.addChild,
         /**
          * EntityGroupにNodeを挿入する.
          * @param {enchant.Node} child 挿入するNode.
          * @param {enchant.Node} reference 挿入位置の前にあるNode.
-         */
+*/
         insertBefore: enchant.Group.prototype.insertBefore,
         /**
          * EntityGroupからNodeを削除する.
          * @param {enchant.Node} child 削除するNode.
-         */
+*/
         removeChild: enchant.Group.prototype.removeChild,
         /**
          * 最初の子Node.
-         */
+*/
         firstChild: Object.getOwnPropertyDescriptor(enchant.Group.prototype, 'firstChild'),
         /**
          * 最後の子Node.
-         * @type {enchant.Node}
+* @type {enchant.Node}
          */
         lastChild: Object.getOwnPropertyDescriptor(enchant.Group.prototype, 'lastChild'),
         _dirty: Object.getOwnPropertyDescriptor(enchant.Group.prototype, '_dirty'),
@@ -1154,7 +1154,7 @@
     enchant.widget.Modal = enchant.Class.create(enchant.Scene, {
         /**
          * モーダルシーン.
-         * @constructs
+* @constructs
          * @extends enchant.Scene
          */
         initialize: function() {
@@ -1177,7 +1177,7 @@
          * ボタン.
          * 通常の背景と押下中の背景を設定できる.
          * @param {*} content ボタンの内容.
-         * @constructs
+* @constructs
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(content) {
@@ -1221,7 +1221,7 @@
         },
         /**
          * ボタンの幅
-         * @type number
+* @type number
          */
         width: {
             get: function() {
@@ -1240,7 +1240,7 @@
         },
         /**
          * ボタンの高さ
-         * @type number
+* @type number
          */
         height: {
             get: function() {
@@ -1259,7 +1259,7 @@
         },
         /**
          * ボタンの背景.
-         */
+*/
         image: {
             get: function() {
                 return this._image;
@@ -1274,7 +1274,7 @@
         },
         /**
          * ボタンが押されている時の背景.
-         * @type {enchant.Surface}
+* @type {enchant.Surface}
          */
         pushedimage: {
             get: function() {
@@ -1289,7 +1289,7 @@
         },
         /**
          * ボタンの内容
-         * @type {String}
+* @type {String}
          */
         content: {
             get: function() {
@@ -1318,7 +1318,7 @@
          * 通常{@link enchant.widget.AlertScene}から使用する.
          * @param {*} content 表示するコンテンツ.
          * @param {String} ac 了承ボタンのラベル.
-         * @see enchant.widget.AlertScene
+* @see enchant.widget.AlertScene
          * @constructs
          * @extends enchant.widget.EntityGroup
          */
@@ -1352,7 +1352,7 @@
         },
         /**
          * 了承ボタンが押されたときに実行される関数.
-         * @type {Function}
+* @type {Function}
          */
         onaccept: function() {
         }
@@ -1368,7 +1368,7 @@
          * @param {*} content 表示するコンテンツ.
          * @param {String} ac 了承ボタンのラベル.
          * @param {String} ig キャンセルボタンのラベル.
-         * @see enchant.widget.ConfirmScene
+* @see enchant.widget.ConfirmScene
          * @constructs
          * @extends enchant.widget.EntityGroup
          */
@@ -1410,13 +1410,13 @@
         },
         /**
          * キャンセルボタンが押されたときに実行される関数.
-         * @type {Function}
+* @type {Function}
          */
         oncancel: function() {
         },
         /**
          * 了承ボタンが押されたときに実行される関数.
-         */
+*/
         onaccept: function() {
         }
     });
@@ -1431,7 +1431,7 @@
          * @param {*} content 表示するコンテンツ.
          * @param {String} ac 了承ボタンのラベル.
          * @param {String} ig キャンセルボタンのラベル.
-         * @see enchant.widget.PromptScene
+* @see enchant.widget.PromptScene
          * @constructs
          * @extends enchant.widget.Confirm
          */
@@ -1463,7 +1463,7 @@
     enchant.widget.Input = enchant.Class.create(enchant.Entity, {
         /**
          * <input>を内包したEntity.
-         * @param {String} type <input>のtype.
+* @param {String} type <input>のtype.
          * @constructs
          * @extends enchant.Entity
          */
@@ -1484,7 +1484,7 @@
         },
         /**
          * 入力を許可するか決定する.
-         * @type {Boolean}
+* @type {Boolean}
          */
         disabled: {
             get: function() {
@@ -1502,7 +1502,7 @@
     enchant.widget.InputTextBox = enchant.Class.create(enchant.widget.Input, {
         /**
          * テキストボックス.
-         * @constructs
+* @constructs
          * @extends enchant.widget.Input
          */
         initialize: function() {
@@ -1564,7 +1564,7 @@
         },
         /**
          * プレースホルダ.
-         * @type {String}
+* @type {String}
          */
         placeholder: {
             get: function() {
@@ -1576,7 +1576,7 @@
         },
         /**
          * テキストボックスに入力された値.
-         * @type {String}
+* @type {String}
          */
         value: {
             get: function() {
@@ -1588,7 +1588,7 @@
         },
         /**
          * テキストボックスの横幅.
-         * @type {Number}
+* @type {Number}
          */
         width: {
             get: function() {
@@ -1602,7 +1602,7 @@
         },
         /**
          * テキストボックスの縦幅.
-         * @type {Number}
+* @type {Number}
          */
         height: {
             get: function() {
@@ -1629,7 +1629,7 @@
          *       female: '女'
          *   };
          *   var selectbox = new InputSelectBox(option);
-         *
+*
          * @constructs
          * @extends enchant.widget.Input
          */
@@ -1654,7 +1654,7 @@
         },
         /**
          * 選択されている項目.
-         * @type {String}
+* @type {String}
          */
         selected: {
             get: function() {
@@ -1684,7 +1684,7 @@
          * @param {String} value 値.
          * @param {String} text ラベルテキスト.
          * @param {Boolean} checked チェックされているかどうか.
-         * @constructs
+* @constructs
          * @extends enchant.widget.Input
          */
         initialize: function(value, text, checked) {
@@ -1700,7 +1700,7 @@
         },
         /**
          * チェックされているかどうか.
-         * @type {Boolean}
+* @type {Boolean}
          */
         checked: {
             get: function() {
@@ -1718,7 +1718,7 @@
     enchant.widget.InputTextArea = enchant.Class.create(enchant.Entity, {
         /**
          * テキストエリア.
-         * @constructs
+* @constructs
          * @extends enchant.Entity
          */
         initialize: function() {
@@ -1815,7 +1815,7 @@
          [lang]ja]
          * プレースホルダ.
          [/lang]
-         * @type {String}
+* @type {String}
          */
         placeholder: {
             get: function() {
@@ -1827,7 +1827,7 @@
         },
         /**
          * テキストエリアに入力された値.
-         * @type {String}
+* @type {String}
          */
         value: {
             get: function() {
@@ -1839,7 +1839,7 @@
         },
         /**
          * テキストエリアの横幅.
-         * @type {Number}
+* @type {Number}
          */
         width: {
             get: function() {
@@ -1853,7 +1853,7 @@
         },
         /**
          * テキストエリアの縦幅.
-         * @type {Number}
+* @type {Number}
          */
         height: {
             get: function() {
@@ -1882,7 +1882,7 @@
          *     };
          *     alert.onaccept = function() {
          *     };
-         * @constructs
+* @constructs
          * @extends enchant.widget.Modal
          */
         initialize: function(content, acceptName) {
@@ -1944,7 +1944,7 @@
          *     };
          *     confirm.onaccept = function() {
          *     };
-         * @constructs
+* @constructs
          * @extends enchant.widget.Modal
          */
         initialize: function(content, acceptName, cancelName) {
@@ -2029,7 +2029,7 @@
          *     };
          *     confirm.onaccept = function(text) {
          *     };
-         * @see enchant.widget.InputScene
+* @see enchant.widget.InputScene
          * @constructs
          * @extends enchant.widget.Modal
          */
@@ -2152,7 +2152,7 @@
          *     };
          *     input.onaccept = function(text) {
          *     };
-         * @constructs
+* @constructs
          * @extends enchant.widget.Modal
          */
         initialize: function(text, acceptName, cancelName, placeholder) {
@@ -2260,7 +2260,7 @@
         },
         /**
          * テキストエリアに入力された値.
-         * @type {String}
+* @type {String}
          */
         value: {
             get: function() {
@@ -2314,7 +2314,7 @@
          * 通常, {@link enchant.widget.ListItem}や, {@link enchant.widget.ListItemVertical}を使用する.
          * @param {Number} width 要素の横幅.
          * @param {Number} height 要素の縦幅.
-         * @constructs
+* @constructs
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(width, height) {
@@ -2324,7 +2324,7 @@
         },
         /**
          * 変更を更新する.
-         */
+*/
         refresh: function() {
             var content = this._content;
             var margin = enchant.widget._env.listItemMargin;
@@ -2336,7 +2336,7 @@
         /**
          * ListElementの内容.
          * @type {enchant.Entity[]}
-         */
+*/
         content: {
             get: function() {
                 return this._rawContent;
@@ -2401,7 +2401,7 @@
          * @param {*} [content] ListItemの内容.
          * @param {enchant.Sprite|enchant.Surface} [icon] ListItemのアイコン.
          * @param {enchant.Sprite|enchant.Surface} [rightIcon] ListItemの左側のアイコン.
-         * @see enchant.widget.ListItemVertical
+* @see enchant.widget.ListItemVertical
          * @constructs
          * @extends enchant.widget.ListElement
          */
@@ -2428,7 +2428,7 @@
         },
         /**
          * 変更を更新する.
-         */
+*/
         refresh: function() {
             var icon = this._icon;
             var content = this._content;
@@ -2451,7 +2451,7 @@
          * アイコン.
          * 左側に表示される.
          * @type {enchant.Sprite|enchant.Surface}
-         */
+*/
         icon: {
             get: function() {
                 return this._rawIcon;
@@ -2471,7 +2471,7 @@
          * 右側のアイコン.
          * 右側に表示される.
          * @type {enchant.Sprite|enchant.Surface}
-         */
+*/
         rightIcon: {
             get: function() {
                 return this._rawRightIcon;
@@ -2501,7 +2501,7 @@
          * @param {*} [content] ListItemVerticalの内容.
          * @param {*} [header] ListItemのヘッダ.
          * @param {*} [footer] ListItemのフッタ.
-         * @constructs
+* @constructs
          * @extends enchant.widget.ListElement
          */
         initialize: function(width, height, content, header, footer) {
@@ -2527,7 +2527,7 @@
         },
         /**
          * 変更を更新する.
-         */
+*/
         refresh: function() {
             var header = this._header;
             var footer = this._footer;
@@ -2570,7 +2570,7 @@
          * ヘッダ.
          * contentの上に表示される.
          * @type {*}
-         */
+*/
         header: {
             get: function() {
                 return this._rawHeader;
@@ -2590,7 +2590,7 @@
          * フッタ.
          * contentの下に表示される.
          * @type {*}
-         */
+*/
         footer: {
             get: function() {
                 return this._rawFooter;
@@ -2617,7 +2617,7 @@
          * 設定したコンテンツをスクロール可能.
          * @param {Number} width ビューの横幅.
          * @param {Number} height ビューの縦幅.
-         * @constructs
+* @constructs
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(width, height) {
@@ -2628,7 +2628,7 @@
         /**
          * ScrollViewの内容.
          * @type {enchant.Entity}
-         */
+*/
         content: {
             oet: function() {
                 return this._content;
@@ -2645,7 +2645,7 @@
          * コンテンツのスクロールを行う.
          * 正の値が上方向のスクロールとなる.
          * @param {Number} dy スクロール量.
-         */
+*/
         scroll: function(dy) {
             if (!this._content) {
                 return;
@@ -2677,8 +2677,8 @@
          * @param {Number} height メニューの縦幅.
          * @param {Boolean} draggable 項目をドラッグできるか設定する.
          * List view.
-         * @constructs
-         * @extends enchant.widget.EntityGroup
+* @constructs
+         * @extends enchant.widget.ScrollView
          */
         initialize: function(width, height, draggable) {
             enchant.widget.ScrollView.call(this, width, height);
@@ -2797,7 +2797,7 @@
         /**
          * リストビューの内容を設定する.
          * @type {enchant.widget.ListElement[]}
-         */
+*/
         content: {
             get: function() {
                 return this._content.childNodes;
@@ -2816,7 +2816,7 @@
         },
         /**
          * イベントの対象を取得する.
-         * @param {enchant.Event} event
+* @param {enchant.Event} event
          * @return {enchant.widget.ListElement}
          */
         getSelectedItem: function(e) {
@@ -2919,7 +2919,7 @@
          * @param {*} center 中央に表示させたい項目.
          * @param {*} left 左に表示させたい項目.
          * @param {*} right 右に表示させたい項目.
-         * @constructs
+* @constructs
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(center, left, right) {
@@ -2946,7 +2946,7 @@
         },
         /**
          * 変更を更新する.
-         */
+*/
         refresh: function() {
             var center = this._center;
             var left = this._left;
@@ -2965,7 +2965,7 @@
         /**
          * 中央の項目.
          * @type {*}
-         */
+*/
         center: {
             get: function() {
                 return this._rawCenter;
@@ -2985,7 +2985,7 @@
          * 左の項目.
          * 左詰めで表示される.
          * @type {*}
-         */
+*/
         left: {
             get: function() {
                 return this._rawLeft;
@@ -3005,7 +3005,7 @@
          * 右の項目.
          * 右詰めで表示される.
          * @type {*}
-         */
+*/
         right: {
             get: function() {
                 return this._rawRight;
@@ -3045,7 +3045,7 @@
         /**
          * アイコンが横に並ぶメニュー.
          * @param {enchant.Entity[]} buttons 設定したいボタンの配列.
-         * @constructs
+* @constructs
          * @extends enchant.widget.EntityGroup
          */
         initialize: function(buttons) {
@@ -3068,7 +3068,7 @@
         },
         /**
          * 変更を更新する.
-         */
+*/
         getSelectedItem: function(e) {
             var x = e.localX;
             var list = this._bgs;
@@ -3169,7 +3169,7 @@
         /**
          * アイコンを設定する.
          * @param {enchant.Entity[]} content 表示させたいオブジェクトの配列.
-         */
+*/
         content: {
             get: function() {
                 return this._icons;
@@ -3178,7 +3178,7 @@
                 var removeChild = enchant.widget.EntityGroup.prototype.removeChild;
                 var menu = this;
                 if (this.childNodes) {
-                    this.childNodes.forEach(function(child) {
+                    this.childNodes.slice().forEach(function(child) {
                         removeChild.call(menu, child);
                     });
                 }

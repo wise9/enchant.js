@@ -1,7 +1,7 @@
 /**
  * enchant.js v0.6.3
  * http://enchantjs.com
- * 
+ *
  * Copyright Ubiquitous Entertainment Inc.
  * Released under the MIT license.
  */
@@ -508,7 +508,6 @@ enchant.Event = enchant.Class.create({
  *      ... // initialisierung des Spieles 
  *   };
  *   core.start();
- *
  * @type {String}
  */
 enchant.Event.LOAD = 'load';
@@ -2354,38 +2353,51 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     cvsRender: function(ctx) {
-        if (this._image == null || this._width === 0 || this._height === 0) {
-            return;
-        }
-        var image = this._image;
-        var element = image._element;
-        var sx = this._frameLeft;
-        var sy = this._frameTop;
-        var sw = Math.min(this.width, image.width - sx);
-        var sh = Math.min(this.height, image.height - sy);
-        var dw = Math.min(image.width, this.width);
-        var dh = Math.min(image.height, this.height);
-        var x, y, w, h;
-        for (y = 0; y < this.height; y += dh) {
-            h = (this.height < y + dh) ? this.height - y : dh;
-            for (x = 0; x < this.width; x += dw) {
-                w = (this.width < x + dw) ? this.width - x : dw;
-                ctx.drawImage(element, sx, sy,
-                    sw * w / dw, sh * h / dh, x, y, w, h);
+        var image = this._image,
+            w = this._width, h = this._height,
+            iw, ih, elem, sx, sy, sw, sh;
+        if (image && w !== 0 && h !== 0) {
+            iw = image.width, ih = image.height;
+            if (iw < w || ih < h) {
+                ctx.fillStyle = enchant.Surface._getPattern(image);
+                ctx.fillRect(0, 0, w, h);
+            } else {
+                elem = image._element;
+                sx = this._frameLeft;
+                sy = Math.min(this._frameTop, ih - h);
+                sw = Math.min(iw - sx, w);
+                sh = Math.min(ih - sy, h);
+                ctx.drawImage(elem, sx, sy, sw, sh, 0, 0, w, h);
             }
         }
     },
-    domRender: function(element) {
-        if (this._image) {
-            if (this._image._css) {
-                this._style['background-image'] = this._image._css;
-                this._style['background-position'] =
-                    -this._frameLeft + 'px ' +
-                    -this._frameTop + 'px';
-            } else if (this._image._element) {
-            }
+    domRender: (function() {
+        if (enchant.ENV.VENDOR_PREFIX === 'ms') {
+            return function(element) {
+                if (this._image) {
+                    if (this._image._css) {
+                        this._style['background-image'] = this._image._css;
+                        this._style['background-position'] =
+                            -this._frameLeft + 'px ' +
+                            -this._frameTop + 'px';
+                    } else if (this._image._element) {
+                    }
+                }
+            };
+        } else {
+            return function(element) {
+                if (this._image) {
+                    if (this._image._css) {
+                        this._style['background-image'] = this._image._css;
+                        this._style['background-position'] =
+                            -this._frameLeft + 'px ' +
+                            -this._frameTop + 'px';
+                    } else if (this._image._element) {
+                    }
+                }
+            };
         }
-    }
+    }())
 });
 
 /**
@@ -2958,7 +2970,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      *          this.x = 64 - player.x;
      *      }
      *   });
-     *
      * @constructs
      * @extends enchant.Node
      */
@@ -3778,26 +3789,23 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._rendering(this, render);
     },
     _rendering:  function(node, e) {
-        var core = enchant.Core.instance;
-        var matrix = enchant.Matrix.instance;
-        var stack = matrix.stack;
-        var width = node.width;
-        var height = node.height;
         var ctx = this.context;
-        var child;
+        var width, height, child;
         ctx.save();
         node.dispatchEvent(e);
-        // composite
-        if (node.compositeOperation) {
-            ctx.globalCompositeOperation = node.compositeOperation;
-        } else {
-            ctx.globalCompositeOperation = 'source-over';
-        }
-        ctx.globalAlpha = (typeof node._opacity === 'number') ? node._opacity : 1.0;
         // transform
         this._transform(node, ctx);
-        // render
         if (typeof node._visible === 'undefined' || node._visible) {
+            width = node.width;
+            height = node.height;
+            // composite
+            if (node.compositeOperation) {
+                ctx.globalCompositeOperation = node.compositeOperation;
+            } else {
+                ctx.globalCompositeOperation = 'source-over';
+            }
+            ctx.globalAlpha = (typeof node._opacity === 'number') ? node._opacity : 1.0;
+            // render
             if (node._backgroundColor) {
                 ctx.fillStyle = node._backgroundColor;
                 ctx.fillRect(0, 0, width, height);
@@ -3807,7 +3815,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 node.cvsRender(ctx);
             }
 
-            if (core._debug) {
+            if (enchant.Core.instance._debug) {
                 if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
                     ctx.strokeStyle = '#ff0000';
                 } else {
@@ -3820,66 +3828,68 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
                 ctx.rect(0, 0, width, height);
                 ctx.clip();
             }
-        }
-        if (node.childNodes) {
-            for (var i = 0, l = node.childNodes.length; i < l; i++) {
-                child = node.childNodes[i];
-                this._rendering(child, e);
+            if (node.childNodes) {
+                for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                    child = node.childNodes[i];
+                    this._rendering(child, e);
+                }
             }
         }
         ctx.restore();
         enchant.Matrix.instance.stack.pop();
     },
     _detectrendering: function(node) {
-        var width = node.width;
-        var height = node.height;
-        var ctx = this._dctx;
-        var child;
-        ctx.save();
-        this._transform(node, ctx);
-        ctx.fillStyle = node._cvsCache.detectColor;
-        if (node._touchEnabled) {
-            if (node.detectRender) {
-                node.detectRender(ctx);
-            } else {
-                ctx.fillRect(0, 0, width, height);
+        var ctx, width, height, child;
+        if (typeof node._visible === 'undefined' || node._visible) {
+            width = node.width;
+            height = node.height;
+            ctx = this._dctx;
+            ctx.save();
+            this._transform(node, ctx);
+            ctx.fillStyle = node._cvsCache.detectColor;
+            if (node._touchEnabled) {
+                if (node.detectRender) {
+                    node.detectRender(ctx);
+                } else {
+                    ctx.fillRect(0, 0, width, height);
+                }
             }
-        }
-        if (node._clipping) {
-            ctx.beginPath();
-            ctx.rect(0, 0, width, height);
-            ctx.clip();
-        }
-        if (node.childNodes) {
-            for (var i = 0, l = node.childNodes.length; i < l; i++) {
-                child = node.childNodes[i];
-                this._detectrendering(child);
+            if (node._clipping) {
+                ctx.beginPath();
+                ctx.rect(0, 0, width, height);
+                ctx.clip();
             }
+            if (node.childNodes) {
+                for (var i = 0, l = node.childNodes.length; i < l; i++) {
+                    child = node.childNodes[i];
+                    this._detectrendering(child);
+                }
+            }
+            ctx.restore();
+            enchant.Matrix.instance.stack.pop();
         }
-        ctx.restore();
-        enchant.Matrix.instance.stack.pop();
     },
     _transform: function(node, ctx) {
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
-        var newmat;
+        var newmat, ox, oy, vec;
         if (node._dirty) {
             matrix.makeTransformMatrix(node, node._cvsCache.matrix);
             newmat = [];
             matrix.multiply(stack[stack.length - 1], node._cvsCache.matrix, newmat);
             node._matrix = newmat;
+            ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
+            oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
+            vec = [ ox, oy ];
+            matrix.multiplyVec(newmat, vec, vec);
+            node._offsetX = vec[0] - ox;
+            node._offsetY = vec[1] - oy;
+            node._dirty = false;
         } else {
             newmat = node._matrix;
         }
         stack.push(newmat);
         ctx.setTransform.apply(ctx, newmat);
-        var ox = (typeof node._originX === 'number') ? node._originX : node._width / 2 || 0;
-        var oy = (typeof node._originY === 'number') ? node._originY : node._height / 2 || 0;
-        var vec = [ ox, oy ];
-        matrix.multiplyVec(newmat, vec, vec);
-        node._offsetX = vec[0] - ox;
-        node._offsetY = vec[1] - oy;
-        node._dirty = false;
 
     },
     _determineEventTarget: function(e) {
@@ -4095,19 +4105,19 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
+        var target, i;
         if (child._element) {
-            if (!this._layers.Dom) {
-                this.addLayer('Dom', 1);
-            }
-            this._layers.Dom.insertBefore(child, next);
-            child._layer = this._layers.Dom;
+            target = 'DOM';
+            i = 1;
         } else {
-            if (!this._layers.Canvas) {
-                this.addLayer('Canvas', 0);
-            }
-            this._layers.Canvas.insertBefore(child, next);
-            child._layer = this._layers.Canvas;
+            target = 'Canvas';
+            i = 0;
         }
+        if (!this._layers[target]) {
+            this.addLayer(target, i);
+        }
+        child._layer = this._layers[target];
+        this._layers[target].insertBefore(child, next);
         child.parentNode = this;
     },
     _onchildremoved: function(e) {
@@ -4148,8 +4158,8 @@ enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
-        this._layers.Canvas.insertBefore(child, next);
         child._layer = this._layers.Canvas;
+        this._layers.Canvas.insertBefore(child, next);
     },
     _onenter: function() {
         this._layers.Canvas._startRendering();
@@ -4180,8 +4190,8 @@ enchant.DOMScene = enchant.Class.create(enchant.Scene, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
-        this._layers.Dom.insertBefore(child, next);
         child._layer = this._layers.Dom;
+        this._layers.Dom.insertBefore(child, next);
     },
     _onenter: function() {
         this._layers.Dom._startRendering();
@@ -4393,6 +4403,16 @@ enchant.Surface.load = function(src, callback) {
     };
     image.src = src;
     return surface;
+};
+
+enchant.Surface._getPattern = function(surface, force) {
+    if (!(surface instanceof enchant.Surface)) {
+        throw new Error('Cannot create pattern from passed object');
+    }
+    if (!surface._pattern || force) {
+        surface._pattern = document.createElement('canvas').getContext('2d').createPattern(surface._element, 'repeat');
+    }
+    return surface._pattern;
 };
 
 /**
@@ -4714,458 +4734,6 @@ enchant.Sound = window.AudioContext && enchant.ENV.USE_WEBAUDIO ? enchant.WebAud
  */
 
 /**
- * Easing function library, from "Easing Equations" by Robert Penner.
- * @type {Object}
- * @namespace
- * {@link enchant.Tween} クラスで用いるイージング関数のライブラリ名前空間.
- */
-enchant.Easing = {
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    LINEAR: function(t, b, c, d) {
-        return c * t / d + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    SWING: function(t, b, c, d) {
-        return c * (0.5 - Math.cos(((t / d) * Math.PI)) / 2) + b;
-    },
-    // quad
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUAD_EASEIN: function(t, b, c, d) {
-        return c * (t /= d) * t + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUAD_EASEOUT: function(t, b, c, d) {
-        return -c * (t /= d) * (t - 2) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUAD_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) {
-            return c / 2 * t * t + b;
-        }
-        return -c / 2 * ((--t) * (t - 2) - 1) + b;
-    },
-    // cubic
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    CUBIC_EASEIN: function(t, b, c, d) {
-        return c * (t /= d) * t * t + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    CUBIC_EASEOUT: function(t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t + 1) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    CUBIC_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) {
-            return c / 2 * t * t * t + b;
-        }
-        return c / 2 * ((t -= 2) * t * t + 2) + b;
-    },
-    // quart
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUART_EASEIN: function(t, b, c, d) {
-        return c * (t /= d) * t * t * t + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUART_EASEOUT: function(t, b, c, d) {
-        return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUART_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) {
-            return c / 2 * t * t * t * t + b;
-        }
-        return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
-    },
-    // quint
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUINT_EASEIN: function(t, b, c, d) {
-        return c * (t /= d) * t * t * t * t + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUINT_EASEOUT: function(t, b, c, d) {
-        return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    QUINT_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) {
-            return c / 2 * t * t * t * t * t + b;
-        }
-        return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
-    },
-    //sin
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    SIN_EASEIN: function(t, b, c, d) {
-        return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    SIN_EASEOUT: function(t, b, c, d) {
-        return c * Math.sin(t / d * (Math.PI / 2)) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    SIN_EASEINOUT: function(t, b, c, d) {
-        return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
-    },
-    // circ
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    CIRC_EASEIN: function(t, b, c, d) {
-        return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    CIRC_EASEOUT: function(t, b, c, d) {
-        return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    CIRC_EASEINOUT: function(t, b, c, d) {
-        if ((t /= d / 2) < 1) {
-            return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
-        }
-        return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
-    },
-    // elastic
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    ELASTIC_EASEIN: function(t, b, c, d, a, p) {
-        if (t === 0) {
-            return b;
-        }
-        if ((t /= d) === 1) {
-            return b + c;
-        }
-
-        if (!p) {
-            p = d * 0.3;
-        }
-
-        var s;
-        if (!a || a < Math.abs(c)) {
-            a = c;
-            s = p / 4;
-        } else {
-            s = p / (2 * Math.PI) * Math.asin(c / a);
-        }
-        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    ELASTIC_EASEOUT: function(t, b, c, d, a, p) {
-        if (t === 0) {
-            return b;
-        }
-        if ((t /= d) === 1) {
-            return b + c;
-        }
-        if (!p) {
-            p = d * 0.3;
-        }
-        var s;
-        if (!a || a < Math.abs(c)) {
-            a = c;
-            s = p / 4;
-        } else {
-            s = p / (2 * Math.PI) * Math.asin(c / a);
-        }
-        return (a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    ELASTIC_EASEINOUT: function(t, b, c, d, a, p) {
-        if (t === 0) {
-            return b;
-        }
-        if ((t /= d / 2) === 2) {
-            return b + c;
-        }
-        if (!p) {
-            p = d * (0.3 * 1.5);
-        }
-        var s;
-        if (!a || a < Math.abs(c)) {
-            a = c;
-            s = p / 4;
-        } else {
-            s = p / (2 * Math.PI) * Math.asin(c / a);
-        }
-        if (t < 1) {
-            return -0.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-        }
-        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * 0.5 + c + b;
-    },
-    // bounce
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    BOUNCE_EASEOUT: function(t, b, c, d) {
-        if ((t /= d) < (1 / 2.75)) {
-            return c * (7.5625 * t * t) + b;
-        } else if (t < (2 / 2.75)) {
-            return c * (7.5625 * (t -= (1.5 / 2.75)) * t + 0.75) + b;
-        } else if (t < (2.5 / 2.75)) {
-            return c * (7.5625 * (t -= (2.25 / 2.75)) * t + 0.9375) + b;
-        } else {
-            return c * (7.5625 * (t -= (2.625 / 2.75)) * t + 0.984375) + b;
-        }
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    BOUNCE_EASEIN: function(t, b, c, d) {
-        return c - enchant.Easing.BOUNCE_EASEOUT(d - t, 0, c, d) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    BOUNCE_EASEINOUT: function(t, b, c, d) {
-        if (t < d / 2) {
-            return enchant.Easing.BOUNCE_EASEIN(t * 2, 0, c, d) * 0.5 + b;
-        } else {
-            return enchant.Easing.BOUNCE_EASEOUT(t * 2 - d, 0, c, d) * 0.5 + c * 0.5 + b;
-        }
-
-    },
-    // back
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    BACK_EASEIN: function(t, b, c, d, s) {
-        if (s === undefined) {
-            s = 1.70158;
-        }
-        return c * (t /= d) * t * ((s + 1) * t - s) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    BACK_EASEOUT: function(t, b, c, d, s) {
-        if (s === undefined) {
-            s = 1.70158;
-        }
-        return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    BACK_EASEINOUT: function(t, b, c, d, s) {
-        if (s === undefined) {
-            s = 1.70158;
-        }
-        if ((t /= d / 2) < 1) {
-            return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
-        }
-        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
-    },
-    // expo
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    EXPO_EASEIN: function(t, b, c, d) {
-        return (t === 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    EXPO_EASEOUT: function(t, b, c, d) {
-        return (t === d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
-    },
-    /**
-     * @param t
-     * @param b
-     * @param c
-     * @param d
-     * @return {Number}
-     */
-    EXPO_EASEINOUT: function(t, b, c, d) {
-        if (t === 0) {
-            return b;
-        }
-        if (t === d) {
-            return b + c;
-        }
-        if ((t /= d / 2) < 1) {
-            return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-        }
-        return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
-    }
-};
-
-/**
- * Easing Equations v2.0
- */
-
-/**
- * @scope enchant.ActionEventTarget.prototype
- * @type {*}
- */
-enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
-    /**
-     * @name enchant.ActionEventTarget
-     * @class
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -5247,39 +4815,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      */
     setTimeBased: function() {
         this.isFrameBased = false;
-    },
-    /**
-     */
-    next: function(remainingTime) {
-        var e, action = this.queue.shift();
-        e = new enchant.Event("actionend");
-        e.timeline = this;
-        action.dispatchEvent(e);
-
-        if (this.queue.length === 0) {
-            this._activated = false;
-            this.node.removeEventListener('enterframe', this._nodeEventListener);
-            return;
-        }
-
-        if (this.looped) {
-            e = new enchant.Event("removedfromtimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-            action.frame = 0;
-
-            this.add(action);
-        } else {
-            // remove after dispatching removedfromtimeline event
-            e = new enchant.Event("removedfromtimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-        }
-        if (remainingTime > 0 || (this.queue[0] && this.queue[0].time === 0)) {
-            var event = new enchant.Event("enterframe");
-            event.elapsed = remainingTime;
-            this.dispatchEvent(event);
-        }
     },
     /**
      */

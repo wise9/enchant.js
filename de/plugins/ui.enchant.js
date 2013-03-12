@@ -484,6 +484,8 @@ enchant.ui.Button.DEFAULT_THEME = {
  */
 enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
     /**
+     [lang:en]
+     [/lang]
      *
      * @usage
      *     var text = new MutableText(0, 0);

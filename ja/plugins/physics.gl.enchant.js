@@ -14,7 +14,7 @@
  * @detail
  * ammo.js:
  * https://github.com/kripken/ammo.js
- */
+*/
 if (typeof Ammo === 'undefined') {
     throw new Error('physics.gl.enchant.js must be loaded after ammo.js');
 }
@@ -34,7 +34,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * ここに剛体オブジェクトを追加し, 時間を進めることで物理演算が実行される.
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
-             */
+*/
             initialize: function() {
                 var g = new Ammo.btVector3(0, -10, 0);
                 var collisionConfiguration = new Ammo.btDefaultCollisionConfiguration();
@@ -54,7 +54,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} gx x軸方向の重力.
              * @param {Number} gy y軸方向の重力.
              * @param {Number} gz z軸方向の重力.
-             */
+*/
             setGravity: function(gx, gy, gz) {
                 var g = new Ammo.btVector3(gx, gy, gz);
                 this._dynamicsWorld.setGravity(g);
@@ -67,14 +67,14 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} maxSubSteps シミュレーションの最大追加回数.
              * @param {Number} fixedTimeStep 基本となる時間. デフォルト値は1/60.
              * @return {Number} subStepsNum
-             */
+*/
             stepSimulation: function(timeStep, maxSubSteps, fixedTimeStep) {
                 return this._dynamicsWorld.stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
             },
             /**
              * Worldに剛体を追加する.
              * @param {enchant.gl.physics.Rigid} Rigid 追加する剛体オブジェクト.
-             */
+*/
             addRigid: function(rigid) {
                 this._dynamicsWorld.addRigidBody(rigid.rigidBody);
                 rigid.world = this;
@@ -82,7 +82,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * Worldから剛体を削除する.
              * @param {enchant.gl.physics.Rigid} Rigid 削除する剛体オブジェクト.
-             */
+*/
             removeRigid: function(rigid) {
                 this._dynamicsWorld.removeRigidBody(rigid.rigidBody);
                 rigid.world = null;
@@ -92,7 +92,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {enchant.gl.physics.Rigid} rigid1 判定するRigid1.
              * @param {enchant.gl.physics.Rigid} rigid2 判定するRigid2.
              * @return {Boolean} bool 衝突の有無.
-             */
+*/
             contactPairTest: function(rigid1, rigid2) {
                 var callback = new Ammo.ConcreteContactResultCallback();
                 var result = false;
@@ -129,7 +129,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.RigidPlane
              * @see enchant.gl.physics.RigidContainer
              * @constructs
-             */
+*/
             initialize: function(shape, mass, lDamp, aDamp) {
                 if (typeof shape === 'undefined') {
                     shape = new Ammo.btBoxShape(1);
@@ -159,12 +159,12 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
                 this.shape = shape;
                 /**
                  * Rigidが所属するWorld
-                 */
+*/
                 this.world = null;
 
                 /**
                  * Ammoの剛体オブジェクト
-                 */
+*/
                 this.rigidBody = new Ammo.btRigidBody(rigidBodyInfo);
                 var p = Ammo.getPointer(this.rigidBody);
                 enchant.gl.physics.Rigid._refs[p] = this;
@@ -189,7 +189,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} x x軸方向の拡大率.
              * @param {Number} y y軸方向の拡大率.
              * @param {Number} z z軸方向の拡大率.
-             */
+*/
             scale: function(x, y, z) {
                 this.activate();
                 this._scaleX *= x;
@@ -212,7 +212,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} x x軸方向の平行移動量.
              * @param {Number} y y軸方向の平行移動量.
              * @param {Number} z z軸方向の平行移動量.
-             */
+*/
             translate: function(x, y, z) {
                 this.activate();
                 var vec = new Ammo.btVector3(x, y, z);
@@ -244,7 +244,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * クォータニオンで表した姿勢をRigidにセットする.
              * @param {enchant.gl.Quat} quat
-             */
+*/
             rotationSet: function(quat) {
                 var qq = quat._quat;
                 var q = new Ammo.btQuaternion(qq[0], qq[1], qq[2], qq[3]);
@@ -257,7 +257,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * クォータニオンで表した回転をRigidに適用する.
              * @param {enchant.gl.Quat} quat
-             */
+*/
             rotationApply: function(quat) {
                 var quat1 = quat._quat;
                 var t = this._getTransform();
@@ -272,7 +272,9 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             },
             /**
              * Rigidを止める.
+[lang:ja]
              * Stops Rigid object.
+             [/lang]
              */
             clearForces: function() {
                 var vec0 = new Ammo.btVector3(0, 0, 0);
@@ -285,7 +287,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * 他のRigidとの衝突判定.
              * @param {enchant.gl.physics.Rigid} rigid 判定するRigid.
              * @return {Boolean} bool 衝突の有無.
-             */
+*/
             contactTest: function(rigid) {
                 if (this.world && rigid.world &&
                     this.world === rigid.world) {
@@ -297,7 +299,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * Rigidを有効化する.
              * @param {Boolean} force 強制的に有効化する.
-             */
+*/
             activate: function(force) {
                 this.rigidBody.activate(force);
             },
@@ -307,7 +309,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} powerX x軸方向の力.
              * @param {Number} powerY y軸方向の力.
              * @param {Number} powerZ z軸方向の力.
-             */
+*/
             applyCentralImpulse: function(powx, powy, powz) {
                 var powv = new Ammo.btVector3(powx, powy, powz);
                 this.activate();
@@ -323,7 +325,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} positonX 力を加える位置のx座標.
              * @param {Number} positonY 力を加える位置のy座標.
              * @param {Number} positonZ 力を加える位置のz座標.
-             */
+*/
             applyImpulse: function(powx, powy, powz, posx, posy, posz) {
                 var powv = new Ammo.btVector3(powx, powy, powz);
                 var posv = new Ammo.btVector3(posx, posy, posz);
@@ -337,7 +339,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             },
             /**
              * Rigidをユーザが動かすためのオブジェクトとして設定する.
-             */
+*/
             kinematize: function() {
                 var flag = this.rigidBody.getCollisionFlags();
                 this.rigidBody.setCollisionFlags(flag | 2);
@@ -346,7 +348,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * Rigidの反発係数.
              * @type Number
-             */
+*/
             restitution: {
                 get: function() {
                     return this._restitution;
@@ -359,7 +361,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * Rigidの摩擦係数.
              * @type Number
-             */
+*/
             friction: {
                 get: function() {
                     return this._friction;
@@ -386,7 +388,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyBox
              * @constructs
              * @extends enchant.gl.physics.Rigid
-             */
+*/
             initialize: function(sx, sy, sz, mass) {
                 var scale = new Ammo.btVector3(sx, sy, sz);
                 var shape = new Ammo.btBoxShape(scale);
@@ -406,7 +408,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @constructs
              * @see enchant.gl.physics.Rigid
              * @extends enchant.gl.physics.PhyCube
-             */
+*/
             initialize: function(scale, mass) {
                 enchant.gl.physics.RigidBox.call(this, scale, scale, scale, mass);
             }
@@ -424,7 +426,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhySphere
              * @constructs
              * @extends enchant.gl.physics.Rigid
-             */
+*/
             initialize: function(s, mass, lDamp, aDamp) {
                 var shape = new Ammo.btSphereShape(s);
                 enchant.gl.physics.Rigid.call(this, shape, mass, lDamp, aDamp);
@@ -444,7 +446,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyCylinder
              * @constructs
              * @extends enchant.gl.physics.Rigid
-             */
+*/
             initialize: function(r, h, mass) {
                 var scale = new Ammo.btVector3(r, h, r);
                 var shape = new Ammo.btCylinderShape(scale);
@@ -467,7 +469,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyCapsule
              * @constructs
              * @extends enchant.gl.physics.Rigid
-             */
+*/
             initialize: function(r, h, mass) {
                 var shape = new Ammo.btCapsuleShape(r, h);
                 enchant.gl.physics.Rigid.call(this, shape, mass);
@@ -487,7 +489,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyPlane
              * @constructs
              * @extends enchant.gl.physics.Rigid
-             */
+*/
             initialize: function(nx, ny, nz, distance) {
                 var normal = new Ammo.btVector3(nx, ny, nz);
                 var shape = new Ammo.btStaticPlaneShape(normal, distance);
@@ -508,7 +510,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyContainer
              * @constructs
              * @extends enchant.gl.physics.Rigid
-             */
+*/
             initialize: function(s, mass) {
                 var shape = new Ammo.btCompoundShape(s);
                 var addWall = function(sx, sy, sz, px, py, pz) {
@@ -542,7 +544,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.World
              * @constructs
              * @extends enchant.gl.Scene3D
-             */
+*/
             initialize: function() {
                 enchant.gl.Scene3D.call(this);
                 var core = enchant.Core.instance;
@@ -560,7 +562,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * 子Sprite3Dを追加する.
              * PhySprite3Dを追加した場合, PhySprite3Dが持つ剛体オブジェクトがPhyScene3Dが持つWorldに追加される.
              * @param {enchant.gl.Sprite3D|enchant.gl.physics.PhySprite3D} Sprite3D 追加する子Sprite3D.
-             */
+*/
             addChild: function(sprite) {
                 enchant.gl.Scene3D.prototype.addChild.call(this, sprite);
                 if (sprite instanceof enchant.gl.physics.PhySprite3D) {
@@ -571,7 +573,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * 指定された子Sprite3Dを削除する.
              * PhySprite3Dを指定した場合, PhySprite3Dが持つ剛体オブジェクトがPhyScene3Dが持つWorldから削除される.
              * @param {enchant.gl.Sprite3D|enchant.gl.physics.PhySprite3D} Sprite3D 追加する子Sprite3D.
-             */
+*/
             removeChild: function(sprite) {
                 enchant.gl.Scene3D.prototype.removeChild.call(this, sprite);
                 if (sprite instanceof enchant.gl.physics.PhySprite3D) {
@@ -583,7 +585,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} gx x軸方向の重力
              * @param {Number} gy y軸方向の重力
              * @param {Number} gz z軸方向の重力
-             */
+*/
             setGravity: function(x, y, z) {
                 this.world.setGravity(x, y, z);
             },
@@ -592,7 +594,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} timeStep 進めたい時間.単位は秒.
              * @param {Number} maxSubSteps
              * @param {Number} fixedTimeStep
-             */
+*/
             stepSimulation: function(timeStep, maxSubSteps, fixedTimeStep) {
                 var subStep = this.world.stepSimulation(timeStep, maxSubSteps, fixedTimeStep);
                 var e = new enchant.Event('timestep');
@@ -608,8 +610,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             /**
              * Worldの時間の進行を始める.
              * enterframeごとにstepSimulationが自動で呼び出される.
-             *
-             */
+*/
             play: function() {
                 var core = enchant.Core.instance;
                 if (!this.isPlaying) {
@@ -619,7 +620,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
             },
             /**
              * Worldの時間の進行を止める.
-             */
+*/
             stop: function() {
                 var core = enchant.Core.instance;
                 this.isPlaying = false;
@@ -643,7 +644,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyPlane
              * @see enchant.gl.physics.PhyContainer
              * @constructs
-             */
+*/
             initialize: function(rigid) {
                 enchant.gl.Sprite3D.call(this);
                 this.rigid = rigid;
@@ -668,7 +669,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} x x軸方向の拡大率.
              * @param {Number} y y軸方向の拡大率.
              * @param {Number} z z軸方向の拡大率.
-             */
+*/
             scale: function(x, y, z) {
                 enchant.gl.Sprite3D.prototype.scale.call(this, x, y, z);
                 this.rigid.scale(x, y, z);
@@ -679,7 +680,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} x x軸方向の平行移動量.
              * @param {Number} y y軸方向の平行移動量.
              * @param {Number} z z軸方向の平行移動量.
-             */
+*/
             translate: function(x, y, z) {
                 enchant.gl.Sprite3D.prototype.translate.call(this, x, y, z);
                 this.rigid.translate(x, y, z);
@@ -688,7 +689,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * 回転行列にクォータニオンから得られる回転行列をセットする.
              * Worldでの姿勢も変更される.
              * @param {enchant.gl.Quat} quat
-             */
+*/
             rotationSet: function(quat) {
                 enchant.gl.Sprite3D.prototype.rotationSet.call(this, quat);
                 this.rigid.rotationSet(quat);
@@ -697,14 +698,16 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * 回転行列にクォータニオンから得られる回転行列を適用する.
              * Worldでの姿勢も変更される.
              * @param {enchant.gl.Quat} quat
-             */
+*/
             rotationApply: function(quat) {
                 enchant.gl.Sprite3D.prototype.rotationApply.call(this, quat);
                 this.rigid.rotationApply(quat);
             },
             /**
              * Rigidを止める.
+[lang:ja]
              * Stops Rigid object.
+             [/lang]
              */
             clearForces: function() {
                 this.rigid.clearForces();
@@ -713,7 +716,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * 他のPhySprite3Dとの衝突判定.
              * @param {enchant.gl.physics.PhySprite3D} sprite 判定するPhySprite3D.
              * @return {Boolean} bool 衝突の有無.
-             */
+*/
             contactTest: function(sprite) {
                 return this.rigid.contactTest(sprite.rigid);
             },
@@ -724,7 +727,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} powerY y軸方向の力.
              * @param {Number} powerZ z軸方向の力.
              * @see enchant.gl.physics.Rigid#applyCentralImpulse
-             */
+*/
             applyCentralImpulse: function(powx, powy, powz) {
                 this.rigid.applyCentralImpulse(powx, powy, powz);
             },
@@ -738,13 +741,13 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @param {Number} positonY 力を加える位置のy座標.
              * @param {Number} positonZ 力を加える位置のz座標.
              * @see enchant.gl.physics.Rigid#applyImpulse
-             */
+*/
             applyImpulse: function(powx, powy, powz, posx, posy, posz) {
                 this.rigid.applyImpulse(powx, powy, powz, posx, posy, posz);
             },
             /**
              * PhySprite3Dをユーザが動かすためのオブジェクトとして設定する.
-             */
+*/
             kinematize: function() {
                 this.rigid.kinematize();
             },
@@ -752,7 +755,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * PhySprite3Dの反発係数.
              * @type Number
              * @see enchant.gl.physics.Rigid#restitution
-             */
+*/
             restitution: {
                 get: function() {
                     return this.rigid._restitution;
@@ -766,7 +769,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * PhySprite3Dの摩擦係数.
              * @type Number
              * @see enchant.gl.physics.Rigid#friction
-             */
+*/
             friction: {
                 get: function() {
                     return this.rigid._friction;
@@ -817,7 +820,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-             */
+*/
             initialize: function(sx, sy, sz, mass) {
                 var rigid = new enchant.gl.physics.RigidBox(sx, sy, sz, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
@@ -838,7 +841,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhyBox
-             */
+*/
             initialize: function(s, mass) {
                 var rigid = new enchant.gl.physics.RigidBox(s, s, s, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
@@ -859,7 +862,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-             */
+*/
             initialize: function(r, mass, lDamp, aDamp) {
                 if (typeof lDamp === 'undefined') {
                     lDamp = 0.05;
@@ -890,7 +893,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-             */
+*/
             initialize: function(r, h, mass) {
                 var rigid = new enchant.gl.physics.RigidCylinder(r, h, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
@@ -913,7 +916,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-             */
+*/
             initialize: function(r, h, mass) {
                 var rigid = new enchant.gl.physics.RigidCapsule(r, h, mass);
                 enchant.gl.physics.PhySprite3D.call(this, rigid);
@@ -937,7 +940,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-             */
+*/
             initialize: function(nx, ny, nz, dist, scale) {
                 if (!scale) {
                     scale = 50;
@@ -979,7 +982,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              * @see enchant.gl.physics.PhyScene3D
              * @constructs
              * @extends enchant.gl.physics.PhySprite3D
-             */
+*/
             initialize: function(scale, mass) {
                 var s = scale;
                 var rigid = new enchant.gl.physics.RigidContainer(s, mass);
