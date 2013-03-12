@@ -211,7 +211,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                     } else if (this._image._element) {
                     }
                 }
-            }
+            };
         } else {
             return function(element) {
                 if (this._image) {
@@ -223,7 +223,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                     } else if (this._image._element) {
                     }
                 }
-            }
+            };
         }
     }())
 });
