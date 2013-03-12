@@ -126,7 +126,7 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask 'default', [
-    'jshint:core', 'concat', 'uglify', 'qunit', 'exec:lang']
+    'jshint:core', 'concat', 'uglify', 'qunit', 'lang']
 
   grunt.registerTask 'lang', 'Make lang file.', ()->
     grunt.log.writeln 'processing..'
