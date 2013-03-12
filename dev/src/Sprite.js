@@ -199,15 +199,31 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             }
         }
     },
-    domRender: function(element) {
-        if (this._image) {
-            if (this._image._css) {
-                this._style['background-image'] = this._image._css;
-                this._style['background-position'] =
-                    -this._frameLeft + 'px ' +
-                    -this._frameTop + 'px';
-            } else if (this._image._element) {
+    domRender: (function() {
+        if (enchant.ENV.VENDOR_PREFIX === 'ms') {
+            return function(element) {
+                if (this._image) {
+                    if (this._image._css) {
+                        this._style['background-image'] = this._image._css;
+                        this._style['background-position'] =
+                            -this._frameLeft + 'px ' +
+                            -this._frameTop + 'px';
+                    } else if (this._image._element) {
+                    }
+                }
+            }
+        } else {
+            return function(element) {
+                if (this._image) {
+                    if (this._image._css) {
+                        this._style['background-image'] = this._image._css;
+                        this._style['background-position'] =
+                            -this._frameLeft + 'px ' +
+                            -this._frameTop + 'px';
+                    } else if (this._image._element) {
+                    }
+                }
             }
         }
-    }
+    }())
 });
