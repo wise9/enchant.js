@@ -221,6 +221,11 @@
                 }
             }(enchant));
 
+            this._calledTime = 0;
+            this._mousedownID = 0;
+            this._surfaceID = 0;
+            this._soundID = 0;
+
             this._scenes = [];
             /**
              [lang:ja]
@@ -290,12 +295,6 @@
                 image.context.fillRect(border, 0, (barWidth - border * 2) * _progress, barHeight);
             });
             this.loadingScene.addChild(bar);
-
-            this._calledTime = 0;
-
-            this._mousedownID = 0;
-            this._surfaceID = 0;
-            this._soundID = 0;
 
             /**
              [lang:ja]
