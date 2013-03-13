@@ -1,21 +1,15 @@
 /**
  * @fileOverview
- [lang:ja]
  * primitive.gl.enchant.js
  * @version 0.3.5
  * @require gl.enchant.js v0.3.5+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
+ [lang:ja]
  * gl.enchant.js で使える基本立体オブジェクト
  [/lang]
  [lang:en]
- * primitive.gl.enchant.js
- * @version 0.3.5
- * @require gl.enchant.js v0.3.5+
- * @author Ubiquitous Entertainment Inc.
- *
- * @description
  * Primitive objects for gl.enchant.js
  [/lang]
  */

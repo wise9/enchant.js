@@ -6,13 +6,13 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
      * @name enchant.ActionEventTarget
      * @class
-     * [lang:ja]
+     [lang:ja]
      * {@link enchant.Action} クラス向けに拡張された {@link enchant.EventTarget} クラス .
      *
-     * [/lang]
-     * [lang:en]
+     [/lang]
+     [lang:en]
      * EventTarget which can change the context of event listeners
-     * [/lang]
+     [/lang]
      * @constructs
      * @extends enchant.EventTarget
      */

@@ -41,9 +41,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frame = 0;
         this._frameSequence = [];
         /**
-         * [lang:ja]
+         [lang:ja]
          * frame に配列が指定されたときの処理。
-         * [/lang]
+         [/lang]
          */
         this.addEventListener('enterframe', function() {
             if (this._frameSequence.length !== 0) {
@@ -136,9 +136,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 0 <= frame
-     * [lang:ja]
+     [lang:ja]
      * 0以下の動作は未定義.
-     * [/lang]
+     [/lang]
      * @param frame
      * @private
      */

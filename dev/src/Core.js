@@ -303,9 +303,9 @@
             this._soundID = 0;
 
             /**
-             * [lang:ja]
+             [lang:ja]
              * 一度でも game.start() が呼ばれたことがあるかどうか。
-             * [/lang]
+             [/lang]
              * @type {Boolean}
              * @private
              */
@@ -750,10 +750,10 @@
             }
         },
         /**
-         * [lang:ja]
+         [lang:ja]
          * 次のフレームの実行を要求する.
          * @param {Number} requestAnimationFrameを呼び出すまでの遅延時間.
-         * [/lang]
+         [/lang]
          * @private
          */
         _requestNextFrame: function(delay) {
@@ -767,9 +767,9 @@
             }, delay);
         },
         /**
-         * [lang:ja]
+         [lang:ja]
          * Core#_tickを呼び出す.
-         * [/lang]
+         [/lang]
          * @private
          */
         _callTick: function(time) {

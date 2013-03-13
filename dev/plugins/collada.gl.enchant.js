@@ -1,39 +1,27 @@
 /**
  * @fileOverview
- [lang:ja]
  * collada.gl.enchant.js
  * @version v0.4.0
  * @require enchant.js v0.4.5+
  * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
  *
+ [lang:ja]
  * @description
  * gl.enchant.jsでcolladaファイル(.dae)を読み込むためのプラグイン
  *
  * @detail
- * ベクトル・行列演算にglMatrix.jsを使用しています.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * glMatrix.jsの詳しい使い方:
- * http://code.google.com/p/glmatrix/wiki/Usage
+ * ベクトル・行列演算にgl-matrix.jsを使用しています.
  [/lang]
  [lang:en]
- * collada.gl.enchant.js
- * @version v0.4.0
- * @require enchant.js v0.4.5+
- * @require gl.enchant.js v0.3.1+
- * @author Ubiquitous Entertainment Inc.
- *
  * @description
  * Plugin to load collada format (.dae) files on gl.enchant.js
  *
  * @detail
- * Uses glMatrix.js in hectors and matrix operations.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * For more information on glMatrix.js usage:
- * http://code.google.com/p/glmatrix/wiki/Usage
+ * Uses gl-matrix.js in vectors and matrix operations.
  [/lang]
+ * gl-matrix.js:
+ * https://github.com/toji/gl-matrix/
  */
 if (enchant.gl !== undefined) {
     enchant.Core._loadFuncs['dae'] = function(src, callback) {

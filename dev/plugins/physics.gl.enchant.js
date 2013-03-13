@@ -1,6 +1,5 @@
 /**
  * @fileOverview
- [lang:ja]
  * physics.gl.enchant.js
  * @version 0.3.6
  * @require enchant.js v0.4.5+
@@ -10,28 +9,17 @@
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
+ [lang:ja]
  * ammo.jsを使用している物理演算ライブラリ.
  * gl.enchant.jsで物理演算によって動作するオブジェクトを使えるようにする.
- * @detail
- * ammo.js:
- * https://github.com/kripken/ammo.js
  [/lang]
  [lang:en]
- * physics.gl.enchant.js
- * @version 0.3.6
- * @require enchant.js v0.4.5+
- * @require gl.enchant.js v0.3.6+
- * @require primitive.gl.enchant.js v0.3.5+
- * @require gl-matrix.js 1.3.7+
- * @author Ubiquitous Entertainment Inc.
- *
- * @description
  * Physical calculation library using ammo.js
  * Allows object movement using the gl.enchant.js physical calculator.
+ [/lang]
  * @detail
  * ammo.js:
  * https://github.com/kripken/ammo.js
- [/lang]
  */
 if (typeof Ammo === 'undefined') {
     throw new Error('physics.gl.enchant.js must be loaded after ammo.js');
@@ -396,7 +384,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
              [lang:ja]
              * Rigidを止める.
              [/lang]
-             [lang:ja]
+             [lang:en]
              * Stops Rigid object.
              [/lang]
              */
