@@ -130,8 +130,15 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'lang', 'Make lang file.', ()->
     grunt.log.writeln 'processing..'
-    done = this.async;
+    done = @async
     fs = require('fs')
+
+    make_repl = (lang) ->
+      new RegExp('^[\\*\\s]*\\[lang:' + lang + '\\]\\n([\\s\\S]*?)^[\\*\\s]*\\[\\/lang\\]\\n', 'mg')
+
+    repl_en = make_repl 'en'
+    repl_ja = make_repl 'ja'
+    repl_de = make_repl 'de'
 
     (glob.sync "dev/{plugins\/,}*.js").forEach (source)->
       dist_en = source.toString().replace(/dev\//, './')
@@ -139,19 +146,19 @@ module.exports = (grunt) ->
       dist_de = source.toString().replace(/dev\//, './de/')
 
       fs.writeFileSync dist_en, (fs.readFileSync source).toString()
-      .replace(/^[\*\s]+\[lang:en\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*\n/mg, '$1')
-      .replace(/^[\*\s]+\[lang:ja\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*\n/mg, '')
-      .replace(/^[\*\s]+\[lang:de\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*\n/mg, '')
+        .replace(repl_en, '$1')
+        .replace(repl_ja, '')
+        .replace(repl_de, '')
 
       fs.writeFileSync dist_ja, (fs.readFileSync source).toString()
-      .replace(/^[\*\s]+\[lang:en\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*/mg, '')
-      .replace(/^[\*\s]+\[lang:ja\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*/mg, '$1')
-      .replace(/^[\*\s]+\[lang:de\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*/mg, '')
+        .replace(repl_en, '')
+        .replace(repl_ja, '$1')
+        .replace(repl_de, '')
 
       fs.writeFileSync dist_de, (fs.readFileSync source).toString()
-      .replace(/^[\*\s]+\[lang:en\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*\n/mg, '')
-      .replace(/^[\*\s]+\[lang:ja\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*\n/mg, '')
-      .replace(/^[\*\s]+\[lang:de\]\n(\s*[\s\S]*?\n)[\*\s]*\[\/lang\]\s*\n/mg, '$1')
+        .replace(repl_en, '')
+        .replace(repl_ja, '')
+        .replace(repl_de, '$1')
 
       grunt.log.writeln(source)
     grunt.log.writeln 'processing..'
