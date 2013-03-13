@@ -1,0 +1,9 @@
+{
+  "name": "enchant.js",
+  "version": "0.6.3",
+  "main": "enchant.js",
+  "ignore": [
+    "node_modules",
+    "components"
+  ]
+}
