@@ -17,7 +17,7 @@
  * https://github.com/edvakf/MMD.js
  * MMD.jsについて:
  * http://edv.sakura.ne.jp/mmd/
-*/
+ */
 
 // for MMD.js
 var MMD = {};
@@ -67,7 +67,7 @@ var MMD = {};
          * MSprite3D用のメッシュオブジェクト.
          * @constructs
          * @extends enchant.gl.Mesh
-*/
+         */
         initialize: function() {
             enchant.gl.Mesh.call(this);
             var vpos1Buffer = new enchant.gl.Buffer(enchant.gl.Buffer.VERTICES);
@@ -175,7 +175,7 @@ var MMD = {};
          * @param {Function} callback コールバック関数
          * @constructs
          * @extends enchant.gl.Sprite3D
-*/
+         */
         initialize: function(path, callback) {
             enchant.gl.Sprite3D.call(this);
             this.program = enchant.gl.mmd.MMD_SHADER_PROGRAM;
@@ -215,13 +215,13 @@ var MMD = {};
          * アニメーションを追加する.
          * アニメーションは追加された順に再生されていく.
          * @param {enchant.gl.mmd.MAnimation} animation
-*/
+         */
         pushAnimation: function(animation) {
             this.animation.push({ frame: 0, animation: animation });
         },
         /**
          * 追加されたアニメーションを削除する.
-*/
+         */
         clearAnimation: function(animation) {
             this.animation = [];
         },
@@ -330,7 +330,7 @@ var MMD = {};
          * mk.loadPmd('model/miku.pmd', function() {
          *     scene.addChild(mk);
          * });
-*/
+         */
         loadPmd: function(path, callback) {
             var split = splitPath(path);
             var model = new MMD.Model(split[1], split[2]);
@@ -594,7 +594,7 @@ var MMD = {};
          * @constructs
          * @extends enchant.gl.Sprite3D
          * @see enchant.gl.mmd.MAnimation#loadVmd
-*/
+         */
         initialize: function(path, callback) {
             this.length = -1;
             if (arguments.length === 2) {
@@ -611,7 +611,7 @@ var MMD = {};
          * dance.loadVmd('motion/dance.vmd', function() {
          *     mk.pushAnimation(dance);
          * });
-*/
+         */
         loadVmd: function(path, callback) {
             var motion = new MMD.Motion(path);
             var frame;

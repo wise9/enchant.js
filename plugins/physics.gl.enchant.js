@@ -271,6 +271,7 @@ if (enchant.gl !== undefined && enchant.gl.primitive !== undefined) {
                 Ammo.destroy(t);
             },
             /**
+             * Stops Rigid object.
              */
             clearForces: function() {
                 var vec0 = new Ammo.btVector3(0, 0, 0);

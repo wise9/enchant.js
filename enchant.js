@@ -4672,7 +4672,6 @@ enchant.Sound = window.AudioContext && enchant.ENV.USE_WEBAUDIO ? enchant.WebAud
  */
 
 /**
- * [/lang]
  * Easing function library, from "Easing Equations" by Robert Penner.
  * @type {Object}
  * @namespace
@@ -5125,6 +5124,48 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
      * @name enchant.ActionEventTarget
      * @class
+     * EventTarget which can change the context of event listeners
+     * @constructs
+     * @extends enchant.EventTarget
+     */
+    initialize: function() {
+        enchant.EventTarget.apply(this, arguments);
+    },
+    /**
+     * Issue event.
+     * @param {enchant.Event} e Event issued.
+     */
+    dispatchEvent: function(e) {
+        var target;
+        if (this.node) {
+            target = this.node;
+            e.target = target;
+            e.localX = e.x - target._offsetX;
+            e.localY = e.y - target._offsetY;
+        } else {
+            this.node = null;
+        }
+
+        if (this['on' + e.type] != null) {
+            this['on' + e.type].call(target, e);
+        }
+        var listeners = this._listeners[e.type];
+        if (listeners != null) {
+            listeners = listeners.slice();
+            for (var i = 0, len = listeners.length; i < len; i++) {
+                listeners[i].call(target, e);
+            }
+        }
+    }
+});
+
+/**
+ * @scope enchant.Timeline.prototype
+ */
+enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
+    /**
+     * @name enchant.Timeline
+     * @class
      * Time-line class.
      * Class for managing the action.
      * For one node to manipulate the timeline of one must correspond.
@@ -5180,7 +5221,6 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
         this.isFrameBased = false;
     },
     /**
-     [/lang]
      */
     next: function(remainingTime) {
         var e, action = this.queue.shift();
@@ -5212,6 +5252,59 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
             event.elapsed = remainingTime;
             this.dispatchEvent(event);
         }
+    },
+    /**
+     */
+    tick: function(enterFrameEvent) {
+        if (this.paused) {
+            return;
+        }
+        if (this.queue.length > 0) {
+            var action = this.queue[0];
+            if (action.frame === 0) {
+                var f;
+                f = new enchant.Event("actionstart");
+                f.timeline = this;
+                action.dispatchEvent(f);
+            }
+
+            var e = new enchant.Event("actiontick");
+            e.timeline = this;
+            if (this.isFrameBased) {
+                e.elapsed = 1;
+            } else {
+                e.elapsed = enterFrameEvent.elapsed;
+            }
+            action.dispatchEvent(e);
+        }
+    },
+    add: function(action) {
+        if (!this._activated) {
+            var tl = this;
+            this._nodeEventListener = function(e) {
+                tl.dispatchEvent(e);
+            };
+            this.node.addEventListener("enterframe", this._nodeEventListener);
+
+            this._activated = true;
+        }
+        if (this._parallel) {
+            this._parallel.actions.push(action);
+            this._parallel = null;
+        } else {
+            this.queue.push(action);
+        }
+        action.frame = 0;
+
+        var e = new enchant.Event("addedtotimeline");
+        e.timeline = this;
+        action.dispatchEvent(e);
+
+        e = new enchant.Event("actionadded");
+        e.action = action;
+        this.dispatchEvent(e);
+
+        return this;
     },
     /**
      */
@@ -5531,6 +5624,7 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
         });
     }
 });
+
 /**
  * @scope enchant.Action.prototype
  * @type {*}
@@ -5598,6 +5692,7 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
 
     }
 });
+
 /**
  * @scope enchant.ParallelAction.prototype
  */
@@ -5732,6 +5827,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         });
     }
 });
+
 /**
  *
  */

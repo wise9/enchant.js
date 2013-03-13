@@ -1,5 +1,12 @@
 /**
  * @fileOverview
+ * collada.gl.enchant.js
+ * @version v0.4.0
+ * @require enchant.js v0.4.5+
+ * @require gl.enchant.js v0.3.1+
+ * @author Ubiquitous Entertainment Inc.
+ * gl-matrix.js:
+ * https://github.com/toji/gl-matrix/
  */
 if (enchant.gl !== undefined) {
     enchant.Core._loadFuncs['dae'] = function(src, callback) {

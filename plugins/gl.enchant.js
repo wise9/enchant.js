@@ -1,7 +1,7 @@
 /**
  * @fileOverview
  * gl.enchant.js
- * @version 0.3.6
+ * @version 0.3.7
  * @require enchant.js v0.4.5+
  * @require gl-matrix.js 1.3.7+
  * @author Ubiquitous Entertainment Inc.
@@ -2964,6 +2964,7 @@ if (typeof glMatrixArrayType === 'undefined') {
          * Defined as rotating.
          * @constructs
          * @see enchant.gl.collision.Bounding
+
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);

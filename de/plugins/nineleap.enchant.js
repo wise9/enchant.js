@@ -11,16 +11,16 @@
  * (9leapにアップロードした後のみランキング画面にジャンプする)
  *
  * @usage
-
- var core = new Core(320, 320);
-
- core.onload = function(){
- // executed after player pushed "START"
- // ...
- if(some.condition)core.end(score, result);
- };
-
- core.start();
+ * 
+ * var core = new Core(320, 320);
+ * 
+ * core.onload = function(){
+ * // executed after player pushed "START"
+ * // ...
+ * if(some.condition)core.end(score, result);
+ * };
+ * 
+ * core.start();
  */
 
 (function() {

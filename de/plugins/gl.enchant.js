@@ -1,5 +1,14 @@
 /**
  * @fileOverview
+ * gl.enchant.js
+ * @version 0.3.7
+ * @require enchant.js v0.4.5+
+ * @require gl-matrix.js 1.3.7+
+ * @author Ubiquitous Entertainment Inc.
+ *
+ * @description
+ * gl-matrix.js:
+ * https://github.com/toji/gl-matrix/
  */
 
 /**
@@ -2315,6 +2324,7 @@ if (typeof glMatrixArrayType === 'undefined') {
      */
     enchant.gl.collision.OBB = enchant.Class.create(enchant.gl.collision.Bounding, {
         /**
+
          */
         initialize: function() {
             enchant.gl.collision.Bounding.call(this);

@@ -5,16 +5,13 @@
  * @require enchant.js v0.4.5+
  * @require gl.enchant.js v0.3.1+
  * @author Ubiquitous Entertainment Inc.
- *
  * @description
  * Plugin to load collada format (.dae) files on gl.enchant.js
  *
  * @detail
- * Uses glMatrix.js in hectors and matrix operations.
- * glMatrix.js:
- * http://code.google.com/p/glmatrix/
- * For more information on glMatrix.js usage:
- * http://code.google.com/p/glmatrix/wiki/Usage
+ * Uses gl-matrix.js in vectors and matrix operations.
+ * gl-matrix.js:
+ * https://github.com/toji/gl-matrix/
  */
 if (enchant.gl !== undefined) {
     enchant.Core._loadFuncs['dae'] = function(src, callback) {
