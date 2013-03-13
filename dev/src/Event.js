@@ -165,16 +165,16 @@ enchant.Event.LOAD = 'load';
 /**
  [lang:ja]
  * Coreのロード進行中に発生するイベント.
- * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.Core}
+ * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.LoadingScene}
  [/lang]
  [lang:en]
  * Events which are occurring during core loading.
- * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.Core}
+ * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.LoadingScene}
  [/lang]
  [lang:de]
  * Ereignis, welches während des Ladens des Spieles auftritt.
  * Das Ereignis tritt jedesmal auf, wenn eine im voraus geladene Grafik geladen wurde.
- * Objekt des Auftretens: {@link enchant.Core}
+ * Objekt des Auftretens: {@link enchant.LoadingScene}
  [/lang]
  * @type {String}
  */

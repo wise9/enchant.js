@@ -62,6 +62,7 @@ module.exports = (grunt) ->
             'dev/src/DomLayer.js'
             'dev/src/CanvasLayer.js'
             'dev/src/Scene.js'
+            'dev/src/LoadingScene.js'
             'dev/src/CanvasScene.js'
             'dev/src/DOMScene.js'
             'dev/src/Surface.js'
