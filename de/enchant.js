@@ -1329,7 +1329,13 @@ enchant.EventTarget = enchant.Class.create({
             };
             this.addEventListener('load', onloadTimeSetter);
 
-            if (!this._activated && this._assets.length) {
+            this.currentTime = window.getTime();
+            this.running = true;
+            this.ready = true;
+            this._requestNextFrame(0);
+
+            if (!this._activated) {
+                this._activated = true;
                 if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
                     (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
                     navigator.userAgent.indexOf('iPad') !== -1)) {
@@ -1352,12 +1358,8 @@ enchant.EventTarget = enchant.Class.create({
                     core.pushScene(scene);
                     return;
                 }
-
-                this._activated = true;
-                this.currentTime = window.getTime();
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame(0);
+            }
+            if (this._assets.length) {
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {
@@ -3395,8 +3397,12 @@ enchant.DomManager = enchant.Class.create({
         if(!node.__styleStatus) {
             node.__styleStatus = {};
         }
-        node._style.width = node.width + 'px';
-        node._style.height = node.height + 'px';
+        if (node.width !== null) {
+            node._style.width = node.width + 'px';
+        }
+        if (node.height !== null) {
+            node._style.height = node.height + 'px';
+        }
         node._style.opacity = node._opacity;
         node._style['background-color'] = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
