@@ -419,7 +419,11 @@ enchant.ui.Button.theme2css = function(theme) {
     var bd = theme.border;
     var ts = theme.textShadow;
     var bs = theme.boxShadow;
-    obj['background-image'] = prefix + bg.type + '('+ [ bg.start, bg.end ] + ')';
+    if (prefix === '-ms-') {
+        obj['background'] = bg.start;
+    } else {
+        obj['background-image'] = prefix + bg.type + '('+ [ 'top', bg.start, bg.end ] + ')';
+    }
     obj['color'] = theme.color;
     obj['border'] = bd.color + ' ' + bd.width + ' ' + bd.type;
     obj['text-shadow'] = ts.offsetX + 'px ' + ts.offsetY + 'px ' + ts.blur + ' ' + ts.color;
