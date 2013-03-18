@@ -184,7 +184,10 @@ var enchant = function(modules) {
         }
     }(enchant, ''));
 
-    window.Game = window.Core;
+    // issue 185
+    if (enchant.Class.getInheritanceTree(window.Game).length <= enchant.Class.getInheritanceTree(window.Core).length) {
+        window.Game = window.Core;
+    }
 
     if (modules != null && modules.length) {
         throw new Error('Cannot load module: ' + modules.join(', '));
