@@ -2120,7 +2120,13 @@ enchant.EventTarget = enchant.Class.create({
             };
             this.addEventListener('load', onloadTimeSetter);
 
-            if (!this._activated && this._assets.length) {
+            this.currentTime = window.getTime();
+            this.running = true;
+            this.ready = true;
+            this._requestNextFrame(0);
+
+            if (!this._activated) {
+                this._activated = true;
                 if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
                     (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
                     navigator.userAgent.indexOf('iPad') !== -1)) {
@@ -2143,12 +2149,8 @@ enchant.EventTarget = enchant.Class.create({
                     core.pushScene(scene);
                     return;
                 }
-
-                this._activated = true;
-                this.currentTime = window.getTime();
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame(0);
+            }
+            if (this._assets.length) {
 
                 var o = {};
                 var assets = this._assets.filter(function(asset) {
