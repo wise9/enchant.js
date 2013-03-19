@@ -4,8 +4,11 @@ window.onload = function() {
     var game = new Game(320, 320);
     game.onload = function() {
         var status = new Label("");
+        status._log = [];
         status.add = function(str) {
-            this.text = str + "<br />" + this.text;
+            this._log.unshift(str);
+            this._log = this._log.slice(0, 20);
+            this.text =  this._log.join('<br />');
         };
 
         var round = function(num) {
