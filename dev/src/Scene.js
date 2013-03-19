@@ -177,7 +177,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var next = e.next;
         var target, i;
         if (child._element) {
-            target = 'DOM';
+            target = 'Dom';
             i = 1;
         } else {
             target = 'Canvas';
