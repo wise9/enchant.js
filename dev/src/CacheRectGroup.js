@@ -16,6 +16,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         }, this);
         this._visible = false;
         this._enableCacheDraw = true;
+        this._needRedraw = true;
     },
     disableCacheDraw: function() {
         if (!this._enableCacheDraw) {
@@ -44,6 +45,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         set: function(width) {
             this._width = width;
             this._dirty = true;
+            this._needRedraw = true;
             if (this._enableCacheDraw) {
                 this.surface.width = width;
             }
@@ -56,6 +58,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         set: function(height) {
             this._height = height;
             this._dirty = true;
+            this._needRedraw = true;
             if (this._enableCacheDraw) {
                 this.surface.height = height;
             }
@@ -97,7 +100,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         var w = this._width;
         var h = this._height;
         enchant.CanvasRenderer.instance.transform(ctx, this);
-        if (w > 0 && h > 0) {
+        if (w > 0 && h > 0 && this.__visible) {
             if (this._checkChildDirty()) {
                 this._drawChildren();
             }
