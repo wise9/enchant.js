@@ -3650,7 +3650,10 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 sy = Math.min(this._frameTop, ih - h);
                 sw = Math.min(iw - sx, w);
                 sh = Math.min(ih - sy, h);
-                ctx.drawImage(elem, sx, sy, sw, sh, 0, 0, w, h);
+                var tmp = document.createElement('canvas');
+                var tctx = tmp.getContext('2d');
+                tctx.drawImage(elem, sx, sy, sw, sh, 0, 0, sw, sh);
+                ctx.drawImage(tmp, 0, 0, sw, sh, 0, 0, w, h);
             }
         }
     },
@@ -5183,12 +5186,9 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         node._dirty = false;
     },
     _determineEventTarget: function() {
-        if (this._touchEventTarget) {
-            if (this._touchEventTarget !== this) {
-                return this._touchEventTarget;
-            }
-        }
-        return null;
+        var target = this._touchEventTarget;
+        this._touchEventTarget = null;
+        return (target === this) ? null : target;
     }
 });
 
@@ -5693,7 +5693,7 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var next = e.next;
         var target, i;
         if (child._element) {
-            target = 'DOM';
+            target = 'Dom';
             i = 1;
         } else {
             target = 'Canvas';
