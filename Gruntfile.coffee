@@ -1,4 +1,5 @@
 glob = require 'glob'
+
 module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig
@@ -108,8 +109,6 @@ module.exports = (grunt) ->
         doc:
           command: 'rake doc'
 
-
-
       watch:
         core:
           files: ['dev/src/*.js']
@@ -128,7 +127,18 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', [
     'jshint:core', 'concat', 'uglify', 'qunit', 'lang']
 
-  grunt.registerTask 'lang', 'Make lang file.', ()->
+  grunt.registerTask 'doc', 'Make jsdoc', ()->
+    done = this.async
+    sh = require('child_process').exec;
+
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js -t=doc/template -d=doc/core/ja'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js -t=doc/template -d=doc/core/en'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js -t=doc/template -d=doc/core/de'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/plugins/ja'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/plugins/en'
+    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js de/plugins/*.js -t=doc/template -d=doc/plugins/de'
+
+  grunt.registerTask 'lang', 'Make lang files.', ()->
     grunt.log.writeln 'processing..'
     done = @async
     fs = require('fs')
@@ -161,4 +171,3 @@ module.exports = (grunt) ->
         .replace(repl_de, '$1')
 
       grunt.log.writeln(source)
-    grunt.log.writeln 'processing..'
