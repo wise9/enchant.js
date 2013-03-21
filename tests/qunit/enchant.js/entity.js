@@ -11,10 +11,10 @@ module('Entity', {
 	setup: function () {
 		enchant();
 		var game = new Core(320, 320);
+        game.preload('start.png');
 	},
 	teardown: function () {
-		// Coreインスタンスを破棄したいのだがそんな処理は無い様子
-	}
+		// Coreインスタンスを破棄したいのだがそんな処理は無い様子	}
 });
 
 
