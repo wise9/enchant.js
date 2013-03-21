@@ -1,8 +1,8 @@
 enchant();
 
-window.onload = function() {
-    var game = new Game(320, 320);
-    game.onload = function() {
+window.onload = function(){
+    var core = new Core(320, 320);
+    core.onload = function(){
         var status = new Label("");
         status._log = [];
         status.add = function(str) {
@@ -15,25 +15,26 @@ window.onload = function() {
             return Math.round(num * 1e3) / 1e3;
         };
 
-        game.rootScene.on('touchstart', function(evt) {
+        core.rootScene.on('touchstart', function(evt) {
             status.add('touchstart (' + round(evt.x) + ', ' + round(evt.y) + ')');
         });
-        game.rootScene.on('touchmove', function(evt) {
+        core.rootScene.on('touchmove', function(evt){
             status.add('touchmove (' + round(evt.x) + ', ' + round(evt.y) + ')');
         });
-        game.rootScene.on('touchstart', function(evt) {
+        core.rootScene.on('touchstart', function(evt){
             status.add('touchend (' + round(evt.x) + ', ' + round(evt.y) + ')');
         });
-
-        ['up', 'down', 'right', 'left'].forEach(function (direction) {
-            game.rootScene.on(direction + 'buttondown', function() {
-                status.add(direction + 'buttondown');
-            });
-            game.rootScene.on(direction + 'buttonup', function() {
-                status.add(direction + 'buttonup');
-            });
+        
+        ['up', 'down', 'right', 'left'].forEach(function (direction){
+            var d = direction;
+            core.rootScene.on(direction + 'buttondown', function(){
+                status.add(d + 'buttondown');
+            })
+            core.rootScene.on(direction + 'buttonup', function(){
+                status.add(d + 'buttonup');
+            })
         });
-        game.rootScene.addChild(status);
+        core.rootScene.addChild(status);
     };
-    game.start();
+    core.start();
 };
