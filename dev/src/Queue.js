@@ -51,32 +51,6 @@ enchant.Queue = enchant.Class.create({
             err.arg = arg;
             throw err;
         }
-    },
-    parallel: function(arg) {
-        var progress = 0;
-        var ret = (arg instanceof Array) ? [] : {};
-        var q = new enchant.Queue();
-        for (var prop in arg) {
-            if (arg.hasOwnProperty(prop)) {
-                progress++;
-                /*jshint loopfunc:true */
-                (function(queue, name) {
-                    queue.next(function(arg) {
-                        progress--;
-                        ret[name] = arg;
-                        if (progress <= 0) {
-                            q.call(ret);
-                        }
-                    })
-                    .error(function(err) { q.fail(err); });
-                    clearTimeout(queue._id);
-                    queue._id = setTimeout(function(q) { queue.call(); }, 0);
-                }(arg[prop], prop));
-            }
-        }
-        return this.next(function() {
-            return q;
-        });
     }
 });
 enchant.Queue._insert = function(queue, ins) {
@@ -93,6 +67,29 @@ enchant.Queue.next = function(func) {
 enchant.Queue.parallel = function(arg) {
     var q = new enchant.Queue();
     q._id = setTimeout(function() { q.call(); }, 0);
-    q.parallel(arg);
-    return q;
+    var progress = 0;
+    var ret = (arg instanceof Array) ? [] : {};
+    var p = new enchant.Queue();
+    for (var prop in arg) {
+        if (arg.hasOwnProperty(prop)) {
+            progress++;
+            /*jshint loopfunc:true */
+            (function(queue, name) {
+                queue.next(function(arg) {
+                    progress--;
+                    ret[name] = arg;
+                    if (progress <= 0) {
+                        p.call(ret);
+                    }
+                })
+                .error(function(err) { p.fail(err); });
+                clearTimeout(queue._id);
+                queue._id = setTimeout(function() { queue.call(); }, 0);
+            }(arg[prop], prop));
+        }
+    }
+    if (!progress) {
+        p._id = setTimeout(function() { p.call(ret); }, 0);
+    }
+    return q.next(function() { return p; });
 };
