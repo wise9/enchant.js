@@ -164,6 +164,19 @@ enchant.Event.LOAD = 'load';
 
 /**
  [lang:ja]
+ * 表示サイズが変わったときに発生するイベント.
+ * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Scene}
+ [/lang]
+ [lang:en]
+ * Events which are occurring when display size is changed.
+ * Issued object: {@link enchant.Core}, {@link enchant.Scene}
+ [/lang]
+ @type {String}
+ */
+enchant.Event.CORE_RESIZE = 'coreresize';
+
+/**
+ [lang:ja]
  * Coreのロード進行中に発生するイベント.
  * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.LoadingScene}
  [/lang]

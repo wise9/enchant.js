@@ -3,18 +3,16 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         var core = enchant.Core.instance;
         enchant.Group.call(this);
 
-        this.width = this._width = core.width;
-        this.height = this._height = core.height;
-
         this._touchEventTarget = null;
 
         this._element = document.createElement('div');
-        this._element.style.width = this.width + 'px';
-        this._element.style.height = this.height + 'px';
         this._element.style.position = 'absolute';
 
         this._domManager = new enchant.DomManager(this, this._element);
         this._domManager.layer = this;
+
+        this.width = core.width;
+        this.height = core.height;
 
         var touch = [
             enchant.Event.TOUCH_START,
@@ -52,6 +50,24 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         this.addEventListener('childremoved', __onchildremoved);
         this.addEventListener('childadded', __onchildadded);
 
+    },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._element.style.width = width + 'px';
+        }
+    },
+    height: {
+        get: function() {
+            return this._height;
+        },
+        set: function(height) {
+            this._height = height;
+            this._element.style.height = height + 'px';
+        }
     },
     _startRendering: function() {
         this.addEventListener('exitframe', this._onexitframe);

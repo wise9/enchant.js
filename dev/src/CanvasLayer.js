@@ -30,19 +30,12 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         };
         this._cvsCache.layer = this;
 
-        this.width = core.width;
-        this.height = core.height;
-
         this._element = document.createElement('canvas');
-        this._element.width = core.width;
-        this._element.height = core.height;
         this._element.style.position = 'absolute';
         // issue 179
         this._element.style.left = this._element.style.top = '0px';
 
         this._detect = document.createElement('canvas');
-        this._detect.width = core.width;
-        this._detect.height = core.height;
         this._detect.style.position = 'absolute';
         this._lastDetected = 0;
 
@@ -50,6 +43,9 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this._dctx = this._detect.getContext('2d');
 
         this._colorManager = new enchant.DetectColorManager(16, 256);
+
+        this.width = core.width;
+        this.height = core.height;
 
         var touch = [
             enchant.Event.TOUCH_START,
@@ -100,6 +96,24 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this.addEventListener('childremoved', __onchildremoved);
         this.addEventListener('childadded', __onchildadded);
 
+    },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._element.width = this._detect.width = width;
+        }
+    },
+    height: {
+        get: function() {
+            return this._height;
+        },
+        set: function(height) {
+            this._height = height;
+            this._element.height = this._detect.height = height;
+        }
     },
     /**
      [lang:ja]

@@ -58,47 +58,18 @@
             }
             core = enchant.Core.instance = this;
 
-            /**
-             [lang:ja]
-             * 画面の横幅.
-             [/lang]
-             [lang:en]
-             * The width of the core screen.
-             [/lang]
-             [lang:de]
-             * Breite des Spieles.
-             [/lang]
-             * @type {Number}
-             */
-            this.width = width || 320;
-            /**
-             [lang:ja]
-             * 画面の高さ.
-             [/lang]
-             [lang:en]
-             * The height of the core screen.
-             [/lang]
-             [lang:de]
-             * Höhe des Spieles.
-             [/lang]
-             * @type {Number}
-             */
-            this.height = height || 320;
-            /**
-             [lang:ja]
-             * 画面の表示倍率.
-             [/lang]
-             [lang:en]
-             * The scaling of the core rendering.
-             [/lang]
-             [lang:de]
-             * Skalierung der Spieldarstellung.
-             [/lang]
-             * @type {Number}
-             */
-            this.scale = 1;
+            this._calledTime = 0;
+            this._mousedownID = 0;
+            this._surfaceID = 0;
+            this._soundID = 0;
+
+            this._scenes = [];
+
+            width = width || 320;
+            height = height || 320;
 
             var stage = document.getElementById('enchant-stage');
+            var scale, sWidth, sHeight;
             if (!stage) {
                 stage = document.createElement('div');
                 stage.id = 'enchant-stage';
@@ -109,23 +80,23 @@
                 } else {
                     document.body.appendChild(stage);
                 }
-                this.scale = Math.min(
-                    window.innerWidth / this.width,
-                    window.innerHeight / this.height
+                scale = Math.min(
+                    window.innerWidth / width,
+                    window.innerHeight / height
                 );
                 this._pageX = 0;
                 this._pageY = 0;
             } else {
                 var style = window.getComputedStyle(stage);
-                width = parseInt(style.width, 10);
-                height = parseInt(style.height, 10);
+                sWidth = parseInt(style.width, 10);
+                sHeight = parseInt(style.height, 10);
                 if (width && height) {
-                    this.scale = Math.min(
-                        width / this.width,
-                        height / this.height
+                    scale = Math.min(
+                        sWidth / width,
+                        sHeight / height
                     );
                 } else {
-                    this.scale = 1;
+                    scale = 1;
                 }
                 while (stage.firstChild) {
                     stage.removeChild(stage.firstChild);
@@ -136,11 +107,15 @@
                 this._pageX = Math.round(window.scrollX || window.pageXOffset + bounding.left);
                 this._pageY = Math.round(window.scrollY || window.pageYOffset + bounding.top);
             }
-            stage.style.width = Math.floor(this.width * this.scale) + 'px';
-            stage.style.height = Math.floor(this.height * this.scale) + 'px';
             stage.style.fontSize = '12px';
             stage.style.webkitTextSizeAdjust = 'none';
             this._element = stage;
+
+            this.addEventListener('coreresize', this._oncoreresize);
+
+            this._width = width;
+            this._height = height;
+            this.scale = scale;
 
             /**
              [lang:ja]
@@ -221,12 +196,6 @@
                 }
             }(enchant));
 
-            this._calledTime = 0;
-            this._mousedownID = 0;
-            this._surfaceID = 0;
-            this._soundID = 0;
-
-            this._scenes = [];
             /**
              [lang:ja]
              * 現在のScene. Sceneスタック中の一番上のScene.
@@ -466,6 +435,85 @@
                     }
                     delete core._touchEventTarget[core._mousedownID];
                 }, false);
+            }
+        },
+        /**
+         [lang:ja]
+         * 画面の横幅.
+         [/lang]
+         [lang:en]
+         * The width of the core screen.
+         [/lang]
+         [lang:de]
+         * Breite des Spieles.
+         [/lang]
+         * @type {Number}
+         */
+        width: {
+            get: function() {
+                return this._width;
+            },
+            set: function(w) {
+                this._width = w;
+                this._dispatchCoreResizeEvent();
+            }
+        },
+        /**
+         [lang:ja]
+         * 画面の高さ.
+         [/lang]
+         [lang:en]
+         * The height of the core screen.
+         [/lang]
+         [lang:de]
+         * Höhe des Spieles.
+         [/lang]
+         * @type {Number}
+         */
+        height: {
+            get: function() {
+                return this._height;
+            },
+            set: function(h) {
+                this._height = h;
+                this._dispatchCoreResizeEvent();
+            }
+        },
+        /**
+         [lang:ja]
+         * 画面の表示倍率.
+         [/lang]
+         [lang:en]
+         * The scaling of the core rendering.
+         [/lang]
+         [lang:de]
+         * Skalierung der Spieldarstellung.
+         [/lang]
+         * @type {Number}
+         */
+        scale: {
+            get: function() {
+                return this._scale;
+            },
+            set: function(s) {
+                this._scale = s;
+                this._dispatchCoreResizeEvent();
+            }
+        },
+        _dispatchCoreResizeEvent: function() {
+            var e = new enchant.Event('coreresize');
+            e.width = this._width;
+            e.height = this._height;
+            e.scale = this._scale;
+            this.dispatchEvent(e);
+        },
+        _oncoreresize: function(e) {
+            this._element.style.width = Math.floor(this._width * this._scale) + 'px';
+            this._element.style.height = Math.floor(this._height * this._scale) + 'px';
+            var scene;
+            for (var i = 0, l = this._scenes.length; i < l; i++) {
+                scene = this._scenes[i];
+                scene.dispatchEvent(e);
             }
         },
         /**
