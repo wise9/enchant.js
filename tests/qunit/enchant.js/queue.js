@@ -6,7 +6,7 @@ module('Queue', {
 
 test('new Queue', function() {
     var result = false;
-    var q = new Queue(function() {
+    var q = new Queue().next(function() {
         result = true;
     });
     equal(result, false, 'before call queue');
@@ -24,7 +24,7 @@ test('Queue.next', function() {
     setTimeout(function() {
         start();
         equal(result, true, 'after call queue');
-    }, 0);
+    }, 50);
 });
 
 test('chained Queue', function() {
@@ -42,10 +42,16 @@ test('chained Queue', function() {
         start();
         equal((result1 & result2), true, 'chain');
         equal(hoge, 'hoge', 'pass returned value');
-    }, 0);
+    }, 50);
 });
 
 test('Queue#error', function() {
+    raises(function() {
+        new Queue().next(function() {
+            throw new Error('fail');
+        }).call();
+    }, /queue failed/, 'no handler');
+
     var result1 = false, result2 = false;
     Queue.next(function() {
         throw new Error('fail');
@@ -61,13 +67,7 @@ test('Queue#error', function() {
         start();
         equal(result1, false, 'skipped in error');
         equal(result2, true, 'error handling');
-    }, 0);
-
-    raises(function() {
-        (new Queue()).next(function() {
-            throw new Error('fail');
-        }).call();
-    }, /queue failed/, 'no handler');
+    }, 50);
 });
 
 test('async Queue', function() {
@@ -112,34 +112,35 @@ test('async Queue', function() {
     }, 150);
 });
 
-test('parallel Queue', function() {
+test('parallel Queue #arrayArgument', function() {
     stop();
-    (new enchant.Queue()).parallel([
-        new Queue(function() {
+    Queue.parallel([
+        Queue.next(function() {
             return 1;
         }),
-        new Queue(function() {
+        Queue.next(function() {
             return 2;
         }),
-        new Queue(function() {
+        Queue.next(function() {
             return 3;
         })
     ])
     .next(function(arr) {
         start();
         deepEqual(arr, [ 1, 2, 3 ], 'returns array');
-    })
-    .call();
+    });
+});
 
+test('parallel Queue #objectArgument', function() {
     stop();
     Queue.parallel({
-        one: new Queue(function() {
+        one: Queue.next(function() {
             return 1;
         }),
-        two: new Queue(function() {
+        two: Queue.next(function() {
             return 2;
         }),
-        three: new Queue(function() {
+        three: Queue.next(function() {
             return 3;
         })
     })
@@ -147,18 +148,20 @@ test('parallel Queue', function() {
         start();
         deepEqual(obj, { one: 1, two: 2, three: 3 }, 'returns object');
     });
+});
 
+test('parallel Queue #Error', function() {
     var result = false;
     var c = 0;
     stop();
     Queue.parallel([
-        new Queue(function() {
+        Queue.next(function() {
             throw new Error('error1');
         }),
-        new Queue(function() {
+        Queue.next(function() {
             throw new Error('error2');
         }),
-        new Queue(function() {
+        Queue.next(function() {
             return 'success';
         })
     ])
@@ -175,6 +178,5 @@ test('parallel Queue', function() {
         start();
         equal(result, false, 'skipped');
         equal(c, 2, 'receive 2 errors');
-
     }, 50);
 });
