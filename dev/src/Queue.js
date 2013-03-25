@@ -5,6 +5,7 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
         this._fail = fail || null;
         this._next = null;
         this._tail = this;
+        this._id = null;
     },
     next: function(func) {
         var q = new enchant.Queue(func);
@@ -56,28 +57,28 @@ enchant.Queue = enchant.Class.create(enchant.EventTarget, {
     parallel: function(arg) {
         var progress = 0;
         var ret = (arg instanceof Array) ? [] : {};
-        this.next(function() {
-            var q = new enchant.Queue();
-            for (var prop in arg) {
-                if (arg.hasOwnProperty(prop)) {
-                    progress++;
-                    /*jshint loopfunc:true */
-                    (function(queue, name) {
-                        queue.next(function(arg) {
-                            progress--;
-                            ret[name] = arg;
-                            if (progress <= 0) {
-                                q.call(ret);
-                            }
-                        })
-                        .error(function(err) { q.fail(err); });
-                        setTimeout(function(q) { queue.call(); }, 0);
-                    }(arg[prop], prop));
-                }
+        var q = new enchant.Queue();
+        for (var prop in arg) {
+            if (arg.hasOwnProperty(prop)) {
+                progress++;
+                /*jshint loopfunc:true */
+                (function(queue, name) {
+                    queue.next(function(arg) {
+                        progress--;
+                        ret[name] = arg;
+                        if (progress <= 0) {
+                            q.call(ret);
+                        }
+                    })
+                    .error(function(err) { q.fail(err); });
+                    clearTimeout(queue._id);
+                    queue._id = setTimeout(function(q) { queue.call(); }, 0);
+                }(arg[prop], prop));
             }
+        }
+        return this.next(function() {
             return q;
         });
-        return this;
     }
 });
 enchant.Queue._insert = function(queue, ins) {
@@ -88,12 +89,12 @@ enchant.Queue._insert = function(queue, ins) {
 };
 enchant.Queue.next = function(func) {
     var q = new enchant.Queue(func);
-    setTimeout(function() { q.call(); }, 0);
+    q._id = setTimeout(function() { q.call(); }, 0);
     return q;
 };
 enchant.Queue.parallel = function(arg) {
     var q = new enchant.Queue();
+    q._id = setTimeout(function() { q.call(); }, 0);
     q.parallel(arg);
-    setTimeout(function() { q.call(); }, 0);
     return q;
 };
