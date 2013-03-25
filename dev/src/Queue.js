@@ -1,17 +1,16 @@
 enchant.Queue = enchant.Class.create({
-    initialize: function(succ, fail) {
-        this._succ = succ || null;
-        this._fail = fail || null;
-        this._next = null;
+    initialize: function() {
+        this._succ = this._fail = this._next = this._id = null;
         this._tail = this;
-        this._id = null;
     },
     next: function(func) {
-        var q = new enchant.Queue(func);
+        var q = new enchant.Queue();
+        q._succ = func;
         return this._add(q);
     },
     error: function(func) {
-        var q = new enchant.Queue(null, func);
+        var q = new enchant.Queue();
+        q._fail = func;
         return this._add(q);
     },
     _add: function(queue) {
@@ -87,7 +86,7 @@ enchant.Queue._insert = function(queue, ins) {
     queue._next = ins;
 };
 enchant.Queue.next = function(func) {
-    var q = new enchant.Queue(func);
+    var q = new enchant.Queue().next(func);
     q._id = setTimeout(function() { q.call(); }, 0);
     return q;
 };
