@@ -66,7 +66,7 @@ module.exports = (grunt) ->
             'dev/src/DOMScene.js'
             'dev/src/Surface.js'
 
-            'dev/src/Queue.js'
+            'dev/src/Deferred.js'
 
             # sound support
             'dev/src/DOMSound.js'

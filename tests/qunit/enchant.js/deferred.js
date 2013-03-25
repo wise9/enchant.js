@@ -1,12 +1,12 @@
-module('Queue', {
+module('Deferred', {
     setup: function() {
         enchant();
     }
 })
 
-test('new Queue', function() {
+test('new Deferred', function() {
     var result = false;
-    var q = new Queue().next(function() {
+    var q = new Deferred().next(function() {
         result = true;
     });
     equal(result, false, 'before call queue');
@@ -14,9 +14,9 @@ test('new Queue', function() {
     equal(result, true, 'after call queue');
 });
 
-test('Queue.next', function() {
+test('Deferred.next', function() {
     var result = false;
-    Queue.next(function() {
+    Deferred.next(function() {
         result = true;
     });
     equal(result, false, 'before call queue');
@@ -27,9 +27,9 @@ test('Queue.next', function() {
     }, 50);
 });
 
-test('chained Queue', function() {
+test('chained Deferred', function() {
     var result1 = false, result2 = false, hoge;
-    Queue.next(function() {
+    Deferred.next(function() {
         result1 = true;
         return 'hoge';
     })
@@ -45,15 +45,15 @@ test('chained Queue', function() {
     }, 50);
 });
 
-test('Queue#error', function() {
+test('Deferred#error', function() {
     raises(function() {
-        new Queue().next(function() {
+        new Deferred().next(function() {
             throw new Error('fail');
         }).call();
     }, /queue failed/, 'no handler');
 
     var result1 = false, result2 = false;
-    Queue.next(function() {
+    Deferred.next(function() {
         throw new Error('fail');
     })
     .next(function() {
@@ -70,10 +70,10 @@ test('Queue#error', function() {
     }, 50);
 });
 
-test('async Queue', function() {
+test('async Deferred', function() {
     var result = false;
-    Queue.next(function() {
-        var q = new Queue();
+    Deferred.next(function() {
+        var q = new Deferred();
         setTimeout(function() {
             q.call();
         }, 100);
@@ -90,8 +90,8 @@ test('async Queue', function() {
     }, 150);
 
     var result1 = false, result2 = false;
-    Queue.next(function() {
-        var q = new Queue();
+    Deferred.next(function() {
+        var q = new Deferred();
         setTimeout(function() {
             q.fail();
         }, 100);
@@ -112,16 +112,16 @@ test('async Queue', function() {
     }, 150);
 });
 
-test('parallel Queue #arrayArgument', function() {
+test('parallel Deferred #arrayArgument', function() {
     stop();
-    Queue.parallel([
-        Queue.next(function() {
+    Deferred.parallel([
+        Deferred.next(function() {
             return 1;
         }),
-        Queue.next(function() {
+        Deferred.next(function() {
             return 2;
         }),
-        Queue.next(function() {
+        Deferred.next(function() {
             return 3;
         })
     ])
@@ -131,16 +131,16 @@ test('parallel Queue #arrayArgument', function() {
     });
 });
 
-test('parallel Queue #objectArgument', function() {
+test('parallel Deferred #objectArgument', function() {
     stop();
-    Queue.parallel({
-        one: Queue.next(function() {
+    Deferred.parallel({
+        one: Deferred.next(function() {
             return 1;
         }),
-        two: Queue.next(function() {
+        two: Deferred.next(function() {
             return 2;
         }),
-        three: Queue.next(function() {
+        three: Deferred.next(function() {
             return 3;
         })
     })
@@ -150,18 +150,18 @@ test('parallel Queue #objectArgument', function() {
     });
 });
 
-test('parallel Queue #Error', function() {
+test('parallel Deferred #Error', function() {
     var result = false;
     var c = 0;
     stop();
-    Queue.parallel([
-        Queue.next(function() {
+    Deferred.parallel([
+        Deferred.next(function() {
             throw new Error('error1');
         }),
-        Queue.next(function() {
+        Deferred.next(function() {
             throw new Error('error2');
         }),
-        Queue.next(function() {
+        Deferred.next(function() {
             return 'success';
         })
     ])

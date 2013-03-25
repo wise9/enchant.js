@@ -1,15 +1,15 @@
-enchant.Queue = enchant.Class.create({
+enchant.Deferred = window.Deferred || enchant.Class.create({
     initialize: function() {
         this._succ = this._fail = this._next = this._id = null;
         this._tail = this;
     },
     next: function(func) {
-        var q = new enchant.Queue();
+        var q = new enchant.Deferred();
         q._succ = func;
         return this._add(q);
     },
     error: function(func) {
-        var q = new enchant.Queue();
+        var q = new enchant.Deferred();
         q._fail = func;
         return this._add(q);
     },
@@ -24,7 +24,7 @@ enchant.Queue = enchant.Class.create({
         while (queue && !queue._succ) {
             queue = queue._next;
         }
-        if (!(queue instanceof enchant.Queue)) {
+        if (!(queue instanceof enchant.Deferred)) {
             return;
         }
         try {
@@ -32,9 +32,9 @@ enchant.Queue = enchant.Class.create({
         } catch (e) {
             return queue.fail(e);
         }
-        if (received instanceof enchant.Queue) {
-            enchant.Queue._insert(queue, received);
-        } else if (queue._next instanceof enchant.Queue) {
+        if (received instanceof enchant.Deferred) {
+            enchant.Deferred._insert(queue, received);
+        } else if (queue._next instanceof enchant.Deferred) {
             queue._next.call(received);
         }
     },
@@ -43,7 +43,7 @@ enchant.Queue = enchant.Class.create({
         while (queue && !queue._fail) {
             queue = queue._next;
         }
-        if (queue instanceof enchant.Queue) {
+        if (queue instanceof enchant.Deferred) {
             var n = queue._fail(arg);
             queue.call(n);
         } else {
@@ -53,23 +53,23 @@ enchant.Queue = enchant.Class.create({
         }
     }
 });
-enchant.Queue._insert = function(queue, ins) {
-    if (queue._next instanceof enchant.Queue) {
+enchant.Deferred._insert = function(queue, ins) {
+    if (queue._next instanceof enchant.Deferred) {
         ins._next = queue._next;
     }
     queue._next = ins;
 };
-enchant.Queue.next = function(func) {
-    var q = new enchant.Queue().next(func);
+enchant.Deferred.next = function(func) {
+    var q = new enchant.Deferred().next(func);
     q._id = setTimeout(function() { q.call(); }, 0);
     return q;
 };
-enchant.Queue.parallel = function(arg) {
-    var q = new enchant.Queue();
+enchant.Deferred.parallel = function(arg) {
+    var q = new enchant.Deferred();
     q._id = setTimeout(function() { q.call(); }, 0);
     var progress = 0;
     var ret = (arg instanceof Array) ? [] : {};
-    var p = new enchant.Queue();
+    var p = new enchant.Deferred();
     for (var prop in arg) {
         if (arg.hasOwnProperty(prop)) {
             progress++;
