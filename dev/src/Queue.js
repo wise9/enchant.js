@@ -1,6 +1,5 @@
-enchant.Queue = enchant.Class.create(enchant.EventTarget, {
+enchant.Queue = enchant.Class.create({
     initialize: function(succ, fail) {
-        enchant.EventTarget.call(this);
         this._succ = succ || null;
         this._fail = fail || null;
         this._next = null;
