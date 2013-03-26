@@ -164,6 +164,18 @@ enchant.Event.LOAD = 'load';
 
 /**
  [lang:ja]
+ * エラーの発生をCoreに伝える際に発生するイベント.
+ * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Surface}, {@link enchant.WebAudioSound}, {@link enchant.DOMSound}
+ [/lang]
+ [lang:en]
+ * Events which are occurring when error is occured.
+ * Issued object: {@link enchant.Core}, {@link enchant.Surface}, {@link enchant.WebAudioSound}, {@link enchant.DOMSound}
+ [/lang]
+ */
+enchant.Event.ERROR = 'error';
+
+/**
+ [lang:ja]
  * 表示サイズが変わったときに発生するイベント.
  * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]

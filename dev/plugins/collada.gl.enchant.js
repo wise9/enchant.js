@@ -1,9 +1,9 @@
 /**
  * @fileOverview
  * collada.gl.enchant.js
- * @version v0.4.0
- * @require enchant.js v0.4.5+
- * @require gl.enchant.js v0.3.1+
+ * @version v0.4.1
+ * @require enchant.js v0.6.3+
+ * @require gl.enchant.js v0.3.5+
  * @author Ubiquitous Entertainment Inc.
  *
  [lang:ja]
@@ -24,13 +24,9 @@
  * https://github.com/toji/gl-matrix/
  */
 if (enchant.gl !== undefined) {
-    enchant.Core._loadFuncs['dae'] = function(src, callback) {
-        enchant.gl.Sprite3D.loadCollada(src, function(collada, src) {
-            enchant.Core.instance.assets[src] = collada;
-            if (callback != null) {
-                callback();
-            }
-        });
+    enchant.Core._loadFuncs['dae'] = function(src, ext, callback, onerror) {
+        var s = enchant.gl.Sprite3D.loadCollada(src, callback, onerror);
+        return s;
     };
     (function() {
         /**
@@ -44,7 +40,8 @@ if (enchant.gl !== undefined) {
         *       scene.addChild(model);
         *   });
         * @param {String} url コラーダモデルのURL
-        * @param {function(enchant.pro.Sprite3D)} onload ロード完了時のコールバック 引数にはモデルから生成されたSprite3Dが渡される
+        * @param {Function} onload ロード完了時のコールバック.
+        * @param {Function} onload ロード失敗時のコールバック.
         * @static
         [/lang]
         [lang:en]
@@ -57,57 +54,73 @@ if (enchant.gl !== undefined) {
         *       scene.addChild(model);
         *   });
         * @param {String} url Collada model URL,
-        * @param {function(enchant.pro.Sprite3D)} onload Callback when loading is complete. Sprite3D created from model will be delivered to argument
+        * @param {Function} onload Callback when loading is complete.
+        * @param {Function} onload Callback when loading is fail.
         * @static
         [/lang]
         */
-        enchant.gl.Sprite3D.loadCollada = function(url, onload) {
+        enchant.gl.Sprite3D.loadCollada = function(url, onload, onerror) {
             if (typeof onload !== 'function') {
                 return;
             }
+
+            var rootSprite = new enchant.gl.collada.RootColladaSprite3D();
+            rootSprite.addEventListener('load', onload);
+            rootSprite.addEventListener('error', onerror);
+            var e = new enchant.Event(enchant.Event.ERROR);
+
             var req = new XMLHttpRequest();
             req.open('GET', url, true);
+            req.onerror = function() {
+                e.message = 'Cannot load an asset: ' + url;
+                rootSprite.dispatchEvent(e);
+            };
             req.onload = function() {
-                var maxbonenum = 6;
-                var lib = {};
-                var collada = req.responseXML.getElementsByTagName('COLLADA')[0];
-                for (var i = 0, l = availableLibraryFeatures.length; i < l; i++) {
-                    lib[availableLibraryFeatures[i].libraryName] = availableLibraryFeatures[i].loadLibraryFromXML(collada, url);
-                }
-                var scene = new Scene(collada.getElementsByTagName('scene')[0]);
-                var rootSprite = new enchant.gl.collada.RootColladaSprite3D();
-                var rootColladaSprite3D = new enchant.gl.collada.ColladaSprite3D(lib);
-                var rootColladaSkeletonSprite3D = new enchant.gl.collada.ColladaSkeletonSprite3D(lib);
-                if (scene.visualSceneUrl) {
-                    var visualScene = lib['visual_scenes'][scene.visualSceneUrl];
-                    for (var nk in visualScene.nodes) {
-                        visualScene.nodes[nk].resolveChildNodes(lib);
+                try {
+                    var maxbonenum = 6;
+                    var lib = {};
+                    var collada = req.responseXML.getElementsByTagName('COLLADA')[0];
+                    for (var i = 0, l = availableLibraryFeatures.length; i < l; i++) {
+                        lib[availableLibraryFeatures[i].libraryName] = availableLibraryFeatures[i].loadLibraryFromXML(collada, url);
                     }
-                    for (var k in visualScene.nodes) {
-                        if (visualScene.nodes[k].controllerUrl) {
-                            var skeletonContainer = new Node(visualScene.nodes[k].xml);
-                            skeletonContainer.nodes = [];
-                            for (var key in visualScene.nodes[k].skeletons) {
-                                skeletonContainer.nodes[visualScene.nodes[k].skeletons[key].id] = (visualScene.nodes[k].skeletons[key]);
+                    var scene = new Scene(collada.getElementsByTagName('scene')[0]);
+                    var rootColladaSprite3D = new enchant.gl.collada.ColladaSprite3D(lib);
+                    var rootColladaSkeletonSprite3D = new enchant.gl.collada.ColladaSkeletonSprite3D(lib);
+                    if (scene.visualSceneUrl) {
+                        var visualScene = lib['visual_scenes'][scene.visualSceneUrl];
+                        for (var nk in visualScene.nodes) {
+                            visualScene.nodes[nk].resolveChildNodes(lib);
+                        }
+                        for (var k in visualScene.nodes) {
+                            if (visualScene.nodes[k].controllerUrl) {
+                                var skeletonContainer = new Node(visualScene.nodes[k].xml);
+                                skeletonContainer.nodes = [];
+                                for (var key in visualScene.nodes[k].skeletons) {
+                                    skeletonContainer.nodes[visualScene.nodes[k].skeletons[key].id] = (visualScene.nodes[k].skeletons[key]);
+                                }
+                                var bone = new enchant.gl.collada.ColladaBone(skeletonContainer, [0, 0, 0]);
+                                var skeleton = new enchant.gl.collada.ColladaSkeleton();
+                                skeleton.addChild(bone);
+                                skeleton.solveFKs();
+                                rootColladaSkeletonSprite3D.skeleton = skeleton;
+                                var skin = lib['controllers'][visualScene.nodes[k].controllerUrl].skin.getProcessedSkinData();
+                                skeleton.calculateTableForIds(skin.ids);
+                                rootColladaSkeletonSprite3D.addColladaSkeletonSprite3DFromNode(skeletonContainer, skin, skeleton, maxbonenum);
+                            } else {
+                                rootColladaSprite3D.addColladaSprite3DFromNode(visualScene.nodes[k]);
                             }
-                            var bone = new enchant.gl.collada.ColladaBone(skeletonContainer, [0, 0, 0]);
-                            var skeleton = new enchant.gl.collada.ColladaSkeleton();
-                            skeleton.addChild(bone);
-                            skeleton.solveFKs();
-                            rootColladaSkeletonSprite3D.skeleton = skeleton;
-                            var skin = lib['controllers'][visualScene.nodes[k].controllerUrl].skin.getProcessedSkinData();
-                            skeleton.calculateTableForIds(skin.ids);
-                            rootColladaSkeletonSprite3D.addColladaSkeletonSprite3DFromNode(skeletonContainer, skin, skeleton, maxbonenum);
-                        } else {
-                            rootColladaSprite3D.addColladaSprite3DFromNode(visualScene.nodes[k]);
                         }
                     }
+                    rootSprite.addChild(rootColladaSprite3D);
+                    rootSprite.addChild(rootColladaSkeletonSprite3D);
+                    rootSprite.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                } catch (err) {
+                    e.message = err.message;
+                    rootSprite.dispatchEvent(e);
                 }
-                rootSprite.addChild(rootColladaSprite3D);
-                rootSprite.addChild(rootColladaSkeletonSprite3D);
-                onload(rootSprite, url);
             };
             req.send(null);
+            return rootSprite;
         };
         var Unit = enchant.Class.create({
             initialize: function(xml) {
