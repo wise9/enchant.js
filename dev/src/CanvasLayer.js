@@ -115,6 +115,39 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             this._element.height = this._detect.height = height;
         }
     },
+    addChild: function(node) {
+        this.childNodes.push(node);
+        node.parentNode = this;
+        var childAdded = new enchant.Event('childadded');
+        childAdded.node = node;
+        childAdded.next = null;
+        this.dispatchEvent(childAdded);
+        node.dispatchEvent(new enchant.Event('added'));
+        if (this.scene) {
+            node.scene = this.scene;
+            var addedToScene = new enchant.Event('addedtoscene');
+            node.dispatchEvent(addedToScene);
+        }
+    },
+    insertBefore: function(node, reference) {
+        var i = this.childNodes.indexOf(reference);
+        if (i !== -1) {
+            this.childNodes.splice(i, 0, node);
+            node.parentNode = this;
+            var childAdded = new enchant.Event('childadded');
+            childAdded.node = node;
+            childAdded.next = reference;
+            this.dispatchEvent(childAdded);
+            node.dispatchEvent(new enchant.Event('added'));
+            if (this.scene) {
+                node.scene = this.scene;
+                var addedToScene = new enchant.Event('addedtoscene');
+                node.dispatchEvent(addedToScene);
+            }
+        } else {
+            this.addChild(node);
+        }
+    },
     /**
      [lang:ja]
      * レンダリングを開始.
