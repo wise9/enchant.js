@@ -339,6 +339,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  * 場合はピクセルを取得するなど画像操作の一部が制限される).
  *
  * @param {String} src ロードする画像ファイルのパス.
+ * @param {Function} callback ロード完了時のコールバック.
+ * @param {Function} [onerror] ロード失敗時のコールバック.
  [/lang]
  [lang:en]
  * Loads an image and creates a Surface object out of it.
@@ -351,6 +353,8 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  * pixel acquisition and other image manipulation might be limited).
  *
  * @param {String} src The file path of the image to be loaded.
+ * @param {Function} callback on load callback.
+ * @param {Function} [onerror] on error callback.
  [/lang]
  [lang:de]
  * Läd eine Grafik und erstellt daraus ein Surface Objekt.
@@ -365,8 +369,9 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  * @param {String} src Der Dateipfad der Grafik die geladen werden soll.
  [/lang]
  * @static
+ * @return {enchant.Surface} Surface
  */
-enchant.Surface.load = function(src, callback) {
+enchant.Surface.load = function(src, callback, onerror) {
     var image = new Image();
     var surface = Object.create(enchant.Surface.prototype, {
         context: { value: null },
@@ -374,11 +379,13 @@ enchant.Surface.load = function(src, callback) {
         _element: { value: image }
     });
     enchant.EventTarget.call(surface);
-    if (typeof callback === 'function') {
-        surface.addEventListener('load', callback);
-    }
+    onerror = onerror || function() {};
+    surface.addEventListener('load', callback);
+    surface.addEventListener('error', onerror);
     image.onerror = function() {
-        throw new Error('Cannot load an asset: ' + image.src);
+        var e = new enchant.Event(enchant.Event.ERROR);
+        e.message = 'Cannot load an asset: ' + image.src;
+        surface.dispatchEvent(e);
     };
     image.onload = function() {
         surface.width = image.width;

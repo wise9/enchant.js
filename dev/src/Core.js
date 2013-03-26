@@ -604,12 +604,14 @@
          *
          * @param {String} asset ロードするファイルのパス.
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
+         * @param {Function} [onerror] ファイルのロードに失敗したときに呼び出される関数.
          [/lang]
          [lang:en]
          * Loads a file.
          *
          * @param {String} asset File path of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
+         * @param {Function} [callback] Function called up when file loading is failed.
          [/lang]
          [lang:de]
          * Laden von Dateien.
@@ -618,7 +620,7 @@
          * @param {Function} [callback] Funktion die ausgeführt wird wenn das laden abgeschlossen wurde.
          [/lang]
          */
-        load: function(src, callback) {
+        load: function(src, callback, onerror) {
             if (callback == null) {
                 callback = function() {
                 };
@@ -627,22 +629,25 @@
             var ext = enchant.Core.findExt(src);
 
             if (enchant.Core._loadFuncs[ext]) {
-                enchant.Core._loadFuncs[ext].call(this, src, callback, ext);
+                this.assets[src] = enchant.Core._loadFuncs[ext].call(this, src, ext, callback, onerror);
             }
             else {
                 var req = new XMLHttpRequest();
                 req.open('GET', src, true);
-                req.onreadystatechange = function(e) {
+                req.onreadystatechange = function() {
                     if (req.readyState === 4) {
                         if (req.status !== 200 && req.status !== 0) {
-                            throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
+                            // throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
+                            var e = new enchant.Event('error');
+                            e.message = req.status + ': ' + 'Cannot load an asset: ' + src;
+                            onerror.call(enchant.Core.instance, e);
                         }
 
                         var type = req.getResponseHeader('Content-Type') || '';
                         if (type.match(/^image/)) {
-                            core.assets[src] = enchant.Surface.load(src, callback);
+                            core.assets[src] = enchant.Surface.load(src, callback, onerror);
                         } else if (type.match(/^audio/)) {
-                            core.assets[src] = enchant.Sound.load(src, type, callback);
+                            core.assets[src] = enchant.Sound.load(src, type, callback, onerror);
                         } else {
                             core.assets[src] = req.responseText;
                             callback();
@@ -729,11 +734,14 @@
                             core.removeScene(core.loadingScene);
                             core.dispatchEvent(new enchant.Event('load'));
                         }
+                    },
+                    onerror = function(e) {
+                        window.console.log(e.message);
                     };
 
                 this.pushScene(this.loadingScene);
                 for (var i = 0; i < len; i++) {
-                    this.load(assets[i], loadFunc);
+                    this.load(assets[i], loadFunc, onerror);
                 }
             } else {
                 this.dispatchEvent(new enchant.Event('load'));
@@ -1148,20 +1156,31 @@
         }
     });
 
+    /**
+     [lang:ja]
+     * 拡張子に対応したアセットのロード関数.
+     * ロード関数はファイルのパス, 拡張子, コールバックを引数に取り,
+     * 対応したクラスのインスタンスを返す必要がある.
+     * コールバックはEvent.LOADとEvent.ERRORでハンドルする.
+     [/lang]
+     * @static
+     * @private
+     * @type {Object.<String, Function>}
+     */
     enchant.Core._loadFuncs = {};
     enchant.Core._loadFuncs['jpg'] =
         enchant.Core._loadFuncs['jpeg'] =
             enchant.Core._loadFuncs['gif'] =
                 enchant.Core._loadFuncs['png'] =
-                    enchant.Core._loadFuncs['bmp'] = function(src, callback) {
-                        this.assets[src] = enchant.Surface.load(src, callback);
+                    enchant.Core._loadFuncs['bmp'] = function(src, ext, callback, onerror) {
+                        return enchant.Surface.load(src, callback, onerror);
                     };
     enchant.Core._loadFuncs['mp3'] =
         enchant.Core._loadFuncs['aac'] =
             enchant.Core._loadFuncs['m4a'] =
                 enchant.Core._loadFuncs['wav'] =
-                    enchant.Core._loadFuncs['ogg'] = function(src, callback, ext) {
-                        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext, callback);
+                    enchant.Core._loadFuncs['ogg'] = function(src, ext, callback, onerror) {
+                        return enchant.Sound.load(src, 'audio/' + ext, callback, onerror);
                     };
 
     /**
