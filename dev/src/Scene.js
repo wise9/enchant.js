@@ -159,6 +159,10 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         this._element.style.height = e.height + 'px';
         this.height = e.height;
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + e.scale + ')';
+
+        for (var type in this._layers) {
+            this._layers[type].dispatchEvent(e);
+        }
     },
     addLayer: function(type, i) {
         var core = enchant.Core.instance;
