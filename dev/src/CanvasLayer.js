@@ -77,7 +77,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             }
             child._dirty = true;
             enchant.Matrix.instance.stack.push(self._matrix);
-            layer._rendering(child, render);
+            layer._rendering(layer.context, child, render);
             enchant.Matrix.instance.stack.pop(self._matrix);
         };
 
@@ -140,10 +140,9 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var ctx = this.context;
         ctx.clearRect(0, 0, core.width, core.height);
         var render = new enchant.Event(enchant.Event.RENDER);
-        this._rendering(this, render);
+        this._rendering(ctx, this, render);
     },
-    _rendering:  function(node, e) {
-        var ctx = this.context;
+    _rendering:  function(ctx, node, e) {
         var width, height, child;
         ctx.save();
         node.dispatchEvent(e);
@@ -185,19 +184,18 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (node.childNodes) {
                 for (var i = 0, l = node.childNodes.length; i < l; i++) {
                     child = node.childNodes[i];
-                    this._rendering(child, e);
+                    this._rendering(ctx, child, e);
                 }
             }
         }
         ctx.restore();
         enchant.Matrix.instance.stack.pop();
     },
-    _detectrendering: function(node) {
-        var ctx, width, height, child;
+    _detectrendering: function(ctx, node) {
+        var width, height, child;
         if (typeof node._visible === 'undefined' || node._visible) {
             width = node.width;
             height = node.height;
-            ctx = this._dctx;
             ctx.save();
             this._transform(node, ctx);
             ctx.fillStyle = node._cvsCache.detectColor;
@@ -216,7 +214,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             if (node.childNodes) {
                 for (var i = 0, l = node.childNodes.length; i < l; i++) {
                     child = node.childNodes[i];
-                    this._detectrendering(child);
+                    this._detectrendering(ctx, child);
                 }
             }
             ctx.restore();
@@ -254,7 +252,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         var ctx = this._dctx;
         if (this._lastDetected < core.frame) {
             ctx.clearRect(0, 0, this.width, this.height);
-            this._detectrendering(this);
+            this._detectrendering(ctx, this);
             this._lastDetected = core.frame;
         }
         var color = ctx.getImageData(x, y, 1, 1).data;
