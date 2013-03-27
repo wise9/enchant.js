@@ -690,7 +690,6 @@
             this.currentTime = window.getTime();
             this.running = true;
             this.ready = true;
-            this._requestNextFrame(0);
 
             if (!this._activated) {
                 this._activated = true;
@@ -708,15 +707,19 @@
                     var width = sprite.image.context.measureText('Touch to Start').width;
                     sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
                     scene.addChild(sprite);
-                    document.addEventListener('touchstart', function() {
+                    document.addEventListener('touchstart', function waitTouch() {
+                        document.removeEventListener('touchstart', waitTouch);
                         core._touched = true;
                         core.removeScene(scene);
                         core.start();
-                    }, true);
+                    }, false);
                     core.pushScene(scene);
                     return;
                 }
             }
+
+            this._requestNextFrame(0);
+
             if (this._assets.length) {
 
                 var o = {};
