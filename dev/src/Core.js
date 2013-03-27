@@ -621,41 +621,50 @@
          [/lang]
          */
         load: function(src, callback, onerror) {
-            if (callback == null) {
-                callback = function() {
-                };
-            }
+            callback = callback || function() {};
+            onerror = onerror || function() {};
 
             var ext = enchant.Core.findExt(src);
 
-            if (enchant.Core._loadFuncs[ext]) {
-                this.assets[src] = enchant.Core._loadFuncs[ext].call(this, src, ext, callback, onerror);
-            }
-            else {
-                var req = new XMLHttpRequest();
-                req.open('GET', src, true);
-                req.onreadystatechange = function() {
-                    if (req.readyState === 4) {
-                        if (req.status !== 200 && req.status !== 0) {
-                            // throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
-                            var e = new enchant.Event('error');
-                            e.message = req.status + ': ' + 'Cannot load an asset: ' + src;
-                            onerror.call(enchant.Core.instance, e);
-                        }
-
-                        var type = req.getResponseHeader('Content-Type') || '';
-                        if (type.match(/^image/)) {
-                            core.assets[src] = enchant.Surface.load(src, callback, onerror);
-                        } else if (type.match(/^audio/)) {
-                            core.assets[src] = enchant.Sound.load(src, type, callback, onerror);
-                        } else {
-                            core.assets[src] = req.responseText;
-                            callback();
-                        }
-                    }
+            return enchant.Deferred.next(function() {
+                var d = new enchant.Deferred();
+                var _callback = function(e) {
+                    d.call(e);
+                    callback.call(this, e);
                 };
-                req.send(null);
-            }
+                var _onerror = function(e) {
+                    d.fail(e);
+                    onerror.call(this, e);
+                };
+                if (enchant.Core._loadFuncs[ext]) {
+                    enchant.Core.instance.assets[src] = enchant.Core._loadFuncs[ext](src, ext, _callback, _onerror);
+                } else {
+                    var req = new XMLHttpRequest();
+                    req.open('GET', src, true);
+                    req.onreadystatechange = function() {
+                        if (req.readyState === 4) {
+                            if (req.status !== 200 && req.status !== 0) {
+                                // throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
+                                var e = new enchant.Event('error');
+                                e.message = req.status + ': ' + 'Cannot load an asset: ' + src;
+                                _onerror.call(enchant.Core.instance, e);
+                            }
+
+                            var type = req.getResponseHeader('Content-Type') || '';
+                            if (type.match(/^image/)) {
+                                core.assets[src] = enchant.Surface.load(src, _callback, _onerror);
+                            } else if (type.match(/^audio/)) {
+                                core.assets[src] = enchant.Sound.load(src, type, _callback, _onerror);
+                            } else {
+                                core.assets[src] = req.responseText;
+                                _callback.call(enchant.Core.instance, new enchant.Event('laod'));
+                            }
+                        }
+                    };
+                    req.send(null);
+                }
+                return d;
+            });
         },
         /**
          [lang:ja]
@@ -679,8 +688,9 @@
          * {@link enchant.Core#currentScene} aktualisiert. Sollten Dateien die im voraus geladen werden
          * sollen vorhanden sein, beginnt das laden dieser Dateien und der Ladebildschirm wird dargestellt.
          [/lang]
+         * @return {enchant.Deferred} Deferred
          */
-        start: function() {
+        start: function(deferred) {
             var onloadTimeSetter = function() {
                 this.frame = 0;
                 this.removeEventListener('load', onloadTimeSetter);
@@ -696,6 +706,7 @@
                 if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
                     (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
                     navigator.userAgent.indexOf('iPad') !== -1)) {
+                    var d = new enchant.Deferred();
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -707,48 +718,54 @@
                     var width = sprite.image.context.measureText('Touch to Start').width;
                     sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
                     scene.addChild(sprite);
-                    document.addEventListener('touchstart', function waitTouch() {
-                        document.removeEventListener('touchstart', waitTouch);
+                    document.addEventListener('mousedown', function waitTouch() {
+                        document.removeEventListener('mousedown', waitTouch);
                         core._touched = true;
                         core.removeScene(scene);
-                        core.start();
+                        core.start(d);
                     }, false);
                     core.pushScene(scene);
-                    return;
+                    return d;
                 }
             }
 
             this._requestNextFrame(0);
 
-            if (this._assets.length) {
-
-                var o = {};
-                var assets = this._assets.filter(function(asset) {
-                    return asset in o ? false : o[asset] = true;
+            var ret = this._requestPreload()
+                .next(function() {
+                    var core = enchant.Core.instance;
+                    core.removeScene(core.loadingScene);
+                    core.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
                 });
-                var loaded = 0,
-                    len = assets.length,
-                    loadFunc = function() {
-                        var e = new enchant.Event('progress');
-                        e.loaded = ++loaded;
-                        e.total = len;
-                        core.loadingScene.dispatchEvent(e);
-                        if (loaded === len) {
-                            core.removeScene(core.loadingScene);
-                            core.dispatchEvent(new enchant.Event('load'));
-                        }
-                    },
-                    onerror = function(e) {
-                        window.console.log(e.message);
-                    };
 
-                this.pushScene(this.loadingScene);
-                for (var i = 0; i < len; i++) {
-                    this.load(assets[i], loadFunc, onerror);
-                }
-            } else {
-                this.dispatchEvent(new enchant.Event('load'));
+            if (deferred) {
+                ret.next(function(arg) {
+                    deferred.call(arg);
+                })
+                .error(function(arg) {
+                    deferred.fail(arg);
+                });
             }
+
+            return ret;
+        },
+        _requestPreload: function() {
+            var o = {};
+            var assets = this._assets.filter(function(asset) {
+                return asset in o ? false : o[asset] = true;
+            });
+            var loaded = 0,
+                len = assets.length,
+                loadFunc = function() {
+                    var e = new enchant.Event('progress');
+                    e.loaded = ++loaded;
+                    e.total = len;
+                    core.loadingScene.dispatchEvent(e);
+                };
+            this.pushScene(this.loadingScene);
+            return enchant.Deferred.parallel(assets.map(function(src) {
+                return this.load(src, loadFunc);
+            }, this))
         },
         /**
          [lang:ja]
@@ -768,10 +785,11 @@
          * Auch wenn die enchant.Core.instance._debug Variable gesetzt ist,
          * kann der Debug-Modus gestartet werden.
          [/lang]
+         * @return {enchant.Deferred} Deferred
          */
         debug: function() {
             this._debug = true;
-            this.start();
+            return this.start();
         },
         actualFps: {
             get: function() {
