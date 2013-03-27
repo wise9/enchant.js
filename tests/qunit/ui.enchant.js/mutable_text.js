@@ -1,10 +1,16 @@
-module('MutableText', {
-	setup: function () {
-		enchant();
-		var game = new Game();
-		game.start();
-	}
-});
+QUnit.config.autostart = false;
+
+enchant();
+
+window.onload = function() {
+	var core = new Core();
+	core.onload = function() {
+		QUnit.start();
+	};
+	core.start();
+};
+
+module('MutableText');
 
 test('MutableText with 1 character', function () {
 	var m = new MutableText(0, 0);
@@ -34,6 +40,6 @@ test('MutableText with 5 characters', function () {
 	}
 
 	m.row = 21;
-	equal(m.width,  16 * 20, 'its width should equal to game.width');
+	equal(m.width,  16 * 20, 'its width should equal to core.width');
 	equal(m.height, 16,      'its height should equal to fontSize');
 });

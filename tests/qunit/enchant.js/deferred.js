@@ -50,7 +50,7 @@ test('Deferred#error', function() {
         new Deferred().next(function() {
             throw new Error('fail');
         }).call();
-    }, /queue failed/, 'no handler');
+    }, /fail/, 'no handler');
 
     var result1 = false, result2 = false;
     Deferred.next(function() {
