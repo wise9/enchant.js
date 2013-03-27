@@ -395,10 +395,11 @@ enchant.Surface.load = function(src, callback, onerror) {
     image.src = src;
     return surface;
 };
+enchant.Surface._staticCanvas2DContext = document.createElement('canvas').getContext('2d');
 
 enchant.Surface._getPattern = function(surface, force) {
     if (!surface._pattern || force) {
-        surface._pattern = document.createElement('canvas').getContext('2d').createPattern(surface._element, 'repeat');
+        surface._pattern = this._staticCanvas2DContext.createPattern(surface._element, 'repeat');
     }
     return surface._pattern;
 };
