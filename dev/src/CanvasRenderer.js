@@ -9,7 +9,7 @@ enchant.CanvasRenderer = enchant.Class.create({
         ctx.save();
         node.dispatchEvent(e);
         // transform
-        this.transform(node, ctx);
+        this.transform(ctx, node);
         if (typeof node._visible === 'undefined' || node._visible) {
             width = node.width;
             height = node.height;
@@ -59,7 +59,7 @@ enchant.CanvasRenderer = enchant.Class.create({
             width = node.width;
             height = node.height;
             ctx.save();
-            this.transform(node, ctx);
+            this.transform(ctx, node);
             ctx.fillStyle = node._cvsCache.detectColor;
             if (node._touchEnabled) {
                 if (node.detectRender) {
@@ -83,7 +83,7 @@ enchant.CanvasRenderer = enchant.Class.create({
             enchant.Matrix.instance.stack.pop();
         }
     },
-    transform: function(node, ctx) {
+    transform: function(ctx, node) {
         var matrix = enchant.Matrix.instance;
         var stack = matrix.stack;
         var newmat, ox, oy, vec;
