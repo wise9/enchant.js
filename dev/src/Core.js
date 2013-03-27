@@ -767,7 +767,7 @@
             this.pushScene(this.loadingScene);
             return enchant.Deferred.parallel(assets.map(function(src) {
                 return this.load(src, loadFunc);
-            }, this))
+            }, this));
         },
         /**
          [lang:ja]
