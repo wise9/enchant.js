@@ -397,9 +397,6 @@ enchant.Surface.load = function(src, callback, onerror) {
 };
 
 enchant.Surface._getPattern = function(surface, force) {
-    if (!(surface instanceof enchant.Surface)) {
-        throw new Error('Cannot create pattern from passed object');
-    }
     if (!surface._pattern || force) {
         surface._pattern = document.createElement('canvas').getContext('2d').createPattern(surface._element, 'repeat');
     }
