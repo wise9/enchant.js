@@ -591,12 +591,14 @@
          * @param {...String} assets Pfade zu den Dateien die im voraus geladen werden sollen.
          * Mehrfachangaben möglich.
          [/lang]
+         * @return {enchant.Core} this
          */
         preload: function(assets) {
             if (!(assets instanceof Array)) {
                 assets = Array.prototype.slice.call(arguments);
             }
             [].push.apply(this._assets, assets);
+            return this;
         },
         /**
          [lang:ja]
@@ -1096,6 +1098,7 @@
          * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
          * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
          [/lang]
+         * @return {enchant.Core} this
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
@@ -1125,6 +1128,7 @@
 
             this._internalButtondownListeners[key] = onxbuttondown;
             this._internalButtonupListeners[key] = onxbuttonup;
+            return this;
         },
         /**
          [lang:ja]
@@ -1142,6 +1146,7 @@
          *
          * @param {Number} key Der Tastencode der entfernt werden soll.
          [/lang]
+         * @return {enchant.Core} this
          */
         keyunbind: function(key) {
             if (!this._keybind[key]) {
@@ -1157,6 +1162,8 @@
             delete buttonups[key];
 
             delete this._keybind[key];
+
+            return this;
         },
         /**
          [lang:ja]
