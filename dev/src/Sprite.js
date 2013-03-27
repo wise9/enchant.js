@@ -74,8 +74,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._image;
         },
         set: function(image) {
-            if (image == null){
-                throw new Error('Assigned value on Sprite.image is undefined or null. Please double-check image path, and check if the image you want to use is preload before use.');
+            if (image === undefined) {
+                throw new Error('Assigned value on Sprite.image is undefined. Please double-check image path, and check if the image you want to use is preload before use.');
             }
             if (image === this._image) {
                 return;
