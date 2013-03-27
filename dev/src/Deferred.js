@@ -46,6 +46,8 @@ enchant.Deferred = window.Deferred || enchant.Class.create({
         if (queue instanceof enchant.Deferred) {
             var n = queue._fail(arg);
             queue.call(n);
+        } else if (arg instanceof Error) {
+            throw arg;
         } else {
             var err = new Error('queue failed');
             err.arg = arg;
