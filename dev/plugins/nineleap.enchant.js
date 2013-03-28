@@ -83,14 +83,6 @@
             coreStart = false; // deprecated
         },
 
-        loadImage: function(src, callback) {
-            if (callback == null) {
-                callback = function() {
-                };
-            }
-            this.assets[src] = enchant.Surface.load(src, callback);
-        },
-
         _requestPreload: function() {
             var o = {};
             var assets = this._assets
@@ -109,9 +101,10 @@
                     e.total = len;
                     enchant.Core.instance.loadingScene.dispatchEvent(e);
                 };
+            this.pushScene(this.loadingScene);
             return enchant.Deferred.parallel(assets.map(function(src) {
                 return this.load(src, loadFunc);
-            }, this))
+            }, this));
         },
 
         end: function(score, result, img) {
