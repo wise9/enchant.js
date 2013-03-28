@@ -90,7 +90,7 @@
                 var style = window.getComputedStyle(stage);
                 sWidth = parseInt(style.width, 10);
                 sHeight = parseInt(style.height, 10);
-                if (width && height) {
+                if (sWidth && sHeight) {
                     scale = Math.min(
                         sWidth / width,
                         sHeight / height
