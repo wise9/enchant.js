@@ -11,8 +11,6 @@ enchant.CanvasRenderer = enchant.Class.create({
             // composite
             if (node.compositeOperation) {
                 ctx.globalCompositeOperation = node.compositeOperation;
-            } else {
-                ctx.globalCompositeOperation = 'source-over';
             }
             ctx.globalAlpha = (typeof node._opacity === 'number') ? node._opacity : 1.0;
             // render
