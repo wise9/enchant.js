@@ -83,16 +83,38 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         }
         return false;
     },
-    _drawChildren: function() {
+    _redraw: function(e) {
         var inv = [];
         var renderer = enchant.CacheRectGroup.renderer;
         var ctx = this.surface.context;
+        var width = this.width;
+        var height = this.height;
+
         enchant.Matrix.instance.inverse(this._matrix, inv);
         renderer.invMat = inv;
-        ctx.clearRect(0, 0, this.width, this.height);
-        var render = new enchant.Event(enchant.Event.RENDER);
+        ctx.clearRect(0, 0, width, height);
+
+        if (this.compositeOperation) {
+            ctx.globalCompositeOperation = this.compositeOperation;
+        }
+        ctx.globalAlpha = (typeof this._opacity === 'number') ? this._opacity : 1.0;
+
+        if (this._backgroundColor) {
+            ctx.fillStyle = this._backgroundColor;
+            ctx.fillRect(0, 0, width, height);
+        }
+
+        if (this.cvsRender) {
+            this.cvsRender(ctx);
+        }
+
+        if (enchant.Core.instance._debug && this._debugColor) {
+            ctx.strokeStyle = this._debugColor;
+            ctx.strokeRect(0, 0, width, height);
+        }
+
         for (var i = 0, l = this.childNodes.length; i < l; i++) {
-            renderer.render(ctx, this.childNodes[i], render);
+            renderer.render(ctx, this.childNodes[i], e);
         }
     },
     _onrender: function(e) {
@@ -102,7 +124,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         enchant.CanvasRenderer.instance.transform(ctx, this);
         if (w > 0 && h > 0 && this.__visible) {
             if (this._checkChildDirty()) {
-                this._drawChildren();
+                this._redraw(e);
             }
             ctx.drawImage(this.surface._element, 0, 0, w, h);
         }
