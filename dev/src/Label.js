@@ -24,6 +24,8 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         this.width = 300;
         this.font = '14px serif';
         this.textAlign = 'left';
+
+        this._debugColor = '#ff0000';
     },
     width: {
         get: function() {

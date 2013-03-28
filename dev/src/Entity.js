@@ -107,6 +107,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._width = 0;
         this._height = 0;
         this._backgroundColor = null;
+        this._debugColor = '#0000ff';
         this._opacity = 1;
         this._visible = true;
         this._buttonMode = null;
@@ -243,6 +244,25 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         },
         set: function(color) {
             this._backgroundColor = color;
+        }
+    },
+    /**
+     [lang:ja]
+     * Entityのデバッグの枠色.
+     * CSSの'color'プロパティと同様の形式で指定できる.
+     [/lang]
+     [lang:en]
+     * The Entity debug color.
+     * Must be provided in the same format as the CSS 'color' property.
+     [/lang]
+     * @type {String}
+     */
+    debugColor: {
+        get: function() {
+            return this._debugColor;
+        },
+        set: function(color) {
+            this._debugColor = color;
         }
     },
     /**

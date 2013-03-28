@@ -23,12 +23,8 @@ enchant.CanvasRenderer = enchant.Class.create({
                 node.cvsRender(ctx);
             }
 
-            if (enchant.Core.instance._debug) {
-                if (node instanceof enchant.Label || node instanceof enchant.Sprite) {
-                    ctx.strokeStyle = '#ff0000';
-                } else {
-                    ctx.strokeStyle = '#0000ff';
-                }
+            if (enchant.Core.instance._debug && node._debugColor) {
+                ctx.strokeStyle = node._debugColor;
                 ctx.strokeRect(0, 0, width, height);
             }
             if (node._clipping) {
