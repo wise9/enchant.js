@@ -1,6 +1,6 @@
 enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
     initialize: function(width, height) {
-        var sf = this.surface = new enchant.Surface(width, height);
+        this.surface = new enchant.Surface(width, height);
         enchant.RectGroup.call(this, width, height);
         this.__visible = true;
         this.enableCacheDraw();
@@ -9,7 +9,6 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         if (this._enableCacheDraw) {
             return;
         }
-        this.surface = new enchant.Surface(this.width, this.height);
         this.addEventListener(enchant.Event.RENDER, this._onrender);
         enchant.CacheRectGroup.REDRAW_CACHE_TRIGGER_EVENTS.forEach(function(type) {
             this.addEventListener(type, this._setNeedDraw);
@@ -22,7 +21,6 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         if (!this._enableCacheDraw) {
             return;
         }
-        delete this.surface;
         this.removeEventListener(enchant.Event.RENDER, this._onrender);
         enchant.CacheRectGroup.REDRAW_CACHE_TRIGGER_EVENTS.forEach(function(type) {
             this.removeEventListener(type, this._setNeedDraw);
