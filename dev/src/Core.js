@@ -813,7 +813,7 @@
                 var core = enchant.Core.instance;
                 core._calledTime = window.getTime();
                 window.requestAnimationFrame(core._callTick);
-            }, delay);
+            }, Math.max(0, delay));
         },
         /**
          [lang:ja]

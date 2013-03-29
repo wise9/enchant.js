@@ -88,7 +88,9 @@ if (window.Deferred) {
                         }
                     })
                     .error(function(err) { p.fail(err); });
-                    clearTimeout(queue._id);
+                    if (typeof queue._id === 'number') {
+                        clearTimeout(queue._id);
+                    }
                     queue._id = setTimeout(function() { queue.call(); }, 0);
                 }(arg[prop], prop));
             }
