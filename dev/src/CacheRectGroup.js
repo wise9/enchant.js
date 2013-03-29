@@ -70,7 +70,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
     _setNeedDraw: function() {
         this._needRedraw = true;
     },
-    _checkChildDirty: function() {
+    _hasDirtyChild: function() {
         if (this._needRedraw) {
             this._needRedraw = false;
             return true;
@@ -126,7 +126,7 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         var h = this._height;
         enchant.CanvasRenderer.instance.transform(ctx, this);
         if (w > 0 && h > 0 && this.__visible) {
-            if (this._checkChildDirty()) {
+            if (this._hasDirtyChild()) {
                 this._redraw(e);
             }
             ctx.drawImage(this.surface._element, 0, 0, w, h);
