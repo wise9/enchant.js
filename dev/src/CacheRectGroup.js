@@ -1,9 +1,14 @@
 enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
-    initialize: function(width, height) {
+    initialize: function(width, height, enableCacheDraw) {
+        if (typeof enableCacheDraw === 'undefined') {
+            enableCacheDraw = true;
+        }
         this.surface = new enchant.Surface(width, height);
         enchant.RectGroup.call(this, width, height);
         this.__visible = true;
-        this.enableCacheDraw();
+        if (enableCacheDraw) {
+            this.enableCacheDraw();
+        }
     },
     enableCacheDraw: function() {
         if (this._enableCacheDraw) {
