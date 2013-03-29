@@ -1,8 +1,38 @@
+/**
+ * @scope enchant.CacheRectGroup.prototype
+ */
 enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
+    /**
+     * @name enchant.CacheRectGroup
+     * @class
+     [lang:ja]
+     * 子の描画をSurfaceにキャッシュするRectGroup.
+     * @param {Number} width RectGroupの横幅.
+     * @param {Number} height RectGroupの縦幅.
+     * @param {Boolean} [enableCacheDraw=true] キャッシュ描画を有効にする.
+     [/lang]
+     [lang:en]
+     * RectGroup that draw own children to Surface for Cache.
+     * @param {Number} width RectGroup width.
+     * @param {Number} height RectGroup height.
+     * @param {Boolean} [enableCacheDraw=true] Enable cache draw.
+     [/lang]
+     * @constructs
+     * @extends enchant.RectGroup
+     */
     initialize: function(width, height, enableCacheDraw) {
         if (typeof enableCacheDraw === 'undefined') {
             enableCacheDraw = true;
         }
+        /**
+         [lang:ja]
+         * キャッシュ用のSurface.
+         [/lang]
+         [lang:en]
+         * The surface for cache draw.
+         [/lang]
+         * {@type enchant.Surface}
+         */
         this.surface = new enchant.Surface(width, height);
         enchant.RectGroup.call(this, width, height);
         this.__visible = true;
@@ -10,6 +40,17 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
             this.enableCacheDraw();
         }
     },
+    /**
+     [lang:ja]
+     * キャッシュ描画を有効にする.
+     * {@link enchant.RectGroup#surface}に子を描画し, 子の状態に変化がなければそのSurfaceをSceneに描画して子の描画を呼ばないようになる.
+     [/lang]
+     [lang:en]
+     * enable cache draw.
+     * Render own children to {@link enchant.RectGroup#surface}.
+     * Rendering itself to scene using the surface and skip rendering the children if there is no change in children status.
+     [/lang]
+     */
     enableCacheDraw: function() {
         if (this._enableCacheDraw) {
             return;
@@ -22,6 +63,16 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         this._enableCacheDraw = true;
         this._needRedraw = true;
     },
+    /**
+     [lang:ja]
+     * キャッシュ描画を無効にする.
+     * 通常の{@link enchant.RectGroup}と同じように描画されるようになる.
+     [/lang]
+     [lang:en]
+     * disable cache draw.
+     * Will be rendered same as {@link enchant.RectGroup}.
+     [/lang]
+     */
     disableCacheDraw: function() {
         if (!this._enableCacheDraw) {
             return;
@@ -134,11 +185,27 @@ enchant.CacheRectGroup = enchant.Class.create(enchant.RectGroup, {
         enchant.Matrix.instance.stack.pop();
     }
 });
+/**
+ [lang:ja]
+ * キャッシュの更新のトリガーにするEventの名前.
+ [/lang]
+ * The Event names that triggers cache update.
+ * @type {String[]}
+ * @static
+ */
 enchant.CacheRectGroup.REDRAW_CACHE_TRIGGER_EVENTS = [
     enchant.Event.ADDED_TO_SCENE,
     enchant.Event.CHILD_ADDED,
     enchant.Event.CHILD_REMOVED
 ];
+/**
+ [lang:ja]
+ * CacheRectGroup用のレンダラ.
+ [/lang]
+ * The customized renderer for CacheRectGroup.
+ * @type {String[]}
+ * @static
+ */
 enchant.CacheRectGroup.renderer = new (enchant.Class.create(enchant.CanvasRenderer, {
     transform: function(ctx, node) {
         var m = [];
