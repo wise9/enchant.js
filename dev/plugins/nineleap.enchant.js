@@ -1,7 +1,7 @@
 /**
  * @fileOverview
  * nineleap.enchant.js
- * @version 0.3.3 (2013/03/27)
+ * @version 0.3.4 (2013/04/03)
  * @requires enchant.js v0.6.3 or later
  *
  * @description
@@ -85,26 +85,35 @@
 
         _requestPreload: function() {
             var o = {};
-            var assets = this._assets
-                .concat(this._twitterAssets || [])
-                .concat(this._netpriceData || [])
-                .concat(this._memoryAssets || [])
-                .filter(function(asset) {
-                    return asset in o ? false : o[asset] = true;
-                });
-
             var loaded = 0,
-                len = assets.length,
+                len = 0,
                 loadFunc = function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
                     e.total = len;
                     enchant.Core.instance.loadingScene.dispatchEvent(e);
                 };
+            this._assets
+                .concat(this._twitterAssets || [])
+                .concat(this._netpriceData || [])
+                .concat(this._memoryAssets || [])
+                .reverse()
+                .forEach(function(asset) {
+                    var src, name;
+                    if (asset instanceof Array) {
+                        src = asset[0];
+                        name = asset[1];
+                    } else {
+                        src = name = asset;
+                    }
+                    if (!o[name]) {
+                        o[name] = this.load(src, name, loadFunc);
+                        len++;
+                    }
+                }, this);
+
             this.pushScene(this.loadingScene);
-            return enchant.Deferred.parallel(assets.map(function(src) {
-                return this.load(src, loadFunc);
-            }, this));
+            return enchant.Deferred.parallel(o);
         },
 
         end: function(score, result, img) {
