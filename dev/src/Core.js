@@ -184,8 +184,8 @@
             this.assets = {};
             var assets = this._assets = [];
             (function detectAssets(module) {
-                if (module.assets instanceof Array) {
-                    [].push.apply(assets, module.assets);
+                if (module.assets) {
+                    enchant.Core.instance.preload(module.assets);
                 }
                 for (var prop in module) {
                     if (module.hasOwnProperty(prop)) {
@@ -594,10 +594,21 @@
          * @return {enchant.Core} this
          */
         preload: function(assets) {
+            var a;
             if (!(assets instanceof Array)) {
-                assets = Array.prototype.slice.call(arguments);
+                if (typeof assets === 'object') {
+                    a = [];
+                    for (var name in assets) {
+                        if (assets.hasOwnProperty(name)) {
+                            a.push([ assets[name], name ]);
+                        }
+                    }
+                    assets = a;
+                } else {
+                    assets = Array.prototype.slice.call(arguments);
+                }
             }
-            [].push.apply(this._assets, assets);
+            Array.prototype.push.apply(this._assets, assets);
             return this;
         },
         /**
@@ -763,21 +774,32 @@
         },
         _requestPreload: function() {
             var o = {};
-            var assets = this._assets.filter(function(asset) {
-                return asset in o ? false : o[asset] = true;
-            });
             var loaded = 0,
-                len = assets.length,
+                len = 0,
                 loadFunc = function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
                     e.total = len;
                     core.loadingScene.dispatchEvent(e);
                 };
+            this._assets
+                .reverse()
+                .forEach(function(asset) {
+                    var src, name;
+                    if (asset instanceof Array) {
+                        src = asset[0];
+                        name = asset[1];
+                    } else {
+                        src = name = asset;
+                    }
+                    if (!o[name]) {
+                        o[name] = this.load(src, name, loadFunc);
+                        len++;
+                    }
+                }, this);
+
             this.pushScene(this.loadingScene);
-            return enchant.Deferred.parallel(assets.map(function(src) {
-                return this.load(src, loadFunc);
-            }, this));
+            return enchant.Deferred.parallel(o);
         },
         /**
          [lang:ja]
