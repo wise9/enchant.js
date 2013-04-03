@@ -1252,10 +1252,10 @@
          */
         initialize: function(width, height) {
             enchant.Entity.call(this);
+            this.childNodes = [];
             this._background;
             this.width = width;
             this.height = height;
-            this.childNodes = [];
 
             [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
                 .forEach(function(event) {
