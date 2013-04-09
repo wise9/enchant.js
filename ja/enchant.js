@@ -1,7 +1,7 @@
 /**
  * enchant.js v0.6.3
  * http://enchantjs.com
- * 
+ *
  * Copyright Ubiquitous Entertainment Inc.
  * Released under the MIT license.
  */
@@ -484,7 +484,6 @@ enchant.Event = enchant.Class.create({
  *      ... // ゲーム開始時の処理を記述
  *   };
  *   core.start();
- *
  * @type {String}
  */
 enchant.Event.LOAD = 'load';
@@ -1386,7 +1385,7 @@ enchant.EventTarget = enchant.Class.create({
             var now = window.getTime();
             var elapsed = e.elapsed = now - this.currentTime;
 
-            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
+            this._actualFps = elapsed > 0 ? (1000 / elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -1405,6 +1404,7 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+            now = window.getTime();
             this.currentTime = now;
             this._requestNextFrame(1000 / this.fps - (now - this._calledTime));
         },
@@ -4679,7 +4679,6 @@ enchant.Sound = window.AudioContext && enchant.ENV.USE_WEBAUDIO ? enchant.WebAud
  *
  * @see http://www.robertpenner.com/easing/
  * @see http://www.robertpenner.com/easing/penner_chapter7_tweening.pdf
- *
  * Easing function library, from "Easing Equations" by Robert Penner.
  * @type {Object}
  * @namespace
@@ -5133,7 +5132,6 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
      * @name enchant.ActionEventTarget
      * @class
      * {@link enchant.Action} クラス向けに拡張された {@link enchant.EventTarget} クラス .
-     *
      * @constructs
      * @extends enchant.EventTarget
      */

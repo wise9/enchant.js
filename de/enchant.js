@@ -511,7 +511,6 @@ enchant.Event = enchant.Class.create({
  *      ... // initialisierung des Spieles 
  *   };
  *   core.start();
- *
  * @type {String}
  */
 enchant.Event.LOAD = 'load';
@@ -1426,7 +1425,7 @@ enchant.EventTarget = enchant.Class.create({
             var now = window.getTime();
             var elapsed = e.elapsed = now - this.currentTime;
 
-            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
+            this._actualFps = elapsed > 0 ? (1000 / elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -1445,6 +1444,7 @@ enchant.EventTarget = enchant.Class.create({
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
+            now = window.getTime();
             this.currentTime = now;
             this._requestNextFrame(1000 / this.fps - (now - this._calledTime));
         },
@@ -2962,7 +2962,6 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      *          this.x = 64 - player.x;
      *      }
      *   });
-     *
      * @constructs
      * @extends enchant.Node
      */
