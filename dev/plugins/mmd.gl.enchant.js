@@ -392,6 +392,7 @@ var MMD = {};
                 } catch (err) {
                     e = new enchant.Event(enchant.Event.ERROR);
                     e.message = err.message;
+                    enchant.Core.instance.dispatchEvent(e);
                     that.dispatchEvent(e);
                 }
             });
@@ -711,6 +712,7 @@ var MMD = {};
                 } catch (err) {
                     e = new enchant.Event(enchant.Event.ERROR);
                     e.message = err.message;
+                    enchant.Core.instance.dispatchEvent(e);
                     that.dispatchEvent(e);
                 }
             });

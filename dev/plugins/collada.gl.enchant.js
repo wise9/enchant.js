@@ -73,6 +73,7 @@ if (enchant.gl !== undefined) {
             req.open('GET', url, true);
             req.onerror = function() {
                 e.message = 'Cannot load an asset: ' + url;
+                enchant.Core.instance.dispatchEvent(e);
                 rootSprite.dispatchEvent(e);
             };
             req.onload = function() {

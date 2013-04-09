@@ -111,6 +111,7 @@ enchant.WebAudioSound.load = function(src, type, callback, onerror) {
                     sound.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
                 },
                 function(error) {
+                    enchant.Core.instance.dispatchEvent(e);
                     sound.dispatchEvent(e);
                 }
             );

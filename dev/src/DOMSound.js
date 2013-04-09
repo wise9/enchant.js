@@ -238,6 +238,7 @@ enchant.DOMSound.load = function(src, type, callback, onerror) {
             audio.onerror = function() {
                 var e = new enchant.Event(enchant.Event.ERROR);
                 e.message = 'Cannot load an asset: ' + audio.src;
+                enchant.Core.instance.dispatchEvent(e);
                 sound.dispatchEvent(e);
             };
             sound._element = audio;
