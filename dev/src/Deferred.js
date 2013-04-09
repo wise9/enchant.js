@@ -42,17 +42,18 @@ if (window.Deferred) {
             }
         },
         fail: function(arg) {
-            var queue = this;
+            var result, err,
+                queue = this;
             while (queue && !queue._fail) {
                 queue = queue._next;
             }
             if (queue instanceof enchant.Deferred) {
-                var n = queue._fail(arg);
-                queue.call(n);
+                result = queue._fail(arg);
+                queue.call(result);
             } else if (arg instanceof Error) {
                 throw arg;
             } else {
-                var err = new Error('queue failed');
+                err = new Error('failed in Deferred');
                 err.arg = arg;
                 throw err;
             }
