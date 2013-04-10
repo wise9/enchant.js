@@ -184,8 +184,8 @@
             this.assets = {};
             var assets = this._assets = [];
             (function detectAssets(module) {
-                if (module.assets instanceof Array) {
-                    [].push.apply(assets, module.assets);
+                if (module.assets) {
+                    enchant.Core.instance.preload(module.assets);
                 }
                 for (var prop in module) {
                     if (module.hasOwnProperty(prop)) {
@@ -594,10 +594,21 @@
          * @return {enchant.Core} this
          */
         preload: function(assets) {
+            var a;
             if (!(assets instanceof Array)) {
-                assets = Array.prototype.slice.call(arguments);
+                if (typeof assets === 'object') {
+                    a = [];
+                    for (var name in assets) {
+                        if (assets.hasOwnProperty(name)) {
+                            a.push([ assets[name], name ]);
+                        }
+                    }
+                    assets = a;
+                } else {
+                    assets = Array.prototype.slice.call(arguments);
+                }
             }
-            [].push.apply(this._assets, assets);
+            Array.prototype.push.apply(this._assets, assets);
             return this;
         },
         /**
@@ -605,6 +616,7 @@
          * ファイルのロードを行う.
          *
          * @param {String} asset ロードするファイルのパス.
+         * @param {String} [alias] ロードするファイルに設定したい名前.
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
          * @param {Function} [onerror] ファイルのロードに失敗したときに呼び出される関数.
          [/lang]
@@ -612,6 +624,7 @@
          * Loads a file.
          *
          * @param {String} asset File path of the resource to be loaded.
+         * @param {String} asset name of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
          * @param {Function} [callback] Function called up when file loading is failed.
          [/lang]
@@ -622,9 +635,17 @@
          * @param {Function} [callback] Funktion die ausgeführt wird wenn das laden abgeschlossen wurde.
          [/lang]
          */
-        load: function(src, callback, onerror) {
-            callback = callback || function() {};
-            onerror = onerror || function() {};
+        load: function(src, alias, callback, onerror) {
+            var assetName, offset;
+            if (typeof arguments[1] === 'string') {
+                assetName = alias;
+                offset = 1;
+            } else {
+                assetName = src;
+                offset = 0;
+            }
+            callback = arguments[1 + offset] || function() {};
+            onerror = arguments[2 + offset] || function() {};
 
             var ext = enchant.Core.findExt(src);
 
@@ -639,7 +660,7 @@
                     onerror.call(this, e);
                 };
                 if (enchant.Core._loadFuncs[ext]) {
-                    enchant.Core.instance.assets[src] = enchant.Core._loadFuncs[ext](src, ext, _callback, _onerror);
+                    enchant.Core.instance.assets[assetName] = enchant.Core._loadFuncs[ext](src, ext, _callback, _onerror);
                 } else {
                     var req = new XMLHttpRequest();
                     req.open('GET', src, true);
@@ -654,11 +675,11 @@
 
                             var type = req.getResponseHeader('Content-Type') || '';
                             if (type.match(/^image/)) {
-                                core.assets[src] = enchant.Surface.load(src, _callback, _onerror);
+                                core.assets[assetName] = enchant.Surface.load(src, _callback, _onerror);
                             } else if (type.match(/^audio/)) {
-                                core.assets[src] = enchant.Sound.load(src, type, _callback, _onerror);
+                                core.assets[assetName] = enchant.Sound.load(src, type, _callback, _onerror);
                             } else {
-                                core.assets[src] = req.responseText;
+                                core.assets[assetName] = req.responseText;
                                 _callback.call(enchant.Core.instance, new enchant.Event('laod'));
                             }
                         }
@@ -753,21 +774,32 @@
         },
         _requestPreload: function() {
             var o = {};
-            var assets = this._assets.filter(function(asset) {
-                return asset in o ? false : o[asset] = true;
-            });
             var loaded = 0,
-                len = assets.length,
+                len = 0,
                 loadFunc = function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
                     e.total = len;
                     core.loadingScene.dispatchEvent(e);
                 };
+            this._assets
+                .reverse()
+                .forEach(function(asset) {
+                    var src, name;
+                    if (asset instanceof Array) {
+                        src = asset[0];
+                        name = asset[1];
+                    } else {
+                        src = name = asset;
+                    }
+                    if (!o[name]) {
+                        o[name] = this.load(src, name, loadFunc);
+                        len++;
+                    }
+                }, this);
+
             this.pushScene(this.loadingScene);
-            return enchant.Deferred.parallel(assets.map(function(src) {
-                return this.load(src, loadFunc);
-            }, this));
+            return enchant.Deferred.parallel(o);
         },
         /**
          [lang:ja]
