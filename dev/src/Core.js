@@ -841,11 +841,16 @@
             if (!this.ready) {
                 return;
             }
-            setTimeout(function() {
-                var core = enchant.Core.instance;
-                core._calledTime = window.getTime();
-                window.requestAnimationFrame(core._callTick);
-            }, Math.max(0, delay));
+            if (this.fps >= 60 || delay <= 16) {
+                this._calledTime = window.getTime();
+                window.requestAnimationFrame(this._callTick);
+            } else {
+                setTimeout(function() {
+                    var core = enchant.Core.instance;
+                    core._calledTime = window.getTime();
+                    window.requestAnimationFrame(core._callTick);
+                }, Math.max(0, delay));
+            }
         },
         /**
          [lang:ja]
