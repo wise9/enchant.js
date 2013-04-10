@@ -8,6 +8,7 @@ module.exports = (grunt) ->
       jshint:
         core: ['dev/src/*.js', '!dev/src/_*.js']
         plugins: ['dev/src/*.js', '!dev/src/_*.js', 'dev/plugins/*.js']
+        collada: ['dev/plugins/collada.gl.enchant.js']
         mixing: ['dev/src/*.js', '!dev/src/_*.js',
           'dev/plugins/mixing.enchant.js']
         options:

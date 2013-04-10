@@ -1,8 +1,8 @@
 /**
  * @fileOverview
  * memory.enchant.js
- * @version 0.2.2 (2011/07/31)
- * @requires enchant.js v0.3.1 or later
+ * @version 0.2.3 (2013/04/3)
+ * @requires enchant.js v0.6.0 or later
  * @requires nineleap.enchant.js v0.2.2 or later
  * @author Ubiquitous Entertainment Inc.
  *
@@ -30,7 +30,7 @@
     if (enchant.nineleap.twitter !== undefined &&
         Object.getPrototypeOf(enchant.nineleap.twitter) === Object.prototype) {
         parentModule = enchant.nineleap.twitter;
-    } else if (enchant.nineleap === undefined &&
+    } else if (enchant.nineleap !== undefined &&
         Object.getPrototypeOf(enchant.nineleap) === Object.prototype) {
         parentModule = enchant.nineleap;
     } else {
