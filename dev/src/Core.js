@@ -1170,7 +1170,6 @@
         /**
          [lang:ja]
          * キーバインドを削除する.
-         *
          * @param {Number} key 削除するキーコード.
          [/lang]
          [lang:en]
@@ -1187,7 +1186,7 @@
          */
         keyunbind: function(key) {
             if (!this._keybind[key]) {
-                return;
+                return this;
             }
             var buttondowns = this._internalButtondownListeners;
             var buttonups = this._internalButtonupListeners;
