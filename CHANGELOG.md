@@ -1,3 +1,19 @@
+# v0.7.0
+
+- features
+    - add Entity#intersectStrict (feature/boundingRect #166)
+    - add Deferred class
+    - add LoadingScene class
+    - allows preload alias (feature/asset-name-alias #193)
+    - Core can be resize after initialized
+    - add Core resize event
+    - improved Group#addChild, insertBefore
+- bugfix
+    - improved some DOM bugs on Internet Explorer
+    - some fixes
+
+# v0.6.3
+
 # v0.6.2
 
 - features
