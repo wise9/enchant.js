@@ -352,6 +352,7 @@ if (enchant.gl !== undefined) {
                 this.nodes = [];
                 this.childNodeIds = [];
                 this.skeletons = [];
+                this.poses = [];
                 this.skeletonChildNodeIds = [];
                 this.translate = [0, 0, 0];
                 this.rotate = [];
@@ -531,12 +532,12 @@ if (enchant.gl !== undefined) {
                 var length = 0;
                 for (var ci = 0, cl = Animation.channels.length; ci < cl; ci++) {
                     if (this.id === Animation.channels[ci].target.split('/')[0]) {
-                        var currentLength = Animation.samplers[Animation.channels[ci].samplerId].input.length;
+                        var currentLength = Animation.samplers[Animation.channels[ci].samplerId].lerpedinput.length;
                         length = Math.max(currentLength, length);
-                        if (Animation.samplers[Animation.channels[ci].samplerId].input.length === length) {
-                            input = Animation.samplers[Animation.channels[ci].samplerId].input;
+                        if (Animation.samplers[Animation.channels[ci].samplerId].lerpedinput.length === length) {
+                            input = Animation.samplers[Animation.channels[ci].samplerId].lerpedinput;
                         }
-                        output[Animation.channels[ci].target.split('/')[1].split('.')[0]] = Animation.samplers[Animation.channels[ci].samplerId].output;
+                        output[Animation.channels[ci].target.split('/')[1].split('.')[0]] = Animation.samplers[Animation.channels[ci].samplerId].lerpedoutput;
                     }
                 }
                 for (var i = 0, l = length; i < l; i++) {
@@ -622,12 +623,12 @@ if (enchant.gl !== undefined) {
                 for (var key in libAnimations) {
                     for (var ci = 0, cl = libAnimations[key].channels.length; ci < cl; ci++) {
                         if (this.id === libAnimations[key].channels[ci].target.split('/')[0]) {
-                            var currentLength = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input.length;
+                            var currentLength = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].lerpedinput.length;
                             length = Math.max(currentLength, length);
-                            if (libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input.length === length) {
-                                input = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].input;
+                            if (libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].lerpedinput.length === length) {
+                                input = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].lerpedinput;
                             }
-                            output[libAnimations[key].channels[ci].target.split('/')[1].split('.')[0]] = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].output;
+                            output[libAnimations[key].channels[ci].target.split('/')[1].split('.')[0]] = libAnimations[key].samplers[libAnimations[key].channels[ci].samplerId].lerpedoutput;
                         }
                     }
                     for (var ackey in libAnimationClips) {
@@ -787,12 +788,31 @@ if (enchant.gl !== undefined) {
                 Unit.call(this, xml);
                 this.input = [];
                 this.output = [];
+                this.lerpedinput =[];
+                this.lerpedoutput = [];
                 for (var i = 0, l = this._datas['input'].length; i < l; i++) {
                     if (this._datas['input'][i].getAttribute('semantic') === 'OUTPUT') {
                         this.output = srcs[this.getReferenceAttribute(this._datas['input'][i], 'source')];
                     }
                     if (this._datas['input'][i].getAttribute('semantic') === 'INPUT') {
                         this.input = srcs[this.getReferenceAttribute(this._datas['input'][i], 'source')];
+                    }
+                }
+                var stride = this.output.length / this.input.length;
+                var ll = Math.floor(1 + this.input[this.input.length - 1] * enchant.Core.instance.fps);
+                for (var li = 0; li < ll; li++) {
+                    this.lerpedinput.push(li / enchant.Core.instance.fps);
+                    for (var j = 0; j < stride; j++) {
+                        for (var post = 0, iil = this.input.length; post < iil; post++ ) {
+                            if (li / enchant.Core.instance.fps < this.input[post]) {
+                                break;
+                            }
+                        }
+                        if (this.output[post * stride + j]) {
+                            this.lerpedoutput.push(this.output[(post - 1) * stride + j] + 1 / (this.input[post] - this.input[post - 1]) * (li / enchant.Core.instance.fps - this.input[post - 1]) * (this.output[post * stride + j] - this.output[(post - 1) * stride + j]));
+                        } else{
+                            this.lerpedoutput.push(this.output[(post - 1) * stride + j]);
+                        }
                     }
                 }
             }
@@ -1308,6 +1328,12 @@ if (enchant.gl !== undefined) {
                 var geometry = this.lib['geometries'][node.geometryUrl];
                 var trianglesLength = this._getTrianglesLength(geometry);
                 var currentTriangle = 0;
+                var makeEnterframe = function(poses, length, sid, obj) {
+                    return function() {
+                         var currentPose = obj.getPose(poses, length)[sid];
+                         obj.rotation = quat4.toMat4(currentPose._rotation);
+                    };
+                };
                 do {
                     var sprite = new enchant.gl.collada.ColladaSprite3D(this.lib, node, this._getTriangles(geometry, currentTriangle));
                     if (node._datas['translate'][0]) {
@@ -1353,13 +1379,16 @@ if (enchant.gl !== undefined) {
                     } else {
                         sprite.scaleX = sprite.scaleY = sprite.scaleZ = 1;
                     }
-                    var poses;
                     if (node.nodes) {
                         for (var k in node.nodes) {
-                            sprite.addColladaSprite3DFromNode(node.nodes[k], poses, length);
+                            sprite.addColladaSprite3DFromNode(node.nodes[k]);
                         }
                     }
-                    poses = [];
+                    var poses = [];
+                    var poselength = this.createPoses(node, poses, this.lib);
+                    if (poselength > 0) {
+                        sprite.addEventListener('enterframe', makeEnterframe(poses, poselength, node.sid, sprite));
+                    }
                     //var poselength = this.createPoses(node, poses, this.lib);
                     //if (poselength > 0) {
                         //sprite.addEventListener('enterframe', function() {

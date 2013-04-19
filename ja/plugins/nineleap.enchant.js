@@ -1,8 +1,8 @@
 /**
  * @fileOverview
  * nineleap.enchant.js
- * @version 0.3.2 (2013/02/08)
- * @requires enchant.js v0.6.0 or later
+ * @version 0.3.4 (2013/04/03)
+ * @requires enchant.js v0.6.3 or later
  *
  * @description
  * enchant.js extension for 9leap.net
@@ -83,119 +83,37 @@
             coreStart = false; // deprecated
         },
 
-        loadImage: function(src, callback) {
-            if (callback == null) {
-                callback = function() {
-                };
-            }
-            this.assets[src] = enchant.Surface.load(src, callback);
-        },
-
-        start: function() {
-            var core = this;
-
-            var onloadTimeSetter = function() {
-                this.frame = 0;
-                this.removeEventListener('load', onloadTimeSetter);
-            };
-            this.addEventListener('load', onloadTimeSetter);
-
-            if (!this._activated && this._assets.length) {
-
-                if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
-                    navigator.userAgent.indexOf('iPad') !== -1)) {
-                    var scene = new enchant.Scene();
-                    scene.backgroundColor = '#000';
-                    var size = Math.round(core.width / 10);
-                    var sprite = new enchant.Sprite(core.width, size);
-                    sprite.y = (core.height - size) / 2;
-                    sprite.image = new enchant.Surface(core.width, size);
-                    sprite.image.context.fillStyle = '#fff';
-                    sprite.image.context.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
-                    var width = sprite.image.context.measureText('Touch to Start').width;
-                    sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
-                    scene.addChild(sprite);
-                    document.addEventListener('touchstart', function() {
-                        core._touched = true;
-                        core.removeScene(scene);
-                        core.start();
-                    }, true);
-                    core.pushScene(scene);
-                    return;
-                }
-
-                this._activated = true;
-                this.currentTime = this.getTime();
-                this._calledTime = 0;
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame(0);
-
-                var o = {};
-                var assets = this._assets.filter(function(asset) {
-                    return asset in o ? false : o[asset] = true;
-                });
-                var tAssets = (this._twitterAssets != undefined) ? this._twitterAssets : [];
-                var nAssets = (this._netpriceData != undefined) ? this._netpriceData : [];
-                var mAssets = (this._memoryAssets != undefined) ? this._memoryAssets : [];
-                var loaded = 0;
-                var total = assets.length + tAssets.length + nAssets.length + mAssets.length;
-                var i, l;
-                var loadListener = function() {
+        _requestPreload: function() {
+            var o = {};
+            var loaded = 0,
+                len = 0,
+                loadFunc = function() {
                     var e = new enchant.Event('progress');
                     e.loaded = ++loaded;
-                    e.total = total;
-                    core.dispatchEvent(e);
-                    if (loaded === total) {
-                        core.removeScene(core.loadingScene);
-                        core.dispatchEvent(new enchant.Event('load'));
-                    }
+                    e.total = len;
+                    enchant.Core.instance.loadingScene.dispatchEvent(e);
                 };
-                this.pushScene(this.loadingScene);
-                for (i = 0, l = assets.length; i < l; i++) {
-                    this.load(assets[i], loadListener);
-                }
-                for (i = 0, l = tAssets.length; i < l; i++) {
-                    this.loadImage(tAssets[i], function() {
-                        var e = new enchant.Event('progress');
-                        e.loaded = ++loaded;
-                        e.total = total;
-                        core.dispatchEvent(e);
-                        if (loaded === total) {
-                            core.removeScene(core.loadingScene);
-                            core.dispatchEvent(new enchant.Event('load'));
-                        }
-                    });
-                }
-                for (i = 0, l = mAssets.length; i < l; i++) {
-                    this.loadImage(mAssets[i], function() {
-                        var e = new enchant.Event('progress');
-                        e.loaded = ++loaded;
-                        e.total = total;
-                        core.dispatchEvent(e);
-                        if (loaded === total) {
-                            core.removeScene(core.loadingScene);
-                            core.dispatchEvent(new enchant.Event('load'));
-                        }
-                    });
-                }
+            this._assets
+                .concat(this._twitterAssets || [])
+                .concat(this._netpriceData || [])
+                .concat(this._memoryAssets || [])
+                .reverse()
+                .forEach(function(asset) {
+                    var src, name;
+                    if (asset instanceof Array) {
+                        src = asset[0];
+                        name = asset[1];
+                    } else {
+                        src = name = asset;
+                    }
+                    if (!o[name]) {
+                        o[name] = this.load(src, name, loadFunc);
+                        len++;
+                    }
+                }, this);
 
-                for (i = 0, l = nAssets.length; i < l; i++) {
-                    this.loadImage(nAssets[i], function() {
-                        var e = new enchant.Event('progress');
-                        e.loaded = ++loaded;
-                        e.total = total;
-                        core.dispatchEvent(e);
-                        if (loaded === total) {
-                            core.removeScene(core.loadingScene);
-                            core.dispatchEvent(new enchant.Event('load'));
-                        }
-                    });
-                }
-            } else {
-                this.dispatchEvent(new enchant.Event('load'));
-            }
+            this.pushScene(this.loadingScene);
+            return enchant.Deferred.parallel(o);
         },
 
         end: function(score, result, img) {

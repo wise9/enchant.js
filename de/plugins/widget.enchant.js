@@ -47,22 +47,20 @@
         /**
          */
         parseContent: function(content, font, color) {
-            var en;
+            var en, metrics;
             if (typeof content === 'undefined') {
                 content = '';
             }
             if (typeof content === 'number') {
-                content = arguments.callee('' + content, font);
-            } else if (content instanceof enchant.Entity) {
+                content = '' + content;
+            }
+            if (content instanceof enchant.Entity) {
             } else if (content instanceof enchant.Surface) {
                 en = new enchant.Sprite(content.width, content.height);
                 en.image = content;
                 content = en;
             } else if (typeof content == 'string') {
-                calced = getElementMetrics(content, font);
                 en = new enchant.Label(content);
-                en.width = calced.width;
-                en.height = calced.height;
                 if (font) {
                     en.font = font;
                 } else {
@@ -71,6 +69,9 @@
                 if (color) {
                     en.color = color;
                 }
+                metrics = en.getMetrics();
+                en.width = metrics.width;
+                en.height = metrics.height;
                 content = en;
             }
             return content;
@@ -975,10 +976,10 @@
          */
         initialize: function(width, height) {
             enchant.Entity.call(this);
+            this.childNodes = [];
             this._background;
             this.width = width;
             this.height = height;
-            this.childNodes = [];
 
             [ enchant.Event.ADDED_TO_SCENE, enchant.Event.REMOVED_FROM_SCENE ]
                 .forEach(function(event) {
