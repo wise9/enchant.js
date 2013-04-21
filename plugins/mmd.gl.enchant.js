@@ -1,9 +1,9 @@
 /**
  * @fileOverview
  * mmd.gl.enchant.js
- * @version 0.2.0
- * @require enchant.js v0.4.3+
- * @require gl.enchant.js v0.3.5+
+ * @version 0.2.2
+ * @require enchant.js v0.6.3+
+ * @require gl.enchant.js v0.3.7+
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
@@ -37,26 +37,12 @@ var MMD = {};
      */
     enchant.gl.mmd = {};
 
-    enchant.Core._loadFuncs['pmd'] = function(src, callback) {
-        if (callback == null) {
-            callback = function() {
-            };
-        }
-        var model = new enchant.gl.mmd.MSprite3D(src, function() {
-            enchant.Core.instance.assets[src] = model;
-            callback();
-        });
+    enchant.Core._loadFuncs['pmd'] = function(src, ext, callback, onerror) {
+        return new enchant.gl.mmd.MSprite3D(src, callback, onerror);
     };
 
-    enchant.Core._loadFuncs['vmd'] = function(src, callback) {
-        if (callback == null) {
-            callback = function() {
-            };
-        }
-        var anim = new enchant.gl.mmd.MAnimation(src, function() {
-            enchant.Core.instance.assets[src] = anim;
-            callback();
-        });
+    enchant.Core._loadFuncs['vmd'] = function(src, ext, callback, onerror) {
+        return new enchant.gl.mmd.MAnimation(src, callback, onerror);
     };
 
     /**
@@ -170,10 +156,14 @@ var MMD = {};
     enchant.gl.mmd.MSprite3D = enchant.Class.create(enchant.gl.Sprite3D, {
         /**
          * Sprite3D optimized for PMD files.
+         * By preloading PMD file, it will be set in assets automatically.
+         * @param {String} [path] file path.
+         * @param {Function} [callback] on load callback.
+         * @param {Function} [onerror] on error callback.
          * @constructs
          * @extends enchant.gl.Sprite3D
          */
-        initialize: function(path, callback) {
+        initialize: function(path, callback, onerror) {
             enchant.gl.Sprite3D.call(this);
             this.program = enchant.gl.mmd.MMD_SHADER_PROGRAM;
             this.animation = [];
@@ -204,8 +194,8 @@ var MMD = {};
                     }
                 }
             });
-            if (arguments.length === 2) {
-                this.loadPmd(path, callback);
+            if (arguments.length >= 2) {
+                this.loadPmd(path, callback, onerror);
             }
         },
         /**
@@ -318,9 +308,11 @@ var MMD = {};
             }
         },
         /**
-         * Load .pmd files.
+         * Load PMD files.
+         * Will be dispatched LOAD event when data has loaded.
          * @param {String} path File path
-         * @param {Function} callback Callback function
+         * @param {Function} [callback] onload callback.
+         * @param {Function} [onerror] onerror callback.
          * @example
          * // model/miku.pmd loading.
          * var mk = new MSprite3D();
@@ -328,13 +320,26 @@ var MMD = {};
          *     scene.addChild(mk);
          * });
          */
-        loadPmd: function(path, callback) {
+        loadPmd: function(path, callback, onerror) {
             var split = splitPath(path);
             var model = new MMD.Model(split[1], split[2]);
             var that = this;
             this._data = model;
+            callback = callback || function() {};
+            onerror = onerror || function() {};
+            this.addEventListener('load', callback);
+            this.addEventListener('error', onerror);
             model.load(function() {
-                return that._parse(model, callback);
+                var e;
+                try {
+                    that._parse(model);
+                    that.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                } catch (err) {
+                    e = new enchant.Event(enchant.Event.ERROR);
+                    e.message = err.message;
+                    enchant.Core.instance.dispatchEvent(e);
+                    that.dispatchEvent(e);
+                }
             });
         },
         set: function(sp) {
@@ -347,11 +352,7 @@ var MMD = {};
             sp._data = this._data;
             return sp;
         },
-        _parse: function(model, callback) {
-            if (typeof callback !== 'function') {
-                callback = function() {
-                };
-            }
+        _parse: function(model) {
             var data;
             var original;
             var params = [ 'ambient', 'diffuse', 'specular', 'shininess', 'alpha', 'face_vert_count', 'edge_flag' ];
@@ -446,8 +447,6 @@ var MMD = {};
                     material.texture = new enchant.gl.Texture(model.directory + '/' + original.texture_file_name);
                 }
             }
-
-            callback(this);
         },
         _applySkeleton: function() {
             var sk = this.skeleton;
@@ -581,25 +580,29 @@ var MMD = {};
     /**
      * @scope enchant.gl.mmd.MAnimation.prototype
      */
-    enchant.gl.mmd.MAnimation = enchant.Class.create({
+    enchant.gl.mmd.MAnimation = enchant.Class.create(enchant.EventTarget, {
         /**
-         * Sprite3D optimized to VMD file.
+         * Animation class optimized to VMD file.
          * Character data and morphing are loaded.
+         * By preloading VMD file, it will be set in assets automatically.
          * If argument is delivered {@link enchant.gl.mmd.MAnimation#loadVmd} will be called up.
-         * @param {String} path File path
-         * @param {Function} callback Callback function
+         * @param {String} [path] File path.
+         * @param {Function} [callback] onload callback.
+         * @param {Function} [onerror] onerror callback.
          * @constructs
-         * @extends enchant.gl.Sprite3D
+         * @extends enchant.EventTarget
          * @see enchant.gl.mmd.MAnimation#loadVmd
          */
-        initialize: function(path, callback) {
+        initialize: function(path, callback, onerror) {
+            enchant.EventTarget.call(this);
             this.length = -1;
-            if (arguments.length === 2) {
-                this.loadVmd(path, callback);
+            if (arguments.length >= 2) {
+                this.loadVmd(path, callback, onerror);
             }
         },
         /**
-         * Load .vmd file.
+         * Load VMD file.
+         * Will be dispatched LOAD event when data has loaded.
          * @param {String} path File path
          * @param {Function} callback Callback function
          * @example
@@ -609,15 +612,29 @@ var MMD = {};
          *     mk.pushAnimation(dance);
          * });
          */
-        loadVmd: function(path, callback) {
+        loadVmd: function(path, callback, onerror) {
             var motion = new MMD.Motion(path);
             var frame;
             var that = this;
+
+            callback = callback || function() {};
+            onerror = onerror || function() {};
+            console.log(this);
+            this.addEventListener('load', callback);
+            this.addEventListener('error', onerror);
             motion.load(function() {
-                that.motions = parseMotion(motion.bone);
-                that.morphs = parseMorph(motion.morph);
-                that._calcLength();
-                callback(that);
+                var e;
+                try {
+                    that.motions = parseMotion(motion.bone);
+                    that.morphs = parseMorph(motion.morph);
+                    that._calcLength();
+                    that.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                } catch (err) {
+                    e = new enchant.Event(enchant.Event.ERROR);
+                    e.message = err.message;
+                    enchant.Core.instance.dispatchEvent(e);
+                    that.dispatchEvent(e);
+                }
             });
         },
         bake: function() {
