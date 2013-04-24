@@ -1,7 +1,7 @@
 enchant();
 
 window.onload = function(){
-    var core = new Core(320, 320);
+    var core = new Game(320, 320);
     core.onload = function(){
         var status = new Label("");
         status._log = [];
