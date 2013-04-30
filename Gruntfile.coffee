@@ -144,7 +144,7 @@ module.exports = (grunt) ->
       grunt.log.writeln('java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js lang/' + lang + '/enchant.js lang/' + lang + '/plugins/*.js -t=doc/template -d=doc/plugins/' + lang)
       ;
       cb()
-        , (error) -> done(!error)
+    , (error) -> done(!error)
 
 
   grunt.registerTask 'build', '', ()->
