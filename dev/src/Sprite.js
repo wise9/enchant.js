@@ -36,14 +36,15 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this.width = width;
         this.height = height;
         this._image = null;
+        this._debugColor = '#ff0000';
         this._frameLeft = 0;
         this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
         /**
-         * [lang:ja]
+         [lang:ja]
          * frame に配列が指定されたときの処理。
-         * [/lang]
+         [/lang]
          */
         this.addEventListener('enterframe', function() {
             if (this._frameSequence.length !== 0) {
@@ -74,6 +75,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._image;
         },
         set: function(image) {
+            if (image === undefined) {
+                throw new Error('Assigned value on Sprite.image is undefined. Please double-check image path, and check if the image you want to use is preload before use.');
+            }
             if (image === this._image) {
                 return;
             }
@@ -136,9 +140,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
     },
     /**
      * 0 <= frame
-     * [lang:ja]
+     [lang:ja]
      * 0以下の動作は未定義.
-     * [/lang]
+     [/lang]
      * @param frame
      * @private
      */
@@ -162,7 +166,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         },
         set: function(width) {
             this._width = width;
-            this._setFrame();
+            this._setFrame(this._frame);
             this._dirty = true;
         }
     },
@@ -176,41 +180,54 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         },
         set: function(height) {
             this._height = height;
-            this._setFrame();
+            this._setFrame(this._frame);
             this._dirty = true;
         }
     },
     cvsRender: function(ctx) {
-        if (this._image == null || this._width === 0 || this._height === 0) {
-            return;
-        }
-        var image = this._image;
-        var element = image._element;
-        var sx = this._frameLeft;
-        var sy = this._frameTop;
-        var sw = Math.min(this.width, image.width - sx);
-        var sh = Math.min(this.height, image.height - sy);
-        var dw = Math.min(image.width, this.width);
-        var dh = Math.min(image.height, this.height);
-        var x, y, w, h;
-        for (y = 0; y < this.height; y += dh) {
-            h = (this.height < y + dh) ? this.height - y : dh;
-            for (x = 0; x < this.width; x += dw) {
-                w = (this.width < x + dw) ? this.width - x : dw;
-                ctx.drawImage(element, sx, sy,
-                    sw * w / dw, sh * h / dh, x, y, w, h);
+        var image = this._image,
+            w = this._width, h = this._height,
+            iw, ih, elem, sx, sy, sw, sh;
+        if (image && w !== 0 && h !== 0) {
+            iw = image.width, ih = image.height;
+            if (iw < w || ih < h) {
+                ctx.fillStyle = enchant.Surface._getPattern(image);
+                ctx.fillRect(0, 0, w, h);
+            } else {
+                elem = image._element;
+                sx = this._frameLeft;
+                sy = Math.min(this._frameTop, ih - h);
+                sw = Math.min(iw - sx, w);
+                sh = Math.min(ih - sy, h);
+                ctx.drawImage(elem, sx, sy, sw, sh, 0, 0, w, h);
             }
         }
     },
-    domRender: function(element) {
-        if (this._image) {
-            if (this._image._css) {
-                this._style['background-image'] = this._image._css;
-                this._style['background-position'] =
-                    -this._frameLeft + 'px ' +
-                    -this._frameTop + 'px';
-            } else if (this._image._element) {
-            }
+    domRender: (function() {
+        if (enchant.ENV.VENDOR_PREFIX === 'ms') {
+            return function(element) {
+                if (this._image) {
+                    if (this._image._css) {
+                        this._style['background-image'] = this._image._css;
+                        this._style['background-position'] =
+                            -this._frameLeft + 'px ' +
+                            -this._frameTop + 'px';
+                    } else if (this._image._element) {
+                    }
+                }
+            };
+        } else {
+            return function(element) {
+                if (this._image) {
+                    if (this._image._css) {
+                        this._style['background-image'] = this._image._css;
+                        this._style['background-position'] =
+                            -this._frameLeft + 'px ' +
+                            -this._frameTop + 'px';
+                    } else if (this._image._element) {
+                    }
+                }
+            };
         }
-    }
+    }())
 });

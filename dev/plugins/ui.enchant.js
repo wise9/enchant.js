@@ -295,8 +295,6 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
             this._element = 'div';
         }
 
-        var prefix = '-' + enchant.ENV.VENDOR_PREFIX + '-';
-
         this.width = width || null;
         this.height = height || null;
         this.text = text;
@@ -312,7 +310,7 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         style["padding"] = "2px 10px";
         style["text-align"] = "center";
         style["font-weight"] = "bold";
-        style[prefix + "border-radius"] = "0.5em";
+        style["border-radius"] = "0.5em";
 
         // テーマの指定がなければ "dark" を使う
         theme = theme || "dark";
@@ -415,13 +413,17 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
 });
 
 enchant.ui.Button.theme2css = function(theme) {
-    var prefix = '-' + enchant.ENV.VENDOR_PREFIX + '-';
+    var prefix = '-' + enchant.ENV.VENDOR_PREFIX.toLowerCase() + '-';
     var obj = {};
     var bg = theme.background;
     var bd = theme.border;
     var ts = theme.textShadow;
     var bs = theme.boxShadow;
-    obj['background-image'] = prefix + bg.type + '('+ [ bg.start, bg.end ] + ')';
+    if (prefix === '-ms-') {
+        obj['background'] = bg.start;
+    } else {
+        obj['background-image'] = prefix + bg.type + '('+ [ 'top', bg.start, bg.end ] + ')';
+    }
     obj['color'] = theme.color;
     obj['border'] = bd.color + ' ' + bd.width + ' ' + bd.type;
     obj['text-shadow'] = ts.offsetX + 'px ' + ts.offsetY + 'px ' + ts.blur + ' ' + ts.color;
@@ -510,6 +512,7 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
         this.widthItemNum = 16;
         this.x = x;
         this.y = y;
+        this._imageAge = Number.MAX_VALUE;
         this.text = '';
         if (arguments[2]) {
             this.row = Math.floor(arguments[2] / this.fontSize);
@@ -522,13 +525,22 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
     setText: function(txt) {
         var i, x, y, wNum, charCode, charPos;
         this._text = txt;
+        var newWidth;
         if (!this.returnLength) {
             this.width = Math.min(this.fontSize * this._text.length, enchant.Game.instance.width);
         } else {
             this.width = Math.min(this.returnLength * this.fontSize, enchant.Game.instance.width);
         }
         this.height = this.fontSize * (Math.ceil(this._text.length / this.row) || 1);
-        this.image = new enchant.Surface(this.width, this.height);
+        // if image is to small or was to big for a long time create new image
+        if(!this.image || this.width > this.image.width || this.height > this.image.height || this._imageAge > 300) {
+            this.image = new enchant.Surface(this.width, this.height);
+            this._imageAge = 0;
+        } else if(this.width < this.image.width || this.height < this.image.height) {
+            this._imageAge++;
+        } else {
+            this._imageAge = 0;
+        }
         this.image.context.clearRect(0, 0, this.width, this.height);
         for (i = 0; i < txt.length; i++) {
             charCode = txt.charCodeAt(i);

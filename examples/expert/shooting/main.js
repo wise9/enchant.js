@@ -24,7 +24,7 @@ window.onload = function () {
     game = new Game(320, 320);
     game.fps = 24;
     /**
-     * Initialiation for variables containing the score,
+     * Initialization for variables containing the score,
      * and whether or not touch is occurring = whether or not bullets are being fired
      * スコアを格納する変数と、
      * タッチされているかどうか = 弾を撃っているかどうかのフラグを初期化
@@ -72,7 +72,7 @@ window.onload = function () {
     game.start();
 };
 /**
- * Succeeds Sprite class, creates Player class.
+ * Inherits Sprite class, creates Player class.
  * Sets as successive class in first argument of enchant.Class.create,
  * as object in second argument, and sets desired addition/override methods.
  * Here, only constructor is overridden.
@@ -107,7 +107,7 @@ var Player = enchant.Class.create(enchant.Sprite, {
     initialize: function (x, y) {
         /**
          * Executes argument of (16, 16), enchant.Sprite (parent class constructor function)
-         * Expands 16x16 Sprite as base.
+         * Extends 16x16 Sprite as base.
          * (16, 16) を引数として、enchant.Sprite (親クラスのコンストラクタ関数) を実行する。
          * 大きさ 16x16 のSpriteをベースとして拡張していく。
          */

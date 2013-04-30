@@ -5,7 +5,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
     /**
      * @name enchant.Tween
      * @class
-     * [lang:ja]
+     [lang:ja]
      * {@link enchant.Action} を継承した、オブジェクトの特定のプロパティを、なめらかに変更したい時に用いるためのアクションクラス.
      * アクションを扱いやすく拡張したクラス.
      *
@@ -19,7 +19,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
      * @constructs
      * @config {time}
      * @config {easing} [function]
-     * [/lang]
+     [/lang]
      */
     initialize: function(params) {
         var origin = {};

@@ -164,17 +164,42 @@ enchant.Event.LOAD = 'load';
 
 /**
  [lang:ja]
+ * エラーの発生をCoreに伝える際に発生するイベント.
+ * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Surface}, {@link enchant.WebAudioSound}, {@link enchant.DOMSound}
+ [/lang]
+ [lang:en]
+ * Events which are occurring when error is occured.
+ * Issued object: {@link enchant.Core}, {@link enchant.Surface}, {@link enchant.WebAudioSound}, {@link enchant.DOMSound}
+ [/lang]
+ */
+enchant.Event.ERROR = 'error';
+
+/**
+ [lang:ja]
+ * 表示サイズが変わったときに発生するイベント.
+ * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Scene}
+ [/lang]
+ [lang:en]
+ * Events which are occurring when display size is changed.
+ * Issued object: {@link enchant.Core}, {@link enchant.Scene}
+ [/lang]
+ @type {String}
+ */
+enchant.Event.CORE_RESIZE = 'coreresize';
+
+/**
+ [lang:ja]
  * Coreのロード進行中に発生するイベント.
- * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.Core}
+ * プリロードする画像が一枚ロードされる度に発行される. 発行するオブジェクト: {@link enchant.LoadingScene}
  [/lang]
  [lang:en]
  * Events which are occurring during core loading.
- * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.Core}
+ * Dispatched each time preloaded image is loaded. Issued object: {@link enchant.LoadingScene}
  [/lang]
  [lang:de]
  * Ereignis, welches während des Ladens des Spieles auftritt.
  * Das Ereignis tritt jedesmal auf, wenn eine im voraus geladene Grafik geladen wurde.
- * Objekt des Auftretens: {@link enchant.Core}
+ * Objekt des Auftretens: {@link enchant.LoadingScene}
  [/lang]
  * @type {String}
  */
@@ -688,58 +713,58 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションがタイムラインに追加された時に発行されるイベント
  * @type {String}
- * [/lang]
+ [/lang]
  */
 enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションがタイムラインから削除された時に発行されるイベント
  * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
- * [/lang]
+ [/lang]
  * @type {String}
  */
 enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションが開始された時に発行されるイベント
- * [/lang]
+ [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_START = "actionstart";
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションが終了するときに発行されるイベント
- * [/lang]
+ [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_END = "actionend";
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションが1フレーム経過するときに発行されるイベント
- * [/lang]
+ [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_TICK = "actiontick";
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションが追加された時に、タイムラインに対して発行されるイベント
- * [/lang]
+ [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_ADDED = "actionadded";
 
 /**
- * [lang:ja]
+ [lang:ja]
  * アクションが削除された時に、タイムラインに対して発行されるイベント
- * [/lang]
+ [/lang]
  * @type {String}
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";

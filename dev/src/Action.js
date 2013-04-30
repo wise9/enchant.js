@@ -7,7 +7,7 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
      * @name enchant.Action
      * @class
-     * [lang:ja]
+     [lang:ja]
      * アニメーションタイムラインを構成する、実行したい処理を指定するためのクラス.
      *
      * タイムラインに追加されたアクションは順に実行される。
@@ -23,8 +23,8 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
      * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
      * @config {function} [onactiontick] アクションが1フレーム経過するときのイベントリスナ
      * @config {function} [onactionend] アクションがが終了する時のイベントリスナ
-     * [/lang]
-     * [lang:en]
+     [/lang]
+     [lang:en]
      * Action class.
      * Actions are units that make up the time line,
      * It is a unit used to specify the action you want to perform.
@@ -41,7 +41,7 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
      * @config {function} [onactionstart] Event listener for when the action is initiated
      * @config {function} [onactiontick] Event listener for when the action has passed one frame
      * @config {function} [onactionend] Event listener for when the action is finished
-     * [/lang]
+     [/lang]
      * @constructs
      */
     initialize: function(param) {

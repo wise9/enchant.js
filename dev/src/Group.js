@@ -108,6 +108,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     addChild: function(node) {
+        if (node.parentNode) {
+            node.parentNode.removeChild(node);
+        }
         this.childNodes.push(node);
         node.parentNode = this;
         var childAdded = new enchant.Event('childadded');
@@ -139,6 +142,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     insertBefore: function(node, reference) {
+        if (node.parentNode) {
+            node.parentNode.removeChild(node);
+        }
         var i = this.childNodes.indexOf(reference);
         if (i !== -1) {
             this.childNodes.splice(i, 0, node);

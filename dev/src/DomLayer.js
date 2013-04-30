@@ -3,18 +3,16 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         var core = enchant.Core.instance;
         enchant.Group.call(this);
 
-        this.width = this._width = core.width;
-        this.height = this._height = core.height;
-
         this._touchEventTarget = null;
 
         this._element = document.createElement('div');
-        this._element.style.width = this.width + 'px';
-        this._element.style.height = this.height + 'px';
         this._element.style.position = 'absolute';
 
         this._domManager = new enchant.DomManager(this, this._element);
         this._domManager.layer = this;
+
+        this.width = core.width;
+        this.height = core.height;
 
         var touch = [
             enchant.Event.TOUCH_START,
@@ -53,6 +51,57 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         this.addEventListener('childadded', __onchildadded);
 
     },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._element.style.width = width + 'px';
+        }
+    },
+    height: {
+        get: function() {
+            return this._height;
+        },
+        set: function(height) {
+            this._height = height;
+            this._element.style.height = height + 'px';
+        }
+    },
+    addChild: function(node) {
+        this.childNodes.push(node);
+        node.parentNode = this;
+        var childAdded = new enchant.Event('childadded');
+        childAdded.node = node;
+        childAdded.next = null;
+        this.dispatchEvent(childAdded);
+        node.dispatchEvent(new enchant.Event('added'));
+        if (this.scene) {
+            node.scene = this.scene;
+            var addedToScene = new enchant.Event('addedtoscene');
+            node.dispatchEvent(addedToScene);
+        }
+    },
+    insertBefore: function(node, reference) {
+        var i = this.childNodes.indexOf(reference);
+        if (i !== -1) {
+            this.childNodes.splice(i, 0, node);
+            node.parentNode = this;
+            var childAdded = new enchant.Event('childadded');
+            childAdded.node = node;
+            childAdded.next = reference;
+            this.dispatchEvent(childAdded);
+            node.dispatchEvent(new enchant.Event('added'));
+            if (this.scene) {
+                node.scene = this.scene;
+                var addedToScene = new enchant.Event('addedtoscene');
+                node.dispatchEvent(addedToScene);
+            }
+        } else {
+            this.addChild(node);
+        }
+    },
     _startRendering: function() {
         this.addEventListener('exitframe', this._onexitframe);
         this._onexitframe();
@@ -83,12 +132,9 @@ enchant.DomLayer = enchant.Class.create(enchant.Group, {
         node._dirty = false;
     },
     _determineEventTarget: function() {
-        if (this._touchEventTarget) {
-            if (this._touchEventTarget !== this) {
-                return this._touchEventTarget;
-            }
-        }
-        return null;
+        var target = this._touchEventTarget;
+        this._touchEventTarget = null;
+        return (target === this) ? null : target;
     }
 });
 

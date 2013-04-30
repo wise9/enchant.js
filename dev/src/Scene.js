@@ -36,9 +36,6 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         // Call initialize method of enchant.Group
         enchant.Group.call(this);
 
-        this.width = core.width;
-        this.height = core.height;
-
         // All nodes (entities, groups, scenes) have reference to the scene that it belongs to.
         this.scene = this;
 
@@ -46,12 +43,9 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
 
         // Create div tag which possesses its layers
         this._element = document.createElement('div');
-        this._element.style.width = this.width + 'px';
-        this._element.style.height = this.height + 'px';
         this._element.style.position = 'absolute';
         this._element.style.overflow = 'hidden';
         this._element.style[enchant.ENV.VENDOR_PREFIX + 'TransformOrigin'] = '0 0';
-        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + enchant.Core.instance.scale + ')';
 
         this._layers = {};
         this._layerPriority = [];
@@ -69,6 +63,10 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
                 layer.dispatchEvent(new enchant.Event(enchant.Event.EXIT_FRAME));
             }
         };
+
+        this.addEventListener(enchant.Event.CORE_RESIZE, this._oncoreresize);
+
+        this._oncoreresize(core);
     },
     x: {
         get: function() {
@@ -89,6 +87,28 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._y = y;
             for (var type in this._layers) {
                 this._layers[type].y = y;
+            }
+        }
+    },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            for (var type in this._layers) {
+                this._layers[type].width = width;
+            }
+        }
+    },
+    height: {
+        get: function() {
+            return this._height;
+        },
+        set: function(height) {
+            this._height = height;
+            for (var type in this._layers) {
+                this._layers[type].height = height;
             }
         }
     },
@@ -133,6 +153,17 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._backgroundColor = this._element.style.backgroundColor = color;
         }
     },
+    _oncoreresize: function(e) {
+        this._element.style.width = e.width + 'px';
+        this.width = e.width;
+        this._element.style.height = e.height + 'px';
+        this.height = e.height;
+        this._element.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'scale(' + e.scale + ')';
+
+        for (var type in this._layers) {
+            this._layers[type].dispatchEvent(e);
+        }
+    },
     addLayer: function(type, i) {
         var core = enchant.Core.instance;
         if (this._layers[type]) {
@@ -146,7 +177,11 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
         var element = layer._element;
         if (typeof i === 'number') {
             var nextSibling = this._element.childNodes[i];
-            this._element.insertBefore(element, nextSibling);
+            if (nextSibling) {
+                this._element.insertBefore(element, nextSibling);
+            } else {
+                this._element.appendChild(element);
+            }
             this._layerPriority.splice(i, 0, type);
         } else {
             this._element.appendChild(element);
@@ -171,19 +206,19 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
+        var target, i;
         if (child._element) {
-            if (!this._layers.Dom) {
-                this.addLayer('Dom', 1);
-            }
-            this._layers.Dom.insertBefore(child, next);
-            child._layer = this._layers.Dom;
+            target = 'Dom';
+            i = 1;
         } else {
-            if (!this._layers.Canvas) {
-                this.addLayer('Canvas', 0);
-            }
-            this._layers.Canvas.insertBefore(child, next);
-            child._layer = this._layers.Canvas;
+            target = 'Canvas';
+            i = 0;
         }
+        if (!this._layers[target]) {
+            this.addLayer(target, i);
+        }
+        child._layer = this._layers[target];
+        this._layers[target].insertBefore(child, next);
         child.parentNode = this;
     },
     _onchildremoved: function(e) {

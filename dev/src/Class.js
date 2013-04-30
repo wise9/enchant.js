@@ -171,7 +171,7 @@ enchant.Class.create = function(superclass, definition) {
     }
 
     var tree = this.getInheritanceTree(superclass);
-    for (var i = tree.length - 1; i >= 0; i--) {
+    for (var i = 0, l = tree.length; i < l; i++) {
         if (typeof tree[i]._inherited === 'function') {
             tree[i]._inherited(Constructor);
             break;

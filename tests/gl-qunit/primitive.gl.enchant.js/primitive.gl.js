@@ -22,7 +22,6 @@ if (document.createElement('canvas').getContext('experimental-webgl')) {
         var error = game.GL._gl.getError();
         notEqual(error, gl.INVALID_OPERATION);
     });
-
 }else{
     console.log('\nskipping tests using webgl..');
 }

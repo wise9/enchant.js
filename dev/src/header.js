@@ -62,14 +62,16 @@ if (typeof Function.prototype.bind !== 'function') {
 }
 
 window.getTime = (function() {
-
+    var origin;
     if (window.performance && window.performance.now) {
+        origin = Date.now();
         return function() {
-            return window.performance.now();
+            return origin + window.performance.now();
         };
     } else if (window.performance && window.performance.webkitNow) {
+        origin = Date.now();
         return function() {
-            return window.performance.webkitNow();
+            return origin + window.performance.webkitNow();
         };
     } else {
         return Date.now;
@@ -88,11 +90,10 @@ window.requestAnimationFrame =
         var lastTime = window.getTime();
         var frame = 1000 / 60;
         return function(func) {
-            var currentTime = window.getTime();
             var _id = setTimeout(function() {
-                func(window.getTime());
-            }, Math.max(0, lastTime + frame - currentTime));
-            lastTime = currentTime;
+                lastTime = window.getTime();
+                func(lastTime);
+            }, Math.max(0, lastTime + frame - window.getTime()));
             return _id;
         };
     }());
@@ -163,7 +164,7 @@ var enchant = function(modules) {
             if (module.hasOwnProperty(prop)) {
                 if (typeof module[prop] === 'function') {
                     window[prop] = module[prop];
-                } else if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                } else if (typeof module[prop] === 'object' && module[prop] !== null && Object.getPrototypeOf(module[prop]) === Object.prototype) {
                     if (modules == null) {
                         submodules.push(prop);
                     } else {
@@ -182,7 +183,10 @@ var enchant = function(modules) {
         }
     }(enchant, ''));
 
-    window.Game = window.Core;
+    // issue 185
+    if (enchant.Class.getInheritanceTree(window.Game).length <= enchant.Class.getInheritanceTree(window.Core).length) {
+        window.Game = window.Core;
+    }
 
     if (modules != null && modules.length) {
         throw new Error('Cannot load module: ' + modules.join(', '));

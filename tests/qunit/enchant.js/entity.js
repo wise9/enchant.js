@@ -11,10 +11,13 @@ module('Entity', {
 	setup: function () {
 		enchant();
 		var game = new Core(320, 320);
+        game.preload('start.png');
+        // working around of error "game.assets['start.png'] is undefined"
+        game.assets['start.png'] = new Surface();
 	},
-	teardown: function () {
-		// Coreインスタンスを破棄したいのだがそんな処理は無い様子
-	}
+    // Coreインスタンスを破棄したいのだがそんな処理は無い様子
+    teardown: function () {
+    }
 });
 
 

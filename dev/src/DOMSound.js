@@ -184,12 +184,16 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
  *
  * @param {String} src ロードする音声ファイルのパス.
  * @param {String} [type] 音声ファイルのMIME Type.
+ * @param {Function} callback ロード完了時のコールバック.
+ * @param {Function} [onerror] ロード失敗時のコールバック.
  [/lang]
  [lang:en]
  * Loads an audio file and creates Sound object.
  *
  * @param {String} src Path of the audio file to be loaded.
  * @param {String} [type] MIME Type of the audio file.
+ * @param {Function} callback on load callback.
+ * @param {Function} [onerror] on error callback.
  [/lang]
  [lang:de]
  * Läd eine Audio Datei und erstellt ein Sound objekt.
@@ -197,9 +201,10 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
  * @param {String} src Pfad zu der zu ladenden Audiodatei.
  * @param {String} [type] MIME Type der Audtiodatei.
  [/lang]
+ * @return {enchant.DOMSound} DOMSound
  * @static
  */
-enchant.DOMSound.load = function(src, type, callback) {
+enchant.DOMSound.load = function(src, type, callback, onerror) {
     if (type == null) {
         var ext = enchant.Core.findExt(src);
         if (ext) {
@@ -209,9 +214,12 @@ enchant.DOMSound.load = function(src, type, callback) {
         }
     }
     type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
+    onerror = onerror || function() {};
 
     var sound = Object.create(enchant.DOMSound.prototype);
     enchant.EventTarget.call(sound);
+    sound.addEventListener('load', callback);
+    sound.addEventListener('error', onerror);
     var audio = new Audio();
     if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
@@ -220,16 +228,19 @@ enchant.DOMSound.load = function(src, type, callback) {
         }, 0);
     } else {
         if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
-            audio.src = src;
-            audio.load();
-            audio.autoplay = false;
-            audio.onerror = function() {
-                throw new Error('Cannot load an asset: ' + audio.src);
-            };
             audio.addEventListener('canplaythrough', function() {
                 sound.duration = audio.duration;
                 sound.dispatchEvent(new enchant.Event('load'));
             }, false);
+            audio.src = src;
+            audio.load();
+            audio.autoplay = false;
+            audio.onerror = function() {
+                var e = new enchant.Event(enchant.Event.ERROR);
+                e.message = 'Cannot load an asset: ' + audio.src;
+                enchant.Core.instance.dispatchEvent(e);
+                sound.dispatchEvent(e);
+            };
             sound._element = audio;
         } else if (type === 'audio/mpeg') {
             var embed = document.createElement('embed');
@@ -269,9 +280,6 @@ enchant.DOMSound.load = function(src, type, callback) {
                 sound.dispatchEvent(new enchant.Event('load'));
             }, 0);
         }
-        sound.addEventListener('load', function() {
-            callback.call(enchant.Core.instance);
-        });
     }
     return sound;
 };

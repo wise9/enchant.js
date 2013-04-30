@@ -89,28 +89,39 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
     }
 });
 
-enchant.WebAudioSound.load = function(src, type, callback) {
-    var actx = enchant.WebAudioSound.audioContext;
-    var xhr = new XMLHttpRequest();
+enchant.WebAudioSound.load = function(src, type, callback, onerror) {
+    var canPlay = (new Audio()).canPlayType(type);
     var sound = new enchant.WebAudioSound();
-    var mimeType = 'audio/' + enchant.Core.findExt(src);
-    // TODO check Audio.canPlayType(mimeType)
-    xhr.responseType = 'arraybuffer';
-    xhr.open('GET', src, true);
-    xhr.onload = function() {
-        actx.decodeAudioData(
-            xhr.response,
-            function(buffer) {
-                sound.buffer = buffer;
-                callback.call(enchant.Core.instance);
-            },
-            function(error) {
-                // TODO change to enchant Error
-                window.console.log(error);
-            }
-        );
-    };
-    xhr.send(null);
+    onerror = onerror || function() {};
+    sound.addEventListener(enchant.Event.LOAD, callback);
+    sound.addEventListener(enchant.Event.ERROR, onerror);
+    var e = new enchant.Event(enchant.Event.ERROR);
+    e.message = 'Cannot load an asset: ' + src;
+    var actx, xhr;
+    if (canPlay === 'maybe' || canPlay === 'probably') {
+        actx = enchant.WebAudioSound.audioContext;
+        xhr = new XMLHttpRequest();
+        xhr.responseType = 'arraybuffer';
+        xhr.open('GET', src, true);
+        xhr.onload = function() {
+            actx.decodeAudioData(
+                xhr.response,
+                function(buffer) {
+                    sound.buffer = buffer;
+                    sound.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                },
+                function(error) {
+                    enchant.Core.instance.dispatchEvent(e);
+                    sound.dispatchEvent(e);
+                }
+            );
+        };
+        xhr.send(null);
+    } else {
+        setTimeout(function() {
+            sound.dispatchEvent(e);
+        }, 50);
+    }
     return sound;
 };
 

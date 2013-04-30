@@ -17,15 +17,15 @@ enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
     _onchildadded: function(e) {
         var child = e.node;
         var next = e.next;
-        this._layers.Canvas.insertBefore(child, next);
         child._layer = this._layers.Canvas;
+        this._layers.Canvas.insertBefore(child, next);
     },
     _onenter: function() {
         this._layers.Canvas._startRendering();
-        enchant.Game.instance.addEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.addEventListener('exitframe', this._dispatchExitframe);
     },
     _onexit: function() {
         this._layers.Canvas._stopRendering();
-        enchant.Game.instance.removeEventListener('exitframe', this._dispatchExitframe);
+        enchant.Core.instance.removeEventListener('exitframe', this._dispatchExitframe);
     }
 });

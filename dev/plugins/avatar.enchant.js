@@ -10,30 +10,29 @@
  * Avatar character plugin for enchant.js with 9leap.net
  *
  * @example
- *
- *  var core = new Core(320, 320);
- * core.preload('avatarBg1.png','avatarBg2.png','avatarBg3.png','bigmonster1.gif');
+ * var core = new Core(320, 320);
+ * core.preload('avatarBg1.png', 'avatarBg2.png', 'avatarBg3.png', 'bigmonster1.gif');
  * core.onload = function(){
- * 		core.rootScene.backgroundColor="#000000";
- * 		// show infinite scrolling background
- * 		bg =new AvatarBG(0); 
- * 		bg.y=50;
- * 		core.rootScene.addChild(bg);
- * 		
- * 		//show monster
- * 		monster = new AvatarMonster(core.assets['bigmonster1.gif']);
- * 		monster.x=200;
- * 		monster.y=100;
- * 		core.rootScene.addChild(monster);
- * 		
- * 		//show avatar
- * 		chara = new Avatar("2:2:1:2004:21230:22480");
- * 		core.rootScene.addChild(chara);
- * 		chara.scaleX=-1;
- * 		chara.scaleY=1;
- * 		chara.x=50;
- * 		chara.y=100;
- *  };
+ *     core.rootScene.backgroundColor = "#000000";
+ *     // show infinite scrolling background
+ *     bg = new AvatarBG(0);
+ *     bg.y = 50;
+ *     core.rootScene.addChild(bg);
+ *     
+ *     // show monster
+ *     monster = new AvatarMonster(core.assets['bigmonster1.gif']);
+ *     monster.x = 200;
+ *     monster.y = 100;
+ *     core.rootScene.addChild(monster);
+ *     
+ *     // show avatar
+ *     chara = new Avatar("2:2:1:2004:21230:22480");
+ *     core.rootScene.addChild(chara);
+ *     chara.scaleX = -1;
+ *     chara.scaleY = 1;
+ *     chara.x = 50;
+ *     chara.y = 100;
+ * };
  * core.start();
  */
 
@@ -174,7 +173,7 @@ enchant.avatar.AvatarBG = enchant.Class.create(enchant.Group, {
         this.tiles = [];
         for (i = 0; i < 14; i++) {
             var tile = new enchant.Sprite(32, 128);
-            tile.image = core.assets["avadtarBg1.png"];
+            tile.image = core.assets["avatarBg1.png"];
             tile.frame = mode;
             tile.x = i * 31 - 48;
             tile.y = 48;

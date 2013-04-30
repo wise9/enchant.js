@@ -44,10 +44,18 @@ enchant.DomManager = enchant.Class.create({
         var element = childManager.getDomElement();
         if (element instanceof Array) {
             element.forEach(function(child) {
-                this.element.insertBefore(child, nextElement);
+                if (nextElement) {
+                    this.element.insertBefore(child, nextElement);
+                } else {
+                    this.element.appendChild(child);
+                }
             }, this);
         } else {
-            this.element.insertBefore(element, nextElement);
+            if (nextElement) {
+                this.element.insertBefore(element, nextElement);
+            } else {
+                this.element.appendChild(element);
+            }
         }
         this.setLayer(this.layer);
     },
@@ -94,14 +102,16 @@ enchant.DomManager = enchant.Class.create({
             node._offsetX += node.parentNode._offsetX;
             node._offsetY += node.parentNode._offsetY;
         }
-        this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' +
-        dest[0].toFixed(10) + ',' +
-        dest[1].toFixed(10) + ',' +
-        dest[2].toFixed(10) + ',' +
-        dest[3].toFixed(10) + ',' +
-        dest[4].toFixed(10) + ',' +
-        dest[5].toFixed(10) +
-        ')';
+        if (node._dirty) {
+            this.style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(' +
+                dest[0].toFixed(10) + ',' +
+                dest[1].toFixed(10) + ',' +
+                dest[2].toFixed(10) + ',' +
+                dest[3].toFixed(10) + ',' +
+                dest[4].toFixed(10) + ',' +
+                dest[5].toFixed(10) +
+            ')';
+        }
         this.domRender();
     },
     domRender: function() {
@@ -112,8 +122,12 @@ enchant.DomManager = enchant.Class.create({
         if(!node.__styleStatus) {
             node.__styleStatus = {};
         }
-        node._style.width = node.width + 'px';
-        node._style.height = node.height + 'px';
+        if (node.width !== null) {
+            node._style.width = node.width + 'px';
+        }
+        if (node.height !== null) {
+            node._style.height = node.height + 'px';
+        }
         node._style.opacity = node._opacity;
         node._style['background-color'] = node._backgroundColor;
         if (typeof node._visible !== 'undefined') {
@@ -122,10 +136,12 @@ enchant.DomManager = enchant.Class.create({
         if (typeof node.domRender === 'function') {
             node.domRender(this.element);
         }
+        var value;
         for (var prop in node._style) {
-            if(node.__styleStatus[prop] !== node._style[prop]) {
-                this.style.setProperty(prop, node._style[prop]);
-                node.__styleStatus[prop] = node._style[prop];
+            value = node._style[prop];
+            if(node.__styleStatus[prop] !== value && value != null) {
+                this.style.setProperty(prop, '' + value);
+                node.__styleStatus[prop] = value;
             }
         }
     },

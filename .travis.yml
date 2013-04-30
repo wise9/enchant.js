@@ -3,3 +3,17 @@ node_js:
   - 0.8
 before_install:
   - phantomjs --version
+before_script:
+  - npm install -g grunt-cli
+notifications:
+  email:
+    - "fushimi.ryohei@gmail.com"
+  irc:
+    channels:
+      - "irc.freenode.org#enchantjs"
+    template:
+      - "%{repository} (%{commit}) : %{message} %{foo} "
+      - "Build details: %{build_url}"
+  webhooks:
+      - "https://zapier.com/hooks/catch/n/1zlV/"
+

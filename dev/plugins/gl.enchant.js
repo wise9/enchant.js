@@ -1,6 +1,5 @@
 /**
  * @fileOverview
- [lang:ja]
  * gl.enchant.js
  * @version 0.3.7
  * @require enchant.js v0.4.5+
@@ -8,32 +7,22 @@
  * @author Ubiquitous Entertainment Inc.
  *
  * @description
+ [lang:ja]
  * WebGLを用いた描画ライブラリ
  * enchant.js と組み合わせることで高度な3D描画と、2D描画を組み合わせることができる
  *
  * @detail
  * ベクトル・行列演算にgl-matrix.jsを使用しています.
- * gl-matrix.js:
- * https://github.com/toji/gl-matrix/
- *
  [/lang]
  [lang:en]
- * gl.enchant.js
- * @version 0.3.6
- * @require enchant.js v0.4.5+
- * @require gl-matrix.js 1.3.7+
- * @author Ubiquitous Entertainment Inc.
- *
- * @description
  * Drawing library using WebGL
  * By combining with enchant.js, high quality 3D drawing and combination with 2D drawing is possible
  *
  * @detail
  * Uses gl-matrix.js in vector, matrix operation.
+ [/lang]
  * gl-matrix.js:
  * https://github.com/toji/gl-matrix/
- *
- [/lang]
  */
 
 /**

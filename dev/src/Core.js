@@ -58,52 +58,21 @@
             }
             core = enchant.Core.instance = this;
 
-            /**
-             [lang:ja]
-             * 画面の横幅.
-             [/lang]
-             [lang:en]
-             * The width of the core screen.
-             [/lang]
-             [lang:de]
-             * Breite des Spieles.
-             [/lang]
-             * @type {Number}
-             */
-            this.width = width || 320;
-            /**
-             [lang:ja]
-             * 画面の高さ.
-             [/lang]
-             [lang:en]
-             * The height of the core screen.
-             [/lang]
-             [lang:de]
-             * Höhe des Spieles.
-             [/lang]
-             * @type {Number}
-             */
-            this.height = height || 320;
-            /**
-             [lang:ja]
-             * 画面の表示倍率.
-             [/lang]
-             [lang:en]
-             * The scaling of the core rendering.
-             [/lang]
-             [lang:de]
-             * Skalierung der Spieldarstellung.
-             [/lang]
-             * @type {Number}
-             */
-            this.scale = 1;
+            this._calledTime = 0;
+            this._mousedownID = 0;
+            this._surfaceID = 0;
+            this._soundID = 0;
+
+            this._scenes = [];
+
+            width = width || 320;
+            height = height || 320;
 
             var stage = document.getElementById('enchant-stage');
+            var scale, sWidth, sHeight;
             if (!stage) {
                 stage = document.createElement('div');
                 stage.id = 'enchant-stage';
-//                stage.style.width = window.innerWidth + 'px';
-//                stage.style.height = window.innerHeight + 'px';
                 stage.style.position = 'absolute';
 
                 if (document.body.firstChild) {
@@ -111,24 +80,23 @@
                 } else {
                     document.body.appendChild(stage);
                 }
-                this.scale = Math.min(
-                    window.innerWidth / this.width,
-                    window.innerHeight / this.height
+                scale = Math.min(
+                    window.innerWidth / width,
+                    window.innerHeight / height
                 );
                 this._pageX = 0;
                 this._pageY = 0;
             } else {
                 var style = window.getComputedStyle(stage);
-                width = parseInt(style.width, 10);
-                height = parseInt(style.height, 10);
-                if (width && height) {
-                    this.scale = Math.min(
-                        width / this.width,
-                        height / this.height
+                sWidth = parseInt(style.width, 10);
+                sHeight = parseInt(style.height, 10);
+                if (sWidth && sHeight) {
+                    scale = Math.min(
+                        sWidth / width,
+                        sHeight / height
                     );
                 } else {
-                    stage.style.width = this.width + 'px';
-                    stage.style.height = this.height + 'px';
+                    scale = 1;
                 }
                 while (stage.firstChild) {
                     stage.removeChild(stage.firstChild);
@@ -139,12 +107,15 @@
                 this._pageX = Math.round(window.scrollX || window.pageXOffset + bounding.left);
                 this._pageY = Math.round(window.scrollY || window.pageYOffset + bounding.top);
             }
-            if (!this.scale) {
-                this.scale = 1;
-            }
             stage.style.fontSize = '12px';
             stage.style.webkitTextSizeAdjust = 'none';
             this._element = stage;
+
+            this.addEventListener('coreresize', this._oncoreresize);
+
+            this._width = width;
+            this._height = height;
+            this.scale = scale;
 
             /**
              [lang:ja]
@@ -213,19 +184,18 @@
             this.assets = {};
             var assets = this._assets = [];
             (function detectAssets(module) {
-                if (module.assets instanceof Array) {
-                    [].push.apply(assets, module.assets);
+                if (module.assets) {
+                    enchant.Core.instance.preload(module.assets);
                 }
                 for (var prop in module) {
                     if (module.hasOwnProperty(prop)) {
-                        if (typeof module[prop] === 'object' && Object.getPrototypeOf(module[prop]) === Object.prototype) {
+                        if (typeof module[prop] === 'object' && module[prop] !== null && Object.getPrototypeOf(module[prop]) === Object.prototype) {
                             detectAssets(module[prop]);
                         }
                     }
                 }
             }(enchant));
 
-            this._scenes = [];
             /**
              [lang:ja]
              * 現在のScene. Sceneスタック中の一番上のScene.
@@ -267,41 +237,12 @@
              [/lang]
              * @type {enchant.Scene}
              */
-            this.loadingScene = new enchant.Scene();
-            this.loadingScene.backgroundColor = '#000';
-            var barWidth = this.width * 0.4 | 0;
-            var barHeight = this.width * 0.05 | 0;
-            var border = barWidth * 0.03 | 0;
-            var bar = new enchant.Sprite(barWidth, barHeight);
-
-            bar.x = (this.width - barWidth) / 2;
-            bar.y = (this.height - barHeight) / 2;
-            var image = new enchant.Surface(barWidth, barHeight);
-            image.context.fillStyle = '#fff';
-            image.context.fillRect(0, 0, barWidth, barHeight);
-            image.context.fillStyle = '#000';
-            image.context.fillRect(border, border, barWidth - border * 2, barHeight - border * 2);
-            bar.image = image;
-            var progress = 0, _progress = 0;
-            this.addEventListener('progress', function(e) {
-                progress = e.loaded / e.total;
-            });
-            bar.addEventListener('enterframe', function() {
-                _progress *= 0.9;
-                _progress += progress * 0.1;
-                image.context.fillStyle = '#fff';
-                image.context.fillRect(border, 0, (barWidth - border * 2) * _progress, barHeight);
-            });
-            this.loadingScene.addChild(bar);
-
-            this._mousedownID = 0;
-            this._surfaceID = 0;
-            this._soundID = 0;
+            this.loadingScene = new enchant.LoadingScene();
 
             /**
-             * [lang:ja]
+             [lang:ja]
              * 一度でも game.start() が呼ばれたことがあるかどうか。
-             * [/lang]
+             [/lang]
              * @type {Boolean}
              * @private
              */
@@ -488,9 +429,91 @@
                     var core = enchant.Core.instance;
                     var evt = new enchant.Event(enchant.Event.TOUCH_END);
                     evt._initPosition(e.pageX, e.pageY);
-                    core._touchEventTarget[core._mousedownID].dispatchEvent(evt);
+                    var target = core._touchEventTarget[core._mousedownID];
+                    if (target) {
+                        target.dispatchEvent(evt);
+                    }
                     delete core._touchEventTarget[core._mousedownID];
                 }, false);
+            }
+        },
+        /**
+         [lang:ja]
+         * 画面の横幅.
+         [/lang]
+         [lang:en]
+         * The width of the core screen.
+         [/lang]
+         [lang:de]
+         * Breite des Spieles.
+         [/lang]
+         * @type {Number}
+         */
+        width: {
+            get: function() {
+                return this._width;
+            },
+            set: function(w) {
+                this._width = w;
+                this._dispatchCoreResizeEvent();
+            }
+        },
+        /**
+         [lang:ja]
+         * 画面の高さ.
+         [/lang]
+         [lang:en]
+         * The height of the core screen.
+         [/lang]
+         [lang:de]
+         * Höhe des Spieles.
+         [/lang]
+         * @type {Number}
+         */
+        height: {
+            get: function() {
+                return this._height;
+            },
+            set: function(h) {
+                this._height = h;
+                this._dispatchCoreResizeEvent();
+            }
+        },
+        /**
+         [lang:ja]
+         * 画面の表示倍率.
+         [/lang]
+         [lang:en]
+         * The scaling of the core rendering.
+         [/lang]
+         [lang:de]
+         * Skalierung der Spieldarstellung.
+         [/lang]
+         * @type {Number}
+         */
+        scale: {
+            get: function() {
+                return this._scale;
+            },
+            set: function(s) {
+                this._scale = s;
+                this._dispatchCoreResizeEvent();
+            }
+        },
+        _dispatchCoreResizeEvent: function() {
+            var e = new enchant.Event('coreresize');
+            e.width = this._width;
+            e.height = this._height;
+            e.scale = this._scale;
+            this.dispatchEvent(e);
+        },
+        _oncoreresize: function(e) {
+            this._element.style.width = Math.floor(this._width * this._scale) + 'px';
+            this._element.style.height = Math.floor(this._height * this._scale) + 'px';
+            var scene;
+            for (var i = 0, l = this._scenes.length; i < l; i++) {
+                scene = this._scenes[i];
+                scene.dispatchEvent(e);
             }
         },
         /**
@@ -568,25 +591,42 @@
          * @param {...String} assets Pfade zu den Dateien die im voraus geladen werden sollen.
          * Mehrfachangaben möglich.
          [/lang]
+         * @return {enchant.Core} this
          */
         preload: function(assets) {
+            var a;
             if (!(assets instanceof Array)) {
-                assets = Array.prototype.slice.call(arguments);
+                if (typeof assets === 'object') {
+                    a = [];
+                    for (var name in assets) {
+                        if (assets.hasOwnProperty(name)) {
+                            a.push([ assets[name], name ]);
+                        }
+                    }
+                    assets = a;
+                } else {
+                    assets = Array.prototype.slice.call(arguments);
+                }
             }
-            [].push.apply(this._assets, assets);
+            Array.prototype.push.apply(this._assets, assets);
+            return this;
         },
         /**
          [lang:ja]
          * ファイルのロードを行う.
          *
          * @param {String} asset ロードするファイルのパス.
+         * @param {String} [alias] ロードするファイルに設定したい名前.
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
+         * @param {Function} [onerror] ファイルのロードに失敗したときに呼び出される関数.
          [/lang]
          [lang:en]
          * Loads a file.
          *
          * @param {String} asset File path of the resource to be loaded.
+         * @param {String} asset name of the resource to be loaded.
          * @param {Function} [callback] Function called up when file loading is finished.
+         * @param {Function} [callback] Function called up when file loading is failed.
          [/lang]
          [lang:de]
          * Laden von Dateien.
@@ -595,41 +635,59 @@
          * @param {Function} [callback] Funktion die ausgeführt wird wenn das laden abgeschlossen wurde.
          [/lang]
          */
-        load: function(src, callback) {
-            if (callback == null) {
-                callback = function() {
-                };
+        load: function(src, alias, callback, onerror) {
+            var assetName, offset;
+            if (typeof arguments[1] === 'string') {
+                assetName = alias;
+                offset = 1;
+            } else {
+                assetName = src;
+                offset = 0;
             }
+            callback = arguments[1 + offset] || function() {};
+            onerror = arguments[2 + offset] || function() {};
 
             var ext = enchant.Core.findExt(src);
 
-            if (enchant.Core._loadFuncs[ext]) {
-                enchant.Core._loadFuncs[ext].call(this, src, callback, ext);
-            }
-            else {
-                var req = new XMLHttpRequest();
-                req.open('GET', src, true);
-                req.onreadystatechange = function(e) {
-                    if (req.readyState === 4) {
-                        if (req.status !== 200 && req.status !== 0) {
-                            throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
-                        }
-
-                        var type = req.getResponseHeader('Content-Type') || '';
-                        if (type.match(/^image/)) {
-                            core.assets[src] = enchant.Surface.load(src);
-                            core.assets[src].addEventListener('load', callback);
-                        } else if (type.match(/^audio/)) {
-                            core.assets[src] = enchant.Sound.load(src, type);
-                            core.assets[src].addEventListener('load', callback);
-                        } else {
-                            core.assets[src] = req.responseText;
-                            callback();
-                        }
-                    }
+            return enchant.Deferred.next(function() {
+                var d = new enchant.Deferred();
+                var _callback = function(e) {
+                    d.call(e);
+                    callback.call(this, e);
                 };
-                req.send(null);
-            }
+                var _onerror = function(e) {
+                    d.fail(e);
+                    onerror.call(this, e);
+                };
+                if (enchant.Core._loadFuncs[ext]) {
+                    enchant.Core.instance.assets[assetName] = enchant.Core._loadFuncs[ext](src, ext, _callback, _onerror);
+                } else {
+                    var req = new XMLHttpRequest();
+                    req.open('GET', src, true);
+                    req.onreadystatechange = function() {
+                        if (req.readyState === 4) {
+                            if (req.status !== 200 && req.status !== 0) {
+                                // throw new Error(req.status + ': ' + 'Cannot load an asset: ' + src);
+                                var e = new enchant.Event('error');
+                                e.message = req.status + ': ' + 'Cannot load an asset: ' + src;
+                                _onerror.call(enchant.Core.instance, e);
+                            }
+
+                            var type = req.getResponseHeader('Content-Type') || '';
+                            if (type.match(/^image/)) {
+                                core.assets[assetName] = enchant.Surface.load(src, _callback, _onerror);
+                            } else if (type.match(/^audio/)) {
+                                core.assets[assetName] = enchant.Sound.load(src, type, _callback, _onerror);
+                            } else {
+                                core.assets[assetName] = req.responseText;
+                                _callback.call(enchant.Core.instance, new enchant.Event('laod'));
+                            }
+                        }
+                    };
+                    req.send(null);
+                }
+                return d;
+            });
         },
         /**
          [lang:ja]
@@ -653,22 +711,25 @@
          * {@link enchant.Core#currentScene} aktualisiert. Sollten Dateien die im voraus geladen werden
          * sollen vorhanden sein, beginnt das laden dieser Dateien und der Ladebildschirm wird dargestellt.
          [/lang]
+         * @return {enchant.Deferred} Deferred
          */
-        start: function() {
+        start: function(deferred) {
             var onloadTimeSetter = function() {
-                this.currentTime = this.getTime();
-                this._nextTime = 0;
+                this.frame = 0;
                 this.removeEventListener('load', onloadTimeSetter);
-                this.running = true;
-                this.ready = true;
-                this._requestNextFrame();
             };
             this.addEventListener('load', onloadTimeSetter);
 
-            if (!this._activated && this._assets.length) {
+            this.currentTime = window.getTime();
+            this.running = true;
+            this.ready = true;
+
+            if (!this._activated) {
                 this._activated = true;
-                if (enchant.Sound.enabledInMobileSafari && !core._touched &&
-                    enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
+                if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
+                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
+                    navigator.userAgent.indexOf('iPad') !== -1)) {
+                    var d = new enchant.Deferred();
                     var scene = new enchant.Scene();
                     scene.backgroundColor = '#000';
                     var size = Math.round(core.width / 10);
@@ -680,39 +741,63 @@
                     var width = sprite.image.context.measureText('Touch to Start').width;
                     sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
                     scene.addChild(sprite);
-                    document.addEventListener('touchstart', function() {
+                    document.addEventListener('mousedown', function waitTouch() {
+                        document.removeEventListener('mousedown', waitTouch);
                         core._touched = true;
                         core.removeScene(scene);
-                        core.start();
-                    }, true);
+                        core.start(d);
+                    }, false);
                     core.pushScene(scene);
-                    return;
+                    return d;
                 }
-
-                var o = {};
-                var assets = this._assets.filter(function(asset) {
-                    return asset in o ? false : o[asset] = true;
-                });
-                var loaded = 0,
-                    len = assets.length,
-                    loadFunc = function() {
-                        var e = new enchant.Event('progress');
-                        e.loaded = ++loaded;
-                        e.total = len;
-                        core.dispatchEvent(e);
-                        if (loaded === len) {
-                            core.removeScene(core.loadingScene);
-                            core.dispatchEvent(new enchant.Event('load'));
-                        }
-                    };
-
-                for (var i = 0; i < len; i++) {
-                    this.load(assets[i], loadFunc);
-                }
-                this.pushScene(this.loadingScene);
-            } else {
-                this.dispatchEvent(new enchant.Event('load'));
             }
+
+            this._requestNextFrame(0);
+
+            var ret = this._requestPreload()
+                .next(function() {
+                    enchant.Core.instance.loadingScene.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                });
+
+            if (deferred) {
+                ret.next(function(arg) {
+                    deferred.call(arg);
+                })
+                .error(function(arg) {
+                    deferred.fail(arg);
+                });
+            }
+
+            return ret;
+        },
+        _requestPreload: function() {
+            var o = {};
+            var loaded = 0,
+                len = 0,
+                loadFunc = function() {
+                    var e = new enchant.Event('progress');
+                    e.loaded = ++loaded;
+                    e.total = len;
+                    core.loadingScene.dispatchEvent(e);
+                };
+            this._assets
+                .reverse()
+                .forEach(function(asset) {
+                    var src, name;
+                    if (asset instanceof Array) {
+                        src = asset[0];
+                        name = asset[1];
+                    } else {
+                        src = name = asset;
+                    }
+                    if (!o[name]) {
+                        o[name] = this.load(src, name, loadFunc);
+                        len++;
+                    }
+                }, this);
+
+            this.pushScene(this.loadingScene);
+            return enchant.Deferred.parallel(o);
         },
         /**
          [lang:ja]
@@ -732,10 +817,11 @@
          * Auch wenn die enchant.Core.instance._debug Variable gesetzt ist,
          * kann der Debug-Modus gestartet werden.
          [/lang]
+         * @return {enchant.Deferred} Deferred
          */
         debug: function() {
             this._debug = true;
-            this.start();
+            return this.start();
         },
         actualFps: {
             get: function() {
@@ -743,41 +829,42 @@
             }
         },
         /**
-         * [lang:ja]
-         * 次のフレームの実行を要求する
-         * [/lang]
+         [lang:ja]
+         * 次のフレームの実行を要求する.
+         * @param {Number} requestAnimationFrameを呼び出すまでの遅延時間.
+         [/lang]
          * @private
          */
-        _requestNextFrame: function() {
+        _requestNextFrame: function(delay) {
             if (!this.ready) {
                 return;
             }
-            var core = this;
-            window.requestAnimationFrame(core._checkTick);
-        },
-        /**
-         * [lang:ja]
-         * もし1フレームぶんの時間が経過していれば、_tick 関数を実行する
-         * [/lang]
-         * @private
-         */
-        _checkTick: function(now) {
-            var core = enchant.Core.instance;
-            if (core._nextTime < now) {
-                // if enough time has passed, execute _tick
-                core._tick(now);
+            if (this.fps >= 60 || delay <= 16) {
+                this._calledTime = window.getTime();
+                window.requestAnimationFrame(this._callTick);
             } else {
-                // if enough time has not passed yet, request next frame
-                window.requestAnimationFrame(core._checkTick);
+                setTimeout(function() {
+                    var core = enchant.Core.instance;
+                    core._calledTime = window.getTime();
+                    window.requestAnimationFrame(core._callTick);
+                }, Math.max(0, delay));
             }
         },
-        _tick: function(now) {
+        /**
+         [lang:ja]
+         * Core#_tickを呼び出す.
+         [/lang]
+         * @private
+         */
+        _callTick: function(time) {
+            enchant.Core.instance._tick(time);
+        },
+        _tick: function(time) {
             var e = new enchant.Event('enterframe');
-            e.elapsed = now - this.currentTime;
+            var now = window.getTime();
+            var elapsed = e.elapsed = now - this.currentTime;
 
-            // frame fragment time, will be used in _checkTick
-            this._nextTime = now + 1000 / this.fps;
-            this._actualFps = e.elapsed > 0 ? (1000 / e.elapsed) : 0;
+            this._actualFps = elapsed > 0 ? (1000 / elapsed) : 0;
 
             var nodes = this.currentScene.childNodes.slice();
             var push = Array.prototype.push;
@@ -796,7 +883,9 @@
 
             this.dispatchEvent(new enchant.Event('exitframe'));
             this.frame++;
-            this._requestNextFrame();
+            now = window.getTime();
+            this.currentTime = now;
+            this._requestNextFrame(1000 / this.fps - (now - this._calledTime));
         },
         getTime: function() {
             return window.getTime();
@@ -865,10 +954,10 @@
             if (this.ready) {
                 return;
             }
-            this.currentTime = this.getTime();
+            this.currentTime = window.getTime();
             this.ready = true;
             this.running = true;
-            this._requestNextFrame();
+            this._requestNextFrame(0);
         },
 
         /**
@@ -1044,6 +1133,7 @@
          * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
          * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
          [/lang]
+         * @return {enchant.Core} this
          */
         keybind: function(key, button) {
             this._keybind[key] = button;
@@ -1073,11 +1163,11 @@
 
             this._internalButtondownListeners[key] = onxbuttondown;
             this._internalButtonupListeners[key] = onxbuttonup;
+            return this;
         },
         /**
          [lang:ja]
          * キーバインドを削除する.
-         *
          * @param {Number} key 削除するキーコード.
          [/lang]
          [lang:en]
@@ -1090,10 +1180,11 @@
          *
          * @param {Number} key Der Tastencode der entfernt werden soll.
          [/lang]
+         * @return {enchant.Core} this
          */
         keyunbind: function(key) {
             if (!this._keybind[key]) {
-                return;
+                return this;
             }
             var buttondowns = this._internalButtondownListeners;
             var buttonups = this._internalButtonupListeners;
@@ -1105,6 +1196,8 @@
             delete buttonups[key];
 
             delete this._keybind[key];
+
+            return this;
         },
         /**
          [lang:ja]
@@ -1126,21 +1219,31 @@
         }
     });
 
+    /**
+     [lang:ja]
+     * 拡張子に対応したアセットのロード関数.
+     * ロード関数はファイルのパス, 拡張子, コールバックを引数に取り,
+     * 対応したクラスのインスタンスを返す必要がある.
+     * コールバックはEvent.LOADとEvent.ERRORでハンドルする.
+     [/lang]
+     * @static
+     * @private
+     * @type {Object.<String, Function>}
+     */
     enchant.Core._loadFuncs = {};
     enchant.Core._loadFuncs['jpg'] =
         enchant.Core._loadFuncs['jpeg'] =
             enchant.Core._loadFuncs['gif'] =
                 enchant.Core._loadFuncs['png'] =
-                    enchant.Core._loadFuncs['bmp'] = function(src, callback) {
-                        this.assets[src] = enchant.Surface.load(src);
-                        this.assets[src].addEventListener('load', callback);
+                    enchant.Core._loadFuncs['bmp'] = function(src, ext, callback, onerror) {
+                        return enchant.Surface.load(src, callback, onerror);
                     };
     enchant.Core._loadFuncs['mp3'] =
         enchant.Core._loadFuncs['aac'] =
             enchant.Core._loadFuncs['m4a'] =
                 enchant.Core._loadFuncs['wav'] =
-                    enchant.Core._loadFuncs['ogg'] = function(src, callback, ext) {
-                        this.assets[src] = enchant.Sound.load(src, 'audio/' + ext, callback);
+                    enchant.Core._loadFuncs['ogg'] = function(src, ext, callback, onerror) {
+                        return enchant.Sound.load(src, 'audio/' + ext, callback, onerror);
                     };
 
     /**

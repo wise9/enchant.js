@@ -9,7 +9,7 @@
  */
 
 /**
- * [lang:ja]
+ [lang:ja]
  * イージング関数ライブラリ
  * {@link enchant.Easing} 以下にある関数は全て t(現在の時刻), b(初期値), c(変化後の値), d(値の変化にかける時間) の引数を取り、指定した時刻に取る値を返す。
  * ActionScript で広く使われている Robert Penner による Easing Equations を JavaScript に移植した。
@@ -17,9 +17,9 @@
  * @see http://www.robertpenner.com/easing/
  * @see http://www.robertpenner.com/easing/penner_chapter7_tweening.pdf
  *
- * [/lang]
- * [lang:en]
- * [/lang]
+ [/lang]
+ [lang:en]
+ [/lang]
  * Easing function library, from "Easing Equations" by Robert Penner.
  * @type {Object}
  * @namespace

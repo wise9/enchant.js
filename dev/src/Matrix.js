@@ -1,8 +1,5 @@
 enchant.Matrix = enchant.Class.create({
     initialize: function() {
-        if (enchant.Matrix.instance) {
-            return enchant.Matrix.instance;
-        }
         this.reset();
     },
     reset: function() {

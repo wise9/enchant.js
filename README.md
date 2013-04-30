@@ -78,6 +78,7 @@ If you want to send a pull request or join development enchant.js, please edit f
 
 To setup grunt.js (build tool for node.js) as npm package, type:
 
+    npm install -g grunt-cli
     npm install
 
 You additionally need [phantomjs](http://code.google.com/p/phantomjs/) to run qunit test in grunt.js.
@@ -85,11 +86,11 @@ You additionally need [phantomjs](http://code.google.com/p/phantomjs/) to run qu
 Build Tasks
 -----------
 
-- `grunt` do default tasks (lint concat min qunit exec:lang)
-- `grunt watch` watch dev/src/*.js and exec `grunt concat min lang` when something is modified
-- `grunt lint` check sourcecode in dev/classes/*.js with jshint
+- `grunt` do default tasks (jshint concat uglify qunit exec:lang)
+- `grunt watch` watch dev/src/*.js and exec `grunt concat uglify lang` when something is modified
+- `grunt jshint` check sourcecode in dev/classes/*.js with jshint
 - `grunt concat` generate dev/enchant.js from dev/classes/*.js
-- `grunt min` generate enchant.min.js from dev/enchant.js
+- `grunt uglify` generate enchant.min.js from dev/enchant.js
 - `grunt exec:lang` generate enchant.js (English comment only) from dev/enchant.js
 - `grunt qunit` do qunit tests with phantomjs (headless browser)
 

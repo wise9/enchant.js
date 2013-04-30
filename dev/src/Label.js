@@ -20,14 +20,30 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     initialize: function(text) {
         enchant.Entity.call(this);
 
+        this.text = text || '';
         this.width = 300;
         this.font = '14px serif';
-        this.text = text || '';
         this.textAlign = 'left';
+
+        this._debugColor = '#ff0000';
+    },
+    width: {
+        get: function() {
+            return this._width;
+        },
+        set: function(width) {
+            this._width = width;
+            this._dirty = true;
+            // issue #164
+            this.updateBoundArea();
+        }
     },
     /**
      [lang:ja]
      * 表示するテキスト.
+     * DOM レンダラを利用している場合 (DOMScene 以下にある場合) 改行タグ (br) も利用できるが、
+     * ユーザから入力したり、サーバから取得した文字列を表示する場合, XSS 脆弱性などに注意してください.
+     * Canvas レンダラを利用できる場合でも、改行タグ (br, BR) は改行に変換されます。
      [/lang]
      [lang:en]
      * Text to be displayed.
@@ -42,6 +58,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             return this._text;
         },
         set: function(text) {
+            text = '' + text;
             if(this._text === text) {
                 return;
             }
@@ -131,32 +148,47 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
     },
     cvsRender: function(ctx) {
         var x, y = 0;
-        var text, buf, c;
+        var labelWidth = this.width;
+        var charWidth, amount, line, text, c, buf, increase, length;
+        var bufWidth;
         if (this._splitText) {
             ctx.textBaseline = 'top';
             ctx.font = this.font;
             ctx.fillStyle = this.color || '#000000';
+            charWidth = ctx.measureText(' ').width;
+            amount = labelWidth / charWidth;
             for (var i = 0, l = this._splitText.length; i < l; i++) {
-                text = this._splitText[i];
-                buf = '';
-                for (var j = 0, ll = text.text.length; j < ll; j++) {
-                    c = text.text[j];
-                    if (ctx.measureText(buf).width > this.width) {
-                        ctx.fillText(buf, 0, y);
-                        y += text.height - 1;
-                        buf = '';
+                line = this._splitText[i];
+                text = line.text;
+                c = 0;
+                while (text.length > c + amount || ctx.measureText(text.slice(c, c + amount)).width > labelWidth) {
+                    buf = '';
+                    increase = amount;
+                    length = 0;
+                    while (increase > 0) {
+                        if (ctx.measureText(buf).width < labelWidth) {
+                            length += increase;
+                            buf = text.slice(c, c + length);
+                        } else {
+                            length -= increase;
+                            buf = text.slice(c, c + length);
+                        }
+                        increase = increase / 2 | 0;
                     }
-                    buf += c;
+                    ctx.fillText(buf, 0, y);
+                    y += line.height - 1;
+                    c += length;
                 }
+                buf = text.slice(c, c + text.length);
                 if (this.textAlign === 'right') {
-                    x = this.width - ctx.measureText(buf).width;
+                    x = labelWidth - ctx.measureText(buf).width;
                 } else if (this.textAlign === 'center') {
-                    x = (this.width - ctx.measureText(buf).width) / 2;
+                    x = (labelWidth - ctx.measureText(buf).width) / 2;
                 } else {
                     x = 0;
                 }
                 ctx.fillText(buf, x, y);
-                y += text.height - 1;
+                y += line.height - 1;
             }
         }
     },
@@ -179,28 +211,30 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
         } else {
             this._boundOffset = 0;
         }
+    },
+    getMetrics: function(text) {
+        var ret = {};
+        var div, width, height;
+        if (document.body) {
+            div = document.createElement('div');
+            for (var prop in this._style) {
+                if(prop !== 'width' && prop !== 'height') {
+                    div.style[prop] = this._style[prop];
+                }
+            }
+            text = text || this._text;
+            div.innerHTML = text.replace(/ /g, '&nbsp;');
+            div.style.whiteSpace = 'noWrap';
+            div.style.lineHeight = 1;
+            document.body.appendChild(div);
+            ret.height = parseInt(getComputedStyle(div).height, 10) + 1;
+            div.style.position = 'absolute';
+            ret.width = parseInt(getComputedStyle(div).width, 10) + 1;
+            document.body.removeChild(div);
+        } else {
+            ret.width = this.width;
+            ret.height = this.height;
+        }
+        return ret;
     }
 });
-
-enchant.Label.prototype.getMetrics = function(text) {
-    var ret = {};
-    var div, width, height;
-    if (document.body) {
-        div = document.createElement('div');
-        for (var prop in this._style) {
-            if(prop !== 'width' && prop !== 'height') {
-                div.style[prop] = this._style[prop];
-            }
-        }
-        div.innerHTML = text || this._text;
-        document.body.appendChild(div);
-        ret.height = parseInt(getComputedStyle(div).height, 10) + 1;
-        div.style.position = 'absolute';
-        ret.width = parseInt(getComputedStyle(div).width, 10) + 1;
-        document.body.removeChild(div);
-    } else {
-        ret.width = this.width;
-        ret.height = this.height;
-    }
-    return ret;
-};

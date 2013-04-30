@@ -34,17 +34,17 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         this._offsetY = 0;
 
         /**
-         * [lang:ja]
+         [lang:ja]
          * Node が画面に表示されてから経過したフレーム数。
          * {@link enchant.Event.ENTER_FRAME} イベントを受け取る前にインクリメントされる。
          * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
-         * [/lang]
-         * [lang:en]
+         [/lang]
+         [lang:en]
          * The age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
-         * [/lang]
-         * [lang:de]
+         [/lang]
+         [lang:de]
          * Das Alter (Frames) dieses Nodes welches vor dem {@link enchant.Event.ENTER_FRAME} Ereignis erhöht wird.
-         * [/lang]
+         [/lang]
          * @type {Number}
          */
         this.age = 0;
@@ -93,9 +93,9 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         });
 
         /**
-         * [lang:ja]
+         [lang:ja]
          * Node が生成される際に、tl プロパティに Timeline オブジェクトを追加している
-         * [/lang]
+         [/lang]
          */
         if(enchant.ENV.USE_ANIMATION){
             var tl = this.tl = new enchant.Timeline(this);
