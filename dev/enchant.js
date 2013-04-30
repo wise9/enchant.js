@@ -1,10 +1,10 @@
 /**
- * enchant.js v0.7.0
- * http://enchantjs.com
- *
- * Copyright Ubiquitous Entertainment Inc.
- * Released under the MIT license.
- */
+* enchant.js v0.7.0
+* http://enchantjs.com
+*
+* Copyright Ubiquitous Entertainment Inc.
+* Released under the MIT license.
+*/
 
 (function(window, undefined){
 
@@ -6138,6 +6138,14 @@ enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
      * @class
      * @constructs
      * @extends enchant.Scene
+     * @usage
+     * enchant.Module.LoadingScene = enchant.Class.create(enchant.LoadingScene, {
+     *    initialize: function(){
+     *        enchant.LoadingScene.call(this);
+     *        this.backgroundColor = 'red';
+     *        // or something like that
+     *    }
+     * });
      */
     initialize: function() {
         enchant.Scene.call(this);
