@@ -1402,7 +1402,7 @@
             enchant.Scene.call(this);
             var core = enchant.Core.instance;
             var shade = new enchant.Sprite(core.width, core.height);
-            shade.backgroundColor = 'rgba(0, 0, 0, 255, 0.1)';
+            shade.backgroundColor = 'rgba(0, 0, 0, 0.1)';
             this.addChild(shade);
             this.addEventListener(enchant.Event.ENTER, function() {
                 shade.tl.fadeTo(0.7, 5, enchant.Easing.QUAD_EASEOUT);
