@@ -135,7 +135,6 @@ module.exports = (grunt) ->
   grunt.registerTask 'doc', 'Make jsdoc', ()->
     done = this.async
     sh = require('child_process').exec
-    ;
 
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js -t=doc/template -d=doc/core/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js -t=doc/template -d=doc/core/en'
@@ -146,18 +145,25 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build', '', ()->
     fs = require('fs')
-    grunt.task.run('lang:en')
-    grunt.file.delete('./build', {force: true})
+    grunt.task.run [ 'lang:en', 'cp:lang/en/:build/' ]
 
-    grunt.file.recurse('./lang/en', (abspath, rootdir, subdir, filename)->
+  grunt.registerTask 'cp', '', ()->
+    from = @args[0]
+    to = @args[1]
+    console.log(from, to)
+
+    if grunt.file.exists to
+      grunt.file.delete(to, { force: true })
+
+    grunt.file.recurse(from, (abspath, rootdir, subdir, filename)->
       path = (subdir || '') + '/' + filename
-      grunt.file.copy('./lang/en/' + path, 'build/' + path)
+      grunt.file.copy(from + path, to + path)
     )
 
 
   grunt.registerTask 'lang', 'Make lang files.', ()->
     lang = @args[0] || 'en'
-    path = @args[1] || 'lang/' + lang;
+    path = @args[1] || 'lang/' + lang
     grunt.log.writeln 'processing..'
     done = @async
     fs = require('fs')
