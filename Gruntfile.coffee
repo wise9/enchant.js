@@ -4,7 +4,6 @@ module.exports = (grunt) ->
   # Project configuration.
   grunt.initConfig
       pkg: grunt.file.readJSON 'package.json'
-
       jshint:
         core: ['dev/src/*.js', '!dev/src/_*.js']
         plugins: ['dev/src/*.js', '!dev/src/_*.js', 'dev/plugins/*.js']
@@ -89,14 +88,14 @@ module.exports = (grunt) ->
           dest: 'dev/enchant.js'
           options:
             banner: """
-                                                            /**
-                                                             * <%= pkg.name %> v<%= pkg.version %>
-                                                             * <%= pkg.homepage %>
-                                                             *
-                                                             * Copyright Ubiquitous Entertainment Inc.
-                                                             * Released under the MIT license.
-                                                             */\n\n
-                                                            """
+                                                                        /**
+                                                                         * <%= pkg.name %> v<%= pkg.version %>
+                                                                         * <%= pkg.homepage %>
+                                                                         *
+                                                                         * Copyright Ubiquitous Entertainment Inc.
+                                                                         * Released under the MIT license.
+                                                                         */\n\n
+                                                                        """
 
       uglify:
         dist:
@@ -135,7 +134,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'doc', 'Make jsdoc', ()->
     done = this.async
-    sh = require('child_process').exec;
+    sh = require('child_process').exec
+    ;
 
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js -t=doc/template -d=doc/core/ja'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js -t=doc/template -d=doc/core/en'
@@ -144,36 +144,38 @@ module.exports = (grunt) ->
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/plugins/en'
     sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js de/plugins/*.js -t=doc/template -d=doc/plugins/de'
 
+  grunt.registerTask 'build', '', ()->
+    fs = require('fs')
+    grunt.task.run('lang:en')
+    grunt.file.delete('./build', {force: true})
+
+    grunt.file.recurse('./lang/en', (abspath, rootdir, subdir, filename)->
+      path = (subdir || '') + '/' + filename
+      grunt.file.copy('./lang/en/' + path, 'build/' + path)
+    )
+
+
   grunt.registerTask 'lang', 'Make lang files.', ()->
+    lang = @args[0] || 'en'
+    path = @args[1] || 'lang/' + lang;
     grunt.log.writeln 'processing..'
     done = @async
     fs = require('fs')
 
+    grunt.file.mkdir('lang/' + lang + '/plugins')
+
     make_repl = (lang) ->
       new RegExp('^[\\*\\s]*\\[lang:' + lang + '\\]\\n([\\s\\S]*?)^[\\*\\s]*\\[\\/lang\\]\\n', 'mg')
-
-    repl_en = make_repl 'en'
     repl_ja = make_repl 'ja'
+    repl_en = make_repl 'en'
     repl_de = make_repl 'de'
 
     (glob.sync "dev/{plugins\/,}*.js").forEach (source)->
-      dist_en = source.toString().replace(/dev\//, './')
-      dist_ja = source.toString().replace(/dev\//, './ja/')
-      dist_de = source.toString().replace(/dev\//, './de/')
+      dist = source.toString().replace(/dev\//, './lang/' +lang+ '/')
 
-      fs.writeFileSync dist_en, (fs.readFileSync source).toString()
-        .replace(repl_en, '$1')
-        .replace(repl_ja, '')
-        .replace(repl_de, '')
-
-      fs.writeFileSync dist_ja, (fs.readFileSync source).toString()
-        .replace(repl_en, '')
-        .replace(repl_ja, '$1')
-        .replace(repl_de, '')
-
-      fs.writeFileSync dist_de, (fs.readFileSync source).toString()
-        .replace(repl_en, '')
-        .replace(repl_ja, '')
-        .replace(repl_de, '$1')
+      fs.writeFileSync dist, (fs.readFileSync source).toString()
+      .replace(repl_en, (if lang == 'en' then '$1' else ''))
+      .replace(repl_ja, (if lang == 'ja' then '$1' else ''))
+      .replace(repl_de, (if lang == 'de' then '$1' else ''))
 
       grunt.log.writeln(source)
