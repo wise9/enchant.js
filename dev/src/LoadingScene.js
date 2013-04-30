@@ -7,6 +7,14 @@ enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
      * @class
      * @constructs
      * @extends enchant.Scene
+     * @usage
+     * enchant.Module.LoadingScene = enchant.Class.create(enchant.LoadingScene, {
+     *    initialize: function(){
+     *        enchant.LoadingScene.call(this);
+     *        this.backgroundColor = 'red';
+     *        // or something like that
+     *    }
+     * });
      */
     initialize: function() {
         enchant.Scene.call(this);
