@@ -130,7 +130,7 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask 'default', [
-    'jshint:core', 'concat', 'uglify', 'qunit', 'lang']
+    'jshint:core', 'concat', 'uglify', 'qunit', 'lang', 'build']
 
   grunt.registerTask 'doc', 'Make jsdoc', ()->
     done = this.async
