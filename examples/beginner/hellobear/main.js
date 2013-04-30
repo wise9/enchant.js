@@ -14,40 +14,40 @@ enchant();
  * window.onload
  *
  * The function which will be executed after loading page.
- * Command in enchant.js such as "new Game();" will cause an error if executed before entire page is loaded.
+ * Command in enchant.js such as "new Core();" will cause an error if executed before entire page is loaded.
  *
  * ページがロードされた際に実行される関数。
  * すべての処理はページがロードされてから行うため、 window.onload の中で実行する。
- * 特に new Game(); は、<body> タグが存在しないとエラーになるので注意。
+ * 特に new Core(); は、<body> タグが存在しないとエラーになるので注意。
  */
 window.onload = function(){
     /**
-     * new Game(width, height)
+     * new Core(width, height)
      *
-     * Make instance of enchant.Game class. Set window size to 320 x 320
-     * Game オブジェクトを作成する。
+     * Make instance of enchant.Core class. Set window size to 320 x 320
+     * Core オブジェクトを作成する。
      * 画面の大きさは 320ピクセル x 320ピクセル に設定する。
      */
-    var game = new Game(320, 320);
+    var game = new Core(320, 320);
 
     /**
-     * Game.fps
+     * Core.fps
      *
      * Set fps (frame per second) in this game to 15.
      * ゲームの fps (frame per second) を指定する。この場合、1秒間あたり15回画面が更新される。
      */
     game.fps = 15;
     /**
-     * Game#preload
+     * Core#preload
      *
      * You can preload all assets files before starting the game.
-     * Set needed file lists in relative/absolute path for attributes of Game#preload
+     * Set needed file lists in relative/absolute path for attributes of Core#preload
      * 必要なファイルを相対パスで引数に指定する。 ファイルはすべて、ゲームが始まる前にロードされる。
      */
     game.preload("chara1.png");
 
     /**
-     * Game#onload
+     * Core#onload
      *
      * ロードが完了した直後に実行される関数を指定している。
      * onload プロパティは load イベントのリスナとして働くので、以下の2つの書き方は同じ意味。
@@ -70,7 +70,7 @@ window.onload = function(){
 
         /**
          * Sprite.image {Object}
-         * Game#preload で指定されたファイルは、Game.assets のプロパティとして格納される。
+         * Core#preload で指定されたファイルは、Core.assets のプロパティとして格納される。
          * Sprite.image にこれを代入することで、画像を表示することができる
          */
         bear.image = game.assets["chara1.png"];
@@ -96,7 +96,7 @@ window.onload = function(){
          * Group#addChild(node) {Function}
          * オブジェクトをノードツリーに追加するメソッド。
          * ここでは、クマの画像を表示するスプライトオブジェクトを、rootScene に追加している。
-         * Game.rootScene は Group を継承した Scene クラスのインスタンスで、描画ツリーのルートになる特別な Scene オブジェクト。
+         * Core.rootScene は Group を継承した Scene クラスのインスタンスで、描画ツリーのルートになる特別な Scene オブジェクト。
          * この rootScene に描画したいオブジェクトを子として追加する (addChild) ことで、毎フレーム描画されるようになる。
          * 引数には enchant.Node を継承したクラス (Entity, Group, Scene, Label, Sprite..) を指定する。
          */
@@ -147,10 +147,10 @@ window.onload = function(){
     };
 
     /**
-     * Game#start
+     * Core#start
      * ゲームを開始する。この関数を実行するまで、ゲームは待機状態となる。
-     * 代わりに Game#debug を使うことで、デバッグモードで起動することができる。
-     * Game#pause(); で一時停止し、 Game#resume(); で再開することができる。
+     * 代わりに Core#debug を使うことで、デバッグモードで起動することができる。
+     * Core#pause(); で一時停止し、 Core#resume(); で再開することができる。
      */
     game.start();
 };

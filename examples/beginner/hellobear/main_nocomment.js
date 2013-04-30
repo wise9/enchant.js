@@ -1,7 +1,7 @@
 enchant();
 
 window.onload = function(){
-    var game = new Game(320, 320);
+    var game = new Core(320, 320);
     game.fps = 15;
     game.preload("chara1.png");
     game.onload = function(){
