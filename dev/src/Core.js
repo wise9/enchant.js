@@ -756,9 +756,7 @@
 
             var ret = this._requestPreload()
                 .next(function() {
-                    var core = enchant.Core.instance;
-                    core.removeScene(core.loadingScene);
-                    core.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                    enchant.Core.instance.loadingScene.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
                 });
 
             if (deferred) {

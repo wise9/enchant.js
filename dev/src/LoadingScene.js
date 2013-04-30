@@ -36,5 +36,10 @@ enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
             image.context.fillRect(border, 0, (barWidth - border * 2) * _progress, barHeight);
         });
         this.addChild(bar);
+        this.addEventListener('load', function(e) {
+            var core = enchant.Core.instance;
+            core.removeScene(core.loadingScene);
+            core.dispatchEvent(e);
+        });
     }
 });
