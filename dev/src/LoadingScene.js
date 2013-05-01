@@ -7,6 +7,23 @@ enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
      * @class
      * @constructs
      * @extends enchant.Scene
+     * Default loading scene. If you want to use your own loading animation, overwrite (don't inherit) this class.
+     * Referred from enchant.Core in default, as `new enchant.LoadingScene` etc.
+     *
+     * @usage
+     * enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
+     *    initialize: function(){
+     *        enchant.Scene.call(this);
+     *        this.backgroundColor = 'red';
+     *        // ...
+     *        this.addEventListener('progress', function(e){
+     *            progress = e.loaded / e.total;
+     *        });
+     *        this.addEventListener('enterframe', function(){
+     *            // animation
+     *        });
+     *    }
+     * });
      */
     initialize: function() {
         enchant.Scene.call(this);

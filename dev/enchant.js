@@ -1,10 +1,10 @@
 /**
- * enchant.js v0.6.3
- * http://enchantjs.com
- *
- * Copyright Ubiquitous Entertainment Inc.
- * Released under the MIT license.
- */
+* enchant.js v0.7.0
+* http://enchantjs.com
+*
+* Copyright Ubiquitous Entertainment Inc.
+* Released under the MIT license.
+*/
 
 (function(window, undefined){
 
@@ -2235,9 +2235,7 @@ enchant.EventTarget = enchant.Class.create({
 
             var ret = this._requestPreload()
                 .next(function() {
-                    var core = enchant.Core.instance;
-                    core.removeScene(core.loadingScene);
-                    core.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+                    enchant.Core.instance.loadingScene.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
                 });
 
             if (deferred) {
@@ -2649,7 +2647,6 @@ enchant.EventTarget = enchant.Class.create({
         /**
          [lang:ja]
          * キーバインドを削除する.
-         *
          * @param {Number} key 削除するキーコード.
          [/lang]
          [lang:en]
@@ -2666,7 +2663,7 @@ enchant.EventTarget = enchant.Class.create({
          */
         keyunbind: function(key) {
             if (!this._keybind[key]) {
-                return;
+                return this;
             }
             var buttondowns = this._internalButtondownListeners;
             var buttonups = this._internalButtonupListeners;
@@ -6141,6 +6138,23 @@ enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
      * @class
      * @constructs
      * @extends enchant.Scene
+     * Default loading scene. If you want to use your own loading animation, overwrite (don't inherit) this class.
+     * Referred from enchant.Core in default, as `new enchant.LoadingScene` etc.
+     *
+     * @usage
+     * enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
+     *    initialize: function(){
+     *        enchant.Scene.call(this);
+     *        this.backgroundColor = 'red';
+     *        // ...
+     *        this.addEventListener('progress', function(e){
+     *            progress = e.loaded / e.total;
+     *        });
+     *        this.addEventListener('enterframe', function(){
+     *            // animation
+     *        });
+     *    }
+     * });
      */
     initialize: function() {
         enchant.Scene.call(this);
@@ -6170,6 +6184,11 @@ enchant.LoadingScene = enchant.Class.create(enchant.Scene, {
             image.context.fillRect(border, 0, (barWidth - border * 2) * _progress, barHeight);
         });
         this.addChild(bar);
+        this.addEventListener('load', function(e) {
+            var core = enchant.Core.instance;
+            core.removeScene(core.loadingScene);
+            core.dispatchEvent(e);
+        });
     }
 });
 

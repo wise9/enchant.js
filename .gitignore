@@ -5,5 +5,5 @@ node_modules
 .project
 doc/*
 !doc/template
-build
-lang
+build/*
+!build/readme.md

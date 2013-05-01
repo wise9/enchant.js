@@ -88,14 +88,14 @@ module.exports = (grunt) ->
           dest: 'dev/enchant.js'
           options:
             banner: """
-                                                                        /**
-                                                                         * <%= pkg.name %> v<%= pkg.version %>
-                                                                         * <%= pkg.homepage %>
-                                                                         *
-                                                                         * Copyright Ubiquitous Entertainment Inc.
-                                                                         * Released under the MIT license.
-                                                                         */\n\n
-                                                                        """
+/**
+* <%= pkg.name %> v<%= pkg.version %>
+* <%= pkg.homepage %>
+*
+* Copyright Ubiquitous Entertainment Inc.
+* Released under the MIT license.
+*/\n\n
+"""
 
       uglify:
         dist:
@@ -130,18 +130,22 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask 'default', [
-    'jshint:core', 'concat', 'uglify', 'qunit', 'lang']
+    'jshint:core', 'concat', 'uglify', 'qunit', 'lang', 'build']
 
   grunt.registerTask 'doc', 'Make jsdoc', ()->
     done = this.async
     sh = require('child_process').exec
+    async = grunt.util.async
+    async.forEach ['en', 'ja', 'de'], (lang, cb)->
+      sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js lang/' + lang + '/enchant.js -t=doc/template -d=doc/core/' + lang
+      sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js lang/' + lang + '/enchant.js lang/' + lang + '/plugins/*.js -t=doc/template -d=doc/plugins/' + lang
+      grunt.log.writeln('java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js lang/' + lang + '/enchant.js -t=doc/template -d=doc/core/' + lang)
+      ;
+      grunt.log.writeln('java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js lang/' + lang + '/enchant.js lang/' + lang + '/plugins/*.js -t=doc/template -d=doc/plugins/' + lang)
+      ;
+      cb()
+    , (error) -> done(!error)
 
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js -t=doc/template -d=doc/core/ja'
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js -t=doc/template -d=doc/core/en'
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js -t=doc/template -d=doc/core/de'
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js ja/enchant.js ja/plugins/*.js -t=doc/template -d=doc/plugins/ja'
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js enchant.js plugins/*.js -t=doc/template -d=doc/plugins/en'
-    sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js de/enchant.js de/plugins/*.js -t=doc/template -d=doc/plugins/de'
 
   grunt.registerTask 'build', '', ()->
     fs = require('fs')
@@ -177,7 +181,7 @@ module.exports = (grunt) ->
     repl_de = make_repl 'de'
 
     (glob.sync "dev/{plugins\/,}*.js").forEach (source)->
-      dist = source.toString().replace(/dev\//, './lang/' +lang+ '/')
+      dist = source.toString().replace(/dev\//, './lang/' + lang + '/')
 
       fs.writeFileSync dist, (fs.readFileSync source).toString()
       .replace(repl_en, (if lang == 'en' then '$1' else ''))
