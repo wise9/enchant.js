@@ -1,6 +1,7 @@
-glob = require 'glob'
 
 module.exports = (grunt) ->
+  glob = require 'glob'
+  sh = require('child_process').exec
   # Project configuration.
   grunt.initConfig
       pkg: grunt.file.readJSON 'package.json'
@@ -128,13 +129,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-exec'
 
-  # Default task.
-  grunt.registerTask 'default', [
-    'jshint:core', 'concat', 'uglify', 'qunit', 'lang', 'build']
-
   grunt.registerTask 'doc', 'Make jsdoc', ()->
     done = this.async
-    sh = require('child_process').exec
     async = grunt.util.async
     async.forEach ['en', 'ja', 'de'], (lang, cb)->
       sh 'java -jar jsdoc-toolkit/jsrun.jar jsdoc-toolkit/app/run.js lang/' + lang + '/enchant.js -t=doc/template -d=doc/core/' + lang
@@ -150,6 +146,10 @@ module.exports = (grunt) ->
   grunt.registerTask 'build', '', ()->
     fs = require('fs')
     grunt.task.run [ 'lang:en', 'cp:lang/en/:build/' ]
+    done = this.async();
+
+    sh 'git checkout build/readme.md', ()->
+      done
 
   grunt.registerTask 'cp', '', ()->
     from = @args[0]
@@ -189,3 +189,8 @@ module.exports = (grunt) ->
       .replace(repl_de, (if lang == 'de' then '$1' else ''))
 
       grunt.log.writeln(source)
+
+  # Default task.
+  grunt.registerTask 'default', [
+    'jshint:core', 'concat', 'uglify', 'qunit', 'lang', 'build']
+
