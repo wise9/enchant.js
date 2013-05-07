@@ -408,33 +408,36 @@
                         }
                     }, false);
                 }
-                stage.addEventListener('mousedown', function(e) {
-                    var core = enchant.Core.instance;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
-                    evt._initPosition(e.pageX, e.pageY);
-                    var target = core.currentScene._determineEventTarget(evt);
-                    core._touchEventTarget[core._mousedownID] = target;
-                    target.dispatchEvent(evt);
-                }, false);
-                stage.addEventListener('mousemove', function(e) {
-                    var core = enchant.Core.instance;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
-                    evt._initPosition(e.pageX, e.pageY);
-                    var target = core._touchEventTarget[core._mousedownID];
-                    if (target) {
+
+                if (enchant.ENV.MOUSE_ENABLED){
+                    stage.addEventListener('mousedown', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                        evt._initPosition(e.pageX, e.pageY);
+                        var target = core.currentScene._determineEventTarget(evt);
+                        core._touchEventTarget[core._mousedownID] = target;
                         target.dispatchEvent(evt);
-                    }
-                }, false);
-                stage.addEventListener('mouseup', function(e) {
-                    var core = enchant.Core.instance;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_END);
-                    evt._initPosition(e.pageX, e.pageY);
-                    var target = core._touchEventTarget[core._mousedownID];
-                    if (target) {
-                        target.dispatchEvent(evt);
-                    }
-                    delete core._touchEventTarget[core._mousedownID];
-                }, false);
+                    }, false);
+                    stage.addEventListener('mousemove', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        evt._initPosition(e.pageX, e.pageY);
+                        var target = core._touchEventTarget[core._mousedownID];
+                        if (target) {
+                            target.dispatchEvent(evt);
+                        }
+                    }, false);
+                    stage.addEventListener('mouseup', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        evt._initPosition(e.pageX, e.pageY);
+                        var target = core._touchEventTarget[core._mousedownID];
+                        if (target) {
+                            target.dispatchEvent(evt);
+                        }
+                        delete core._touchEventTarget[core._mousedownID];
+                    }, false);
+                }
             }
         },
         /**

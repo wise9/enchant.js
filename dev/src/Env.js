@@ -45,6 +45,7 @@ enchant.ENV = {
         div.setAttribute('ontouchstart', 'return');
         return typeof div.ontouchstart === 'function';
     }()),
+    MOUSE_ENABLED: true,
     /**
      * Determines if the current browser is an iPhone with a retina display.
      * @return {Boolean} True, if this display is a retina display
