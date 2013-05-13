@@ -865,9 +865,15 @@ if (enchant.gl !== undefined) {
                         this.vertex_weights[child.nodeName] = this.parseFloatArray(child);
                     }
                 }
+                this.bind_shape_matrix = mat4.identity();
+                if (this._datas['bind_shape_matrix'].length > 0) {
+                    var bind_shape_matrix = this._datas['bind_shape_matrix'][0];
+                    this.bind_shape_matrix = mat4.transpose(this.parseFloatArray(bind_shape_matrix));
+                }
             },
             getProcessedSkinData: function() {
                 var resultSkin = {};
+                resultSkin.bind_shape_matrix = this.bind_shape_matrix;
                 resultSkin.joints = {};
                 var ids = {};
                 for (var i = 0, l = this.vertex_weights.JOINT.length; i < l; i++) {
@@ -1651,6 +1657,7 @@ if (enchant.gl !== undefined) {
                             triangles.inputs['POSITION'][index * 3 + 1],
                             triangles.inputs['POSITION'][index * 3 + 2]
                         ];
+                        mat4.multiplyVec3(skin.bind_shape_matrix, vec);
                         var count = -1;
                         keys.push(skin.vertex_weights[index]);
                         for (var key in skin.vertex_weights[index]) {
