@@ -838,7 +838,7 @@ if (enchant.gl !== undefined) {
                     for (var j = 0, m = source.childNodes.length; j < m; j++) {
                         child = source.childNodes[j];
                         if (child.nodeName === 'Name_array') {
-                            this.sources[source.getAttribute('id')] = child.textContent.split(' ');
+                            this.sources[source.getAttribute('id')] = child.textContent.replace(/^\s+|\s+$/g, "").split(/[\s,]+/);
                         }
                         if (child.nodeName === 'float_array') {
                             this.sources[source.getAttribute('id')] = this.parseFloatArray(child);
