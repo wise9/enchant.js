@@ -10,7 +10,8 @@ window.onload = function () {
         
         // CanvasGroup に addChild されたノードは canvas上で描画されます。
         // 回転や拡大縮小などを含む場合、DOMよりも高速な描画が可能です。
-        var canvasGroup = new CanvasGroup();
+        // enchant.js v0.7では、特に宣言のないGroupはCanvasによって描画されます。
+        var canvasGroup = new Group();
         game.rootScene.addChild(canvasGroup);
         
         function addBear () {
