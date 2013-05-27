@@ -96,6 +96,13 @@ if (enchant.gl !== undefined) {
                             if (visualScene.nodes[k].controllerUrl) {
                                 var skeletonContainer = new Node(visualScene.nodes[k].xml);
                                 skeletonContainer.nodes = [];
+                                var skin = lib['controllers'][visualScene.nodes[k].controllerUrl].skin.getProcessedSkinData();
+                                if (visualScene.nodes[k].skeletons.length === 0) {
+                                    for (var sk in skin.ids) {
+                                        visualScene.nodes[k].skeletons.push(lib['nodes'][sk]);
+                                        break;
+                                    }
+                                }
                                 for (var key in visualScene.nodes[k].skeletons) {
                                     skeletonContainer.nodes[visualScene.nodes[k].skeletons[key].id] = (visualScene.nodes[k].skeletons[key]);
                                 }
@@ -104,7 +111,6 @@ if (enchant.gl !== undefined) {
                                 skeleton.addChild(bone);
                                 skeleton.solveFKs();
                                 rootColladaSkeletonSprite3D.skeleton = skeleton;
-                                var skin = lib['controllers'][visualScene.nodes[k].controllerUrl].skin.getProcessedSkinData();
                                 skeleton.calculateTableForIds(skin.ids);
                                 rootColladaSkeletonSprite3D.addColladaSkeletonSprite3DFromNode(skeletonContainer, skin, skeleton, maxbonenum);
                             } else {
