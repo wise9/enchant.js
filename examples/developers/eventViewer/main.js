@@ -21,7 +21,7 @@ window.onload = function(){
         core.rootScene.on('touchmove', function(evt){
             status.add('touchmove (' + round(evt.x) + ', ' + round(evt.y) + ')');
         });
-        core.rootScene.on('touchstart', function(evt){
+        core.rootScene.on('touchend', function(evt){
             status.add('touchend (' + round(evt.x) + ', ' + round(evt.y) + ')');
         });
         
