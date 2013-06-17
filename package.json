@@ -1,6 +1,6 @@
 {
   "name": "enchant.js",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "homepage": "http://enchantjs.com",
   "engines": {
     "node": ">=0.8"
