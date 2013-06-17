@@ -90,12 +90,12 @@ module.exports = (grunt) ->
           options:
             banner: """
 /**
-* <%= pkg.name %> v<%= pkg.version %>
-* <%= pkg.homepage %>
-*
-* Copyright Ubiquitous Entertainment Inc.
-* Released under the MIT license.
-*/\n\n
+ * <%= pkg.name %> v<%= pkg.version %>
+ * <%= pkg.homepage %>
+ *
+ * Copyright Ubiquitous Entertainment Inc.
+ * Released under the MIT license.
+ */\n\n
 """
 
       uglify:
