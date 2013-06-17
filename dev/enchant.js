@@ -1588,6 +1588,7 @@ enchant.EventTarget = enchant.Class.create({
             }
             stage.style.fontSize = '12px';
             stage.style.webkitTextSizeAdjust = 'none';
+            stage.style.webkitTapHighlightColor = 'rgba(0, 0, 0, 0)';
             this._element = stage;
 
             this.addEventListener('coreresize', this._oncoreresize);
