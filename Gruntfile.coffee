@@ -142,52 +142,43 @@ module.exports = (grunt) ->
       cb()
     , (error) -> done(!error)
 
-
   grunt.registerTask 'build', '', ()->
-    fs = require('fs')
-    grunt.task.run [ 'lang:en', 'cp:lang/en/:build/' ]
-    done = this.async();
+    grunt.task.run [ 'lang:en', 'cp:lang/en/:build/', 'restoreReadme' ]
 
+  grunt.registerTask 'restoreReadme', '', ()->
+    done = @async()
     sh 'git checkout build/readme.md', ()->
-      done
+      grunt.log.writeln('done')
+      done()
 
   grunt.registerTask 'cp', '', ()->
     from = @args[0]
     to = @args[1]
     console.log(from, to)
-
     if grunt.file.exists to
       grunt.file.delete(to, { force: true })
-
     grunt.file.recurse(from, (abspath, rootdir, subdir, filename)->
       path = (subdir || '') + '/' + filename
       grunt.file.copy(from + path, to + path)
     )
-
-
   grunt.registerTask 'lang', 'Make lang files.', ()->
     lang = @args[0] || 'en'
     path = @args[1] || 'lang/' + lang
     grunt.log.writeln 'processing..'
     done = @async
     fs = require('fs')
-
     grunt.file.mkdir('lang/' + lang + '/plugins')
-
     make_repl = (lang) ->
       new RegExp('^[\\*\\s]*\\[lang:' + lang + '\\]\\n([\\s\\S]*?)^[\\*\\s]*\\[\\/lang\\]\\n', 'mg')
     repl_ja = make_repl 'ja'
     repl_en = make_repl 'en'
     repl_de = make_repl 'de'
-
     (glob.sync "dev/{plugins\/,}*.js").forEach (source)->
       dist = source.toString().replace(/dev\//, './lang/' + lang + '/')
-
       fs.writeFileSync dist, (fs.readFileSync source).toString()
       .replace(repl_en, (if lang == 'en' then '$1' else ''))
       .replace(repl_ja, (if lang == 'ja' then '$1' else ''))
       .replace(repl_de, (if lang == 'de' then '$1' else ''))
-
       grunt.log.writeln(source)
 
   # Default task.

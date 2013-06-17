@@ -1,10 +1,10 @@
 /**
-* enchant.js v0.7.0
-* http://enchantjs.com
-*
-* Copyright Ubiquitous Entertainment Inc.
-* Released under the MIT license.
-*/
+ * enchant.js v0.7.1
+ * http://enchantjs.com
+ *
+ * Copyright Ubiquitous Entertainment Inc.
+ * Released under the MIT license.
+ */
 
 (function(window, undefined){
 
