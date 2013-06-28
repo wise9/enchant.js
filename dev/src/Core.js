@@ -84,8 +84,8 @@
                     window.innerWidth / width,
                     window.innerHeight / height
                 );
-                this._pageX = 0;
-                this._pageY = 0;
+                this._pageX = stage.getBoundingClientRect().left;
+                this._pageY = stage.getBoundingClientRect().top;
             } else {
                 var style = window.getComputedStyle(stage);
                 sWidth = parseInt(style.width, 10);
