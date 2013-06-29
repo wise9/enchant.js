@@ -8,15 +8,19 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      [lang:ja]
      * 入力を管理するためのクラス.
      * @param {*} flagStore 入力のフラグを保持させるオブジェクト.
+     * @param {String} activeEventNameSuffix イベント名の接尾辞.
+     * @param {String} inactiveEventNameSuffix イベント名の接尾辞.
      [/lang]
      [lang:en]
      * Class for managing input.
      * @param {*} flagStore object that store input flag.
+     * @param {String} activeEventNameSuffix event name suffix.
+     * @param {String} inactiveEventNameSuffix event name suffix.
      [/lang]
      * @constructs
      * @extends enchant.EventTarget
      */
-    initialize: function(flagStore) {
+    initialize: function(flagStore, activeEventNameSuffix, inactiveEventNameSuffix) {
         enchant.EventTarget.call(this);
         /**
          [lang:ja]
@@ -48,6 +52,27 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
          * @type {Object}
          */
         this.flagStore = flagStore;
+        /**
+         [lang:ja]
+         * InputManagerが発行するイベント名の接尾辞.
+         [/lang]
+         [lang:en]
+         * event name suffix that dispatched by InputManager.
+         [/lang]
+         * @type {String}
+         */
+        this.activeEventNameSuffix = activeEventNameSuffix;
+        /**
+         [lang:ja]
+         * InputManagerが発行するイベント名の接尾辞.
+         [/lang]
+         [lang:en]
+         * event name suffix that dispatched by InputManager.
+         [/lang]
+         * @type {String}
+         */
+        this.inactiveEventNameSuffix = inactiveEventNameSuffix;
+
         this._binds = {};
         this._stateHandler = function(e) {
             var id = e.source.identifier;
@@ -154,7 +179,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
             inputEvent.manager = this;
             this.broadcastEvent(inputEvent);
         }
-        var downEvent = new enchant.Event(name + 'buttondown');
+        var downEvent = new enchant.Event(name + this.activeEventNameSuffix);
         this.broadcastEvent(downEvent);
     },
     _up: function(name) {
@@ -165,7 +190,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
             inputEvent.manager = this;
             this.broadcastEvent(inputEvent);
         }
-        var upEvent = new enchant.Event(name + 'buttonup');
+        var upEvent = new enchant.Event(name + this.inactiveEventNameSuffix);
         this.broadcastEvent(upEvent);
     }
 });

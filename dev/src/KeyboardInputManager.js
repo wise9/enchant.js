@@ -11,7 +11,7 @@ enchant.KeyboardInputManager = enchant.Class.create(enchant.InputManager, {
      * @extends enchant.InputSource
      */
     initialize: function(domElement, flagStore) {
-        enchant.InputManager.call(this, flagStore);
+        enchant.InputManager.call(this, flagStore, 'buttondown', 'buttonup');
         this._attachDOMEvent(domElement, 'keydown', true);
         this._attachDOMEvent(domElement, 'keyup', false);
     },
