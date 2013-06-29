@@ -137,7 +137,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
     bind: function(inputSource, name) {
         inputSource.addEventListener(enchant.Event.INPUT_STATE_CHANGED, this._stateHandler);
         this._binds[inputSource.identifier] = name;
-        this.flagStore[inputSource.identifier] = false;
+        this.flagStore[name] = false;
     },
     /**
      [lang:ja]
@@ -150,8 +150,9 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      */
     unbind: function(inputSource) {
         inputSource.removeEventListener(enchant.Event.INPUT_STATE_CHANGED, this._stateHandler);
+        var name = this._binds[inputSource.identifier];
         delete this._binds[inputSource.identifier];
-        delete this.flagStore[inputSource.identifier];
+        delete this.flagStore[name];
     },
     /**
      [lang:ja]
