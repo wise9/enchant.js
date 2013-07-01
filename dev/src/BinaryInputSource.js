@@ -1,13 +1,13 @@
 /**
- * @scope enchant.InputSource.prototype
+ * @scope enchant.BinaryInputSource.prototype
  */
-enchant.InputSource = enchant.Class.create(enchant.EventTarget, {
+enchant.BinaryInputSource = enchant.Class.create(enchant.EventTarget, {
     /**
-     * @name enchant.InputSource
+     * @name enchant.BinaryInputSource
      * @class
      [lang:ja]
      * 任意の入力をラップするクラス.
-     * @param {String} identifier identifier of InputSource.
+     * @param {String} identifier identifier of BinaryInputSource.
      [/lang]
      [lang:en]
      * Class that wrap input.
@@ -23,7 +23,7 @@ enchant.InputSource = enchant.Class.create(enchant.EventTarget, {
          * 入力のid.
          [/lang]
          [lang:en]
-         * Identifier of InputSource.
+         * Identifier of BinaryInputSource.
          [/lang]
          * @type {String}
          */

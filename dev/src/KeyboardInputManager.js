@@ -1,28 +1,28 @@
 /**
  * @scope enchant.KeyboardInputManager.prototype
  */
-enchant.KeyboardInputManager = enchant.Class.create(enchant.InputManager, {
+enchant.KeyboardInputManager = enchant.Class.create(enchant.BinaryInputManager, {
     /**
      * @name enchant.KeyboardInputSource
      * @class
      * @param {HTMLElement} dom element that will be watched.
      * @param {*} flagStore object that store input flag.
      * @constructs
-     * @extends enchant.InputSource
+     * @extends enchant.BinaryInputSource
      */
     initialize: function(domElement, flagStore) {
-        enchant.InputManager.call(this, flagStore, 'buttondown', 'buttonup');
+        enchant.BinaryInputManager.call(this, flagStore, 'buttondown', 'buttonup');
         this._attachDOMEvent(domElement, 'keydown', true);
         this._attachDOMEvent(domElement, 'keyup', false);
     },
     /**
      [lang:ja]
-     * キーコードに対応したInputSourceを使って{@link enchant.InputManager#bind} を呼び出す.
+     * キーコードに対応したBinaryInputSourceを使って{@link enchant.BinaryInputManager#bind} を呼び出す.
      * @param {Number} keyCode キーコード.
      * @param {String} name 入力の名前.
      [/lang]
      [lang:en]
-     * Call {@link enchant.InputManager#bind} with InputSource equivalent of key code.
+     * Call {@link enchant.BinaryInputManager#bind} with BinaryInputSource equivalent of key code.
      * @param {Number} keyCode key code.
      * @param {String} name input name.
      [/lang]
@@ -32,11 +32,11 @@ enchant.KeyboardInputManager = enchant.Class.create(enchant.InputManager, {
     },
     /**
      [lang:ja]
-     * キーコードに対応したInputSourceを使って{@link enchant.InputManager#unbind} を呼び出す.
+     * キーコードに対応したBinaryInputSourceを使って{@link enchant.BinaryInputManager#unbind} を呼び出す.
      * @param {Number} keyCode キーコード.
      [/lang]
      [lang:en]
-     * Call {@link enchant.InputManager#unbind} with InputSource equivalent of key code.
+     * Call {@link enchant.BinaryInputManager#unbind} with BinaryInputSource equivalent of key code.
      * @param {Number} keyCode key code.
      [/lang]
      */

@@ -1,23 +1,23 @@
 /**
  * @scope enchant.KeyboardInputSource.prototype
  */
-enchant.KeyboardInputSource = enchant.Class.create(enchant.InputSource, {
+enchant.KeyboardInputSource = enchant.Class.create(enchant.BinaryInputSource, {
     /**
      * @name enchant.KeyboardInputSource
      * @class
      [lang:ja]
-     * キーボード入力をラップするInputSource.
+     * キーボード入力をラップするBinaryInputSource.
      * キーコードをidとして持つ.
      * @param {String} keyCode キーコード.
      [/lang]
      [lang:en]
-     * @param {String} keyCode key code of InputSource.
+     * @param {String} keyCode key code of BinaryInputSource.
      [/lang]
      * @constructs
-     * @extends enchant.InputSource
+     * @extends enchant.BinaryInputSource
      */
     initialize: function(keyCode) {
-        enchant.InputSource.call(this, keyCode);
+        enchant.BinaryInputSource.call(this, keyCode);
     }
 });
 /**

@@ -1,9 +1,9 @@
 /**
- * @scope enchant.InputManager.prototype
+ * @scope enchant.BinaryInputManager.prototype
  */
-enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
+enchant.BinaryInputManager = enchant.Class.create(enchant.EventTarget, {
     /**
-     * @name enchant.InputManager
+     * @name enchant.BinaryInputManager
      * @class
      [lang:ja]
      * 入力を管理するためのクラス.
@@ -54,20 +54,20 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
         this.flagStore = flagStore;
         /**
          [lang:ja]
-         * InputManagerが発行するイベント名の接尾辞.
+         * BinaryInputManagerが発行するイベント名の接尾辞.
          [/lang]
          [lang:en]
-         * event name suffix that dispatched by InputManager.
+         * event name suffix that dispatched by BinaryInputManager.
          [/lang]
          * @type {String}
          */
         this.activeEventNameSuffix = activeEventNameSuffix;
         /**
          [lang:ja]
-         * InputManagerが発行するイベント名の接尾辞.
+         * BinaryInputManagerが発行するイベント名の接尾辞.
          [/lang]
          [lang:en]
-         * event name suffix that dispatched by InputManager.
+         * event name suffix that dispatched by BinaryInputManager.
          [/lang]
          * @type {String}
          */
@@ -112,10 +112,10 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      [lang:ja]
-     * イベントを{@link enchant.InputManager#broadcastTarget}に発行する.
+     * イベントを{@link enchant.BinaryInputManager#broadcastTarget}に発行する.
      [/lang]
      [lang:en]
-     * Dispatch event to {@link enchant.InputManager#broadcastTarget}.
+     * Dispatch event to {@link enchant.BinaryInputManager#broadcastTarget}.
      [/lang]
      * @param {enchant.Event} e event.
      */
@@ -134,7 +134,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      * Name specified input.
      * Input can be watched by flag or event.
      [/lang]
-     * @param {enchant.InputSource} inputSource input source.
+     * @param {enchant.BinaryInputSource} inputSource input source.
      * @param {String} name input name.
      */
     bind: function(inputSource, name) {
@@ -149,7 +149,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      [lang:en]
      * Remove binded name.
      [/lang]
-     * @param {enchant.InputSource} inputSource input source.
+     * @param {enchant.BinaryInputSource} inputSource input source.
      */
     unbind: function(inputSource) {
         inputSource.removeEventListener(enchant.Event.INPUT_STATE_CHANGED, this._stateHandler);
