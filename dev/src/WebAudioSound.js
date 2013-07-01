@@ -101,8 +101,8 @@ enchant.WebAudioSound.load = function(src, type, callback, onerror) {
     if (canPlay === 'maybe' || canPlay === 'probably') {
         actx = enchant.WebAudioSound.audioContext;
         xhr = new XMLHttpRequest();
-        xhr.responseType = 'arraybuffer';
         xhr.open('GET', src, true);
+        xhr.responseType = 'arraybuffer';
         xhr.onload = function() {
             actx.decodeAudioData(
                 xhr.response,
