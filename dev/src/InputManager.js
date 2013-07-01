@@ -90,7 +90,10 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      * @param {enchant.EventTarget} eventTarget broadcast target.
      */
     addBroadcastTarget: function(eventTarget) {
-        this.broadcastTarget.push(eventTarget);
+        var i = this.broadcastTarget.indexOf(eventTarget);
+        if (i === -1) {
+            this.broadcastTarget.push(eventTarget);
+        }
     },
     /**
      [lang:ja]
