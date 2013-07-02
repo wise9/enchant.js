@@ -17,9 +17,9 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         if(!window.webkitAudioContext){
             throw new Error("This browser does not support WebAudio API.");
         }
-        var actx = enchant.WebAudioSound.audioContext;
         enchant.EventTarget.call(this);
-        this.src = actx.createBufferSource();
+        this.context = enchant.WebAudioSound.audioContext;
+        this.src = this.context.createBufferSource();
         this.buffer = null;
         this._volume = 1;
         this._currentTime = 0;
@@ -27,24 +27,29 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         this.connectTarget = enchant.WebAudioSound.destination;
     },
     play: function(dup) {
-        var actx = enchant.WebAudioSound.audioContext;
-        if (this._state === 2) {
-            this.src.connect(this.connectTarget);
-        } else {
-            if (this._state === 1 && !dup) {
-                this.src.disconnect(this.connectTarget);
-            }
-            this.src = actx.createBufferSource();
-            this.src.buffer = this.buffer;
-            this.src.gain.value = this._volume;
-            this.src.connect(this.connectTarget);
-            this.src.noteOn(0);
+        if (this._state === 1 && !dup) {
+            this.src.disconnect(this.connectTarget);
         }
+        if (this._state !== 2) {
+            this._currentTime = 0;
+        }
+        var offset = this._currentTime;
+        var actx = this.context;
+        this.src = actx.createBufferSource();
+        this.src.buffer = this.buffer;
+        this.src.gain.value = this._volume;
+        this.src.connect(this.connectTarget);
+        this.src.noteGrainOn(0, offset, this.buffer.duration - offset);
+        this._startTime = actx.currentTime - this._currentTime;
         this._state = 1;
     },
     pause: function() {
-        var actx = enchant.WebAudioSound.audioContext;
-        this.src.disconnect(this.connectTarget);
+        var currentTime = this.currentTime;
+        if (currentTime === this.duration) {
+            return;
+        }
+        this.src.noteOff(0);
+        this._currentTime = currentTime;
         this._state = 2;
     },
     stop: function() {
@@ -79,12 +84,13 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
     },
     currentTime: {
         get: function() {
-            window.console.log('currentTime is not allowed');
-            return this._currentTime;
+            return Math.max(0, Math.min(this.duration, this.src.context.currentTime - this._startTime));
         },
         set: function(time) {
-            window.console.log('currentTime is not allowed');
             this._currentTime = time;
+            if (this._state !== 2) {
+                this.play(false);
+            }
         }
     }
 });
