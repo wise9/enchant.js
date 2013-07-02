@@ -95,8 +95,12 @@ enchant.WebAudioSound.load = function(src, type, callback, onerror) {
     onerror = onerror || function() {};
     sound.addEventListener(enchant.Event.LOAD, callback);
     sound.addEventListener(enchant.Event.ERROR, onerror);
-    var e = new enchant.Event(enchant.Event.ERROR);
-    e.message = 'Cannot load an asset: ' + src;
+    function dispatchErrorEvent() {
+        var e = new enchant.Event(enchant.Event.ERROR);
+        e.message = 'Cannot load an asset: ' + src;
+        enchant.Core.instance.dispatchEvent(e);
+        sound.dispatchEvent(e);
+    }
     var actx, xhr;
     if (canPlay === 'maybe' || canPlay === 'probably') {
         actx = enchant.WebAudioSound.audioContext;
@@ -104,23 +108,15 @@ enchant.WebAudioSound.load = function(src, type, callback, onerror) {
         xhr.open('GET', src, true);
         xhr.responseType = 'arraybuffer';
         xhr.onload = function() {
-            actx.decodeAudioData(
-                xhr.response,
-                function(buffer) {
-                    sound.buffer = buffer;
-                    sound.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
-                },
-                function(error) {
-                    enchant.Core.instance.dispatchEvent(e);
-                    sound.dispatchEvent(e);
-                }
-            );
+            actx.decodeAudioData(xhr.response, function(buffer) {
+                sound.buffer = buffer;
+                sound.dispatchEvent(new enchant.Event(enchant.Event.LOAD));
+            }, dispatchErrorEvent);
         };
+        xhr.onerror = dispatchErrorEvent;
         xhr.send(null);
     } else {
-        setTimeout(function() {
-            sound.dispatchEvent(e);
-        }, 50);
+        setTimeout(dispatchErrorEvent,  50);
     }
     return sound;
 };
