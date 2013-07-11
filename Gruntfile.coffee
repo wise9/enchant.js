@@ -51,6 +51,8 @@ module.exports = (grunt) ->
             'dev/src/EventTarget.js'
             'dev/src/Core.js'
             'dev/src/Game.js'
+            'dev/src/InputManager.js'
+            'dev/src/InputSource.js'
             'dev/src/BinaryInputManager.js'
             'dev/src/BinaryInputSource.js'
             'dev/src/KeyboardInputManager.js'

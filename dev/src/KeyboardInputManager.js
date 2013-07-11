@@ -3,12 +3,20 @@
  */
 enchant.KeyboardInputManager = enchant.Class.create(enchant.BinaryInputManager, {
     /**
-     * @name enchant.KeyboardInputSource
+     * @name enchant.KeyboardInputManager
      * @class
+     [lang:ja]
+     * キーボード入力を管理するためのクラス.
      * @param {HTMLElement} dom element that will be watched.
      * @param {*} flagStore object that store input flag.
+     [/lang]
+     [lang:en]
+     * Class that manage keyboard input.
+     * @param {HTMLElement} dom element that will be watched.
+     * @param {*} flagStore object that store input flag.
+     [/lang]
      * @constructs
-     * @extends enchant.BinaryInputSource
+     * @extends enchant.BinaryInputManager
      */
     initialize: function(domElement, flagStore) {
         enchant.BinaryInputManager.call(this, flagStore, 'buttondown', 'buttonup');
