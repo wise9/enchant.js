@@ -236,7 +236,10 @@ enchant.DomlessManager = enchant.Class.create({
         var i = this._domRef.indexOf(childManager.element);
         if (i !== -1) {
             dom = this._domRef[i];
-            dom.parentNode.removeChild(dom);
+            /*dom.parentNode.removeChild(dom);*/
+            if(dom.parentNode){
+                dom.parentNode.removeChild(dom);
+            }
             this._domRef.splice(i, 1);
         }
         this.setLayer(this.layer);
