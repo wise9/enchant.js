@@ -61,9 +61,12 @@ enchant.DomManager = enchant.Class.create({
     },
     removeManager: function(childManager) {
         if (childManager instanceof enchant.DomlessManager) {
-            childManager._domRef.forEach(function(element) {
+            /*childManager._domRef.forEach(function(element) {
                 this.element.removeChild(element);
-            }, this);
+            }, this);*/
+            for(var i = this.element.childNodes.length - 1; i >= 0; i--){
+                this.element.removeChild(this.element.childNodes[i]);
+            }
         } else {
             this.element.removeChild(childManager.element);
         }
