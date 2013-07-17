@@ -2568,9 +2568,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 elem = image._element;
                 sx = this._frameLeft;
                 sy = Math.min(this._frameTop, ih - h);
-                // IE9 doesn't allow for negative widths when drawing on the CANVAS element
-                sw = Math.max(Math.min(iw - sx, w),0);
-                sh = Math.max(Math.min(ih - sy, h),0);
+                // IE9 doesn't allow for negative or 0 widths/heights when drawing on the CANVAS element
+                sw = Math.max(0.01, Math.min(iw - sx, w));
+                sh = Math.max(0.01, Math.min(ih - sy, h));
                 ctx.drawImage(elem, sx, sy, sw, sh, 0, 0, w, h);
             }
         }
