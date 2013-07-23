@@ -10,18 +10,20 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
      * @param {*} flagStore 入力のフラグを保持させるオブジェクト.
      * @param {String} activeEventNameSuffix イベント名の接尾辞.
      * @param {String} inactiveEventNameSuffix イベント名の接尾辞.
+     * @param {*} [source=this] イベントに付加される入力のソース.
      [/lang]
      [lang:en]
      * Class for managing input.
      * @param {*} flagStore object that store input flag.
      * @param {String} activeEventNameSuffix event name suffix.
      * @param {String} inactiveEventNameSuffix event name suffix.
+     * @param {*} [source=this] source that will be added to event object.
      [/lang]
      * @constructs
      * @extends enchant.InputManager
      */
-    initialize: function(flagStore, activeEventNameSuffix, inactiveEventNameSuffix) {
-        enchant.InputManager.call(this, flagStore);
+    initialize: function(flagStore, activeEventNameSuffix, inactiveEventNameSuffix, source) {
+        enchant.InputManager.call(this, flagStore, source);
         /**
          [lang:ja]
          * アクティブな入力の数.
@@ -107,10 +109,11 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
         if (!this.valueStore[name]) {
             this.valueStore[name] = true;
             inputEvent = new enchant.Event((this.activeInputsNum++) ? 'inputchange' : 'inputstart');
-            inputEvent.manager = this;
+            inputEvent.source = this.source;
             this.broadcastEvent(inputEvent);
         }
         var downEvent = new enchant.Event(name + this.activeEventNameSuffix);
+        downEvent.source = this.source;
         this.broadcastEvent(downEvent);
     },
     _up: function(name) {
@@ -118,10 +121,11 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
         if (this.valueStore[name]) {
             this.valueStore[name] = false;
             inputEvent = new enchant.Event((--this.activeInputsNum) ? 'inputchange' : 'inputend');
-            inputEvent.manager = this;
+            inputEvent.source = this.source;
             this.broadcastEvent(inputEvent);
         }
         var upEvent = new enchant.Event(name + this.inactiveEventNameSuffix);
+        upEvent.source = this.source;
         this.broadcastEvent(upEvent);
     }
 });

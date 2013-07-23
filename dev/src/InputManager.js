@@ -8,15 +8,17 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      [lang:ja]
      * 入力を管理するためのクラス.
      * @param {*} valueStore 入力の状態を保持させるオブジェクト.
+     * @param {*} [source=this] イベントに付加される入力のソース.
      [/lang]
      [lang:en]
      * Class for managing input.
      * @param {*} valueStore object that store input state.
+     * @param {*} [source=this] source that will be added to event object.
      [/lang]
      * @constructs
      * @extends enchant.EventTarget
      */
-    initialize: function(valueStore) {
+    initialize: function(valueStore, source) {
         enchant.EventTarget.call(this);
 
         /**
@@ -39,6 +41,16 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
          * @type {Object}
          */
         this.valueStore = valueStore;
+        /**
+         [lang:ja]
+         * イベントに付加される入力のソース.
+         [/lang]
+         [lang:en]
+         * source that will be added to event object.
+         [/lang]
+         * @type {Object}
+         */
+        this.source = source || this;
 
         this._binds = {};
 
