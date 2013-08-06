@@ -1,4 +1,3 @@
-
 window.AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext || window.msAudioContext || window.oAudioContext;
 
 /**
@@ -90,7 +89,13 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
 });
 
 enchant.WebAudioSound.load = function(src, type, callback, onerror) {
-    var canPlay = (new Audio()).canPlayType(type);
+    var audio;
+    try{
+        audio = new Audio();
+    }catch(err){
+        audio = document.createElement('audio');
+    }
+    var canPlay = audio.canPlayType(type);
     var sound = new enchant.WebAudioSound();
     onerror = onerror || function() {};
     sound.addEventListener(enchant.Event.LOAD, callback);
