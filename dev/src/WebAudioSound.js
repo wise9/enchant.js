@@ -95,7 +95,7 @@ enchant.WebAudioSound.load = function(src, type, callback, onerror) {
     }catch(err){
         audio = document.createElement('audio');
     }
-    var canPlay = audio.canPlayType(type);
+    var canPlay = audio.canPlayType == null ? false : audio.canPlayType(type);
     var sound = new enchant.WebAudioSound();
     onerror = onerror || function() {};
     sound.addEventListener(enchant.Event.LOAD, callback);
