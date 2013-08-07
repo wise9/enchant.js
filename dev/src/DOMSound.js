@@ -224,7 +224,7 @@ enchant.DOMSound.load = function(src, type, callback, onerror) {
     try{
         audio = new Audio();
     }catch(err){
-        audio = document.createElement('audio');
+        throw new Error('Audio not support');
     }
     if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
