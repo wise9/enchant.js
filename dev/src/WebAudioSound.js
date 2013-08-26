@@ -39,7 +39,7 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         this.src.buffer = this.buffer;
         this.src.gain.value = this._volume;
         this.src.connect(this.connectTarget);
-        this.src.noteGrainOn(0, offset, this.buffer.duration - offset);
+        this.src.noteGrainOn(0, offset, this.buffer.duration - offset - 1.192e-7);
         this._startTime = actx.currentTime - this._currentTime;
         this._state = 1;
     },
