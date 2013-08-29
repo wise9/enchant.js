@@ -2136,7 +2136,7 @@ enchant.EventTarget = enchant.Class.create({
          [lang:ja]
          * ファイルのロードを行う.
          *
-         * @param {String} asset ロードするファイルのパス.
+         * @param {String} [src] asset ロードするファイルのパス.
          * @param {String} [alias] ロードするファイルに設定したい名前.
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
          * @param {Function} [onerror] ファイルのロードに失敗したときに呼び出される関数.
@@ -2144,10 +2144,10 @@ enchant.EventTarget = enchant.Class.create({
          [lang:en]
          * Loads a file.
          *
-         * @param {String} asset File path of the resource to be loaded.
-         * @param {String} asset name of the resource to be loaded.
-         * @param {Function} [callback] Function called up when file loading is finished.
-         * @param {Function} [callback] Function called up when file loading is failed.
+         * @param {String} [src] File path of the resource to be loaded.
+         * @param {String} [asset] Name you want to designate for the resource to be loaded.
+         * @param {Function} [callback] Function to be called if the file loads successfully.
+         * @param {Function} [onerror] Function to be called if the file fails to load.
          [/lang]
          [lang:de]
          * Laden von Dateien.
@@ -2221,9 +2221,10 @@ enchant.EventTarget = enchant.Class.create({
          [lang:en]
          * Start the core.
          *
-         * Obeying the frame rate set in {@link enchant.Core#fps}, the frame in
-         * {@link enchant.Core#currentScene} will be updated. If images to preload are present,
-         * loading will begin and the loading screen will be displayed.
+         * Sets the framerate of the {@link enchant.Core#currentScene}
+         * according to the value stored in {@link enchant.core#fps}. If
+         * there are images to preload, loading will begin and the
+         * loading screen will be displayed.
          [/lang]
          [lang:de]
          * Starte das Spiel
@@ -2327,10 +2328,10 @@ enchant.EventTarget = enchant.Class.create({
          * enchant.Core.instance._debug フラグを true にすることでもデバッグモードをオンにすることができる
          [/lang]
          [lang:en]
-         * Begin core debug mode.
+         * Start application in debug mode.
          *
-         * Core debug mode can be set to on even if enchant.Core.instance._debug
-         * flag is already set to true.
+         * Core debug mode can be turned on even if the
+         * enchant.Core.instance._debug flag is already set to true.
          [/lang]
          [lang:de]
          * Startet den Debug-Modus des Spieles.
@@ -2354,6 +2355,10 @@ enchant.EventTarget = enchant.Class.create({
          * 次のフレームの実行を要求する.
          * @param {Number} requestAnimationFrameを呼び出すまでの遅延時間.
          [/lang]
+         [lang:en]
+         * Requests the next frame.
+         * @param {Number} Amount of time to delay before calling requestAnimationFrame.
+         [/lang]
          * @private
          */
         _requestNextFrame: function(delay) {
@@ -2373,8 +2378,12 @@ enchant.EventTarget = enchant.Class.create({
         },
         /**
          [lang:ja]
-         * Core#_tickを呼び出す.
+         * {@link enchant.Core#_tick}を呼び出す.
          [/lang]
+         [lang:en]
+         * Calls {@link enchant.Core#_tick}.
+         [/lang]
+         * @param {Number} [time]
          * @private
          */
         _callTick: function(time) {
