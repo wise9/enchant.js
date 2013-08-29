@@ -1383,9 +1383,8 @@ enchant.EventTarget = enchant.Class.create({
      * ただしフェーズの概念はなし.
      [/lang]
      [lang:en]
-     * A class for an independent implementation of events
-     * similar to DOM Events.
-     * However, it does not include the phase concept.
+     * A class for implementation of events similar to DOM Events.
+     * However, it does not include the concept of phases.
      [/lang]
      [lang:de]
      * Eine Klasse für eine unabhängige Implementierung von Ereignissen 
@@ -1406,7 +1405,7 @@ enchant.EventTarget = enchant.Class.create({
      [/lang]
      [lang:en]
      * Add a new event listener which will be executed when the event
-     * is being dispatched.
+     * is dispatched.
      * @param {String} type Type of the events.
      * @param {function(e:enchant.Event)} listener Event listener to be added.
      [/lang]
@@ -1469,8 +1468,8 @@ enchant.EventTarget = enchant.Class.create({
      * @param [String] type イベントのタイプ.
      [/lang]
      [lang:en]
-     * Clear all defined event listener for a given type.
-     * If no type is given, all listener will be removed.
+     * Clear all defined event listeners of a given type.
+     * If no type is given, all listeners will be removed.
      * @param [String] type Type of the events.
      [/lang]
      [lang:de]
@@ -1541,14 +1540,15 @@ enchant.EventTarget = enchant.Class.create({
          * @param {Number} height 画面の高さ.
          [/lang]
          [lang:en]
-         * A class which is controlling the cores main loop and scenes.
+         * A class for controlling the core’s main loop and scenes.
          *
-         * There can be only one instance at a time, when the constructor is executed
-         * with an instance present, the existing instance will be overwritten. The existing instance
+         * There can be only one instance at a time. When the
+         * constructor is executed while an instance exists, the
+         * existing instance will be overwritten. The existing instance
          * can be accessed from {@link enchant.Core.instance}.
          *
-         * @param {Number} width The width of the core screen.
-         * @param {Number} height The height of the core screen.
+         * @param {Number} width The width of the core viewport.
+         * @param {Number} height The height of the core viewport.
          [/lang]
          [lang:de]
          * Klasse, welche die Spielschleife und Szenen kontrolliert.
@@ -1656,7 +1656,7 @@ enchant.EventTarget = enchant.Class.create({
              * アプリの開始からのフレーム数.
              [/lang]
              [lang:en]
-             * The amount of frames since the core was started.
+             * The number of frames processed since the core was started.
              [/lang]
              [lang:de]
              * Anzahl der Frames seit dem Spielestart.
@@ -1669,7 +1669,7 @@ enchant.EventTarget = enchant.Class.create({
              * アプリが実行可能な状態かどうか.
              [/lang]
              [lang:en]
-             * Indicates if the core can be executed.
+             * Indicates whether or not the core can be executed.
              [/lang]
              [lang:de]
              * Zeigt an ob das Spiel ausgeführt werden kann.
@@ -1682,7 +1682,7 @@ enchant.EventTarget = enchant.Class.create({
              * アプリが実行状態かどうか.
              [/lang]
              [lang:en]
-             * Indicates if the core is currently executed.
+             * Indicates whether or not the core is currently running.
              [/lang]
              [lang:de]
              * Zeigt an ob das Spiel derzeit ausgeführt wird.
@@ -1695,7 +1695,7 @@ enchant.EventTarget = enchant.Class.create({
              * ロードされた画像をパスをキーとして保存するオブジェクト.
              [/lang]
              [lang:en]
-             * Object which stores loaded objects with the path as key.
+             * Object which stores loaded assets using the path as a key.
              [/lang]
              [lang:de]
              * Geladene Objekte werden unter dem Pfad als Schlüssel in diesem Objekt abgelegt.
@@ -1736,7 +1736,7 @@ enchant.EventTarget = enchant.Class.create({
              * ルートScene. Sceneスタック中の一番下のScene.
              [/lang]
              [lang:en]
-             * The root Scene. The Scene at bottom of Scene stack.
+             * The root Scene. The Scene at bottom of the Scene stack.
              [/lang]
              [lang:de]
              * Die Ursprungsszene.
@@ -1751,7 +1751,7 @@ enchant.EventTarget = enchant.Class.create({
              * ローディング時に表示されるScene.
              [/lang]
              [lang:en]
-             * The Scene which is getting displayed during loading.
+             * The Scene to be displayed during loading.
              [/lang]
              [lang:de]
              * Die Szene, welche während des Ladevorgangs dargestellt wird.
@@ -1763,6 +1763,9 @@ enchant.EventTarget = enchant.Class.create({
             /**
              [lang:ja]
              * 一度でも game.start() が呼ばれたことがあるかどうか。
+             [/lang]
+             [/lang:ja]
+             * Indicates whether or not game.start() has been called.
              [/lang]
              * @type {Boolean}
              * @private
@@ -2041,13 +2044,13 @@ enchant.EventTarget = enchant.Class.create({
          [lang:ja]
          * ファイルのプリロードを行う.
          *
-         * プリロードを行うよう設定されたファイルはenchant.Core#startが実行されるとき
+         * プリロードを行うよう設定されたファイルは{@link enchant.Core#start}が実行されるとき
          * ロードが行われる. 全てのファイルのロードが完了したときはCoreオブジェクトからload
          * イベントが発行され, Coreオブジェクトのassetsプロパティから画像ファイルの場合は
          * Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジェクトとして,
          * その他の場合は文字列としてアクセスできるようになる.
          *
-         * なおこのSurfaceオブジェクトはenchant.Surface.loadを使って作成されたものである
+         * なおこのSurfaceオブジェクトは{@link enchant.Surface.load}を使って作成されたものである
          * ため直接画像操作を行うことはできない. enchant.Surface.loadの項を参照.
          *
          * @example
@@ -2059,20 +2062,27 @@ enchant.EventTarget = enchant.Class.create({
          *   };
          *   core.start();
          *
-         * @param {...String} assets プリロードする画像のパス. 複数指定できる.
+         * @param {...String} assets プリロードするファイルのパス. 複数指定できる.
          [/lang]
          [lang:en]
-         * Performs a file preload.
+         * File preloader.
          *
-         * Sets files which are to be preloaded. When {@link enchant.Core#start} is called the
-         * actual loading takes place. When all files are loaded, a {@link enchant.Event.LOAD} event
-         * is dispatched from the Core object. Depending on the type of the file different objects will be
-         * created and stored in {@link enchant.Core#assets} Variable.
-         * When an image file is loaded, an {@link enchant.Surface} is created. If a sound file is loaded, an
-         * {@link enchant.Sound} object is created. Otherwise it will be accessible as a string.
+         * Loads the files specified in the parameters when
+         * {@link enchant.Core#start} is called.
+         * When all files are loaded, a {@link enchant.Event.LOAD}
+         * event is dispatched from the Core object. Depending on the
+         * type of each file, different objects will be created and
+         * stored in {@link enchant.Core#assets} Variable.
          *
-         * In addition, because this Surface object used made with {@link enchant.Surface.load},
-         * direct object manipulation is not possible. Refer to the items of {@link enchant.Surface.load}
+         * When an image file is loaded, a {@link enchant.Surface} is
+         * created. If a sound file is loaded, an {@link enchant.Sound}
+         * object is created. Any other file type will be accessible
+         * as a string.
+         *
+         * In addition, because this Surface object is created with
+         * {@link enchant.Surface.load}, it is not possible to
+         * manipulate the image directly.
+         * Refer to the {@link enchant.Surface.load} documentation.
          *
          * @example
          *   core.preload('player.gif');
@@ -2083,7 +2093,8 @@ enchant.EventTarget = enchant.Class.create({
          *   };
          *   core.start();
          *
-         * @param {...String} assets Path of images to be preloaded. Multiple settings possible.
+         * @param {...String} assets Path of images to be preloaded.
+         * Multiple settings possible.
          [/lang]
          [lang:de]
          * Lässt Dateien im voraus laden.
