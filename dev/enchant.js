@@ -1295,8 +1295,8 @@ enchant.Event.B_BUTTON_UP = 'bbuttonup';
  * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
  [/lang]
  [lang:en]
- * An event dispatched when an Action has been added to a Timeline.
- * When looped, an Action is removed from the timeline and added back into it.
+ * An event dispatched when an Action is added to a Timeline.
+ * When looped, an Action is removed from the Timeline and added back into it.
  [/lang]
  * @type {String}
  *
@@ -1695,7 +1695,7 @@ enchant.EventTarget = enchant.Class.create({
              * ロードされた画像をパスをキーとして保存するオブジェクト.
              [/lang]
              [lang:en]
-             * Object which stores loaded assets using the path as a key.
+             * Object which stores loaded assets using their paths as keys.
              [/lang]
              [lang:de]
              * Geladene Objekte werden unter dem Pfad als Schlüssel in diesem Objekt abgelegt.
@@ -2225,7 +2225,7 @@ enchant.EventTarget = enchant.Class.create({
          [lang:ja]
          * アプリを起動する.
          *
-         * enchant.Core#fpsで設定されたフレームレートに従ってenchant.Core#currentSceneの
+         * enchant.Core#fpsで設定されたフレームレートに従って{@link enchant.Core#currentScene}の
          * フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
          * 始まりローディング画面が表示される.
          [/lang]
