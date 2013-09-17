@@ -114,6 +114,10 @@ module.exports = (grunt) ->
       qunit:
         files: ['tests/qunit/*/*.html']
 
+      mocha:
+        all: 'tests/mocha/*.html'
+        core: 'test/mocha/enchant.js/*.html'
+
       exec:
         lang:
           command: 'rake lang'
@@ -133,6 +137,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-qunit'
   grunt.loadNpmTasks 'grunt-contrib-watch'
+  grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-exec'
 
   grunt.registerTask 'doc', 'Make jsdoc', ()->
@@ -155,6 +160,7 @@ module.exports = (grunt) ->
     done = this.async();
 
     sh 'git checkout build/readme.md', ()->
+      grunt.log.writeln("done!");
       done
 
   grunt.registerTask 'cp', '', ()->
@@ -198,5 +204,5 @@ module.exports = (grunt) ->
 
   # Default task.
   grunt.registerTask 'default', [
-    'jshint:core', 'concat', 'uglify', 'qunit', 'lang', 'build']
+    'jshint:core', 'concat', 'uglify', 'qunit', 'lang:en', 'lang:ja', 'lang:de', 'build']
 
