@@ -1,3 +1,14 @@
+# v0.8.0
+
+- features
+    - add WebAudioSound#currentTime
+    - add some classes about button input detection (feature/input)
+    - some fixes for supporting Nintendo Web Framework
+- bugfix
+    - bugfix about WebAudioSound#duration (#222)
+
+# v0.7.1
+
 # v0.7.0
 
 - features
