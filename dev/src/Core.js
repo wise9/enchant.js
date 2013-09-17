@@ -84,8 +84,8 @@
                     window.innerWidth / width,
                     window.innerHeight / height
                 );
-                this._pageX = 0;
-                this._pageY = 0;
+                this._pageX = stage.getBoundingClientRect().left;
+                this._pageY = stage.getBoundingClientRect().top;
             } else {
                 var style = window.getComputedStyle(stage);
                 sWidth = parseInt(style.width, 10);
@@ -265,16 +265,17 @@
              * @type {Object.<String, Boolean>}
              */
             this.input = {};
+
+            this.keyboardInputManager = new enchant.KeyboardInputManager(window.document, this.input);
+            this.keyboardInputManager.addBroadcastTarget(this);
+            this._keybind = this.keyboardInputManager._binds;
+
             if (!enchant.ENV.KEY_BIND_TABLE) {
                 enchant.ENV.KEY_BIND_TABLE = {};
             }
-            this._keybind = enchant.ENV.KEY_BIND_TABLE;
-            this.pressedKeysNum = 0;
-            this._internalButtondownListeners = {};
-            this._internalButtonupListeners = {};
 
-            for (var prop in this._keybind) {
-                this.keybind(prop, this._keybind[prop]);
+            for (var prop in enchant.ENV.KEY_BIND_TABLE) {
+                this.keybind(prop, enchant.ENV.KEY_BIND_TABLE[prop]);
             }
 
             if (initial) {
@@ -285,25 +286,6 @@
                     if (enchant.ENV.PREVENT_DEFAULT_KEY_CODES.indexOf(e.keyCode) !== -1) {
                         e.preventDefault();
                         e.stopPropagation();
-                    }
-
-                    if (!core.running) {
-                        return;
-                    }
-                    var button = core._keybind[e.keyCode];
-                    if (button) {
-                        evt = new enchant.Event(button + 'buttondown');
-                        core.dispatchEvent(evt);
-                    }
-                }, true);
-                document.addEventListener('keyup', function(e) {
-                    if (!core.running) {
-                        return;
-                    }
-                    var button = core._keybind[e.keyCode];
-                    if (button) {
-                        evt = new enchant.Event(button + 'buttonup');
-                        core.dispatchEvent(evt);
                     }
                 }, true);
 
@@ -1115,6 +1097,9 @@
                 }
             }
         },
+        _buttonListener: function(e) {
+            this.currentScene.dispatchEvent(e);
+        },
         /**
          [lang:ja]
          * キーバインドを設定する.
@@ -1137,33 +1122,9 @@
          * @return {enchant.Core} this
          */
         keybind: function(key, button) {
-            this._keybind[key] = button;
-            var onxbuttondown = function(e) {
-                var inputEvent;
-                if (!this.input[button]) {
-                    this.input[button] = true;
-                    inputEvent = new enchant.Event((this.pressedKeysNum++) ? 'inputchange' : 'inputstart');
-                    this.dispatchEvent(inputEvent);
-                    this.currentScene.dispatchEvent(inputEvent);
-                }
-                this.currentScene.dispatchEvent(e);
-            };
-            var onxbuttonup = function(e) {
-                var inputEvent;
-                if (this.input[button]) {
-                    this.input[button] = false;
-                    inputEvent = new enchant.Event((--this.pressedKeysNum) ? 'inputchange' : 'inputend');
-                    this.dispatchEvent(inputEvent);
-                    this.currentScene.dispatchEvent(inputEvent);
-                }
-                this.currentScene.dispatchEvent(e);
-            };
-
-            this.addEventListener(button + 'buttondown', onxbuttondown);
-            this.addEventListener(button + 'buttonup', onxbuttonup);
-
-            this._internalButtondownListeners[key] = onxbuttondown;
-            this._internalButtonupListeners[key] = onxbuttonup;
+            this.keyboardInputManager.keybind(key, button);
+            this.addEventListener(button + 'buttondown', this._buttonListener);
+            this.addEventListener(button + 'buttonup', this._buttonListener);
             return this;
         },
         /**
@@ -1184,21 +1145,14 @@
          * @return {enchant.Core} this
          */
         keyunbind: function(key) {
-            if (!this._keybind[key]) {
-                return this;
-            }
-            var buttondowns = this._internalButtondownListeners;
-            var buttonups = this._internalButtonupListeners;
-
-            this.removeEventListener(key + 'buttondown', buttondowns);
-            this.removeEventListener(key + 'buttonup', buttonups);
-
-            delete buttondowns[key];
-            delete buttonups[key];
-
-            delete this._keybind[key];
-
+            var button = this._keybind[key];
+            this.keyboardInputManager.keyunbind(key);
+            this.removeEventListener(button + 'buttondown', this._buttonListener);
+            this.removeEventListener(button + 'buttonup', this._buttonListener);
             return this;
+        },
+        changeButtonState: function(button, bool) {
+            this.keyboardInputManager.changeState(button, bool);
         },
         /**
          [lang:ja]

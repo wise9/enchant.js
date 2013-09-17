@@ -99,10 +99,10 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
         var core = enchant.Core.instance;
         ['left', 'right', 'up', 'down'].forEach(function(type) {
             if (this.input[type] && !input[type]) {
-                core.dispatchEvent(new enchant.Event(type + 'buttonup'));
+                core.changeButtonState(type, false);
             }
             if (!this.input[type] && input[type]) {
-                core.dispatchEvent(new enchant.Event(type + 'buttondown'));
+                core.changeButtonState(type, true);
             }
         }, this);
         this.input = input;
