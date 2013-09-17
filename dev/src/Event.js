@@ -510,6 +510,20 @@ enchant.Event.INPUT_END = 'inputend';
 
 /**
  [lang:ja]
+ * 入力が変化したとき発生するイベント
+ * ボタン入力が変化したとき発生する内部的なイベント.
+ * 発行するオブジェクト: {@link enchant.InputSource}
+ [/lang]
+ [lang:en]
+ * An internal event which is occurring when a input changes.
+ * Issued object: {@link enchant.InputSource}
+ [/lang]
+ * @type {String}
+ */
+enchant.Event.INPUT_STATE_CHANGED = 'inputstatechanged';
+
+/**
+ [lang:ja]
  * leftボタンが押された発生するイベント.
  * 発行するオブジェクト: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
