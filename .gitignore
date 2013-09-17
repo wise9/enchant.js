@@ -10,3 +10,4 @@ lang/*
 !build/readme.md
 enchant.js
 enchant.min.js
+npm-debug.log
