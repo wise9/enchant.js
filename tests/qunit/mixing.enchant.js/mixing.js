@@ -1,3 +1,4 @@
+
 module('mixing.enchant.js', {
     setup: function() {
         TestClass = enchant.Class.create({
@@ -22,9 +23,10 @@ module('mixing.enchant.js', {
 
             }
         });
+        QUnit.start();
     },
     teardown: function() {
-        testClass = undefined;
+        TestClass = undefined;
     }
 });
 
