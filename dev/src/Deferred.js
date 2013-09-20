@@ -61,7 +61,7 @@ if (window.Deferred) {
     });
     enchant.Deferred._insert = function(queue, ins) {
         if (queue._next instanceof enchant.Deferred) {
-            ins._next = queue._next;
+            ins._tail._next = queue._next;
         }
         queue._next = ins;
     };
