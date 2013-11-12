@@ -55,13 +55,21 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         var offset = this._currentTime;
         var actx = this.context;
         this.src = actx.createBufferSource();
-        this._gain = actx.createGain();
+        if (actx.createGain != null) {
+            this._gain = actx.createGain();
+        } else {
+            this._gain = actx.createGainNode();
+	}
         this.src.buffer = this.buffer;
         this._gain.gain.value = this._volume;
 
         this.src.connect(this._gain);
         this._gain.connect(this.connectTarget);
-        this.src.start(0, offset, this.buffer.duration - offset - 1.192e-7);
+	if (this.src.start != null) {
+            this.src.start(0, offset, this.buffer.duration - offset - 1.192e-7);
+	} else {
+            this.src.noteGrainOn(0, offset, this.buffer.duration - offset - 1.192e-7);
+	}
         this._startTime = actx.currentTime - this._currentTime;
         this._state = 1;
     },
@@ -81,7 +89,11 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         if (currentTime === this.duration) {
             return;
         }
-        this.src.stop(0);
+	if (this.src.stop != null) {
+            this.src.stop(0);
+	} else {
+            this.src.noteOff(0);
+	}
         this._currentTime = currentTime;
         this._state = 2;
     },
@@ -97,7 +109,11 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     stop: function() {
-        this.src.stop(0);
+	if (this.src.stop != null) {
+            this.src.stop(0);
+	} else {
+            this.src.noteOff(0);
+	}
         this._state = 0;
     },
     /**
