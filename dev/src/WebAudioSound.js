@@ -14,7 +14,7 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
      * @constructs
      */
     initialize: function() {
-        if(!window.webkitAudioContext){
+        if(!window.AudioContext){
             throw new Error("This browser does not support WebAudio API.");
         }
         enchant.EventTarget.call(this);
@@ -36,10 +36,21 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         var offset = this._currentTime;
         var actx = this.context;
         this.src = actx.createBufferSource();
+        if (actx.createGain != null) {
+            this._gain = actx.createGain();
+        } else {
+            this._gain = actx.createGainNode();
+	}
         this.src.buffer = this.buffer;
-        this.src.gain.value = this._volume;
-        this.src.connect(this.connectTarget);
-        this.src.noteGrainOn(0, offset, this.buffer.duration - offset - 1.192e-7);
+        this._gain.gain.value = this._volume;
+
+        this.src.connect(this._gain);
+        this._gain.connect(this.connectTarget);
+	if (this.src.start != null) {
+            this.src.start(0, offset, this.buffer.duration - offset - 1.192e-7);
+	} else {
+            this.src.noteGrainOn(0, offset, this.buffer.duration - offset - 1.192e-7);
+	}
         this._startTime = actx.currentTime - this._currentTime;
         this._state = 1;
     },
@@ -48,12 +59,20 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
         if (currentTime === this.duration) {
             return;
         }
-        this.src.noteOff(0);
+	if (this.src.stop != null) {
+            this.src.stop(0);
+	} else {
+            this.src.noteOff(0);
+	}
         this._currentTime = currentTime;
         this._state = 2;
     },
     stop: function() {
-        this.src.noteOff(0);
+	if (this.src.stop != null) {
+            this.src.stop(0);
+	} else {
+            this.src.noteOff(0);
+	}
         this._state = 0;
     },
     clone: function() {
@@ -78,7 +97,7 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
             volume = Math.max(0, Math.min(1, volume));
             this._volume = volume;
             if (this.src) {
-                this.src.gain.value = volume;
+		this._gain.gain.value = volume;
             }
         }
     },
