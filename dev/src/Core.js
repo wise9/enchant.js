@@ -663,7 +663,7 @@
                                 core.assets[assetName] = enchant.Sound.load(src, type, _callback, _onerror);
                             } else {
                                 core.assets[assetName] = req.responseText;
-                                _callback.call(enchant.Core.instance, new enchant.Event('laod'));
+                                _callback.call(enchant.Core.instance, new enchant.Event('load'));
                             }
                         }
                     };
