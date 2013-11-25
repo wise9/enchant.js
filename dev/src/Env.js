@@ -5,7 +5,8 @@
  * new Core() を呼ぶ前に変更することで変更することで, 動作設定を変えることができる.
  [/lang]
  [lang:en]
- * Environment variable.
+ * enchant.js environment variables.
+ * Execution settings can be changed by modifying these before calling new Core().
  [/lang]
  [lang:de]
  * Umgebungsvariable.
