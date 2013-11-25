@@ -899,19 +899,19 @@
          * アプリを停止する.
          *
          * フレームは更新されず, ユーザの入力も受け付けなくなる.
-         * {@link enchant.Core#start}で再開できる.
+         * {@link enchant.Core#resume}で再開できる.
          [/lang]
          [lang:en]
          * Stops the core.
          *
          * The frame will not be updated, and player input will not be accepted anymore.
-         * Core can be restarted using {@link enchant.Core#start}.
+         * Core can be restarted using {@link enchant.Core#resume}.
          [/lang]
          [lang:de]
          * Stoppt das Spiel.
          *
          * Der Frame wird nicht mehr aktualisiert und Spielereingaben werden nicht
-         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Core#start} Methode
+         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Core#resume} Methode
          * erneut gestartet werden.
          [/lang]
          */
@@ -924,19 +924,19 @@
          * アプリを一時停止する.
          *
          * フレームは更新されず, ユーザの入力は受け付ける.
-         * {@link enchant.Core#start}で再開できる.
+         * {@link enchant.Core#resume}で再開できる.
          [/lang]
          [lang:en]
          * Stops the core.
          *
          * The frame will not be updated, and player input will not be accepted anymore.
-         * Core can be started again using {@link enchant.Core#start}.
+         * Core can be started again using {@link enchant.Core#resume}.
          [/lang]
          [lang:de]
          * Stoppt das Spiel.
          *
          * Der Frame wird nicht mehr aktualisiert und Spielereingaben werden nicht
-         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Core#start} Methode
+         * mehr akzeptiert. Das spiel kann mit der {@link enchant.Core#resume} Methode
          * erneut gestartet werden.
          [/lang]
          */
