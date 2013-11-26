@@ -228,9 +228,10 @@ enchant.DOMSound.load = function(src, type, callback, onerror) {
         }, 0);
     } else {
         if (!enchant.ENV.USE_FLASH_SOUND && audio.canPlayType(type)) {
-            audio.addEventListener('canplaythrough', function() {
+            audio.addEventListener('canplaythrough', function canplay() {
                 sound.duration = audio.duration;
                 sound.dispatchEvent(new enchant.Event('load'));
+                audio.removeEventListener('canplaythrough', canplay);
             }, false);
             audio.src = src;
             audio.load();
