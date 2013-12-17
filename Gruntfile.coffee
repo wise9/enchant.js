@@ -116,10 +116,6 @@ module.exports = (grunt) ->
         core: 'test/mocha/enchant.js/*.html'
 
       exec:
-        lang:
-          command: 'rake lang'
-        doc:
-          command: 'rake doc'
         whatever:
           cmd: (command) -> command
 

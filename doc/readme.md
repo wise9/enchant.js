@@ -1,4 +1,4 @@
-Document was removed from repository, please see links below or generate by yourself with `rake doc` (require install jsdoc-toolkit with `rake jsdoc-toolkit`).
+Document was removed from repository, please see links below or generate by yourself with `grunt doc` (require install jsdoc-toolkit with `grunt install-jsdoc-toolkit`).
 
 - English
     - <http://wise9.github.com/enchant.js/doc/core/en/index.html>
