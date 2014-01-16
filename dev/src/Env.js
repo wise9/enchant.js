@@ -11,17 +11,16 @@
  [lang:de]
  * Umgebungsvariable.
  [/lang]
- * @type {Object}
  */
 enchant.ENV = {
     /**
      * Version of enchant.js
-     * @type {String}
+     * @type String
      */
     VERSION: "0.6.1",
     /**
      * The CSS vendor prefix of the current browser.
-     * @type {String}
+     * @type String
      */
     VENDOR_PREFIX: (function() {
         var ua = navigator.userAgent;
@@ -39,7 +38,8 @@ enchant.ENV = {
     }()),
     /**
      * Determines if the current browser supports touch.
-     * @type {Boolean} True, if touch is enabled.
+     * True, if touch is enabled.
+     * @type Boolean
      */
     TOUCH_ENABLED: (function() {
         var div = document.createElement('div');
@@ -48,7 +48,8 @@ enchant.ENV = {
     }()),
     /**
      * Determines if the current browser is an iPhone with a retina display.
-     * @return {Boolean} True, if this display is a retina display
+     * True, if this display is a retina display.
+     * @type Boolean
      */
     RETINA_DISPLAY: (function() {
         if (navigator.userAgent.indexOf('iPhone') !== -1 && window.devicePixelRatio === 2) {
@@ -66,7 +67,8 @@ enchant.ENV = {
     /**
      * Determines if for current browser Flash should be used to play 
      * sound instead of the native audio class.
-     * @type {Boolean} True, if flash should be used.
+     * True, if flash should be used.
+     * @type Boolean
      */
     USE_FLASH_SOUND: (function() {
         var ua = navigator.userAgent;
@@ -76,6 +78,7 @@ enchant.ENV = {
     }()),
     /**
      * If click/touch event occure for these tags the setPreventDefault() method will not be called.
+     * @type String[]
      */
     USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select', 'area'],
     CANVAS_DRAWING_METHODS: [
@@ -84,15 +87,16 @@ enchant.ENV = {
     ],
     /**
      * Keybind Table.
-     * You can use 'left', 'up', 'right', 'down', 'a', 'b' for preset event.
+     * You can use 'left', 'up', 'right', 'down' for preset event.
      * @example
      * enchant.ENV.KEY_BIND_TABLE = {
-     *    37: 'left',
-     *    38: 'up',
-     *    39: 'right',
-     *    40: 'down',
-     *    32: 'a', //-> use 'space' key as 'a button'
-     * }
+     *     37: 'left',
+     *     38: 'up',
+     *     39: 'right',
+     *     40: 'down',
+     *     32: 'a', //-> use 'space' key as 'a button'
+     * };
+     * @type Object
      */
     KEY_BIND_TABLE: {
         37: 'left',
@@ -102,17 +106,19 @@ enchant.ENV = {
     },
     PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
     /**
-     * @type {Boolean}
+     * @type Boolean
      */
     SOUND_ENABLED_ON_MOBILE_SAFARI: false,
     /**
      * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
+     * @type Boolean
      */
-    USE_WEBAUDIO: (function(){
+    USE_WEBAUDIO: (function() {
         return location.protocol !== 'file:';
     }()),
     /**
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
+     * @type Boolean
      */
     USE_ANIMATION: true
 };

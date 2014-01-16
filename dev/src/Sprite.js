@@ -7,26 +7,24 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * @class
      [lang:ja]
      * 画像表示機能を持ったクラス. Entity を継承している.
-     *
-     * @param {Number} [width] Spriteの横幅.
-     * @param {Number} [height] Spriteの高さ.
+     * @param {Number} width Spriteの横幅.
+     * @param {Number} height Spriteの高さ.
      [/lang]
      [lang:en]
      * Class which can display images.
-     * 
-     * @param {Number} [width] Sprite width.
-     * @param {Number} [height] Sprite height.
+     * @param {Number} width Sprite width.
+     * @param {Number} height Sprite height.
      [/lang]
      [lang:de]
      * Eine Klasse die Grafiken darstellen kann.
-     * 
-     * @param {Number} [width] Die Breite des Sprites.
-     * @param {Number} [height] Die Höhe des Sprites.
+     * @param {Number} width Die Breite des Sprites.
+     * @param {Number} height Die Höhe des Sprites.
      [/lang]
+     *
      * @example
-     *   var bear = new Sprite(32, 32);
-     *   bear.image = core.assets['chara1.gif'];
-     *   
+     * var bear = new Sprite(32, 32);
+     * bear.image = core.assets['chara1.gif'];
+     *
      * @constructs
      * @extends enchant.Entity
      */
@@ -41,11 +39,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameTop = 0;
         this._frame = 0;
         this._frameSequence = [];
-        /**
-         [lang:ja]
-         * frame に配列が指定されたときの処理。
-         [/lang]
-         */
+
+        // frame に配列が指定されたときの処理.
         this.addEventListener('enterframe', function() {
             if (this._frameSequence.length !== 0) {
                 var nextFrame = this._frameSequence.shift();
@@ -68,7 +63,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      [lang:de]
      * Die Grafik die im Sprite dargestellt wird.
      [/lang]
-     * @type {enchant.Surface}
+     * @type enchant.Surface
      */
     image: {
         get: function() {
@@ -91,8 +86,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * Spriteと同じ横幅と高さを持ったフレームが{@link enchant.Sprite#image}プロパティの画像に左上から順に
      * 配列されていると見て, 0から始まるインデックスを指定することでフレームを切り替える.
      *
-     * 数値の配列が指定された場合、それらを毎フレーム順に切り替える。
-     * ループするが、null値が含まれているとそこでループをストップする。
+     * 数値の配列が指定された場合, それらを毎フレーム順に切り替える.
+     * ループするが, null値が含まれているとそこでループをストップする.
      [/lang]
      [lang:en]
      * Indizes of the frames to be displayed.
@@ -108,6 +103,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * der dargestellte Frame automatisch gewechselt. Am ende des Arrays der Sequenz wird diese neugestartet.
      * Wenn ein Wert in der Sequenz auf null gesetzt wird, wird das automatische Framewechseln gestoppt.
      [/lang]
+     *
      * @example
      * var sprite = new Sprite(32, 32);
      * sprite.frame = [0, 1, 0, 2]
@@ -115,14 +111,14 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * sprite.frame = [0, 1, 0, 2, null]
      * //-> 0, 1, 0, 2, (2, 2,.. :stop)
      *
-     * @type {Number|Array}
+     * @type Number|Array
      */
     frame: {
         get: function() {
             return this._frame;
         },
         set: function(frame) {
-            if(this._frame === frame) {
+            if (this._frame === frame) {
                 return;
             }
             if (frame instanceof Array) {
@@ -143,7 +139,11 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      [lang:ja]
      * 0以下の動作は未定義.
      [/lang]
-     * @param frame
+     [lang:en]
+     [/lang]
+     [lang:de]
+     [/lang]
+     * @param {Number} frame 表示に使用するフレーム番号.
      * @private
      */
     _setFrame: function(frame) {
@@ -156,10 +156,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._frameTop = (frame / row | 0) * this._height % image.height;
         }
     },
-    /**
-     * width of Sprite
-     * @type {Number}
-     */
+    /**#nocode+*/
     width: {
         get: function() {
             return this._width;
@@ -170,10 +167,6 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._dirty = true;
         }
     },
-    /**
-     * height of Sprite
-     * @type {Number}
-     */
     height: {
         get: function() {
             return this._height;
@@ -184,6 +177,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             this._dirty = true;
         }
     },
+    /**#nocode-*/
     cvsRender: function(ctx) {
         var image = this._image,
             w = this._width, h = this._height,

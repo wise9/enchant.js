@@ -15,6 +15,10 @@ enchant.KeyboardInputManager = enchant.Class.create(enchant.BinaryInputManager, 
      * @param {HTMLElement} dom element that will be watched.
      * @param {*} flagStore object that store input flag.
      [/lang]
+     [lang:de]
+     * @param {HTMLElement} dom
+     * @param {*} flagStore
+     [/lang]
      * @constructs
      * @extends enchant.BinaryInputManager
      */
@@ -34,6 +38,10 @@ enchant.KeyboardInputManager = enchant.Class.create(enchant.BinaryInputManager, 
      * @param {Number} keyCode key code.
      * @param {String} name input name.
      [/lang]
+     [lang:de]
+     * @param {Number} keyCode
+     * @param {String} name
+     [/lang]
      */
     keybind: function(keyCode, name) {
         this.bind(enchant.KeyboardInputSource.getByKeyCode('' + keyCode), name);
@@ -47,12 +55,15 @@ enchant.KeyboardInputManager = enchant.Class.create(enchant.BinaryInputManager, 
      * Call {@link enchant.BinaryInputManager#unbind} with BinaryInputSource equivalent of key code.
      * @param {Number} keyCode key code.
      [/lang]
+     [lang:de]
+     * @param {Number} keyCode
+     [/lang]
      */
     keyunbind: function(keyCode) {
         this.unbind(enchant.KeyboardInputSource.getByKeyCode('' + keyCode));
     },
     _attachDOMEvent: function(domElement, eventType, state) {
-        domElement.addEventListener(eventType,  function(e) {
+        domElement.addEventListener(eventType, function(e) {
             var core = enchant.Core.instance;
             if (!core || !core.running) {
                 return;

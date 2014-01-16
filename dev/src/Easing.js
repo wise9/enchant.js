@@ -1,5 +1,4 @@
-
-/**
+/*
  * ============================================================================================
  * Easing Equations v2.0
  * September 1, 2003
@@ -9,21 +8,23 @@
  */
 
 /**
+ * @namespace
  [lang:ja]
- * イージング関数ライブラリ
- * {@link enchant.Easing} 以下にある関数は全て t(現在の時刻), b(初期値), c(変化後の値), d(値の変化にかける時間) の引数を取り、指定した時刻に取る値を返す。
- * ActionScript で広く使われている Robert Penner による Easing Equations を JavaScript に移植した。
- *
- * @see http://www.robertpenner.com/easing/
- * @see http://www.robertpenner.com/easing/penner_chapter7_tweening.pdf
- *
+ * イージング関数ライブラリ.
+ * {@link enchant.Easing} 以下にある関数は全て t(現在の時刻), b(初期値), c(変化後の値), d(値の変化にかける時間) の引数を取り, 指定した時刻に取る値を返す.
+ * ActionScript で広く使われている Robert Penner による Easing Equations を JavaScript に移植した.
  [/lang]
  [lang:en]
- [/lang]
  * Easing function library, from "Easing Equations" by Robert Penner.
- * @type {Object}
- * @namespace
- * {@link enchant.Tween} クラスで用いるイージング関数のライブラリ名前空間.
+ [/lang]
+ [lang:de]
+ [/lang]
+ * <br/>
+ * See: <a href="http://www.robertpenner.com/easing/">
+ * http://www.robertpenner.com/easing/</a>
+ * <br/>
+ * See: <a href="http://www.robertpenner.com/easing/penner_chapter7_tweening.pdf">
+ * http://www.robertpenner.com/easing/penner_chapter7_tweening.pdf</a>
  */
 enchant.Easing = {
     /**
@@ -459,7 +460,3 @@ enchant.Easing = {
         return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
     }
 };
-
-/**
- * Easing Equations v2.0
- */

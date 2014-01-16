@@ -1,6 +1,3 @@
-/**
- * @scope enchant.Core.prototype
- */
 (function() {
     var core;
     /**
@@ -10,15 +7,15 @@
         /**
          * @name enchant.Core
          * @class
-            [lang:ja]
+         [lang:ja]
          * アプリケーションのメインループ, シーンを管理するクラス.
          *
          * インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
          * コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
-         * {@link enchant.Core.instance}からアクセスできる.
+         * {@link enchant.Core.instance} からアクセスできる.
          *
-         * @param {Number} [width] 画面の横幅.
-         * @param {Number} [height] 画面の高さ.
+         * @param {Number} [width=320] 画面の横幅.
+         * @param {Number} [height=320] 画面の高さ.
          [/lang]
          [lang:en]
          * A class for controlling the core’s main loop and scenes.
@@ -28,8 +25,8 @@
          * existing instance will be overwritten. The existing instance
          * can be accessed from {@link enchant.Core.instance}.
          *
-         * @param {Number} [width] The width of the core viewport.
-         * @param {Number} [height] The height of the core viewport.
+         * @param {Number} [width=320] The width of the core viewport.
+         * @param {Number} [height=320] The height of the core viewport.
          [/lang]
          [lang:de]
          * Klasse, welche die Spielschleife und Szenen kontrolliert.
@@ -39,8 +36,8 @@
          * Auf die aktuell existierende Instanz kann über die {@link enchant.Core.instance}
          * Variable zugegriffen werden.
          *
-         * @param {Number} [width] Die Breite des Spieles.
-         * @param {Number} [height] Die Höhe des Spieles.
+         * @param {Number} [width=320] Die Breite des Spieles.
+         * @param {Number} [height=320] Die Höhe des Spieles.
          [/lang]
          * @constructs
          * @extends enchant.EventTarget
@@ -129,7 +126,7 @@
              [lang:de]
              * Frame Rate des Spieles.
              [/lang]
-             * @type {Number}
+             * @type Number
              */
             this.fps = 30;
             /**
@@ -142,7 +139,7 @@
              [lang:de]
              * Anzahl der Frames seit dem Spielestart.
              [/lang]
-             * @type {Number}
+             * @type Number
              */
             this.frame = 0;
             /**
@@ -155,7 +152,7 @@
              [lang:de]
              * Zeigt an ob das Spiel ausgeführt werden kann.
              [/lang]
-             * @type {Boolean}
+             * @type Boolean
              */
             this.ready = false;
             /**
@@ -168,7 +165,7 @@
              [lang:de]
              * Zeigt an ob das Spiel derzeit ausgeführt wird.
              [/lang]
-             * @type {Boolean}
+             * @type Boolean
              */
             this.running = false;
             /**
@@ -181,7 +178,7 @@
              [lang:de]
              * Geladene Objekte werden unter dem Pfad als Schlüssel in diesem Objekt abgelegt.
              [/lang]
-             * @type {Object.<String, Surface>}
+             * @type Object
              */
             this.assets = {};
             var assets = this._assets = [];
@@ -209,7 +206,7 @@
              * Die aktuell dargestellte Szene.
              * Diese Szene befindet sich oben auf dem Stapelspeicher.
              [/lang]
-             * @type {enchant.Scene}
+             * @type enchant.Scene
              */
             this.currentScene = null;
             /**
@@ -223,7 +220,7 @@
              * Die Ursprungsszene.
              * Diese Szene befindet sich unten auf dem Stapelspeicher.
              [/lang]
-             * @type {enchant.Scene}
+             * @type enchant.Scene
              */
             this.rootScene = new enchant.Scene();
             this.pushScene(this.rootScene);
@@ -237,18 +234,20 @@
              [lang:de]
              * Die Szene, welche während des Ladevorgangs dargestellt wird.
              [/lang]
-             * @type {enchant.Scene}
+             * @type enchant.Scene
              */
             this.loadingScene = new enchant.LoadingScene();
 
             /**
              [lang:ja]
-             * 一度でも game.start() が呼ばれたことがあるかどうか。
+             * 一度でも {@link enchant.Core#start} が呼ばれたことがあるかどうか.
              [/lang]
              [/lang:ja]
-             * Indicates whether or not game.start() has been called.
+             * Indicates whether or not {@link enchant.Core#start} has been called.
              [/lang]
-             * @type {Boolean}
+             [lang:de]
+             [/lang]
+             * @type Boolean
              * @private
              */
             this._activated = false;
@@ -266,7 +265,7 @@
              [lang:de]
              * Objekt, welches den aktuellen Eingabestatus des Spieles speichert.
              [/lang]
-             * @type {Object.<String, Boolean>}
+             * @type Object
              */
             this.input = {};
 
@@ -434,7 +433,7 @@
          [lang:de]
          * Breite des Spieles.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         width: {
             get: function() {
@@ -455,7 +454,7 @@
          [lang:de]
          * Höhe des Spieles.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         height: {
             get: function() {
@@ -476,7 +475,7 @@
          [lang:de]
          * Skalierung der Spieldarstellung.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         scale: {
             get: function() {
@@ -507,25 +506,25 @@
          [lang:ja]
          * ファイルのプリロードを行う.
          *
-         * プリロードを行うよう設定されたファイルは{@link enchant.Core#start}が実行されるとき
+         * プリロードを行うよう設定されたファイルは {@link enchant.Core#start} が実行されるとき
          * ロードが行われる. 全てのファイルのロードが完了したときはCoreオブジェクトからload
          * イベントが発行され, Coreオブジェクトのassetsプロパティから画像ファイルの場合は
          * Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジェクトとして,
          * その他の場合は文字列としてアクセスできるようになる.
          *
-         * なおこのSurfaceオブジェクトは{@link enchant.Surface.load}を使って作成されたものである
+         * なおこのSurfaceオブジェクトは {@link enchant.Surface.load} を使って作成されたものである
          * ため直接画像操作を行うことはできない. enchant.Surface.loadの項を参照.
          *
          * @example
-         *   core.preload('player.gif');
-         *   core.onload = function() {
-         *      var sprite = new Sprite(32, 32);
-         *      sprite.image = core.assets['player.gif']; // パス名でアクセス
-         *      ...
-         *   };
-         *   core.start();
+         * core.preload('player.gif');
+         * core.onload = function() {
+         *     var sprite = new Sprite(32, 32);
+         *     sprite.image = core.assets['player.gif']; // パス名でアクセス
+         *     ...
+         * };
+         * core.start();
          *
-         * @param {...String} [assets] プリロードするファイルのパス. 複数指定できる.
+         * @param {...String|String[]} assets プリロードするファイルのパス. 複数指定できる.
          [/lang]
          [lang:en]
          * File preloader.
@@ -548,15 +547,15 @@
          * Refer to the {@link enchant.Surface.load} documentation.
          *
          * @example
-         *   core.preload('player.gif');
-         *   core.onload = function() {
-         *      var sprite = new Sprite(32, 32);
-         *      sprite.image = core.assets['player.gif']; // Access via path
-         *      ...
-         *   };
-         *   core.start();
+         * core.preload('player.gif');
+         * core.onload = function() {
+         *     var sprite = new Sprite(32, 32);
+         *     sprite.image = core.assets['player.gif']; // Access via path
+         *     ...
+         * };
+         * core.start();
          *
-         * @param {...String} [assets] Path of images to be preloaded.
+         * @param {...String|String[]} assets Path of images to be preloaded.
          * Multiple settings possible.
          [/lang]
          [lang:de]
@@ -575,15 +574,15 @@
          * Für diesen Fall ist auf die {@link enchant.Surface.load} Dokumentation zu verweisen.
          *
          * @example
-         *   core.preload('player.gif');
-         *   core.onload = function() {
-         *      var sprite = new Sprite(32, 32);
-         *      sprite.image = core.assets['player.gif']; // zugriff mittels Dateipfades
-         *      ...
-         *   };
-         *   core.start();
+         * core.preload('player.gif');
+         * core.onload = function() {
+         *     var sprite = new Sprite(32, 32);
+         *     sprite.image = core.assets['player.gif']; // zugriff mittels Dateipfades
+         *     ...
+         * };
+         * core.start();
          *
-         * @param {...String} [assets] Pfade zu den Dateien die im voraus geladen werden sollen.
+         * @param {...String|String[]} assets Pfade zu den Dateien die im voraus geladen werden sollen.
          * Mehrfachangaben möglich.
          [/lang]
          * @return {enchant.Core} this
@@ -610,24 +609,29 @@
          [lang:ja]
          * ファイルのロードを行う.
          *
-         * @param {String} [src] asset ロードするファイルのパス.
+         * @param {String} src ロードするファイルのパス.
          * @param {String} [alias] ロードするファイルに設定したい名前.
          * @param {Function} [callback] ファイルのロードが完了したときに呼び出される関数.
          * @param {Function} [onerror] ファイルのロードに失敗したときに呼び出される関数.
+         * @return {enchant.Deferred} ファイル読み込み後に起動するDeferredオブジェクト.
          [/lang]
          [lang:en]
          * Loads a file.
          *
-         * @param {String} [src] File path of the resource to be loaded.
-         * @param {String} [asset] Name you want to designate for the resource to be loaded.
+         * @param {String} src File path of the resource to be loaded.
+         * @param {String} [alias] Name you want to designate for the resource to be loaded.
          * @param {Function} [callback] Function to be called if the file loads successfully.
          * @param {Function} [onerror] Function to be called if the file fails to load.
+         * @return {enchant.Deferred}
          [/lang]
          [lang:de]
          * Laden von Dateien.
          *
-         * @param {String} [asset] Pfad zu der Datei die geladen werden soll.
+         * @param {String} src Pfad zu der Datei die geladen werden soll.
+         * @param {String} [alias]
          * @param {Function} [callback] Funktion die ausgeführt wird wenn das laden abgeschlossen wurde.
+         * @param {Function} [onerror]
+         * @return {enchant.Deferred}
          [/lang]
          */
         load: function(src, alias, callback, onerror) {
@@ -688,9 +692,10 @@
          [lang:ja]
          * アプリを起動する.
          *
-         * enchant.Core#fpsで設定されたフレームレートに従って{@link enchant.Core#currentScene}の
+         * enchant.Core#fpsで設定されたフレームレートに従って {@link enchant.Core#currentScene} の
          * フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
          * 始まりローディング画面が表示される.
+         * @return {enchant.Deferred} ローディング画面終了後に起動するDeferredオブジェクト.
          [/lang]
          [lang:en]
          * Start the core.
@@ -699,6 +704,7 @@
          * according to the value stored in {@link enchant.core#fps}. If
          * there are images to preload, loading will begin and the
          * loading screen will be displayed.
+         * @return {enchant.Deferred}
          [/lang]
          [lang:de]
          * Starte das Spiel
@@ -706,8 +712,8 @@
          * Je nach der Frame Rate definiert in {@link enchant.Core#fps}, wird der Frame in der
          * {@link enchant.Core#currentScene} aktualisiert. Sollten Dateien die im voraus geladen werden
          * sollen vorhanden sein, beginnt das laden dieser Dateien und der Ladebildschirm wird dargestellt.
+         * @return {enchant.Deferred}
          [/lang]
-         * @return {enchant.Deferred} Deferred
          */
         start: function(deferred) {
             var onloadTimeSetter = function() {
@@ -799,21 +805,23 @@
          [lang:ja]
          * アプリをデバッグモードで開始する.
          *
-         * enchant.Core.instance._debug フラグを true にすることでもデバッグモードをオンにすることができる
+         * {@link enchant.Core#_debug} フラグを true にすることでもデバッグモードをオンにすることができる
+         * @return {enchant.Deferred} ローディング画面終了後に起動するDeferredオブジェクト.
          [/lang]
          [lang:en]
          * Start application in debug mode.
          *
          * Core debug mode can be turned on even if the
-         * enchant.Core.instance._debug flag is already set to true.
+         * {@link enchant.Core#_debug} flag is already set to true.
+         * @return {enchant.Deferred}
          [/lang]
          [lang:de]
          * Startet den Debug-Modus des Spieles.
          *
-         * Auch wenn die enchant.Core.instance._debug Variable gesetzt ist,
+         * Auch wenn die {@link enchant.Core#_debug} Variable gesetzt ist,
          * kann der Debug-Modus gestartet werden.
+         * @return {enchant.Deferred}
          [/lang]
-         * @return {enchant.Deferred} Deferred
          */
         debug: function() {
             this._debug = true;
@@ -827,11 +835,13 @@
         /**
          [lang:ja]
          * 次のフレームの実行を要求する.
-         * @param {Number} [delay] requestAnimationFrameを呼び出すまでの遅延時間.
+         * @param {Number} delay requestAnimationFrameを呼び出すまでの遅延時間.
          [/lang]
          [lang:en]
          * Requests the next frame.
-         * @param {Number} [delay] Amount of time to delay before calling requestAnimationFrame.
+         * @param {Number} delay Amount of time to delay before calling requestAnimationFrame.
+         [/lang]
+         [lang:de]
          [/lang]
          * @private
          */
@@ -853,11 +863,15 @@
         /**
          [lang:ja]
          * Core#_tickを呼び出す.
+         * @param {Number} time 呼び出し時の時間.
          [/lang]
          [lang:en]
          * Calls {@link enchant.Core#_tick}.
+         * @param {Number} time
          [/lang]
-         * @param {Number} [time]
+         [lang:de]
+         * @param {Number} time
+         [/lang]
          * @private
          */
         _callTick: function(time) {
@@ -899,7 +913,7 @@
          * アプリを停止する.
          *
          * フレームは更新されず, ユーザの入力も受け付けなくなる.
-         * {@link enchant.Core#resume}で再開できる.
+         * {@link enchant.Core#resume} で再開できる.
          [/lang]
          [lang:en]
          * Stops the core.
@@ -924,7 +938,7 @@
          * アプリを一時停止する.
          *
          * フレームは更新されず, ユーザの入力は受け付ける.
-         * {@link enchant.Core#resume}で再開できる.
+         * {@link enchant.Core#resume} で再開できる.
          [/lang]
          [lang:en]
          * Stops the core.
@@ -945,7 +959,7 @@
         },
         /**
          [lang:ja]
-         * アプリを再開する。
+         * アプリを再開する.
          [/lang]
          [lang:en]
          * Resumes core operations.
@@ -972,7 +986,7 @@
          * enchant.Core#pushSceneを行うとSceneをスタックの一番上に積むことができる. スタックの
          * 一番上のSceneに対してはフレームの更新が行われる.
          *
-         * @param {enchant.Scene} [scene] 移行する新しいScene.
+         * @param {enchant.Scene} scene 移行する新しいScene.
          * @return {enchant.Scene} 新しいScene.
          [/lang]
          [lang:en]
@@ -984,7 +998,7 @@
          * placed top of the stack. Frames will be only updated for the
          * Scene which is on the top of the stack.
          *
-         * @param {enchant.Scene} [scene] The new scene to display.
+         * @param {enchant.Scene} scene The new scene to display.
          * @return {enchant.Scene} The new Scene.
          [/lang]
          [lang:de]
@@ -1055,7 +1069,7 @@
          *
          * {@link enchant.Core#popScene}, {@link enchant.Core#pushScene}を同時に行う.
          *
-         * @param {enchant.Scene} [scene] おきかえるScene.
+         * @param {enchant.Scene} scene おきかえるScene.
          * @return {enchant.Scene} 新しいScene.
          [/lang]
          [lang:en]
@@ -1064,7 +1078,7 @@
          * Executes {@link enchant.Core#popScene} and {@link enchant.Core#pushScene}
          * one after another to replace the current scene with the new scene.
          *
-         * @param {enchant.Scene} [scene] The new scene with which to replace the current scene.
+         * @param {enchant.Scene} scene The new scene with which to replace the current scene.
          * @return {enchant.Scene} The new Scene.
          [/lang]
          [lang:de]
@@ -1073,7 +1087,7 @@
          * {@link enchant.Core#popScene}, {@link enchant.Core#pushScene} werden nacheinander
          * ausgeführt um die aktuelle Szene durch die neue zu ersetzen.
          *
-         * @param {enchant.Scene} [scene] Die neue Szene, welche die aktuelle Szene ersetzen wird.
+         * @param {enchant.Scene} scene Die neue Szene, welche die aktuelle Szene ersetzen wird.
          * @return {enchant.Scene} Die neue Szene.
          [/lang]
          */
@@ -1083,11 +1097,11 @@
         },
         /**
          [lang:ja]
-         * Scene削除する.
+         * Sceneを削除する.
          *
          * Sceneスタック中からSceneを削除する.
          *
-         * @param {enchant.Scene} [scene] 削除するScene.
+         * @param {enchant.Scene} scene 削除するScene.
          * @return {enchant.Scene} 削除したScene.
          [/lang]
          [lang:en]
@@ -1098,7 +1112,7 @@
          * If the given scene does not exist anywhere in the stack,
          * this method returns null.
          *
-         * @param {enchant.Scene} [scene] Scene to be removed.
+         * @param {enchant.Scene} scene Scene to be removed.
          * @return {enchant.Scene} The deleted Scene.
          [/lang]
          [lang:de]
@@ -1106,7 +1120,7 @@
          *
          * Entfernt eine Szene aus dem Szenen-Stapelspeicher.
          *
-         * @param {enchant.Scene} [scene] Die Szene die entfernt werden soll.
+         * @param {enchant.Scene} scene Die Szene die entfernt werden soll.
          * @return {enchant.Scene} Die entfernte Szene.
          [/lang]
          */
@@ -1131,8 +1145,8 @@
          [lang:ja]
          * キーバインドを設定する.
          *
-         * @param {Number} [key] キーバインドを設定するキーコード.
-         * @param {String} [button] 割り当てるボタン.
+         * @param {Number} key キーバインドを設定するキーコード.
+         * @param {String} button 割り当てるボタン.
          [/lang]
          [lang:en]
          * Bind a key code to an enchant.js button.
@@ -1140,14 +1154,14 @@
          * Binds the given key code to the given enchant.js button
          * ('left', 'right', 'up', 'down', 'a', 'b').
          *
-         * @param {Number} [key] Key code for the button to be bound.
-         * @param {String} [button] An enchant.js button.
+         * @param {Number} key Key code for the button to be bound.
+         * @param {String} button An enchant.js button.
          [/lang]
          [lang:de]
          * Bindet eine Taste.
          *
-         * @param {Number} [key] Der Tastencode der Taste die gebunden werden soll.
-         * @param {String} [button] Der enchant.js Knopf (left, right, up, down, a, b).
+         * @param {Number} key Der Tastencode der Taste die gebunden werden soll.
+         * @param {String} button Der enchant.js Knopf (left, right, up, down, a, b).
          [/lang]
          * @return {enchant.Core} this
          */
@@ -1165,12 +1179,12 @@
          [lang:en]
          * Delete the key binding for the given key.
          *
-         * @param {Number} [key] Key code whose binding is to be deleted.
+         * @param {Number} key Key code whose binding is to be deleted.
          [/lang]
          [lang:de]
          * Entbindet eine Taste.
          *
-         * @param {Number} [key] Der Tastencode der entfernt werden soll.
+         * @param {Number} key Der Tastencode der entfernt werden soll.
          [/lang]
          * @return {enchant.Core} this
          */
@@ -1186,15 +1200,15 @@
         },
         /**
          [lang:ja]
-         * Core#start が呼ばれてから経過した時間を取得する
+         * Core#startが呼ばれてから経過した時間を取得する.
          * @return {Number} 経過した時間 (秒)
          [/lang]
          [lang:en]
-         * Get the core time (not actual) elapsed since core.start was called.
+         * Get the core time (not actual) elapsed since {@link enchant.Core#start} was called.
          * @return {Number} Time elapsed (in seconds).
          [/lang]
          [lang:de]
-         * Liefert die vergange Spielzeit (keine reale) die seit dem Aufruf von core.start
+         * Liefert die vergange Spielzeit (keine reale) die seit dem Aufruf von {@link enchant.Core#start}
          * vergangen ist.
          * @return {Number} Die vergangene Zeit (Sekunden)
          [/lang]
@@ -1217,9 +1231,11 @@
      * callback function as arguments, then return the appropriate
      * class instance.
      [/lang]
+     [lang:de]
+     [/lang]
      * @static
      * @private
-     * @type {Object.<String, Function>}
+     * @type Object
      */
     enchant.Core._loadFuncs = {};
     enchant.Core._loadFuncs['jpg'] =
@@ -1238,8 +1254,17 @@
                     };
 
     /**
-     * Get the file extension from a path
-     * @param {String} [path]
+     [lang:ja]
+     * ファイルパスを取り, 拡張子を返す.
+     * @param {String} path ファイルパス.
+     [/lang]
+     [lang:en]
+     * Get the file extension from a path.
+     * @param {String} path file path.
+     [/lang]
+     [lang:de]
+     * @param {String} path
+     [/lang]
      * @return {*}
      */
     enchant.Core.findExt = function(path) {
@@ -1265,7 +1290,7 @@
      [lang:de]
      * Die aktuelle Instanz des Spieles.
      [/lang]
-     * @type {enchant.Core}
+     * @type enchant.Core
      * @static
      */
     enchant.Core.instance = null;

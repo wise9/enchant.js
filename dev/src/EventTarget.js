@@ -18,7 +18,6 @@ enchant.EventTarget = enchant.Class.create({
      * (Events), ähnlich wie DOM Events.
      * Jedoch wird das Phasenkonzept nicht unterstützt.
      [/lang]
-     * @extends {enchant.Event}
      * @constructs
      */
     initialize: function() {
@@ -27,20 +26,20 @@ enchant.EventTarget = enchant.Class.create({
     /**
      [lang:ja]
      * イベントリスナを追加する.
-     * @param {String} [type] イベントのタイプ.
-     * @param {function(e:enchant.Event)} [listener] 追加するイベントリスナ.
+     * @param {String} type イベントのタイプ.
+     * @param {Function(e:enchant.Event)} listener 追加するイベントリスナ.
      [/lang]
      [lang:en]
      * Add a new event listener which will be executed when the event
      * is dispatched.
-     * @param {String} [type] Type of the events.
-     * @param {function(e:enchant.Event)} [listener] Event listener to be added.
+     * @param {String} type Type of the events.
+     * @param {Function(e:enchant.Event)} listener Event listener to be added.
      [/lang]
      [lang:de]
      * Fügt einen neuen Ereignisbeobachter hinzu, welcher beim Auftreten des
      * Events ausgeführt wird.
-     * @param {String} [type] Ereignis Typ.
-     * @param {function(e:enchant.Event)} [listener] Der Ereignisbeobachter 
+     * @param {String} type Ereignis Typ.
+     * @param {Function(e:enchant.Event)} listener Der Ereignisbeobachter 
      * der hinzugefügt wird.
      [/lang]
      */
@@ -54,18 +53,23 @@ enchant.EventTarget = enchant.Class.create({
         }
     },
     /**
-     [lang:jp]
-     * addEventListener と同じ。
-     * @see {enchant.EventTarget#addEventListener}
-     * @param {String} [type] イベントのタイプ.
-     * @param {function(e:enchant.Event)} [listener] 追加するイベントリスナ.
+     [lang:ja]
+     * addEventListener と同じ.
+     * @param {String} type イベントのタイプ.
+     * @param {Function(e:enchant.Event)} listener 追加するイベントリスナ.
      [/lang]
      [lang:en]
-     * Synonym for addEventListener
-     * @see {enchant.EventTarget#addEventListener}
-     * @param {String} [type] Type of the events.
-     * @param {function(e:enchant.Event)} [listener] Event listener to be added.
+     * Synonym for addEventListener.
+     * @param {String} type Type of the events.
+     * @param {Function(e:enchant.Event)} listener Event listener to be added.
      [/lang]
+     [lang:de]
+     * Synonym für addEventListener.
+     * @param {String} type Ereignis Typ.
+     * @param {Function(e:enchant.Event)} listener Der Ereignisbeobachter 
+     * der hinzugefügt wird.
+     [/lang]
+     * @see enchant.EventTarget#addEventListener
      */
     on: function() {
         this.addEventListener.apply(this, arguments);
@@ -73,18 +77,18 @@ enchant.EventTarget = enchant.Class.create({
     /**
      [lang:ja]
      * イベントリスナを削除する.
-     * @param {String} [type] イベントのタイプ.
-     * @param {function(e:enchant.Event)} [listener] 削除するイベントリスナ.
+     * @param {String} type イベントのタイプ.
+     * @param {Function(e:enchant.Event)} listener 削除するイベントリスナ.
      [/lang]
      [lang:en]
      * Delete an event listener.
      * @param {String} [type] Type of the events.
-     * @param {function(e:enchant.Event)} [listener] Event listener to be deleted.
+     * @param {Function(e:enchant.Event)} listener Event listener to be deleted.
      [/lang]
      [lang:de]
      * Entfernt einen Ereignisbeobachter.
      * @param {String} [type] Ereignis Typ.
-     * @param {function(e:enchant.Event)} [listener] Der Ereignisbeobachter 
+     * @param {Function(e:enchant.Event)} listener Der Ereignisbeobachter 
      * der entfernt wird.
      [/lang]
      */
@@ -100,19 +104,18 @@ enchant.EventTarget = enchant.Class.create({
     /**
      [lang:ja]
      * すべてのイベントリスナを削除する.
-     * @param [String] [type] イベントのタイプ.
+     * @param {String} type イベントのタイプ.
      [/lang]
-     [lang:en]
      [lang:en]
      * Clear all defined event listeners of a given type.
      * If no type is given, all listeners will be removed.
-     * @param [String] [type] Type of the events.
+     * @param {String} type Type of the events.
      [/lang]
      [lang:de]
      * Entfernt alle Ereignisbeobachter für einen Typ.
      * Wenn kein Typ gegeben ist, werden alle 
      * Ereignisbeobachter entfernt.
-     * @param [String] [type] Ereignis Typ.
+     * @param {String} type Ereignis Typ.
      [/lang]
      */
     clearEventListener: function(type) {
@@ -125,15 +128,15 @@ enchant.EventTarget = enchant.Class.create({
     /**
      [lang:ja]
      * イベントを発行する.
-     * @param {enchant.Event} [e] 発行するイベント.
+     * @param {enchant.Event} e 発行するイベント.
      [/lang]
      [lang:en]
      * Issue an event.
-     * @param {enchant.Event} [e] Event to be issued.
+     * @param {enchant.Event} e Event to be issued.
      [/lang]
      [lang:de]
      * Löst ein Ereignis aus.
-     * @param {enchant.Event} [e] Ereignis das ausgelöst werden soll.
+     * @param {enchant.Event} e Ereignis das ausgelöst werden soll.
      [/lang]
      */
     dispatchEvent: function(e) {

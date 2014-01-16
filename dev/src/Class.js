@@ -3,23 +3,20 @@
  * @class
  [lang:ja]
  * クラスのクラス.
- *
  * @param {Function} [superclass] 継承するクラス.
- * @param {*} definition クラス定義.
+ * @param {*} [definition] クラス定義.
  [/lang]
  [lang:en]
  * A Class representing a class which supports inheritance.
- *
  * @param {Function} [superclass] The class from which the
  * new class will inherit the class definition.
- * @param {*} definition Class definition.
+ * @param {*} [definition] Class definition.
  [/lang]
  [lang:de]
  * Eine Klasse für Klassen, die Vererbung unterstützen.
- *
  * @param {Function} [superclass] Die Klasse, deren Klassendefinition
  * die neue Klasse erben wird.
- * @param {*} definition Klassendefinition.
+ * @param {*} [definition] Klassendefinition.
  [/lang]
  * @constructor
  */
@@ -36,18 +33,18 @@ enchant.Class = function(superclass, definition) {
  * コンストラクタを適用するには明示的に呼び出す必要がある.
  *
  * @example
- *   var Ball = Class.create({ // 何も継承しないクラスを作成する
- *       initialize: function(radius) { ... }, // メソッド定義
- *       fall: function() { ... }
- *   });
+ * var Ball = Class.create({ // 何も継承しないクラスを作成する
+ *     initialize: function(radius) { ... }, // メソッド定義
+ *     fall: function() { ... }
+ * });
  *
- *   var Ball = Class.create(Sprite);  // Spriteを継承したクラスを作成する
- *   var Ball = Class.create(Sprite, { // Spriteを継承したクラスを作成する
- *       initialize: function(radius) { // コンストラクタを上書きする
- *          Sprite.call(this, radius*2, radius*2); // 継承元のコンストラクタを適用する
- *          this.image = core.assets['ball.gif'];
- *       }
- *   });
+ * var Ball = Class.create(Sprite);  // Spriteを継承したクラスを作成する
+ * var Ball = Class.create(Sprite, { // Spriteを継承したクラスを作成する
+ *     initialize: function(radius) { // コンストラクタを上書きする
+ *         Sprite.call(this, radius * 2, radius * 2); // 継承元のコンストラクタを適用する
+ *         this.image = core.assets['ball.gif'];
+ *     }
+ * });
  *
  * @param {Function} [superclass] 継承するクラス.
  * @param {*} [definition] クラス定義.
@@ -60,18 +57,18 @@ enchant.Class = function(superclass, definition) {
  * to explicitly call the previous constructor to ensure a correct class initialization.
  *
  * @example
- *   var Ball = Class.create({ // Creates independent class.
- *       initialize: function(radius) { ... }, // Method definition.
- *       fall: function() { ... }
- *   });
+ * var Ball = Class.create({ // Creates independent class.
+ *     initialize: function(radius) { ... }, // Method definition.
+ *     fall: function() { ... }
+ * });
  *
- *   var Ball = Class.create(Sprite);  // Creates a class inheriting from "Sprite"
- *   var Ball = Class.create(Sprite, { // Creates a class inheriting "Sprite"
- *       initialize: function(radius) { // Overwrites constructor
- *          Sprite.call(this, radius*2, radius*2); // Applies previous constructor.
- *          this.image = core.assets['ball.gif'];
- *       }
- *   });
+ * var Ball = Class.create(Sprite);  // Creates a class inheriting from "Sprite"
+ * var Ball = Class.create(Sprite, { // Creates a class inheriting "Sprite"
+ *     initialize: function(radius) { // Overwrites constructor
+ *         Sprite.call(this, radius * 2, radius * 2); // Applies previous constructor.
+ *         this.image = core.assets['ball.gif'];
+ *     }
+ * });
  *
  * @param {Function} [superclass] The class from which the
  * new class will inherit the class definition.
@@ -86,55 +83,29 @@ enchant.Class = function(superclass, definition) {
  * Klasseninitialisierung sicherzustellen.
  *
  * @example
- *   var Ball = Class.create({ // definiert eine unabhängige Klasse.
- *       initialize: function(radius) { ... }, // Methodendefinitionen
- *       fall: function() { ... }
- *   });
+ * var Ball = Class.create({ // definiert eine unabhängige Klasse.
+ *     initialize: function(radius) { ... }, // Methodendefinitionen
+ *     fall: function() { ... }
+ * });
  *
  *   var Ball = Class.create(Sprite);  // definiert eine Klasse die von "Sprite" erbt.
  *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
  *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
- *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
- *          this.image = core.assets['ball.gif'];
+ *           Sprite.call(this, radius * 2, radius * 2); // Aufruf des Konstruktors der Basisklasse.
+ *           this.image = core.assets['ball.gif'];
  *       }
  *   });
  *
  * @param {Function} [superclass] The class from which the
  * new class will inherit the class definition.
  * @param {*} [definition] Class definition.
- [/lang]
- [lang:de]
- * Erstellt eine neue Klasse
- *
- * Wenn eine Klasse definiert wird, die von einer anderen Klasse erbt, wird der Konstruktor der
- * Basisklasse als Standard definiert. Sollte dieser Konstruktor in der neuen Klasse überschrieben
- * werden, sollte der vorherige Konstruktor explizit aufgerufen werden, um eine korrekte
- * Klasseninitialisierung sicherzustellen.
- * 
- * @example
- *   var Ball = Class.create({ // definiert eine unabhängige Klasse.
- *       initialize: function(radius) { ... }, // Methodendefinitionen
- *       fall: function() { ... }
- *   });
- *
- *   var Ball = Class.create(Sprite);  // definiert eine Klasse die von "Sprite" erbt.
- *   var Ball = Class.create(Sprite, { // definiert eine Klasse die von "Sprite" erbt.
- *       initialize: function(radius) { // überschreibt den Standardkonstruktor.
- *          Sprite.call(this, radius*2, radius*2); // Aufruf des Konstruktors der Basisklasse.
- *          this.image = core.assets['ball.gif'];
- *       }
- *   });
- *
- * @param {Function} [superclass] Die Klasse, deren Klassendefinition
- * die neue Klasse erben wird.
- * @param {*} definition Klassendefinition.
  [/lang]
  * @static
  */
 enchant.Class.create = function(superclass, definition) {
-    if (superclass == null && definition){
+    if (superclass == null && definition) {
         throw new Error("superclass is undefined (enchant.Class.create)");
-    }else if(superclass == null){
+    } else if (superclass == null) {
         throw new Error("definition is undefined (enchant.Class.create)");
     }
 
@@ -184,12 +155,18 @@ enchant.Class.create = function(superclass, definition) {
 /**
  [lang:ja]
  * クラスの継承関係を取得する.
+ * @param {Function} コンストラクタ.
+ * @return {Function[]} 親のコンストラクタ.
  [/lang]
  [lang:en]
  * Get the inheritance tree of this class.
+ * @param {Function}
+ * @return {Function[]}
  [/lang]
- * @param {ConstructorFunction}
- * @return {...ConstructorFunction}
+ [lang:de]
+ * @param {Function}
+ * @return {Function[]}
+ [/lang]
  */
 enchant.Class.getInheritanceTree = function(Constructor) {
     var ret = [];

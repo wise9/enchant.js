@@ -1,17 +1,17 @@
 /**
  * @scope enchant.ActionEventTarget.prototype
- * @type {*}
  */
 enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     /**
      * @name enchant.ActionEventTarget
      * @class
      [lang:ja]
-     * {@link enchant.Action} クラス向けに拡張された {@link enchant.EventTarget} クラス .
-     *
+     * timelineの {@link enchant.Action} クラス向けに拡張された {@link enchant.EventTarget} クラス.
      [/lang]
      [lang:en]
-     * EventTarget which can change the context of event listeners
+     * EventTarget which can change the context of event listeners.
+     [/lang]
+     [lang:de]
      [/lang]
      * @constructs
      * @extends enchant.EventTarget
@@ -19,10 +19,6 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
     initialize: function() {
         enchant.EventTarget.apply(this, arguments);
     },
-    /**
-     * Issue event.
-     * @param {enchant.Event} e Event issued.
-     */
     dispatchEvent: function(e) {
         var target;
         if (this.node) {

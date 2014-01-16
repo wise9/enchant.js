@@ -34,7 +34,7 @@ enchant.Event = enchant.Class.create({
          [lang:de]
          * Typ des Ereignis.
          [/lang]
-         * @type {String}
+         * @type String
          */
         this.type = type;
         /**
@@ -47,7 +47,7 @@ enchant.Event = enchant.Class.create({
          [lang:de]
          * Ziel des Ereignis.
          [/lang]
-         * @type {*}
+         * @type *
          */
         this.target = null;
         /**
@@ -60,7 +60,7 @@ enchant.Event = enchant.Class.create({
          [lang:de]
          * X Koordinate des Auftretens des Ereignis.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.x = 0;
         /**
@@ -73,7 +73,7 @@ enchant.Event = enchant.Class.create({
          [lang:de]
          * Y Koordinate des Auftretens des Ereignis.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.y = 0;
         /**
@@ -87,7 +87,7 @@ enchant.Event = enchant.Class.create({
          [lang:de]
          * X Koordinate des lokalen Koordinatensystems des Auftretens des Ereignis.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.localX = 0;
         /**
@@ -101,7 +101,7 @@ enchant.Event = enchant.Class.create({
          [lang:de]
          * Y Koordinate des lokalen Koordinatensystems des Auftretens des Ereignis.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.localY = 0;
     },
@@ -120,12 +120,12 @@ enchant.Event = enchant.Class.create({
  * 発行するオブジェクト: {@link enchant.Core}
  *
  * @example
- *   var core = new Core(320, 320);
- *   core.preload('player.gif');
- *   core.onload = function() {
- *      ... // ゲーム開始時の処理を記述
- *   };
- *   core.start();
+ * var core = new Core(320, 320);
+ * core.preload('player.gif');
+ * core.onload = function() {
+ *     ... // ゲーム開始時の処理を記述
+ * };
+ * core.start();
  *
  [/lang]
  [lang:en]
@@ -136,12 +136,12 @@ enchant.Event = enchant.Class.create({
  * Issued by: {@link enchant.Core}
  *
  * @example
- *   var core = new Core(320, 320);
- *   core.preload('player.gif');
- *   core.onload = function() {
- *      ... // Describes initial core processing
- *   };
- *   core.start();
+ * var core = new Core(320, 320);
+ * core.preload('player.gif');
+ * core.onload = function() {
+ *     ... // Describes initial core processing
+ * };
+ * core.start();
  *
  [/lang]
  [lang:de]
@@ -152,15 +152,15 @@ enchant.Event = enchant.Class.create({
  * Objekt des Auftretens: {@link enchant.Core}
  *
  * @example
- *   var core = new Core(320, 320);
- *   core.preload('player.gif');
- *   core.onload = function() {
- *      ... // initialisierung des Spieles 
- *   };
- *   core.start();
+ * var core = new Core(320, 320);
+ * core.preload('player.gif');
+ * core.onload = function() {
+ *     ... // initialisierung des Spieles 
+ * };
+ * core.start();
  *
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.LOAD = 'load';
 
@@ -172,6 +172,9 @@ enchant.Event.LOAD = 'load';
  [lang:en]
  * An event dispatched when an error occurs.
  * Issued by: {@link enchant.Core}, {@link enchant.Surface}, {@link enchant.WebAudioSound}, {@link enchant.DOMSound}
+ [/lang]
+ [lang:de]
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Surface}, {@link enchant.WebAudioSound}, {@link enchant.DOMSound}
  [/lang]
  */
 enchant.Event.ERROR = 'error';
@@ -185,7 +188,10 @@ enchant.Event.ERROR = 'error';
  * An event dispatched when the display size is changed.
  * Issued by: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- @type {String}
+ [lang:de]
+ * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
+ [/lang]
+ @type String
  */
 enchant.Event.CORE_RESIZE = 'coreresize';
 
@@ -204,7 +210,7 @@ enchant.Event.CORE_RESIZE = 'coreresize';
  * Das Ereignis tritt jedesmal auf, wenn eine im voraus geladene Grafik geladen wurde.
  * Objekt des Auftretens: {@link enchant.LoadingScene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.PROGRESS = 'progress';
 
@@ -221,7 +227,7 @@ enchant.Event.PROGRESS = 'progress';
  * Ereignis, welches auftritt wenn ein neuer Frame bearbeitet wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.ENTER_FRAME = 'enterframe';
 
@@ -238,7 +244,7 @@ enchant.Event.ENTER_FRAME = 'enterframe';
  * Ereignis, welches auftritt wenn ein Frame beendet wird.
  * Objekt des Auftretens: {@link enchant.Core}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.EXIT_FRAME = 'exitframe';
 
@@ -256,7 +262,7 @@ enchant.Event.EXIT_FRAME = 'exitframe';
  * ({@link enchant.Scene}) beginnt.
  * Objekt des Auftretens: {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.ENTER = 'enter';
 
@@ -274,7 +280,7 @@ enchant.Event.ENTER = 'enter';
  * ({@link enchant.Scene}) endet.
  * Objekt des Auftretens: {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.EXIT = 'exit';
 
@@ -292,7 +298,7 @@ enchant.Event.EXIT = 'exit';
  * hinzugefügt wird.
  * Objekt des Auftretens: {@link enchant.Group}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.CHILD_ADDED = 'childadded';
 
@@ -310,7 +316,7 @@ enchant.Event.CHILD_ADDED = 'childadded';
  * hinzugefügt wird.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.ADDED = 'added';
 
@@ -328,7 +334,7 @@ enchant.Event.ADDED = 'added';
  * hinzugefügt wird.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
 
@@ -336,19 +342,19 @@ enchant.Event.ADDED_TO_SCENE = 'addedtoscene';
  [lang:ja]
  * Nodeから子が削除されたとき発生するイベント.
  * 発行するオブジェクト: {@link enchant.Group}, {@link enchant.Scene}
- * @type {String}
+ * @type String
  [/lang]
  [lang:en]
  * An event dispatched when a Child is removed from a Node.
  * Issued by: {@link enchant.Group}, {@link enchant.Scene}
- * @type {String}
+ * @type String
  [/lang]
  [lang:de]
  * Ereignis, welchses auftritt wenn ein Kindelement von einem Node
  * entfernt wird.
  * Objekt des Auftretens: {@link enchant.Group}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.CHILD_REMOVED = 'childremoved';
 
@@ -366,7 +372,7 @@ enchant.Event.CHILD_REMOVED = 'childremoved';
  * entfernt wird.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.REMOVED = 'removed';
 
@@ -384,7 +390,7 @@ enchant.Event.REMOVED = 'removed';
  * entfernt wird.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
 
@@ -402,7 +408,7 @@ enchant.Event.REMOVED_FROM_SCENE = 'removedfromscene';
  * beginnt. Klicks werden als Touch behandelt.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.TOUCH_START = 'touchstart';
 
@@ -420,14 +426,14 @@ enchant.Event.TOUCH_START = 'touchstart';
  * bewegt wurde. Klicks werden als Touch behandelt.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.TOUCH_MOVE = 'touchmove';
 
 /**
  [lang:ja]
  * Nodeに対するタッチが終了したとき発生するイベント.
- * クリックもタッチとして扱われる. 発行するオブジェクト: enchant.Node
+ * クリックもタッチとして扱われる. 発行するオブジェクト: {@link enchant.Node}
  [/lang]
  [lang:en]
  * An event dispatched when a touch event intersecting the Node ends.
@@ -438,7 +444,7 @@ enchant.Event.TOUCH_MOVE = 'touchmove';
  * endet. Klicks werden als Touch behandelt.
  * Objekt des Auftretens: {@link enchant.Node}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.TOUCH_END = 'touchend';
 
@@ -456,7 +462,7 @@ enchant.Event.TOUCH_END = 'touchend';
  * gerendert wird.
  * Objekt des Auftretens: {@link enchant.Entity}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.RENDER = 'render';
 
@@ -473,7 +479,7 @@ enchant.Event.RENDER = 'render';
  * Ereignis, welchses auftritt wenn ein Knopf gedückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.INPUT_START = 'inputstart';
 
@@ -490,7 +496,7 @@ enchant.Event.INPUT_START = 'inputstart';
  * Ereignis, welchses auftritt wenn eine Knopfeingabe verändert wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.INPUT_CHANGE = 'inputchange';
 
@@ -507,13 +513,13 @@ enchant.Event.INPUT_CHANGE = 'inputchange';
  * Ereignis, welchses auftritt wenn eine Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.INPUT_END = 'inputend';
 
 /**
  [lang:ja]
- * 入力が変化したとき発生するイベント
+ * 入力が変化したとき発生するイベント.
  * ボタン入力が変化したとき発生する内部的なイベント.
  * 発行するオブジェクト: {@link enchant.InputSource}
  [/lang]
@@ -521,7 +527,7 @@ enchant.Event.INPUT_END = 'inputend';
  * An internal event which is occurring when a input changes.
  * Issued object: {@link enchant.InputSource}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.INPUT_STATE_CHANGED = 'inputstatechanged';
 
@@ -538,7 +544,7 @@ enchant.Event.INPUT_STATE_CHANGED = 'inputstatechanged';
  * Ereignis, welchses auftritt wenn der "Nach Links"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
 
@@ -555,7 +561,7 @@ enchant.Event.LEFT_BUTTON_DOWN = 'leftbuttondown';
  * Ereignis, welchses auftritt wenn der "Nach Links"-Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
 
@@ -572,7 +578,7 @@ enchant.Event.LEFT_BUTTON_UP = 'leftbuttonup';
  * Ereignis, welchses auftritt wenn der "Nach Rechts"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
 
@@ -589,7 +595,7 @@ enchant.Event.RIGHT_BUTTON_DOWN = 'rightbuttondown';
  * Ereignis, welchses auftritt wenn der "Nach Rechts"-Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
 
@@ -606,7 +612,7 @@ enchant.Event.RIGHT_BUTTON_UP = 'rightbuttonup';
  * Ereignis, welchses auftritt wenn der "Nach Oben"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
 
@@ -623,7 +629,7 @@ enchant.Event.UP_BUTTON_DOWN = 'upbuttondown';
  * Ereignis, welchses auftritt wenn der "Nach Oben"-Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.UP_BUTTON_UP = 'upbuttonup';
 
@@ -640,7 +646,7 @@ enchant.Event.UP_BUTTON_UP = 'upbuttonup';
  * Ereignis, welchses auftritt wenn der "Nach Unten"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
 
@@ -657,7 +663,7 @@ enchant.Event.DOWN_BUTTON_DOWN = 'downbuttondown';
  * Ereignis, welchses auftritt wenn der "Nach Unten"-Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
 
@@ -674,7 +680,7 @@ enchant.Event.DOWN_BUTTON_UP = 'downbuttonup';
  * Ereignis, welchses auftritt wenn der "A"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.A_BUTTON_DOWN = 'abuttondown';
 
@@ -691,7 +697,7 @@ enchant.Event.A_BUTTON_DOWN = 'abuttondown';
  * Ereignis, welchses auftritt wenn der "A"-Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.A_BUTTON_UP = 'abuttonup';
 
@@ -708,7 +714,7 @@ enchant.Event.A_BUTTON_UP = 'abuttonup';
  * Ereignis, welchses auftritt wenn der "B"-Knopf gedrückt wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
 
@@ -725,87 +731,101 @@ enchant.Event.B_BUTTON_DOWN = 'bbuttondown';
  * Ereignis, welchses auftritt wenn der "B"-Knopf losgelassen wird.
  * Objekt des Auftretens: {@link enchant.Core}, {@link enchant.Scene}
  [/lang]
- * @type {String}
+ * @type String
  */
 enchant.Event.B_BUTTON_UP = 'bbuttonup';
 
 /**
  [lang:ja]
- * アクションがタイムラインに追加された時に発行されるイベント
- * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * アクションがタイムラインに追加された時に発行されるイベント.
+ * looped が設定されている時も, アクションは一度タイムラインから削除されもう一度追加される.
  [/lang]
  [lang:en]
  * An event dispatched when an Action is added to a Timeline.
  * When looped, an Action is removed from the Timeline and added back into it.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.ADDED_TO_TIMELINE = "addedtotimeline";
 
 /**
  [lang:ja]
- * アクションがタイムラインから削除された時に発行されるイベント
- * looped が設定されている時も、アクションは一度タイムラインから削除されもう一度追加される
+ * アクションがタイムラインから削除された時に発行されるイベント.
+ * looped が設定されている時も, アクションは一度タイムラインから削除されもう一度追加される.
  [/lang]
  [lang:en]
  * An event dispatched when an Action is removed from a Timeline.
  * When looped, an Action is removed from the timeline and added back into it.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.REMOVED_FROM_TIMELINE = "removedfromtimeline";
 
 /**
  [lang:ja]
- * アクションが開始された時に発行されるイベント
+ * アクションが開始された時に発行されるイベント.
  [/lang]
  [lang:en]
  * An event dispatched when an Action begins.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.ACTION_START = "actionstart";
 
 /**
  [lang:ja]
- * アクションが終了するときに発行されるイベント
+ * アクションが終了するときに発行されるイベント.
  [/lang]
  [lang:en]
  * An event dispatched when an Action finishes.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.ACTION_END = "actionend";
 
 /**
  [lang:ja]
- * アクションが1フレーム経過するときに発行されるイベント
+ * アクションが1フレーム経過するときに発行されるイベント.
  [/lang]
  [lang:en]
  * An event dispatched when an Action has gone through one frame.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.ACTION_TICK = "actiontick";
 
 /**
  [lang:ja]
- * アクションが追加された時に、タイムラインに対して発行されるイベント
+ * アクションが追加された時に, タイムラインに対して発行されるイベント.
  [/lang]
  [lang:en]
  * An event dispatched to the Timeline when an Action is added.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.ACTION_ADDED = "actionadded";
 
 /**
  [lang:ja]
- * アクションが削除された時に、タイムラインに対して発行されるイベント
+ * アクションが削除された時に, タイムラインに対して発行されるイベント.
  [/lang]
  [lang:en]
  * An event dispatched to the Timeline when an Action is removed.
  [/lang]
- * @type {String}
+ [lang:de]
+ [/lang]
+ * @type String
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";

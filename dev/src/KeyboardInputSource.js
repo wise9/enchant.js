@@ -13,6 +13,9 @@ enchant.KeyboardInputSource = enchant.Class.create(enchant.BinaryInputSource, {
      [lang:en]
      * @param {String} keyCode key code of BinaryInputSource.
      [/lang]
+     [lang:de]
+     * @param {String} keyCode
+     [/lang]
      * @constructs
      * @extends enchant.BinaryInputSource
      */
@@ -33,6 +36,9 @@ enchant.KeyboardInputSource._instances = {};
  [lang:en]
  * Get the instance by key code.
  * @param {Number} keyCode key code.
+ [/lang]
+ [lang:de]
+ * @param {Number} keyCode
  [/lang]
  * @return {enchant.KeyboardInputSource} instance.
  */

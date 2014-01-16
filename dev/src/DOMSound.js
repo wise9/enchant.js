@@ -1,6 +1,5 @@
 /**
  * @scope enchant.DOMSound.prototype
- * @type {*}
  */
 enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
     /**
@@ -14,7 +13,7 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
      * Safari, Chrome, Firefox, Operaが対応している. ブラウザが音声ファイル
      * のコーデックに対応していない場合は再生されない.
      *
-     * コンストラクタではなく{@link enchant.DOMSound.load}を通じてインスタンスを作成する.
+     * コンストラクタではなく {@link enchant.DOMSound.load} を通じてインスタンスを作成する.
      [/lang]
      [lang:en]
      * Class to wrap audio elements.
@@ -38,6 +37,7 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
      * {@link enchant.DOMSound.load} erstellt.
      [/lang]
      * @constructs
+     * @extends enchant.EventTarget
      */
     initialize: function() {
         enchant.EventTarget.call(this);
@@ -51,7 +51,7 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Die länge der Sounddatei in Sekunden.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.duration = 0;
         throw new Error("Illegal Constructor");
@@ -142,7 +142,7 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
      [lang:de]
      * Aktuelle Wiedergabeposition (seconds).
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     currentTime: {
         get: function() {
@@ -164,7 +164,7 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
      [lang:de]
      * Lautstärke. 0 (stumm) ～ 1 (volle Lautstärke).
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     volume: {
         get: function() {
@@ -180,26 +180,25 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
 
 /**
  [lang:ja]
- * 音声ファイルを読み込んでSoundオブジェクトを作成する.
- *
+ * 音声ファイルを読み込んでDOMSoundオブジェクトを作成する.
  * @param {String} src ロードする音声ファイルのパス.
  * @param {String} [type] 音声ファイルのMIME Type.
  * @param {Function} callback ロード完了時のコールバック.
  * @param {Function} [onerror] ロード失敗時のコールバック.
  [/lang]
  [lang:en]
- * Loads an audio file and creates Sound object.
- *
+ * Loads an audio file and creates DOMSound object.
  * @param {String} src Path of the audio file to be loaded.
  * @param {String} [type] MIME Type of the audio file.
  * @param {Function} callback on load callback.
  * @param {Function} [onerror] on error callback.
  [/lang]
  [lang:de]
- * Läd eine Audio Datei und erstellt ein Sound objekt.
- *
+ * Läd eine Audio Datei und erstellt ein DOMSound objekt.
  * @param {String} src Pfad zu der zu ladenden Audiodatei.
  * @param {String} [type] MIME Type der Audtiodatei.
+ * @param {Function} callback
+ * @param {Function} [onerror]
  [/lang]
  * @return {enchant.DOMSound} DOMSound
  * @static

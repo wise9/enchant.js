@@ -1,6 +1,4 @@
-/**
- * ECMA-262 5th edition Functions
- */
+// ECMA-262 5th edition Functions
 if (typeof Object.defineProperty !== 'function') {
     Object.defineProperty = function(obj, prop, desc) {
         if ('value' in desc) {
@@ -78,9 +76,7 @@ window.getTime = (function() {
     }
 }());
 
-/**
- * define requestAnimationFrame
- */
+// define requestAnimationFrame
 window.requestAnimationFrame =
     window.requestAnimationFrame ||
     window.mozRequestAnimationFrame ||
@@ -108,9 +104,9 @@ window.requestAnimationFrame =
  * プラグインの識別子を引数として渡す必要がある.
  *
  * @example
- *   enchant();     // 全てのクラスがエクスポートされる
- *   enchant('');   // enchant.js本体のクラスのみがエクスポートされる
- *   enchant('ui'); // enchant.js本体のクラスとui.enchant.jsのクラスがエクスポートされる
+ * enchant();     // 全てのクラスがエクスポートされる
+ * enchant('');   // enchant.js本体のクラスのみがエクスポートされる
+ * enchant('ui'); // enchant.js本体のクラスとui.enchant.jsのクラスがエクスポートされる
  *
  * @param {...String} [modules] エクスポートするモジュール. 複数指定できる.
  [/lang]
@@ -123,9 +119,9 @@ window.requestAnimationFrame =
  * the plugin identifiers as arguments.
  *
  * @example
- *   enchant();     // All classes will be exported.
- *   enchant('');   // Only classes in enchant.js will be exported.
- *   enchant('ui'); // enchant.js classes and ui.enchant.js classes will be exported.
+ * enchant();     // All classes will be exported.
+ * enchant('');   // Only classes in enchant.js will be exported.
+ * enchant('ui'); // enchant.js classes and ui.enchant.js classes will be exported.
  *
  * @param {...String} [modules] Export module. Multiple designations possible.
  [/lang]
@@ -138,14 +134,14 @@ window.requestAnimationFrame =
  * müssen die Plugin Bezeichner explizit als Argumente übergeben werden.
  *
  * @example
- *   enchant();     // alle Klassen werden exportiert.
- *   enchant('');   // nur Klassen die in enchant.js definiert sind werden exportiert.
- *   enchant('ui'); // enchant.js Klassen und ui.enchant.js Klassen werden exportiert.
+ * enchant();     // alle Klassen werden exportiert.
+ * enchant('');   // nur Klassen die in enchant.js definiert sind werden exportiert.
+ * enchant('ui'); // enchant.js Klassen und ui.enchant.js Klassen werden exportiert.
  *
  * @param {...String} [modules] Module die exportiert werden sollen.
  [/lang]
+ * @function
  * @global
- * @type {Object}
  * @name enchant
  */
 var enchant = function(modules) {
@@ -193,9 +189,7 @@ var enchant = function(modules) {
     }
 };
 
-/**
- * export enchant
- */
+// export enchant
 window.enchant = enchant;
 
 window.addEventListener("message", function(msg, origin) {

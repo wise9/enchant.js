@@ -19,6 +19,12 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
      * @param {String} inactiveEventNameSuffix event name suffix.
      * @param {*} [source=this] source that will be added to event object.
      [/lang]
+     [lang:de]
+     * @param {*} flagStore
+     * @param {String} activeEventNameSuffix
+     * @param {String} inactiveEventNameSuffix
+     * @param {*} [source=this] source
+     [/lang]
      * @constructs
      * @extends enchant.InputManager
      */
@@ -31,7 +37,9 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
          [lang:en]
          * The number of active inputs.
          [/lang]
-         * @type {Number}
+         [lang:de]
+         [/lang]
+         * @type Number
          */
         this.activeInputsNum = 0;
         /**
@@ -41,7 +49,9 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
          [lang:en]
          * event name suffix that dispatched by BinaryInputManager.
          [/lang]
-         * @type {String}
+         [lang:de]
+         [/lang]
+         * @type String
          */
         this.activeEventNameSuffix = activeEventNameSuffix;
         /**
@@ -51,18 +61,26 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
          [lang:en]
          * event name suffix that dispatched by BinaryInputManager.
          [/lang]
-         * @type {String}
+         [lang:de]
+         [/lang]
+         * @type String
          */
         this.inactiveEventNameSuffix = inactiveEventNameSuffix;
     },
     /**
      [lang:ja]
+     * 特定の入力に名前をつける.
      * @param {enchant.BinaryInputSource} inputSource {@link enchant.InputSource}のインスタンス.
      * @param {String} name 入力につける名前.
      [/lang]
      [lang:en]
+     * Name specified input.
      * @param {enchant.BinaryInputSource} inputSource input source.
      * @param {String} name input name.
+     [/lang]
+     [lang:de]
+     * @param {enchant.BinaryInputSource} inputSource
+     * @param {String} name
      [/lang]
      * @see enchant.InputManager#bind
      */
@@ -72,11 +90,15 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
     },
     /**
      [lang:ja]
+     * 入力のバインドを解除する.
      * @param {enchant.BinaryInputSource} inputSource {@link enchant.InputSource}のインスタンス.
      [/lang]
      [lang:en]
      * Remove binded name.
      * @param {enchant.BinaryInputSource} inputSource input source.
+     [/lang]
+     [lang:de]
+     * @param {enchant.BinaryInputSource} inputSource
      [/lang]
      * @see enchant.InputManager#unbind
      */
@@ -95,6 +117,10 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
      * Change state of input.
      * @param {String} name input name.
      * @param {Boolean} bool input state.
+     [/lang]
+     [lang:de]
+     * @param {String} name
+     * @param {Boolean} bool
      [/lang]
      */
     changeState: function(name, bool) {
