@@ -63,6 +63,6 @@ module.exports = (grunt) ->
     grunt.task.run [
       'download-jsdoc-toolkit',
       'extract-jsdoc-toolkit',
-      'copy:' + extracted_directory_name + install_path ':' + install_path,
+      'copy:' + extracted_directory_name + install_path + ':' + install_path,
       'finalize-jsdoc-toolkit'
     ]
