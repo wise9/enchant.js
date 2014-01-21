@@ -108,6 +108,13 @@ module.exports = (grunt) ->
       qunit:
         files: ['tests/qunit/*/*.html']
 
+      mocha:
+        test:
+          src: ['tests/mocha/**/*.html']
+          options: 
+            log: true
+            reporter: 'Spec'
+
       exec:
         lang:
           command: 'rake lang'
@@ -126,6 +133,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-qunit'
+  grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-exec'
 
