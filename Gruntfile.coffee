@@ -116,6 +116,13 @@ module.exports = (grunt) ->
         all: 'tests/mocha/*.html'
         core: 'test/mocha/enchant.js/*.html'
 
+      mocha:
+        test:
+          src: ['tests/mocha/**/*.html']
+          options: 
+            log: true
+            reporter: 'Spec'
+
       exec:
         whatever:
           cmd: (command) -> command
@@ -132,6 +139,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-qunit'
+  grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-exec'
