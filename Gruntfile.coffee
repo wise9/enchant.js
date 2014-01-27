@@ -119,13 +119,6 @@ module.exports = (grunt) ->
             log: true
             reporter: 'Spec'
 
-      mocha:
-        test:
-          src: ['tests/mocha/**/*.html']
-          options: 
-            log: true
-            reporter: 'Spec'
-
       exec:
         whatever:
           cmd: (command) -> command
