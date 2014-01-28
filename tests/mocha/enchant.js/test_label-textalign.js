@@ -1,4 +1,4 @@
-describe("Lavel.textAlign", function(){
+describe("Label.textAlign", function(){
     var context, core, label;
 
     beforeEach(function(){
