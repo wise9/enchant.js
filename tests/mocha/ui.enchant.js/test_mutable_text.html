@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../mocha.css" type="text/css" media="screen">
+    <title>ui.enchant.js mutableText unit test</title>
+    <style type="text/css">
+    #enchant-stage{display:none; visibility:hidden;}
+    </style>
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="../mocha.js" type="text/javascript"></script> 
+    <script type="text/javascript">
+        mocha.setup("bdd");
+    </script>
+    <script src="../../../node_modules/grunt-mocha/phantomjs/bridge.js" type="text/javascript"></script>
+    <script src="../chai.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var expect = chai.expect;
+    </script>
+
+    <script src="../../../dev/enchant.js"></script>
+    <script src="../../../dev/plugins/ui.enchant.js"></script>
+    <script src="../../../dev/plugins/util.enchant.js"></script>
+    <script src="./test_mutable_text.js"></script>
+
+    <!--
+      - mocha.run() is executed in test_mutable_text.js.
+      - It is needed to execute after core.start() called.
+      -->
+</body>
+</html>
