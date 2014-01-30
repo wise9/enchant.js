@@ -3,7 +3,13 @@ describe("Class", function(){
         enchant();
     });
 
-    it("stands for Class");
+    it("is a class", function(){
+        var TestClass = enchant.Class(Object, {});
+        expect(TestClass.prototype.constructor).to.exist;
+        expect(TestClass.prototype.initialize).to.exist;
+        var tc = new TestClass();
+        expect(tc).to.be.an.instanceOf(TestClass);
+    });
 
     describe("#create", function(){
         it("throws Error when arguments are invalid", function(){
@@ -52,6 +58,9 @@ describe("Class", function(){
     });
 
     describe("#getInheritanceTree", function(){
-        it("shows inheritance tree");
+        it("returns inheritance tree array", function(){
+            var inheritanceTree = enchant.Class.getInheritanceTree(enchant.Sprite);
+            expect(inheritanceTree.length).to.equal(4);
+         });
     });
 });
