@@ -24,8 +24,31 @@ describe("Class", function(){
             expect(tc.foo()).to.equal('foo');
         });
 
-        it("creates a class inheritting 'Sprite'");
-        it("creates a class inheritting 'Sprite' and overwrite constructor");
+        it("creates a class inheritting existing Class", function(){
+            var TestClass = enchant.Class.create(Sprite);
+            expect(TestClass.prototype.initialize).to.deep.equal(Sprite.prototype.initialize);
+            expect(TestClass.prototype.cvsRender, "inherit from enchant.Sprite").to.exist;
+            expect(TestClass.prototype.within, "inherit from enchant.Entity").to.exist;
+            var tc = new TestClass(10, 10);
+            expect(tc.height).to.equal(10);
+            expect(tc.width).to.equal(10);
+        });
+
+        it("creates a class inheritting existing Class and overwrite constructor", function(){
+            var TestClass = enchant.Class.create(Sprite, {
+                initialize: function(width, height){
+                    enchant.Sprite.call(this);
+                    this.width = 2 * width
+                    this.height = 2 * height;
+                }
+            });
+            expect(TestClass.prototype.initialize).not.to.deep.equal(Sprite.prototype.initialize);
+            expect(TestClass.prototype.cvsRender, "inherit from enchant.Sprite").to.exist;
+            expect(TestClass.prototype.within, "inherit from enchant.Entity").to.exist;
+            var tc = new TestClass(10, 10);
+            expect(tc.height).to.equal(20);
+            expect(tc.width).to.equal(20);
+        });
     });
 
     describe("#getInheritanceTree", function(){
