@@ -58,13 +58,9 @@ describe("Class", function(){
     });
 
     describe("#getInheritanceTree", function(){
-<<<<<<< HEAD
-        it("shows inheritance tree");
-=======
         it("returns inheritance tree array", function(){
             var inheritanceTree = enchant.Class.getInheritanceTree(enchant.Sprite);
             expect(inheritanceTree.length).to.equal(4);
          });
->>>>>>> add enchant.Class test
     });
 });
