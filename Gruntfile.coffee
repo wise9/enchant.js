@@ -91,6 +91,7 @@ module.exports = (grunt) ->
           ]
           dest: 'dev/enchant.js'
           options:
+            process: true
             banner: """
 /**
  * <%= pkg.name %> v<%= pkg.version %>

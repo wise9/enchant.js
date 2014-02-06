@@ -17,7 +17,7 @@ enchant.ENV = {
      * Version of enchant.js
      * @type String
      */
-    VERSION: "0.6.1",
+    VERSION: '<%= pkg.version %>',
     /**
      * The CSS vendor prefix of the current browser.
      * @type String
