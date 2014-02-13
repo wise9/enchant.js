@@ -41,17 +41,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameSequence = [];
 
         // frame に配列が指定されたときの処理.
-        this.addEventListener('enterframe', function() {
-            if (this._frameSequence.length !== 0) {
-                var nextFrame = this._frameSequence.shift();
-                if (nextFrame === null) {
-                    this._frameSequence = [];
-                } else {
-                    this._setFrame(nextFrame);
-                    this._frameSequence.push(nextFrame);
-                }
-            }
-        });
+        this.addEventListener(enchant.Event.ENTER_FRAME, this._rotateFrameSequence);
     },
     /**
      [lang:ja]
@@ -154,6 +144,17 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             row = image.width / this._width | 0;
             this._frameLeft = (frame % row | 0) * this._width;
             this._frameTop = (frame / row | 0) * this._height % image.height;
+        }
+    },
+    _rotateFrameSequence: function() {
+        if (this._frameSequence.length !== 0) {
+            var nextFrame = this._frameSequence.shift();
+            if (nextFrame === null) {
+                this._frameSequence = [];
+            } else {
+                this._setFrame(nextFrame);
+                this._frameSequence.push(nextFrame);
+            }
         }
     },
     /**#nocode+*/
