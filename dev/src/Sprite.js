@@ -67,7 +67,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 return;
             }
             this._image = image;
-            this._setFrame(this._frame);
+            this._computeFramePosition();
         }
     },
     /**
@@ -112,15 +112,12 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 return;
             }
             if (frame instanceof Array) {
-                var frameSequence = frame.slice();
-                var nextFrame = frameSequence.shift();
-                this._setFrame(nextFrame);
-                frameSequence.push(nextFrame);
-                this._frameSequence = frameSequence;
+                this._frameSequence = frame.slice();
+                this._rotateFrameSequence();
             } else {
-                this._setFrame(frame);
                 this._frameSequence = [];
                 this._frame = frame;
+                this._computeFramePosition();
             }
         }
     },
@@ -133,17 +130,15 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      [/lang]
      [lang:de]
      [/lang]
-     * @param {Number} frame 表示に使用するフレーム番号.
      * @private
      */
-    _setFrame: function(frame) {
+    _computeFramePosition: function() {
         var image = this._image;
-        var row, col;
+        var row;
         if (image != null) {
-            this._frame = frame;
             row = image.width / this._width | 0;
-            this._frameLeft = (frame % row | 0) * this._width;
-            this._frameTop = (frame / row | 0) * this._height % image.height;
+            this._frameLeft = (this._frame % row | 0) * this._width;
+            this._frameTop = (this._frame / row | 0) * this._height % image.height;
         }
     },
     _rotateFrameSequence: function() {
@@ -152,7 +147,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             if (nextFrame === null) {
                 this._frameSequence = [];
             } else {
-                this._setFrame(nextFrame);
+                this._frame = nextFrame;
+                this._computeFramePosition();
                 this._frameSequence.push(nextFrame);
             }
         }
@@ -164,7 +160,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         },
         set: function(width) {
             this._width = width;
-            this._setFrame(this._frame);
+            this._computeFramePosition();
             this._dirty = true;
         }
     },
@@ -174,7 +170,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         },
         set: function(height) {
             this._height = height;
-            this._setFrame(this._frame);
+            this._computeFramePosition();
             this._dirty = true;
         }
     },
