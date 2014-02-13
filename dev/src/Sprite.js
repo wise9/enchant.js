@@ -122,7 +122,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 return;
             }
             if (frame instanceof Array) {
-                var frameSequence = frame;
+                var frameSequence = frame.slice();
                 var nextFrame = frameSequence.shift();
                 this._setFrame(nextFrame);
                 frameSequence.push(nextFrame);
