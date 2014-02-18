@@ -302,6 +302,5 @@ describe("Scene", function(){
             scene.dispatchEvent(new enchant.Event("exit"));
             expect(stub.called).to.be.true;
         });
-
     });
 });
