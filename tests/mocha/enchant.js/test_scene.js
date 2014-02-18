@@ -261,11 +261,19 @@ describe("Scene", function(){
         it("#_determineEventTarget returns target layer", function(){
             var target = scene._determineEventTarget(new enchant.Event("touchstart"));
             expect(target).to.equal(scene);
-            var sprite = new Sprite();
-            var stub = sinon.stub(scene._layers["Canvas"], "_determineEventTarget");
-            stub.returns(sprite);
+            var spriteOnCanvas = new Sprite();
+            var stubCanvas = sinon.stub(scene._layers["Canvas"], "_determineEventTarget");
+            stubCanvas.returns(spriteOnCanvas);
             target = scene._determineEventTarget(new enchant.Event("touchstart"));
-            expect(target).to.equal(sprite);
+            expect(target).to.equal(spriteOnCanvas);
+            expect(stubCanvas.callCount).to.equal(1);
+            var spriteOnDom = new Sprite();
+            var stubDom = sinon.stub(scene._layers["Dom"], "_determineEventTarget");
+            stubDom.returns(spriteOnDom);
+            target = scene._determineEventTarget(new enchant.Event("touchstart"));
+            expect(target).to.equal(spriteOnCanvas);
+            expect(stubCanvas.callCount).to.equal(2);
+            expect(stubDom.callCount).to.equal(0);
         });
 
         it("adds layer to child when childadded event occurred", function(){
