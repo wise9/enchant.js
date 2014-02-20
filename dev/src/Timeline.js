@@ -102,9 +102,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      */
     next: function(remainingTime) {
         var e, action = this.queue.shift();
-        e = new enchant.Event("actionend");
-        e.timeline = this;
-        action.dispatchEvent(e);
+
+        if (action) {
+            e = new enchant.Event("actionend");
+            e.timeline = this;
+            action.dispatchEvent(e);
+        }
 
         if (this.queue.length === 0) {
             this._activated = false;
