@@ -183,21 +183,21 @@ enchant.DOMSound = enchant.Class.create(enchant.EventTarget, {
  * 音声ファイルを読み込んでDOMSoundオブジェクトを作成する.
  * @param {String} src ロードする音声ファイルのパス.
  * @param {String} [type] 音声ファイルのMIME Type.
- * @param {Function} callback ロード完了時のコールバック.
+ * @param {Function} [callback] ロード完了時のコールバック.
  * @param {Function} [onerror] ロード失敗時のコールバック.
  [/lang]
  [lang:en]
  * Loads an audio file and creates DOMSound object.
  * @param {String} src Path of the audio file to be loaded.
  * @param {String} [type] MIME Type of the audio file.
- * @param {Function} callback on load callback.
+ * @param {Function} [callback] on load callback.
  * @param {Function} [onerror] on error callback.
  [/lang]
  [lang:de]
  * Läd eine Audio Datei und erstellt ein DOMSound objekt.
  * @param {String} src Pfad zu der zu ladenden Audiodatei.
  * @param {String} [type] MIME Type der Audtiodatei.
- * @param {Function} callback
+ * @param {Function} [callback]
  * @param {Function} [onerror]
  [/lang]
  * @return {enchant.DOMSound} DOMSound
@@ -213,6 +213,7 @@ enchant.DOMSound.load = function(src, type, callback, onerror) {
         }
     }
     type = type.replace('mp3', 'mpeg').replace('m4a', 'mp4');
+    callback = callback || function() {};
     onerror = onerror || function() {};
 
     var sound = Object.create(enchant.DOMSound.prototype);

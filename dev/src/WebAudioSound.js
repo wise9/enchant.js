@@ -191,21 +191,21 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
  * 音声ファイルを読み込んでWebAudioSoundオブジェクトを作成する.
  * @param {String} src ロードする音声ファイルのパス.
  * @param {String} [type] 音声ファイルのMIME Type.
- * @param {Function} callback ロード完了時のコールバック.
+ * @param {Function} [callback] ロード完了時のコールバック.
  * @param {Function} [onerror] ロード失敗時のコールバック.
  [/lang]
  [lang:en]
  * Loads an audio file and creates WebAudioSound object.
  * @param {String} src Path of the audio file to be loaded.
  * @param {String} [type] MIME Type of the audio file.
- * @param {Function} callback on load callback.
+ * @param {Function} [callback] on load callback.
  * @param {Function} [onerror] on error callback.
  [/lang]
  [lang:de]
  * Läd eine Audio Datei und erstellt ein WebAudioSound objekt.
  * @param {String} src Pfad zu der zu ladenden Audiodatei.
  * @param {String} [type] MIME Type der Audtiodatei.
- * @param {Function} callback
+ * @param {Function} [callback]
  * @param {Function} [onerror]
  [/lang]
  * @return {enchant.WebAudioSound} WebAudioSound
@@ -214,6 +214,7 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
 enchant.WebAudioSound.load = function(src, type, callback, onerror) {
     var canPlay = (new Audio()).canPlayType(type);
     var sound = new enchant.WebAudioSound();
+    callback = callback || function() {};
     onerror = onerror || function() {};
     sound.addEventListener(enchant.Event.LOAD, callback);
     sound.addEventListener(enchant.Event.ERROR, onerror);
