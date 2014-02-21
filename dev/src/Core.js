@@ -732,19 +732,9 @@
                     (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
                     navigator.userAgent.indexOf('iPad') !== -1)) {
                     var d = new enchant.Deferred();
-                    var scene = new enchant.Scene();
-                    scene.backgroundColor = '#000';
-                    var size = Math.round(core.width / 10);
-                    var sprite = new enchant.Sprite(core.width, size);
-                    sprite.y = (core.height - size) / 2;
-                    sprite.image = new enchant.Surface(core.width, size);
-                    sprite.image.context.fillStyle = '#fff';
-                    sprite.image.context.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
-                    var width = sprite.image.context.measureText('Touch to Start').width;
-                    sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
-                    scene.addChild(sprite);
-                    document.addEventListener('mousedown', function waitTouch() {
-                        document.removeEventListener('mousedown', waitTouch);
+                    var scene = this._createTouchToStartScene();
+                    scene.addEventListener(enchant.Event.TOUCH_START, function waitTouch() {
+                        this.removeEventListener(enchant.Event.TOUCH_START, waitTouch);
                         core._touched = true;
                         core.removeScene(scene);
                         core.start(d);
@@ -800,6 +790,20 @@
 
             this.pushScene(this.loadingScene);
             return enchant.Deferred.parallel(o);
+        },
+        _createTouchToStartScene: function() {
+            var scene = new enchant.Scene();
+            scene.backgroundColor = '#000';
+            var size = Math.round(core.width / 10);
+            var sprite = new enchant.Sprite(core.width, size);
+            sprite.y = (core.height - size) / 2;
+            sprite.image = new enchant.Surface(core.width, size);
+            sprite.image.context.fillStyle = '#fff';
+            sprite.image.context.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
+            var width = sprite.image.context.measureText('Touch to Start').width;
+            sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
+            scene.addChild(sprite);
+            return scene;
         },
         /**
          [lang:ja]
