@@ -26,7 +26,7 @@ enchant.ENV = {
         var ua = navigator.userAgent;
         if (ua.indexOf('Opera') !== -1) {
             return 'O';
-        } else if (ua.indexOf('MSIE') !== -1) {
+        } else if (/MSIE|Trident/.test(ua)) {
             return 'ms';
         } else if (ua.indexOf('WebKit') !== -1) {
             return 'webkit';
