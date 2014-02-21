@@ -792,17 +792,20 @@
             return enchant.Deferred.parallel(o);
         },
         _createTouchToStartScene: function() {
-            var scene = new enchant.Scene();
+            var label = new enchant.Label('Touch to Start'),
+                size = Math.round(core.width / 10),
+                scene = new enchant.Scene();
+
+            label.color = '#fff';
+            label.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
+            label.width = label._boundWidth;
+            label.height = label._boundHeight;
+            label.x = (core.width - label.width) / 2;
+            label.y = (core.height - label.height) / 2;
+
             scene.backgroundColor = '#000';
-            var size = Math.round(core.width / 10);
-            var sprite = new enchant.Sprite(core.width, size);
-            sprite.y = (core.height - size) / 2;
-            sprite.image = new enchant.Surface(core.width, size);
-            sprite.image.context.fillStyle = '#fff';
-            sprite.image.context.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
-            var width = sprite.image.context.measureText('Touch to Start').width;
-            sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
-            scene.addChild(sprite);
+            scene.addChild(label);
+
             return scene;
         },
         /**
