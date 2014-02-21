@@ -19,6 +19,31 @@ enchant.ENV = {
      */
     VERSION: '<%= pkg.version %>',
     /**
+     * Identifier of the current browser.
+     * @type String
+     */
+    BROWSER: (function(ua) {
+        if (/Eagle/.test(ua)) {
+            return 'eagle';
+        } else if (/Opera/.test(ua)) {
+            return 'opera';
+        } else if (/MSIE|Trident/.test(ua)) {
+            return 'ie';
+        } else if (/Chrome/.test(ua)) {
+            return 'chrome';
+        } else if (/(?:Macintosh|Windows).*AppleWebKit/.test(ua)) {
+            return 'safari';
+        } else if (/(?:iPhone|iPad|iPod).*AppleWebKit/.test(ua)) {
+            return 'mobilesafari';
+        } else if (/Firefox/.test(ua)) {
+            return 'firefox';
+        } else if (/Android/.test(ua)) {
+            return 'android';
+        } else {
+            return '';
+        }
+    }(navigator.userAgent)),
+    /**
      * The CSS vendor prefix of the current browser.
      * @type String
      */
