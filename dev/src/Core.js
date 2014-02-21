@@ -728,14 +728,12 @@
 
             if (!this._activated) {
                 this._activated = true;
-                if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
-                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
-                    navigator.userAgent.indexOf('iPad') !== -1)) {
+                if (enchant.ENV.BROWSER === 'mobilesafari' &&
+                    enchant.ENV.USE_TOUCH_TO_START_SCENE) {
                     var d = new enchant.Deferred();
                     var scene = this._createTouchToStartScene();
                     scene.addEventListener(enchant.Event.TOUCH_START, function waitTouch() {
                         this.removeEventListener(enchant.Event.TOUCH_START, waitTouch);
-                        core._touched = true;
                         core.removeScene(scene);
                         core.start(d);
                     }, false);
