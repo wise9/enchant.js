@@ -729,11 +729,15 @@
             if (!this._activated) {
                 this._activated = true;
                 if (enchant.ENV.BROWSER === 'mobilesafari' &&
+                    enchant.ENV.USE_WEBAUDIO &&
                     enchant.ENV.USE_TOUCH_TO_START_SCENE) {
                     var d = new enchant.Deferred();
                     var scene = this._createTouchToStartScene();
                     scene.addEventListener(enchant.Event.TOUCH_START, function waitTouch() {
                         this.removeEventListener(enchant.Event.TOUCH_START, waitTouch);
+                        var a = new enchant.WebAudioSound();
+                        a.buffer = enchant.WebAudioSound.audioContext.createBuffer(1, 1, 48000);
+                        a.play();
                         core.removeScene(scene);
                         core.start(d);
                     }, false);
