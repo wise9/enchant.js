@@ -135,6 +135,10 @@ enchant.ENV = {
      */
     SOUND_ENABLED_ON_MOBILE_SAFARI: false,
     /**
+     * @type Boolean
+     */
+    USE_TOUCH_TO_START_SCENE: true,
+    /**
      * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
      * @type Boolean
      */
