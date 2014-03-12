@@ -664,7 +664,8 @@
             this._user_memory_key = "game_" + game_id + "_user_";
         },
         get_user_memory: function(key) {
-            var ret = JSON.parse(localStorage.getItem(this._user_memory_key + key));
+            var value = localStorage.getItem(this._user_memory_key + key);
+            var ret = value ? JSON.parse(value) : null;
             if (ret == null) return {'data': {}};
             ret.toSprite = function(width, height) {
                 if (arguments.length < 2) {
