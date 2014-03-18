@@ -115,6 +115,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._style = {};
         this.__styleStatus = {};
 
+        this._isContainedInCollection = false;
+
         /**
          [lang:ja]
          * Entityを描画する際の合成処理を設定する.
@@ -674,12 +676,22 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     _addSelfToCollection: function() {
+        if (this._isContainedInCollection) {
+            return;
+        }
+
         var Constructor = this.getConstructor();
         Constructor._collectionTarget.forEach(function(C) {
             C.collection.push(this);
         }, this);
+
+        this._isContainedInCollection = true;
     },
     _removeSelfFromCollection: function() {
+        if (!this._isContainedInCollection) {
+            return;
+        }
+
         var Constructor = this.getConstructor();
         Constructor._collectionTarget.forEach(function(C) {
             var i = C.collection.indexOf(this);
@@ -687,6 +699,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 C.collection.splice(i, 1);
             }
         }, this);
+
+        this._isContainedInCollection = false;
     },
     getBoundingRect: function() {
         var w = this.width || 0;
