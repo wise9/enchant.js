@@ -14,12 +14,22 @@
  */
 enchant.ENV = {
     /**
+     [lang:ja]
+     * enchant.jsのバージョン.
+     [/lang]
+     [lang:en]
      * Version of enchant.js
+     [/lang]
      * @type String
      */
     VERSION: '<%= pkg.version %>',
     /**
+     [lang:ja]
+     * 実行中のブラウザの種類.
+     [/lang]
+     [lang:en]
      * Identifier of the current browser.
+     [/lang]
      * @type String
      */
     BROWSER: (function(ua) {
@@ -44,7 +54,12 @@ enchant.ENV = {
         }
     }(navigator.userAgent)),
     /**
+     [lang:ja]
+     * 実行中のブラウザに対応するCSSのベンダープレフィックス.
+     [/lang]
+     [lang:en]
      * The CSS vendor prefix of the current browser.
+     [/lang]
      * @type String
      */
     VENDOR_PREFIX: (function() {
@@ -62,8 +77,13 @@ enchant.ENV = {
         }
     }()),
     /**
+     [lang:ja]
+     * ブラウザがタッチ入力をサポートしているかどうか.
+     [/lang]
+     [lang:en]
      * Determines if the current browser supports touch.
      * True, if touch is enabled.
+     [/lang]
      * @type Boolean
      */
     TOUCH_ENABLED: (function() {
@@ -72,8 +92,13 @@ enchant.ENV = {
         return typeof div.ontouchstart === 'function';
     }()),
     /**
+     [lang:ja]
+     * 実行中の環境がRetina DisplayのiPhoneかどうか.
+     [/lang]
+     [lang:en]
      * Determines if the current browser is an iPhone with a retina display.
      * True, if this display is a retina display.
+     [/lang]
      * @type Boolean
      */
     RETINA_DISPLAY: (function() {
@@ -90,9 +115,14 @@ enchant.ENV = {
         }
     }()),
     /**
+     [lang:ja]
+     * サウンドの再生にHTMLAudioElement/WebAudioの代わりにflashのプレーヤーを使うかどうか.
+     [/lang]
+     [lang:en]
      * Determines if for current browser Flash should be used to play 
      * sound instead of the native audio class.
      * True, if flash should be used.
+     [/lang]
      * @type Boolean
      */
     USE_FLASH_SOUND: (function() {
@@ -102,15 +132,43 @@ enchant.ENV = {
         return (location.href.indexOf('http') === 0 && ua.indexOf('Mobile') === -1 && vendor.indexOf('Apple') !== -1);
     }()),
     /**
+     [lang:ja]
+     * クリック/タッチ時の規定の動作を許可するhtmlタグ名.
+     * ここに追加したhtmlタグへのイベントはpreventDefaultされない.
+     [/lang]
+     [lang:en]
      * If click/touch event occure for these tags the setPreventDefault() method will not be called.
+     [/lang]
      * @type String[]
      */
     USE_DEFAULT_EVENT_TAGS: ['input', 'textarea', 'select', 'area'],
+    /**
+     [lang:ja]
+     * SurfaceのメソッドとしてアクセスできるようにするCanvasRenderingContext2Dのメソッド.
+     [/lang]
+     [lang:en]
+     * Method names of CanvasRenderingContext2D that will be defined as Surface method.
+     [/lang]
+     * @type String[]
+     */
     CANVAS_DRAWING_METHODS: [
         'putImageData', 'drawImage', 'drawFocusRing', 'fill', 'stroke',
         'clearRect', 'fillRect', 'strokeRect', 'fillText', 'strokeText'
     ],
     /**
+     [lang:ja]
+     * キーバインドのテーブル.
+     * デフォルトで 'left, 'up', 'right', 'down' のイベントが使用可能.
+     * @example
+     * enchant.ENV.KEY_BIND_TABLE = {
+     *     37: 'left',
+     *     38: 'up',
+     *     39: 'right',
+     *     40: 'down',
+     *     32: 'a', //-> スペースキーをaボタンとして使う.
+     * };
+     [/lang]
+     [lang:en]
      * Keybind Table.
      * You can use 'left', 'up', 'right', 'down' for preset event.
      * @example
@@ -121,6 +179,7 @@ enchant.ENV = {
      *     40: 'down',
      *     32: 'a', //-> use 'space' key as 'a button'
      * };
+     [/lang]
      * @type Object
      */
     KEY_BIND_TABLE: {
@@ -129,20 +188,48 @@ enchant.ENV = {
         39: 'right',
         40: 'down'
     },
+    /**
+     [lang:ja]
+     * キー押下時の規定の動作を抑止するキーコード.
+     * ここに追加したキーによるイベントはpreventDefaultされる.
+     [/lang]
+     [lang:en]
+     * If keydown event occure for these keycodes the setPreventDefault() method will be called.
+     [/lang]
+     * @type Number[]
+     */
     PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
     /**
+     [lang:ja]
+     * Mobile Safariでサウンドの再生を有効にするかどうか.
+     [/lang]
+     [lang:en]
+     * Determines if Sound is enabled on Mobile Safari.
+     [/lang]
      * @type Boolean
      */
     SOUND_ENABLED_ON_MOBILE_SAFARI: true,
     /**
+     [lang:ja]
+     * WebAudioを有効にするどうか.
+     * trueならサウンドの再生の際HTMLAudioElementの代わりにWebAudioAPIを使用する.
+     [/lang]
+     [lang:en]
      * Determines if WebAudioAPI is enabled. (true: use WebAudioAPI instead of Audio element if possible)
+     [/lang]
      * @type Boolean
      */
     USE_WEBAUDIO: (function() {
         return location.protocol !== 'file:';
     }()),
     /**
+     [lang:ja]
+     * アニメーション機能を有効にするかどうか.
+     * trueだと, Node#tlにTimelineオブジェクトが作成される.
+     [/lang]
+     [lang:en]
      * Determines if animation feature is enabled. (true: Timeline instance will be generated in new Node)
+     [/lang]
      * @type Boolean
      */
     USE_ANIMATION: true
