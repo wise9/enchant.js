@@ -1,3 +1,21 @@
+# v0.8.1
+
+- feature
+    - add enchant.ENV.BROWSER
+    - default value of enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI became true  
+        WebAudio API is available in iOS6+
+    - enchant.Sound.load callback became optional (#224)
+    - enchant.Sprite#frame duplicates assigned Array (#202)
+    - support newer interface of WebAudio API (thx @kumabook)
+    - improved API documents (thx @Crowbeak)
+- bugfix
+    - improved behavior of enchant.Deferred chaining
+    - detect Internet Explorer 11 correctly (#256)
+    - bugfix about enchant.Timeline#next (#242) (thx @xy124)  
+        In rare case, it failed to dispatch "actionend" event
+    - bugfix about enchant.DOMSound.load on Firefox (#235)  
+        Firefox dispatches "canplaythrough" event more than once
+
 # v0.8.0
 
 - features
