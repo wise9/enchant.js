@@ -6,20 +6,30 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
      * @name enchant.Tween
      * @class
      [lang:ja]
-     * {@link enchant.Action} を継承した、オブジェクトの特定のプロパティを、なめらかに変更したい時に用いるためのアクションクラス.
+     * オブジェクトの特定のプロパティを, なめらかに変更したい時に用いるためのアクションクラス.
      * アクションを扱いやすく拡張したクラス.
      *
-     * コンストラクタに渡す設定オブジェクトに、プロパティの目標値を指定すると、
-     * アクションが実行された時に、目標値までなめらかに値を変更するようなアクションを生成する。
+     * コンストラクタに渡す設定オブジェクトに, プロパティの目標値を指定すると,
+     * アクションが実行された時に, 目標値までなめらかに値を変更するようなアクションを生成する.
      *
-     * トゥイーンのイージングも、easing プロパティで指定できる。
-     * デフォルトでは enchant.Easing.LINEAR が指定されている。
+     * トゥイーンのイージングも, easing プロパティで指定できる.
      *
-     * @param params
-     * @constructs
-     * @config {time}
-     * @config {easing} [function]
+     * @param {Object} params
+     * @param {Number} params.time アニメーションにかける時間.
+     * @param {Function} [params.easing=enchant.Easing.LINEAR] イージング関数.
      [/lang]
+     [lang:en]
+     * @param {Object} params
+     * @param {Number} params.time
+     * @param {Function} [params.easing=enchant.Easing.LINEAR]
+     [/lang]
+     [lang:de]
+     * @param {Object} params
+     * @param {Number} params.time
+     * @param {Function} [params.easing=enchant.Easing.LINEAR]
+     [/lang]
+     * @constructs
+     * @extends enchant.Action
      */
     initialize: function(params) {
         var origin = {};

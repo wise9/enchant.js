@@ -6,8 +6,12 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
      * @name enchant.ParallelAction
      * @class
      [lang:ja]
-     * アクションを並列で実行するためのアクション。
-     * 子アクションを複数持つことができる。
+     * アクションを並列で実行するためのアクション.
+     * 子アクションを複数持つことができる.
+     [/lang]
+     [lang:en]
+     [/lang]
+     [lang:de]
      [/lang]
      * @constructs
      * @extends enchant.Action
@@ -18,20 +22,26 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         var node = this.node;
         /**
          [lang:ja]
-         * 子アクション
+         * 子アクション.
          [/lang]
          [lang:en]
-         * Children Actions
+         * Children Actions.
          [/lang]
+         [lang:de]
+         [/lang]
+         * @type enchant.Action[]
          */
         this.actions = [];
         /**
          [lang:ja]
-         * 実行が終了したアクション
+         * 実行が終了したアクション.
          [/lang]
          [lang:en]
-         * Removed actions
+         * Removed actions.
          [/lang]
+         [lang:de]
+         [/lang]
+         * @type enchant.Action[]
          */
         this.endedActions = [];
         var that = this;

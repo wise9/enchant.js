@@ -6,52 +6,51 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      * @name enchant.Group
      * @class
      [lang:ja]
-     * 複数の{@link enchant.Node}を子に持つことができるクラス.
+     * 複数の {@link enchant.Node} を子に持つことができるクラス.
      *
      * @example
-     *   var stage = new Group();
-     *   stage.addChild(player);
-     *   stage.addChild(enemy);
-     *   stage.addChild(map);
-     *   stage.addEventListener('enterframe', function() {
-     *      // playerの座標に従って全体をスクロールする
-     *      if (this.x > 64 - player.x) {
-     *          this.x = 64 - player.x;
-     *      }
-     *   });
+     * var stage = new Group();
+     * stage.addChild(player);
+     * stage.addChild(enemy);
+     * stage.addChild(map);
+     * stage.addEventListener('enterframe', function() {
+     *     // playerの座標に従って全体をスクロールする
+     *     if (this.x > 64 - player.x) {
+     *         this.x = 64 - player.x;
+     *     }
+     * });
      *
-     * @extends enchant.Node
      [/lang]
      [lang:en]
      * A class that can hold multiple {@link enchant.Node}.
      *
      * @example
-     *   var stage = new Group();
-     *   stage.addChild(player);
-     *   stage.addChild(enemy);
-     *   stage.addChild(map);
-     *   stage.addEventListener('enterframe', function() {
-     *      // Moves the entire frame in according to the player's coordinates.
-     *      if (this.x > 64 - player.x) {
-     *          this.x = 64 - player.x;
-     *      }
-     *   });
+     * var stage = new Group();
+     * stage.addChild(player);
+     * stage.addChild(enemy);
+     * stage.addChild(map);
+     * stage.addEventListener('enterframe', function() {
+     *     // Moves the entire frame in according to the player's coordinates.
+     *     if (this.x > 64 - player.x) {
+     *         this.x = 64 - player.x;
+     *     }
+     * });
      *
      [/lang]
      [lang:de]
      * Eine Klasse die mehrere {@link enchant.Node} beinhalten kann.
      *
      * @example
-     *   var stage = new Group();
-     *   stage.addChild(player);
-     *   stage.addChild(enemy);
-     *   stage.addChild(map);
-     *   stage.addEventListener('enterframe', function() {
-     *      // Bewegt den gesamten Frame je nach der aktuelle Spielerposition.
-     *      if (this.x > 64 - player.x) {
-     *          this.x = 64 - player.x;
-     *      }
-     *   });
+     * var stage = new Group();
+     * stage.addChild(player);
+     * stage.addChild(enemy);
+     * stage.addChild(map);
+     * stage.addEventListener('enterframe', function() {
+     *     // Bewegt den gesamten Frame je nach der aktuelle Spielerposition.
+     *     if (this.x > 64 - player.x) {
+     *         this.x = 64 - player.x;
+     *     }
+     * });
      *
      [/lang]
      * @constructs
@@ -68,7 +67,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
          [lang:de]
          * Kind-Nodes.
          [/lang]
-         * @type {Array.<enchant.Node>}
+         * @type enchant.Node[]
          */
         this.childNodes = [];
 
@@ -203,7 +202,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Der Node, welcher das erste Kind der Gruppe darstellt.
      [/lang]
-     * @type {enchant.Node}
+     * @type enchant.Node
      */
     firstChild: {
         get: function() {
@@ -220,7 +219,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Der Node, welcher das letzte Kind der Gruppe darstellt.
      [/lang]
-     * @type {enchant.Node}
+     * @type enchant.Node
      */
     lastChild: {
         get: function() {
@@ -237,7 +236,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     [lang:de]
     * Rotationswinkel der Gruppe (Grad).
     [/lang]
-    * @type {Number}
+    * @type Number
     */
     rotation: {
         get: function() {
@@ -258,9 +257,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     [lang:de]
     * Skalierungsfaktor auf der x-Achse der Gruppe.
     [/lang]
-    * @type {Number}
-    * @see enchant.CanvasGroup.originX
-    * @see enchant.CanvasGroup.originY
+    * @type Number
+    * @see enchant.Group#originX
+    * @see enchant.Group#originY
     */
     scaleX: {
         get: function() {
@@ -281,9 +280,9 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     [lang:de]
     * Skalierungsfaktor auf der y-Achse der Gruppe.
     [/lang]
-    * @type {Number}
-    * @see enchant.CanvasGroup.originX
-    * @see enchant.CanvasGroup.originY
+    * @type Number
+    * @see enchant.Group#originX
+    * @see enchant.Group#originY
     */
     scaleY: {
         get: function() {
@@ -304,7 +303,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     [lang:de]
     * Ausgangspunkt für Rotation und Skalierung.
     [/lang]
-    * @type {Number}
+    * @type Number
     */
     originX: {
         get: function() {
@@ -325,7 +324,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
     [lang:de]
     * Ausgangspunkt für Rotation und Skalierung.
     [/lang]
-    * @type {Number}
+    * @type Number
     */
     originY: {
         get: function() {
@@ -336,6 +335,7 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             this._dirty = true;
         }
     },
+    /**#nocode+*/
     _dirty: {
         get: function() {
             return this.__dirty;
@@ -350,4 +350,5 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             }
         }
     }
+    /**#nocode-*/
 });

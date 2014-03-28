@@ -15,6 +15,10 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      * @param {*} valueStore object that store input state.
      * @param {*} [source=this] source that will be added to event object.
      [/lang]
+     [lang:de]
+     * @param {*} valueStore
+     * @param {*} [source=this]
+     [/lang]
      * @constructs
      * @extends enchant.EventTarget
      */
@@ -28,7 +32,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
          [lang:en]
          * Array that store event target.
          [/lang]
-         * @type {enchant.EventTarget[]}
+         * @type enchant.EventTarget[]
          */
         this.broadcastTarget = [];
         /**
@@ -38,7 +42,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
          [lang:en]
          * Object that store input state.
          [/lang]
-         * @type {Object}
+         * @type Object
          */
         this.valueStore = valueStore;
         /**
@@ -48,7 +52,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
          [lang:en]
          * source that will be added to event object.
          [/lang]
-         * @type {Object}
+         * @type Object
          */
         this.source = source || this;
 
@@ -64,7 +68,7 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      [lang:ja]
      * 特定の入力に名前をつける.
      * 入力はフラグとイベントで監視できるようになる.
-     * @param {enchant.InputSource} inputSource {@link enchant.InputSource}のインスタンス.
+     * @param {enchant.InputSource} inputSource {@link enchant.InputSource} のインスタンス.
      * @param {String} name 入力につける名前.
      [/lang]
      [lang:en]
@@ -72,6 +76,10 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      * Input can be watched by flag or event.
      * @param {enchant.InputSource} inputSource input source.
      * @param {String} name input name.
+     [/lang]
+     [lang:de]
+     * @param {enchant.InputSource} inputSource
+     * @param {String} name
      [/lang]
      */
     bind: function(inputSource, name) {
@@ -81,11 +89,14 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
     /**
      [lang:ja]
      * 入力のバインドを解除する.
-     * @param {enchant.InputSource} inputSource {@link enchant.InputSource}のインスタンス.
+     * @param {enchant.InputSource} inputSource {@link enchant.InputSource} のインスタンス.
      [/lang]
      [lang:en]
      * Remove binded name.
      * @param {enchant.InputSource} inputSource input source.
+     [/lang]
+     [lang:de]
+     * @param {enchant.InputSource} inputSource
      [/lang]
      */
     unbind: function(inputSource) {
@@ -100,6 +111,9 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      [lang:en]
      * Add event target.
      * @param {enchant.EventTarget} eventTarget broadcast target.
+     [/lang]
+     [lang:de]
+     * @param {enchant.EventTarget} eventTarget
      [/lang]
      */
     addBroadcastTarget: function(eventTarget) {
@@ -117,6 +131,9 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      * Remove event target.
      * @param {enchant.EventTarget} eventTarget broadcast target.
      [/lang]
+     [lang:de]
+     * @param {enchant.EventTarget} eventTarget
+     [/lang]
      */
     removeBroadcastTarget: function(eventTarget) {
         var i = this.broadcastTarget.indexOf(eventTarget);
@@ -126,12 +143,15 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      [lang:ja]
-     * イベントを{@link enchant.InputManager#broadcastTarget}に発行する.
+     * イベントを {@link enchant.InputManager#broadcastTarget} に発行する.
      * @param {enchant.Event} e イベント.
      [/lang]
      [lang:en]
      * Dispatch event to {@link enchant.InputManager#broadcastTarget}.
      * @param {enchant.Event} e event.
+     [/lang]
+     [lang:de]
+     * @param {enchant.Event} e
      [/lang]
      */
     broadcastEvent: function(e) {
@@ -150,6 +170,10 @@ enchant.InputManager = enchant.Class.create(enchant.EventTarget, {
      * Change state of input.
      * @param {String} name input name.
      * @param {*} data input state.
+     [/lang]
+     [lang:de]
+     * @param {String} name
+     * @param {*} data
      [/lang]
      */
     changeState: function(name, data) {

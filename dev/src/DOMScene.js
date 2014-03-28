@@ -1,8 +1,21 @@
 /**
- * @scope enchant.CanvasScene.prototype
- * @type {*}
+ * @scope enchant.DOMScene.prototype
  */
 enchant.DOMScene = enchant.Class.create(enchant.Scene, {
+    /**
+     * @name enchant.DOMScene
+     * @class
+     [lang:ja]
+     * すべての子をDOMで描画するScene.
+     [/lang]
+     [lang:en]
+     * Scene to draw by the DOM all of the children.
+     [/lang]
+     [lang:de]
+     [/lang]
+     * @constructs
+     * @extends enchant.Scene
+     */
     initialize: function() {
         enchant.Scene.call(this);
         this.addLayer('Dom');

@@ -1,8 +1,21 @@
 /**
  * @scope enchant.CanvasScene.prototype
- * @type {*}
  */
 enchant.CanvasScene = enchant.Class.create(enchant.Scene, {
+    /**
+     * @name enchant.CanvasScene
+     * @class
+     [lang:ja]
+     * すべての子をCanvasに描画するScene.
+     [/lang]
+     [lang:en]
+     * Scene to draw by the Canvas all of the children.
+     [/lang]
+     [lang:de]
+     [/lang]
+     * @constructs
+     * @extends enchant.Scene
+     */
     initialize: function() {
         enchant.Scene.call(this);
         this.addLayer('Canvas');

@@ -13,11 +13,25 @@ enchant.InputSource = enchant.Class.create(enchant.EventTarget, {
      * Class that wrap input.
      * @param {String} identifier identifier of InputSource.
      [/lang]
+     [lang:de]
+     * @param {String} identifier
+     [/lang]
      * @constructs
      * @extends enchant.EventTarget
      */
     initialize: function(identifier) {
         enchant.EventTarget.call(this);
+        /**
+         [lang:ja]
+         * 入力のid.
+         [/lang]
+         [lang:en]
+         * identifier of InputSource.
+         [/lang]
+         [lang:de]
+         [/lang]
+         * @type String
+         */
         this.identifier = identifier;
     },
     /**
@@ -28,6 +42,9 @@ enchant.InputSource = enchant.Class.create(enchant.EventTarget, {
      [lang:en]
      * Notify state change by event.
      * @param {*} data state.
+     [/lang]
+     [lang:de]
+     * @param {*} data
      [/lang]
      */
     notifyStateChange: function(data) {
