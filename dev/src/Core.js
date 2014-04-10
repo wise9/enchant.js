@@ -800,9 +800,9 @@
 
             label.color = '#fff';
             label.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
-            label.width = label._boundWidth;
+            label.textAlign = 'center';
+            label.width = core.width;
             label.height = label._boundHeight;
-            label.x = (core.width - label.width) / 2;
             label.y = (core.height - label.height) / 2;
 
             scene.backgroundColor = '#000';
