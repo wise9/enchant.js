@@ -210,6 +210,10 @@ enchant.ENV = {
      */
     SOUND_ENABLED_ON_MOBILE_SAFARI: true,
     /**
+     * @type Boolean
+     */
+    USE_TOUCH_TO_START_SCENE: true,
+    /**
      [lang:ja]
      * WebAudioを有効にするどうか.
      * trueならサウンドの再生の際HTMLAudioElementの代わりにWebAudioAPIを使用する.
