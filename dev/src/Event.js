@@ -829,3 +829,16 @@ enchant.Event.ACTION_ADDED = "actionadded";
  * @type String
  */
 enchant.Event.ACTION_REMOVED = "actionremoved";
+
+/**
+ [lang:ja]
+ [/lang]
+ [lang:en]
+ * An event dispatched when an animation finishes, meaning null element was encountered
+ * Issued by: {@link enchant.Sprite}
+ [/lang]
+ [lang:de]
+ [/lang]
+ * @type String
+ */
+enchant.Event.ANIMATION_END = "animationend";
