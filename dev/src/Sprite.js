@@ -135,12 +135,19 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * @private
      */
     _deepCompareToPreviousFrame: function(frameArray) {
-        if (frameArray === this._originalFrameSequence) return true;
-        if (frameArray == null || this._originalFrameSequence == null) return false;
-        if (frameArray.length != this._originalFrameSequence.length) return false;
-
+        if (frameArray === this._originalFrameSequence) {
+            return true;
+        }
+        if (frameArray == null || this._originalFrameSequence == null) {
+            return false;
+        }
+        if (frameArray.length !== this._originalFrameSequence.length) {
+            return false;
+        }
         for (var i = 0; i < frameArray.length; ++i) {
-            if (frameArray[i] !== this._originalFrameSequence[i]) return false;
+            if (frameArray[i] !== this._originalFrameSequence[i]){
+                return false;
+            }
         }
         return true;
     },
