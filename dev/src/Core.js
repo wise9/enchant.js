@@ -743,8 +743,8 @@
                     var width = sprite.image.context.measureText('Touch to Start').width;
                     sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
                     scene.addChild(sprite);
-                    document.addEventListener('mousedown', function waitTouch() {
-                        document.removeEventListener('mousedown', waitTouch);
+                    document.addEventListener('touchstart', function waitTouch() {
+                        document.removeEventListener('touchstart', waitTouch);
                         core._touched = true;
                         core.removeScene(scene);
                         core.start(d);
