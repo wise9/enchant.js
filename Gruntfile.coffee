@@ -113,9 +113,14 @@ module.exports = (grunt) ->
         files: [ 'tests/qunit/*/*.html' ]
 
       mocha:
-        test:
+        all:
           src: ['tests/mocha/**/*.html']
           options: 
+            log: true
+            reporter: 'Spec'
+        core:
+          src: ['tests/mocha/enchant.js/*.html']
+          options:
             log: true
             reporter: 'Spec'
 
