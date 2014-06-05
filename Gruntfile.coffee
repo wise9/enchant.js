@@ -118,6 +118,11 @@ module.exports = (grunt) ->
           options: 
             log: true
             reporter: 'Spec'
+        core:
+          src: ['tests/mocha/enchant.js/*.html']
+          options:
+            log: true
+            reporter: 'Spec'
 
       exec:
         whatever:
