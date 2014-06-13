@@ -211,6 +211,24 @@ enchant.ENV = {
     SOUND_ENABLED_ON_MOBILE_SAFARI: true,
     /**
      [lang:ja]
+     * "touch to start" のシーンを使用するかどうか.
+     * Mobile SafariでWebAudioのサウンドを再生するためには,
+     * 一度タッチイベントハンドラ内で音声を流す必要があるため,
+     * Mobile Safariでの実行時にはこのシーンが追加される.
+     * falseにすることで, このシーンを表示しないようにできるが,
+     * その場合は, 自身の責任でサウンドを有効化する必要がある.
+     [/lang]
+     [lang:en]
+     * Determines if "touch to start" scene is enabled.
+     * It is necessary on Mobile Safari because WebAudio Sound is
+     * muted by browser until play any sound in touch event handler.
+     * If set it to false, you should control this behavior manually.
+     [/lang]
+     * @type Boolean
+     */
+    USE_TOUCH_TO_START_SCENE: true,
+    /**
+     [lang:ja]
      * WebAudioを有効にするどうか.
      * trueならサウンドの再生の際HTMLAudioElementの代わりにWebAudioAPIを使用する.
      [/lang]

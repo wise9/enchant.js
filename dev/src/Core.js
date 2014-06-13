@@ -728,24 +728,16 @@
 
             if (!this._activated) {
                 this._activated = true;
-                if (enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI && !core._touched &&
-                    (navigator.userAgent.indexOf('iPhone OS') !== -1 ||
-                    navigator.userAgent.indexOf('iPad') !== -1)) {
+                if (enchant.ENV.BROWSER === 'mobilesafari' &&
+                    enchant.ENV.USE_WEBAUDIO &&
+                    enchant.ENV.USE_TOUCH_TO_START_SCENE) {
                     var d = new enchant.Deferred();
-                    var scene = new enchant.Scene();
-                    scene.backgroundColor = '#000';
-                    var size = Math.round(core.width / 10);
-                    var sprite = new enchant.Sprite(core.width, size);
-                    sprite.y = (core.height - size) / 2;
-                    sprite.image = new enchant.Surface(core.width, size);
-                    sprite.image.context.fillStyle = '#fff';
-                    sprite.image.context.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
-                    var width = sprite.image.context.measureText('Touch to Start').width;
-                    sprite.image.context.fillText('Touch to Start', (core.width - width) / 2, size - 1);
-                    scene.addChild(sprite);
-                    document.addEventListener('mousedown', function waitTouch() {
-                        document.removeEventListener('mousedown', waitTouch);
-                        core._touched = true;
+                    var scene = this._createTouchToStartScene();
+                    scene.addEventListener(enchant.Event.TOUCH_START, function waitTouch() {
+                        this.removeEventListener(enchant.Event.TOUCH_START, waitTouch);
+                        var a = new enchant.WebAudioSound();
+                        a.buffer = enchant.WebAudioSound.audioContext.createBuffer(1, 1, 48000);
+                        a.play();
                         core.removeScene(scene);
                         core.start(d);
                     }, false);
@@ -800,6 +792,23 @@
 
             this.pushScene(this.loadingScene);
             return enchant.Deferred.parallel(o);
+        },
+        _createTouchToStartScene: function() {
+            var label = new enchant.Label('Touch to Start'),
+                size = Math.round(core.width / 10),
+                scene = new enchant.Scene();
+
+            label.color = '#fff';
+            label.font = (size - 1) + 'px bold Helvetica,Arial,sans-serif';
+            label.textAlign = 'center';
+            label.width = core.width;
+            label.height = label._boundHeight;
+            label.y = (core.height - label.height) / 2;
+
+            scene.backgroundColor = '#000';
+            scene.addChild(label);
+
+            return scene;
         },
         /**
          [lang:ja]

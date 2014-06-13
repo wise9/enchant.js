@@ -108,11 +108,12 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._frame;
         },
         set: function(frame) {
-            if (this._frame === frame) {
+            if (this._frame === frame || (frame instanceof Array && this._deepCompareToPreviousFrame(frame))) {
                 return;
             }
             if (frame instanceof Array) {
                 this._frameSequence = frame.slice();
+                this._originalFrameSequence = frame.slice();
                 this._rotateFrameSequence();
             } else {
                 this._frameSequence = [];
@@ -120,6 +121,35 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
                 this._computeFramePosition();
             }
         }
+    },
+    /**
+     *
+     [lang:ja]
+     [/lang]
+     [lang:en]
+     * If we are setting the same frame Array as animation,
+     * just continue animating.
+     [/lang]
+     [lang:de]
+     [/lang]
+     * @private
+     */
+    _deepCompareToPreviousFrame: function(frameArray) {
+        if (frameArray === this._originalFrameSequence) {
+            return true;
+        }
+        if (frameArray == null || this._originalFrameSequence == null) {
+            return false;
+        }
+        if (frameArray.length !== this._originalFrameSequence.length) {
+            return false;
+        }
+        for (var i = 0; i < frameArray.length; ++i) {
+            if (frameArray[i] !== this._originalFrameSequence[i]){
+                return false;
+            }
+        }
+        return true;
     },
     /**
      * 0 <= frame
@@ -146,6 +176,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             var nextFrame = this._frameSequence.shift();
             if (nextFrame === null) {
                 this._frameSequence = [];
+                this.dispatchEvent(new enchant.Event(enchant.Event.ANIMATION_END));
             } else {
                 this._frame = nextFrame;
                 this._computeFramePosition();
