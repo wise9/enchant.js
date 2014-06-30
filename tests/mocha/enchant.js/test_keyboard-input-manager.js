@@ -6,16 +6,13 @@ describe('KeyboardInputManager', function(){
 
     describe('#initialize', function(){
 
-        it('calles BinaryInputManager initializing method', function(){});
+        it('calls BinaryInputManager initializing method');
         it('ataches keydown event to given domElement');
         it('ataches keyup event to given domElement');
     });
 
     describe('#keybind', function(){
-        it.skip('binds keycode and given name', function(){
-            var flagStore = {};
-            var keyboardInputManager = new KeyboardInputManager(window.document, flagStore);
-        });
+        it('binds keycode and given name');
     });
 
     describe('#keyunbind', function(){
