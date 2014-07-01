@@ -103,8 +103,8 @@ enchant.BinaryInputManager = enchant.Class.create(enchant.InputManager, {
      * @see enchant.InputManager#unbind
      */
     unbind: function(binaryInputSource) {
-        enchant.InputManager.prototype.unbind.call(this, binaryInputSource);
         var name = this._binds[binaryInputSource.identifier];
+        enchant.InputManager.prototype.unbind.call(this, binaryInputSource);
         delete this.valueStore[name];
     },
     /**
