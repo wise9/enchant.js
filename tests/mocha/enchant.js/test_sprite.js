@@ -1,12 +1,10 @@
-enchant();
-
-var core;
-window.onload = function(){
-    core = new Core();
-    mocha.run();
-};
-
 describe("Sprite", function(){
+    var core;
+
+    before(function(){
+        enchant();
+    });
+
     describe("#initialize", function(){
         it("sets width and height", function(){
             var sprite = new Sprite(100, 150);
@@ -21,7 +19,7 @@ describe("Sprite", function(){
             expect(sprite.image).to.be.null;
         });
 
-        it("set image which is preloaded to core", function(done){
+        it("sets image which is preloaded to core", function(done){
             core = new Core();
             core.preload("icon0.png");
             core.onload = function(){
@@ -49,7 +47,7 @@ describe("Sprite", function(){
             var sprite = new Sprite(16, 16);
             expect(sprite.frame).to.be.zero;
             sprite.frame = 10;
-            expect(sprite.frame, "there is no index like '10', so this will be zero").to.be.zero;
+            expect(sprite.frame).to.equal(10);
             core.preload("icon0.png");
             core.onload = function(){
                 sprite.image = core.assets["icon0.png"];
