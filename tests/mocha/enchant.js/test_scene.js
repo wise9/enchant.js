@@ -107,7 +107,7 @@ describe("Scene", function(){
     });
 
     describe("adding layers", function(){
-        it("can be add DomLyer or CanvasLayer or both", function(){
+        it("can be add DomLayer or CanvasLayer or both", function(){
             expect(Object.keys(scene._layers).length).to.be.zero;
             scene.addLayer("Canvas");
             expect(Object.keys(scene._layers).length).to.equal(1);
