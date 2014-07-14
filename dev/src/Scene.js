@@ -196,7 +196,9 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             layer = this._layers[this._layerPriority[i]];
             target = layer._determineEventTarget(e);
             if (target) {
-                break;
+                if (target.touchEnabled) {
+                    break;   
+                }
             }
         }
         if (!target) {
