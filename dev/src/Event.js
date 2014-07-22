@@ -832,6 +832,7 @@ enchant.Event.ACTION_REMOVED = "actionremoved";
 
 /**
  [lang:ja]
+ * フレームアニメーションが終了したときに発生するイベント. フレームの再生がnullに到達したことを意味する.
  [/lang]
  [lang:en]
  * An event dispatched when an animation finishes, meaning null element was encountered

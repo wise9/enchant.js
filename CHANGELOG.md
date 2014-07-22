@@ -1,3 +1,15 @@
+# v0.8.2
+
+- feature
+    - add ANIMATION_END event (thx @bytehala)  
+        Sprite dispatches "ANIMATION_END" event when frame animation ended
+- bugfix
+    - bugfix about Sprite#frame to setting same frame sequence (thx @bytehala)
+    - bugfix about "Touch to Start" scene in iOS
+    - bugfix about Node#\_updateCoordinate
+    - bugfix about Core#keyunbind
+    - bugfix about Core#load
+
 # v0.8.1
 
 - feature
