@@ -197,8 +197,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         var stack = matrix.stack;
         var mat = [];
         var newmat, ox, oy;
-        stack.push(tree[0]._matrix);
-        for (var i = 1, l = tree.length; i < l; i++) {
+        for (var i = 0, l = tree.length; i < l; i++) {
             node = tree[i];
             newmat = [];
             matrix.makeTransformMatrix(node, mat);
