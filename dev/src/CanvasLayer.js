@@ -148,11 +148,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         childAdded.next = null;
         this.dispatchEvent(childAdded);
         node.dispatchEvent(new enchant.Event('added'));
-        if (this.scene) {
-            node.scene = this.scene;
-            var addedToScene = new enchant.Event('addedtoscene');
-            node.dispatchEvent(addedToScene);
-        }
     },
     insertBefore: function(node, reference) {
         var i = this.childNodes.indexOf(reference);
@@ -164,11 +159,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             childAdded.next = reference;
             this.dispatchEvent(childAdded);
             node.dispatchEvent(new enchant.Event('added'));
-            if (this.scene) {
-                node.scene = this.scene;
-                var addedToScene = new enchant.Event('addedtoscene');
-                node.dispatchEvent(addedToScene);
-            }
         } else {
             this.addChild(node);
         }
