@@ -198,7 +198,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * @private
      */
     _stopRendering: function() {
-        this.removeEventListener('render', this._onexitframe);
+        this.removeEventListener('exitframe', this._onexitframe);
         this._onexitframe(new enchant.Event(enchant.Event.RENDER));
     },
     _onexitframe: function() {
