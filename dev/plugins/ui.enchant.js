@@ -79,7 +79,7 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
         x -= this.width / 2;
         y -= this.height / 2;
         var input = { left: false, right: false, up: false, down: false };
-        if (x * x + y * y > 200) {
+        if (x * x + y * y <= 50 * 50) {  // some fix // old: x²+y² > 200 // new: a²+b²=c² <= 50²  // 50 because x -= 100/2
             if (x < 0 && y < x * x * 0.1 && y > x * x * -0.1) {
                 input.left = true;
             }
