@@ -635,16 +635,17 @@
          [/lang]
          */
         load: function(src, alias, callback, onerror) {
-            var assetName, offset;
+            var assetName;
             if (typeof arguments[1] === 'string') {
                 assetName = alias;
-                offset = 1;
+                callback = callback || function() {};
+                onerror = onerror || function() {};
             } else {
                 assetName = src;
-                offset = 0;
+                var tempCallback = callback;
+                callback = arguments[1] || function() {};
+                onerror = tempCallback || function() {};
             }
-            callback = arguments[1 + offset] || function() {};
-            onerror = arguments[2 + offset] || function() {};
 
             var ext = enchant.Core.findExt(src);
 
