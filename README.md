@@ -1,7 +1,7 @@
 enchant.js
 ==========
 
-<img src="http://github.com/wise9/enchant.js/raw/master/enchant.png" width="320" height="320">
+<img src="https://raw.githubusercontent.com/wise9/enchant.js/master/enchant.png" width="320" height="320">
 
 JavaScript Game Engine
 
