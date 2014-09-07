@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @scope enchant.Sprite.prototype
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {
@@ -80,8 +80,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
      * ループするが, null値が含まれているとそこでループをストップする.
      [/lang]
      [lang:en]
-     * Indizes of the frames to be displayed.
-     * Frames with same width and height as Sprite will be arrayed from upper left corner of the 
+     * Index of the frame to be displayed.
+     * Frames with the same width and height as Sprite will be arrayed from upper left corner of the 
      * {@link enchant.Sprite#image} image. When a sequence of numbers is provided, the displayed frame 
      * will switch automatically. At the end of the array the sequence will restart. By setting 
      * a value within the sequence to null, the frame switching is stopped.
