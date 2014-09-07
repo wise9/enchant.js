@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @scope enchant.Action.prototype
  */
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
@@ -22,7 +22,6 @@ enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
      * @param {Function} [param.onactionend] アクションがが終了する時のイベントリスナ.
      [/lang]
      [lang:en]
-     * Action class.
      * Actions are units that make up the time line,
      * It is a unit used to specify the action you want to perform.
      * Action has been added to the time line is performed in order.
