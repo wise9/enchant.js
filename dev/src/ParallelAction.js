@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @scope enchant.ParallelAction.prototype
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {
@@ -10,6 +10,8 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
      * 子アクションを複数持つことができる.
      [/lang]
      [lang:en]
+     * Actions to be executed in parallel.
+     * It's possible to have more than one child action.
      [/lang]
      [lang:de]
      [/lang]
