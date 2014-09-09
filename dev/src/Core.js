@@ -1102,7 +1102,10 @@
          [/lang]
          */
         replaceScene: function(scene) {
-            this.popScene();
+            var currentScene = this.popScene();
+	    while (currentScene.childNodes.length > 0) {
+		currentScene.removeChild(currentScene.childNodes[0]);
+	    }
             return this.pushScene(scene);
         },
         /**
