@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/wise9/enchant.js/master/enchant.png" width="320" height="320" alt="enchant.js">
 
-[![Build Status](https://secure.travis-ci.org/wise9/enchant.js.png)](https://travis-ci.org/wise9/enchant.js) [![NPM version](https://badge.fury.io/js/grunt-jsdoc.png)](http://badge.fury.io/js/grunt-jsdoc) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+[![Build Status](https://secure.travis-ci.org/wise9/enchant.js.png)](https://travis-ci.org/wise9/enchant.js) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 Download
 --------
