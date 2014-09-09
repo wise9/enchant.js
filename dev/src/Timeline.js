@@ -844,7 +844,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      */
     removeFromScene: function() {
         return this.then(function() {
-            this.scene.removeChild(this);
+            this.parentNode.removeChild(this);
         });
     },
     /**
@@ -913,13 +913,16 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     scaleBy: function(scale, time, easing) {
+        var scaleX, scaleY;
         if (typeof easing === "number") {
+            scaleX = arguments[0];
+            scaleY = arguments[1];
             return this.tween({
                 scaleX: function() {
-                    return this.scaleX * arguments[0];
+                    return this.scaleX * scaleX;
                 },
                 scaleY: function() {
-                    return this.scaleY * arguments[1];
+                    return this.scaleY * scaleY;
                 },
                 time: arguments[2],
                 easing: arguments[3]
