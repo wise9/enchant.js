@@ -50,12 +50,22 @@
 enchant.ui = { assets: ['pad.png', 'apad.png', 'icon0.png', 'font0.png'] };
 
 /**
+ [lang:ja]
  * 方向キーパッドのクラス: Pad
+ [/lang]
+ [lang:en]
+ * A class for direction pad: Pad
+ [/lang]
  * @scope enchant.ui.Pad
  */
 enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
     /**
+     [lang:ja]
      * 方向キーパッドオブジェクトを作成する。
+     [/lang]
+     [lang:en]
+     * Constructs a direction pad object.
+     [/lang]
      * @constructs
      * @extends enchant.Sprite
      */
@@ -110,17 +120,33 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
 });
 
 /**
+ [lang:ja]
  * アナログパッドのクラス: APad
+ [/lang]
+ [lang:en]
+ * A class for analog pad(stick): APad
+ [/lang]
  * @scope enchant.ui.APad
  */
 enchant.ui.APad = enchant.Class.create(enchant.Group, {
     /**
+     [lang:ja]
      * アナログパッドオブジェクトを作成する。
+     [/lang]
+     [lang:en]
+     * Constructs a analog pad object.
+     [/lang]
      * @constructs
      * @extends enchant.Group
      * @param mode
+     [lang:ja]
      *   'direct': 入力ベクトルは正規化されない (大きさは 0~1 の間)
      *   'normal': 入力ベクトルを常に正規化する (大きさは常に1となる)
+     [/lang]
+     [lang:en]
+     *   'direct': Does not Normalize the input vector (The length would be between 0 to 1)
+     *   'normal': Normalizes the input vector (The length is always 1)
+     [/lang]
      */
     initialize: function(mode) {
         var core = enchant.Core.instance;
@@ -145,14 +171,23 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
         /**
          * isTouched
          * @type {Boolean}
+	 [lang:ja]
          * タッチされているかどうか
+	 [/lang]
+	 [lang:en]
+	 [/lang]
          */
         this.isTouched = false;
 
         /**
          * vx, vy
          * @type {Number}
+	 [lang:ja]
          * 入力ベクトルの(x, y)方向の大きさ
+	 [/lang]
+	 [lang:en]
+	 * The length of input vector (x, y)
+	 [/lang]
          */
         this.vx = 0;
         this.vy = 0;
@@ -160,8 +195,14 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
         /**
          * rad, dist
          * @type {Number}
+	 [lang:ja]
          * 入力ベクトルの極座標表示
          * radは角度、distはベクトルの大きさを示す
+	 [/lang]
+	 [lang:en]
+	 * The input vector in polar coordinate
+	 * rad is the angle. dist is the length.
+	 [/lang]
          */
         this.rad = 0;
         this.dist = 0;
@@ -275,7 +316,12 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
 });
 
 /**
+ [lang:ja]
  * ボタンオブジェクトのクラス: Button
+ [/lang]
+ [lang:en]
+ * A class for a button: Button
+ [/lang]
  * available in only DOMGroup
  *
  * @scope enchant.ui.Button.prototype
@@ -284,7 +330,12 @@ enchant.ui.APad = enchant.Class.create(enchant.Group, {
  */
 enchant.ui.Button = enchant.Class.create(enchant.Entity, {
     /**
+     [lang:ja]
      * ボタンオブジェクトを作成する。
+     [/lang]
+     [lang:en]
+     * Constructs a button object.
+     [/lang]
      * @constructs
      * @extends enchant.Entity
      */
@@ -350,7 +401,12 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     [lang:ja]
      * 表示するテキスト
+     [/lang]
+     [lang:en]
+     * Text to display
+     [/lang]
      * @type {String}
      */
     text: {
@@ -365,7 +421,12 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     [lang:ja]
      * フォントサイズ
+     [/lang]
+     [lang:en]
+     * Font size
+     [/lang]
      */
     size: {
         get: function() {
@@ -376,7 +437,12 @@ enchant.ui.Button = enchant.Class.create(enchant.Entity, {
         }
     },
     /**
+     [lang:ja]
      * フォントの指定
+     [/lang]
+     [lang:en]
+     * Font style
+     [/lang]
      * @type {String}
      */
     font: {
@@ -494,6 +560,8 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
      * enchant.js 添付素材の font*.png が利用可能。
      [/lang]
      [lang:en]
+     * A label class using bitmap font.
+     * You can use font*.png attached to enchant.js.
      [/lang]
      *
      * @usage
@@ -519,7 +587,12 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
         }
     },
     /**
+     [lang:ja]
      * ラベルの内容を書き換える関数
+     [/lang]
+     [lang:en]
+     * A function to rewrite the text in the label.
+     [/lang]
      * @param txt
      */
     setText: function(txt) {
@@ -557,7 +630,12 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
         }
     },
     /**
+     [lang:ja]
      * ラベルの内容
+     [/lang]
+     [lang:en]
+     * The text in the label
+     [/lang]
      * @type {String}
      */
     text: {
@@ -588,8 +666,14 @@ enchant.ui.MutableText = enchant.Class.create(enchant.Sprite, {
  */
 enchant.ui.ScoreLabel = enchant.Class.create(enchant.ui.MutableText, {
     /**
+     [lang:ja]
      * スコアを表示するラベル。
      * 画像フォントクラス (MutableText) を使って表示する。
+     [/lang]
+     [lang:en]
+     * A label to display the score.
+     * It makes use of MutableText class.
+     [/lang]
      * @constructs
      * @param x
      * @param y
@@ -626,7 +710,12 @@ enchant.ui.ScoreLabel = enchant.Class.create(enchant.ui.MutableText, {
         });
     },
     /**
+     [lang:ja]
      * スコア
+     [/lang]
+     [lang:en]
+     * Score
+     [/lang]
      * @type {Number}
      */
     score: {
@@ -645,7 +734,12 @@ enchant.ui.ScoreLabel = enchant.Class.create(enchant.ui.MutableText, {
  */
 enchant.ui.TimeLabel = enchant.Class.create(enchant.ui.MutableText, {
     /**
+     [lang:ja]
      * 残り時間などのタイムを表示するラベル
+     [/lang]
+     [lang:en]
+     * A label to display time like remaining time.
+     [/lang]
      * @constructs
      * @param x
      * @param y
@@ -677,7 +771,12 @@ enchant.ui.TimeLabel = enchant.Class.create(enchant.ui.MutableText, {
         });
     },
     /**
+     [lang:ja]
      * 残り時間
+     [/lang]
+     [lang:en]
+     * Remaining time
+     [/lang]
      * @type {Number}
      */
     time: {
@@ -696,8 +795,14 @@ enchant.ui.TimeLabel = enchant.Class.create(enchant.ui.MutableText, {
  */
 enchant.ui.LifeLabel = enchant.Class.create(enchant.Group, {
     /**
+     [lang:ja]
      * ライフを表示する専用のラベル
      * icon0.png 内のハートの画像を用いる
+     [/lang]
+     [lang:en]
+     * A label to display a life.
+     * It uses the heart image in icon0.png.
+     [/lang]
      * @constructs
      * @param x
      * @param y
@@ -723,7 +828,12 @@ enchant.ui.LifeLabel = enchant.Class.create(enchant.Group, {
         }
     },
     /**
+     [lang:ja]
      * 残りライフの数
+     [/lang]
+     [lang:en]
+     * The number of life left.
+     [/lang]
      * @type {Number}
      */
     life: {
@@ -748,7 +858,12 @@ enchant.ui.LifeLabel = enchant.Class.create(enchant.Group, {
  */
 enchant.ui.Bar = enchant.Class.create(enchant.Sprite, {
     /**
+     [lang:ja]
      * イージング付きのバークラス
+     [/lang]
+     [lang:en]
+     * A class for bar with easing functionality.
+     [/lang]
      * @constructs
      * @param x
      * @param y
@@ -798,7 +913,12 @@ enchant.ui.Bar = enchant.Class.create(enchant.Sprite, {
         });
     },
     /**
+     [lang:ja]
      * バーの向き ('right' or 'left')
+     [/lang]
+     [lang:en]
+     * The direction of the bar ('right' or 'left')
+     [/lang]
      * @default 'right'
      * @type {String}
      */
@@ -815,7 +935,12 @@ enchant.ui.Bar = enchant.Class.create(enchant.Sprite, {
         }
     },
     /**
-     * x 座標
+     [lang:ja]
+     * x 座標 
+     [/lang]
+     [lang:en]
+     * x coordinate
+     [/lang]
      * @type {Number}
      */
     x: {
@@ -846,12 +971,23 @@ enchant.ui.Bar = enchant.Class.create(enchant.Sprite, {
  */
 enchant.ui.VirtualMap = enchant.Class.create(enchant.Group, {
     /**
+     [lang:ja]
      * マップライクな Group
      * addChildで Sprite 等を追加すると、自動的に mx, my プロパティが追加され、
      * VirtualMap内での座標で Sprite を操作できる
      *
      * 使い方
      * //20 x 20 メッシュの縦横320ピクセルの盤を作り、その上に16 x 16の駒を8つ並べる
+     [/lang]
+     [lang:en]
+     * A group class .
+     * It adds mx and my properties to its children.
+     * You can access its children from coordination in VirtualMap.
+     *  
+     * How to Use
+     * // Creates 20 * 20 mesh with 320 * 320 pixel board.
+     * // On top of the board put 8 Sprites of 16 * 16 pixel.
+     [/lang]
      * var board = new VirtualMap(20, 20);
      * board.width = 320;
      * board.height = 320;
@@ -874,7 +1010,12 @@ enchant.ui.VirtualMap = enchant.Class.create(enchant.Group, {
         this.meshHeight = meshHeight || 16;
     },
     /**
+     [lang:ja]
      * VirtualMap にオブジェクトを追加する (自動的にバインドされる)
+     [/lang]
+     [lang:en]
+     * Adds object to the VirtualMap (automatically binds it).
+     [/lang]
      * @param obj
      */
     addChild: function(obj) {
@@ -882,8 +1023,14 @@ enchant.ui.VirtualMap = enchant.Class.create(enchant.Group, {
         this.bind(obj);
     },
     /**
+     [lang:ja]
      * VirtualMap にオブジェクトを追加する
      * reference で指定したオブジェクトより前に追加される (自動的にバインドされる)。
+     [/lang]
+     [lang:en]
+     * Adds object to the VirtualMap.
+     * Inserts before the object of reference.
+     [/lang]
      * @param obj
      * @param reference
      */
@@ -892,9 +1039,16 @@ enchant.ui.VirtualMap = enchant.Class.create(enchant.Group, {
         this.bind(obj);
     },
     /**
+     [lang:ja]
      * オブジェクトを VirtualMap にバインドする。
      * バインドされたオブジェクトはメッシュ座標 mx, my プロパティを持ち、これを操作することで
      * VirtualMap の中を移動させることができる。
+     [/lang]
+     [lang:en]
+     * Binds an object to the VirtualMap.
+     * Binded objects have mx, my properties.
+     * You can move them in the VirtualMap by manipulating mx, my coordinations.
+     [/lang]
      * @param obj
      */
     bind: function(obj) {
