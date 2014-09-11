@@ -113,8 +113,16 @@ module.exports = (grunt) ->
         files: [ 'tests/qunit/*/*.html' ]
 
       mocha:
-        all: 'tests/mocha/*.html'
-        core: 'test/mocha/enchant.js/*.html'
+        all:
+          src: ['tests/mocha/**/*.html']
+          options: 
+            log: true
+            reporter: 'Spec'
+        core:
+          src: ['tests/mocha/enchant.js/*.html']
+          options:
+            log: true
+            reporter: 'Spec'
 
       exec:
         whatever:
@@ -132,10 +140,11 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-contrib-qunit'
+  grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-mocha'
   grunt.loadNpmTasks 'grunt-exec'
   grunt.loadTasks 'tasks/'
 
   # Default task.
-  grunt.registerTask 'default', [ 'jshint:core', 'concat', 'uglify', 'qunit', 'lang:en', 'lang:ja', 'lang:de', 'build' ]
+  grunt.registerTask 'default', [ 'jshint:core', 'concat', 'uglify', 'mocha', 'lang:en', 'lang:ja', 'lang:de', 'build' ]
