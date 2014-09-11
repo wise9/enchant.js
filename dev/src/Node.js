@@ -216,9 +216,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         matrix.reset();
     },
     remove: function() {
-        if (this._listener) {
-            this.clearEventListener();
-        }
+        this.clearEventListener();
+
         if (this.parentNode) {
             this.parentNode.removeChild(this);
         }
