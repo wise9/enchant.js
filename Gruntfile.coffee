@@ -115,14 +115,16 @@ module.exports = (grunt) ->
       mocha:
         all:
           src: ['tests/mocha/**/*.html']
-          options: 
+          options:
             log: true
             reporter: 'Spec'
+            timeout: 10000
         core:
           src: ['tests/mocha/enchant.js/*.html']
           options:
             log: true
             reporter: 'Spec'
+            timeout: 10000
 
       exec:
         whatever:
