@@ -27,6 +27,31 @@ describe("Scene", function(){
         });
     });
 
+    describe("#remove", function() {
+        it("removes all children", function() {
+            var sprite1 = new enchant.Sprite();
+            var sprite2 = new enchant.Sprite();
+            scene.addChild(sprite1);
+            scene.addChild(sprite2);
+            expect(scene.childNodes.length).to.equal(2);
+            scene.remove();
+            expect(scene.childNodes.length).to.equal(0);
+        });
+
+        it("removes all event listners", function() {
+            var clearEventListener = sinon.spy(scene, 'clearEventListener');
+            scene.remove();
+            expect(clearEventListener.called).to.be.true;
+        });
+
+        it("is removed from scene stack", function() {
+            core.pushScene(scene);
+            expect(core._scenes.indexOf(scene)).not.to.be.equal(-1);
+            scene.remove();
+            expect(core._scenes.indexOf(scene)).to.be.equal(-1);
+        });
+    });
+
     describe("with no layer", function(){
         it("can be set x position", function(){
             expect(scene.x).to.be.zero;
