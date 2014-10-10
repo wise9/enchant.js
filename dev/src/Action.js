@@ -1,48 +1,55 @@
-/**
+﻿/**
  * @scope enchant.Action.prototype
- * @type {*}
  */
-
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {
     /**
      * @name enchant.Action
      * @class
      [lang:ja]
-     * アニメーションタイムラインを構成する、実行したい処理を指定するためのクラス.
+     * アニメーションタイムラインを構成する, 実行したい処理を指定するためのクラス.
      *
-     * タイムラインに追加されたアクションは順に実行される。
-     * アクションが開始・終了された時に actionstart, actionend イベントが発行され、
-     * また1フレーム経過した時には actiontick イベントが発行される。
-     * これらのイベントのリスナとして実行したい処理を指定する。
+     * タイムラインに追加されたアクションは順に実行される.
+     * アクションが開始・終了された時に actionstart, actionend イベントが発行され,
+     * また1フレーム経過した時には actiontick イベントが発行される.
+     * これらのイベントのリスナとして実行したい処理を指定する.
      *
-     * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが、
-     * null が指定されると、タイムラインの next メソッドが呼ばれるまで移行しない。
-     * @constructs
-     * @param param
-     * @config {integer} [time] アクションが持続するフレーム数。 null が指定されると無限長
-     * @config {function} [onactionstart] アクションが開始される時のイベントリスナ
-     * @config {function} [onactiontick] アクションが1フレーム経過するときのイベントリスナ
-     * @config {function} [onactionend] アクションがが終了する時のイベントリスナ
+     * time で指定されたフレーム数が経過すると自動的に次のアクションに移行するが,
+     * null が指定されると, タイムラインの next メソッドが呼ばれるまで移行しない.
+     * @param {Object} param
+     * @param {Number} [param.time] アクションが持続するフレーム数. null が指定されると無限長.
+     * @param {Function} [param.onactionstart] アクションが開始される時のイベントリスナ.
+     * @param {Function} [param.onactiontick] アクションが1フレーム経過するときのイベントリスナ.
+     * @param {Function} [param.onactionend] アクションがが終了する時のイベントリスナ.
      [/lang]
      [lang:en]
-     * Action class.
-     * Actions are units that make up the time line,
+     * Actions are units that make up the timeline.
      * It is a unit used to specify the action you want to perform.
-     * Action has been added to the time line is performed in order.
+     * 
+     * Actions that have been added to the timeline are performed in sequential order.
+     * The transition from one action to the next occurs automatically 
+     * after the number of frames specified by the time parameter have elapsed.
      *
-     * Actionstart, actiontick event is fired when the action is started and stopped,
-     * When one frame has elapsed actiontick event is also issued.
-     * Specify the action you want to perform as a listener for these events.
-     * The transition to the next action automatically the number of frames that are specified in the time has elapsed.
+     * An actionstart event is fired when the action has started.
+     * An actionend event is fired when the action has stopped.
+     * For each frame that elapses, an actiontick event is fired.
+     * 
+     * You can specify a listener for these events to perform specific events when they occur.
      *
-     * @constructs
-     * @param param
-     * @config {integer} [time] The number of frames that will last action. infinite length is specified null
-     * @config {function} [onactionstart] Event listener for when the action is initiated
-     * @config {function} [onactiontick] Event listener for when the action has passed one frame
-     * @config {function} [onactionend] Event listener for when the action is finished
+     * @param {Object} param
+     * @param {Number} [param.time] The number of frames that the action will persist. For an infinite number set this to null.
+     * @param {Function} [param.onactionstart] Event listener for when the action is initiated.
+     * @param {Function} [param.onactiontick] Event listener for when the action has passed one frame.
+     * @param {Function} [param.onactionend] Event listener for when the action is finished.
+     [/lang]
+     [lang:de]
+     * @param {Object} param
+     * @param {Number} [param.time]
+     * @param {Function} [param.onactionstart]
+     * @param {Function} [param.onactiontick]
+     * @param {Function} [param.onactionend]
      [/lang]
      * @constructs
+     * @extends enchant.ActionEventTarget
      */
     initialize: function(param) {
         enchant.ActionEventTarget.call(this);

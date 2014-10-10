@@ -8,17 +8,17 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      [lang:ja]
      * canvas要素をラップしたクラス.
      *
-     * {@link enchant.Sprite}や{@link enchant.Map}のimageプロパティに設定して表示させることができる.
-     * Canvas APIにアクセスしたいときは{@link enchant.Surface#context}プロパティを用いる.
+     * {@link enchant.Sprite} や {@link enchant.Map} のimageプロパティに設定して表示させることができる.
+     * Canvas APIにアクセスしたいときは {@link enchant.Surface#context} プロパティを用いる.
      *
      * @example
-     *   // 円を表示するSpriteを作成する
-     *   var ball = new Sprite(50, 50);
-     *   var surface = new Surface(50, 50);
-     *   surface.context.beginPath();
-     *   surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
-     *   surface.context.fill();
-     *   ball.image = surface;
+     * // 円を表示するSpriteを作成する
+     * var ball = new Sprite(50, 50);
+     * var surface = new Surface(50, 50);
+     * surface.context.beginPath();
+     * surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+     * surface.context.fill();
+     * ball.image = surface;
      *
      * @param {Number} width Surfaceの横幅.
      * @param {Number} height Surfaceの高さ.
@@ -30,13 +30,13 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * If you wish to access Canvas API use the {@link enchant.Surface#context} property.
      *
      * @example
-     *   // Creates Sprite that displays a circle.
-     *   var ball = new Sprite(50, 50);
-     *   var surface = new Surface(50, 50);
-     *   surface.context.beginPath();
-     *   surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
-     *   surface.context.fill();
-     *   ball.image = surface;
+     * // Creates Sprite that displays a circle.
+     * var ball = new Sprite(50, 50);
+     * var surface = new Surface(50, 50);
+     * surface.context.beginPath();
+     * surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+     * surface.context.fill();
+     * ball.image = surface;
      *
      * @param {Number} width Surface width.
      * @param {Number} height Surface height.
@@ -50,18 +50,19 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * {@link enchant.Surface#context} Variable erfolgen.
      *
      * @example
-     *   // Erstellt einen Sprite und stellt einen Kreis dar.
-     *   var ball = new Sprite(50, 50);
-     *   var surface = new Surface(50, 50);
-     *   surface.context.beginPath();
-     *   surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
-     *   surface.context.fill();
-     *   ball.image = surface;
+     * // Erstellt einen Sprite und stellt einen Kreis dar.
+     * var ball = new Sprite(50, 50);
+     * var surface = new Surface(50, 50);
+     * surface.context.beginPath();
+     * surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+     * surface.context.fill();
+     * ball.image = surface;
      *
      * @param {Number} width Die Breite der Surface.
      * @param {Number} height Die Höhe der Surface.
      [/lang]
      * @constructs
+     * @extends enchant.EventTarget
      */
     initialize: function(width, height) {
         enchant.EventTarget.call(this);
@@ -78,7 +79,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Die Breite der Surface.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.width = width;
         /**
@@ -91,7 +92,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Die Höhe der Surface.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.height = height;
         /**
@@ -104,7 +105,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Der Surface Zeichenkontext.
          [/lang]
-         * @type {CanvasRenderingContext2D}
+         * @type CanvasRenderingContext2D
          */
         this.context = null;
 
@@ -142,19 +143,19 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * Surfaceから1ピクセル取得する.
      * @param {Number} x 取得するピクセルのx座標.
      * @param {Number} y 取得するピクセルのy座標.
-     * @return {Array.<Number>} ピクセルの情報を[r, g, b, a]の形式で持つ配列.
+     * @return {Number[]} ピクセルの情報を[r, g, b, a]の形式で持つ配列.
      [/lang]
      [lang:en]
      * Returns 1 pixel from the Surface.
      * @param {Number} x The pixel's x coordinates.
      * @param {Number} y The pixel's y coordinates.
-     * @return {Array.<Number>} An array that holds pixel information in [r, g, b, a] format.
+     * @return {Number[]} An array that holds pixel information in [r, g, b, a] format.
      [/lang]
      [lang:de]
      * Liefert einen Pixel der Surface.
      * @param {Number} x Die x Koordinaten des Pixel.
      * @param {Number} y Die y Koordinaten des Pixel.
-     * @return {Array.<Number>} Ein Array das die Pixelinformationen im [r, g, b, a] Format enthält.
+     * @return {Number[]} Ein Array das die Pixelinformationen im [r, g, b, a] Format enthält.
      [/lang]
      */
     getPixel: function(x, y) {
@@ -218,14 +219,14 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * Canvas APIのdrawImageをラップしており, 描画する矩形を同様の形式で指定できる.
      *
      * @example
-     *   var src = core.assets['src.gif'];
-     *   var dst = new Surface(100, 100);
-     *   dst.draw(src);         // ソースを(0, 0)に描画
-     *   dst.draw(src, 50, 50); // ソースを(50, 50)に描画
-     *   // ソースを(50, 50)に縦横30ピクセル分だけ描画
-     *   dst.draw(src, 50, 50, 30, 30);
-     *   // ソースの(10, 10)から縦横40ピクセルの領域を(50, 50)に縦横30ピクセルに縮小して描画
-     *   dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
+     * var src = core.assets['src.gif'];
+     * var dst = new Surface(100, 100);
+     * dst.draw(src);         // ソースを(0, 0)に描画
+     * dst.draw(src, 50, 50); // ソースを(50, 50)に描画
+     * // ソースを(50, 50)に縦横30ピクセル分だけ描画
+     * dst.draw(src, 50, 50, 30, 30);
+     * // ソースの(10, 10)から縦横40ピクセルの領域を(50, 50)に縦横30ピクセルに縮小して描画
+     * dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
      *
      * @param {enchant.Surface} image 描画に用いるSurface.
      [/lang]
@@ -236,15 +237,15 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * these are getting applied to the Canvas drawImage method.
      *
      * @example
-     *   var src = core.assets['src.gif'];
-     *   var dst = new Surface(100, 100);
-     *   dst.draw(src);         // Draws source at (0, 0)
-     *   dst.draw(src, 50, 50); // Draws source at (50, 50)
-     *   // Draws just 30 horizontal and vertical pixels of source at (50, 50)
-     *   dst.draw(src, 50, 50, 30, 30);
-     *   // Takes the image content in src starting at (10,10) with a (Width, Height) of (40,40),
-     *   // scales it and draws it in this surface at (50, 50) with a (Width, Height) of (30,30).
-     *   dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
+     * var src = core.assets['src.gif'];
+     * var dst = new Surface(100, 100);
+     * dst.draw(src);         // Draws source at (0, 0)
+     * dst.draw(src, 50, 50); // Draws source at (50, 50)
+     * // Draws just 30 horizontal and vertical pixels of source at (50, 50)
+     * dst.draw(src, 50, 50, 30, 30);
+     * // Takes the image content in src starting at (10,10) with a (Width, Height) of (40,40),
+     * // scales it and draws it in this surface at (50, 50) with a (Width, Height) of (30,30).
+     * dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
      *
      * @param {enchant.Surface} image Surface used in drawing.
      [/lang]
@@ -255,15 +256,15 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
      * übergeben werden, werden diese auf die Canvas drawImage Methode angewendet.
      *
      * @example
-     *   var src = core.assets['src.gif'];
-     *   var dst = new Surface(100, 100);
-     *   dst.draw(src);         // Zeichnet src bei (0, 0)
-     *   dst.draw(src, 50, 50); // Zeichnet src bei (50, 50)
-     *   // Zeichnet src an der Position (50,50), jedoch nur 30x30 Pixel
-     *   dst.draw(src, 50, 50, 30, 30);
-     *   // Skaliert und zeichnet den Bereich mit der (Breite, Höhe) von (40, 40)
-     *   // in src ab (10,10) in diese Surface bei (50,50) mit einer (Breite, Höhe) von (30, 30).
-     *   dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
+     * var src = core.assets['src.gif'];
+     * var dst = new Surface(100, 100);
+     * dst.draw(src);         // Zeichnet src bei (0, 0)
+     * dst.draw(src, 50, 50); // Zeichnet src bei (50, 50)
+     * // Zeichnet src an der Position (50,50), jedoch nur 30x30 Pixel
+     * dst.draw(src, 50, 50, 30, 30);
+     * // Skaliert und zeichnet den Bereich mit der (Breite, Höhe) von (40, 40)
+     * // in src ab (10,10) in diese Surface bei (50,50) mit einer (Breite, Höhe) von (30, 30).
+     * dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);
      *
      * @param {enchant.Surface} image Surface used in drawing.
      [/lang]
@@ -331,10 +332,10 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
  [lang:ja]
  * 画像ファイルを読み込んでSurfaceオブジェクトを作成する.
  *
- * このメソッドによって作成されたSurfaceはimg要素のラップしており{@link enchant.Surface#context}プロパティに
- * アクセスしたり{@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel},
- * {@link enchant.Surface#setPixel}メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない.
- * ただし{@link enchant.Surface#draw}メソッドの引数とすることはでき,
+ * このメソッドによって作成されたSurfaceはimg要素をラップしており {@link enchant.Surface#context} プロパティに
+ * アクセスしたり {@link enchant.Surface#draw}, {@link enchant.Surface#clear}, {@link enchant.Surface#getPixel},
+ * {@link enchant.Surface#setPixel} メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない.
+ * ただし{@link enchant.Surface#draw} メソッドの引数とすることはでき,
  * ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
  * 場合はピクセルを取得するなど画像操作の一部が制限される).
  *

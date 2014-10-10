@@ -99,10 +99,10 @@ enchant.ui.Pad = enchant.Class.create(enchant.Sprite, {
         var core = enchant.Core.instance;
         ['left', 'right', 'up', 'down'].forEach(function(type) {
             if (this.input[type] && !input[type]) {
-                core.dispatchEvent(new enchant.Event(type + 'buttonup'));
+                core.changeButtonState(type, false);
             }
             if (!this.input[type] && input[type]) {
-                core.dispatchEvent(new enchant.Event(type + 'buttondown'));
+                core.changeButtonState(type, true);
             }
         }, this);
         this.input = input;
@@ -615,7 +615,12 @@ enchant.ui.ScoreLabel = enchant.Class.create(enchant.ui.MutableText, {
             if (this.easing === 0) {
                 this.text = this.label + (this._current = this._score);
             } else {
-                this._current += Math.ceil((this._score - this._current) / this.easing);
+                var dist = this._score - this._current;
+                if (0 < dist) {
+                    this._current += Math.ceil(dist / this.easing);
+                } else if (dist < 0) {
+                    this._current += Math.floor(dist / this.easing);
+                }
                 this.text = this.label + this._current;
             }
         });

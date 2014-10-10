@@ -1,7 +1,7 @@
 enchant.js
 ==========
 
-<img src="http://github.com/wise9/enchant.js/raw/master/enchant.png" width="320" height="320">
+<img src="https://raw.githubusercontent.com/wise9/enchant.js/master/enchant.png" width="320" height="320">
 
 JavaScript Game Engine
 
@@ -10,9 +10,9 @@ JavaScript Game Engine
 Download
 --------
 
-- [enchant.js](http://github.com/wise9/enchant.js/raw/master/enchant.js)
-- [enchant.min.js](http://github.com/wise9/enchant.js/raw/master/enchant.min.js) (compressed)
+This is a repository for development. Refer to [uei/enchant.js-builds](https://github.com/uei/enchant.js-builds) for download pre-built files.
 
+[Download Zip file](https://github.com/uei/enchant.js-builds/archive/master.zip)
 
 Documentation
 -------------

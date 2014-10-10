@@ -180,3 +180,51 @@ test('parallel Deferred #Error', function() {
         equal(c, 2, 'receive 2 errors');
     }, 50);
 });
+
+test('insert Deferred.next()', function() {
+    var called = 0;
+    function hoge() {
+        return Deferred
+            .next(function() {
+                var d = new Deferred();
+                setTimeout(function() {
+                    called++;
+                    equal(called, 3, 'check sequence');
+                    d.call();
+                }, 100);
+                return d;
+            })
+            .next(function() {
+                called++;
+                equal(called, 4, 'check sequence');
+            })
+            .next(function() {
+                var d = new Deferred();
+                setTimeout(function() {
+                    called++;
+                    equal(called, 5, 'check sequence');
+                    d.call();
+                }, 100);
+                return d;
+            })
+    }
+    Deferred
+        .next(function() {
+            called++;
+            equal(called, 1, 'check sequence');
+        })
+        .next(function() {
+            called++;
+            equal(called, 2, 'check sequence');
+            return hoge();
+        })
+        .next(function() {
+            called++;
+            equal(called, 6, 'check sequence');
+        })
+        .next(function() {
+            start();
+        });
+    equal(true, true, 'dummy');
+    stop();
+});

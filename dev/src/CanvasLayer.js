@@ -1,4 +1,4 @@
-/**
+﻿/**
  * @scope enchant.CanvasLayer.prototype
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
@@ -7,10 +7,10 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * @class
      [lang:ja]
      * Canvas を用いた描画を行うクラス.
-     * 子を Canvas を用いた描画に切り替えるクラス
+     * 子を Canvas を用いた描画に切り替えるクラス.
      [/lang]
      [lang:en]
-     * A class which is using HTML Canvas for the rendering.
+     * Class that uses the HTML Canvas for rendering.
      * The rendering of children will be replaced by the Canvas rendering.
      [/lang]
      [lang:de]
@@ -18,6 +18,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * Das Rendern der Kinder wird durch das Canvas Rendering ersetzt.
      [/lang]
      * @constructs
+     * @extends enchant.Group
      */
     initialize: function() {
         var core = enchant.Core.instance;
@@ -97,6 +98,18 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         this.addEventListener('childadded', __onchildadded);
 
     },
+    /**
+     [lang:ja]
+     * CanvasLayerの横幅.
+     [/lang]
+     [lang:en]
+     * The width of the CanvasLayer.
+     [/lang]
+     [lang:de]
+     * Die Breite der CanvasLayer.
+     [/lang]
+     * @type Number
+     */
     width: {
         get: function() {
             return this._width;
@@ -106,6 +119,18 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             this._element.width = this._detect.width = width;
         }
     },
+    /**
+     [lang:ja]
+     * CanvasLayerの高さ.
+     [/lang]
+     [lang:en]
+     * The height of the CanvasLayer.
+     [/lang]
+     [lang:de]
+     * Die Höhe der CanvasLayer.
+     [/lang]
+     * @type Number
+     */
     height: {
         get: function() {
             return this._height;
@@ -150,7 +175,11 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     },
     /**
      [lang:ja]
-     * レンダリングを開始.
+     * レンダリングを開始する.
+     [/lang]
+     [lang:en]
+     [/lang]
+     [lang:de]
      [/lang]
      * @private
      */
@@ -160,7 +189,11 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
     },
     /**
      [lang:ja]
-     * レンダリングを停止.
+     * レンダリングを停止する.
+     [/lang]
+     [lang:en]
+     [/lang]
+     [lang:de]
      [/lang]
      * @private
      */

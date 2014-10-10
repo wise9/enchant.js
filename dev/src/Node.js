@@ -35,9 +35,9 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
 
         /**
          [lang:ja]
-         * Node が画面に表示されてから経過したフレーム数。
-         * {@link enchant.Event.ENTER_FRAME} イベントを受け取る前にインクリメントされる。
-         * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる。)
+         * Nodeが画面に表示されてから経過したフレーム数.
+         * {@link enchant.Event.ENTER_FRAME} イベントを受け取る前にインクリメントされる.
+         * (ENTER_FRAME イベントのリスナが初めて実行される時に 1 となる.)
          [/lang]
          [lang:en]
          * The age (frames) of this node which will be increased before this node receives {@link enchant.Event.ENTER_FRAME} event.
@@ -45,7 +45,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Das Alter (Frames) dieses Nodes welches vor dem {@link enchant.Event.ENTER_FRAME} Ereignis erhöht wird.
          [/lang]
-         * @type {Number}
+         * @type Number
          */
         this.age = 0;
 
@@ -59,7 +59,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Der Eltern-Node dieses Node.
          [/lang]
-         * @type {enchant.Group}
+         * @type enchant.Group
          */
         this.parentNode = null;
         /**
@@ -72,7 +72,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
          [lang:de]
          * Die Szene, zu welcher dieser Node gehört.
          [/lang]
-         * @type {enchant.Scene}
+         * @type enchant.Scene
          */
         this.scene = null;
 
@@ -92,13 +92,9 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             }
         });
 
-        /**
-         [lang:ja]
-         * Node が生成される際に、tl プロパティに Timeline オブジェクトを追加している
-         [/lang]
-         */
-        if(enchant.ENV.USE_ANIMATION){
-            var tl = this.tl = new enchant.Timeline(this);
+        // Nodeが生成される際に, tl プロパティに Timeline オブジェクトを追加している.
+        if (enchant.ENV.USE_ANIMATION) {
+            this.tl = new enchant.Timeline(this);
         }
     },
     /**
@@ -155,7 +151,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
      [lang:de]
      * Die x Koordinaten des Nodes.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     x: {
         get: function() {
@@ -176,7 +172,7 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
      [lang:de]
      * Die y Koordinaten des Nodes.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     y: {
         get: function() {

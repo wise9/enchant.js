@@ -1,7 +1,7 @@
 /**
- * enchant.Core is moved to enchant.Core from v0.6
+ * @name enchant.Game
  * @class
- * Game = Core
- * @type {*}
+ * enchant.Game is moved to {@link enchant.Core} from v0.6
+ * @deprecated
  */
 enchant.Game = enchant.Core;

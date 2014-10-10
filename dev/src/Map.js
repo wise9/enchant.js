@@ -7,20 +7,17 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      * @class
      [lang:ja]
      * タイルセットからマップを生成して表示するクラス.
-     *
      * @param {Number} tileWidth タイルの横幅.
      * @param {Number} tileHeight タイルの高さ.
      [/lang]
      [lang:en]
      * A class to create and display maps from a tile set.
-     *
      * @param {Number} tileWidth Tile width.
      * @param {Number} tileHeight Tile height.
      [/lang]
      [lang:de]
      * Eine Klasse mit der Karten aus Kacheln (Tiles)
      * erstellt und angezeigt werden können.
-     *
      * @param {Number} tileWidth Kachelbreite.
      * @param {Number} tileHeight Kachelhöhe.
      [/lang]
@@ -71,7 +68,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
          * Ein 2-Dimensionales Array um zu speichern, ob für eine Kachel
          * Kollesionsdetektion durchgeführt werden soll.
          [/lang]
-         * @type {Array.<Array.<Number>>}
+         * @type Number[][]
          */
         this.collisionData = null;
 
@@ -162,21 +159,21 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      * データを設定する.
      * タイルががimageプロパティの画像に左上から順に配列されていると見て, 0から始まる
      * インデックスの二元配列を設定する.複数指定された場合は後のものから順に表示される.
-     * @param {...Array<Array.<Number>>} data タイルのインデックスの二元配列. 複数指定できる.
+     * @param {...Number[][]} data タイルのインデックスの二元配列. 複数指定できる.
      [/lang]
      [lang:en]
      * Set map data.
      * Sets the tile data, whereas the data (two-dimensional array with indizes starting from 0) 
      * is mapped on the image starting from the upper left corner.
      * When more than one map data array is set, they are displayed in reverse order.
-     * @param {...Array<Array.<Number>>} data Two-dimensional array of tile indizes. Multiple designations possible.
+     * @param {...Number[][]} data Two-dimensional array of tile indizes. Multiple designations possible.
      [/lang]
      [lang:de]
      * Setzt die Kartendaten.
      * Setzt die Kartendaten, wobei die Daten (ein 2-Dimensionales Array bei dem die Indizes bei 0 beginnen) 
      * auf das Bild, beginned bei der linken oberen Ecke) projeziert werden.
      * Sollte mehr als ein Array übergeben worden sein, werden die Karten in invertierter Reihenfolge dargestellt. 
-     * @param {...Array<Array.<Number>>} data 2-Dimensionales Array mit Kachel Indizes. Mehrfachangaben möglich.
+     * @param {...Number[][]} data 2-Dimensionales Array mit Kachel Indizes. Mehrfachangaben möglich.
      [/lang]
      */
     loadData: function(data) {
@@ -288,7 +285,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      [lang:de]
      * Das Bild mit dem die Kacheln auf der Karte dargestellt werden.
      [/lang]
-     * @type {enchant.Surface}
+     * @type enchant.Surface
      */
     image: {
         get: function() {
@@ -325,7 +322,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      [lang:de]
      * Kachelbreite
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     tileWidth: {
         get: function() {
@@ -346,7 +343,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
      [lang:de]
      * Kachelhöhe.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     tileHeight: {
         get: function() {

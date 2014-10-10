@@ -115,12 +115,19 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         this._style = {};
         this.__styleStatus = {};
 
+        this._isContainedInCollection = false;
+
         /**
          [lang:ja]
          * Entityを描画する際の合成処理を設定する.
          * Canvas上に描画する際のみ有効.
          * CanvasのコンテキストのglobalCompositeOperationにセットされる.
          [/lang]
+         [lang:en]
+         [/lang]
+         [lang:de]
+         [/lang]
+         * @type String
          */
         this.compositeOperation = null;
 
@@ -141,13 +148,13 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          * Button Ereignis (Event) ausgelöst.
          * Mögliche buttonModes sind: left, right, up, down, a, b. 
          [/lang]
-         * @type {String}
+         * @type String
          */
         this.buttonMode = null;
         /**
          [lang:ja]
          * Entityが押されているかどうか.
-         * {@link enchant.Entity.buttonMode}が設定されているときだけ機能する.
+         * {@link enchant.Entity.buttonMode} が設定されているときだけ機能する.
          [/lang]
          [lang:en]
          * Indicates if this Entity is being clicked.
@@ -157,7 +164,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
          * Zeigt an, ob auf die Entity geklickt wurde.
          * Funktioniert nur wenn {@link enchant.Entity.buttonMode} gesetzt ist.
          [/lang]
-         * @type {Boolean}
+         * @type Boolean
          */
         this.buttonPressed = false;
         this.addEventListener('touchstart', function() {
@@ -165,18 +172,16 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 return;
             }
             this.buttonPressed = true;
-            var e = new enchant.Event(this.buttonMode + 'buttondown');
-            this.dispatchEvent(e);
-            core.dispatchEvent(e);
+            this.dispatchEvent(new enchant.Event(this.buttonMode + 'buttondown'));
+            core.changeButtonState(this.buttonMode, true);
         });
         this.addEventListener('touchend', function() {
             if (!this.buttonMode) {
                 return;
             }
             this.buttonPressed = false;
-            var e = new enchant.Event(this.buttonMode + 'buttonup');
-            this.dispatchEvent(e);
-            core.dispatchEvent(e);
+            this.dispatchEvent(new enchant.Event(this.buttonMode + 'buttonup'));
+            core.changeButtonState(this.buttonMode, false);
         });
 
         this.enableCollection();
@@ -191,7 +196,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Die Breite der Entity.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     width: {
         get: function() {
@@ -212,7 +217,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Die Höhe der Entity.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     height: {
         get: function() {
@@ -236,7 +241,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Die Hintergrundfarbe der Entity.
      * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
      [/lang]
-     * @type {String}
+     * @type String
      */
     backgroundColor: {
         get: function() {
@@ -255,7 +260,11 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * The Entity debug color.
      * Must be provided in the same format as the CSS 'color' property.
      [/lang]
-     * @type {String}
+     [lang:de]
+     * Die debug-farbe der Entity.
+     * Muss im gleichen Format definiert werden wie das CSS 'color' Attribut.
+     [/lang]
+     * @type String
      */
     debugColor: {
         get: function() {
@@ -280,7 +289,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Definiert den Level der Transparenz von 0 bis 1
      * (0 ist komplett transparent, 1 ist vollständig deckend).
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     opacity: {
         get: function() {
@@ -300,7 +309,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Zeigt an, ob die Entity dargestellt werden soll oder nicht.
      [/lang]
-     * @type {Boolean}
+     * @type Boolean
      */
     visible: {
         get: function() {
@@ -318,9 +327,9 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * Indicates whether or not this Entity can be touched.
      [/lang]
      [lang:de]
-     * Definiert ob auf die Entity geklickt werden kann. 
+     * Definiert ob auf die Entity geklickt werden kann.
      [/lang]
-     * @type {Boolean}
+     * @type Boolean
      */
     touchEnabled: {
         get: function() {
@@ -487,19 +496,20 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         var _;
         return (_ = this._offsetX - other._offsetX + (this.width - other.width) / 2) * _ +
             (_ = this._offsetY - other._offsetY + (this.height - other.height) / 2) * _ < distance * distance;
-    }, /**
+    },
+    /**
      [lang:ja]
-     * Spriteを拡大縮小する.
+     * Entityを拡大縮小する.
      * @param {Number} x 拡大するx軸方向の倍率.
      * @param {Number} [y] 拡大するy軸方向の倍率.
      [/lang]
      [lang:en]
-     * Enlarges or shrinks this Sprite.
+     * Enlarges or shrinks this Entity.
      * @param {Number} x Scaling factor on the x axis.
      * @param {Number} [y] Scaling factor on the y axis.
      [/lang]
      [lang:de]
-     * Vergrößert oder verkleinert dieses Sprite.
+     * Vergrößert oder verkleinert dieses Entity.
      * @param {Number} x Skalierungsfaktor auf der x-Achse.
      * @param {Number} [y] Skalierungsfaktor auf der y-Achse.
      [/lang]
@@ -511,15 +521,15 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      [lang:ja]
-     * Spriteを回転する.
+     * Entityを回転する.
      * @param {Number} deg 回転する角度 (度数法).
      [/lang]
      [lang:en]
-     * Rotate this Sprite.
+     * Rotate this Entity.
      * @param {Number} deg Rotation angle (degree).
      [/lang]
      [lang:de]
-     * Rotiert dieses Sprite.
+     * Rotiert dieses Entity.
      * @param {Number} deg Rotationswinkel (Grad).
      [/lang]
      */
@@ -529,15 +539,15 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      [lang:ja]
-     * Spriteのx軸方向の倍率.
+     * Entityのx軸方向の倍率.
      [/lang]
      [lang:en]
-     * Scaling factor on the x axis of this Sprite.
+     * Scaling factor on the x axis of this Entity.
      [/lang]
      [lang:de]
-     * Skalierungsfaktor auf der x-Achse dieses Sprites.
+     * Skalierungsfaktor auf der x-Achse dieses Entity.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     scaleX: {
         get: function() {
@@ -550,15 +560,15 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      [lang:ja]
-     * Spriteのy軸方向の倍率.
+     * Entityのy軸方向の倍率.
      [/lang]
      [lang:en]
-     * Scaling factor on the y axis of this Sprite.
+     * Scaling factor on the y axis of this Entity.
      [/lang]
      [lang:de]
-     * Skalierungsfaktor auf der y-Achse dieses Sprites.
+     * Skalierungsfaktor auf der y-Achse dieses Entity.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     scaleY: {
         get: function() {
@@ -571,15 +581,15 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
     },
     /**
      [lang:ja]
-     * Spriteの回転角 (度数法).
+     * Entityの回転角 (度数法).
      [/lang]
      [lang:en]
-     * Sprite rotation angle (degree).
+     * Entity rotation angle (degree).
      [/lang]
      [lang:de]
-     * Rotationswinkel des Sprites (Grad).
+     * Rotationswinkel des Entity (Grad).
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     rotation: {
         get: function() {
@@ -600,7 +610,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Ausgangspunkt für Rotation und Skalierung.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     originX: {
         get: function() {
@@ -621,7 +631,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:de]
      * Ausgangspunkt für Rotation und Skalierung.
      [/lang]
-     * @type {Number}
+     * @type Number
      */
     originY: {
         get: function() {
@@ -637,6 +647,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      * インスタンスをコレクションの対象にする.
      * デフォルトで呼び出される.
      [/lang]
+     [lang:en]
+     [/lang]
+     [lang:de]
+     [/lang]
      */
     enableCollection: function() {
         this.addEventListener('addedtoscene', this._addSelfToCollection);
@@ -649,6 +663,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [lang:ja]
      * インスタンスをコレクションの対象から除外する.
      [/lang]
+     [lang:en]
+     [/lang]
+     [lang:de]
+     [/lang]
      */
     disableCollection: function() {
         this.removeEventListener('addedtoscene', this._addSelfToCollection);
@@ -658,12 +676,22 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
         }
     },
     _addSelfToCollection: function() {
+        if (this._isContainedInCollection) {
+            return;
+        }
+
         var Constructor = this.getConstructor();
         Constructor._collectionTarget.forEach(function(C) {
             C.collection.push(this);
         }, this);
+
+        this._isContainedInCollection = true;
     },
     _removeSelfFromCollection: function() {
+        if (!this._isContainedInCollection) {
+            return;
+        }
+
         var Constructor = this.getConstructor();
         Constructor._collectionTarget.forEach(function(C) {
             var i = C.collection.indexOf(this);
@@ -671,6 +699,8 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
                 C.collection.splice(i, 1);
             }
         }, this);
+
+        this._isContainedInCollection = false;
     },
     getBoundingRect: function() {
         var w = this.width || 0;

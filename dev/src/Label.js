@@ -6,7 +6,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      * @name enchant.Label
      * @class
      [lang:ja]
-     * Label クラス。
+     * Label クラス.
      [/lang]
      [lang:en]
      * A class for Label object.
@@ -27,6 +27,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
 
         this._debugColor = '#ff0000';
     },
+    /**#nocode+*/
     width: {
         get: function() {
             return this._width;
@@ -38,12 +39,13 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             this.updateBoundArea();
         }
     },
+    /**#nocode-*/
     /**
      [lang:ja]
      * 表示するテキスト.
-     * DOM レンダラを利用している場合 (DOMScene 以下にある場合) 改行タグ (br) も利用できるが、
-     * ユーザから入力したり、サーバから取得した文字列を表示する場合, XSS 脆弱性などに注意してください.
-     * Canvas レンダラを利用できる場合でも、改行タグ (br, BR) は改行に変換されます。
+     * DOM レンダラを利用している場合 (DOMScene 以下にある場合) 改行タグ (br) も利用できますが,
+     * ユーザから入力したり, サーバから取得した文字列を表示する場合, XSS 脆弱性などに注意してください.
+     * Canvas レンダラを利用できる場合でも, 改行タグ (br, BR) は改行に変換されます.
      [/lang]
      [lang:en]
      * Text to be displayed.
@@ -51,7 +53,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      [lang:de]
      * Darzustellender Text.
      [/lang]
-     * @type {String}
+     * @type String
      */
     text: {
         get: function() {
@@ -88,7 +90,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      * Spezifiziert die horizontale Ausrichtung des Textes.
      * Kann im gleichen Format wie die CSS 'text-align' Eigenschaft angegeben werden.
      [/lang]
-     * @type {String}
+     * @type String
      */
     textAlign: {
         get: function() {
@@ -112,7 +114,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      * Text Eigenschaften.
      * Kann im gleichen Format wie die CSS 'font' Eigenschaft angegeben werden.
      [/lang]
-     * @type {String}
+     * @type String
      */
     font: {
         get: function() {
@@ -136,7 +138,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
      * Text Farbe.
      * Kann im gleichen Format wie die CSS 'color' Eigenschaft angegeben werden.
      [/lang]
-     * @type {String}
+     * @type String
      */
     color: {
         get: function() {

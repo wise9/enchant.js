@@ -1,3 +1,44 @@
+# v0.8.2
+
+- feature
+    - add ANIMATION_END event (thx @bytehala)  
+        Sprite dispatches "ANIMATION_END" event when frame animation ended
+- bugfix
+    - bugfix about Sprite#frame to setting same frame sequence (thx @bytehala)
+    - bugfix about "Touch to Start" scene in iOS
+    - bugfix about Node#\_updateCoordinate
+    - bugfix about Core#keyunbind
+    - bugfix about Core#load
+
+# v0.8.1
+
+- feature
+    - add enchant.ENV.BROWSER
+    - default value of enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI became true  
+        WebAudio API is available in iOS6+
+    - enchant.Sound.load callback became optional (#224)
+    - enchant.Sprite#frame duplicates assigned Array (#202)
+    - support newer interface of WebAudio API (thx @kumabook)
+    - improved API documents (thx @Crowbeak)
+- bugfix
+    - improved behavior of enchant.Deferred chaining
+    - detect Internet Explorer 11 correctly (#256)
+    - bugfix about enchant.Timeline#next (#242) (thx @xy124)  
+        In rare case, it failed to dispatch "actionend" event
+    - bugfix about enchant.DOMSound.load on Firefox (#235)  
+        Firefox dispatches "canplaythrough" event more than once
+
+# v0.8.0
+
+- features
+    - add WebAudioSound#currentTime
+    - add some classes about button input detection (feature/input)
+    - some fixes for supporting Nintendo Web Framework
+- bugfix
+    - bugfix about WebAudioSound#duration (#222)
+
+# v0.7.1
+
 # v0.7.0
 
 - features
