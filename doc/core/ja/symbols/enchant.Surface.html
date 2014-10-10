@@ -42,11 +42,21 @@
 				
 					<li><a href="../symbols/enchant.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
 				
+					<li><a href="../symbols/enchant.BinaryInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.BinaryInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
+				
+					<li><a href="../symbols/enchant.CanvasScene.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasScene</a></li>
 				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.Deferred.html">enchant<span class='break'> </span>.<span class='break'> </span>Deferred</a></li>
+				
+					<li><a href="../symbols/enchant.DOMScene.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMScene</a></li>
 				
 					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
 				
@@ -64,7 +74,17 @@
 				
 					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
 				
+					<li><a href="../symbols/enchant.InputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>InputManager</a></li>
+				
+					<li><a href="../symbols/enchant.InputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>InputSource</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.LoadingScene.html">enchant<span class='break'> </span>.<span class='break'> </span>LoadingScene</a></li>
 				
 					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
 				
@@ -73,8 +93,6 @@
 					<li><a href="../symbols/enchant.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
 				
 					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
-				
-					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
 				
 					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
 				
@@ -93,7 +111,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-11-31 7:23
+		Generated on: 2014-9-10 19:11
 	</div>
 </div>
 
@@ -110,8 +128,8 @@
 			<p class="description summary">
 				canvas要素をラップしたクラス.
 
-<a href="../symbols/enchant.Sprite.html">enchant.Sprite</a>や<a href="../symbols/enchant.Map.html">enchant.Map</a>のimageプロパティに設定して表示させることができる.
-Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a>プロパティを用いる.
+<a href="../symbols/enchant.Sprite.html">enchant.Sprite</a> や <a href="../symbols/enchant.Map.html">enchant.Map</a> のimageプロパティに設定して表示させることができる.
+Canvas APIにアクセスしたいときは <a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a> プロパティを用いる.
 			</p>
 				
 			
@@ -119,9 +137,11 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/ja_enchant.js.html">enchant.js</a></li>
+						<li>Defined in: <a href="../symbols/src/lang_ja_enchant.js.html">enchant.js</a></li>
 					
-						
+						<li>Extends <span class="fixedFont">
+						<a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span></li>
+					
 				</ul>
 			
 		</div>
@@ -203,6 +223,10 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 			
 			
 			
+				<dl class="inheritsList">
+				
+				</dl>
+			
 		
 <!--
 #### METHODS SUMMARY
@@ -274,7 +298,7 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">enchant.Surface.<b><a href="../symbols/enchant.Surface.html#.load">load</a></b>(src, callback)
+										<div class="fixedFont">enchant.Surface.<b><a href="../symbols/enchant.Surface.html#.load">load</a></b>(src, callback, onerror)
 										</div>
 										<div class="description">画像ファイルを読み込んでSurfaceオブジェクトを作成する.</div>
 									</td>
@@ -307,6 +331,10 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 				
 			
 				
+					<dl class="inheritsList" id="MethodsListInherited">
+					<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#on">on</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
+					</dl>
+				
 			</div>
 		
 		
@@ -335,13 +363,13 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 					
 					
 						
-							<pre class="code">  // 円を表示するSpriteを作成する
-  var ball = new Sprite(50, 50);
-  var surface = new Surface(50, 50);
-  surface.context.beginPath();
-  surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
-  surface.context.fill();
-  ball.image = surface;</pre>
+							<pre class="code">// 円を表示するSpriteを作成する
+var ball = new Sprite(50, 50);
+var surface = new Surface(50, 50);
+surface.context.beginPath();
+surface.context.arc(25, 25, 25, 0, Math.PI*2, true);
+surface.context.fill();
+ball.image = surface;</pre>
 						
 					
 				
@@ -384,7 +412,7 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 							
 							</span>
 							
-							
+							<span class="light">{CanvasRenderingContext2D}</span>
 							
 							<b>context</b>							
 						</div>
@@ -406,7 +434,7 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>height</b>							
 						</div>
@@ -428,7 +456,7 @@ Canvas APIにアクセスしたいときは<a href="../symbols/enchant.Surface.h
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>width</b>							
 						</div>
@@ -565,14 +593,14 @@ Canvas APIのdrawImageをラップしており, 描画する矩形を同様の�
 								
 								
 									
-										<pre class="code">  var src = core.assets['src.gif'];
-  var dst = new Surface(100, 100);
-  dst.draw(src);         // ソースを(0, 0)に描画
-  dst.draw(src, 50, 50); // ソースを(50, 50)に描画
-  // ソースを(50, 50)に縦横30ピクセル分だけ描画
-  dst.draw(src, 50, 50, 30, 30);
-  // ソースの(10, 10)から縦横40ピクセルの領域を(50, 50)に縦横30ピクセルに縮小して描画
-  dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);</pre>
+										<pre class="code">var src = core.assets['src.gif'];
+var dst = new Surface(100, 100);
+dst.draw(src);         // ソースを(0, 0)に描画
+dst.draw(src, 50, 50); // ソースを(50, 50)に描画
+// ソースを(50, 50)に縦横30ピクセル分だけ描画
+dst.draw(src, 50, 50, 30, 30);
+// ソースの(10, 10)から縦横40ピクセルの領域を(50, 50)に縦横30ピクセルに縮小して描画
+dst.draw(src, 10, 10, 40, 40, 50, 50, 30, 30);</pre>
 									
 								
 								
@@ -601,7 +629,7 @@ Canvas APIのdrawImageをラップしており, 描画する矩形を同様の�
 									
 									</span>
 									
-									<span class="light">{Array.<Number>}</span>
+									<span class="light">{Number[]}</span>
 									
 									<b>getPixel</b>(x, y)
 								</div>
@@ -647,7 +675,7 @@ Canvas APIのdrawImageをラップしており, 描画する矩形を同様の�
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{Array.&lt;Number&gt;}</span> ピクセルの情報を[r, g, b, a]の形式で持つ配列.</dd>
+												<dd><span class="light fixedFont">{Number[]}</span> ピクセルの情報を[r, g, b, a]の形式で持つ配列.</dd>
 											
 										
 										
@@ -668,18 +696,18 @@ Canvas APIのdrawImageをラップしており, 描画する矩形を同様の�
 									&lt;static&gt; 
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span>
 									
-									
-									<span class="light">enchant.Surface.</span><b>load</b>(src, callback)
+									<span class="light">enchant.Surface.</span><b>load</b>(src, callback, onerror)
 								</div>
 								
 								<div class="description">
 									画像ファイルを読み込んでSurfaceオブジェクトを作成する.
 
-このメソッドによって作成されたSurfaceはimg要素のラップしており<a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a>プロパティに
-アクセスしたり<a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>, <a href="../symbols/enchant.Surface.html#clear">enchant.Surface#clear</a>, <a href="../symbols/enchant.Surface.html#getPixel">enchant.Surface#getPixel</a>,
-<a href="../symbols/enchant.Surface.html#setPixel">enchant.Surface#setPixel</a>メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない.
-ただし<a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>メソッドの引数とすることはでき,
+このメソッドによって作成されたSurfaceはimg要素をラップしており <a href="../symbols/enchant.Surface.html#context">enchant.Surface#context</a> プロパティに
+アクセスしたり <a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a>, <a href="../symbols/enchant.Surface.html#clear">enchant.Surface#clear</a>, <a href="../symbols/enchant.Surface.html#getPixel">enchant.Surface#getPixel</a>,
+<a href="../symbols/enchant.Surface.html#setPixel">enchant.Surface#setPixel</a> メソッドなどの呼び出しでCanvas APIを使った画像操作を行うことはできない.
+ただし<a href="../symbols/enchant.Surface.html#draw">enchant.Surface#draw</a> メソッドの引数とすることはでき,
 ほかのSurfaceに描画した上で画像操作を行うことはできる(クロスドメインでロードした
 場合はピクセルを取得するなど画像操作の一部が制限される).
 									
@@ -701,14 +729,41 @@ Canvas APIのdrawImageをラップしており, 描画する矩形を同様の�
 											<dd>ロードする画像ファイルのパス.</dd>
 										
 											<dt>
-												<b>callback</b>
+												<span class="light fixedFont">{Function}</span> <b>callback</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>ロード完了時のコールバック.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>onerror</b>
+												<i>Optional</i>
+											</dt>
+											<dd>ロード失敗時のコールバック.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Surface.html">enchant.Surface</a>}</span> Surface</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>

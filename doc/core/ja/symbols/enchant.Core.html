@@ -42,11 +42,21 @@
 				
 					<li><a href="../symbols/enchant.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
 				
+					<li><a href="../symbols/enchant.BinaryInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.BinaryInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
+				
+					<li><a href="../symbols/enchant.CanvasScene.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasScene</a></li>
 				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.Deferred.html">enchant<span class='break'> </span>.<span class='break'> </span>Deferred</a></li>
+				
+					<li><a href="../symbols/enchant.DOMScene.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMScene</a></li>
 				
 					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
 				
@@ -64,7 +74,17 @@
 				
 					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
 				
+					<li><a href="../symbols/enchant.InputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>InputManager</a></li>
+				
+					<li><a href="../symbols/enchant.InputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>InputSource</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.LoadingScene.html">enchant<span class='break'> </span>.<span class='break'> </span>LoadingScene</a></li>
 				
 					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
 				
@@ -73,8 +93,6 @@
 					<li><a href="../symbols/enchant.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
 				
 					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
-				
-					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
 				
 					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
 				
@@ -93,7 +111,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-11-31 7:23
+		Generated on: 2014-9-10 19:11
 	</div>
 </div>
 
@@ -112,7 +130,7 @@
 
 インスタンスは一つしか存在することができず, すでにインスタンスが存在する状態で
 コンストラクタを実行した場合既存のものが上書きされる. 存在するインスタンスには
-enchant.Core.instanceからアクセスできる.
+<a href="../symbols/enchant.Core.html#.instance">enchant.Core.instance</a> からアクセスできる.
 			</p>
 				
 			
@@ -120,7 +138,7 @@ enchant.Core.instanceからアクセスできる.
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/ja_enchant.js.html">enchant.js</a></li>
+						<li>Defined in: <a href="../symbols/src/lang_ja_enchant.js.html">enchant.js</a></li>
 					
 						<li>Extends <span class="fixedFont">
 						<a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span></li>
@@ -337,17 +355,6 @@ enchant.Core.instanceからアクセスできる.
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b>addManager</b>(childManager, nextManager)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item1'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#debug">debug</a></b>()
 										</div>
 										<div class="description">アプリをデバッグモードで開始する.</div>
@@ -355,73 +362,29 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item2'
+									 class='item1'
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont">enchant.Core.<b><a href="../symbols/enchant.Core.html#.findExt">findExt</a></b>(path)
 										</div>
-										<div class="description">Get the file extension from a path</div>
+										<div class="description">ファイルパスを取り, 拡張子を返す.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item3'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>getDomElement</b>()
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item4'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>getDomElementAsNext</b>()
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item5'
+									 class='item2'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#getElapsedTime">getElapsedTime</a></b>()
 										</div>
-										<div class="description">Core#start が呼ばれてから経過した時間を取得する</div>
+										<div class="description">Core#startが呼ばれてから経過した時間を取得する.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item6'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>getNextManager</b>(manager)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item7'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>initialize</b>(node)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item8'
+									 class='item3'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -432,7 +395,7 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item9'
+									 class='item4'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -443,18 +406,18 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item10'
+									 class='item5'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#load">load</a></b>(asset, callback)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#load">load</a></b>(src, alias, callback, onerror)
 										</div>
 										<div class="description">ファイルのロードを行う.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item11'
+									 class='item6'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -465,7 +428,7 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item12'
+									 class='item7'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -476,7 +439,7 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item13'
+									 class='item8'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -487,7 +450,7 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item14'
+									 class='item9'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -498,51 +461,18 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item15'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>remove</b>()
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item16'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>removeManager</b>(childManager)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item17'
+									 class='item10'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#removeScene">removeScene</a></b>(scene)
 										</div>
-										<div class="description">Scene削除する.</div>
+										<div class="description">Sceneを削除する.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item18'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>render</b>(inheritMat)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item19'
+									 class='item11'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -553,40 +483,29 @@ enchant.Core.instanceからアクセスできる.
 								</tr>
 							
 								<tr
-									 class='item20'
+									 class='item12'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#resume">resume</a></b>()
 										</div>
-										<div class="description">アプリを再開する。</div>
+										<div class="description">アプリを再開する.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item21'
+									 class='item13'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b>setLayer</b>(layer)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item22'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#start">start</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#start">start</a></b>(deferred)
 										</div>
 										<div class="description">アプリを起動する.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item23'
+									 class='item14'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -639,13 +558,13 @@ enchant.Core.instanceからアクセスできる.
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span>  <b>width</b>
-									
+									<i>Optional, Default: 320</i>
 								</dt>
 								<dd>画面の横幅.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span>  <b>height</b>
-									
+									<i>Optional, Default: 320</i>
 								</dt>
 								<dd>画面の高さ.</dd>
 							
@@ -672,7 +591,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Object}</span>
 							
 							<b>assets</b>							
 						</div>
@@ -694,7 +613,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
 							
 							<b>currentScene</b>							
 						</div>
@@ -716,7 +635,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>fps</b>							
 						</div>
@@ -738,7 +657,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>frame</b>							
 						</div>
@@ -760,7 +679,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>height</b>							
 						</div>
@@ -782,7 +701,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Object}</span>
 							
 							<b>input</b>							
 						</div>
@@ -804,7 +723,7 @@ enchant.Core.instanceからアクセスできる.
 							&lt;static&gt; 
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 							
 							<span class="light">enchant.Core.</span><b>instance</b>							
 						</div>
@@ -826,7 +745,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
 							
 							<b>loadingScene</b>							
 						</div>
@@ -848,7 +767,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Boolean}</span>
 							
 							<b>ready</b>							
 						</div>
@@ -870,7 +789,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
 							
 							<b>rootScene</b>							
 						</div>
@@ -892,7 +811,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Boolean}</span>
 							
 							<b>running</b>							
 						</div>
@@ -914,7 +833,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>scale</b>							
 						</div>
@@ -936,7 +855,7 @@ enchant.Core.instanceからアクセスできる.
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>width</b>							
 						</div>
@@ -972,58 +891,12 @@ enchant.Core.instanceからアクセスできる.
 							<li 
 								 class='item0'
 							>
-								<div class="fixedFont heading" id="addManager">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>addManager</b>(childManager, nextManager)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>childManager</b>
-												
-											</dt>
-											<dd></dd>
-										
-											<dt>
-												<b>nextManager</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item1'
-							>
 								<div class="fixedFont heading" id="debug">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span>
 									
 									<b>debug</b>()
 								</div>
@@ -1031,7 +904,7 @@ enchant.Core.instanceからアクセスできる.
 								<div class="description">
 									アプリをデバッグモードで開始する.
 
-enchant.Core.instance._debug フラグを true にすることでもデバッグモードをオンにすることができる
+enchant.Core#_debug フラグを true にすることでもデバッグモードをオンにすることができる
 									
 									
 									
@@ -1043,11 +916,32 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span> ローディング画面終了後に起動するDeferredオブジェクト.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item2'
+								 class='item1'
 							>
 								<div class="fixedFont heading" id=".findExt">
 									<span class='lighter'>
@@ -1060,7 +954,7 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 								</div>
 								
 								<div class="description">
-									Get the file extension from a path
+									ファイルパスを取り, 拡張子を返す.
 									
 									
 									
@@ -1074,10 +968,10 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>path</b>
+												<span class="light fixedFont">{String}</span> <b>path</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>ファイルパス.</dd>
 										
 									</dl>
 								
@@ -1108,65 +1002,7 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 							</li>
 						
 							<li 
-								 class='item3'
-							>
-								<div class="fixedFont heading" id="getDomElement">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>getDomElement</b>()
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item4'
-							>
-								<div class="fixedFont heading" id="getDomElementAsNext">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>getDomElementAsNext</b>()
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item5'
+								 class='item2'
 							>
 								<div class="fixedFont heading" id="getElapsedTime">
 									<span class='lighter'>
@@ -1179,7 +1015,7 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 								</div>
 								
 								<div class="description">
-									Core#start が呼ばれてから経過した時間を取得する
+									Core#startが呼ばれてから経過した時間を取得する.
 									
 									
 									
@@ -1216,94 +1052,14 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 							</li>
 						
 							<li 
-								 class='item6'
-							>
-								<div class="fixedFont heading" id="getNextManager">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>getNextManager</b>(manager)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>manager</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item7'
-							>
-								<div class="fixedFont heading" id="initialize">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>initialize</b>(node)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>node</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item8'
+								 class='item3'
 							>
 								<div class="fixedFont heading" id="keybind">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 									
 									<b>keybind</b>(key, button)
 								</div>
@@ -1338,18 +1094,39 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item9'
+								 class='item4'
 							>
 								<div class="fixedFont heading" id="keyunbind">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 									
 									<b>keyunbind</b>(key)
 								</div>
@@ -1378,20 +1155,41 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item10'
+								 class='item5'
 							>
 								<div class="fixedFont heading" id="load">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span>
 									
-									
-									<b>load</b>(asset, callback)
+									<b>load</b>(src, alias, callback, onerror)
 								</div>
 								
 								<div class="description">
@@ -1409,10 +1207,16 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{String}</span> <b>asset</b>
+												<span class="light fixedFont">{String}</span> <b>src</b>
 												
 											</dt>
 											<dd>ロードするファイルのパス.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{String}</span> <b>alias</b>
+												<i>Optional</i>
+											</dt>
+											<dd>ロードするファイルに設定したい名前.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{Function}</span> <b>callback</b>
@@ -1420,15 +1224,42 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 											</dt>
 											<dd>ファイルのロードが完了したときに呼び出される関数.</dd>
 										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>onerror</b>
+												<i>Optional</i>
+											</dt>
+											<dd>ファイルのロードに失敗したときに呼び出される関数.</dd>
+										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span> ファイル読み込み後に起動するDeferredオブジェクト.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item11'
+								 class='item6'
 							>
 								<div class="fixedFont heading" id="pause">
 									<span class='lighter'>
@@ -1444,7 +1275,7 @@ enchant.Core.instance._debug フラグを true にすることでもデバッグ
 									アプリを一時停止する.
 
 フレームは更新されず, ユーザの入力は受け付ける.
-enchant.Core#startで再開できる.
+<a href="../symbols/enchant.Core.html#resume">enchant.Core#resume</a> で再開できる.
 									
 									
 									
@@ -1460,7 +1291,7 @@ enchant.Core#startで再開できる.
 							</li>
 						
 							<li 
-								 class='item12'
+								 class='item7'
 							>
 								<div class="fixedFont heading" id="popScene">
 									<span class='lighter'>
@@ -1513,14 +1344,14 @@ enchant.Core#popSceneを行うとスタックの一番上のSceneを取り出す
 							</li>
 						
 							<li 
-								 class='item13'
+								 class='item8'
 							>
 								<div class="fixedFont heading" id="preload">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 									
 									<b>preload</b>(assets)
 								</div>
@@ -1528,13 +1359,13 @@ enchant.Core#popSceneを行うとスタックの一番上のSceneを取り出す
 								<div class="description">
 									ファイルのプリロードを行う.
 
-プリロードを行うよう設定されたファイルはenchant.Core#startが実行されるとき
+プリロードを行うよう設定されたファイルは <a href="../symbols/enchant.Core.html#start">enchant.Core#start</a> が実行されるとき
 ロードが行われる. 全てのファイルのロードが完了したときはCoreオブジェクトからload
 イベントが発行され, Coreオブジェクトのassetsプロパティから画像ファイルの場合は
 Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジェクトとして,
 その他の場合は文字列としてアクセスできるようになる.
 
-なおこのSurfaceオブジェクトはenchant.Surface.loadを使って作成されたものである
+なおこのSurfaceオブジェクトは <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a> を使って作成されたものである
 ため直接画像操作を行うことはできない. enchant.Surface.loadの項を参照.
 									
 									
@@ -1544,13 +1375,13 @@ Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジ
 								
 								
 									
-										<pre class="code">  core.preload('player.gif');
-  core.onload = function() {
-     var sprite = new Sprite(32, 32);
-     sprite.image = core.assets['player.gif']; // パス名でアクセス
-     ...
-  };
-  core.start();</pre>
+										<pre class="code">core.preload('player.gif');
+core.onload = function() {
+    var sprite = new Sprite(32, 32);
+    sprite.image = core.assets['player.gif']; // パス名でアクセス
+    ...
+};
+core.start();</pre>
 									
 								
 								
@@ -1559,20 +1390,41 @@ Surfaceオブジェクトとして, 音声ファイルの場合はSoundオブジ
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{...String}</span> <b>assets</b>
+												<span class="light fixedFont">{...String|String[]}</span> <b>assets</b>
 												
 											</dt>
-											<dd>プリロードする画像のパス. 複数指定できる.</dd>
+											<dd>プリロードするファイルのパス. 複数指定できる.</dd>
 										
 									</dl>
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item14'
+								 class='item9'
 							>
 								<div class="fixedFont heading" id="pushScene">
 									<span class='lighter'>
@@ -1637,76 +1489,7 @@ enchant.Core#pushSceneを行うとSceneをスタックの一番上に積むこ�
 							</li>
 						
 							<li 
-								 class='item15'
-							>
-								<div class="fixedFont heading" id="remove">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>remove</b>()
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item16'
-							>
-								<div class="fixedFont heading" id="removeManager">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>removeManager</b>(childManager)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>childManager</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item17'
+								 class='item10'
 							>
 								<div class="fixedFont heading" id="removeScene">
 									<span class='lighter'>
@@ -1719,7 +1502,7 @@ enchant.Core#pushSceneを行うとSceneをスタックの一番上に積むこ�
 								</div>
 								
 								<div class="description">
-									Scene削除する.
+									Sceneを削除する.
 
 Sceneスタック中からSceneを削除する.
 									
@@ -1769,47 +1552,7 @@ Sceneスタック中からSceneを削除する.
 							</li>
 						
 							<li 
-								 class='item18'
-							>
-								<div class="fixedFont heading" id="render">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>render</b>(inheritMat)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>inheritMat</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item19'
+								 class='item11'
 							>
 								<div class="fixedFont heading" id="replaceScene">
 									<span class='lighter'>
@@ -1824,7 +1567,7 @@ Sceneスタック中からSceneを削除する.
 								<div class="description">
 									現在のSceneを別のSceneにおきかえる.
 
-enchant.Core#popScene, enchant.Core#pushSceneを同時に行う.
+<a href="../symbols/enchant.Core.html#popScene">enchant.Core#popScene</a>, <a href="../symbols/enchant.Core.html#pushScene">enchant.Core#pushScene</a>を同時に行う.
 									
 									
 									
@@ -1872,7 +1615,7 @@ enchant.Core#popScene, enchant.Core#pushSceneを同時に行う.
 							</li>
 						
 							<li 
-								 class='item20'
+								 class='item12'
 							>
 								<div class="fixedFont heading" id="resume">
 									<span class='lighter'>
@@ -1885,7 +1628,7 @@ enchant.Core#popScene, enchant.Core#pushSceneを同時に行う.
 								</div>
 								
 								<div class="description">
-									アプリを再開する。
+									アプリを再開する.
 									
 									
 									
@@ -1901,20 +1644,24 @@ enchant.Core#popScene, enchant.Core#pushSceneを同時に行う.
 							</li>
 						
 							<li 
-								 class='item21'
+								 class='item13'
 							>
-								<div class="fixedFont heading" id="setLayer">
+								<div class="fixedFont heading" id="start">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span>
 									
-									
-									<b>setLayer</b>(layer)
+									<b>start</b>(deferred)
 								</div>
 								
 								<div class="description">
-									
+									アプリを起動する.
+
+enchant.Core#fpsで設定されたフレームレートに従って <a href="../symbols/enchant.Core.html#currentScene">enchant.Core#currentScene</a> の
+フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
+始まりローディング画面が表示される.
 									
 									
 									
@@ -1928,7 +1675,7 @@ enchant.Core#popScene, enchant.Core#pushSceneを同時に行う.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>layer</b>
+												<b>deferred</b>
 												
 											</dt>
 											<dd></dd>
@@ -1937,44 +1684,32 @@ enchant.Core#popScene, enchant.Core#pushSceneを同時に行う.
 								
 								
 								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item22'
-							>
-								<div class="fixedFont heading" id="start">
-									<span class='lighter'>
+									<dl class="detailList nomargin">
 									
-									</span>
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span> ローディング画面終了後に起動するDeferredオブジェクト.</dd>
+											
+										
+										
+										
+										
+										
 									
-									
-									
-									<b>start</b>()
-								</div>
-								
-								<div class="description">
-									アプリを起動する.
-
-enchant.Core#fpsで設定されたフレームレートに従ってenchant.Core#currentSceneの
-フレームの更新が行われるようになる. プリロードする画像が存在する場合はロードが
-始まりローディング画面が表示される.
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item23'
+								 class='item14'
 							>
 								<div class="fixedFont heading" id="stop">
 									<span class='lighter'>
@@ -1990,7 +1725,7 @@ enchant.Core#fpsで設定されたフレームレートに従ってenchant.Core#
 									アプリを停止する.
 
 フレームは更新されず, ユーザの入力も受け付けなくなる.
-enchant.Core#startで再開できる.
+<a href="../symbols/enchant.Core.html#resume">enchant.Core#resume</a> で再開できる.
 									
 									
 									

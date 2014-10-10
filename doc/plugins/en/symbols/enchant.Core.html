@@ -50,15 +50,27 @@
 				
 					<li><a href="../symbols/enchant.AvatarBG.html">enchant<span class='break'> </span>.<span class='break'> </span>AvatarBG</a></li>
 				
+					<li><a href="../symbols/enchant.BinaryInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.BinaryInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.box2d.PhysicsWorld.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhysicsWorld</a></li>
 				
 					<li><a href="../symbols/enchant.box2d.PhySprite.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhySprite</a></li>
 				
 					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
 				
+					<li><a href="../symbols/enchant.CanvasScene.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasScene</a></li>
+				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
+					<li><a href="../symbols/enchant.Class.MixingRecipe.html">enchant<span class='break'> </span>.<span class='break'> </span>Class<span class='break'> </span>.<span class='break'> </span>MixingRecipe</a></li>
+				
 					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.Deferred.html">enchant<span class='break'> </span>.<span class='break'> </span>Deferred</a></li>
+				
+					<li><a href="../symbols/enchant.DOMScene.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMScene</a></li>
 				
 					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
 				
@@ -174,7 +186,17 @@
 				
 					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
 				
+					<li><a href="../symbols/enchant.InputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>InputManager</a></li>
+				
+					<li><a href="../symbols/enchant.InputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>InputSource</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.LoadingScene.html">enchant<span class='break'> </span>.<span class='break'> </span>LoadingScene</a></li>
 				
 					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
 				
@@ -207,8 +229,6 @@
 					<li><a href="../symbols/enchant.PhyCircleSprite.html">enchant<span class='break'> </span>.<span class='break'> </span>PhyCircleSprite</a></li>
 				
 					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
-				
-					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
 				
 					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
 				
@@ -286,6 +306,10 @@
 				
 					<li><a href="../symbols/enchant.widget.ScrollView.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>ScrollView</a></li>
 				
+					<li><a href="../symbols/enchant.wiiu.html">enchant<span class='break'> </span>.<span class='break'> </span>wiiu</a></li>
+				
+					<li><a href="../symbols/Object.html">Object</a></li>
+				
 			</ul>
 		</nav>
 	</div>
@@ -293,7 +317,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-11-31 7:25
+		Generated on: 2014-9-10 19:11
 	</div>
 </div>
 
@@ -308,10 +332,11 @@
 		
 		<div class="intro">
 			<p class="description summary">
-				A class which is controlling the cores main loop and scenes.
+				A class for controlling the core’s main loop and scenes.
 
-There can be only one instance at a time, when the constructor is executed
-with an instance present, the existing instance will be overwritten. The existing instance
+There can be only one instance at a time. When the
+constructor is executed while an instance exists, the
+existing instance will be overwritten. The existing instance
 can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Core.instance</a>.
 			</p>
 				
@@ -320,7 +345,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/enchant.js.html">enchant.js</a></li>
+						<li>Defined in: <a href="../symbols/src/lang_en_enchant.js.html">enchant.js</a></li>
 					
 						<li>Extends <span class="fixedFont">
 						<a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span></li>
@@ -376,7 +401,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Core.html#assets">assets</a></b>
 										</div>
-										<div class="description">Object which stores loaded objects with the path as key.</div>
+										<div class="description">Object which stores loaded assets using their paths as keys.</div>
 									</td>
 								</tr>
 							
@@ -406,7 +431,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Core.html#frame">frame</a></b>
 										</div>
-										<div class="description">The amount of frames since the core was started.</div>
+										<div class="description">The number of frames processed since the core was started.</div>
 									</td>
 								</tr>
 							
@@ -436,7 +461,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 										<div class="fixedFont">
 										enchant.Core.<b><a href="../symbols/enchant.Core.html#.instance">instance</a></b>
 										</div>
-										<div class="description">The Current Core instance.</div>
+										<div class="description">The current Core instance.</div>
 									</td>
 								</tr>
 							
@@ -446,7 +471,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Core.html#loadingScene">loadingScene</a></b>
 										</div>
-										<div class="description">The Scene which is getting displayed during loading.</div>
+										<div class="description">The Scene to be displayed during loading.</div>
 									</td>
 								</tr>
 							
@@ -456,7 +481,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Core.html#ready">ready</a></b>
 										</div>
-										<div class="description">Indicates if the core can be executed.</div>
+										<div class="description">Indicates whether or not the core can be executed.</div>
 									</td>
 								</tr>
 							
@@ -476,7 +501,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 										<div class="fixedFont">
 										<b><a href="../symbols/enchant.Core.html#running">running</a></b>
 										</div>
-										<div class="description">Indicates if the core is currently executed.</div>
+										<div class="description">Indicates whether or not the core is currently running.</div>
 									</td>
 								</tr>
 							
@@ -537,91 +562,36 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b>addManager</b>(childManager, nextManager)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#debug">debug</a></b>()
 										</div>
-										<div class="description"></div>
+										<div class="description">Start application in debug mode.</div>
 									</td>
 								</tr>
 							
 								<tr
 									 class='item1'
 								>
-									<td class="attributes">&nbsp;</td>
+									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#debug">debug</a></b>()
+										<div class="fixedFont">enchant.Core.<b><a href="../symbols/enchant.Core.html#.findExt">findExt</a></b>(path)
 										</div>
-										<div class="description">Begin core debug mode.</div>
+										<div class="description">Get the file extension from a path.</div>
 									</td>
 								</tr>
 							
 								<tr
 									 class='item2'
 								>
-									<td class="attributes">&lt;static&gt; &nbsp;</td>
+									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont">enchant.Core.<b><a href="../symbols/enchant.Core.html#.findExt">findExt</a></b>(path)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#getElapsedTime">getElapsedTime</a></b>()
 										</div>
-										<div class="description">Get the file extension from a path</div>
+										<div class="description">Get the core time (not actual) elapsed since <a href="../symbols/enchant.Core.html#start">enchant.Core#start</a> was called.</div>
 									</td>
 								</tr>
 							
 								<tr
 									 class='item3'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>getDomElement</b>()
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item4'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>getDomElementAsNext</b>()
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item5'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#getElapsedTime">getElapsedTime</a></b>()
-										</div>
-										<div class="description">Get the elapsed core time (not actual) from when core.start was called.</div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item6'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>getNextManager</b>(manager)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item7'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>initialize</b>(node)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item8'
 								>
 									<td class="attributes">&lt;static&gt; &nbsp;</td>
 									<td class="nameDescription">
@@ -632,40 +602,40 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								</tr>
 							
 								<tr
-									 class='item9'
+									 class='item4'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#keybind">keybind</a></b>(key, button)
 										</div>
-										<div class="description">Set a key binding.</div>
+										<div class="description">Bind a key code to an enchant.js button.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item10'
+									 class='item5'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#keyunbind">keyunbind</a></b>(key)
 										</div>
-										<div class="description">Delete a key binding.</div>
+										<div class="description">Delete the key binding for the given key.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item11'
+									 class='item6'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#load">load</a></b>(asset, callback)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#load">load</a></b>(src, alias, callback, onerror)
 										</div>
 										<div class="description">Loads a file.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item12'
+									 class='item7'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -676,84 +646,51 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								</tr>
 							
 								<tr
-									 class='item13'
+									 class='item8'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#popScene">popScene</a></b>()
 										</div>
-										<div class="description">Ends the current Scene, return to the previous Scene.</div>
+										<div class="description">Ends the current Scene and returns to the previous Scene.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item14'
+									 class='item9'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#preload">preload</a></b>(assets)
 										</div>
-										<div class="description">Performs a file preload.</div>
+										<div class="description">File preloader.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item15'
+									 class='item10'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#pushScene">pushScene</a></b>(scene)
 										</div>
-										<div class="description">Switch to a new Scene.</div>
+										<div class="description">Switches to a new Scene.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item16'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>remove</b>()
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item17'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>removeManager</b>(childManager)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item18'
+									 class='item11'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#removeScene">removeScene</a></b>(scene)
 										</div>
-										<div class="description">Removes a Scene.</div>
+										<div class="description">Removes a Scene from the Scene stack.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item19'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b>render</b>(inheritMat)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item20'
+									 class='item12'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -764,40 +701,29 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								</tr>
 							
 								<tr
-									 class='item21'
+									 class='item13'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#resume">resume</a></b>()
 										</div>
-										<div class="description">Resumes the core.</div>
+										<div class="description">Resumes core operations.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item22'
+									 class='item14'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b>setLayer</b>(layer)
-										</div>
-										<div class="description"></div>
-									</td>
-								</tr>
-							
-								<tr
-									 class='item23'
-								>
-									<td class="attributes">&nbsp;</td>
-									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#start">start</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Core.html#start">start</a></b>(deferred)
 										</div>
 										<div class="description">Start the core.</div>
 									</td>
 								</tr>
 							
 								<tr
-									 class='item24'
+									 class='item15'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -808,7 +734,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								</tr>
 							
 								<tr
-									 class='item25'
+									 class='item16'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -819,7 +745,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								</tr>
 							
 								<tr
-									 class='item26'
+									 class='item17'
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
@@ -872,15 +798,15 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span>  <b>width</b>
-									
+									<i>Optional, Default: 320</i>
 								</dt>
-								<dd>The width of the core screen.</dd>
+								<dd>The width of the core viewport.</dd>
 							
 								<dt>
 									<span class="light fixedFont">{Number}</span>  <b>height</b>
-									
+									<i>Optional, Default: 320</i>
 								</dt>
-								<dd>The height of the core screen.</dd>
+								<dd>The height of the core viewport.</dd>
 							
 						</dl>
 					
@@ -905,13 +831,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/Object.html">Object</a>}</span>
 							
 							<b>assets</b>							
 						</div>
 						
 						<div class="description">
-							Object which stores loaded objects with the path as key.
+							Object which stores loaded assets using their paths as keys.
 							
 							
 							
@@ -927,13 +853,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
 							
 							<b>currentScene</b>							
 						</div>
 						
 						<div class="description">
-							The Scene which is currently displayed. This Scene is on top of Scene stack.
+							The Scene which is currently displayed. This Scene is on top of the Scene stack.
 							
 							
 							
@@ -949,7 +875,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>fps</b>							
 						</div>
@@ -971,13 +897,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>frame</b>							
 						</div>
 						
 						<div class="description">
-							The amount of frames since the core was started.
+							The number of frames processed since the core was started.
 							
 							
 							
@@ -993,7 +919,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>height</b>							
 						</div>
@@ -1015,7 +941,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/Object.html">Object</a>}</span>
 							
 							<b>input</b>							
 						</div>
@@ -1037,13 +963,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							&lt;static&gt; 
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 							
 							<span class="light">enchant.Core.</span><b>instance</b>							
 						</div>
 						
 						<div class="description">
-							The Current Core instance.
+							The current Core instance.
 							
 							
 							
@@ -1059,13 +985,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
 							
 							<b>loadingScene</b>							
 						</div>
 						
 						<div class="description">
-							The Scene which is getting displayed during loading.
+							The Scene to be displayed during loading.
 							
 							
 							
@@ -1081,13 +1007,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Boolean}</span>
 							
 							<b>ready</b>							
 						</div>
 						
 						<div class="description">
-							Indicates if the core can be executed.
+							Indicates whether or not the core can be executed.
 							
 							
 							
@@ -1103,13 +1029,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span>
 							
 							<b>rootScene</b>							
 						</div>
 						
 						<div class="description">
-							The root Scene. The Scene at bottom of Scene stack.
+							The root Scene. The Scene at the bottom of the Scene stack.
 							
 							
 							
@@ -1125,13 +1051,13 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Boolean}</span>
 							
 							<b>running</b>							
 						</div>
 						
 						<div class="description">
-							Indicates if the core is currently executed.
+							Indicates whether or not the core is currently running.
 							
 							
 							
@@ -1147,7 +1073,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>scale</b>							
 						</div>
@@ -1169,7 +1095,7 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							
 							</span>
 							
-							
+							<span class="light">{Number}</span>
 							
 							<b>width</b>							
 						</div>
@@ -1205,18 +1131,21 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 							<li 
 								 class='item0'
 							>
-								<div class="fixedFont heading" id="addManager">
+								<div class="fixedFont heading" id="debug">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span>
 									
-									
-									<b>addManager</b>(childManager, nextManager)
+									<b>debug</b>()
 								</div>
 								
 								<div class="description">
-									
+									Start application in debug mode.
+
+Core debug mode can be turned on even if the
+enchant.Core#_debug flag is already set to true.
 									
 									
 									
@@ -1226,62 +1155,34 @@ can be accessed from <a href="../symbols/enchant.Core.html#.instance">enchant.Co
 								
 								
 								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
+								
+								
+									<dl class="detailList nomargin">
+									
 										
-											<dt>
-												<b>childManager</b>
-												
-											</dt>
-											<dd></dd>
 										
-											<dt>
-												<b>nextManager</b>
-												
-											</dt>
-											<dd></dd>
 										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span> </dd>
+											
+										
+										
+										
+										
+										
+									
 									</dl>
-								
-								
 								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
 								 class='item1'
-							>
-								<div class="fixedFont heading" id="debug">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>debug</b>()
-								</div>
-								
-								<div class="description">
-									Begin core debug mode.
-
-Core debug mode can be set to on even if enchant.Core.instance._debug
-flag is already set to true.
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item2'
 							>
 								<div class="fixedFont heading" id=".findExt">
 									<span class='lighter'>
@@ -1294,7 +1195,7 @@ flag is already set to true.
 								</div>
 								
 								<div class="description">
-									Get the file extension from a path
+									Get the file extension from a path.
 									
 									
 									
@@ -1308,10 +1209,10 @@ flag is already set to true.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>path</b>
+												<span class="light fixedFont">{String}</span> <b>path</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>file path.</dd>
 										
 									</dl>
 								
@@ -1342,65 +1243,7 @@ flag is already set to true.
 							</li>
 						
 							<li 
-								 class='item3'
-							>
-								<div class="fixedFont heading" id="getDomElement">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>getDomElement</b>()
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item4'
-							>
-								<div class="fixedFont heading" id="getDomElementAsNext">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>getDomElementAsNext</b>()
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item5'
+								 class='item2'
 							>
 								<div class="fixedFont heading" id="getElapsedTime">
 									<span class='lighter'>
@@ -1413,7 +1256,7 @@ flag is already set to true.
 								</div>
 								
 								<div class="description">
-									Get the elapsed core time (not actual) from when core.start was called.
+									Get the core time (not actual) elapsed since <a href="../symbols/enchant.Core.html#start">enchant.Core#start</a> was called.
 									
 									
 									
@@ -1436,7 +1279,7 @@ flag is already set to true.
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{Number}</span> The elapsed time (seconds)</dd>
+												<dd><span class="light fixedFont">{Number}</span> Time elapsed (in seconds).</dd>
 											
 										
 										
@@ -1450,87 +1293,7 @@ flag is already set to true.
 							</li>
 						
 							<li 
-								 class='item6'
-							>
-								<div class="fixedFont heading" id="getNextManager">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>getNextManager</b>(manager)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>manager</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item7'
-							>
-								<div class="fixedFont heading" id="initialize">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>initialize</b>(node)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>node</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item8'
+								 class='item3'
 							>
 								<div class="fixedFont heading" id=".initialize">
 									<span class='lighter'>
@@ -1547,7 +1310,7 @@ flag is already set to true.
 									
 									
 										<br />
-										<i>Defined in: </i> <a href="../symbols/src/plugins_widget.enchant.js.html">widget.enchant.js</a>.
+										<i>Defined in: </i> <a href="../symbols/src/lang_en_plugins_widget.enchant.js.html">widget.enchant.js</a>.
 									
 									
 									
@@ -1573,20 +1336,23 @@ flag is already set to true.
 							</li>
 						
 							<li 
-								 class='item9'
+								 class='item4'
 							>
 								<div class="fixedFont heading" id="keybind">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 									
 									<b>keybind</b>(key, button)
 								</div>
 								
 								<div class="description">
-									Set a key binding.
+									Bind a key code to an enchant.js button.
+
+Binds the given key code to the given enchant.js button
+('left', 'right', 'up', 'down', 'a', 'b').
 									
 									
 									
@@ -1603,36 +1369,57 @@ flag is already set to true.
 												<span class="light fixedFont">{Number}</span> <b>key</b>
 												
 											</dt>
-											<dd>Key code for the button which will be bound.</dd>
+											<dd>Key code for the button to be bound.</dd>
 										
 											<dt>
 												<span class="light fixedFont">{String}</span> <b>button</b>
 												
 											</dt>
-											<dd>The enchant.js button (left, right, up, down, a, b).</dd>
+											<dd>An enchant.js button.</dd>
 										
 									</dl>
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item10'
+								 class='item5'
 							>
 								<div class="fixedFont heading" id="keyunbind">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 									
 									<b>keyunbind</b>(key)
 								</div>
 								
 								<div class="description">
-									Delete a key binding.
+									Delete the key binding for the given key.
 									
 									
 									
@@ -1649,26 +1436,47 @@ flag is already set to true.
 												<span class="light fixedFont">{Number}</span> <b>key</b>
 												
 											</dt>
-											<dd>Key code that want to delete.</dd>
+											<dd>Key code whose binding is to be deleted.</dd>
 										
 									</dl>
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item11'
+								 class='item6'
 							>
 								<div class="fixedFont heading" id="load">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span>
 									
-									
-									<b>load</b>(asset, callback)
+									<b>load</b>(src, alias, callback, onerror)
 								</div>
 								
 								<div class="description">
@@ -1686,26 +1494,59 @@ flag is already set to true.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{String}</span> <b>asset</b>
+												<span class="light fixedFont">{String}</span> <b>src</b>
 												
 											</dt>
 											<dd>File path of the resource to be loaded.</dd>
 										
 											<dt>
+												<span class="light fixedFont">{String}</span> <b>alias</b>
+												<i>Optional</i>
+											</dt>
+											<dd>Name you want to designate for the resource to be loaded.</dd>
+										
+											<dt>
 												<span class="light fixedFont">{Function}</span> <b>callback</b>
 												<i>Optional</i>
 											</dt>
-											<dd>Function called up when file loading is finished.</dd>
+											<dd>Function to be called if the file loads successfully.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>onerror</b>
+												<i>Optional</i>
+											</dt>
+											<dd>Function to be called if the file fails to load.</dd>
 										
 									</dl>
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span> </dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item12'
+								 class='item7'
 							>
 								<div class="fixedFont heading" id="pause">
 									<span class='lighter'>
@@ -1721,7 +1562,7 @@ flag is already set to true.
 									Stops the core.
 
 The frame will not be updated, and player input will not be accepted anymore.
-Core can be started again using <a href="../symbols/enchant.Core.html#start">enchant.Core#start</a>.
+Core can be started again using <a href="../symbols/enchant.Core.html#resume">enchant.Core#resume</a>.
 									
 									
 									
@@ -1737,7 +1578,7 @@ Core can be started again using <a href="../symbols/enchant.Core.html#start">enc
 							</li>
 						
 							<li 
-								 class='item13'
+								 class='item8'
 							>
 								<div class="fixedFont heading" id="popScene">
 									<span class='lighter'>
@@ -1750,11 +1591,12 @@ Core can be started again using <a href="../symbols/enchant.Core.html#start">enc
 								</div>
 								
 								<div class="description">
-									Ends the current Scene, return to the previous Scene.
+									Ends the current Scene and returns to the previous Scene.
 
-Scenes are controlled using a stack, and the display order also obeys that stack order.
-When <a href="../symbols/enchant.Core.html#popScene">enchant.Core#popScene</a> is executed, the Scene at the top of the stack
-will be removed and returned.
+Scenes are controlled using a stack, with the top scene on
+the stack being the one displayed.
+When <a href="../symbols/enchant.Core.html#popScene">enchant.Core#popScene</a> is executed, the Scene at
+the top of the stack is removed and returned.
 									
 									
 									
@@ -1777,7 +1619,7 @@ will be removed and returned.
 										
 											<dt class="heading">Returns:</dt>
 											
-												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> Ended Scene.</dd>
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> Removed Scene.</dd>
 											
 										
 										
@@ -1791,30 +1633,37 @@ will be removed and returned.
 							</li>
 						
 							<li 
-								 class='item14'
+								 class='item9'
 							>
 								<div class="fixedFont heading" id="preload">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span>
 									
 									<b>preload</b>(assets)
 								</div>
 								
 								<div class="description">
-									Performs a file preload.
+									File preloader.
 
-Sets files which are to be preloaded. When <a href="../symbols/enchant.Core.html#start">enchant.Core#start</a> is called the
-actual loading takes place. When all files are loaded, a <a href="../symbols/enchant.Event.html#.LOAD">enchant.Event.LOAD</a> event
-is dispatched from the Core object. Depending on the type of the file different objects will be
-created and stored in <a href="../symbols/enchant.Core.html#assets">enchant.Core#assets</a> Variable.
-When an image file is loaded, an <a href="../symbols/enchant.Surface.html">enchant.Surface</a> is created. If a sound file is loaded, an
-<a href="../symbols/enchant.Sound.html">enchant.Sound</a> object is created. Otherwise it will be accessible as a string.
+Loads the files specified in the parameters when
+<a href="../symbols/enchant.Core.html#start">enchant.Core#start</a> is called.
+When all files are loaded, a <a href="../symbols/enchant.Event.html#.LOAD">enchant.Event.LOAD</a>
+event is dispatched from the Core object. Depending on the
+type of each file, different objects will be created and
+stored in <a href="../symbols/enchant.Core.html#assets">enchant.Core#assets</a> Variable.
 
-In addition, because this Surface object used made with <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>,
-direct object manipulation is not possible. Refer to the items of <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>
+When an image file is loaded, a <a href="../symbols/enchant.Surface.html">enchant.Surface</a> is
+created. If a sound file is loaded, an enchant.Sound
+object is created. Any other file type will be accessible
+as a string.
+
+In addition, because this Surface object is created with
+<a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a>, it is not possible to
+manipulate the image directly.
+Refer to the <a href="../symbols/enchant.Surface.html#.load">enchant.Surface.load</a> documentation.
 									
 									
 									
@@ -1823,13 +1672,13 @@ direct object manipulation is not possible. Refer to the items of <a href="../sy
 								
 								
 									
-										<pre class="code">  core.preload('player.gif');
-  core.onload = function() {
-     var sprite = new Sprite(32, 32);
-     sprite.image = core.assets['player.gif']; // Access via path
-     ...
-  };
-  core.start();</pre>
+										<pre class="code">core.preload('player.gif');
+core.onload = function() {
+    var sprite = new Sprite(32, 32);
+    sprite.image = core.assets['player.gif']; // Access via path
+    ...
+};
+core.start();</pre>
 									
 								
 								
@@ -1838,20 +1687,42 @@ direct object manipulation is not possible. Refer to the items of <a href="../sy
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{...String}</span> <b>assets</b>
+												<span class="light fixedFont">{...String|String[]}</span> <b>assets</b>
 												
 											</dt>
-											<dd>Path of images to be preloaded. Multiple settings possible.</dd>
+											<dd>Path of images to be preloaded.
+Multiple settings possible.</dd>
 										
 									</dl>
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Core.html">enchant.Core</a>}</span> this</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item15'
+								 class='item10'
 							>
 								<div class="fixedFont heading" id="pushScene">
 									<span class='lighter'>
@@ -1864,11 +1735,13 @@ direct object manipulation is not possible. Refer to the items of <a href="../sy
 								</div>
 								
 								<div class="description">
-									Switch to a new Scene.
+									Switches to a new Scene.
 
-Scenes are controlled using a stack, and the display order also obeys that stack order.
-When <a href="../symbols/enchant.Core.html#pushScene">enchant.Core#pushScene</a> is executed, the Scene can be brought to the top of stack.
-Frames will be updated in the Scene which is on the top of the stack.
+Scenes are controlled using a stack, with the top scene on
+the stack being the one displayed.
+When <a href="../symbols/enchant.Core.html#pushScene">enchant.Core#pushScene</a> is executed, the Scene is
+placed top of the stack. Frames will be only updated for the
+Scene which is on the top of the stack.
 									
 									
 									
@@ -1885,7 +1758,7 @@ Frames will be updated in the Scene which is on the top of the stack.
 												<span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> <b>scene</b>
 												
 											</dt>
-											<dd>The new scene to be switched to.</dd>
+											<dd>The new scene to display.</dd>
 										
 									</dl>
 								
@@ -1916,76 +1789,7 @@ Frames will be updated in the Scene which is on the top of the stack.
 							</li>
 						
 							<li 
-								 class='item16'
-							>
-								<div class="fixedFont heading" id="remove">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>remove</b>()
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item17'
-							>
-								<div class="fixedFont heading" id="removeManager">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>removeManager</b>(childManager)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>childManager</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item18'
+								 class='item11'
 							>
 								<div class="fixedFont heading" id="removeScene">
 									<span class='lighter'>
@@ -1998,9 +1802,12 @@ Frames will be updated in the Scene which is on the top of the stack.
 								</div>
 								
 								<div class="description">
-									Removes a Scene.
+									Removes a Scene from the Scene stack.
 
-Removes a Scene from the Scene stack.
+If the scene passed in as a parameter is not the current
+scene, the stack will be searched for the given scene.
+If the given scene does not exist anywhere in the stack,
+this method returns null.
 									
 									
 									
@@ -2048,47 +1855,7 @@ Removes a Scene from the Scene stack.
 							</li>
 						
 							<li 
-								 class='item19'
-							>
-								<div class="fixedFont heading" id="render">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>render</b>(inheritMat)
-								</div>
-								
-								<div class="description">
-									
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>inheritMat</b>
-												
-											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item20'
+								 class='item12'
 							>
 								<div class="fixedFont heading" id="replaceScene">
 									<span class='lighter'>
@@ -2103,8 +1870,8 @@ Removes a Scene from the Scene stack.
 								<div class="description">
 									Overwrites the current Scene with a new Scene.
 
-<a href="../symbols/enchant.Core.html#popScene">enchant.Core#popScene</a>, <a href="../symbols/enchant.Core.html#pushScene">enchant.Core#pushScene</a> are executed after
-each other to replace to current scene with the new scene.
+Executes <a href="../symbols/enchant.Core.html#popScene">enchant.Core#popScene</a> and <a href="../symbols/enchant.Core.html#pushScene">enchant.Core#pushScene</a>
+one after another to replace the current scene with the new scene.
 									
 									
 									
@@ -2121,7 +1888,7 @@ each other to replace to current scene with the new scene.
 												<span class="light fixedFont">{<a href="../symbols/enchant.Scene.html">enchant.Scene</a>}</span> <b>scene</b>
 												
 											</dt>
-											<dd>The new scene which will replace the previous scene.</dd>
+											<dd>The new scene with which to replace the current scene.</dd>
 										
 									</dl>
 								
@@ -2152,7 +1919,7 @@ each other to replace to current scene with the new scene.
 							</li>
 						
 							<li 
-								 class='item21'
+								 class='item13'
 							>
 								<div class="fixedFont heading" id="resume">
 									<span class='lighter'>
@@ -2165,7 +1932,7 @@ each other to replace to current scene with the new scene.
 								</div>
 								
 								<div class="description">
-									Resumes the core.
+									Resumes core operations.
 									
 									
 									
@@ -2181,20 +1948,25 @@ each other to replace to current scene with the new scene.
 							</li>
 						
 							<li 
-								 class='item22'
+								 class='item14'
 							>
-								<div class="fixedFont heading" id="setLayer">
+								<div class="fixedFont heading" id="start">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span>
 									
-									
-									<b>setLayer</b>(layer)
+									<b>start</b>(deferred)
 								</div>
 								
 								<div class="description">
-									
+									Start the core.
+
+Sets the framerate of the <a href="../symbols/enchant.Core.html#currentScene">enchant.Core#currentScene</a>
+according to the value stored in enchant.core#fps. If
+there are images to preload, loading will begin and the
+loading screen will be displayed.
 									
 									
 									
@@ -2208,7 +1980,7 @@ each other to replace to current scene with the new scene.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>layer</b>
+												<b>deferred</b>
 												
 											</dt>
 											<dd></dd>
@@ -2217,44 +1989,32 @@ each other to replace to current scene with the new scene.
 								
 								
 								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item23'
-							>
-								<div class="fixedFont heading" id="start">
-									<span class='lighter'>
+									<dl class="detailList nomargin">
 									
-									</span>
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Deferred.html">enchant.Deferred</a>}</span> </dd>
+											
+										
+										
+										
+										
+										
 									
-									
-									
-									<b>start</b>()
-								</div>
-								
-								<div class="description">
-									Start the core.
-
-Obeying the frame rate set in <a href="../symbols/enchant.Core.html#fps">enchant.Core#fps</a>, the frame in
-<a href="../symbols/enchant.Core.html#currentScene">enchant.Core#currentScene</a> will be updated. If images to preload are present,
-loading will begin and the loading screen will be displayed.
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item24'
+								 class='item15'
 							>
 								<div class="fixedFont heading" id="stop">
 									<span class='lighter'>
@@ -2270,7 +2030,7 @@ loading will begin and the loading screen will be displayed.
 									Stops the core.
 
 The frame will not be updated, and player input will not be accepted anymore.
-Core can be restarted using <a href="../symbols/enchant.Core.html#start">enchant.Core#start</a>.
+Core can be restarted using <a href="../symbols/enchant.Core.html#resume">enchant.Core#resume</a>.
 									
 									
 									
@@ -2286,7 +2046,7 @@ Core can be restarted using <a href="../symbols/enchant.Core.html#start">enchant
 							</li>
 						
 							<li 
-								 class='item25'
+								 class='item16'
 							>
 								<div class="fixedFont heading" id="transitionPop">
 									<span class='lighter'>
@@ -2303,7 +2063,7 @@ Core can be restarted using <a href="../symbols/enchant.Core.html#start">enchant
 									
 									
 										<br />
-										<i>Defined in: </i> <a href="../symbols/src/plugins_widget.enchant.js.html">widget.enchant.js</a>.
+										<i>Defined in: </i> <a href="../symbols/src/lang_en_plugins_widget.enchant.js.html">widget.enchant.js</a>.
 									
 									
 									
@@ -2344,7 +2104,7 @@ Core can be restarted using <a href="../symbols/enchant.Core.html#start">enchant
 							</li>
 						
 							<li 
-								 class='item26'
+								 class='item17'
 							>
 								<div class="fixedFont heading" id="transitionPush">
 									<span class='lighter'>
@@ -2361,7 +2121,7 @@ Core can be restarted using <a href="../symbols/enchant.Core.html#start">enchant
 									
 									
 										<br />
-										<i>Defined in: </i> <a href="../symbols/src/plugins_widget.enchant.js.html">widget.enchant.js</a>.
+										<i>Defined in: </i> <a href="../symbols/src/lang_en_plugins_widget.enchant.js.html">widget.enchant.js</a>.
 									
 									
 									

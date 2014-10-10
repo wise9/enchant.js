@@ -50,15 +50,27 @@
 				
 					<li><a href="../symbols/enchant.AvatarBG.html">enchant<span class='break'> </span>.<span class='break'> </span>AvatarBG</a></li>
 				
+					<li><a href="../symbols/enchant.BinaryInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.BinaryInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.box2d.PhysicsWorld.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhysicsWorld</a></li>
 				
 					<li><a href="../symbols/enchant.box2d.PhySprite.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhySprite</a></li>
 				
 					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
 				
+					<li><a href="../symbols/enchant.CanvasScene.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasScene</a></li>
+				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
+					<li><a href="../symbols/enchant.Class.MixingRecipe.html">enchant<span class='break'> </span>.<span class='break'> </span>Class<span class='break'> </span>.<span class='break'> </span>MixingRecipe</a></li>
+				
 					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.Deferred.html">enchant<span class='break'> </span>.<span class='break'> </span>Deferred</a></li>
+				
+					<li><a href="../symbols/enchant.DOMScene.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMScene</a></li>
 				
 					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
 				
@@ -174,7 +186,17 @@
 				
 					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
 				
+					<li><a href="../symbols/enchant.InputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>InputManager</a></li>
+				
+					<li><a href="../symbols/enchant.InputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>InputSource</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.LoadingScene.html">enchant<span class='break'> </span>.<span class='break'> </span>LoadingScene</a></li>
 				
 					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
 				
@@ -207,8 +229,6 @@
 					<li><a href="../symbols/enchant.PhyCircleSprite.html">enchant<span class='break'> </span>.<span class='break'> </span>PhyCircleSprite</a></li>
 				
 					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
-				
-					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
 				
 					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
 				
@@ -286,6 +306,10 @@
 				
 					<li><a href="../symbols/enchant.widget.ScrollView.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>ScrollView</a></li>
 				
+					<li><a href="../symbols/enchant.wiiu.html">enchant<span class='break'> </span>.<span class='break'> </span>wiiu</a></li>
+				
+					<li><a href="../symbols/Object.html">Object</a></li>
+				
 			</ul>
 		</nav>
 	</div>
@@ -293,7 +317,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-11-31 7:25
+		Generated on: 2014-9-10 19:12
 	</div>
 </div>
 
@@ -310,13 +334,10 @@
 			<p class="description summary">
 				アニメーションを管理するためのクラス.
 
-操作するノードひとつに対して、必ずひとつのタイムラインが対応する。
-tl.enchant.js を読み込むと、Node クラスを継承したすべてのクラス (Group, Scene, Entity, Label, Sprite)の
-
-tl プロパティに、タイムラインクラスのインスタンスが生成される。
-タイムラインクラスは、自身に様々なアクションを追加するメソッドを持っており、
-これらを使うことで簡潔にアニメーションや様々な操作をすることができる。
-タイムラインクラスはフレームとタイムのアニメーションができる。
+操作するノードひとつに対して, 必ずひとつのタイムラインが対応する.
+タイムラインクラスは, 自身に様々なアクションを追加するメソッドを持っており,
+これらを使うことで簡潔にアニメーションや様々な操作をすることができる.
+タイムラインクラスはフレームとタイムのアニメーションができる.
 			</p>
 				
 			
@@ -324,9 +345,11 @@ tl プロパティに、タイムラインクラスのインスタンスが生�
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/ja_enchant.js.html">enchant.js</a></li>
+						<li>Defined in: <a href="../symbols/src/lang_ja_enchant.js.html">enchant.js</a></li>
 					
-						
+						<li>Extends <span class="fixedFont">
+						<a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span></li>
+					
 				</ul>
 			
 		</div>
@@ -346,7 +369,7 @@ tl プロパティに、タイムラインクラスのインスタンスが生�
 							<td class="attributes">&nbsp;</td>
 							<td class="nameDescription" >
 								<div class="fixedFont">
-									<b><a href="../symbols/enchant.Timeline.html#constructor">enchant.Timeline</a></b>(node, unitialized)
+									<b><a href="../symbols/enchant.Timeline.html#constructor">enchant.Timeline</a></b>(node)
 								</div>
 								<div class="description"></div>
 							</td>
@@ -385,8 +408,7 @@ tl プロパティに、タイムラインクラスのインスタンスが生�
 									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#action">action</a></b>(params)
 										</div>
-										<div class="description">アクションを簡単に追加するためのメソッド。
-実体は add メソッドのラッパ。</div>
+										<div class="description">アクションを簡単に追加するためのメソッド.</div>
 									</td>
 								</tr>
 							
@@ -395,10 +417,9 @@ tl プロパティに、タイムラインクラスのインスタンスが生�
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#and">and</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#add">add</a></b>(action)
 										</div>
-										<div class="description">複数のアクションを並列で実行したいときに指定する。
-and で結ばれたすべてのアクションが終了するまで次のアクションには移行しない</div>
+										<div class="description">タイムラインにアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -407,9 +428,9 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#clear">clear</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#and">and</a></b>()
 										</div>
-										<div class="description">タイムラインのキューをすべて破棄する。終了イベントは発行されない。</div>
+										<div class="description">複数のアクションを並列で実行したいときに指定する.</div>
 									</td>
 								</tr>
 							
@@ -418,10 +439,9 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#cue">cue</a></b>(cue)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#clear">clear</a></b>()
 										</div>
-										<div class="description">実行したい関数を、フレーム数をキーとした連想配列(オブジェクト)で複数指定し追加する。
-内部的には delay, then を用いている。</div>
+										<div class="description">タイムラインのキューをすべて破棄する.</div>
 									</td>
 								</tr>
 							
@@ -430,9 +450,9 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#delay">delay</a></b>(time)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#cue">cue</a></b>(cue)
 										</div>
-										<div class="description">指定したフレーム数だけ待ち、何もしないアクションを追加する。</div>
+										<div class="description">実行したい関数を, フレーム数をキーとした連想配列(オブジェクト)で複数指定し追加する.</div>
 									</td>
 								</tr>
 							
@@ -441,10 +461,9 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#exec">exec</a></b>(func)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#delay">delay</a></b>(time)
 										</div>
-										<div class="description">then メソッドのシノニム。
-関数を実行し、即時に次のアクションに移る。</div>
+										<div class="description">指定したフレーム数だけ待ち, 何もしないアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -453,10 +472,9 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#fadeIn">fadeIn</a></b>(time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#exec">exec</a></b>(func)
 										</div>
-										<div class="description">Entity をフェードインするアクションを追加する。
-fadeTo(1) のエイリアス。</div>
+										<div class="description">関数を実行し, 即時に次のアクションに移るアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -465,10 +483,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#fadeOut">fadeOut</a></b>(time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#fadeIn">fadeIn</a></b>(time, easing)
 										</div>
-										<div class="description">Entity をフェードアウトするアクションを追加する。
-fadeTo(1) のエイリアス。</div>
+										<div class="description">Entityをフェードインするアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -477,9 +494,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#fadeTo">fadeTo</a></b>(opacity, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#fadeOut">fadeOut</a></b>(time, easing)
 										</div>
-										<div class="description">Entity の不透明度をなめらかに変えるアクションを追加する。</div>
+										<div class="description">Entityをフェードアウトするアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -488,9 +505,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#hide">hide</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#fadeTo">fadeTo</a></b>(opacity, time, easing)
 										</div>
-										<div class="description">Entity の opacity を0にする (即時)</div>
+										<div class="description">Entityの不透明度をなめらかに変えるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -499,11 +516,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#loop">loop</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#hide">hide</a></b>()
 										</div>
-										<div class="description">タイムラインをループさせる。
-ループしているときに終了したアクションは、タイムラインから取り除かれた後
-再度タイムラインに追加される。このアクションは、ループが解除されても残る。</div>
+										<div class="description">Entityの不透明度を0にする.</div>
 									</td>
 								</tr>
 							
@@ -512,10 +527,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveBy">moveBy</a></b>(x, y, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#loop">loop</a></b>()
 										</div>
-										<div class="description">Entity の位置をなめらかに変化させるアクションを追加する。
-座標は、アクション開始時からの相対座標で指定する。</div>
+										<div class="description">タイムラインをループさせる.</div>
 									</td>
 								</tr>
 							
@@ -524,9 +538,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveTo">moveTo</a></b>(x, y, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveBy">moveBy</a></b>(x, y, time, easing)
 										</div>
-										<div class="description">Entity の位置をなめらかに移動させるアクションを追加する。</div>
+										<div class="description">Entityの位置をなめらかに変化させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -535,9 +549,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveX">moveX</a></b>(x, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveTo">moveTo</a></b>(x, y, time, easing)
 										</div>
-										<div class="description">Entity のx座標をなめらかに変化させるアクションを追加する。</div>
+										<div class="description">Entityの位置をなめらかに移動させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -546,9 +560,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveY">moveY</a></b>(y, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveX">moveX</a></b>(x, time, easing)
 										</div>
-										<div class="description">Entity のy座標をなめらかに変化させるアクションを追加する。</div>
+										<div class="description">Entityのx座標をなめらかに移動させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -557,14 +571,9 @@ fadeTo(1) のエイリアス。</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#next">next</a></b>(remainingTime)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#moveY">moveY</a></b>(y, time, easing)
 										</div>
-										<div class="description">キューの先頭にあるアクションを終了し、次のアクションへ移行する。
-アクションの中から呼び出されるが、外から呼び出すこともできる。
-
-アクション実行中に、アクションが終了した場合、
-もう一度 tick() 関数が呼ばれるため、1フレームに複数のアクションが処理される場合もある。
-ex.</div>
+										<div class="description">Entityのy座標をなめらかに移動させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -573,9 +582,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#pause">pause</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#next">next</a></b>(remainingTime)
 										</div>
-										<div class="description">タイムラインの実行を一時停止する</div>
+										<div class="description">キューの先頭にあるアクションを終了し, 次のアクションへ移行する.</div>
 									</td>
 								</tr>
 							
@@ -584,12 +593,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#removeFromScene">removeFromScene</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#pause">pause</a></b>()
 										</div>
-										<div class="description">Entity をシーンから削除する。
-シーンから削除された場合、 enterframe イベントは呼ばれなくなるので、
-タイムラインも止まることに注意。
-これ以降のアクションは、再度シーンに追加されるまで実行されない。</div>
+										<div class="description">タイムラインの実行を一時停止する.</div>
 									</td>
 								</tr>
 							
@@ -598,9 +604,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#repeat">repeat</a></b>(func, time)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#removeFromScene">removeFromScene</a></b>()
 										</div>
-										<div class="description">ある関数を指定したフレーム数繰り返し実行するアクションを追加する。</div>
+										<div class="description">Entityをシーンから削除する.</div>
 									</td>
 								</tr>
 							
@@ -609,9 +615,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#resume">resume</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#repeat">repeat</a></b>(func, time)
 										</div>
-										<div class="description">タイムラインの実行を再開する</div>
+										<div class="description">ある関数を指定したフレーム数繰り返し実行するアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -620,10 +626,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#rotateBy">rotateBy</a></b>(deg, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#resume">resume</a></b>()
 										</div>
-										<div class="description">Entity をなめらかに回転させるアクションを追加する。
-角度は相対角度 (アクション開始時の角度から更に n 度) で指定する</div>
+										<div class="description">タイムラインの実行を再開する.</div>
 									</td>
 								</tr>
 							
@@ -632,9 +637,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#rotateTo">rotateTo</a></b>(deg, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#rotateBy">rotateBy</a></b>(deg, time, easing)
 										</div>
-										<div class="description">Entity をなめらかに回転させるアクションを追加する。</div>
+										<div class="description">Entityをなめらかに回転させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -643,10 +648,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#scaleBy">scaleBy</a></b>(scaleX, scaleY, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#rotateTo">rotateTo</a></b>(deg, time, easing)
 										</div>
-										<div class="description">Entity をなめらかに拡大・縮小させるアクションを追加する。
-相対縮尺 (ex.</div>
+										<div class="description">Entityをなめらかに回転させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -655,9 +659,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#scaleTo">scaleTo</a></b>(scaleX, scaleY, time, easing)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#scaleBy">scaleBy</a></b>(scaleX, scaleY, time, easing)
 										</div>
-										<div class="description">Entity をなめらかに拡大・縮小するアクションを追加する。</div>
+										<div class="description">Entityをなめらかに拡大・縮小させるアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -666,9 +670,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#setFrameBased">setFrameBased</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#scaleTo">scaleTo</a></b>(scaleX, scaleY, time, easing)
 										</div>
-										<div class="description">一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる。 （デフォルト）</div>
+										<div class="description">Entityをなめらかに拡大・縮小するアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -677,9 +681,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#setTimeBased">setTimeBased</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#setFrameBased">setFrameBased</a></b>()
 										</div>
-										<div class="description">一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに前のフレームから経過した時間になる。</div>
+										<div class="description">一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる.</div>
 									</td>
 								</tr>
 							
@@ -688,9 +692,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#show">show</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#setTimeBased">setTimeBased</a></b>()
 										</div>
-										<div class="description">Entity の opacity を1にする (即時)</div>
+										<div class="description">一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに前のフレームから経過した時間になる.</div>
 									</td>
 								</tr>
 							
@@ -699,11 +703,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#skip">skip</a></b>(frames)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#show">show</a></b>()
 										</div>
-										<div class="description">タイムラインを早送りする。
-指定したフレーム数が経過したのと同様の処理を、瞬時に実行する。
-巻き戻しはできない。</div>
+										<div class="description">Entityの不透明度を1にする.</div>
 									</td>
 								</tr>
 							
@@ -712,9 +714,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#then">then</a></b>(func)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#skip">skip</a></b>(frames)
 										</div>
-										<div class="description">関数を実行し、即時に次のアクションに移るアクションを追加する。</div>
+										<div class="description">タイムラインを早送りする.</div>
 									</td>
 								</tr>
 							
@@ -723,11 +725,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#tick">tick</a></b>(enterFrameEvent)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#then">then</a></b>(func)
 										</div>
-										<div class="description">ターゲットの enterframe イベントのリスナとして登録される関数
-1フレーム経過する際に実行する処理が書かれている。
-(キューの先頭にあるアクションに対して、actionstart/actiontickイベントを発行する)</div>
+										<div class="description">関数を実行し, 即時に次のアクションに移るアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -736,10 +736,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#tween">tween</a></b>(params)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#tick">tick</a></b>(enterFrameEvent)
 										</div>
-										<div class="description">トゥイーンを簡単に追加するためのメソッド。
-実体は add メソッドのラッパ。</div>
+										<div class="description">自身のenterframeイベントのリスナとして登録される関数.</div>
 									</td>
 								</tr>
 							
@@ -748,9 +747,9 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#unloop">unloop</a></b>()
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#tween">tween</a></b>(params)
 										</div>
-										<div class="description">タイムラインのループを解除する。</div>
+										<div class="description">トゥイーンを簡単に追加するためのメソッド.</div>
 									</td>
 								</tr>
 							
@@ -759,9 +758,20 @@ ex.</div>
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#unloop">unloop</a></b>()
+										</div>
+										<div class="description">タイムラインのループを解除する.</div>
+									</td>
+								</tr>
+							
+								<tr
+									 class='item33'
+								>
+									<td class="attributes">&nbsp;</td>
+									<td class="nameDescription">
 										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#waitUntil">waitUntil</a></b>(func)
 										</div>
-										<div class="description">true値 が返るまで、関数を毎フレーム実行するアクションを追加する。</div>
+										<div class="description">trueが返るまで, 関数を毎フレーム実行するアクションを追加する.</div>
 									</td>
 								</tr>
 							
@@ -769,6 +779,10 @@ ex.</div>
 					</table>
 				
 			
+				
+					<dl class="inheritsList" id="MethodsListInherited">
+					<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#on">on</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
+					</dl>
 				
 			</div>
 		
@@ -788,7 +802,7 @@ ex.</div>
 					</h2>
 					
 					<div class="fixedFont">
-						<b>enchant.Timeline</b>(node, unitialized)
+						<b>enchant.Timeline</b>(node)
 					</div>
 					
 					<div class="description">
@@ -803,16 +817,10 @@ ex.</div>
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									 <b>node</b>
+									<span class="light fixedFont">{<a href="../symbols/enchant.Node.html">enchant.Node</a>}</span>  <b>node</b>
 									
 								</dt>
-								<dd>操作の対象となるノード</dd>
-							
-								<dt>
-									 <b>unitialized</b>
-									<i>Optional</i>
-								</dt>
-								<dd>このパラメータがtrueならば、最初のaddメソッドが呼ばれる時nodeにenchant.Event.ENTER_FRAMEイベントリスナを追加される。</dd>
+								<dd>操作の対象となるノード.</dd>
 							
 						</dl>
 					
@@ -846,14 +854,14 @@ ex.</div>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
 									<b>action</b>(params)
 								</div>
 								
 								<div class="description">
-									アクションを簡単に追加するためのメソッド。
-実体は add メソッドのラッパ。
+									アクションを簡単に追加するためのメソッド.
+実体は <a href="../symbols/enchant.Timeline.html#add">enchant.Timeline#add</a> のラッパ.
 									
 									
 									
@@ -867,14 +875,35 @@ ex.</div>
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>params</b>
+												<span class="light fixedFont">{<a href="../symbols/Object.html">Object</a>}</span> <b>params</b>
 												
 											</dt>
-											<dd>アクションの設定オブジェクト</dd>
+											<dd>アクションの設定オブジェクト.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -882,19 +911,18 @@ ex.</div>
 							<li 
 								 class='item1'
 							>
-								<div class="fixedFont heading" id="and">
+								<div class="fixedFont heading" id="add">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>and</b>()
+									<b>add</b>(action)
 								</div>
 								
 								<div class="description">
-									複数のアクションを並列で実行したいときに指定する。
-and で結ばれたすべてのアクションが終了するまで次のアクションには移行しない
+									タイムラインにアクションを追加する.
 									
 									
 									
@@ -902,14 +930,41 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								</div>
 								
 								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/enchant.Action.html">enchant.Action</a>}</span> <b>action</b>
+												
+											</dt>
+											<dd>追加するアクション.</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
 									
-										<pre class="code">sprite.tl.fadeIn(30).and.rotateBy(360, 30);
-30フレームでフェードインしながら 360度回転する</pre>
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
 									
-								
-								
-								
-								
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -917,18 +972,19 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 							<li 
 								 class='item2'
 							>
-								<div class="fixedFont heading" id="clear">
+								<div class="fixedFont heading" id="and">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>clear</b>()
+									<b>and</b>()
 								</div>
 								
 								<div class="description">
-									タイムラインのキューをすべて破棄する。終了イベントは発行されない。
+									複数のアクションを並列で実行したいときに指定する.
+and で結ばれたすべてのアクションが終了するまで次のアクションには移行しない.
 									
 									
 									
@@ -936,9 +992,36 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								</div>
 								
 								
+									
+										<pre class="code">sprite.tl.fadeIn(30).and().rotateBy(360, 30);
+
+// 30フレームでフェードインしながら360度回転する.</pre>
+									
 								
 								
 								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -946,19 +1029,69 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 							<li 
 								 class='item3'
 							>
+								<div class="fixedFont heading" id="clear">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
+									
+									<b>clear</b>()
+								</div>
+								
+								<div class="description">
+									タイムラインのキューをすべて破棄する. 終了イベントは発行されない.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item4'
+							>
 								<div class="fixedFont heading" id="cue">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
 									<b>cue</b>(cue)
 								</div>
 								
 								<div class="description">
-									実行したい関数を、フレーム数をキーとした連想配列(オブジェクト)で複数指定し追加する。
-内部的には delay, then を用いている。
+									実行したい関数を, フレーム数をキーとした連想配列(オブジェクト)で複数指定し追加する.
+内部的には <a href="../symbols/enchant.Timeline.html#delay">enchant.Timeline#delay</a>, <a href="../symbols/enchant.Timeline.html#then">enchant.Timeline#then</a> を用いている.
 									
 									
 									
@@ -968,9 +1101,9 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 								
 									
 										<pre class="code">sprite.tl.cue({
-   10: function(){ 10フレーム経過した後に実行される関数 },
-   20: function(){ 20フレーム経過した後に実行される関数 },
-   30: function(){ 30フレーム経過した後に実行される関数 }
+    10: function() {}, // 10フレーム経過した後に実行される関数
+    20: function() {}, // 20フレーム経過した後に実行される関数
+    30: function() {}  // 30フレーム経過した後に実行される関数
 });</pre>
 									
 								
@@ -980,54 +1113,35 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>cue</b>
+												<span class="light fixedFont">{<a href="../symbols/Object.html">Object</a>}</span> <b>cue</b>
 												
 											</dt>
-											<dd>キューオブジェクト</dd>
+											<dd>キューオブジェクト.</dd>
 										
 									</dl>
 								
 								
 								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item4'
-							>
-								<div class="fixedFont heading" id="delay">
-									<span class='lighter'>
+									<dl class="detailList nomargin">
 									
-									</span>
-									
-									
-									
-									<b>delay</b>(time)
-								</div>
-								
-								<div class="description">
-									指定したフレーム数だけ待ち、何もしないアクションを追加する。
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
 										
-											<dt>
-												<b>time</b>
-												
-											</dt>
-											<dd></dd>
 										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
 									</dl>
-								
-								
 								
 								<div class="hr"></div>
 							</li>
@@ -1035,19 +1149,18 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 							<li 
 								 class='item5'
 							>
-								<div class="fixedFont heading" id="exec">
+								<div class="fixedFont heading" id="delay">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>exec</b>(func)
+									<b>delay</b>(time)
 								</div>
 								
 								<div class="description">
-									then メソッドのシノニム。
-関数を実行し、即時に次のアクションに移る。
+									指定したフレーム数だけ待ち, 何もしないアクションを追加する.
 									
 									
 									
@@ -1061,14 +1174,35 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>func</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>待機するフレーム数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1076,19 +1210,19 @@ and で結ばれたすべてのアクションが終了するまで次のアク�
 							<li 
 								 class='item6'
 							>
-								<div class="fixedFont heading" id="fadeIn">
+								<div class="fixedFont heading" id="exec">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>fadeIn</b>(time, easing)
+									<b>exec</b>(func)
 								</div>
 								
 								<div class="description">
-									Entity をフェードインするアクションを追加する。
-fadeTo(1) のエイリアス。
+									関数を実行し, 即時に次のアクションに移るアクションを追加する.
+<a href="../symbols/enchant.Timeline.html#then">enchant.Timeline#then</a> のシノニム.
 									
 									
 									
@@ -1102,20 +1236,35 @@ fadeTo(1) のエイリアス。
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Function}</span> <b>func</b>
 												
 											</dt>
-											<dd>フレーム数</dd>
-										
-											<dt>
-												<b>easing</b>
-												<i>Optional</i>
-											</dt>
-											<dd>イージング関数</dd>
+											<dd>実行する関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1123,19 +1272,19 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item7'
 							>
-								<div class="fixedFont heading" id="fadeOut">
+								<div class="fixedFont heading" id="fadeIn">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>fadeOut</b>(time, easing)
+									<b>fadeIn</b>(time, easing)
 								</div>
 								
 								<div class="description">
-									Entity をフェードアウトするアクションを追加する。
-fadeTo(1) のエイリアス。
+									Entityをフェードインするアクションを追加する.
+fadeTo(1, time, easing) のエイリアス.
 									
 									
 									
@@ -1149,20 +1298,41 @@ fadeTo(1) のエイリアス。
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd>フレーム数</dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>easing</b>
-												<i>Optional</i>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
-											<dd>イージング関数</dd>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1170,18 +1340,19 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item8'
 							>
-								<div class="fixedFont heading" id="fadeTo">
+								<div class="fixedFont heading" id="fadeOut">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>fadeTo</b>(opacity, time, easing)
+									<b>fadeOut</b>(time, easing)
 								</div>
 								
 								<div class="description">
-									Entity の不透明度をなめらかに変えるアクションを追加する。
+									Entityをフェードアウトするアクションを追加する.
+fadeTo(1, time, easing) のエイリアス.
 									
 									
 									
@@ -1195,26 +1366,41 @@ fadeTo(1) のエイリアス。
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>opacity</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd>目標の不透明度</dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>time</b>
-												
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
-											<dd>フレーム数</dd>
-										
-											<dt>
-												<b>easing</b>
-												<i>Optional</i>
-											</dt>
-											<dd>イージング関数</dd>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1222,18 +1408,18 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item9'
 							>
-								<div class="fixedFont heading" id="hide">
+								<div class="fixedFont heading" id="fadeTo">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>hide</b>()
+									<b>fadeTo</b>(opacity, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity の opacity を0にする (即時)
+									Entityの不透明度をなめらかに変えるアクションを追加する.
 									
 									
 									
@@ -1243,7 +1429,51 @@ fadeTo(1) のエイリアス。
 								
 								
 								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>opacity</b>
+												
+											</dt>
+											<dd>目標の不透明度.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
+												
+											</dt>
+											<dd>フレーム数.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
+											</dt>
+											<dd>イージング関数.</dd>
+										
+									</dl>
 								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1251,20 +1481,18 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item10'
 							>
-								<div class="fixedFont heading" id="loop">
+								<div class="fixedFont heading" id="hide">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>loop</b>()
+									<b>hide</b>()
 								</div>
 								
 								<div class="description">
-									タイムラインをループさせる。
-ループしているときに終了したアクションは、タイムラインから取り除かれた後
-再度タイムラインに追加される。このアクションは、ループが解除されても残る。
+									Entityの不透明度を0にする. (即時)
 									
 									
 									
@@ -1275,6 +1503,27 @@ fadeTo(1) のエイリアス。
 								
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1282,19 +1531,20 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item11'
 							>
-								<div class="fixedFont heading" id="moveBy">
+								<div class="fixedFont heading" id="loop">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>moveBy</b>(x, y, time, easing)
+									<b>loop</b>()
 								</div>
 								
 								<div class="description">
-									Entity の位置をなめらかに変化させるアクションを追加する。
-座標は、アクション開始時からの相対座標で指定する。
+									タイムラインをループさせる.
+ループしているときに終了したアクションは, タイムラインから取り除かれた後,
+再度タイムラインに追加される. このアクションは, ループが解除されても残る.
 									
 									
 									
@@ -1304,36 +1554,28 @@ fadeTo(1) のエイリアス。
 								
 								
 								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
+								
+								
+									<dl class="detailList nomargin">
+									
 										
-											<dt>
-												<b>x</b>
-												
-											</dt>
-											<dd></dd>
 										
-											<dt>
-												<b>y</b>
-												
-											</dt>
-											<dd></dd>
 										
-											<dt>
-												<b>time</b>
-												
-											</dt>
-											<dd></dd>
 										
-											<dt>
-												<b>easing</b>
-												<i>Optional</i>
-											</dt>
-											<dd></dd>
 										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
 									</dl>
-								
-								
 								
 								<div class="hr"></div>
 							</li>
@@ -1341,18 +1583,19 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item12'
 							>
-								<div class="fixedFont heading" id="moveTo">
+								<div class="fixedFont heading" id="moveBy">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>moveTo</b>(x, y, time, easing)
+									<b>moveBy</b>(x, y, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity の位置をなめらかに移動させるアクションを追加する。
+									Entityの位置をなめらかに変化させるアクションを追加する.
+座標は, アクション開始時からの相対座標で指定する.
 									
 									
 									
@@ -1366,32 +1609,53 @@ fadeTo(1) のエイリアス。
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>x</b>
+												<span class="light fixedFont">{Number}</span> <b>x</b>
 												
 											</dt>
-											<dd>目標のx座標</dd>
+											<dd>x軸方向の移動量.</dd>
 										
 											<dt>
-												<b>y</b>
+												<span class="light fixedFont">{Number}</span> <b>y</b>
 												
 											</dt>
-											<dd>目標のy座標</dd>
+											<dd>y軸方向の移動量.</dd>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd>フレーム数</dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>easing</b>
-												<i>Optional</i>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
-											<dd>イージング関数</dd>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1399,18 +1663,18 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item13'
 							>
-								<div class="fixedFont heading" id="moveX">
+								<div class="fixedFont heading" id="moveTo">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>moveX</b>(x, time, easing)
+									<b>moveTo</b>(x, y, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity のx座標をなめらかに変化させるアクションを追加する。
+									Entityの位置をなめらかに移動させるアクションを追加する.
 									
 									
 									
@@ -1424,26 +1688,53 @@ fadeTo(1) のエイリアス。
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>x</b>
+												<span class="light fixedFont">{Number}</span> <b>x</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>目標のx座標.</dd>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>y</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>目標のy座標.</dd>
 										
 											<dt>
-												<b>easing</b>
-												<i>Optional</i>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
+												
 											</dt>
-											<dd></dd>
+											<dd>フレーム数.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
+											</dt>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1451,18 +1742,18 @@ fadeTo(1) のエイリアス。
 							<li 
 								 class='item14'
 							>
-								<div class="fixedFont heading" id="moveY">
+								<div class="fixedFont heading" id="moveX">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>moveY</b>(y, time, easing)
+									<b>moveX</b>(x, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity のy座標をなめらかに変化させるアクションを追加する。
+									Entityのx座標をなめらかに移動させるアクションを追加する.
 									
 									
 									
@@ -1476,32 +1767,126 @@ fadeTo(1) のエイリアス。
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>y</b>
+												<span class="light fixedFont">{Number}</span> <b>x</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>目標のx座標.</dd>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>easing</b>
-												<i>Optional</i>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
-											<dd></dd>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
 								 class='item15'
+							>
+								<div class="fixedFont heading" id="moveY">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
+									
+									<b>moveY</b>(y, time, easing)
+								</div>
+								
+								<div class="description">
+									Entityのy座標をなめらかに移動させるアクションを追加する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>y</b>
+												
+											</dt>
+											<dd>目標のy座標.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
+												
+											</dt>
+											<dd>フレーム数.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
+											</dt>
+											<dd>イージング関数.</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item16'
 							>
 								<div class="fixedFont heading" id="next">
 									<span class='lighter'>
@@ -1514,20 +1899,22 @@ fadeTo(1) のエイリアス。
 								</div>
 								
 								<div class="description">
-									キューの先頭にあるアクションを終了し、次のアクションへ移行する。
-アクションの中から呼び出されるが、外から呼び出すこともできる。
+									キューの先頭にあるアクションを終了し, 次のアクションへ移行する.
+アクションの中から呼び出されるが, 外から呼び出すこともできる.
 
-アクション実行中に、アクションが終了した場合、
-もう一度 tick() 関数が呼ばれるため、1フレームに複数のアクションが処理される場合もある。
-ex.
-  sprite.tl.then(function A(){ .. }).then(function B(){ .. });
-と記述した場合、最初のフレームで A・B の関数どちらも実行される
+アクション実行中に, アクションが終了した場合,
+もう一度 tick() 関数が呼ばれるため, 1フレームに複数のアクションが処理される場合もある.
 									
 									
 									
 									
 								</div>
 								
+								
+									
+										<pre class="code">sprite.tl.then(function A(){ .. }).then(function B(){ .. });
+// 最初のフレームで A・B の関数どちらも実行される.</pre>
+									
 								
 								
 								
@@ -1548,20 +1935,20 @@ ex.
 							</li>
 						
 							<li 
-								 class='item16'
+								 class='item17'
 							>
 								<div class="fixedFont heading" id="pause">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
 									<b>pause</b>()
 								</div>
 								
 								<div class="description">
-									タイムラインの実行を一時停止する
+									タイムラインの実行を一時停止する.
 									
 									
 									
@@ -1573,37 +1960,26 @@ ex.
 								
 								
 								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item17'
-							>
-								<div class="fixedFont heading" id="removeFromScene">
-									<span class='lighter'>
+									<dl class="detailList nomargin">
 									
-									</span>
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
 									
-									
-									
-									<b>removeFromScene</b>()
-								</div>
-								
-								<div class="description">
-									Entity をシーンから削除する。
-シーンから削除された場合、 enterframe イベントは呼ばれなくなるので、
-タイムラインも止まることに注意。
-これ以降のアクションは、再度シーンに追加されるまで実行されない。
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1611,18 +1987,21 @@ ex.
 							<li 
 								 class='item18'
 							>
-								<div class="fixedFont heading" id="repeat">
+								<div class="fixedFont heading" id="removeFromScene">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>repeat</b>(func, time)
+									<b>removeFromScene</b>()
 								</div>
 								
 								<div class="description">
-									ある関数を指定したフレーム数繰り返し実行するアクションを追加する。
+									Entityをシーンから削除する.
+シーンから削除された場合,  enterframe イベントは呼ばれなくなるので,
+タイムラインも止まることに注意.
+これ以降のアクションは, 再度シーンに追加されるまで実行されない.
 									
 									
 									
@@ -1632,24 +2011,28 @@ ex.
 								
 								
 								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
+								
+								
+									<dl class="detailList nomargin">
+									
 										
-											<dt>
-												<b>func</b>
-												
-											</dt>
-											<dd>実行したい関数</dd>
 										
-											<dt>
-												<b>time</b>
-												
-											</dt>
-											<dd>持続フレーム数</dd>
 										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
 									</dl>
-								
-								
 								
 								<div class="hr"></div>
 							</li>
@@ -1657,18 +2040,18 @@ ex.
 							<li 
 								 class='item19'
 							>
-								<div class="fixedFont heading" id="resume">
+								<div class="fixedFont heading" id="repeat">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>resume</b>()
+									<b>repeat</b>(func, time)
 								</div>
 								
 								<div class="description">
-									タイムラインの実行を再開する
+									ある関数を指定したフレーム数繰り返し実行するアクションを追加する.
 									
 									
 									
@@ -1678,7 +2061,45 @@ ex.
 								
 								
 								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>func</b>
+												
+											</dt>
+											<dd>実行したい関数.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
+												
+											</dt>
+											<dd>持続フレーム数.</dd>
+										
+									</dl>
 								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1686,19 +2107,18 @@ ex.
 							<li 
 								 class='item20'
 							>
-								<div class="fixedFont heading" id="rotateBy">
+								<div class="fixedFont heading" id="resume">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>rotateBy</b>(deg, time, easing)
+									<b>resume</b>()
 								</div>
 								
 								<div class="description">
-									Entity をなめらかに回転させるアクションを追加する。
-角度は相対角度 (アクション開始時の角度から更に n 度) で指定する
+									タイムラインの実行を再開する.
 									
 									
 									
@@ -1708,30 +2128,28 @@ ex.
 								
 								
 								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
+								
+								
+									<dl class="detailList nomargin">
+									
 										
-											<dt>
-												<b>deg</b>
-												
-											</dt>
-											<dd>目標の相対角度 (弧度法: 1回転を 360 とする)</dd>
 										
-											<dt>
-												<b>time</b>
-												
-											</dt>
-											<dd>フレーム数</dd>
 										
-											<dt>
-												<b>easing</b>
-												<i>Optional</i>
-											</dt>
-											<dd>イージング関数</dd>
 										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
 									</dl>
-								
-								
 								
 								<div class="hr"></div>
 							</li>
@@ -1739,18 +2157,19 @@ ex.
 							<li 
 								 class='item21'
 							>
-								<div class="fixedFont heading" id="rotateTo">
+								<div class="fixedFont heading" id="rotateBy">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>rotateTo</b>(deg, time, easing)
+									<b>rotateBy</b>(deg, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity をなめらかに回転させるアクションを追加する。
+									Entityをなめらかに回転させるアクションを追加する.
+角度は相対角度 (アクション開始時の角度から更にn度) で指定する.
 									
 									
 									
@@ -1764,26 +2183,47 @@ ex.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>deg</b>
+												<span class="light fixedFont">{Number}</span> <b>deg</b>
 												
 											</dt>
-											<dd>目標の回転角度 (弧度法: 1回転を 360 とする)</dd>
+											<dd>目標の相対角度. (度数法)</dd>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd>フレーム数</dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>easing</b>
-												<i>Optional</i>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
-											<dd>イージング関数</dd>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1791,19 +2231,18 @@ ex.
 							<li 
 								 class='item22'
 							>
-								<div class="fixedFont heading" id="scaleBy">
+								<div class="fixedFont heading" id="rotateTo">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>scaleBy</b>(scaleX, scaleY, time, easing)
+									<b>rotateTo</b>(deg, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity をなめらかに拡大・縮小させるアクションを追加する。
-相対縮尺 (ex. アクション開始時の縮尺の n 倍) で指定する。
+									Entityをなめらかに回転させるアクションを追加する.
 									
 									
 									
@@ -1817,32 +2256,47 @@ ex.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>scaleX</b>
+												<span class="light fixedFont">{Number}</span> <b>deg</b>
 												
 											</dt>
-											<dd>相対縮尺</dd>
+											<dd>目標の回転角度. (度数法)</dd>
 										
 											<dt>
-												<b>scaleY</b>
-												<i>Optional</i>
-											</dt>
-											<dd>相対縮尺。省略した場合 scaleX と同じ</dd>
-										
-											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>easing</b>
-												<i>Optional</i>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
-											<dd></dd>
+											<dd>イージング関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -1850,18 +2304,19 @@ ex.
 							<li 
 								 class='item23'
 							>
-								<div class="fixedFont heading" id="scaleTo">
+								<div class="fixedFont heading" id="scaleBy">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>scaleTo</b>(scaleX, scaleY, time, easing)
+									<b>scaleBy</b>(scaleX, scaleY, time, easing)
 								</div>
 								
 								<div class="description">
-									Entity をなめらかに拡大・縮小するアクションを追加する。
+									Entityをなめらかに拡大・縮小させるアクションを追加する.
+相対縮尺 (アクション開始時の縮尺のn倍) で指定する.
 									
 									
 									
@@ -1875,26 +2330,105 @@ ex.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>scaleX</b>
+												<span class="light fixedFont">{Number}</span> <b>scaleX</b>
 												
 											</dt>
-											<dd>縮尺</dd>
+											<dd>x軸方向の相対縮尺.</dd>
 										
 											<dt>
-												<b>scaleY</b>
+												<span class="light fixedFont">{Number}</span> <b>scaleY</b>
 												<i>Optional</i>
 											</dt>
-											<dd>縮尺。省略した場合 scaleX と同じ</dd>
+											<dd>y軸方向の相対縮尺. 省略した場合 scaleX と同じ.</dd>
 										
 											<dt>
-												<b>time</b>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>フレーム数.</dd>
 										
 											<dt>
-												<b>easing</b>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
+											</dt>
+											<dd>イージング関数.</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item24'
+							>
+								<div class="fixedFont heading" id="scaleTo">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
+									
+									<b>scaleTo</b>(scaleX, scaleY, time, easing)
+								</div>
+								
+								<div class="description">
+									Entityをなめらかに拡大・縮小するアクションを追加する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>scaleX</b>
+												
+											</dt>
+											<dd>x軸方向の縮尺.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>scaleY</b>
 												<i>Optional</i>
+											</dt>
+											<dd>y軸方向の縮尺. 省略した場合 scaleX と同じ.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Number}</span> <b>time</b>
+												
+											</dt>
+											<dd>フレーム数.</dd>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>easing</b>
+												<i>Optional, Default: enchant.Easing.LINEAR</i>
 											</dt>
 											<dd></dd>
 										
@@ -1902,11 +2436,32 @@ ex.
 								
 								
 								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
-								 class='item24'
+								 class='item25'
 							>
 								<div class="fixedFont heading" id="setFrameBased">
 									<span class='lighter'>
@@ -1919,36 +2474,7 @@ ex.
 								</div>
 								
 								<div class="description">
-									一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる。 （デフォルト）
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item25'
-							>
-								<div class="fixedFont heading" id="setTimeBased">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>setTimeBased</b>()
-								</div>
-								
-								<div class="description">
-									一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに前のフレームから経過した時間になる。
+									一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに一つの時間単位になる. （デフォルト）
 									
 									
 									
@@ -1966,18 +2492,18 @@ ex.
 							<li 
 								 class='item26'
 							>
-								<div class="fixedFont heading" id="show">
+								<div class="fixedFont heading" id="setTimeBased">
 									<span class='lighter'>
 									
 									</span>
 									
 									
 									
-									<b>show</b>()
+									<b>setTimeBased</b>()
 								</div>
 								
 								<div class="description">
-									Entity の opacity を1にする (即時)
+									一つのenchant.Event.ENTER_FRAMEイベントはアニメーションに前のフレームから経過した時間になる.
 									
 									
 									
@@ -1995,20 +2521,18 @@ ex.
 							<li 
 								 class='item27'
 							>
-								<div class="fixedFont heading" id="skip">
+								<div class="fixedFont heading" id="show">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>skip</b>(frames)
+									<b>show</b>()
 								</div>
 								
 								<div class="description">
-									タイムラインを早送りする。
-指定したフレーム数が経過したのと同様の処理を、瞬時に実行する。
-巻き戻しはできない。
+									Entityの不透明度を1にする. (即時)
 									
 									
 									
@@ -2018,18 +2542,28 @@ ex.
 								
 								
 								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
+								
+								
+									<dl class="detailList nomargin">
+									
 										
-											<dt>
-												<b>frames</b>
-												
-											</dt>
-											<dd></dd>
 										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
 									</dl>
-								
-								
 								
 								<div class="hr"></div>
 							</li>
@@ -2037,18 +2571,20 @@ ex.
 							<li 
 								 class='item28'
 							>
-								<div class="fixedFont heading" id="then">
+								<div class="fixedFont heading" id="skip">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>then</b>(func)
+									<b>skip</b>(frames)
 								</div>
 								
 								<div class="description">
-									関数を実行し、即時に次のアクションに移るアクションを追加する。
+									タイムラインを早送りする.
+指定したフレーム数が経過したのと同様の処理を, 瞬時に実行する.
+巻き戻しはできない.
 									
 									
 									
@@ -2062,20 +2598,102 @@ ex.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>func</b>
+												<span class="light fixedFont">{Number}</span> <b>frames</b>
 												
 											</dt>
-											<dd></dd>
+											<dd>スキップするフレーム数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
 						
 							<li 
 								 class='item29'
+							>
+								<div class="fixedFont heading" id="then">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
+									
+									<b>then</b>(func)
+								</div>
+								
+								<div class="description">
+									関数を実行し, 即時に次のアクションに移るアクションを追加する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{Function}</span> <b>func</b>
+												
+											</dt>
+											<dd>実行する関数.</dd>
+										
+									</dl>
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item30'
 							>
 								<div class="fixedFont heading" id="tick">
 									<span class='lighter'>
@@ -2088,9 +2706,9 @@ ex.
 								</div>
 								
 								<div class="description">
-									ターゲットの enterframe イベントのリスナとして登録される関数
-1フレーム経過する際に実行する処理が書かれている。
-(キューの先頭にあるアクションに対して、actionstart/actiontickイベントを発行する)
+									自身のenterframeイベントのリスナとして登録される関数.
+1フレーム経過する際に実行する処理が書かれている.
+(キューの先頭にあるアクションに対して, actionstart/actiontickイベントを発行する)
 									
 									
 									
@@ -2104,51 +2722,10 @@ ex.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>enterFrameEvent</b>
+												<span class="light fixedFont">{<a href="../symbols/enchant.Event.html">enchant.Event</a>}</span> <b>enterFrameEvent</b>
 												
 											</dt>
-											<dd></dd>
-										
-									</dl>
-								
-								
-								
-								<div class="hr"></div>
-							</li>
-						
-							<li 
-								 class='item30'
-							>
-								<div class="fixedFont heading" id="tween">
-									<span class='lighter'>
-									
-									</span>
-									
-									
-									
-									<b>tween</b>(params)
-								</div>
-								
-								<div class="description">
-									トゥイーンを簡単に追加するためのメソッド。
-実体は add メソッドのラッパ。
-									
-									
-									
-									
-								</div>
-								
-								
-								
-								
-									<dl class="detailList params">
-										<dt class="heading">Parameters:</dt>
-										
-											<dt>
-												<b>params</b>
-												
-											</dt>
-											<dd>トゥイーンの設定オブジェクト。</dd>
+											<dd>enterframeイベント.</dd>
 										
 									</dl>
 								
@@ -2160,18 +2737,19 @@ ex.
 							<li 
 								 class='item31'
 							>
-								<div class="fixedFont heading" id="unloop">
+								<div class="fixedFont heading" id="tween">
 									<span class='lighter'>
 									
 									</span>
 									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
-									
-									<b>unloop</b>()
+									<b>tween</b>(params)
 								</div>
 								
 								<div class="description">
-									タイムラインのループを解除する。
+									トゥイーンを簡単に追加するためのメソッド.
+実体は <a href="../symbols/enchant.Timeline.html#add">enchant.Timeline#add</a> のラッパ.
 									
 									
 									
@@ -2181,7 +2759,39 @@ ex.
 								
 								
 								
+									<dl class="detailList params">
+										<dt class="heading">Parameters:</dt>
+										
+											<dt>
+												<span class="light fixedFont">{<a href="../symbols/Object.html">Object</a>}</span> <b>params</b>
+												
+											</dt>
+											<dd>トゥイーンの設定オブジェクト.</dd>
+										
+									</dl>
 								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								<div class="hr"></div>
 							</li>
@@ -2189,18 +2799,68 @@ ex.
 							<li 
 								 class='item32'
 							>
+								<div class="fixedFont heading" id="unloop">
+									<span class='lighter'>
+									
+									</span>
+									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
+									
+									<b>unloop</b>()
+								</div>
+								
+								<div class="description">
+									タイムラインのループを解除する.
+									
+									
+									
+									
+								</div>
+								
+								
+								
+								
+								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
+								
+								<div class="hr"></div>
+							</li>
+						
+							<li 
+								 class='item33'
+							>
 								<div class="fixedFont heading" id="waitUntil">
 									<span class='lighter'>
 									
 									</span>
 									
-									
+									<span class="light">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span>
 									
 									<b>waitUntil</b>(func)
 								</div>
 								
 								<div class="description">
-									true値 が返るまで、関数を毎フレーム実行するアクションを追加する。
+									trueが返るまで, 関数を毎フレーム実行するアクションを追加する.
 									
 									
 									
@@ -2209,10 +2869,10 @@ ex.
 								
 								
 									
-										<pre class="code">sprite.tl.waitUntil(function(){
-   return this.x-- < 0
+										<pre class="code">sprite.tl.waitUntil(function() {
+    return --this.x < 0;
 }).then(function(){ .. });
-// x 座標が負になるまで毎フレーム x座標を減算し続ける</pre>
+// x座標が負になるまで毎フレームx座標を減算し続ける.</pre>
 									
 								
 								
@@ -2221,14 +2881,35 @@ ex.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<b>func</b>
+												<span class="light fixedFont">{Function}</span> <b>func</b>
 												
 											</dt>
-											<dd>実行したい関数</dd>
+											<dd>条件とする関数.</dd>
 										
 									</dl>
 								
 								
+								
+									<dl class="detailList nomargin">
+									
+										
+										
+										
+										
+										
+										
+										
+											<dt class="heading">Returns:</dt>
+											
+												<dd><span class="light fixedFont">{<a href="../symbols/enchant.Timeline.html">enchant.Timeline</a>}</span> 自身.</dd>
+											
+										
+										
+										
+										
+										
+									
+									</dl>
 								
 								
 							</li>

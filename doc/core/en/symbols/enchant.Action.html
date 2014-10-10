@@ -42,11 +42,21 @@
 				
 					<li><a href="../symbols/enchant.ActionEventTarget.html">enchant<span class='break'> </span>.<span class='break'> </span>ActionEventTarget</a></li>
 				
+					<li><a href="../symbols/enchant.BinaryInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.BinaryInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
+				
+					<li><a href="../symbols/enchant.CanvasScene.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasScene</a></li>
 				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
 					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.Deferred.html">enchant<span class='break'> </span>.<span class='break'> </span>Deferred</a></li>
+				
+					<li><a href="../symbols/enchant.DOMScene.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMScene</a></li>
 				
 					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
 				
@@ -64,7 +74,17 @@
 				
 					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
 				
+					<li><a href="../symbols/enchant.InputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>InputManager</a></li>
+				
+					<li><a href="../symbols/enchant.InputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>InputSource</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.LoadingScene.html">enchant<span class='break'> </span>.<span class='break'> </span>LoadingScene</a></li>
 				
 					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
 				
@@ -73,8 +93,6 @@
 					<li><a href="../symbols/enchant.ParallelAction.html">enchant<span class='break'> </span>.<span class='break'> </span>ParallelAction</a></li>
 				
 					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
-				
-					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
 				
 					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
 				
@@ -93,7 +111,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-11-31 7:23
+		Generated on: 2014-9-10 19:10
 	</div>
 </div>
 
@@ -108,15 +126,18 @@
 		
 		<div class="intro">
 			<p class="description summary">
-				Action class.
-Actions are units that make up the time line,
+				Actions are units that make up the timeline.
 It is a unit used to specify the action you want to perform.
-Action has been added to the time line is performed in order.
 
-Actionstart, actiontick event is fired when the action is started and stopped,
-When one frame has elapsed actiontick event is also issued.
-Specify the action you want to perform as a listener for these events.
-The transition to the next action automatically the number of frames that are specified in the time has elapsed.
+Actions that have been added to the timeline are performed in sequential order.
+The transition from one action to the next occurs automatically 
+after the number of frames specified by the time parameter have elapsed.
+
+An actionstart event is fired when the action has started.
+An actionend event is fired when the action has stopped.
+For each frame that elapses, an actiontick event is fired.
+
+You can specify a listener for these events to perform specific events when they occur.
 			</p>
 				
 			
@@ -124,9 +145,11 @@ The transition to the next action automatically the number of frames that are sp
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/enchant.js.html">enchant.js</a></li>
+						<li>Defined in: <a href="../symbols/src/lang_en_enchant.js.html">enchant.js</a></li>
 					
-						
+						<li>Extends <span class="fixedFont">
+						<a href="../symbols/enchant.ActionEventTarget.html">enchant.ActionEventTarget</a></span></li>
+					
 				</ul>
 			
 		</div>
@@ -161,6 +184,20 @@ The transition to the next action automatically the number of frames that are sp
 #### METHODS SUMMARY
 -->
 		
+			
+			
+			<div class="props">
+				<h2 class="sectionTitle">Method Summary</h2>
+				
+				
+			
+				
+					<dl class="inheritsList" id="MethodsListInherited">
+					<dt>Methods borrowed from class <span class='fixedFont'><a href="../symbols/enchant.EventTarget.html">enchant.EventTarget</a></span>: </dt><dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#addEventListener">addEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#clearEventListener">clearEventListener</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#dispatchEvent">dispatchEvent</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#on">on</a></span></dd> <dd><span class='fixedFont'><a href="../symbols/enchant.EventTarget.html#removeEventListener">removeEventListener</a></span></dd>
+					</dl>
+				
+			</div>
+		
 		
 <!--
 #### EVENTS SUMMARY
@@ -192,34 +229,34 @@ The transition to the next action automatically the number of frames that are sp
 							<dt class="heading">Parameters:</dt>
 							
 								<dt>
-									 <b>param</b>
+									<span class="light fixedFont">{Object}</span>  <b>param</b>
 									
 								</dt>
 								<dd></dd>
 							
 								<dt>
-									<span class="light fixedFont">{integer}</span>  <b>param.time</b>
+									<span class="light fixedFont">{Number}</span>  <b>param.time</b>
 									<i>Optional</i>
 								</dt>
-								<dd>The number of frames that will last action. infinite length is specified null</dd>
+								<dd>The number of frames that the action will persist. For an infinite number set this to null.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{function}</span>  <b>param.onactionstart</b>
+									<span class="light fixedFont">{Function}</span>  <b>param.onactionstart</b>
 									<i>Optional</i>
 								</dt>
-								<dd>Event listener for when the action is initiated</dd>
+								<dd>Event listener for when the action is initiated.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{function}</span>  <b>param.onactiontick</b>
+									<span class="light fixedFont">{Function}</span>  <b>param.onactiontick</b>
 									<i>Optional</i>
 								</dt>
-								<dd>Event listener for when the action has passed one frame</dd>
+								<dd>Event listener for when the action has passed one frame.</dd>
 							
 								<dt>
-									<span class="light fixedFont">{function}</span>  <b>param.onactionend</b>
+									<span class="light fixedFont">{Function}</span>  <b>param.onactionend</b>
 									<i>Optional</i>
 								</dt>
-								<dd>Event listener for when the action is finished</dd>
+								<dd>Event listener for when the action is finished.</dd>
 							
 						</dl>
 					

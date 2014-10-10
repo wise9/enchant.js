@@ -50,15 +50,27 @@
 				
 					<li><a href="../symbols/enchant.AvatarBG.html">enchant<span class='break'> </span>.<span class='break'> </span>AvatarBG</a></li>
 				
+					<li><a href="../symbols/enchant.BinaryInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.BinaryInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>BinaryInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.box2d.PhysicsWorld.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhysicsWorld</a></li>
 				
 					<li><a href="../symbols/enchant.box2d.PhySprite.html">enchant<span class='break'> </span>.<span class='break'> </span>box2d<span class='break'> </span>.<span class='break'> </span>PhySprite</a></li>
 				
 					<li><a href="../symbols/enchant.CanvasLayer.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasLayer</a></li>
 				
+					<li><a href="../symbols/enchant.CanvasScene.html">enchant<span class='break'> </span>.<span class='break'> </span>CanvasScene</a></li>
+				
 					<li><a href="../symbols/enchant.Class.html">enchant<span class='break'> </span>.<span class='break'> </span>Class</a></li>
 				
+					<li><a href="../symbols/enchant.Class.MixingRecipe.html">enchant<span class='break'> </span>.<span class='break'> </span>Class<span class='break'> </span>.<span class='break'> </span>MixingRecipe</a></li>
+				
 					<li><a href="../symbols/enchant.Core.html">enchant<span class='break'> </span>.<span class='break'> </span>Core</a></li>
+				
+					<li><a href="../symbols/enchant.Deferred.html">enchant<span class='break'> </span>.<span class='break'> </span>Deferred</a></li>
+				
+					<li><a href="../symbols/enchant.DOMScene.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMScene</a></li>
 				
 					<li><a href="../symbols/enchant.DOMSound.html">enchant<span class='break'> </span>.<span class='break'> </span>DOMSound</a></li>
 				
@@ -174,7 +186,17 @@
 				
 					<li><a href="../symbols/enchant.Group.html">enchant<span class='break'> </span>.<span class='break'> </span>Group</a></li>
 				
+					<li><a href="../symbols/enchant.InputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>InputManager</a></li>
+				
+					<li><a href="../symbols/enchant.InputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>InputSource</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputManager.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputManager</a></li>
+				
+					<li><a href="../symbols/enchant.KeyboardInputSource.html">enchant<span class='break'> </span>.<span class='break'> </span>KeyboardInputSource</a></li>
+				
 					<li><a href="../symbols/enchant.Label.html">enchant<span class='break'> </span>.<span class='break'> </span>Label</a></li>
+				
+					<li><a href="../symbols/enchant.LoadingScene.html">enchant<span class='break'> </span>.<span class='break'> </span>LoadingScene</a></li>
 				
 					<li><a href="../symbols/enchant.Map.html">enchant<span class='break'> </span>.<span class='break'> </span>Map</a></li>
 				
@@ -207,8 +229,6 @@
 					<li><a href="../symbols/enchant.PhyCircleSprite.html">enchant<span class='break'> </span>.<span class='break'> </span>PhyCircleSprite</a></li>
 				
 					<li><a href="../symbols/enchant.Scene.html">enchant<span class='break'> </span>.<span class='break'> </span>Scene</a></li>
-				
-					<li><a href="../symbols/enchant.Sound.html">enchant<span class='break'> </span>.<span class='break'> </span>Sound</a></li>
 				
 					<li><a href="../symbols/enchant.Sprite.html">enchant<span class='break'> </span>.<span class='break'> </span>Sprite</a></li>
 				
@@ -286,6 +306,10 @@
 				
 					<li><a href="../symbols/enchant.widget.ScrollView.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>ScrollView</a></li>
 				
+					<li><a href="../symbols/enchant.wiiu.html">enchant<span class='break'> </span>.<span class='break'> </span>wiiu</a></li>
+				
+					<li><a href="../symbols/Object.html">Object</a></li>
+				
 			</ul>
 		</nav>
 	</div>
@@ -293,7 +317,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2012-11-31 7:25
+		Generated on: 2014-9-10 19:12
 	</div>
 </div>
 
@@ -309,11 +333,11 @@
 		<div class="intro">
 			<p class="description summary">
 				表示オブジェクトツリーのルートになるクラス.
-シーンはレイヤーを持っていて、子として追加されたオブジェクト (Entity) は描画方法に応じてレイヤーに振り分けられる。
-Scene クラスは最も汎用的なシーンの実装で、(enchant.DOMLayer と <a href="../symbols/enchant.CanvasLayer.html">enchant.CanvasLayer</a>) を持っており、
-それぞれ DOM, Canvas を用いて描画される。描画順は DOM が手前、Canvas が奥で、
-各レイヤーの間では新しく追加されたオブジェクトほど手前に表示される。
-Scene クラスを継承することで、新しい種類の Layer を持つシーンクラスを作ることができる。
+シーンはレイヤーを持っていて, 子として追加されたオブジェクト (Entity) は描画方法に応じてレイヤーに振り分けられる.
+Scene クラスは最も汎用的なシーンの実装で, (enchant.DOMLayer と <a href="../symbols/enchant.CanvasLayer.html">enchant.CanvasLayer</a>) を持っており,
+それぞれ DOM, Canvas を用いて描画される. 描画順は DOM が手前, Canvas が奥で,
+各レイヤーの間では新しく追加されたオブジェクトほど手前に表示される.
+Scene クラスを継承することで, 新しい種類の Layer を持つシーンクラスを作ることができる.
 			</p>
 				
 			
@@ -321,7 +345,7 @@ Scene クラスを継承することで、新しい種類の Layer を持つシ�
 					
 					
 					
-						<li>Defined in: <a href="../symbols/src/ja_enchant.js.html">enchant.js</a></li>
+						<li>Defined in: <a href="../symbols/src/lang_ja_enchant.js.html">enchant.js</a></li>
 					
 						<li>Extends <span class="fixedFont">
 						<a href="../symbols/enchant.Group.html">enchant.Group</a></span></li>
@@ -409,10 +433,10 @@ Scene クラスを継承することで、新しい種類の Layer を持つシ�
 					
 					
 						
-							<pre class="code">  var scene = new Scene();
-  scene.addChild(player);
-  scene.addChild(enemy);
-  core.pushScene(scene);</pre>
+							<pre class="code">var scene = new Scene();
+scene.addChild(player);
+scene.addChild(enemy);
+core.pushScene(scene);</pre>
 						
 					
 				
