@@ -449,7 +449,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     exec: function(func) {
-        this.then(func);
+        return this.then(func);
     },
     /**
      [lang:ja]
@@ -484,6 +484,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
                 ptr = frame;
             }
         }
+        return this;
     },
     /**
      [lang:ja]
