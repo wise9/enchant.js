@@ -320,35 +320,36 @@
                             }
                         }
                     }, true);
+                }else{
+                    stage.addEventListener('mousedown', function(e) {
+                        var tagName = (e.target.tagName).toLowerCase();
+                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                            e.preventDefault();
+                            core._mousedownID++;
+                            if (!core.running) {
+                                e.stopPropagation();
+                            }
+                        }
+                    }, true);
+                    stage.addEventListener('mousemove', function(e) {
+                        var tagName = (e.target.tagName).toLowerCase();
+                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                            e.preventDefault();
+                            if (!core.running) {
+                                e.stopPropagation();
+                            }
+                        }
+                    }, true);
+                    stage.addEventListener('mouseup', function(e) {
+                        var tagName = (e.target.tagName).toLowerCase();
+                        if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
+                            e.preventDefault();
+                            if (!core.running) {
+                                e.stopPropagation();
+                            }
+                        }
+                    }, true);
                 }
-                stage.addEventListener('mousedown', function(e) {
-                    var tagName = (e.target.tagName).toLowerCase();
-                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        e.preventDefault();
-                        core._mousedownID++;
-                        if (!core.running) {
-                            e.stopPropagation();
-                        }
-                    }
-                }, true);
-                stage.addEventListener('mousemove', function(e) {
-                    var tagName = (e.target.tagName).toLowerCase();
-                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        e.preventDefault();
-                        if (!core.running) {
-                            e.stopPropagation();
-                        }
-                    }
-                }, true);
-                stage.addEventListener('mouseup', function(e) {
-                    var tagName = (e.target.tagName).toLowerCase();
-                    if (enchant.ENV.USE_DEFAULT_EVENT_TAGS.indexOf(tagName) === -1) {
-                        e.preventDefault();
-                        if (!core.running) {
-                            e.stopPropagation();
-                        }
-                    }
-                }, true);
                 core._touchEventTarget = {};
                 if (enchant.ENV.TOUCH_ENABLED) {
                     stage.addEventListener('touchstart', function(e) {
@@ -393,34 +394,35 @@
                             }
                         }
                     }, false);
+                }else{
+                    stage.addEventListener('mousedown', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_START);
+                        evt._initPosition(e.pageX, e.pageY);
+                        var target = core.currentScene._determineEventTarget(evt);
+                        core._touchEventTarget[core._mousedownID] = target;
+                        target.dispatchEvent(evt);
+                    }, false);
+                    stage.addEventListener('mousemove', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
+                        evt._initPosition(e.pageX, e.pageY);
+                        var target = core._touchEventTarget[core._mousedownID];
+                        if (target) {
+                            target.dispatchEvent(evt);
+                        }
+                    }, false);
+                    stage.addEventListener('mouseup', function(e) {
+                        var core = enchant.Core.instance;
+                        var evt = new enchant.Event(enchant.Event.TOUCH_END);
+                        evt._initPosition(e.pageX, e.pageY);
+                        var target = core._touchEventTarget[core._mousedownID];
+                        if (target) {
+                            target.dispatchEvent(evt);
+                        }
+                        delete core._touchEventTarget[core._mousedownID];
+                    }, false);
                 }
-                stage.addEventListener('mousedown', function(e) {
-                    var core = enchant.Core.instance;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_START);
-                    evt._initPosition(e.pageX, e.pageY);
-                    var target = core.currentScene._determineEventTarget(evt);
-                    core._touchEventTarget[core._mousedownID] = target;
-                    target.dispatchEvent(evt);
-                }, false);
-                stage.addEventListener('mousemove', function(e) {
-                    var core = enchant.Core.instance;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_MOVE);
-                    evt._initPosition(e.pageX, e.pageY);
-                    var target = core._touchEventTarget[core._mousedownID];
-                    if (target) {
-                        target.dispatchEvent(evt);
-                    }
-                }, false);
-                stage.addEventListener('mouseup', function(e) {
-                    var core = enchant.Core.instance;
-                    var evt = new enchant.Event(enchant.Event.TOUCH_END);
-                    evt._initPosition(e.pageX, e.pageY);
-                    var target = core._touchEventTarget[core._mousedownID];
-                    if (target) {
-                        target.dispatchEvent(evt);
-                    }
-                    delete core._touchEventTarget[core._mousedownID];
-                }, false);
             }
         },
         /**
