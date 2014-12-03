@@ -183,4 +183,108 @@ describe("Sprite", function(){
             core.start();
         });
     });
+    
+    describe("#sprite frame issue 298 - https://github.com/wise9/enchant.js/issues/298", function(){
+        
+        it("frameArray -> frame (number)", function(){
+            var sprite = new enchant.Sprite(32, 32);
+            var enterframe = new enchant.Event(enchant.Event.ENTER_FRAME);
+            var frameArray = [1,2,3,4,5,6,7,8,9];
+            var frameArrayLength = frameArray.length;
+            var iterations = 17;
+            
+            sprite.frame = 0;
+            expect(sprite.frame).to.equal(0);
+            
+            for (var i = 0; i < 13; i++) {
+                sprite.dispatchEvent(enterframe);
+                expect(sprite.frame).to.equal(0);
+            }
+            
+            sprite.frame = frameArray;
+            for (var i = 0; i < iterations; i++) {
+                expect(sprite.frame).to.equal(i%frameArrayLength+1);
+                sprite.dispatchEvent(enterframe);
+            }
+            var expected = iterations%frameArrayLength+1;
+            expect(sprite.frame).to.equal(expected);
+            
+            sprite.frame = expected;
+            for (var i = 0; i < 7; i++) {
+                sprite.dispatchEvent(enterframe);
+                expect(sprite.frame).to.equal(expected);
+            }
+        });
+        
+        it("frameArray <- frame (number)", function(){
+            var sprite = new enchant.Sprite(32, 32);
+            var enterframe = new enchant.Event(enchant.Event.ENTER_FRAME);
+            var frameArray = [6,6,7,7];
+            var frameArrayLength = frameArray.length;
+            var iterations = 17;
+            
+            sprite.frame = frameArray; // frame 6
+            expect(sprite.frame).to.equal(6);
+            sprite.dispatchEvent(enterframe); // frame 6
+            expect(sprite.frame).to.equal(6);
+            sprite.dispatchEvent(enterframe); // frame 7
+            expect(sprite.frame).to.equal(7);
+            sprite.frame = 6;
+            expect(sprite.frame).to.equal(6);
+            
+            for (var i = 0; i < 13; i++) {
+                sprite.dispatchEvent(enterframe);
+                expect(sprite.frame).to.equal(6);
+            }
+            
+            sprite.frame = frameArray;
+            for (var i = 0; i < iterations; i++) {
+                expect(sprite.frame).to.equal(frameArray[i%frameArrayLength]);
+                sprite.dispatchEvent(enterframe);
+            }
+            
+            var expected = frameArray[iterations%frameArrayLength];
+            expect(sprite.frame).to.equal(expected);
+        });
+        
+        it("frameArray <-> frame (number)", function(){
+            var sprite = new enchant.Sprite(32, 32);
+            var enterframe = new enchant.Event(enchant.Event.ENTER_FRAME);
+            var frameArray = [6,6,7,7];
+            var frameArrayLength = frameArray.length;
+            var iterations = 17;
+            
+            sprite.frame = 0;
+            expect(sprite.frame).to.equal(0);
+            
+            for (var i = 0; i < 13; i++) {
+                sprite.dispatchEvent(enterframe);
+                expect(sprite.frame).to.equal(0);
+            }
+            
+            sprite.frame = frameArray;
+            expect(sprite.frame).to.equal(6);
+            sprite.dispatchEvent(enterframe);
+            expect(sprite.frame).to.equal(6);
+            sprite.dispatchEvent(enterframe);
+            expect(sprite.frame).to.equal(7);
+            sprite.frame = [6];
+            expect(sprite.frame).to.equal(6);
+            
+            for (var i = 0; i < 13; i++) {
+                sprite.dispatchEvent(enterframe);
+                expect(sprite.frame).to.equal(6);
+            }
+            
+            sprite.frame = frameArray;
+            for (var i = 0; i < iterations; i++) {
+                expect(sprite.frame).to.equal(frameArray[i%frameArrayLength]);
+                sprite.dispatchEvent(enterframe);
+            }
+            
+            var expected = frameArray[iterations%frameArrayLength];
+            expect(sprite.frame).to.equal(expected);
+        });
+    });
+    
 });
