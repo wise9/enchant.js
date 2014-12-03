@@ -198,7 +198,7 @@ enchant.ENV = {
      [/lang]
      * @type Number[]
      */
-    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40, 32],
+    PREVENT_DEFAULT_KEY_CODES: [37, 38, 39, 40],
     /**
      [lang:ja]
      * Mobile Safariでサウンドの再生を有効にするかどうか.
