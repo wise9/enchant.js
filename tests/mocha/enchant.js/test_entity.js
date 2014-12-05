@@ -149,4 +149,81 @@ describe("Entity", function(){
             expect(error).to.be.below(errorCapacity, result);
         });
     });
+    
+    describe("#collection behavior", function(){
+        it("Node.remove", function(){
+            var initialCollectionLength = enchant.Sprite.collection.length;
+            var a = new enchant.Sprite(32, 32),
+                b = new enchant.Sprite(32, 32),
+                scene = new enchant.Scene(),
+                ga = new enchant.Group();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            scene.addChild(ga);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            scene.addChild(b);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+1);
+            ga.addChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+2);
+            b.remove();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+1);
+            a.remove();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            a = new enchant.Sprite(32, 32)
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            ga.addChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+1);
+            ga.remove();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            a.remove();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            
+            a = new enchant.Sprite(32, 32)
+            ga = new enchant.Group();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            ga.addChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            a.remove();
+            ga.remove();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            
+            // listener check as remove has been used
+            expect(a._listeners).to.be.empty;
+            expect(b._listeners).to.be.empty;
+            expect(ga._listeners).to.be.empty;
+        });
+        
+        it("parentNode.removeChild", function(){
+            var initialCollectionLength = enchant.Sprite.collection.length;
+            var a = new enchant.Sprite(32, 32),
+                b = new enchant.Sprite(32, 32),
+                scene = new enchant.Scene(),
+                ga = new enchant.Group();
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            scene.addChild(ga);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            scene.addChild(b);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+1);
+            ga.addChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+2);
+            b.parentNode.removeChild(b);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+1);
+            a.parentNode.removeChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            ga.addChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength+1);
+            ga.parentNode.removeChild(ga);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            a.parentNode.removeChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            
+            ga.addChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            a.parentNode.removeChild(a);
+            expect(enchant.Sprite.collection.length).to.be.equal(initialCollectionLength);
+            
+            expect(a._listeners).to.not.be.empty;
+            expect(b._listeners).to.not.be.empty;
+            expect(ga._listeners).to.not.be.empty;
+        });
+    });
 });
