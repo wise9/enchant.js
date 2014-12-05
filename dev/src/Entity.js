@@ -70,6 +70,8 @@ var _staticIntersectStrict = function(other) {
     return false;
 };
 
+var _nodePrototypeClearEventListener = enchant.Node.prototype.clearEventListener;
+
 /**
  * @scope enchant.Entity.prototype
  */
@@ -675,6 +677,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._removeSelfFromCollection();
         }
     },
+    /**#nocode+*/
+    clearEventListener: function() {
+        _nodePrototypeClearEventListener.apply(this,arguments);
+        if (this.scene) {
+            this._removeSelfFromCollection();
+        }
+    },
+    /**#nocode-*/
     _addSelfToCollection: function() {
         if (this._isContainedInCollection) {
             return;
