@@ -331,8 +331,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._tileWidth;
         },
         set: function(tileWidth) {
-            this._tileWidth = tileWidth;
-            this._dirty = true;
+            if(this._tileWidth !== tileWidth) {
+                this._tileWidth = tileWidth;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -352,8 +354,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._tileHeight;
         },
         set: function(tileHeight) {
-            this._tileHeight = tileHeight;
-            this._dirty = true;
+            if(this._tileHeight !== tileHeight) {
+                this._tileHeight = tileHeight;
+                this._dirty = true;
+            }
         }
     },
     /**
