@@ -175,7 +175,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      */
     _startRendering: function() {
         this.addEventListener('exitframe', this._onexitframe);
-        this._onexitframe(new enchant.Event(enchant.Event.RENDER));
+        this._onexitframe();
     },
     /**
      [lang:ja]
@@ -189,7 +189,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      */
     _stopRendering: function() {
         this.removeEventListener('exitframe', this._onexitframe);
-        this._onexitframe(new enchant.Event(enchant.Event.RENDER));
+        this._onexitframe();
     },
     _onexitframe: function() {
         var core = enchant.Core.instance;
