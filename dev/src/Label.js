@@ -74,7 +74,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 this._splitText[i] = {};
                 this._splitText[i].text = text;
                 this._splitText[i].height = metrics.height;
-		this._splitText[i].width = metrics.width;
+                this._splitText[i].width = metrics.width;
             }
         }
     },
