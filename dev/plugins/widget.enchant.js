@@ -3448,6 +3448,58 @@
             this._content.insertBefore(child, reference);
         }
     });
+    
+    
+    var _emptyFunction = function(){};
+
+    enchant.widget.LazyListItem = enchant.Class.create(enchant.widget.ListItem, {
+        initialize: function() {
+            enchant.widget.ListItem.apply(this, arguments);
+        },
+        _loadResources: function() {
+            if(this.loadResources) {
+                this.loadResources();
+                this._loadResources = _emptyFunction;
+            }
+        }
+    });
+    
+    var _enchantWidgetListViewPrototypeScroll = enchant.widget.ListView.prototype.scroll;
+    var _enchantWidgetListViewPrototypeAddChild = enchant.widget.ListView.prototype.addChild;
+    var _enchantWidgetListViewPrototypeRemoveChild = enchant.widget.ListView.prototype.removeChild;
+    var _enchantWidgetListViewPrototypeInsertBefore = enchant.widget.ListView.prototype.insertBefore;
+    
+    enchant.widget.LazyListView = enchant.Class.create(enchant.widget.ListView, {
+        initialize: function() {
+            enchant.widget.ListView.apply(this, arguments);
+        },
+        _updateContent: function() {
+            var visibleHeight = this.height - this._content.y + 100;
+            var content = this.content;
+            var contentLength = content.length;
+            for(var i = 0; i < contentLength; i++) {
+                if(content[i].y <= visibleHeight && content[i]._loadResources) {
+                    content[i]._loadResources.call(content[i]);
+                }
+            }
+        },
+        scroll: function() {
+            _enchantWidgetListViewPrototypeScroll.apply(this, arguments);
+            this._updateContent();
+        },
+        addChild: function(child) {
+            _enchantWidgetListViewPrototypeAddChild.apply(this, arguments);
+            this._updateContent();
+        },
+        removeChild: function(child) {
+            _enchantWidgetListViewPrototypeRemoveChild.apply(this, arguments);
+            this._updateContent();
+        },
+        insertBefore: function(child, reference) {
+            _enchantWidgetListViewPrototypeInsertBefore.apply(this, arguments);
+            this._updateContent();
+        }
+    });
 
     var List = enchant.Class.create(enchant.widget.EntityGroup, {
         initialize: function(array) {
