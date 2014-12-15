@@ -65,7 +65,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 return;
             }
             this._text = text;
-            text = text.replace(/<(br|BR) ?\/?>/g, '<br/>');
+            text = text.replace(/<br ?\/?>/gi, '<br/>');
             this._splitText = text.split('<br/>');
             this.updateBoundArea();
             for (var i = 0, l = this._splitText.length; i < l; i++) {
@@ -74,6 +74,7 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
                 this._splitText[i] = {};
                 this._splitText[i].text = text;
                 this._splitText[i].height = metrics.height;
+                this._splitText[i].width = metrics.width;
             }
         }
     },
@@ -229,9 +230,10 @@ enchant.Label = enchant.Class.create(enchant.Entity, {
             div.style.whiteSpace = 'noWrap';
             div.style.lineHeight = 1;
             document.body.appendChild(div);
-            ret.height = parseInt(getComputedStyle(div).height, 10) + 1;
+            var computedStyle = getComputedStyle(div);
+            ret.height = parseInt(computedStyle.height, 10) + 1;
             div.style.position = 'absolute';
-            ret.width = parseInt(getComputedStyle(div).width, 10) + 1;
+            ret.width = parseInt(computedStyle.width, 10) + 1;
             document.body.removeChild(div);
         } else {
             ret.width = this.width;
