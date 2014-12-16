@@ -40,7 +40,6 @@ var ImageListItem = enchant.Class.create(enchant.widget.LazyListItem, {
     }
 });
 
-
 window.addEventListener("load", function() {
     var core = new enchant.Core(320, 320);
     core.preload({
@@ -63,6 +62,41 @@ window.addEventListener("load", function() {
             lazyListView.addChild(item);
         }
         core.rootScene.addChild(lazyListView);
+        
+        
+        /**
+         * The above code showed how to initialze a LazyListView with many elements which will be initialized dynamically upon scrolling.
+         * The following code demonstrates how to dynamically add new content to the LazyListView.
+         * (The code contains redundant parts however, to make the example simple this is intended.) 
+         */
+        
+        var itemFactory = function() {
+            console.log("The LazyListView ran out of items to display. The enchant.Event.CONTENT_REQUESTED event has been dispatched to trigger the creation of new items");
+            lazyListView.removeEventListener(enchant.Event.CONTENT_REQUESTED, itemFactory); // avoid double updates
+            if(!this._pageIndex) {
+                this._pageIndex = 0;
+            }
+            var newRequestUrl =  "http://ajax.googleapis.com/ajax/services/search/images?v=1.0&imgsz=large&rsz=8&start=" + this._pageIndex*8 + "&q=enchant.js+OR+Ubiquitous+Entertainment+Inc.+OR+enchant.js+Inc.+OR+enchantMOON";
+            console.log("\t* Searching for Images (page:", this._pageIndex, ")");
+            core.load(newRequestUrl, function() {
+                console.log("\t* Search Completed -> Adding new Items");
+                lazyListView.addEventListener(enchant.Event.CONTENT_REQUESTED, itemFactory);
+                var newResults = JSON.parse(core.assets[newRequestUrl]).responseData.results;
+                for(var i = 0, j = newResults.length; i < j; i++) {
+                    var item = new ImageListItem(lazyListView.width, lazyListView.height/2, newResults[i].url);
+                    lazyListView.addChild(item);
+                }
+                // update complete, enable update again
+                lazyListView.addEventListener(enchant.Event.CONTENT_REQUESTED, itemFactory);
+            }, function() {
+                console.log("\t* Search Produced Error");
+                // error enable update again
+                lazyListView.addEventListener(enchant.Event.CONTENT_REQUESTED, itemFactory);
+            });
+            this._pageIndex++;
+        }
+        
+        lazyListView.addEventListener(enchant.Event.CONTENT_REQUESTED, itemFactory);
     });
     core.start();
 });

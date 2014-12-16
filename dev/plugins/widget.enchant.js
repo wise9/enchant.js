@@ -245,6 +245,12 @@
      * @type {String}
      */
     enchant.Event.FLING = 'fling';
+    
+    
+    /**
+     * Event which will be dispatched when additional content should be loaded for a view.
+     */
+    enchant.Event.CONTENT_REQUESTED = 'contentRequested';
 
     var NOTOUCH = 0;
     var WAITDBL = 1;
@@ -3452,7 +3458,23 @@
     
     var _emptyFunction = function(){};
 
+    /**
+     * @scope enchant.widget.LazyListItem
+     */
     enchant.widget.LazyListItem = enchant.Class.create(enchant.widget.ListItem, {
+        /**
+         * LazyListItem is a class which can be used in an enchant.widget.LazyListView instance
+         * to enable the lazy loading of the content of a list item.
+         * The LazyListView instance will call the loadResources function of the LazyListItem instance
+         * when it feels like the content will be required soon.
+         * Implementors must implement the loadResources function.
+         * See the LazyListView example of enchant.js (examples/plugins/widget/LazyListView/).
+         * 
+         * @see enchant.widget.LazyListView 
+         * @see enchant.widget.ListItem
+         * @constructs
+         * @extends enchant.widget.ListItem
+         */
         initialize: function() {
             enchant.widget.ListItem.apply(this, arguments);
         },
@@ -3469,7 +3491,25 @@
     var _enchantWidgetListViewPrototypeRemoveChild = enchant.widget.ListView.prototype.removeChild;
     var _enchantWidgetListViewPrototypeInsertBefore = enchant.widget.ListView.prototype.insertBefore;
     
+    /**
+     * @scope enchant.widget.LazyListView
+     */
     enchant.widget.LazyListView = enchant.Class.create(enchant.widget.ListView, {
+        /**
+         * LazyListView is a class which enables a ListView to load the content of it's
+         * child ListItems lazily by using enchant.widget.LazyListItem (s).
+         * It is also possible to use regular ListItems which will behave
+         * like if they where added to a ListView (therefore, no lazy initialization).
+         * Furthermore, this LazyListView will dispatch an enchant.Event.CONTENT_REQUESTED event
+         * when the ListView feels like the available content is not sufficient. 
+         * The enchant.Event.CONTENT_REQUESTED can be used to add new items to the LazyListView.
+         * See the LazyListView example of enchant.js (examples/plugins/widget/LazyListView/).
+         * 
+         * @see enchant.widget.ListView 
+         * @see enchant.widget.LazyListItem
+         * @constructs
+         * @extends enchant.widget.ListView
+         */
         initialize: function() {
             enchant.widget.ListView.apply(this, arguments);
         },
@@ -3480,8 +3520,13 @@
             for(var i = 0; i < contentLength; i++) {
                 if(content[i].y <= visibleHeight && content[i]._loadResources) {
                     content[i]._loadResources.call(content[i]);
+                } else if(content[i].y > visibleHeight) {
+                    return;
                 }
             }
+            
+            var event = new enchant.Event(enchant.Event.CONTENT_REQUESTED);
+            this.dispatchEvent(event); // as we did not return in the loop there are not enough list items available, request new content
         },
         scroll: function() {
             _enchantWidgetListViewPrototypeScroll.apply(this, arguments);
