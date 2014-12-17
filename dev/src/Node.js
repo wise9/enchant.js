@@ -221,6 +221,12 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         if (this.parentNode) {
             this.parentNode.removeChild(this);
         }
+        if (this.childNodes) {
+            var childNodes = this.childNodes.slice();
+            for(var i = childNodes.length-1; i >= 0; i--) {
+                childNodes[i].remove();
+            }
+        }
         
         this.clearEventListener();
     }
