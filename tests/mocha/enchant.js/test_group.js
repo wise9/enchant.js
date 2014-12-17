@@ -45,6 +45,40 @@ describe("Group",function(){
             expect(group.childNodes[0]).to.equal(child_group);
         });
     });
+    
+    describe("#remove", function(){
+        it("should remove all childNodes", function() {
+            var initialGroupCollectionLength = enchant.Entity.collection.length;
+            var parentGroup = new enchant.Group();
+            var group = new enchant.Group();
+            var childAmount = 10;
+            var children = [];
+            for(var i = 0; i < childAmount; i++) {
+                var entity = new enchant.Entity();
+                group.addChild(entity);
+                children.push(entity);
+            }
+            parentGroup.addChild(group);
+            game.rootScene.addChild(parentGroup);
+            
+            expect(group.childNodes.length).to.equal(childAmount);
+            expect(parentGroup.childNodes.length).to.equal(1);
+            
+            parentGroup.remove();
+            expect(group.childNodes.length).to.be.empty;
+            expect(group.parentNode).to.not.exist;
+            expect(group._listeners).to.be.empty;
+            expect(parentGroup.childNodes.length).to.be.empty;
+            expect(parentGroup.parentNode).to.not.exist;
+            expect(parentGroup._listeners).to.be.empty;
+            for(var i = 0; i < childAmount; i++) {
+                var entity = children[i];
+                expect(entity.parentNode).to.not.exist;
+                expect(entity._listeners).to.be.empty;
+            }
+            expect(enchant.Entity.collection.length).to.equal(initialGroupCollectionLength);
+        });
+    });
 
     describe("#removeChild", function(){
         it("should remove children", function(){
