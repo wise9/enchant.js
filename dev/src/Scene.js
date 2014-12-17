@@ -7,14 +7,17 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
      * @class
      [lang:ja]
      * 表示オブジェクトツリーのルートになるクラス.
-     * シーンはレイヤーを持っていて, 子として追加されたオブジェクト (Entity) は描画方法に応じてレイヤーに振り分けられる.
+     * シーンはレイヤーを持っていて, 子として追加されたオブジェクト ({@link Entity}) は描画方法に応じてレイヤーに振り分けられる.
      * Scene クラスは最も汎用的なシーンの実装で, ({@link enchant.DOMLayer} と {@link enchant.CanvasLayer}) を持っており,
      * それぞれ DOM, Canvas を用いて描画される. 描画順は DOM が手前, Canvas が奥で,
      * 各レイヤーの間では新しく追加されたオブジェクトほど手前に表示される.
      * Scene クラスを継承することで, 新しい種類の Layer を持つシーンクラスを作ることができる.
      [/lang]
      [lang:en]
-     * A Class that becomes the root of the display object tree.
+     * Class that becomes the root of the display object tree.
+     * Child {@link Entity} objects are distributed to the Scene layer according to the drawing method.
+     * The DOM of each Scene layer has a ({@link enchant.DOMLayer} and  {@link enchant.CanvasLayer}) and is drawn using the Canvas.
+     * Scenes are drawn in the order that they are added.
      [/lang]
      [lang:de]
      * Eine Klasse die zur Wurzel im Darstellungsobjektbaum wird.

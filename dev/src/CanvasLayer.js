@@ -10,7 +10,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * 子を Canvas を用いた描画に切り替えるクラス.
      [/lang]
      [lang:en]
-     * A class which is using HTML Canvas for the rendering.
+     * Class that uses the HTML Canvas for rendering.
      * The rendering of children will be replaced by the Canvas rendering.
      [/lang]
      [lang:de]

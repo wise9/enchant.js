@@ -50,22 +50,40 @@ enchant.Class = function(superclass, definition) {
  * @param {*} [definition] クラス定義.
  [/lang]
  [lang:en]
- * Create a class.
+ * Creates a class.
  *
- * When defining classes that inherit from other classes, the previous class is used as a base with
- * the superclass's constructor as default. When overriding the default constructor, it is necessary
- * to explicitly call the previous constructor to ensure a correct class initialization.
+ * When defining a class that extends from another class, 
+ * the constructor of the other class will be used by default.
+ * Even if you override this constructor, you must still call it
+ * to ensure that the class is initialized correctly.
  *
  * @example
- * var Ball = Class.create({ // Creates independent class.
- *     initialize: function(radius) { ... }, // Method definition.
- *     fall: function() { ... }
+ * // Creates a Ball class.
+ * var Ball = Class.create({ 
+ *
+ *     // Ball's constructor
+ *     initialize: function(radius) {
+ *       // ... code ...
+ *     }, 
+ *
+ *     // Defines a fall method that doesn't take any arguments.
+ *     fall: function() { 
+ *       // ... code ...
+ *     }
  * });
  *
- * var Ball = Class.create(Sprite);  // Creates a class inheriting from "Sprite"
- * var Ball = Class.create(Sprite, { // Creates a class inheriting "Sprite"
- *     initialize: function(radius) { // Overwrites constructor
- *         Sprite.call(this, radius * 2, radius * 2); // Applies previous constructor.
+ * // Creates a Ball class that extends from "Sprite"
+ * var Ball = Class.create(Sprite);  
+ *
+ * // Creates a Ball class that extends from "Sprite"
+ * var Ball = Class.create(Sprite, { 
+ *
+ *     // Overwrite Sprite's constructor
+ *     initialize: function(radius) { 
+ *
+ *         // Call Sprite's constructor.
+ *         Sprite.call(this, radius * 2, radius * 2);
+ *
  *         this.image = core.assets['ball.gif'];
  *     }
  * });
@@ -160,8 +178,8 @@ enchant.Class.create = function(superclass, definition) {
  [/lang]
  [lang:en]
  * Get the inheritance tree of this class.
- * @param {Function}
- * @return {Function[]}
+ * @param {Function} Constructor
+ * @return {Function[]} Parent's constructor
  [/lang]
  [lang:de]
  * @param {Function}
