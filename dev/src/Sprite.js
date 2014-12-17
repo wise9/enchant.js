@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @scope enchant.Sprite.prototype
  */
 enchant.Sprite = enchant.Class.create(enchant.Entity, {

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @scope enchant.ParallelAction.prototype
  */
 enchant.ParallelAction = enchant.Class.create(enchant.Action, {

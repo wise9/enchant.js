@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @scope enchant.Action.prototype
  */
 enchant.Action = enchant.Class.create(enchant.ActionEventTarget, {

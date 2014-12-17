@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @name enchant.Class
  * @class
  [lang:ja]

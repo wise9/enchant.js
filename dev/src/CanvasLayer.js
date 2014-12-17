@@ -1,4 +1,4 @@
-﻿/**
+/**
  * @scope enchant.CanvasLayer.prototype
  */
 enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
