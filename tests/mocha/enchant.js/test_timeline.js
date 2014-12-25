@@ -866,7 +866,7 @@ describe("Timeline", function() {
             tl.waitUntil(function() {});
             expect(tl.queue).to.have.length(1);
             expect(constcurtorSpy.calledWithNew()).to.be.true;
-            expect(constcurtorSpy.calledWith({ onactionstart: sinon.match.func, onactiontick: sinon.match.func })).to.be.true;
+            expect(constcurtorSpy.calledWith({ onactiontick: sinon.match.func })).to.be.true;
         });
 
         it("return itself", function() {
@@ -885,12 +885,12 @@ describe("Timeline", function() {
 
             tl.waitUntil(waitUntilSpy);
             tl.tick(event);
-            expect(waitUntilSpy.calledTwice).to.be.true;
+            expect(waitUntilSpy.calledOnce).to.be.true;
             result = true;
             tl.tick(event);
-            expect(waitUntilSpy.calledThrice).to.be.true;
+            expect(waitUntilSpy.calledTwice).to.be.true;
             tl.tick(event);
-            expect(waitUntilSpy.calledThrice).to.be.true;
+            expect(waitUntilSpy.calledTwice).to.be.true;
         });
 
         it("execute passed function on each frames until getting truthy result (time based)", function() {
@@ -903,12 +903,12 @@ describe("Timeline", function() {
             tl.setTimeBased();
             tl.waitUntil(waitUntilSpy);
             tl.tick(event);
-            expect(waitUntilSpy.calledTwice).to.be.true;
+            expect(waitUntilSpy.calledOnce).to.be.true;
             result = true;
             tl.tick(event);
-            expect(waitUntilSpy.calledThrice).to.be.true;
+            expect(waitUntilSpy.calledTwice).to.be.true;
             tl.tick(event);
-            expect(waitUntilSpy.calledThrice).to.be.true;
+            expect(waitUntilSpy.calledTwice).to.be.true;
         });
     });
 

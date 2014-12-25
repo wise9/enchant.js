@@ -577,12 +577,10 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     waitUntil: function(func) {
-        var timeline = this;
         this.add(new enchant.Action({
-            onactionstart: func,
             onactiontick: function(evt) {
                 if (func.call(this)) {
-                    timeline.next();
+                    evt.timeline.next();
                 }
             }
         }));
