@@ -39,7 +39,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.isFrameBased = true;
         this._parallel = null;
         this._activated = false;
-        this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
+        this.addEventListener(enchant.Event.ENTER_FRAME, this._onenterframe);
 
         var tl = this;
         this._nodeEventListener = function(e) {
@@ -63,6 +63,16 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.node.addEventListener("enterframe", this._nodeEventListener);
             this._activated = true;
         }
+    },
+    /**
+     * @private
+     */
+    _onenterframe: function(evt) {
+        if (this.paused) {
+            return;
+        }
+
+        this.tick(this.isFrameBased ? 1 : evt.elapsed);
     },
     /**
      [lang:ja]
@@ -136,22 +146,18 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      [lang:ja]
-     * 自身のenterframeイベントのリスナとして登録される関数.
-     * 1フレーム経過する際に実行する処理が書かれている.
+     * Timelineの時間を進める.
      * (キューの先頭にあるアクションに対して, actionstart/actiontickイベントを発行する)
-     * @param {enchant.Event} enterFrameEvent enterframeイベント.
+     * @param {Number} elapsed 経過させる時間.
      [/lang]
      [lang:en]
-     * @param {enchant.Event} enterFrameEvent
+     * @param {Number} elapsed
      [/lang]
      [lang:de]
-     * @param {enchant.Event} enterFrameEvent
+     * @param {Number} elapsed
      [/lang]
      */
-    tick: function(enterFrameEvent) {
-        if (this.paused) {
-            return;
-        }
+    tick: function(elapsed) {
         if (this.queue.length > 0) {
             var action = this.queue[0];
             if (action.frame === 0) {
@@ -163,11 +169,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 
             var e = new enchant.Event("actiontick");
             e.timeline = this;
-            if (this.isFrameBased) {
-                e.elapsed = 1;
-            } else {
-                e.elapsed = enterFrameEvent.elapsed;
-            }
+            e.elapsed = elapsed;
             action.dispatchEvent(e);
         }
     },

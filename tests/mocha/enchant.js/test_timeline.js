@@ -413,77 +413,38 @@ describe("Timeline", function() {
     });
 
     describe("#tick", function() {
-        it("is called on ENTER_FRAME event", function() {
-            var tickSpy = sinon.spy(Timeline.prototype, 'tick');
-            var sp = new Sprite(32, 32),
-                tl = new Timeline(sp),
-                event = createEnterFrameEvent();
-
-            tl.dispatchEvent(event);
-            expect(tickSpy.calledOnce).to.be.true;
-            tickSpy.restore();
-        });
-
         it("dispatch events to current action", function() {
             var sp = new Sprite(32, 32),
                 tl = new Timeline(sp),
                 action = new Action(),
-                event = createEnterFrameEvent(),
                 onActionStartSpy = sinon.spy(),
-                onActionTickSpy = sinon.spy();
+                onActionTickSpy = sinon.spy(),
+                time1 = 1,
+                time2 = 2;
 
             action.addEventListener(Event.ACTION_START, onActionStartSpy);
             action.addEventListener(Event.ACTION_TICK, onActionTickSpy);
 
             tl.add(action);
-            tl.tick(event);
+            tl.tick(time1);
             expect(onActionStartSpy.calledOnce).to.be.true;
             expect(onActionTickSpy.calledOnce).to.be.true;
-            tl.tick(event);
+            expect(onActionTickSpy.args[0][0].elapsed).to.equal(time1);
+            tl.tick(time2);
             expect(onActionStartSpy.calledOnce).to.be.true;
             expect(onActionTickSpy.calledTwice).to.be.true;
+            expect(onActionTickSpy.args[1][0].elapsed).to.equal(time2);
         });
 
-        it("do nothing if timeline is pausing", function() {
+        it("do nothing if queue is empty", function() {
             var sp = new Sprite(32, 32),
-                tl = new Timeline(sp),
-                action = new Action(),
-                event = createEnterFrameEvent(),
-                onActionTickSpy = sinon.spy();
+                tl = new Timeline(sp);
 
-            action.addEventListener(Event.ACTION_TICK, onActionTickSpy);
-            tl.paused = true;
-            tl.add(action);
-            tl.tick(event);
-            expect(onActionTickSpy.notCalled).to.be.true;
+            expect(function() {
+                tl.tick(1);
+            }).to.not.throws();
         });
 
-        it("use 1 as elapsed time (frame based)", function() {
-            var sp = new Sprite(32, 32),
-                tl = new Timeline(sp),
-                action = new Action(),
-                event = createEnterFrameEvent(),
-                onActionTickSpy = sinon.spy();
-
-            action.addEventListener(Event.ACTION_TICK, onActionTickSpy);
-            tl.add(action);
-            tl.tick(event);
-            expect(onActionTickSpy.args[0][0].elapsed).to.equal(1);
-        });
-
-        it("use events' value as elapsed time (time based)", function() {
-            var sp = new Sprite(32, 32),
-                tl = new Timeline(sp),
-                action = new Action(),
-                event = createEnterFrameEvent(),
-                onActionTickSpy = sinon.spy();
-
-            action.addEventListener(Event.ACTION_TICK, onActionTickSpy);
-            tl.setTimeBased();
-            tl.add(action);
-            tl.tick(event);
-            expect(onActionTickSpy.args[0][0].elapsed).to.equal(event.elapsed);
-        });
     });
 
     describe("#next", function() {
@@ -636,7 +597,7 @@ describe("Timeline", function() {
                 callbackSpy = sinon.spy();
 
             tl.then(callbackSpy);
-            tl.tick(event);
+            tl.dispatchEvent(event);
 
             expect(callbackSpy.calledOnce).to.be.true;
             expect(callbackSpy.calledOn(sp)).to.be.true;
@@ -650,7 +611,7 @@ describe("Timeline", function() {
 
             tl.setTimeBased();
             tl.then(callbackSpy);
-            tl.tick(event);
+            tl.dispatchEvent(event);
 
             expect(callbackSpy.calledOnce).to.be.true;
             expect(callbackSpy.calledOn(sp)).to.be.true;
@@ -665,7 +626,7 @@ describe("Timeline", function() {
 
             tl.then(callbackSpy1);
             tl.then(callbackSpy2);
-            tl.tick(event);
+            tl.dispatchEvent(event);
 
             expect(callbackSpy1.calledOnce).to.be.true;
             expect(callbackSpy2.calledOnce).to.be.true;
@@ -699,9 +660,9 @@ describe("Timeline", function() {
                 event = createEnterFrameEvent();
 
             tl.delay(2);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(tl.queue).to.have.length(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(tl.queue).to.have.length(0);
         });
 
@@ -712,9 +673,9 @@ describe("Timeline", function() {
 
             tl.setTimeBased();
             tl.delay(1000 / 30 * 2);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(tl.queue).to.have.length(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(tl.queue).to.have.length(0);
 
         });
@@ -741,18 +702,18 @@ describe("Timeline", function() {
                 4: cueSpy2,
                 6: cueSpy3
             });
-            tl.tick(event);
-            tl.tick(event);
+            tl.dispatchEvent(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.notCalled).to.be.true;
             expect(cueSpy3.notCalled).to.be.true;
-            tl.tick(event);
-            tl.tick(event);
+            tl.dispatchEvent(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.calledOnce).to.be.true;
             expect(cueSpy3.notCalled).to.be.true;
-            tl.tick(event);
-            tl.tick(event);
+            tl.dispatchEvent(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.calledOnce).to.be.true;
             expect(cueSpy3.calledOnce).to.be.true;
@@ -772,23 +733,23 @@ describe("Timeline", function() {
                 90: cueSpy2,
                 150: cueSpy3
             });
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.notCalled).to.be.true;
             expect(cueSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.notCalled).to.be.true;
             expect(cueSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.calledOnce).to.be.true;
             expect(cueSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.calledOnce).to.be.true;
             expect(cueSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(cueSpy1.calledOnce).to.be.true;
             expect(cueSpy2.calledOnce).to.be.true;
             expect(cueSpy3.calledOnce).to.be.true;
@@ -823,13 +784,13 @@ describe("Timeline", function() {
                 repeatSpy = sinon.spy();
 
             tl.repeat(repeatSpy, 3);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledOnce).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledTwice).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledThrice).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledThrice).to.be.true;
         });
 
@@ -841,13 +802,13 @@ describe("Timeline", function() {
 
             tl.setTimeBased();
             tl.repeat(repeatSpy, 100);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledOnce).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledTwice).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledThrice).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(repeatSpy.calledThrice).to.be.true;
         });
     });
@@ -879,12 +840,12 @@ describe("Timeline", function() {
                 waitUntilSpy = sinon.spy(function() { return result; });
 
             tl.waitUntil(waitUntilSpy);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(waitUntilSpy.calledOnce).to.be.true;
             result = true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(waitUntilSpy.calledTwice).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(waitUntilSpy.calledTwice).to.be.true;
         });
 
@@ -897,12 +858,12 @@ describe("Timeline", function() {
 
             tl.setTimeBased();
             tl.waitUntil(waitUntilSpy);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(waitUntilSpy.calledOnce).to.be.true;
             result = true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(waitUntilSpy.calledTwice).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(waitUntilSpy.calledTwice).to.be.true;
         });
     });
@@ -931,7 +892,7 @@ describe("Timeline", function() {
 
             tl.hide();
             expect(sp.opacity).to.equal(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.equal(0);
         });
     });
@@ -961,7 +922,7 @@ describe("Timeline", function() {
             sp.opacity = 0;
             tl.show();
             expect(sp.opacity).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.equal(1);
         });
     });
@@ -992,7 +953,7 @@ describe("Timeline", function() {
             group.addChild(sp);
             tl.removeFromScene();
             expect(sp.parentNode).to.equal(group);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.parentNode).to.be.null;
         });
     });
@@ -1027,11 +988,11 @@ describe("Timeline", function() {
 
             tl.fadeTo(0, 3, enchant.Easing.LINEAR);
             expect(sp.opacity).to.equal(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.closeTo(0.666, 0.001);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.closeTo(0.333, 0.001);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.equal(0);
 
         });
@@ -1044,11 +1005,11 @@ describe("Timeline", function() {
             tl.setTimeBased();
             tl.fadeTo(0, 100, enchant.Easing.LINEAR);
             expect(sp.opacity).to.equal(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.closeTo(0.666, 0.001);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.closeTo(0.333, 0.001);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.opacity).to.equal(0);
 
         });
@@ -1128,13 +1089,13 @@ describe("Timeline", function() {
             tl.moveTo(30, 30, 3, enchant.Easing.LINEAR);
             expect(sp.x).to.equal(0);
             expect(sp.y).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(10);
             expect(sp.y).to.equal(10);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(20);
             expect(sp.y).to.equal(20);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(30);
             expect(sp.y).to.equal(30);
         });
@@ -1148,13 +1109,13 @@ describe("Timeline", function() {
             tl.moveTo(30, 30, 100, enchant.Easing.LINEAR);
             expect(sp.x).to.equal(0);
             expect(sp.y).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(10, 1);
             expect(sp.y).to.closeTo(10, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(20, 1);
             expect(sp.y).to.closeTo(20, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(30);
             expect(sp.y).to.equal(30);
         });
@@ -1190,11 +1151,11 @@ describe("Timeline", function() {
 
             tl.moveX(30, 3, enchant.Easing.LINEAR);
             expect(sp.x).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(10);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(20);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(30);
         });
 
@@ -1206,11 +1167,11 @@ describe("Timeline", function() {
             tl.setTimeBased();
             tl.moveX(30, 100, enchant.Easing.LINEAR);
             expect(sp.x).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(10, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(20, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(30);
         });
     });
@@ -1245,11 +1206,11 @@ describe("Timeline", function() {
 
             tl.moveY(30, 3, enchant.Easing.LINEAR);
             expect(sp.y).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.y).to.equal(10);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.y).to.equal(20);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.y).to.equal(30);
         });
 
@@ -1261,11 +1222,11 @@ describe("Timeline", function() {
             tl.setTimeBased();
             tl.moveY(30, 100, enchant.Easing.LINEAR);
             expect(sp.y).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.y).to.closeTo(10, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.y).to.closeTo(20, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.y).to.equal(30);
         });
     });
@@ -1301,13 +1262,13 @@ describe("Timeline", function() {
             tl.moveBy(30, 30, 3, enchant.Easing.LINEAR);
             expect(sp.x).to.equal(30);
             expect(sp.y).to.equal(30);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(40);
             expect(sp.y).to.equal(40);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(50);
             expect(sp.y).to.equal(50);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(60);
             expect(sp.y).to.equal(60);
         });
@@ -1322,13 +1283,13 @@ describe("Timeline", function() {
             tl.moveBy(30, 30, 100, enchant.Easing.LINEAR);
             expect(sp.x).to.equal(30);
             expect(sp.y).to.equal(30);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(40, 1);
             expect(sp.y).to.closeTo(40, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(50, 1);
             expect(sp.y).to.closeTo(50, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(60);
             expect(sp.y).to.equal(60);
         });
@@ -1343,15 +1304,15 @@ describe("Timeline", function() {
             expect(sp.x).to.equal(30);
             expect(sp.y).to.equal(30);
             sp.moveBy(5, 5);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(45);
             expect(sp.y).to.equal(45);
             sp.moveBy(5, 5);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(60);
             expect(sp.y).to.equal(60);
             sp.moveBy(5, 5);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(75);
             expect(sp.y).to.equal(75);
         });
@@ -1367,15 +1328,15 @@ describe("Timeline", function() {
             expect(sp.x).to.equal(30);
             expect(sp.y).to.equal(30);
             sp.moveBy(5, 5);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(45, 1);
             expect(sp.y).to.closeTo(45, 1);
             sp.moveBy(5, 5);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.closeTo(60, 1);
             expect(sp.y).to.closeTo(60, 1);
             sp.moveBy(5, 5);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.x).to.equal(75);
             expect(sp.y).to.equal(75);
         });
@@ -1426,13 +1387,13 @@ describe("Timeline", function() {
             tl.scaleTo(2, 2, 3, enchant.Easing.LINEAR);
             expect(sp.scaleX).to.equal(1);
             expect(sp.scaleY).to.equal(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(1.33, 0.01);
             expect(sp.scaleY).to.closeTo(1.33, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(1.66, 0.01);
             expect(sp.scaleY).to.closeTo(1.66, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.equal(2);
             expect(sp.scaleY).to.equal(2);
         });
@@ -1446,13 +1407,13 @@ describe("Timeline", function() {
             tl.scaleTo(2, 2, 100, enchant.Easing.LINEAR);
             expect(sp.scaleX).to.equal(1);
             expect(sp.scaleY).to.equal(1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(1.33, 0.01);
             expect(sp.scaleY).to.closeTo(1.33, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(1.66, 0.01);
             expect(sp.scaleY).to.closeTo(1.66, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.equal(2);
             expect(sp.scaleY).to.equal(2);
         });
@@ -1504,13 +1465,13 @@ describe("Timeline", function() {
             tl.scaleBy(2, 2, 3, enchant.Easing.LINEAR);
             expect(sp.scaleX).to.equal(2);
             expect(sp.scaleY).to.equal(2);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(2.66, 0.01);
             expect(sp.scaleY).to.closeTo(2.66, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(3.33, 0.01);
             expect(sp.scaleY).to.closeTo(3.33, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.equal(4);
             expect(sp.scaleY).to.equal(4);
         });
@@ -1525,13 +1486,13 @@ describe("Timeline", function() {
             tl.scaleBy(2, 2, 100, enchant.Easing.LINEAR);
             expect(sp.scaleX).to.equal(2);
             expect(sp.scaleY).to.equal(2);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(2.66, 0.01);
             expect(sp.scaleY).to.closeTo(2.66, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.closeTo(3.33, 0.01);
             expect(sp.scaleY).to.closeTo(3.33, 0.01);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.scaleX).to.equal(4);
             expect(sp.scaleY).to.equal(4);
         });
@@ -1567,11 +1528,11 @@ describe("Timeline", function() {
 
             tl.rotateTo(90, 3, enchant.Easing.LINEAR);
             expect(sp.rotation).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(30);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(60);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(90);
         });
 
@@ -1583,11 +1544,11 @@ describe("Timeline", function() {
             tl.setTimeBased();
             tl.rotateTo(90, 100, enchant.Easing.LINEAR);
             expect(sp.rotation).to.equal(0);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.closeTo(30, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.closeTo(60, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(90);
         });
     });
@@ -1622,11 +1583,11 @@ describe("Timeline", function() {
             sp.rotation = 30;
             tl.rotateBy(90, 3, enchant.Easing.LINEAR);
             expect(sp.rotation).to.equal(30);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(60);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(90);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(120);
         });
 
@@ -1639,11 +1600,11 @@ describe("Timeline", function() {
             tl.setTimeBased();
             tl.rotateBy(90, 100, enchant.Easing.LINEAR);
             expect(sp.rotation).to.equal(30);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.closeTo(60, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.closeTo(90, 1);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(120);
         });
 
@@ -1656,13 +1617,13 @@ describe("Timeline", function() {
             tl.rotateBy(90, 3, enchant.Easing.LINEAR);
             expect(sp.rotation).to.equal(30);
             sp.rotation += 15;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(75);
             sp.rotation += 15;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(120);
             sp.rotation += 15;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(165);
         });
 
@@ -1676,14 +1637,58 @@ describe("Timeline", function() {
             tl.rotateBy(90, 100, enchant.Easing.LINEAR);
             expect(sp.rotation).to.equal(30);
             sp.rotation += 15;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.closeTo(75, 1);
             sp.rotation += 15;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.closeTo(120, 1);
             sp.rotation += 15;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(sp.rotation).to.equal(165);
+        });
+    });
+
+    describe("ENTER_FRAME event", function() {
+        it("execute #tick", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                tickSpy = sinon.spy(tl, 'tick');
+
+            tl.dispatchEvent(event);
+            expect(tickSpy.calledOnce).to.be.true;
+        });
+
+        it("do nothing if timeline is pausing", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                tickSpy = sinon.spy(tl, 'tick');
+
+            tl.paused = true;
+            tl.dispatchEvent(event);
+            expect(tickSpy.notCalled).to.be.true;
+        });
+
+        it("use 1 as elapsed time (frame based)", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                tickSpy = sinon.spy(tl, 'tick');
+
+            tl.dispatchEvent(event);
+            expect(tickSpy.args[0][0]).to.equal(1);
+        });
+
+        it("use events' value as elapsed time (time based)", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                tickSpy = sinon.spy(tl, 'tick');
+
+            tl.setTimeBased();
+            tl.dispatchEvent(event);
+            expect(tickSpy.args[0][0]).to.equal(event.elapsed);
         });
     });
 
@@ -1696,7 +1701,7 @@ describe("Timeline", function() {
 
             tl.delay(1);
             tl.then(callbackSpy);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy.calledOnce).to.be.true;
         });
 
@@ -1709,9 +1714,9 @@ describe("Timeline", function() {
             tl.delay(1);
             tl.delay(1);
             tl.then(callbackSpy);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy.calledOnce).to.be.true;
         });
 
@@ -1726,10 +1731,10 @@ describe("Timeline", function() {
             tl.then(callbackSpy1);
             tl.delay(1);
             tl.then(callbackSpy2);
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy1.calledOnce).to.be.true;
             expect(callbackSpy2.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy1.calledOnce).to.be.true;
             expect(callbackSpy2.calledOnce).to.be.true;
         });
@@ -1743,7 +1748,7 @@ describe("Timeline", function() {
             expect(function() {
                 tl.then(callbackSpy);
                 tl.loop();
-                tl.tick(event);
+                tl.dispatchEvent(event);
             }).to.throws("Maximum call stack size exceeded");
         });
 
@@ -1756,9 +1761,9 @@ describe("Timeline", function() {
             tl.delay(1);
             tl.then(callbackSpy);
             tl.loop();
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy.calledOnce).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy.calledTwice).to.be.true;
         });
 
@@ -1778,15 +1783,15 @@ describe("Timeline", function() {
             expect(callbackSpy1.notCalled).to.be.true;
             expect(callbackSpy2.notCalled).to.be.true;
             expect(callbackSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy1.calledOnce).to.be.true;
             expect(callbackSpy2.calledOnce).to.be.true;
             expect(callbackSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy1.calledTwice).to.be.true;
             expect(callbackSpy2.calledTwice).to.be.true;
             expect(callbackSpy3.notCalled).to.be.true;
-            tl.tick(event);
+            tl.dispatchEvent(event);
             expect(callbackSpy1.calledThrice).to.be.true;
             expect(callbackSpy2.calledTwice).to.be.true;
             expect(callbackSpy3.calledOnce).to.be.true;
@@ -1804,15 +1809,15 @@ describe("Timeline", function() {
             tl2.moveBy(200, 0, 10, enchant.Easing.LINEAR);
 
             for (var i = 0; i < 9; i++) {
-                tl1.tick(event);
-                tl2.tick(event);
+                tl1.dispatchEvent(event);
+                tl2.dispatchEvent(event);
                 expect(sp1.x).to.closeTo(sp2.x, 0.01);
                 expect(tl1._activated).to.be.true;
                 expect(tl2._activated).to.be.true;
             }
 
-            tl1.tick(event);
-            tl2.tick(event);
+            tl1.dispatchEvent(event);
+            tl2.dispatchEvent(event);
             expect(sp1.x).to.closeTo(sp2.x, 0.01);
             expect(tl1._activated).to.be.false;
             expect(tl2._activated).to.be.false;
@@ -1831,15 +1836,15 @@ describe("Timeline", function() {
             tl2.moveBy(200, 0, 10, enchant.Easing.LINEAR);
 
             for (var i = 0; i < 9; i++) {
-                tl1.tick(event);
-                tl2.tick(event);
+                tl1.dispatchEvent(event);
+                tl2.dispatchEvent(event);
                 expect(sp1.x).to.closeTo(sp2.x, 0.01);
                 expect(tl1._activated).to.be.true;
                 expect(tl2._activated).to.be.true;
             }
 
-            tl1.tick(event);
-            tl2.tick(event);
+            tl1.dispatchEvent(event);
+            tl2.dispatchEvent(event);
             expect(sp1.x).to.closeTo(sp2.x, 0.01);
             expect(tl1._activated).to.be.false;
             expect(tl2._activated).to.be.false;
@@ -1858,16 +1863,16 @@ describe("Timeline", function() {
             tl2.moveBy(100, 100, 10, enchant.Easing.LINEAR);
 
             for (var i = 0; i < 9; i++) {
-                tl1.tick(event);
-                tl2.tick(event);
+                tl1.dispatchEvent(event);
+                tl2.dispatchEvent(event);
                 expect(sp1.x).to.closeTo(sp2.x, 0.01);
                 expect(sp1.y).to.closeTo(sp2.y, 0.01);
                 expect(tl1._activated).to.be.true;
                 expect(tl2._activated).to.be.true;
             }
 
-            tl1.tick(event);
-            tl2.tick(event);
+            tl1.dispatchEvent(event);
+            tl2.dispatchEvent(event);
             expect(sp1.x).to.closeTo(sp2.x, 0.01);
             expect(sp1.y).to.closeTo(sp2.y, 0.01);
             expect(tl1._activated).to.be.false;
