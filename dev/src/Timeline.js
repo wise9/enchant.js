@@ -128,9 +128,10 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         }
 
         if (remainingTime > 0 || (this.queue[0] && this.queue[0].time === 0)) {
-            var event = new enchant.Event("enterframe");
+            var event = new enchant.Event("actiontick");
             event.elapsed = remainingTime;
-            this.dispatchEvent(event);
+            event.timeline = this;
+            this.queue[0].dispatchEvent(event);
         }
     },
     /**
