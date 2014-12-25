@@ -20,8 +20,6 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
      */
     initialize: function(param) {
         enchant.Action.call(this, param);
-        var timeline = this.timeline;
-        var node = this.node;
         /**
          [lang:ja]
          * 子アクション.
@@ -91,8 +89,8 @@ enchant.ParallelAction = enchant.Class.create(enchant.Action, {
         });
 
         this.addEventListener(enchant.Event.REMOVED_FROM_TIMELINE, function() {
-            this.actions = this.endedActions;
-            this.endedActions = [];
+            that.actions = that.endedActions;
+            that.endedActions = [];
         });
 
     }
