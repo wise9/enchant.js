@@ -107,6 +107,7 @@ describe("Timeline", function() {
             var sp = new Sprite(32, 32),
                 tl = new Timeline(sp);
 
+            sp.addEventListener(enchant.Event.ENTER_FRAME, function() {});
             tl.paused = true;
             tl._activateTimeline();
             expect(tl._activated).to.be.false;
