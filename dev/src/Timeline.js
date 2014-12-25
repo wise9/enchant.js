@@ -112,6 +112,14 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             e = new enchant.Event("actionend");
             e.timeline = this;
             action.dispatchEvent(e);
+
+            e = new enchant.Event("removedfromtimeline");
+            e.timeline = this;
+            action.dispatchEvent(e);
+
+            if (this.looped) {
+                this.add(action);
+            }
         }
 
         if (this.queue.length === 0) {
@@ -119,19 +127,6 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             return;
         }
 
-        if (this.looped) {
-            e = new enchant.Event("removedfromtimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-            action.frame = 0;
-
-            this.add(action);
-        } else {
-            // remove after dispatching removedfromtimeline event
-            e = new enchant.Event("removedfromtimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-        }
         if (remainingTime > 0 || (this.queue[0] && this.queue[0].time === 0)) {
             var event = new enchant.Event("enterframe");
             event.elapsed = remainingTime;
