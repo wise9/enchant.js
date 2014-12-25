@@ -37,10 +37,7 @@ enchant.Tween = enchant.Class.create(enchant.Action, {
         enchant.Action.call(this, params);
 
         if (this.easing == null) {
-            // linear
-            this.easing = function(t, b, c, d) {
-                return c * t / d + b;
-            };
+            this.easing = enchant.Easing.LINEAR;
         }
 
         var tween = this;
