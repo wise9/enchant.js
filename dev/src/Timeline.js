@@ -605,12 +605,11 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     fadeTo: function(opacity, time, easing) {
-        this.tween({
+        return this.tween({
             opacity: opacity,
             time: time,
             easing: easing
         });
-        return this;
     },
     /**
      [lang:ja]
