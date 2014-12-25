@@ -387,10 +387,9 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     delay: function(time) {
-        this.add(new enchant.Action({
+        return this.action({
             time: time
-        }));
-        return this;
+        });
     },
     /**
      * @ignore
@@ -416,14 +415,13 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     then: function(func) {
-        this.add(new enchant.Action({
+        return this.action({
             onactiontick: function(evt) {
                 func.call(this);
             },
             // if time is 0, next action will be immediately executed
             time: 0
-        }));
-        return this;
+        });
     },
     /**
      [lang:ja]
@@ -498,13 +496,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     repeat: function(func, time) {
-        this.add(new enchant.Action({
+        return this.action({
             onactiontick: function(evt) {
                 func.call(this);
             },
             time: time
-        }));
-        return this;
+        });
     },
     /**
      [lang:ja]
@@ -578,14 +575,13 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     waitUntil: function(func) {
-        this.add(new enchant.Action({
+        return this.action({
             onactiontick: function(evt) {
                 if (func.call(this)) {
                     evt.timeline.next();
                 }
             }
-        }));
-        return this;
+        });
     },
     /**
      [lang:ja]
