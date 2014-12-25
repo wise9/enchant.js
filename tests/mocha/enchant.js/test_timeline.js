@@ -548,14 +548,14 @@ describe("Timeline", function() {
                 action1 = new Action(),
                 action2 = new Action(),
                 onActionTickSpy = sinon.spy(),
-                remainingTime = 1000 / 30;
+                remainingTime = 1;
 
             action2.addEventListener(Event.ACTION_TICK, onActionTickSpy);
             tl.add(action1);
             tl.add(action2);
             tl.next(remainingTime);
             expect(onActionTickSpy.calledOnce).to.be.true;
-            expect(onActionTickSpy.args[0][0].elapsed).to.equal(1);
+            expect(onActionTickSpy.args[0][0].elapsed).to.equal(remainingTime);
         });
 
         it("continue animation if remainingTime is passed (time based)", function() {
