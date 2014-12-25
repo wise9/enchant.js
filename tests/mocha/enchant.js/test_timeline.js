@@ -392,13 +392,6 @@ describe("Timeline", function() {
         });
     });
 
-    describe("#then", function() {
-        it("execute passed function", function() {
-            var sp = new Sprite(32, 32),
-                tl = new Timeline(sp);
-        })
-    });
-
     describe("#exec", function() {
         it("call #then", function() {
             var sp = new Sprite(32, 32),
@@ -646,6 +639,7 @@ describe("Timeline", function() {
             tl.tick(event);
 
             expect(callbackSpy.calledOnce).to.be.true;
+            expect(callbackSpy.calledOn(sp)).to.be.true;
         });
 
         it("execute callback (time based)", function() {
@@ -659,6 +653,7 @@ describe("Timeline", function() {
             tl.tick(event);
 
             expect(callbackSpy.calledOnce).to.be.true;
+            expect(callbackSpy.calledOn(sp)).to.be.true;
         });
 
         it("execute all callbacks if chained", function() {
