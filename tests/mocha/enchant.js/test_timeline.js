@@ -1691,4 +1691,192 @@ describe("Timeline", function() {
         });
     });
 
+    describe("combinations", function() {
+        it("tl.delay(1).then", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                callbackSpy = sinon.spy();
+
+            tl.delay(1);
+            tl.then(callbackSpy);
+            tl.tick(event);
+            expect(callbackSpy.calledOnce).to.be.true;
+        });
+
+        it("tl.delay(1).delay(1).then", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                callbackSpy = sinon.spy();
+
+            tl.delay(1);
+            tl.delay(1);
+            tl.then(callbackSpy);
+            tl.tick(event);
+            expect(callbackSpy.notCalled).to.be.true;
+            tl.tick(event);
+            expect(callbackSpy.calledOnce).to.be.true;
+        });
+
+        it("tl.delay(1).then.delay(1).then", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                callbackSpy1 = sinon.spy(),
+                callbackSpy2 = sinon.spy();
+
+            tl.delay(1);
+            tl.then(callbackSpy1);
+            tl.delay(1);
+            tl.then(callbackSpy2);
+            tl.tick(event);
+            expect(callbackSpy1.calledOnce).to.be.true;
+            expect(callbackSpy2.notCalled).to.be.true;
+            tl.tick(event);
+            expect(callbackSpy1.calledOnce).to.be.true;
+            expect(callbackSpy2.calledOnce).to.be.true;
+        });
+
+        it("tl.then.loop", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                callbackSpy = sinon.spy();
+
+            expect(function() {
+                tl.then(callbackSpy);
+                tl.loop();
+                tl.tick(event);
+            }).to.throws("Maximum call stack size exceeded");
+        });
+
+        it("tl.delay(1).then.loop", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                callbackSpy = sinon.spy();
+
+            tl.delay(1);
+            tl.then(callbackSpy);
+            tl.loop();
+            tl.tick(event);
+            expect(callbackSpy.calledOnce).to.be.true;
+            tl.tick(event);
+            expect(callbackSpy.calledTwice).to.be.true;
+        });
+
+        it("tl.repeat(3).and.repeat(2).then", function() {
+            var sp = new Sprite(32, 32),
+                tl = new Timeline(sp),
+                event = createEnterFrameEvent(),
+                callbackSpy1 = sinon.spy(),
+                callbackSpy2 = sinon.spy(),
+                callbackSpy3 = sinon.spy();
+
+            tl.repeat(callbackSpy1, 3);
+            tl.and();
+            tl.repeat(callbackSpy2, 2);
+            tl.then(callbackSpy3);
+
+            expect(callbackSpy1.notCalled).to.be.true;
+            expect(callbackSpy2.notCalled).to.be.true;
+            expect(callbackSpy3.notCalled).to.be.true;
+            tl.tick(event);
+            expect(callbackSpy1.calledOnce).to.be.true;
+            expect(callbackSpy2.calledOnce).to.be.true;
+            expect(callbackSpy3.notCalled).to.be.true;
+            tl.tick(event);
+            expect(callbackSpy1.calledTwice).to.be.true;
+            expect(callbackSpy2.calledTwice).to.be.true;
+            expect(callbackSpy3.notCalled).to.be.true;
+            tl.tick(event);
+            expect(callbackSpy1.calledThrice).to.be.true;
+            expect(callbackSpy2.calledTwice).to.be.true;
+            expect(callbackSpy3.calledOnce).to.be.true;
+        });
+
+        it("tl.moveBy(100, 0, 5).moveBy(100, 0, 5)", function() {
+            var sp1 = new Sprite(32, 32),
+                sp2 = new Sprite(32, 32),
+                tl1 = new Timeline(sp1),
+                tl2 = new Timeline(sp2),
+                event = createEnterFrameEvent();
+
+            tl1.moveBy(100, 0, 5, enchant.Easing.LINEAR);
+            tl1.moveBy(100, 0, 5, enchant.Easing.LINEAR);
+            tl2.moveBy(200, 0, 10, enchant.Easing.LINEAR);
+
+            for (var i = 0; i < 9; i++) {
+                tl1.tick(event);
+                tl2.tick(event);
+                expect(sp1.x).to.closeTo(sp2.x, 0.01);
+                expect(tl1._activated).to.be.true;
+                expect(tl2._activated).to.be.true;
+            }
+
+            tl1.tick(event);
+            tl2.tick(event);
+            expect(sp1.x).to.closeTo(sp2.x, 0.01);
+            expect(tl1._activated).to.be.false;
+            expect(tl2._activated).to.be.false;
+        });
+
+        it("tl.moveBy(100, 0, 10).and.moveBy(100, 0, 10)", function() {
+            var sp1 = new Sprite(32, 32),
+                sp2 = new Sprite(32, 32),
+                tl1 = new Timeline(sp1),
+                tl2 = new Timeline(sp2),
+                event = createEnterFrameEvent();
+
+            tl1.moveBy(100, 0, 10, enchant.Easing.LINEAR);
+            tl1.and();
+            tl1.moveBy(100, 0, 10, enchant.Easing.LINEAR);
+            tl2.moveBy(200, 0, 10, enchant.Easing.LINEAR);
+
+            for (var i = 0; i < 9; i++) {
+                tl1.tick(event);
+                tl2.tick(event);
+                expect(sp1.x).to.closeTo(sp2.x, 0.01);
+                expect(tl1._activated).to.be.true;
+                expect(tl2._activated).to.be.true;
+            }
+
+            tl1.tick(event);
+            tl2.tick(event);
+            expect(sp1.x).to.closeTo(sp2.x, 0.01);
+            expect(tl1._activated).to.be.false;
+            expect(tl2._activated).to.be.false;
+        });
+
+        it("tl.moveBy(100, 0, 10).and.moveBy(0, 100, 10)", function() {
+            var sp1 = new Sprite(32, 32),
+                sp2 = new Sprite(32, 32),
+                tl1 = new Timeline(sp1),
+                tl2 = new Timeline(sp2),
+                event = createEnterFrameEvent();
+
+            tl1.moveBy(100, 0, 10, enchant.Easing.LINEAR);
+            tl1.and();
+            tl1.moveBy(0, 100, 10, enchant.Easing.LINEAR);
+            tl2.moveBy(100, 100, 10, enchant.Easing.LINEAR);
+
+            for (var i = 0; i < 9; i++) {
+                tl1.tick(event);
+                tl2.tick(event);
+                expect(sp1.x).to.closeTo(sp2.x, 0.01);
+                expect(sp1.y).to.closeTo(sp2.y, 0.01);
+                expect(tl1._activated).to.be.true;
+                expect(tl2._activated).to.be.true;
+            }
+
+            tl1.tick(event);
+            tl2.tick(event);
+            expect(sp1.x).to.closeTo(sp2.x, 0.01);
+            expect(sp1.y).to.closeTo(sp2.y, 0.01);
+            expect(tl1._activated).to.be.false;
+            expect(tl2._activated).to.be.false;
+        });
+    });
+
 });
