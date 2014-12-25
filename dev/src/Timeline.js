@@ -414,10 +414,9 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     then: function(func) {
-        var timeline = this;
         this.add(new enchant.Action({
             onactiontick: function(evt) {
-                func.call(timeline.node);
+                func.call(this);
             },
             // if time is 0, next action will be immediately executed
             time: 0
