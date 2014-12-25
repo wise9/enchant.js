@@ -246,7 +246,7 @@ describe('Map', function(){
     describe('when "render" event occurs', function(){
         var map;
 
-        before(function(){
+        beforeEach(function(){
             core = new Core(64, 64);
             map = new Map(16, 16);
             sinon.spy(map, 'redraw');
@@ -254,11 +254,61 @@ describe('Map', function(){
 
         it.skip('in case _dirty = false. NEED TO REFACTOR enchant.Map', function(){});
 
-        it('draws map with given conditions', function(done){
+        it('the map should not be drawn as the offsets are not updated yet (1 frame lag issue #296 - https://github.com/wise9/enchant.js/issues/296)', function(done){
             core.load('../../../images/map0.png', 'map0', function(){
-                map.iamge = core.assets['map0'];
+                map.image = core.assets['map0'];
                 map.loadData([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
                 map.dispatchEvent(new enchant.Event('render'));
+            });
+            map.addEventListener('render', function(){
+                setTimeout(function(){
+                    expect(map.redraw.notCalled).to.be.true;
+                    done();
+                }, 100);
+            });
+
+        });
+        
+        it('and the map is dirty, the previous offsets must be deleted to ensure a buffer update during the rendering', function(done){
+            core.load('../../../images/map0.png', 'map0', function(){
+                map.image = core.assets['map0'];
+                map.loadData([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
+                map._dirty = true;
+                map._previousOffsetX = 1;
+                map._previousOffsetY = 2;
+                map.dispatchEvent(new enchant.Event('render'));
+            });
+            map.addEventListener('render', function(){
+                setTimeout(function(){
+                    expect(map._previousOffsetX).to.not.exist;
+                    expect(map._previousOffsetY).to.not.exist;
+                    done();
+                }, 100);
+            });
+
+        });
+
+        afterEach(function(){
+            map.redraw.restore();
+        });
+    });
+    
+    describe('when "cvsRender" is called', function(){
+        var map;
+
+        before(function(){
+            core = new Core(64, 64);
+            map = new Map(16, 16);
+            sinon.spy(map, 'redraw');
+        });
+        
+        it('draws map with given conditions', function(done){
+            core.load('../../../images/map0.png', 'map0', function(){
+                map.image = core.assets['map0'];
+                map.loadData([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
+                map.dispatchEvent(new enchant.Event('render'));
+                var surface = new enchant.Surface(64,64);
+                map.cvsRender(surface.context);
             });
             map.addEventListener('render', function(){
                 setTimeout(function(){
@@ -267,6 +317,82 @@ describe('Map', function(){
                 }, 100);
             });
 
+        });
+
+        after(function(){
+            map.redraw.restore();
+        });
+    });
+    
+
+    describe('when "domRender" is called', function(){
+        var map;
+
+        before(function(){
+            core = new Core(64, 64);
+            map = new Map(16, 16);
+            sinon.spy(map, 'redraw');
+        });
+
+        it('draws map with given conditions', function(done){
+            core.load('../../../images/map0.png', 'map0', function(){
+                map.image = core.assets['map0'];
+                map.loadData([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
+                map.dispatchEvent(new enchant.Event('render'));
+                var surface = new enchant.Surface(64,64);
+                map.domRender(document.createElement('div'));
+            });
+            map.addEventListener('render', function(){
+                setTimeout(function(){
+                    expect(map.redraw.lastCall.calledWithExactly(0, 0, 64, 64)).to.be.true;
+                    done();
+                }, 100);
+            });
+
+        });
+        
+        describe('when managed in core', function(){
+            var map;
+
+            before(function(){
+                core = new Core(64, 64);
+                map = new Map(16, 16);
+                sinon.spy(map, 'redraw');
+            });
+            
+            it('the map should only be drawn once without modification', function(done){
+                core.preload({map0: '../../../images/map0.png'});
+                core.onload = function() {
+                    map.image = core.assets['map0'];
+                    map.loadData([[0, 0, 0], [0, 0, 0], [0, 0, 0]]);
+                    core.rootScene.addChild(map);
+                    core.rootScene.addEventListener("enterframe", function() {
+                        if(this.age === 5) {
+                            expect(map.redraw.callCount).to.equal(1);
+                            expect(map.redraw.lastCall.calledWithExactly(0, 0, 64, 64)).to.be.true;
+                            done();
+                        }
+                    });
+                    core.rootScene.age = 0;
+                }
+                core.start();
+            });
+            
+            it('the map should be redrawn once and only once when it became dirty', function(done){
+                core.rootScene.age = 100;
+                map._dirty = true;
+                core.rootScene.addEventListener("enterframe", function() {
+                    if(this.age === 105) {
+                        expect(map.redraw.callCount).to.equal(2);
+                        expect(map.redraw.lastCall.calledWithExactly(0, 0, 64, 64)).to.be.true;
+                        done();
+                    }
+                });
+            });
+
+            after(function(){
+                map.redraw.restore();
+            });
         });
 
         after(function(){
