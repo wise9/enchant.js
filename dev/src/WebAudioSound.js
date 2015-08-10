@@ -47,7 +47,7 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
      */
     play: function(dup) {
         if (this._state === 1 && !dup) {
-            this.src.disconnect(this.connectTarget);
+            this.src.disconnect();
         }
         if (this._state !== 2) {
             this._currentTime = 0;
