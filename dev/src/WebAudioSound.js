@@ -23,6 +23,10 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
             throw new Error("This browser does not support WebAudio API.");
         }
         enchant.EventTarget.call(this);
+        if (!enchant.WebAudioSound.audioContext) {
+          enchant.WebAudioSound.audioContext = new window.AudioContext();
+          enchant.WebAudioSound.destination = enchant.WebAudioSound.audioContext.destination;
+        }
         this.context = enchant.WebAudioSound.audioContext;
         this.src = this.context.createBufferSource();
         this.buffer = null;
@@ -262,8 +266,3 @@ enchant.WebAudioSound.load = function(src, type, callback, onerror) {
     }
     return sound;
 };
-
-if (window.AudioContext) {
-    enchant.WebAudioSound.audioContext = new window.AudioContext();
-    enchant.WebAudioSound.destination = enchant.WebAudioSound.audioContext.destination;
-}
