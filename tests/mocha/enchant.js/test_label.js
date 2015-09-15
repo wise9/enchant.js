@@ -8,25 +8,25 @@ describe("Label", function(){
 
     it("#getMetrics returns metrics of label itself", function(){
         label = new Label(".");
-        label.font = "10px mono monospace";
+        label.font = "10px LiberationMono monospace";
         label.textAlign = "left";
         var metrics = label.getMetrics();
         expect(metrics.height).to.equal(11);
-        expect(metrics.width).to.equal(4);
+        expect(metrics.width).to.equal(3);
     });
 
     it("#updateBoundArea", function(){
         label = new Label(".");
-        label.font = "10px mono monospace";
+        label.font = "10px LiberationMono monospace";
         label.textAlign = "left";
         label.width = 100;
         expect(label._boundHeight).to.equal(11);        
-        expect(label._boundWidth).to.equal(4);
+        expect(label._boundWidth).to.equal(3);
         expect(label._boundOffset).to.equal(0);       
         label.textAlign = "center";
-        expect(label._boundOffset).to.equal(48);
+        expect(label._boundOffset).to.equal(48.5);
         label.textAlign = "right";
-        expect(label._boundOffset).to.equal(96);
+        expect(label._boundOffset).to.equal(97);
     });
 
     describe("settings", function(){
@@ -96,9 +96,9 @@ describe("Label", function(){
 
         it("font can be set", function(){
             expect(label.font).to.equal("14px serif");
-            label.font = "14px mono monospace";
-            expect(label.font).to.equal("14px mono monospace");
-            expect(label._style.font).to.equal("14px mono monospace");
+            label.font = "14px LiberationMono monospace";
+            expect(label.font).to.equal("14px LiberationMono monospace");
+            expect(label._style.font).to.equal("14px LiberationMono monospace");
         });
 
         it("color can be set", function(){
@@ -133,7 +133,7 @@ describe("Label", function(){
             // using multibyte char in tests causes problem when running on phantomjs
             label = new Label('=');
             label.color = "#f00";
-            label.font = '10px mono monospace';
+            label.font = '10px LiberationMono monospace';
         });
 
         describe("text alignment", function(){
