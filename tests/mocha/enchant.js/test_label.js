@@ -1,6 +1,7 @@
 describe("Label", function(){
     enchant();
     var core, label;
+    var LABEL_DIMENSION_TEST_DELTA = 1;
 
     beforeEach(function(){
         core = new enchant.Core(320, 320);
@@ -12,7 +13,7 @@ describe("Label", function(){
         label.textAlign = "left";
         var metrics = label.getMetrics();
         expect(metrics.height).to.equal(11);
-        expect(metrics.width).to.equal(3);
+        expect(metrics.width).to.be.closeTo(4, LABEL_DIMENSION_TEST_DELTA);
     });
 
     it("#updateBoundArea", function(){
@@ -21,12 +22,12 @@ describe("Label", function(){
         label.textAlign = "left";
         label.width = 100;
         expect(label._boundHeight).to.equal(11);        
-        expect(label._boundWidth).to.equal(3);
+        expect(label._boundWidth).to.be.closeTo(4, LABEL_DIMENSION_TEST_DELTA);
         expect(label._boundOffset).to.equal(0);       
         label.textAlign = "center";
-        expect(label._boundOffset).to.equal(48.5);
+        expect(label._boundOffset).to.be.closeTo(48, LABEL_DIMENSION_TEST_DELTA);
         label.textAlign = "right";
-        expect(label._boundOffset).to.equal(97);
+        expect(label._boundOffset).to.be.closeTo(96, LABEL_DIMENSION_TEST_DELTA);
     });
 
     describe("settings", function(){
