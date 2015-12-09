@@ -42,6 +42,10 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
         this.context = this._element.getContext('2d');
         this._dctx = this._detect.getContext('2d');
+        this._dctx.imageSmoothingEnabled =
+                this._dctx.msImageSmoothingEnabled =
+                this._dctx.mozImageSmoothingEnabled =
+                this._dctx.webkitImageSmoothingEnabled = false;
 
         this._colorManager = new enchant.DetectColorManager(16, 256);
 
