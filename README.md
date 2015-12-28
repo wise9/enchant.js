@@ -1,11 +1,6 @@
-enchant.js
-==========
+<img src="https://raw.githubusercontent.com/wise9/enchant.js/master/enchant.png" width="320" height="320" alt="enchant.js">
 
-<img src="https://raw.githubusercontent.com/wise9/enchant.js/master/enchant.png" width="320" height="320">
-
-JavaScript Game Engine
-
-[![Build Status](https://secure.travis-ci.org/wise9/enchant.js.png)](https://travis-ci.org/wise9/enchant.js)
+[![Build Status](https://secure.travis-ci.org/wise9/enchant.js.png)](https://travis-ci.org/wise9/enchant.js) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
 Download
 --------
@@ -93,6 +88,7 @@ Build Tasks
 - `grunt uglify` generate enchant.min.js from dev/enchant.js
 - `grunt exec:lang` generate enchant.js (English comment only) from dev/enchant.js
 - `grunt qunit` do qunit tests with phantomjs (headless browser)
+- `grunt mocha` do mocha tests with phantomjs (headless browser)
 
 If you wish to send your codes to github repos, don't forget to run `grunt` command before you commit your change!
 

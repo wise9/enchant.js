@@ -39,7 +39,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
         this.isFrameBased = true;
         this._parallel = null;
         this._activated = false;
-        this.addEventListener(enchant.Event.ENTER_FRAME, this.tick);
+        this.addEventListener(enchant.Event.ENTER_FRAME, this._onenterframe);
+
+        var tl = this;
+        this._nodeEventListener = function(e) {
+            tl.dispatchEvent(e);
+        };
     },
     /**
      * @private
@@ -58,6 +63,16 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             this.node.addEventListener("enterframe", this._nodeEventListener);
             this._activated = true;
         }
+    },
+    /**
+     * @private
+     */
+    _onenterframe: function(evt) {
+        if (this.paused) {
+            return;
+        }
+
+        this.tick(this.isFrameBased ? 1 : evt.elapsed);
     },
     /**
      [lang:ja]
@@ -107,51 +122,42 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
             e = new enchant.Event("actionend");
             e.timeline = this;
             action.dispatchEvent(e);
+
+            e = new enchant.Event("removedfromtimeline");
+            e.timeline = this;
+            action.dispatchEvent(e);
+
+            if (this.looped) {
+                this.add(action);
+            }
         }
 
         if (this.queue.length === 0) {
-            this._activated = false;
-            this.node.removeEventListener('enterframe', this._nodeEventListener);
+            this._deactivateTimeline();
             return;
         }
 
-        if (this.looped) {
-            e = new enchant.Event("removedfromtimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-            action.frame = 0;
-
-            this.add(action);
-        } else {
-            // remove after dispatching removedfromtimeline event
-            e = new enchant.Event("removedfromtimeline");
-            e.timeline = this;
-            action.dispatchEvent(e);
-        }
         if (remainingTime > 0 || (this.queue[0] && this.queue[0].time === 0)) {
-            var event = new enchant.Event("enterframe");
+            var event = new enchant.Event("actiontick");
             event.elapsed = remainingTime;
-            this.dispatchEvent(event);
+            event.timeline = this;
+            this.queue[0].dispatchEvent(event);
         }
     },
     /**
      [lang:ja]
-     * 自身のenterframeイベントのリスナとして登録される関数.
-     * 1フレーム経過する際に実行する処理が書かれている.
+     * Timelineの時間を進める.
      * (キューの先頭にあるアクションに対して, actionstart/actiontickイベントを発行する)
-     * @param {enchant.Event} enterFrameEvent enterframeイベント.
+     * @param {Number} elapsed 経過させる時間.
      [/lang]
      [lang:en]
-     * @param {enchant.Event} enterFrameEvent
+     * @param {Number} elapsed
      [/lang]
      [lang:de]
-     * @param {enchant.Event} enterFrameEvent
+     * @param {Number} elapsed
      [/lang]
      */
-    tick: function(enterFrameEvent) {
-        if (this.paused) {
-            return;
-        }
+    tick: function(elapsed) {
         if (this.queue.length > 0) {
             var action = this.queue[0];
             if (action.frame === 0) {
@@ -163,11 +169,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
 
             var e = new enchant.Event("actiontick");
             e.timeline = this;
-            if (this.isFrameBased) {
-                e.elapsed = 1;
-            } else {
-                e.elapsed = enterFrameEvent.elapsed;
-            }
+            e.elapsed = elapsed;
             action.dispatchEvent(e);
         }
     },
@@ -187,15 +189,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     add: function(action) {
-        if (!this._activated) {
-            var tl = this;
-            this._nodeEventListener = function(e) {
-                tl.dispatchEvent(e);
-            };
-            this.node.addEventListener("enterframe", this._nodeEventListener);
-
-            this._activated = true;
-        }
+        this._activateTimeline();
         if (this._parallel) {
             this._parallel.actions.push(action);
             this._parallel = null;
@@ -393,10 +387,9 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     delay: function(time) {
-        this.add(new enchant.Action({
+        return this.action({
             time: time
-        }));
-        return this;
+        });
     },
     /**
      * @ignore
@@ -422,15 +415,13 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     then: function(func) {
-        var timeline = this;
-        this.add(new enchant.Action({
+        return this.action({
             onactiontick: function(evt) {
-                func.call(timeline.node);
+                func.call(this);
             },
             // if time is 0, next action will be immediately executed
             time: 0
-        }));
-        return this;
+        });
     },
     /**
      [lang:ja]
@@ -505,13 +496,12 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     repeat: function(func, time) {
-        this.add(new enchant.Action({
+        return this.action({
             onactiontick: function(evt) {
                 func.call(this);
             },
             time: time
-        }));
-        return this;
+        });
     },
     /**
      [lang:ja]
@@ -585,16 +575,13 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     waitUntil: function(func) {
-        var timeline = this;
-        this.add(new enchant.Action({
-            onactionstart: func,
+        return this.action({
             onactiontick: function(evt) {
                 if (func.call(this)) {
-                    timeline.next();
+                    evt.timeline.next();
                 }
             }
-        }));
-        return this;
+        });
     },
     /**
      [lang:ja]
@@ -618,12 +605,11 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     fadeTo: function(opacity, time, easing) {
-        this.tween({
+        return this.tween({
             opacity: opacity,
             time: time,
             easing: easing
         });
-        return this;
     },
     /**
      [lang:ja]
@@ -845,7 +831,7 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      */
     removeFromScene: function() {
         return this.then(function() {
-            this.scene.removeChild(this);
+            this.parentNode.removeChild(this);
         });
     },
     /**
@@ -873,17 +859,20 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     scaleTo: function(scale, time, easing) {
+        var scaleX, scaleY;
+
         if (typeof easing === "number") {
-            return this.tween({
-                scaleX: arguments[0],
-                scaleY: arguments[1],
-                time: arguments[2],
-                easing: arguments[3]
-            });
+            scaleX = arguments[0];
+            scaleY = arguments[1];
+            time = arguments[2];
+            easing = arguments[3];
+        } else {
+            scaleX = scaleY = scale;
         }
+
         return this.tween({
-            scaleX: scale,
-            scaleY: scale,
+            scaleX: scaleX,
+            scaleY: scaleY,
             time: time,
             easing: easing
         });
@@ -914,24 +903,23 @@ enchant.Timeline = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     scaleBy: function(scale, time, easing) {
+        var scaleX, scaleY;
+
         if (typeof easing === "number") {
-            return this.tween({
-                scaleX: function() {
-                    return this.scaleX * arguments[0];
-                },
-                scaleY: function() {
-                    return this.scaleY * arguments[1];
-                },
-                time: arguments[2],
-                easing: arguments[3]
-            });
+            scaleX = arguments[0];
+            scaleY = arguments[1];
+            time = arguments[2];
+            easing = arguments[3];
+        } else {
+            scaleX = scaleY = scale;
         }
+
         return this.tween({
             scaleX: function() {
-                return this.scaleX * scale;
+                return this.scaleX * scaleX;
             },
             scaleY: function() {
-                return this.scaleY * scale;
+                return this.scaleY * scaleY;
             },
             time: time,
             easing: easing

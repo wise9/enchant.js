@@ -170,7 +170,6 @@ enchant.DomlessManager = enchant.Class.create({
     },
     _register: function(element, nextElement) {
         var i = this._domRef.indexOf(nextElement);
-        var childNodes;
         if (element instanceof Array) {
             if (i === -1) {
                 Array.prototype.push.apply(this._domRef, element);

@@ -42,6 +42,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
 
         this.context = this._element.getContext('2d');
         this._dctx = this._detect.getContext('2d');
+        this._setImageSmoothingEnable();
 
         this._colorManager = new enchant.DetectColorManager(16, 256);
 
@@ -117,6 +118,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         set: function(width) {
             this._width = width;
             this._element.width = this._detect.width = width;
+            this._setImageSmoothingEnable();
         }
     },
     /**
@@ -138,6 +140,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         set: function(height) {
             this._height = height;
             this._element.height = this._detect.height = height;
+            this._setImageSmoothingEnable();
         }
     },
     addChild: function(node) {
@@ -148,11 +151,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
         childAdded.next = null;
         this.dispatchEvent(childAdded);
         node.dispatchEvent(new enchant.Event('added'));
-        if (this.scene) {
-            node.scene = this.scene;
-            var addedToScene = new enchant.Event('addedtoscene');
-            node.dispatchEvent(addedToScene);
-        }
     },
     insertBefore: function(node, reference) {
         var i = this.childNodes.indexOf(reference);
@@ -164,11 +162,6 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             childAdded.next = reference;
             this.dispatchEvent(childAdded);
             node.dispatchEvent(new enchant.Event('added'));
-            if (this.scene) {
-                node.scene = this.scene;
-                var addedToScene = new enchant.Event('addedtoscene');
-                node.dispatchEvent(addedToScene);
-            }
         } else {
             this.addChild(node);
         }
@@ -185,7 +178,7 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      */
     _startRendering: function() {
         this.addEventListener('exitframe', this._onexitframe);
-        this._onexitframe(new enchant.Event(enchant.Event.RENDER));
+        this._onexitframe();
     },
     /**
      [lang:ja]
@@ -198,8 +191,8 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
      * @private
      */
     _stopRendering: function() {
-        this.removeEventListener('render', this._onexitframe);
-        this._onexitframe(new enchant.Event(enchant.Event.RENDER));
+        this.removeEventListener('exitframe', this._onexitframe);
+        this._onexitframe();
     },
     _onexitframe: function() {
         var core = enchant.Core.instance;
@@ -219,8 +212,15 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             enchant.CanvasRenderer.instance.detectRender(ctx, this);
             this._lastDetected = core.frame;
         }
-        var color = ctx.getImageData(x, y, 1, 1).data;
-        return this._colorManager.getSpriteByColor(color);
+        var extra = enchant.ENV.COLOR_DETECTION_LEVEL - 1;
+        var rgba = ctx.getImageData(x - extra, y - extra, 1 + extra * 2, 1 + extra * 2).data;
+        return this._colorManager.getSpriteByColors(rgba);
+    },
+    _setImageSmoothingEnable: function() {
+        this._dctx.imageSmoothingEnabled =
+                this._dctx.msImageSmoothingEnabled =
+                this._dctx.mozImageSmoothingEnabled =
+                this._dctx.webkitImageSmoothingEnabled = false;
     }
 });
 

@@ -243,8 +243,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._rotation;
         },
         set: function(rotation) {
-            this._rotation = rotation;
-            this._dirty = true;
+            if(this._rotation !== rotation) {
+                this._rotation = rotation;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -266,8 +268,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._scaleX;
         },
         set: function(scale) {
-            this._scaleX = scale;
-            this._dirty = true;
+            if(this._scaleX !== scale) {
+                this._scaleX = scale;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -289,8 +293,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._scaleY;
         },
         set: function(scale) {
-            this._scaleY = scale;
-            this._dirty = true;
+            if(this._scaleY !== scale) {
+                this._scaleY = scale;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -310,8 +316,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._originX;
         },
         set: function(originX) {
-            this._originX = originX;
-            this._dirty = true;
+            if(this._originX !== originX) {
+                this._originX = originX;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -331,8 +339,10 @@ enchant.Group = enchant.Class.create(enchant.Node, {
             return this._originY;
         },
         set: function(originY) {
-            this._originY = originY;
-            this._dirty = true;
+            if(this._originY !== originY) {
+                this._originY = originY;
+                this._dirty = true;
+            }
         }
     },
     /**#nocode+*/

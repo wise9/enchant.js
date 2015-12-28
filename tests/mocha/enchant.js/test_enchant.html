@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../mocha.css" type="text/css" media="screen">
+    <link rel="stylesheet" href="../font/font.css" type="text/css" media="screen">
+    <title>enchant.js unit test</title>
+    <style>
+    #enchant-stage{display:none; visibility:hidden;}
+    </style>
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="../sinon-1.8.1.js" type="text/javascript"></script>
+    <script src="../mocha.js" type="text/javascript"></script> 
+    <script type="text/javascript">
+        mocha.setup("bdd");
+    </script>
+    <script src="../../../node_modules/grunt-mocha/phantomjs/bridge.js" type="text/javascript"></script>
+    <script src="../chai.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var expect = chai.expect;
+    </script>
+    <script src="../../../dev/enchant.js"></script>
+
+    <script src="./test_class.js"></script>
+    <script src="./test_event.js"></script>
+    <script src="./test_event-target.js"></script>
+    <script src="./test_core.js"></script>
+    <script src="./test_input-manager.js"></script>
+    <script src="./test_input-source.js"></script>
+    <script src="./test_binary-input-manager.js"></script>
+    <script src="./test_binary-input-source.js"></script>
+    <script src="./test_keyboard-input-manager.js"></script>
+    <script src="./test_keyboard-input-source.js"></script>
+    <script src="./test_node.js"></script>
+    <script src="./test_entity.js"></script>
+    <script src="./test_sprite.js"></script>
+    <script src="./test_label.js"></script>
+    <script src="./test_label-textalign.js"></script>
+    <script src="./test_map.js"></script>
+    <script src="./test_group.js"></script>
+    <script src="./test_matrix.js"></script>
+    <script src="./test_detect-color-manager.js"></script>
+    <script src="./test_canvas-layer.js"></script>
+    <script src="./test_canvas-renderer.js"></script>
+    <script src="./test_dom-manager.js"></script>
+    <script src="./test_dom-layer.js"></script>
+    <script src="./test_scene.js"></script>
+    <script src="./test_loading-scene.js"></script>
+    <script src="./test_canvas-scene.js"></script>
+    <script src="./test_dom-scene.js"></script>
+    <script src="./test_surface.js"></script>
+    <script src="./test_deferred.js"></script>
+    <script src="./test_easing.js"></script>
+    <script src="./test_action-event-target.js"></script>
+    <script src="./test_action.js"></script>
+    <script src="./test_parallel-action.js"></script>
+    <script src="./test_tween.js"></script>
+    <script src="./test_timeline.js"></script>
+
+    <script type="text/javascript">
+        mocha.run();
+    </script>
+</body>
+</html>

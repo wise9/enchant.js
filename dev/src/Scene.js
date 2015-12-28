@@ -156,6 +156,15 @@ enchant.Scene = enchant.Class.create(enchant.Group, {
             this._backgroundColor = this._element.style.backgroundColor = color;
         }
     },
+    remove: function() {
+        this.clearEventListener();
+
+        while (this.childNodes.length > 0) {
+            this.childNodes[0].remove();
+        }
+
+        return enchant.Core.instance.removeScene(this);
+    },
     /**#nocode-*/
     _oncoreresize: function(e) {
         this._element.style.width = e.width + 'px';

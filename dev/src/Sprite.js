@@ -38,10 +38,7 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         this._frameLeft = 0;
         this._frameTop = 0;
         this._frame = 0;
-        this._frameSequence = [];
-
-        // frame に配列が指定されたときの処理.
-        this.addEventListener(enchant.Event.ENTER_FRAME, this._rotateFrameSequence);
+        this._frameSequence = null;
     },
     /**
      [lang:ja]
@@ -108,17 +105,35 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return this._frame;
         },
         set: function(frame) {
-            if (this._frame === frame || (frame instanceof Array && this._deepCompareToPreviousFrame(frame))) {
+            if (((this._frameSequence == null) && (this._frame === frame)) || (this._deepCompareToPreviousFrame(frame))) {
                 return;
             }
             if (frame instanceof Array) {
-                this._frameSequence = frame.slice();
-                this._originalFrameSequence = frame.slice();
-                this._rotateFrameSequence();
+                this._frameSequence = frame;
             } else {
-                this._frameSequence = [];
+                this._frameSequence = null;
                 this._frame = frame;
                 this._computeFramePosition();
+            }
+        }
+    },
+    _frameSequence: {
+        get: function() {
+            return this.__frameSequence;
+        },
+        set: function(frameSequence) {
+            if(frameSequence && !this.__frameSequence) {
+                this.addEventListener(enchant.Event.ENTER_FRAME, this._rotateFrameSequence);
+            } else if(!frameSequence && this.__frameSequence) {
+                this.removeEventListener(enchant.Event.ENTER_FRAME, this._rotateFrameSequence);
+            }
+            if(frameSequence) {
+                this.__frameSequence = frameSequence.slice();
+                this._originalFrameSequence = frameSequence.slice();
+                this._rotateFrameSequence();
+            } else {
+                this.__frameSequence = null;
+                this._originalFrameSequence = null;
             }
         }
     },
@@ -139,6 +154,9 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             return true;
         }
         if (frameArray == null || this._originalFrameSequence == null) {
+            return false;
+        }
+        if (!(frameArray instanceof Array)) {
             return false;
         }
         if (frameArray.length !== this._originalFrameSequence.length) {
@@ -172,15 +190,16 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
         }
     },
     _rotateFrameSequence: function() {
-        if (this._frameSequence.length !== 0) {
-            var nextFrame = this._frameSequence.shift();
+        var frameSequence = this._frameSequence;
+        if (frameSequence && frameSequence.length !== 0) {
+            var nextFrame = frameSequence.shift();
             if (nextFrame === null) {
-                this._frameSequence = [];
+                this._frameSequence = null;
                 this.dispatchEvent(new enchant.Event(enchant.Event.ANIMATION_END));
             } else {
                 this._frame = nextFrame;
                 this._computeFramePosition();
-                this._frameSequence.push(nextFrame);
+                frameSequence.push(nextFrame);
             }
         }
     },
@@ -211,7 +230,8 @@ enchant.Sprite = enchant.Class.create(enchant.Entity, {
             w = this._width, h = this._height,
             iw, ih, elem, sx, sy, sw, sh;
         if (image && w !== 0 && h !== 0) {
-            iw = image.width, ih = image.height;
+            iw = image.width;
+            ih = image.height;
             if (iw < w || ih < h) {
                 ctx.fillStyle = enchant.Surface._getPattern(image);
                 ctx.fillRect(0, 0, w, h);
