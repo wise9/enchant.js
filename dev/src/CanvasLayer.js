@@ -212,8 +212,9 @@ enchant.CanvasLayer = enchant.Class.create(enchant.Group, {
             enchant.CanvasRenderer.instance.detectRender(ctx, this);
             this._lastDetected = core.frame;
         }
-        var color = ctx.getImageData(x, y, 1, 1).data;
-        return this._colorManager.getSpriteByColor(color);
+        var extra = enchant.ENV.COLOR_DETECTION_LEVEL - 1;
+        var rgba = ctx.getImageData(x - extra, y - extra, 1 + extra * 2, 1 + extra * 2).data;
+        return this._colorManager.getSpriteByColors(rgba);
     },
     _setImageSmoothingEnable: function() {
         this._dctx.imageSmoothingEnabled =
