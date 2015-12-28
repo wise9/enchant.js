@@ -76,6 +76,18 @@ describe('DetectColorManager', function(){
         });
     });
 
+    describe('#getSpriteByColors', function(){
+        it('returns sprite which correspond with most appeared color', function(){
+            var sprite1 = new Sprite(),
+                sprite2 = new Sprite();
+            var ret1 = colorManager.attachDetectColor(sprite1);
+            var ret2 = colorManager.attachDetectColor(sprite2);
+            expect(colorManager.getSpriteByColors(ret1)).to.equal(sprite1);
+            expect(colorManager.getSpriteByColors([].concat(ret1, ret1, ret2))).to.equal(sprite1);
+            expect(colorManager.getSpriteByColors([].concat(ret1, ret2, ret2))).to.equal(sprite2);
+        });
+    });
+
     describe('#_getColor', function(){
         it('returns array of color code which calculated with given number', function(){
             expect(colorManager._getColor(1)).to.deep.equal([0, 0, 16, 1]);
@@ -89,6 +101,13 @@ describe('DetectColorManager', function(){
             expect(colorManager._decodeDetectColor([0, 0, 16, 1])).to.equal(1);
             expect(colorManager._decodeDetectColor([0, 0, 32, 1])).to.equal(2);
             expect(colorManager._decodeDetectColor([16, 0, 0, 1])).to.equal(256);
+        });
+
+        it('read color from passed index', function(){
+            var rgba = [ 0, 0, 16, 1, 0, 0, 32, 1, 16, 0, 0, 1]
+            expect(colorManager._decodeDetectColor(rgba, 0)).to.equal(1);
+            expect(colorManager._decodeDetectColor(rgba, 4)).to.equal(2);
+            expect(colorManager._decodeDetectColor(rgba, 8)).to.equal(256);
         });
     });
 });

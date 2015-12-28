@@ -250,5 +250,17 @@ enchant.ENV = {
      [/lang]
      * @type Boolean
      */
-    USE_ANIMATION: true
+    USE_ANIMATION: true,
+    /**
+     [lang:ja]
+     * タッチ位置の判定範囲.
+     * 判定範囲はCOLOR_DETECTION_LEVEL * 2 + 1の正方形になる.
+     [/lang]
+     [lang:en]
+     * Specifies range of the touch detection.
+     * The detection area will be (COLOR_DETECTION_LEVEL * 2 + 1)px square.
+     [/lang]
+     * @type Boolean
+     */
+    COLOR_DETECTION_LEVEL: 2
 };

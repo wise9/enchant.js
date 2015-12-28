@@ -32,13 +32,32 @@ enchant.DetectColorManager = enchant.Class.create({
             1.0
         ];
     },
-    _decodeDetectColor: function(color) {
+    _decodeDetectColor: function(color, i) {
+        i = i || 0;
         var C = this.colorResolution;
-        return ~~(color[0] * C * C * C / 256) +
-            ~~(color[1] * C * C / 256) +
-            ~~(color[2] * C / 256);
+        return ~~(color[i] * C * C * C / 256) +
+            ~~(color[i + 1] * C * C / 256) +
+            ~~(color[i + 2] * C / 256);
     },
     getSpriteByColor: function(color) {
         return this.reference[this._decodeDetectColor(color)];
+    },
+    getSpriteByColors: function(rgba) {
+        var i, l, id, result,
+            score = 0,
+            found = {};
+
+        for (i = 0, l = rgba.length; i < l; i+= 4) {
+            id = this._decodeDetectColor(rgba, i);
+            found[id] = (found[id] || 0) + 1;
+        }
+        for (id in found) {
+            if (found[id] > score) {
+                score = found[id];
+                result = id;
+            }
+        }
+
+        return this.reference[result];
     }
 });

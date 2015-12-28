@@ -415,15 +415,29 @@ describe('CanvasLayer', function(){
             enchant.CanvasRenderer.instance.detectRender.restore();
         });
 
-        it('returns the node by calling DetectColorManager#getSpriteByColor', function(){
-            sinon.spy(scene._layers.Canvas._colorManager, 'getSpriteByColor');
-            expect(scene._layers.Canvas._colorManager.getSpriteByColor.called).to.be.false;
+        it('returns the node by calling DetectColorManager#getSpriteByColors', function(){
+            sinon.spy(scene._layers.Canvas._colorManager, 'getSpriteByColors');
+            expect(scene._layers.Canvas._colorManager.getSpriteByColors.called).to.be.false;
             core.frame++;
             var ret = scene._layers.Canvas._getEntityByPosition(1, 1);
-            var color = scene._layers.Canvas._dctx.getImageData(1, 1, 1, 1).data;
-            expect(scene._layers.Canvas._colorManager.getSpriteByColor.calledWith(color)).to.be.true;
+            var color = scene._layers.Canvas._dctx.getImageData(0, 0, 3, 3).data;
+            expect(scene._layers.Canvas._colorManager.getSpriteByColors.calledWith(color)).to.be.true;
             expect(ret).to.equal(sprite);
-            scene._layers.Canvas._colorManager.getSpriteByColor.restore();
+            scene._layers.Canvas._colorManager.getSpriteByColors.restore();
+        });
+
+        it('uses enchant.ENV.COLOR_DETECTION_LEVEL', function(){
+            var ret, color;
+            sinon.spy(scene._layers.Canvas._colorManager, 'getSpriteByColors');
+            core.frame++;
+            enchant.ENV.COLOR_DETECTION_LEVEL = 1;
+            ret = scene._layers.Canvas._getEntityByPosition(2, 2);
+            color = scene._layers.Canvas._dctx.getImageData(2, 2, 1, 1).data;
+            expect(scene._layers.Canvas._colorManager.getSpriteByColors.calledWith(color)).to.be.true;
+            enchant.ENV.COLOR_DETECTION_LEVEL = 3;
+            ret = scene._layers.Canvas._getEntityByPosition(2, 2);
+            color = scene._layers.Canvas._dctx.getImageData(0, 0, 5, 5).data;
+            expect(scene._layers.Canvas._colorManager.getSpriteByColors.calledWith(color)).to.be.true;
         });
     });
 
