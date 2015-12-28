@@ -74,84 +74,9 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
 
         this._listeners['render'] = null;
         this.addEventListener('render', function() {
-            if (this._dirty || this._previousOffsetX == null) {
-                this.redraw(0, 0, core.width, core.height);
-            } else if (this._offsetX !== this._previousOffsetX ||
-                this._offsetY !== this._previousOffsetY) {
-                if (this._tight) {
-                    var x = -this._offsetX;
-                    var y = -this._offsetY;
-                    var px = -this._previousOffsetX;
-                    var py = -this._previousOffsetY;
-                    var w1 = x - px + core.width;
-                    var w2 = px - x + core.width;
-                    var h1 = y - py + core.height;
-                    var h2 = py - y + core.height;
-                    if (w1 > this._tileWidth && w2 > this._tileWidth &&
-                        h1 > this._tileHeight && h2 > this._tileHeight) {
-                        var sx, sy, dx, dy, sw, sh;
-                        if (w1 < w2) {
-                            sx = 0;
-                            dx = px - x;
-                            sw = w1;
-                        } else {
-                            sx = x - px;
-                            dx = 0;
-                            sw = w2;
-                        }
-                        if (h1 < h2) {
-                            sy = 0;
-                            dy = py - y;
-                            sh = h1;
-                        } else {
-                            sy = y - py;
-                            dy = 0;
-                            sh = h2;
-                        }
-
-                        if (core._buffer == null) {
-                            core._buffer = document.createElement('canvas');
-                            core._buffer.width = this._context.canvas.width;
-                            core._buffer.height = this._context.canvas.height;
-                        }
-                        var context = core._buffer.getContext('2d');
-                        if (this._doubledImage) {
-                            context.clearRect(0, 0, sw * 2, sh * 2);
-                            context.drawImage(this._context.canvas,
-                                sx * 2, sy * 2, sw * 2, sh * 2, 0, 0, sw * 2, sh * 2);
-                            context = this._context;
-                            context.clearRect(dx * 2, dy * 2, sw * 2, sh * 2);
-                            context.drawImage(core._buffer,
-                                0, 0, sw * 2, sh * 2, dx * 2, dy * 2, sw * 2, sh * 2);
-                        } else {
-                            context.clearRect(0, 0, sw, sh);
-                            context.drawImage(this._context.canvas,
-                                sx, sy, sw, sh, 0, 0, sw, sh);
-                            context = this._context;
-                            context.clearRect(dx, dy, sw, sh);
-                            context.drawImage(core._buffer,
-                                0, 0, sw, sh, dx, dy, sw, sh);
-                        }
-
-                        if (dx === 0) {
-                            this.redraw(sw, 0, core.width - sw, core.height);
-                        } else {
-                            this.redraw(0, 0, core.width - sw, core.height);
-                        }
-                        if (dy === 0) {
-                            this.redraw(0, sh, core.width, core.height - sh);
-                        } else {
-                            this.redraw(0, 0, core.width, core.height - sh);
-                        }
-                    } else {
-                        this.redraw(0, 0, core.width, core.height);
-                    }
-                } else {
-                    this.redraw(0, 0, core.width, core.height);
-                }
+            if(this._dirty) {
+                this._previousOffsetX = this._previousOffsetY = null;
             }
-            this._previousOffsetX = this._offsetX;
-            this._previousOffsetY = this._offsetY;
         });
     },
     /**
@@ -329,8 +254,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._tileWidth;
         },
         set: function(tileWidth) {
-            this._tileWidth = tileWidth;
-            this._dirty = true;
+            if(this._tileWidth !== tileWidth) {
+                this._tileWidth = tileWidth;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -350,8 +277,10 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             return this._tileHeight;
         },
         set: function(tileHeight) {
-            this._tileHeight = tileHeight;
-            this._dirty = true;
+            if(this._tileHeight !== tileHeight) {
+                this._tileHeight = tileHeight;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -424,9 +353,96 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
             }
         }
     },
+    /**
+     * @private
+     */
+    updateBuffer: function() {
+        if (this._visible === undefined || this._visible) {
+            var core = enchant.Core.instance;
+            if (this._dirty || this._previousOffsetX == null) {
+                this.redraw(0, 0, core.width, core.height);
+            } else if (this._offsetX !== this._previousOffsetX ||
+                    this._offsetY !== this._previousOffsetY) {
+                if (this._tight) {
+                    var x = -this._offsetX;
+                    var y = -this._offsetY;
+                    var px = -this._previousOffsetX;
+                    var py = -this._previousOffsetY;
+                    var w1 = x - px + core.width;
+                    var w2 = px - x + core.width;
+                    var h1 = y - py + core.height;
+                    var h2 = py - y + core.height;
+                    if (w1 > this._tileWidth && w2 > this._tileWidth &&
+                            h1 > this._tileHeight && h2 > this._tileHeight) {
+                        var sx, sy, dx, dy, sw, sh;
+                        if (w1 < w2) {
+                            sx = 0;
+                            dx = px - x;
+                            sw = w1;
+                        } else {
+                            sx = x - px;
+                            dx = 0;
+                            sw = w2;
+                        }
+                        if (h1 < h2) {
+                            sy = 0;
+                            dy = py - y;
+                            sh = h1;
+                        } else {
+                            sy = y - py;
+                            dy = 0;
+                            sh = h2;
+                        }
+
+                        if (core._buffer == null) {
+                            core._buffer = document.createElement('canvas');
+                            core._buffer.width = this._context.canvas.width;
+                            core._buffer.height = this._context.canvas.height;
+                        }
+                        var context = core._buffer.getContext('2d');
+                        if (this._doubledImage) {
+                            context.clearRect(0, 0, sw * 2, sh * 2);
+                            context.drawImage(this._context.canvas,
+                                    sx * 2, sy * 2, sw * 2, sh * 2, 0, 0, sw * 2, sh * 2);
+                            context = this._context;
+                            context.clearRect(dx * 2, dy * 2, sw * 2, sh * 2);
+                            context.drawImage(core._buffer,
+                                    0, 0, sw * 2, sh * 2, dx * 2, dy * 2, sw * 2, sh * 2);
+                        } else {
+                            context.clearRect(0, 0, sw, sh);
+                            context.drawImage(this._context.canvas,
+                                    sx, sy, sw, sh, 0, 0, sw, sh);
+                            context = this._context;
+                            context.clearRect(dx, dy, sw, sh);
+                            context.drawImage(core._buffer,
+                                    0, 0, sw, sh, dx, dy, sw, sh);
+                        }
+
+                        if (dx === 0) {
+                            this.redraw(sw, 0, core.width - sw, core.height);
+                        } else {
+                            this.redraw(0, 0, core.width - sw, core.height);
+                        }
+                        if (dy === 0) {
+                            this.redraw(0, sh, core.width, core.height - sh);
+                        } else {
+                            this.redraw(0, 0, core.width, core.height - sh);
+                        }
+                    } else {
+                        this.redraw(0, 0, core.width, core.height);
+                    }
+                } else {
+                    this.redraw(0, 0, core.width, core.height);
+                }
+            }
+            this._previousOffsetX = this._offsetX;
+            this._previousOffsetY = this._offsetY;
+        }
+    },
     cvsRender: function(ctx) {
-        var core = enchant.Core.instance;
         if (this.width !== 0 && this.height !== 0) {
+            var core = enchant.Core.instance;
+            this.updateBuffer();
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
             var cvs = this._context.canvas;
@@ -436,6 +452,7 @@ enchant.Map = enchant.Class.create(enchant.Entity, {
     },
     domRender: function(element) {
         if (this._image) {
+            this.updateBuffer();
             this._style['background-image'] = this._surface._css;
             // bad performance
             this._style[enchant.ENV.VENDOR_PREFIX + 'Transform'] = 'matrix(1, 0, 0, 1, 0, 0)';

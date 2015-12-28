@@ -20,15 +20,11 @@ enchant.ActionEventTarget = enchant.Class.create(enchant.EventTarget, {
         enchant.EventTarget.apply(this, arguments);
     },
     dispatchEvent: function(e) {
-        var target;
-        if (this.node) {
-            target = this.node;
-            e.target = target;
-            e.localX = e.x - target._offsetX;
-            e.localY = e.y - target._offsetY;
-        } else {
-            this.node = null;
-        }
+        var target = this.node ? this.node : this;
+
+        e.target = target;
+        e.localX = e.x - target._offsetX;
+        e.localY = e.y - target._offsetY;
 
         if (this['on' + e.type] != null) {
             this['on' + e.type].call(target, e);

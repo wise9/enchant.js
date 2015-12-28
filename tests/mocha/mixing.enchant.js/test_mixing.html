@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../mocha.css" type="text/css" media="screen">
+    <title>enchant.js unit test</title>
+    <style type="text/css">
+    #enchant-stage{display:none; visibility:hidden;}
+    </style>
+</head>
+<body>
+    <div id="mocha"></div>
+    <script src="../mocha.js" type="text/javascript"></script> 
+    <script type="text/javascript">
+        mocha.setup("bdd");
+    </script>
+    <script src="../../../node_modules/grunt-mocha/phantomjs/bridge.js" type="text/javascript"></script>
+    <script src="../chai.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        var expect = chai.expect;
+    </script>
+
+    <script src="../../../dev/enchant.js"></script>
+    <script src="../../../dev/plugins/mixing.enchant.js"></script>
+    <script src="./test_mixing.js"></script>
+
+    <script type="text/javascript">
+        mocha.run();
+    </script>
+</body>
+</html>

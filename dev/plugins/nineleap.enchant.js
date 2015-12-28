@@ -74,7 +74,7 @@
                 });
                 this.pushScene(this.startScene);
 
-                this.endScene = new SplashScene();
+                this.endScene = new enchant.nineleap.SplashScene();
                 this.endScene.image = this.assets['end.png'];
                 this.removeEventListener('load', arguments.callee);
             });
@@ -168,7 +168,7 @@
                 }
 
                 // generate an Sprite object and put it on center
-                var sprite = new Sprite(image.width, image.height);
+                var sprite = new enchant.Sprite(image.width, image.height);
                 sprite.image = image;
                 sprite.x = (this.width - image.width) / 2;
                 sprite.y = (this.height - image.height) / 2;

@@ -115,9 +115,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     moveTo: function(x, y) {
-        this._x = x;
-        this._y = y;
-        this._dirty = true;
+        this.x = x;
+        this.y = y;
     },
     /**
      [lang:ja]
@@ -137,9 +136,8 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
      [/lang]
      */
     moveBy: function(x, y) {
-        this._x += x;
-        this._y += y;
-        this._dirty = true;
+        this.x += x;
+        this.y += y;
     },
     /**
      [lang:ja]
@@ -158,8 +156,10 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             return this._x;
         },
         set: function(x) {
-            this._x = x;
-            this._dirty = true;
+            if(this._x !== x) {
+                this._x = x;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -179,8 +179,10 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
             return this._y;
         },
         set: function(y) {
-            this._y = y;
-            this._dirty = true;
+            if(this._y !== y) {
+                this._y = y;
+                this._dirty = true;
+            }
         }
     },
     _updateCoordinate: function() {
@@ -216,11 +218,16 @@ enchant.Node = enchant.Class.create(enchant.EventTarget, {
         matrix.reset();
     },
     remove: function() {
-        if (this._listener) {
-            this.clearEventListener();
-        }
         if (this.parentNode) {
             this.parentNode.removeChild(this);
         }
+        if (this.childNodes) {
+            var childNodes = this.childNodes.slice();
+            for(var i = childNodes.length-1; i >= 0; i--) {
+                childNodes[i].remove();
+            }
+        }
+        
+        this.clearEventListener();
     }
 });

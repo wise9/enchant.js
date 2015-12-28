@@ -70,6 +70,8 @@ var _staticIntersectStrict = function(other) {
     return false;
 };
 
+var _nodePrototypeClearEventListener = enchant.Node.prototype.clearEventListener;
+
 /**
  * @scope enchant.Entity.prototype
  */
@@ -203,8 +205,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._width;
         },
         set: function(width) {
-            this._width = width;
-            this._dirty = true;
+            if(this._width !== width) {
+                this._width = width;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -224,8 +228,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._height;
         },
         set: function(height) {
-            this._height = height;
-            this._dirty = true;
+            if(this._height !== height) {
+                this._height = height;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -534,8 +540,7 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
      [/lang]
      */
     rotate: function(deg) {
-        this._rotation += deg;
-        this._dirty = true;
+        this.rotation += deg;
     },
     /**
      [lang:ja]
@@ -554,8 +559,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._scaleX;
         },
         set: function(scaleX) {
-            this._scaleX = scaleX;
-            this._dirty = true;
+            if(this._scaleX !== scaleX) {
+                this._scaleX = scaleX;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -575,8 +582,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._scaleY;
         },
         set: function(scaleY) {
-            this._scaleY = scaleY;
-            this._dirty = true;
+            if(this._scaleY !== scaleY) {
+                this._scaleY = scaleY;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -596,8 +605,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._rotation;
         },
         set: function(rotation) {
-            this._rotation = rotation;
-            this._dirty = true;
+            if(this._rotation !== rotation) {
+                this._rotation = rotation;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -617,8 +628,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._originX;
         },
         set: function(originX) {
-            this._originX = originX;
-            this._dirty = true;
+            if(this._originX !== originX) {
+                this._originX = originX;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -638,8 +651,10 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             return this._originY;
         },
         set: function(originY) {
-            this._originY = originY;
-            this._dirty = true;
+            if(this._originY !== originY) {
+                this._originY = originY;
+                this._dirty = true;
+            }
         }
     },
     /**
@@ -675,6 +690,14 @@ enchant.Entity = enchant.Class.create(enchant.Node, {
             this._removeSelfFromCollection();
         }
     },
+    /**#nocode+*/
+    clearEventListener: function() {
+        _nodePrototypeClearEventListener.apply(this,arguments);
+        if (this.scene) {
+            this._removeSelfFromCollection();
+        }
+    },
+    /**#nocode-*/
     _addSelfToCollection: function() {
         if (this._isContainedInCollection) {
             return;

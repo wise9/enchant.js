@@ -81,7 +81,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
          [/lang]
          * @type Number
          */
-        this.width = width;
+        this.width = Math.ceil(width);
         /**
          [lang:ja]
          * Surfaceの高さ.
@@ -94,7 +94,7 @@ enchant.Surface = enchant.Class.create(enchant.EventTarget, {
          [/lang]
          * @type Number
          */
-        this.height = height;
+        this.height = Math.ceil(height);
         /**
          [lang:ja]
          * Surfaceの描画コンテクスト.
