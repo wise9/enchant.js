@@ -19,14 +19,14 @@ describe("Deferred", function(){
             result = true;
         });
         expect(result).to.be.false;
-        setTimeout(done, 100);
+        setTimeout(done, 150);
         setTimeout(function(){
             expect(result).to.be.true;
         }, 50);
     });
 
     it("should execute chained Deferred", function(done){
-        setTimeout(done, 100);
+        setTimeout(done, 150);
         var result1 = result2 = false;
         Deferred.next(function(){
             result1 = true;
@@ -41,7 +41,7 @@ describe("Deferred", function(){
     });
 
     it("should pass returned value to chained next Dererred", function(done) {
-        setTimeout(done, 100);
+        setTimeout(done, 150);
         var val;
         Deferred.next(function(){
             return 'foo';
@@ -64,7 +64,7 @@ describe("Deferred", function(){
     });
 
     it("should handle the error", function(done){
-        setTimeout(done, 100);
+        setTimeout(done, 150);
         var result1 = result2 = false;
         Deferred.next(function(){
             throw new Error('fail');
@@ -161,7 +161,7 @@ describe("Deferred", function(){
     });
 
     it("should handle the error when execute parallel", function(done){
-        setTimeout(done, 100);
+        setTimeout(done, 150);
         var result = false, counter = 0;
         Deferred.parallel([
             Deferred.next(function(){
