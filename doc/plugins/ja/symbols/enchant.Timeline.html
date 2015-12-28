@@ -234,6 +234,12 @@
 				
 					<li><a href="../symbols/enchant.Surface.html">enchant<span class='break'> </span>.<span class='break'> </span>Surface</a></li>
 				
+					<li><a href="../symbols/enchant.telepathy.html">enchant<span class='break'> </span>.<span class='break'> </span>telepathy</a></li>
+				
+					<li><a href="../symbols/enchant.telepathy.Telepathy.html">enchant<span class='break'> </span>.<span class='break'> </span>telepathy<span class='break'> </span>.<span class='break'> </span>Telepathy</a></li>
+				
+					<li><a href="../symbols/enchant.telepathy.TelepathySense.html">enchant<span class='break'> </span>.<span class='break'> </span>telepathy<span class='break'> </span>.<span class='break'> </span>TelepathySense</a></li>
+				
 					<li><a href="../symbols/enchant.Timeline.html">enchant<span class='break'> </span>.<span class='break'> </span>Timeline</a></li>
 				
 					<li><a href="../symbols/enchant.Tween.html">enchant<span class='break'> </span>.<span class='break'> </span>Tween</a></li>
@@ -286,6 +292,10 @@
 				
 					<li><a href="../symbols/enchant.widget.InputTextBox.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>InputTextBox</a></li>
 				
+					<li><a href="../symbols/enchant.widget.LazyListItem.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>LazyListItem</a></li>
+				
+					<li><a href="../symbols/enchant.widget.LazyListView.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>LazyListView</a></li>
+				
 					<li><a href="../symbols/enchant.widget.ListElement.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>ListElement</a></li>
 				
 					<li><a href="../symbols/enchant.widget.ListItem.html">enchant<span class='break'> </span>.<span class='break'> </span>widget<span class='break'> </span>.<span class='break'> </span>ListItem</a></li>
@@ -317,7 +327,7 @@
 		
 		Documentation generator: <a href="http://code.google.com/p/jsdoc-toolkit/" target="_blank">JsDoc Toolkit</a> 2.4.0<br />
 		Template: <a href="http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/" target="_blank">Codeview</a> 1.2<br />
-		Generated on: 2014-9-10 19:12
+		Generated on: 2015-11-28 23:47
 	</div>
 </div>
 
@@ -736,9 +746,9 @@
 								>
 									<td class="attributes">&nbsp;</td>
 									<td class="nameDescription">
-										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#tick">tick</a></b>(enterFrameEvent)
+										<div class="fixedFont"><b><a href="../symbols/enchant.Timeline.html#tick">tick</a></b>(elapsed)
 										</div>
-										<div class="description">自身のenterframeイベントのリスナとして登録される関数.</div>
+										<div class="description">Timelineの時間を進める.</div>
 									</td>
 								</tr>
 							
@@ -2702,12 +2712,11 @@ fadeTo(1, time, easing) のエイリアス.
 									
 									
 									
-									<b>tick</b>(enterFrameEvent)
+									<b>tick</b>(elapsed)
 								</div>
 								
 								<div class="description">
-									自身のenterframeイベントのリスナとして登録される関数.
-1フレーム経過する際に実行する処理が書かれている.
+									Timelineの時間を進める.
 (キューの先頭にあるアクションに対して, actionstart/actiontickイベントを発行する)
 									
 									
@@ -2722,10 +2731,10 @@ fadeTo(1, time, easing) のエイリアス.
 										<dt class="heading">Parameters:</dt>
 										
 											<dt>
-												<span class="light fixedFont">{<a href="../symbols/enchant.Event.html">enchant.Event</a>}</span> <b>enterFrameEvent</b>
+												<span class="light fixedFont">{Number}</span> <b>elapsed</b>
 												
 											</dt>
-											<dd>enterframeイベント.</dd>
+											<dd>経過させる時間.</dd>
 										
 									</dl>
 								

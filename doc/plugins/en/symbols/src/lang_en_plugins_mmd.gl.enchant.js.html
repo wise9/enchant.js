@@ -739,271 +739,273 @@
 <span class='line'>732</span> </span><span class="WHIT">        </span><span class="NAME">stride</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>733</span> </span><span class="WHIT">        </span><span class="NAME">offset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
 <span class='line'>734</span> </span><span class="WHIT">        </span><span class="NAME">btype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">34962</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>735</span> </span><span class="WHIT">        </span><span class="NAME">Atype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Float32Array</span><span class="WHIT">
-<span class='line'>736</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>737</span> </span><span class="WHIT">    </span><span class="NAME">bufferProto.EDGES</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>738</span> </span><span class="WHIT">        </span><span class="NAME">size</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>739</span> </span><span class="WHIT">        </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5123</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>740</span> </span><span class="WHIT">        </span><span class="NAME">norm</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>741</span> </span><span class="WHIT">        </span><span class="NAME">stride</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>742</span> </span><span class="WHIT">        </span><span class="NAME">offset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>743</span> </span><span class="WHIT">        </span><span class="NAME">btype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">34962</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>744</span> </span><span class="WHIT">        </span><span class="NAME">Atype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Uint16Array</span><span class="WHIT">
-<span class='line'>745</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>746</span> 
-<span class='line'>747</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_original_start</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enchant.gl.Core.prototype.start</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>748</span> </span><span class="WHIT">    </span><span class="NAME">enchant.gl.Core.prototype.start</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>749</span> </span><span class="WHIT">        </span><span class="NAME">enchant.gl.mmd.MMD_SHADER_PROGRAM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">enchant.gl.Shader</span><span class="PUNC">(</span><span class="NAME">MMD_VERTEX_SHADER_SOURCE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">MMD_FRAGMENT_SHADER_SOURCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>750</span> </span><span class="WHIT">        </span><span class="NAME">this.GL.setProgram</span><span class="PUNC">(</span><span class="NAME">enchant.gl.mmd.MMD_SHADER_PROGRAM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>751</span> </span><span class="WHIT">        </span><span class="NAME">enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>752</span> </span><span class="WHIT">            </span><span class="NAME">uLightMatrix</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
-<span class='line'>753</span> </span><span class="WHIT">                </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>754</span> </span><span class="WHIT">                </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>755</span> </span><span class="WHIT">                </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>756</span> </span><span class="WHIT">                </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
-<span class='line'>757</span> </span><span class="WHIT">            </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>758</span> </span><span class="WHIT">            </span><span class="NAME">uLightColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="NUMB">0.6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0.6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0.6</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>759</span> </span><span class="WHIT">            </span><span class="NAME">uSelfShadow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>760</span> </span><span class="WHIT">            </span><span class="NAME">uShadowMap</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>761</span> </span><span class="WHIT">            </span><span class="NAME">uGenerateShadowMap</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>762</span> </span><span class="WHIT">            </span><span class="NAME">uCenterPoint</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>763</span> </span><span class="WHIT">            </span><span class="NAME">uAxis</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>764</span> </span><span class="WHIT">            </span><span class="NAME">uAxisColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>765</span> </span><span class="WHIT">            </span><span class="NAME">uEdge</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>766</span> </span><span class="WHIT">            </span><span class="NAME">uEdgeColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
-<span class='line'>767</span> </span><span class="WHIT">            </span><span class="NAME">uEdgeThickness</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0.004</span><span class="WHIT">
-<span class='line'>768</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>769</span> </span><span class="WHIT">        </span><span class="NAME">this.GL.setDefaultProgram</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>770</span> </span><span class="WHIT">        </span><span class="NAME">_original_start.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>771</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>772</span> 
-<span class='line'>773</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lerp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">n1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">n2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
-<span class='line'>774</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n1</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n2</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">n1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>775</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>776</span> 
-<span class='line'>777</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">MMD_VERTEX_SHADER_SOURCE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'\n\
-<span class='line'>778</span>         uniform mat4 uMVMatrix;\n\
-<span class='line'>779</span>         uniform mat4 uPMatrix;\n\
-<span class='line'>780</span>         uniform mat4 uNMatrix;\n\
-<span class='line'>781</span>         \n\
-<span class='line'>782</span>         uniform mat4 uLightMatrix;\n\
+<span class='line'>735</span> </span><span class="WHIT">        </span><span class="NAME">usage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">35044</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>736</span> </span><span class="WHIT">        </span><span class="NAME">Atype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Float32Array</span><span class="WHIT">
+<span class='line'>737</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>738</span> </span><span class="WHIT">    </span><span class="NAME">bufferProto.EDGES</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>739</span> </span><span class="WHIT">        </span><span class="NAME">size</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>740</span> </span><span class="WHIT">        </span><span class="NAME">type</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">5123</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>741</span> </span><span class="WHIT">        </span><span class="NAME">norm</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="KEYW">false</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>742</span> </span><span class="WHIT">        </span><span class="NAME">stride</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>743</span> </span><span class="WHIT">        </span><span class="NAME">offset</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>744</span> </span><span class="WHIT">        </span><span class="NAME">btype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">34962</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>745</span> </span><span class="WHIT">        </span><span class="NAME">usage</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">35044</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>746</span> </span><span class="WHIT">        </span><span class="NAME">Atype</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NAME">Uint16Array</span><span class="WHIT">
+<span class='line'>747</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>748</span> 
+<span class='line'>749</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">_original_start</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="NAME">enchant.gl.Core.prototype.start</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>750</span> </span><span class="WHIT">    </span><span class="NAME">enchant.gl.Core.prototype.start</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>751</span> </span><span class="WHIT">        </span><span class="NAME">enchant.gl.mmd.MMD_SHADER_PROGRAM</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">new</span><span class="WHIT"> </span><span class="NAME">enchant.gl.Shader</span><span class="PUNC">(</span><span class="NAME">MMD_VERTEX_SHADER_SOURCE</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">MMD_FRAGMENT_SHADER_SOURCE</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>752</span> </span><span class="WHIT">        </span><span class="NAME">this.GL.setProgram</span><span class="PUNC">(</span><span class="NAME">enchant.gl.mmd.MMD_SHADER_PROGRAM</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>753</span> </span><span class="WHIT">        </span><span class="NAME">enchant.gl.mmd.MMD_SHADER_PROGRAM.setUniforms</span><span class="PUNC">(</span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>754</span> </span><span class="WHIT">            </span><span class="NAME">uLightMatrix</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT">
+<span class='line'>755</span> </span><span class="WHIT">                </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>756</span> </span><span class="WHIT">                </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>757</span> </span><span class="WHIT">                </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>758</span> </span><span class="WHIT">                </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT">
+<span class='line'>759</span> </span><span class="WHIT">            </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>760</span> </span><span class="WHIT">            </span><span class="NAME">uLightColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="NUMB">0.6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0.6</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0.6</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>761</span> </span><span class="WHIT">            </span><span class="NAME">uSelfShadow</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>762</span> </span><span class="WHIT">            </span><span class="NAME">uShadowMap</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>763</span> </span><span class="WHIT">            </span><span class="NAME">uGenerateShadowMap</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>764</span> </span><span class="WHIT">            </span><span class="NAME">uCenterPoint</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>765</span> </span><span class="WHIT">            </span><span class="NAME">uAxis</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>766</span> </span><span class="WHIT">            </span><span class="NAME">uAxisColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">1</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>767</span> </span><span class="WHIT">            </span><span class="NAME">uEdge</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>768</span> </span><span class="WHIT">            </span><span class="NAME">uEdgeColor</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="PUNC">[</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NUMB">0</span><span class="WHIT"> </span><span class="PUNC">]</span><span class="PUNC">,</span><span class="WHIT">
+<span class='line'>769</span> </span><span class="WHIT">            </span><span class="NAME">uEdgeThickness</span><span class="PUNC">:</span><span class="WHIT"> </span><span class="NUMB">0.004</span><span class="WHIT">
+<span class='line'>770</span> </span><span class="WHIT">        </span><span class="PUNC">}</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>771</span> </span><span class="WHIT">        </span><span class="NAME">this.GL.setDefaultProgram</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>772</span> </span><span class="WHIT">        </span><span class="NAME">_original_start.call</span><span class="PUNC">(</span><span class="KEYW">this</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>773</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>774</span> 
+<span class='line'>775</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">lerp</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="KEYW">function</span><span class="PUNC">(</span><span class="NAME">n1</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">n2</span><span class="PUNC">,</span><span class="WHIT"> </span><span class="NAME">r</span><span class="PUNC">)</span><span class="WHIT"> </span><span class="PUNC">{</span><span class="WHIT">
+<span class='line'>776</span> </span><span class="WHIT">        </span><span class="KEYW">return</span><span class="WHIT"> </span><span class="NAME">n1</span><span class="WHIT"> </span><span class="PUNC">+</span><span class="WHIT"> </span><span class="NAME">r</span><span class="WHIT"> </span><span class="PUNC">*</span><span class="WHIT"> </span><span class="PUNC">(</span><span class="NAME">n2</span><span class="WHIT"> </span><span class="PUNC">-</span><span class="WHIT"> </span><span class="NAME">n1</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>777</span> </span><span class="WHIT">    </span><span class="PUNC">}</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>778</span> 
+<span class='line'>779</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">MMD_VERTEX_SHADER_SOURCE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'\n\
+<span class='line'>780</span>         uniform mat4 uMVMatrix;\n\
+<span class='line'>781</span>         uniform mat4 uPMatrix;\n\
+<span class='line'>782</span>         uniform mat4 uNMatrix;\n\
 <span class='line'>783</span>         \n\
-<span class='line'>784</span>         attribute vec3 aVertexNormal;\n\
-<span class='line'>785</span>         attribute vec2 aTextureCoord;\n\
-<span class='line'>786</span>         attribute float aVertexEdge;\n\
-<span class='line'>787</span>         \n\
-<span class='line'>788</span>         attribute float aBoneWeight;\n\
-<span class='line'>789</span>         attribute vec3 aVectorFromBone1;\n\
-<span class='line'>790</span>         attribute vec3 aVectorFromBone2;\n\
-<span class='line'>791</span>         attribute vec4 aBone1Rotation;\n\
-<span class='line'>792</span>         attribute vec4 aBone2Rotation;\n\
-<span class='line'>793</span>         attribute vec3 aBone1Position;\n\
-<span class='line'>794</span>         attribute vec3 aBone2Position;\n\
-<span class='line'>795</span>         \n\
-<span class='line'>796</span>         attribute vec3 aMultiPurposeVector;\n\
+<span class='line'>784</span>         uniform mat4 uLightMatrix;\n\
+<span class='line'>785</span>         \n\
+<span class='line'>786</span>         attribute vec3 aVertexNormal;\n\
+<span class='line'>787</span>         attribute vec2 aTextureCoord;\n\
+<span class='line'>788</span>         attribute float aVertexEdge;\n\
+<span class='line'>789</span>         \n\
+<span class='line'>790</span>         attribute float aBoneWeight;\n\
+<span class='line'>791</span>         attribute vec3 aVectorFromBone1;\n\
+<span class='line'>792</span>         attribute vec3 aVectorFromBone2;\n\
+<span class='line'>793</span>         attribute vec4 aBone1Rotation;\n\
+<span class='line'>794</span>         attribute vec4 aBone2Rotation;\n\
+<span class='line'>795</span>         attribute vec3 aBone1Position;\n\
+<span class='line'>796</span>         attribute vec3 aBone2Position;\n\
 <span class='line'>797</span>         \n\
-<span class='line'>798</span>         varying vec3 vPosition;\n\
-<span class='line'>799</span>         varying vec3 vNormal;\n\
-<span class='line'>800</span>         varying vec2 vTextureCoord;\n\
-<span class='line'>801</span>         varying vec4 vLightCoord;\n\
-<span class='line'>802</span>         \n\
-<span class='line'>803</span>         uniform float uEdgeThickness;\n\
-<span class='line'>804</span>         uniform bool uEdge;\n\
-<span class='line'>805</span>         \n\
-<span class='line'>806</span>         uniform bool uGenerateShadowMap;\n\
+<span class='line'>798</span>         attribute vec3 aMultiPurposeVector;\n\
+<span class='line'>799</span>         \n\
+<span class='line'>800</span>         varying vec3 vPosition;\n\
+<span class='line'>801</span>         varying vec3 vNormal;\n\
+<span class='line'>802</span>         varying vec2 vTextureCoord;\n\
+<span class='line'>803</span>         varying vec4 vLightCoord;\n\
+<span class='line'>804</span>         \n\
+<span class='line'>805</span>         uniform float uEdgeThickness;\n\
+<span class='line'>806</span>         uniform bool uEdge;\n\
 <span class='line'>807</span>         \n\
-<span class='line'>808</span>         uniform bool uSelfShadow;\n\
+<span class='line'>808</span>         uniform bool uGenerateShadowMap;\n\
 <span class='line'>809</span>         \n\
-<span class='line'>810</span>         uniform bool uAxis;\n\
-<span class='line'>811</span>         uniform bool uCenterPoint;\n\
-<span class='line'>812</span>         \n\
-<span class='line'>813</span>         vec3 qtransform(vec4 q, vec3 v) {\n\
-<span class='line'>814</span>             return v + 2.0 * cross(cross(v, q.xyz) - q.w*v, q.xyz);\n\
-<span class='line'>815</span>         }\n\
-<span class='line'>816</span>         \n\
-<span class='line'>817</span>         void main() {\n\
-<span class='line'>818</span>             vec3 position;\n\
-<span class='line'>819</span>             vec3 normal;\n\
-<span class='line'>820</span>         \n\
-<span class='line'>821</span>             if (uAxis || uCenterPoint) {\n\
+<span class='line'>810</span>         uniform bool uSelfShadow;\n\
+<span class='line'>811</span>         \n\
+<span class='line'>812</span>         uniform bool uAxis;\n\
+<span class='line'>813</span>         uniform bool uCenterPoint;\n\
+<span class='line'>814</span>         \n\
+<span class='line'>815</span>         vec3 qtransform(vec4 q, vec3 v) {\n\
+<span class='line'>816</span>             return v + 2.0 * cross(cross(v, q.xyz) - q.w*v, q.xyz);\n\
+<span class='line'>817</span>         }\n\
+<span class='line'>818</span>         \n\
+<span class='line'>819</span>         void main() {\n\
+<span class='line'>820</span>             vec3 position;\n\
+<span class='line'>821</span>             vec3 normal;\n\
 <span class='line'>822</span>         \n\
-<span class='line'>823</span>                 position = aMultiPurposeVector;\n\
+<span class='line'>823</span>             if (uAxis || uCenterPoint) {\n\
 <span class='line'>824</span>         \n\
-<span class='line'>825</span>             } else {\n\
+<span class='line'>825</span>                 position = aMultiPurposeVector;\n\
 <span class='line'>826</span>         \n\
-<span class='line'>827</span>                 float weight = aBoneWeight;\n\
-<span class='line'>828</span>                 vec3 morph = aMultiPurposeVector;\n\
-<span class='line'>829</span>         \n\
-<span class='line'>830</span>                 position = qtransform(aBone1Rotation, aVectorFromBone1 + morph) + aBone1Position;\n\
-<span class='line'>831</span>                 normal = qtransform(aBone1Rotation, aVertexNormal);\n\
-<span class='line'>832</span>         \n\
-<span class='line'>833</span>                 if (weight &lt; 0.99) {\n\
-<span class='line'>834</span>                     vec3 p2 = qtransform(aBone2Rotation, aVectorFromBone2 + morph) + aBone2Position;\n\
-<span class='line'>835</span>                     vec3 n2 = qtransform(aBone2Rotation, normal);\n\
-<span class='line'>836</span>         \n\
-<span class='line'>837</span>                     position = mix(p2, position, weight);\n\
-<span class='line'>838</span>                     normal = normalize(mix(n2, normal, weight));\n\
-<span class='line'>839</span>                 }\n\
-<span class='line'>840</span>             }\n\
-<span class='line'>841</span>         \n\
-<span class='line'>842</span>            \n\
-<span class='line'>843</span>             gl_Position = uPMatrix * uMVMatrix * vec4(position, 1.0);\n\
-<span class='line'>844</span>         \n\
-<span class='line'>845</span>             if (uCenterPoint) {\n\
-<span class='line'>846</span>                 gl_Position.z = 0.0;\n\
-<span class='line'>847</span>                 gl_PointSize = 16.0;\n\
-<span class='line'>848</span>             }\n\
-<span class='line'>849</span>         \n\
-<span class='line'>850</span>             if (uGenerateShadowMap || uAxis || uCenterPoint) return;\n\
+<span class='line'>827</span>             } else {\n\
+<span class='line'>828</span>         \n\
+<span class='line'>829</span>                 float weight = aBoneWeight;\n\
+<span class='line'>830</span>                 vec3 morph = aMultiPurposeVector;\n\
+<span class='line'>831</span>         \n\
+<span class='line'>832</span>                 position = qtransform(aBone1Rotation, aVectorFromBone1 + morph) + aBone1Position;\n\
+<span class='line'>833</span>                 normal = qtransform(aBone1Rotation, aVertexNormal);\n\
+<span class='line'>834</span>         \n\
+<span class='line'>835</span>                 if (weight &lt; 0.99) {\n\
+<span class='line'>836</span>                     vec3 p2 = qtransform(aBone2Rotation, aVectorFromBone2 + morph) + aBone2Position;\n\
+<span class='line'>837</span>                     vec3 n2 = qtransform(aBone2Rotation, normal);\n\
+<span class='line'>838</span>         \n\
+<span class='line'>839</span>                     position = mix(p2, position, weight);\n\
+<span class='line'>840</span>                     normal = normalize(mix(n2, normal, weight));\n\
+<span class='line'>841</span>                 }\n\
+<span class='line'>842</span>             }\n\
+<span class='line'>843</span>         \n\
+<span class='line'>844</span>            \n\
+<span class='line'>845</span>             gl_Position = uPMatrix * uMVMatrix * vec4(position, 1.0);\n\
+<span class='line'>846</span>         \n\
+<span class='line'>847</span>             if (uCenterPoint) {\n\
+<span class='line'>848</span>                 gl_Position.z = 0.0;\n\
+<span class='line'>849</span>                 gl_PointSize = 16.0;\n\
+<span class='line'>850</span>             }\n\
 <span class='line'>851</span>         \n\
-<span class='line'>852</span>            \n\
-<span class='line'>853</span>             vTextureCoord = aTextureCoord;\n\
-<span class='line'>854</span>             vPosition = (uMVMatrix * vec4(position, 1.0)).xyz;\n\
-<span class='line'>855</span>             vNormal = (uNMatrix * vec4(normal, 1.0)).xyz;\n\
-<span class='line'>856</span>         \n\
-<span class='line'>857</span>             if (uSelfShadow) {\n\
-<span class='line'>858</span>                 vLightCoord = uLightMatrix * vec4(position, 1.0);\n\
-<span class='line'>859</span>             }\n\
-<span class='line'>860</span>         \n\
-<span class='line'>861</span>             if (uEdge) {\n\
-<span class='line'>862</span>                 vec4 pos = gl_Position;\n\
-<span class='line'>863</span>                 vec4 pos2 = uPMatrix * uMVMatrix * vec4(position + normal, 1.0);\n\
-<span class='line'>864</span>                 vec4 norm = normalize(pos2 - pos);\n\
-<span class='line'>865</span>                 gl_Position = pos + norm * uEdgeThickness * aVertexEdge * pos.w;\n\
-<span class='line'>866</span>                 return;\n\
-<span class='line'>867</span>             }\n\
-<span class='line'>868</span>         }\n\
-<span class='line'>869</span>     '</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>870</span> 
-<span class='line'>871</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">MMD_FRAGMENT_SHADER_SOURCE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'\n\
-<span class='line'>872</span>         #ifdef GL_ES\n\
-<span class='line'>873</span>             precision highp float;\n\
-<span class='line'>874</span>         #endif\n\
-<span class='line'>875</span>         \n\
-<span class='line'>876</span>         varying vec2 vTextureCoord;\n\
-<span class='line'>877</span>         varying vec3 vPosition;\n\
-<span class='line'>878</span>         varying vec3 vNormal;\n\
-<span class='line'>879</span>         varying vec4 vLightCoord;\n\
-<span class='line'>880</span>         \n\
-<span class='line'>881</span>         uniform vec3 uLightDirection;\n\
-<span class='line'>882</span>         uniform vec3 uLightColor;\n\
-<span class='line'>883</span>         \n\
-<span class='line'>884</span>         uniform vec3 uAmbientColor;\n\
-<span class='line'>885</span>         uniform vec3 uSpecularColor;\n\
-<span class='line'>886</span>         uniform vec3 uDiffuseColor;\n\
-<span class='line'>887</span>         uniform float uAlpha;\n\
-<span class='line'>888</span>         uniform float uShininess;\n\
-<span class='line'>889</span>         \n\
-<span class='line'>890</span>         uniform bool uUseTexture;\n\
-<span class='line'>891</span>         uniform bool uUseSphereMap;\n\
-<span class='line'>892</span>         uniform bool uIsSphereMapAdditive;\n\
-<span class='line'>893</span>         \n\
-<span class='line'>894</span>         uniform sampler2D uToon;\n\
-<span class='line'>895</span>         uniform sampler2D uTexture;\n\
-<span class='line'>896</span>         uniform sampler2D uSphereMap;\n\
-<span class='line'>897</span>         \n\
-<span class='line'>898</span>         uniform bool uEdge;\n\
-<span class='line'>899</span>         uniform float uEdgeThickness;\n\
-<span class='line'>900</span>         uniform vec3 uEdgeColor;\n\
-<span class='line'>901</span>         \n\
-<span class='line'>902</span>         uniform bool uGenerateShadowMap;\n\
-<span class='line'>903</span>         uniform bool uSelfShadow;\n\
-<span class='line'>904</span>         uniform sampler2D uShadowMap;\n\
-<span class='line'>905</span>         \n\
-<span class='line'>906</span>         uniform bool uAxis;\n\
-<span class='line'>907</span>         uniform vec3 uAxisColor;\n\
-<span class='line'>908</span>         uniform bool uCenterPoint;\n\
-<span class='line'>909</span>         \n\
-<span class='line'>910</span>         // from http://spidergl.org/example.php?id=6\n\
-<span class='line'>911</span>         vec4 pack_depth(const in float depth) {\n\
-<span class='line'>912</span>             const vec4 bit_shift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);\n\
-<span class='line'>913</span>             const vec4 bit_mask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);\n\
-<span class='line'>914</span>             vec4 res = fract(depth * bit_shift);\n\
-<span class='line'>915</span>             res -= res.xxyz * bit_mask;\n\
-<span class='line'>916</span>             return res;\n\
-<span class='line'>917</span>         }\n\
-<span class='line'>918</span>         float unpack_depth(const in vec4 rgba_depth)\n\
-<span class='line'>919</span>         {\n\
-<span class='line'>920</span>             const vec4 bit_shift = vec4(1.0/(256.0*256.0*256.0), 1.0/(256.0*256.0), 1.0/256.0, 1.0);\n\
-<span class='line'>921</span>             float depth = dot(rgba_depth, bit_shift);\n\
-<span class='line'>922</span>             return depth;\n\
-<span class='line'>923</span>         }\n\
-<span class='line'>924</span>         \n\
-<span class='line'>925</span>         void main() {\n\
-<span class='line'>926</span>             if (uGenerateShadowMap) {\n\
-<span class='line'>927</span>                \n\
-<span class='line'>928</span>                 gl_FragColor = pack_depth(gl_FragCoord.z);\n\
-<span class='line'>929</span>                 return;\n\
-<span class='line'>930</span>             }\n\
-<span class='line'>931</span>             if (uAxis) {\n\
-<span class='line'>932</span>                 gl_FragColor = vec4(uAxisColor, 1.0);\n\
-<span class='line'>933</span>                 return;\n\
-<span class='line'>934</span>             }\n\
-<span class='line'>935</span>             if (uCenterPoint) {\n\
-<span class='line'>936</span>                 vec2 uv = gl_PointCoord * 2.0 - 1.0;\n\
-<span class='line'>937</span>                 float w = dot(uv, uv);\n\
-<span class='line'>938</span>                 if (w &lt; 0.3 || (w > 0.5 && w &lt; 1.0)) {\n\
-<span class='line'>939</span>                     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n\
-<span class='line'>940</span>                 } else {\n\
-<span class='line'>941</span>                     discard;\n\
-<span class='line'>942</span>                 }\n\
-<span class='line'>943</span>                 return;\n\
-<span class='line'>944</span>             }\n\
-<span class='line'>945</span>         \n\
-<span class='line'>946</span>            \n\
-<span class='line'>947</span>             vec3 norm = normalize(vNormal);\n\
-<span class='line'>948</span>             vec3 cameraDirection = normalize(-vPosition);\n\
-<span class='line'>949</span>         \n\
-<span class='line'>950</span>             vec3 color;\n\
-<span class='line'>951</span>             float alpha = uAlpha;\n\
-<span class='line'>952</span>         \n\
-<span class='line'>953</span>             if (uEdge) {\n\
+<span class='line'>852</span>             if (uGenerateShadowMap || uAxis || uCenterPoint) return;\n\
+<span class='line'>853</span>         \n\
+<span class='line'>854</span>            \n\
+<span class='line'>855</span>             vTextureCoord = aTextureCoord;\n\
+<span class='line'>856</span>             vPosition = (uMVMatrix * vec4(position, 1.0)).xyz;\n\
+<span class='line'>857</span>             vNormal = (uNMatrix * vec4(normal, 1.0)).xyz;\n\
+<span class='line'>858</span>         \n\
+<span class='line'>859</span>             if (uSelfShadow) {\n\
+<span class='line'>860</span>                 vLightCoord = uLightMatrix * vec4(position, 1.0);\n\
+<span class='line'>861</span>             }\n\
+<span class='line'>862</span>         \n\
+<span class='line'>863</span>             if (uEdge) {\n\
+<span class='line'>864</span>                 vec4 pos = gl_Position;\n\
+<span class='line'>865</span>                 vec4 pos2 = uPMatrix * uMVMatrix * vec4(position + normal, 1.0);\n\
+<span class='line'>866</span>                 vec4 norm = normalize(pos2 - pos);\n\
+<span class='line'>867</span>                 gl_Position = pos + norm * uEdgeThickness * aVertexEdge * pos.w;\n\
+<span class='line'>868</span>                 return;\n\
+<span class='line'>869</span>             }\n\
+<span class='line'>870</span>         }\n\
+<span class='line'>871</span>     '</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>872</span> 
+<span class='line'>873</span> </span><span class="WHIT">    </span><span class="KEYW">var</span><span class="WHIT"> </span><span class="NAME">MMD_FRAGMENT_SHADER_SOURCE</span><span class="WHIT"> </span><span class="PUNC">=</span><span class="WHIT"> </span><span class="STRN">'\n\
+<span class='line'>874</span>         #ifdef GL_ES\n\
+<span class='line'>875</span>             precision highp float;\n\
+<span class='line'>876</span>         #endif\n\
+<span class='line'>877</span>         \n\
+<span class='line'>878</span>         varying vec2 vTextureCoord;\n\
+<span class='line'>879</span>         varying vec3 vPosition;\n\
+<span class='line'>880</span>         varying vec3 vNormal;\n\
+<span class='line'>881</span>         varying vec4 vLightCoord;\n\
+<span class='line'>882</span>         \n\
+<span class='line'>883</span>         uniform vec3 uLightDirection;\n\
+<span class='line'>884</span>         uniform vec3 uLightColor;\n\
+<span class='line'>885</span>         \n\
+<span class='line'>886</span>         uniform vec3 uAmbientColor;\n\
+<span class='line'>887</span>         uniform vec3 uSpecularColor;\n\
+<span class='line'>888</span>         uniform vec3 uDiffuseColor;\n\
+<span class='line'>889</span>         uniform float uAlpha;\n\
+<span class='line'>890</span>         uniform float uShininess;\n\
+<span class='line'>891</span>         \n\
+<span class='line'>892</span>         uniform bool uUseTexture;\n\
+<span class='line'>893</span>         uniform bool uUseSphereMap;\n\
+<span class='line'>894</span>         uniform bool uIsSphereMapAdditive;\n\
+<span class='line'>895</span>         \n\
+<span class='line'>896</span>         uniform sampler2D uToon;\n\
+<span class='line'>897</span>         uniform sampler2D uTexture;\n\
+<span class='line'>898</span>         uniform sampler2D uSphereMap;\n\
+<span class='line'>899</span>         \n\
+<span class='line'>900</span>         uniform bool uEdge;\n\
+<span class='line'>901</span>         uniform float uEdgeThickness;\n\
+<span class='line'>902</span>         uniform vec3 uEdgeColor;\n\
+<span class='line'>903</span>         \n\
+<span class='line'>904</span>         uniform bool uGenerateShadowMap;\n\
+<span class='line'>905</span>         uniform bool uSelfShadow;\n\
+<span class='line'>906</span>         uniform sampler2D uShadowMap;\n\
+<span class='line'>907</span>         \n\
+<span class='line'>908</span>         uniform bool uAxis;\n\
+<span class='line'>909</span>         uniform vec3 uAxisColor;\n\
+<span class='line'>910</span>         uniform bool uCenterPoint;\n\
+<span class='line'>911</span>         \n\
+<span class='line'>912</span>         // from http://spidergl.org/example.php?id=6\n\
+<span class='line'>913</span>         vec4 pack_depth(const in float depth) {\n\
+<span class='line'>914</span>             const vec4 bit_shift = vec4(256.0*256.0*256.0, 256.0*256.0, 256.0, 1.0);\n\
+<span class='line'>915</span>             const vec4 bit_mask  = vec4(0.0, 1.0/256.0, 1.0/256.0, 1.0/256.0);\n\
+<span class='line'>916</span>             vec4 res = fract(depth * bit_shift);\n\
+<span class='line'>917</span>             res -= res.xxyz * bit_mask;\n\
+<span class='line'>918</span>             return res;\n\
+<span class='line'>919</span>         }\n\
+<span class='line'>920</span>         float unpack_depth(const in vec4 rgba_depth)\n\
+<span class='line'>921</span>         {\n\
+<span class='line'>922</span>             const vec4 bit_shift = vec4(1.0/(256.0*256.0*256.0), 1.0/(256.0*256.0), 1.0/256.0, 1.0);\n\
+<span class='line'>923</span>             float depth = dot(rgba_depth, bit_shift);\n\
+<span class='line'>924</span>             return depth;\n\
+<span class='line'>925</span>         }\n\
+<span class='line'>926</span>         \n\
+<span class='line'>927</span>         void main() {\n\
+<span class='line'>928</span>             if (uGenerateShadowMap) {\n\
+<span class='line'>929</span>                \n\
+<span class='line'>930</span>                 gl_FragColor = pack_depth(gl_FragCoord.z);\n\
+<span class='line'>931</span>                 return;\n\
+<span class='line'>932</span>             }\n\
+<span class='line'>933</span>             if (uAxis) {\n\
+<span class='line'>934</span>                 gl_FragColor = vec4(uAxisColor, 1.0);\n\
+<span class='line'>935</span>                 return;\n\
+<span class='line'>936</span>             }\n\
+<span class='line'>937</span>             if (uCenterPoint) {\n\
+<span class='line'>938</span>                 vec2 uv = gl_PointCoord * 2.0 - 1.0;\n\
+<span class='line'>939</span>                 float w = dot(uv, uv);\n\
+<span class='line'>940</span>                 if (w &lt; 0.3 || (w > 0.5 && w &lt; 1.0)) {\n\
+<span class='line'>941</span>                     gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n\
+<span class='line'>942</span>                 } else {\n\
+<span class='line'>943</span>                     discard;\n\
+<span class='line'>944</span>                 }\n\
+<span class='line'>945</span>                 return;\n\
+<span class='line'>946</span>             }\n\
+<span class='line'>947</span>         \n\
+<span class='line'>948</span>            \n\
+<span class='line'>949</span>             vec3 norm = normalize(vNormal);\n\
+<span class='line'>950</span>             vec3 cameraDirection = normalize(-vPosition);\n\
+<span class='line'>951</span>         \n\
+<span class='line'>952</span>             vec3 color;\n\
+<span class='line'>953</span>             float alpha = uAlpha;\n\
 <span class='line'>954</span>         \n\
-<span class='line'>955</span>                 color = uEdgeColor;\n\
+<span class='line'>955</span>             if (uEdge) {\n\
 <span class='line'>956</span>         \n\
-<span class='line'>957</span>             } else {\n\
+<span class='line'>957</span>                 color = uEdgeColor;\n\
 <span class='line'>958</span>         \n\
-<span class='line'>959</span>                 color = vec3(1.0, 1.0, 1.0);\n\
-<span class='line'>960</span>                 if (uUseTexture) {\n\
-<span class='line'>961</span>                     vec4 texColor = texture2D(uTexture, vTextureCoord);\n\
-<span class='line'>962</span>                     color *= texColor.rgb;\n\
-<span class='line'>963</span>                     alpha *= texColor.a;\n\
-<span class='line'>964</span>                 }\n\
-<span class='line'>965</span>                 if (uUseSphereMap) {\n\
-<span class='line'>966</span>                     vec2 sphereCoord = 0.5 * (1.0 + vec2(1.0, -1.0) * norm.xy);\n\
-<span class='line'>967</span>                     if (uIsSphereMapAdditive) {\n\
-<span class='line'>968</span>                         color += texture2D(uSphereMap, sphereCoord).rgb;\n\
-<span class='line'>969</span>                     } else {\n\
-<span class='line'>970</span>                         color *= texture2D(uSphereMap, sphereCoord).rgb;\n\
-<span class='line'>971</span>                     }\n\
-<span class='line'>972</span>                 }\n\
-<span class='line'>973</span>         \n\
-<span class='line'>974</span>                \n\
-<span class='line'>975</span>                 vec3 halfAngle = normalize(uLightDirection + cameraDirection);\n\
-<span class='line'>976</span>                 float specularWeight = pow( max(0.001, dot(halfAngle, norm)) , uShininess );\n\
-<span class='line'>977</span>                \n\
-<span class='line'>978</span>                 vec3 specular = specularWeight * uSpecularColor;\n\
-<span class='line'>979</span>         \n\
-<span class='line'>980</span>                 vec2 toonCoord = vec2(0.0, 0.5 * (1.0 - dot( uLightDirection, norm )));\n\
+<span class='line'>959</span>             } else {\n\
+<span class='line'>960</span>         \n\
+<span class='line'>961</span>                 color = vec3(1.0, 1.0, 1.0);\n\
+<span class='line'>962</span>                 if (uUseTexture) {\n\
+<span class='line'>963</span>                     vec4 texColor = texture2D(uTexture, vTextureCoord);\n\
+<span class='line'>964</span>                     color *= texColor.rgb;\n\
+<span class='line'>965</span>                     alpha *= texColor.a;\n\
+<span class='line'>966</span>                 }\n\
+<span class='line'>967</span>                 if (uUseSphereMap) {\n\
+<span class='line'>968</span>                     vec2 sphereCoord = 0.5 * (1.0 + vec2(1.0, -1.0) * norm.xy);\n\
+<span class='line'>969</span>                     if (uIsSphereMapAdditive) {\n\
+<span class='line'>970</span>                         color += texture2D(uSphereMap, sphereCoord).rgb;\n\
+<span class='line'>971</span>                     } else {\n\
+<span class='line'>972</span>                         color *= texture2D(uSphereMap, sphereCoord).rgb;\n\
+<span class='line'>973</span>                     }\n\
+<span class='line'>974</span>                 }\n\
+<span class='line'>975</span>         \n\
+<span class='line'>976</span>                \n\
+<span class='line'>977</span>                 vec3 halfAngle = normalize(uLightDirection + cameraDirection);\n\
+<span class='line'>978</span>                 float specularWeight = pow( max(0.001, dot(halfAngle, norm)) , uShininess );\n\
+<span class='line'>979</span>                \n\
+<span class='line'>980</span>                 vec3 specular = specularWeight * uSpecularColor;\n\
 <span class='line'>981</span>         \n\
-<span class='line'>982</span>                 if (uSelfShadow) {\n\
-<span class='line'>983</span>                     vec3 lightCoord = vLightCoord.xyz / vLightCoord.w;\n\
-<span class='line'>984</span>                     vec4 rgbaDepth = texture2D(uShadowMap, lightCoord.xy);\n\
-<span class='line'>985</span>                     float depth = unpack_depth(rgbaDepth);\n\
-<span class='line'>986</span>                     if (depth &lt; lightCoord.z - 0.01) {\n\
-<span class='line'>987</span>                         toonCoord = vec2(0.0, 0.55);\n\
-<span class='line'>988</span>                     }\n\
-<span class='line'>989</span>                 }\n\
-<span class='line'>990</span>         \n\
-<span class='line'>991</span>                 color *= uAmbientColor + uLightColor * (uDiffuseColor + specular);\n\
+<span class='line'>982</span>                 vec2 toonCoord = vec2(0.0, 0.5 * (1.0 - dot( uLightDirection, norm )));\n\
+<span class='line'>983</span>         \n\
+<span class='line'>984</span>                 if (uSelfShadow) {\n\
+<span class='line'>985</span>                     vec3 lightCoord = vLightCoord.xyz / vLightCoord.w;\n\
+<span class='line'>986</span>                     vec4 rgbaDepth = texture2D(uShadowMap, lightCoord.xy);\n\
+<span class='line'>987</span>                     float depth = unpack_depth(rgbaDepth);\n\
+<span class='line'>988</span>                     if (depth &lt; lightCoord.z - 0.01) {\n\
+<span class='line'>989</span>                         toonCoord = vec2(0.0, 0.55);\n\
+<span class='line'>990</span>                     }\n\
+<span class='line'>991</span>                 }\n\
 <span class='line'>992</span>         \n\
-<span class='line'>993</span>                 color = clamp(color, 0.0, 1.0);\n\
-<span class='line'>994</span>                 color *= texture2D(uToon, toonCoord).rgb;\n\
-<span class='line'>995</span>         \n\
-<span class='line'>996</span>             }\n\
-<span class='line'>997</span>             gl_FragColor = vec4(color, alpha);\n\
-<span class='line'>998</span>         \n\
-<span class='line'>999</span>         }\n\
-<span class='line'>1000</span>     '</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1001</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
-<span class='line'>1002</span> </span></pre></body></html>
+<span class='line'>993</span>                 color *= uAmbientColor + uLightColor * (uDiffuseColor + specular);\n\
+<span class='line'>994</span>         \n\
+<span class='line'>995</span>                 color = clamp(color, 0.0, 1.0);\n\
+<span class='line'>996</span>                 color *= texture2D(uToon, toonCoord).rgb;\n\
+<span class='line'>997</span>         \n\
+<span class='line'>998</span>             }\n\
+<span class='line'>999</span>             gl_FragColor = vec4(color, alpha);\n\
+<span class='line'>1000</span>         \n\
+<span class='line'>1001</span>         }\n\
+<span class='line'>1002</span>     '</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1003</span> </span><span class="PUNC">}</span><span class="PUNC">(</span><span class="PUNC">)</span><span class="PUNC">)</span><span class="PUNC">;</span><span class="WHIT">
+<span class='line'>1004</span> </span></pre></body></html>
