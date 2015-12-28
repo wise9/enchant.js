@@ -149,4 +149,4 @@ module.exports = (grunt) ->
   grunt.loadTasks 'tasks/'
 
   # Default task.
-  grunt.registerTask 'default', [ 'jshint:core', 'concat', 'uglify', 'mocha', 'lang:en', 'lang:ja', 'lang:de', 'build' ]
+  grunt.registerTask 'default', [ 'jshint:core', 'concat', 'uglify', 'mocha:all', 'lang:en', 'lang:ja', 'lang:de', 'build' ]
