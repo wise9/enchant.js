@@ -1,3 +1,28 @@
+# v0.8.3
+
+- feature
+    - remove space key code from PREVENT_DEFAULT_KEY_CODES
+    - improve documentation translation (@thx tygerpatch)
+    - add telepathy plugin
+    - add enchant.ENV.COLOR_DETECTION_LEVEL
+
+- bugfix
+    - fix map render lag
+    - Timeline#exec return this (thx @authorNari)
+    - fix error in WebAudioSound#play (thx @MaciejKus)
+    - reduce audio context creation
+    - improve touch detection precision
+
+- plugins
+    - memory.enchant.js
+        - avoid JSON.parse bug in android (thx @hshimo)
+    - widget.enchant.js
+        - add LazyListView
+    - ui.enchant.js
+        - improve touch area (thx @cs8898)
+    - gl.enchant.js
+        - allow to change buffer type
+
 # v0.8.2
 
 - feature
