@@ -97,7 +97,7 @@ module.exports = (grunt) ->
  * <%= pkg.name %> v<%= pkg.version %>
  * <%= pkg.homepage %>
  *
- * Copyright Ubiquitous Entertainment Inc.
+ * Copyright UEI Corporation
  * Released under the MIT license.
  */\n\n
 """
@@ -107,7 +107,7 @@ module.exports = (grunt) ->
           files:
             'enchant.min.js': [ 'dev/enchant.js' ]
           options:
-            banner: "/* <%= pkg.name %> v<%= pkg.version %> <%= pkg.homepage %> Copyright (c) Ubiquitous Entertainment Inc. Released Under the MIT license. */\n"
+            banner: "/* <%= pkg.name %> v<%= pkg.version %> <%= pkg.homepage %> Copyright (c) UEI Corporation Released Under the MIT license. */\n"
 
       qunit:
         files: [ 'tests/qunit/*/*.html' ]

@@ -3,7 +3,7 @@
  * wiiu.enchant.js
  * @version 0.1.0
  * @require enchant.js v0.6.0+
- * @author Ubiquitous Entertainment Inc.
+ * @author UEI Corporation
  *
  * @description
  * Library for making game for Nintendo wii U

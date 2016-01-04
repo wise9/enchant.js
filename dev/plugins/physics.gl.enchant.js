@@ -6,7 +6,7 @@
  * @require gl.enchant.js v0.3.6+
  * @require primitive.gl.enchant.js v0.3.5+
  * @require gl-matrix.js 1.3.7+
- * @author Ubiquitous Entertainment Inc.
+ * @author UEI Corporation
  *
  * @description
  [lang:ja]

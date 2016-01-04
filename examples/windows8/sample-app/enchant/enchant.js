@@ -1,7 +1,7 @@
 /**
  * enchant.js v0.5.2
  *
- * Copyright (c) Ubiquitous Entertainment Inc.
+ * Copyright (c) UEI Corporation
  * Dual licensed under the MIT or GPL Version 3 licenses
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
