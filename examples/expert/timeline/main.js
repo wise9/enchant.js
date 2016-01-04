@@ -17,7 +17,6 @@ window.onload = function(){
 
         sprites[0].addEventListener("touchstart", function(){
             this.tl.moveBy(200, 0, 60, enchant.Easing.LINEAR);
-            console.log(this.tl);
         });
         sprites[1].addEventListener("touchstart", function(){
             this.tl.moveBy(200, 0, 60, enchant.Easing.QUINT_EASEOUT);
