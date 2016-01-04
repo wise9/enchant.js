@@ -162,13 +162,13 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      [lang:ja]
-     * 現在の再生位置 (秒).
+     * ボリューム. 0 (無音) ～ 1 (フルボリューム).
      [/lang]
      [lang:en]
-     * Current playback position (seconds).
+     * Volume. 0 (muted) ～ 1 (full volume).
      [/lang]
      [lang:de]
-     * Aktuelle Wiedergabeposition (seconds).
+     * Lautstärke. 0 (stumm) ～ 1 (volle Lautstärke).
      [/lang]
      * @type Number
      */
@@ -186,13 +186,13 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
     },
     /**
      [lang:ja]
-     * ボリューム. 0 (無音) ～ 1 (フルボリューム).
+     * 現在の再生位置 (秒).
      [/lang]
      [lang:en]
-     * Volume. 0 (muted) ～ 1 (full volume).
+     * Current playback position (seconds).
      [/lang]
      [lang:de]
-     * Lautstärke. 0 (stumm) ～ 1 (volle Lautstärke).
+     * Aktuelle Wiedergabeposition (seconds).
      [/lang]
      * @type Number
      */

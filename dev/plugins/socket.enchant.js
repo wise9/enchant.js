@@ -3,7 +3,7 @@
  * socket.enchant.js
  * @version beta (2011/12/03)
  * @require enchant.js v0.4.1+
- * @author Ubiquitous Entertainment Inc.
+ * @author UEI Corporation
  *
  * @description
  * enchant.js extension for online game
