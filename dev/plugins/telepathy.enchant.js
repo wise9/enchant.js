@@ -3,7 +3,7 @@
  * telepathy.enchant.js
  * @version 0.1.0
  * @require enchant.js v0.8.0+
- * @author Ubiquitous Entertainment Inc.
+ * @author UEI Corporation
  */
 (function() {
 /**

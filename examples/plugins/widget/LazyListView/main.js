@@ -3,7 +3,7 @@
  * Example for enchant.widget.LazyListView and enchant.widget.LazyListItem 
  * @version 0.0.1
  * @require enchant.js v0.8.3+
- * @author Kevin Kratzer (Ubiquitous Entertainment Inc.)
+ * @author Kevin Kratzer (UEI Corporation)
  *
  * @description
  * Dynamically load the content of ListItems using the enchant.widget.LazyListItem and enchant.widget.LazyListView upon scrolling to enable the usage of large lists which might not be displayed completely.

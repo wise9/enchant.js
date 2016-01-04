@@ -4,7 +4,7 @@
  * @version 0.2.2
  * @require enchant.js v0.6.3+
  * @require gl.enchant.js v0.3.7+
- * @author Ubiquitous Entertainment Inc.
+ * @author UEI Corporation
  *
  * @description
  [lang:ja]

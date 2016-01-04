@@ -3,7 +3,7 @@
  * avatar.enchant.js
  * @version 0.2 (2012/08/09)
  * @requires enchant.js v0.4.0 or later
- * @author shi3z/Ubiquitous Entertainment Inc.
+ * @author shi3z/UEI Corporation
  *
  * @description
  * enchant.js extension for 9leap.net
