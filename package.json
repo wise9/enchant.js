@@ -13,9 +13,12 @@
     "test": "grunt default --verbose",
     "postinstall": "grunt"
   },
+  "files": [
+    "build"
+  ],
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-cli": "^0.1.13",
+    "grunt-cli": "~0.1.13",
     "grunt-contrib-concat": "0.5.1",
     "grunt-contrib-jshint": "0.10.0",
     "grunt-contrib-qunit": "0.7.0",
