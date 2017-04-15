@@ -235,7 +235,13 @@ enchant.WebAudioSound = enchant.Class.create(enchant.EventTarget, {
  * @static
  */
 enchant.WebAudioSound.load = function(src, type, callback, onerror) {
-    var canPlay = (new Audio()).canPlayType(type);
+    var audio;
+    try{
+        audio = new Audio();
+    }catch(err){
+        throw new Error('Audio not support');
+    }
+    var canPlay = audio.canPlayType == null ? false : audio.canPlayType(type);
     var sound = new enchant.WebAudioSound();
     callback = callback || function() {};
     onerror = onerror || function() {};

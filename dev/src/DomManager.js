@@ -61,9 +61,12 @@ enchant.DomManager = enchant.Class.create({
     },
     removeManager: function(childManager) {
         if (childManager instanceof enchant.DomlessManager) {
-            childManager._domRef.forEach(function(element) {
+            /*childManager._domRef.forEach(function(element) {
                 this.element.removeChild(element);
-            }, this);
+            }, this);*/
+            for(var i = this.element.childNodes.length - 1; i >= 0; i--){
+                this.element.removeChild(this.element.childNodes[i]);
+            }
         } else {
             this.element.removeChild(childManager.element);
         }
@@ -232,7 +235,10 @@ enchant.DomlessManager = enchant.Class.create({
         var i = this._domRef.indexOf(childManager.element);
         if (i !== -1) {
             dom = this._domRef[i];
-            dom.parentNode.removeChild(dom);
+            /*dom.parentNode.removeChild(dom);*/
+            if(dom.parentNode){
+                dom.parentNode.removeChild(dom);
+            }
             this._domRef.splice(i, 1);
         }
         this.setLayer(this.layer);

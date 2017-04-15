@@ -220,7 +220,12 @@ enchant.DOMSound.load = function(src, type, callback, onerror) {
     enchant.EventTarget.call(sound);
     sound.addEventListener('load', callback);
     sound.addEventListener('error', onerror);
-    var audio = new Audio();
+    var audio;
+    try{
+        audio = new Audio();
+    }catch(err){
+        throw new Error('Audio not support');
+    }
     if (!enchant.ENV.SOUND_ENABLED_ON_MOBILE_SAFARI &&
         enchant.ENV.VENDOR_PREFIX === 'webkit' && enchant.ENV.TOUCH_ENABLED) {
         window.setTimeout(function() {
