@@ -5,7 +5,7 @@
 Download
 --------
 
-This is a repository for development. Refer to [uei/enchant.js-builds](https://github.com/uei/enchant.js-builds) for download pre-built files.
+This is a repository for development. Refer to [uei/enchant.js-builds](https://github.com/uei/enchant.js-builds) to download pre-built files.
 
 [Download Zip file](https://github.com/uei/enchant.js-builds/archive/master.zip)
 
@@ -71,7 +71,7 @@ How to build
 Source code is divided into class files (dev/src/*.js). These files include multi-language comments. You can build enchant.js with 'grunt' command from these files.
 If you want to send a pull request or join development enchant.js, please edit files under dev/src, use this build tool and commit the built work tree.
 
-To setup grunt.js (build tool for node.js) as npm package, type:
+To setup grunt.js (build tool for node.js) as an npm package, type:
 
     npm install -g grunt-cli
     npm install
@@ -94,4 +94,4 @@ If you wish to send your codes to github repos, don't forget to run `grunt` comm
 
 How to contribute
 -----------------
-If you found issues or improved codes, please write issues or send pull request to `wise9/enchant.js:develop`.
+If you found issues or improved codes, please write issues or send a pull request to `wise9/enchant.js:develop`.
