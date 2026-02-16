@@ -138,6 +138,17 @@ if (typeof glMatrixArrayType === 'undefined') {
                     that.detectFrameBuffer.bind();
                     scene._draw('detect');
                     gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, color);
+                    //in AndroidChrome
+                    //v37.0.2062.117 and
+                    //v38.0.2125.102 need this translate.
+                    //at Chrome39, color=[0,0,1,255], but at Androidchrome, color=[0,0,0,1].
+                    //TODO
+                    //CAUTION:
+                    //You might get bugs when scene3d.backgroundColor = [0,0,1/255,1]
+                    if(color[0] === 0 && color[1] === 0 && color[2] === 0){
+                        color[2] = 1;
+                    }
+
                     sprite = that.detectColorManager.getSpriteByColor(color);
                     if (sprite) {
                         touching = sprite;
