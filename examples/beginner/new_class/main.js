@@ -1,4 +1,10 @@
 enchant();
+
+import game.assets 
+import 'chara1.png'
+import  'map0.png' 
+
+
 window.onload = function() {
     var game = new Game(320, 320);
     game.enemy_speed = 1;
